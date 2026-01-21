@@ -1,0 +1,246 @@
+@model IEnumerable<CommunityCar.Domain.Entities.Community.Groups.Group>
+@{
+    ViewData["Title"] = "Community Groups";
+    var currentPage = ViewBag.CurrentPage ?? 1;
+    var totalPages = ViewBag.TotalPages ?? 1;
+    var totalCount = ViewBag.TotalCount ?? 0;
+    var search = ViewBag.Search as string ?? "";
+    var sortBy = ViewBag.SortBy as string ?? "newest";
+    var filterPrivacy = ViewBag.FilterPrivacy as string ?? "all";
+}
+
+<div class="groups-container">
+    <div class="groups-header">
+        <div>
+            <h1>Community Groups</h1>
+            <p class="text-muted mb-0">Join enthusiasts sharing your interests</p>
+        </div>
+        <a href="@Url.Action("Create", "Groups")" class="btn btn-primary">
+            <i data-lucide="plus-circle"></i>Create Group
+        </a>
+    </div>
+
+    <div class="groups-search-container">
+        <!-- Search and Toolbar -->
+        <form method="get" action="@Url.Action("Index", "Groups")" id="groupsFilterForm">
+            <div class="groups-toolbar">
+                <div class="groups-search-wrapper">
+                    <span class="groups-search-icon">
+                        <i data-lucide="search" style="width: 18px;"></i>
+                    </span>
+                    <input type="text" name="search" class="groups-search-input" placeholder="Search groups..." value="@search">
+                </div>
+                
+                <button type="button" class="groups-filter-btn" id="sortButton">
+                    <i data-lucide="arrow-down-a-z" style="width: 18px;"></i>
+                    <span>Sort</span>
+                </button>
+                
+                <button type="button" class="groups-filter-btn @(filterPrivacy != "all" ? "active" : "")" id="filterButton">
+                    <i data-lucide="filter" style="width: 18px;"></i>
+                    <span>Filter</span>
+                </button>
+            </div>
+
+            <!-- Filters Panel -->
+            <div class="groups-filters-panel" id="filtersPanel" style="display: @(filterPrivacy != "all" ? "block" : "none")">
+                <div class="groups-filters-grid">
+                    <div class="groups-filter-group">
+                        <label class="groups-filter-label">Sort By</label>
+                        <select name="sortBy" class="groups-filter-select" onchange="this.form.submit()">
+                            <option value="newest" selected="@(sortBy == "newest")">Newest First</option>
+                            <option value="oldest" selected="@(sortBy == "oldest")">Oldest First</option>
+                            <option value="name" selected="@(sortBy == "name")">Name (A-Z)</option>
+                        </select>
+                    </div>
+                    <div class="groups-filter-group">
+                        <label class="groups-filter-label">Privacy</label>
+                        <select name="filterPrivacy" class="groups-filter-select" onchange="this.form.submit()">
+                            <option value="all" selected="@(filterPrivacy == "all")">All Groups</option>
+                            <option value="public" selected="@(filterPrivacy == "public")">Public Only</option>
+                            <option value="private" selected="@(filterPrivacy == "private")">Private Only</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid hsl(var(--color-border)); margin-top: 1rem;">
+            <p class="text-muted mb-0" style="font-size: 0.9rem;">
+                Showing <strong>@Model.Count()</strong> of <strong>@totalCount</strong> groups
+            </p>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="groups-empty-state">
+                <i data-lucide="users" class="groups-empty-icon"></i>
+                <p class="mb-2">No groups found matching your criteria</p>
+                @if (!string.IsNullOrEmpty(search))
+                {
+                    <a href="@Url.Action("Index", "Groups")" class="btn btn-ghost mt-2">Clear Search</a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="groups-grid">
+                @foreach (var group in Model)
+                {
+                    <a href="@Url.Action("Details", "Groups", new { id = group.Id })" class="group-card">
+                        <!-- Post Header -->
+                        <div class="group-header">
+                            <div class="group-avatar">
+                                @group.Name.Substring(0, 1).ToUpper()
+                            </div>
+                            <div class="group-info">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                    <h3 class="group-name" style="margin-bottom: 0;">@group.Name</h3>
+                                    @if (group.IsOfficial)
+                                    {
+                                        <i data-lucide="badge-check" style="width: 18px; color: var(--color-red-500);" title="Official Group"></i>
+                                    }
+                                    else if (group.IsVerified)
+                                    {
+                                        <i data-lucide="shield-check" style="width: 16px; color: var(--color-success-500);" title="Verified Group"></i>
+                                    }
+                                </div>
+                                <div class="group-category">
+                                    @if (!string.IsNullOrEmpty(group.Category))
+                                    {
+                                        <i data-lucide="tag" style="width: 12px;"></i>
+                                        <span>@group.Category</span>
+                                        @if (!string.IsNullOrEmpty(group.Location))
+                                        {
+                                            <span>•</span>
+                                        }
+                                    }
+                                    @if (!string.IsNullOrEmpty(group.Location))
+                                    {
+                                        <i data-lucide="map-pin" style="width: 12px;"></i>
+                                        <span>@group.Location</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="group-description">@group.Description</p>
+                        
+                        @if (group.Tags.Any())
+                        {
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                                @foreach (var tag in group.Tags.Take(3))
+                                {
+                                    <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background-color: hsl(var(--color-muted)); border-radius: var(--radius-md); color: hsl(var(--color-muted-foreground));">
+                                        #@tag
+                                    </span>
+                                }
+                            </div>
+                        }
+
+                        <div class="group-stats">
+                            <div class="group-stat">
+                                <i data-lucide="users" style="width: 16px;"></i>
+                                <span class="group-stat-value">@group.MemberCount.ToString("N0")</span>
+                                <span>members</span>
+                            </div>
+                            <div class="group-stat">
+                                <i data-lucide="message-square" style="width: 16px;"></i>
+                                <span class="group-stat-value">@group.PostCount.ToString("N0")</span>
+                                <span>posts</span>
+                            </div>
+                            <span class="group-badge group-badge-@group.Privacy.ToString().ToLower()" style="margin-left: auto;">
+                                <i data-lucide="@(group.Privacy == CommunityCar.Domain.Enums.GroupPrivacy.Public ? "globe" : "lock")" style="width: 10px;"></i>
+                                @group.Privacy.ToString()
+                            </span>
+                        </div>
+                    </a>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (totalPages > 1)
+            {
+                <div class="groups-pagination">
+                    <!-- Previous Button -->
+                    <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = currentPage - 1 })" 
+                       class="pagination-btn @(currentPage <= 1 ? "disabled" : "")"
+                       style="pointer-events: @(currentPage <= 1 ? "none" : "auto")">
+                        <i data-lucide="chevron-left" style="width: 18px;"></i>
+                    </a>
+
+                    <!-- Page Numbers -->
+                    @{
+                        var startPage = Math.Max(1, currentPage - 2);
+                        var endPage = Math.Min(totalPages, currentPage + 2);
+                    }
+
+                    @if (startPage > 1)
+                    {
+                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = 1 })" class="pagination-btn">1</a>
+                        @if (startPage > 2)
+                        {
+                            <span class="pagination-info">...</span>
+                        }
+                    }
+
+                    @for (var i = startPage; i <= endPage; i++)
+                    {
+                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = i })" 
+                           class="pagination-btn @(i == currentPage ? "active" : "")">
+                            @i
+                        </a>
+                    }
+
+                    @if (endPage < totalPages)
+                    {
+                        @if (endPage < totalPages - 1)
+                        {
+                            <span class="pagination-info">...</span>
+                        }
+                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = totalPages })" class="pagination-btn">@totalPages</a>
+                    }
+
+                    <!-- Next Button -->
+                    <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = currentPage + 1 })" 
+                       class="pagination-btn @(currentPage >= totalPages ? "disabled" : "")"
+                       style="pointer-events: @(currentPage >= totalPages ? "none" : "auto")">
+                        <i data-lucide="chevron-right" style="width: 18px;"></i>
+                    </a>
+
+                    <span class="pagination-info">
+                        Page @currentPage of @totalPages
+                    </span>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterButton = document.getElementById('filterButton');
+            const filtersPanel = document.getElementById('filtersPanel');
+
+            filterButton?.addEventListener('click', () => {
+                filterButton.classList.toggle('active');
+                if (filtersPanel.style.display === 'block') {
+                    filtersPanel.style.display = 'none';
+                } else {
+                    filtersPanel.style.display = 'block';
+                }
+            });
+
+            // Auto-submit on search input
+            const searchInput = document.querySelector('.groups-search-input');
+            let searchTimeout;
+            searchInput?.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    document.getElementById('groupsFilterForm').submit();
+                }, 500);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,177 @@
+using Microsoft.AspNetCore.SignalR;
+using CommunityCar.Application.Common.Interfaces.Services.Communication;
+using CommunityCar.Application.Common.Models.Notifications;
+using CommunityCar.Infrastructure.Hubs;
+using CommunityCar.Domain.Enums;
+
+namespace CommunityCar.Infrastructure.Services.Communication;
+
+public class NotificationService : INotificationService
+{
+    private readonly IHubContext<NotificationHub> _notificationHub;
+
+    public NotificationService(IHubContext<NotificationHub> notificationHub)
+    {
+        _notificationHub = notificationHub;
+    }
+
+    public async Task SendNotificationAsync(NotificationRequest request)
+    {
+        var notification = new
+        {
+            Id = Guid.NewGuid(),
+            Title = request.Title,
+            Message = request.Message,
+            Type = request.Type.ToString().ToLower(),
+            ActionUrl = request.ActionUrl,
+            IconClass = request.IconClass ?? GetDefaultIcon(request.Type),
+            Data = request.Data,
+            CreatedAt = DateTime.UtcNow,
+            IsRead = false
+        };
+
+        await _notificationHub.Clients.Group($"user_{request.UserId}")
+            .SendAsync("ReceiveNotification", notification);
+    }
+
+    public async Task SendBulkNotificationAsync(BulkNotificationRequest request)
+    {
+        var notification = new
+        {
+            Id = Guid.NewGuid(),
+            Title = request.Title,
+            Message = request.Message,
+            Type = request.Type.ToString().ToLower(),
+            ActionUrl = request.ActionUrl,
+            IconClass = request.IconClass ?? GetDefaultIcon(request.Type),
+            Data = request.Data,
+            CreatedAt = DateTime.UtcNow,
+            IsRead = false
+        };
+
+        var tasks = request.UserIds.Select(userId =>
+            _notificationHub.Clients.Group($"user_{userId}")
+                .SendAsync("ReceiveNotification", notification));
+
+        await Task.WhenAll(tasks);
+    }
+
+    public async Task SendToUserAsync(Guid userId, string title, string message, NotificationType type, string? actionUrl = null)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = title,
+            Message = message,
+            Type = type,
+            ActionUrl = actionUrl
+        });
+    }
+
+    public async Task SendToUsersAsync(List<Guid> userIds, string title, string message, NotificationType type, string? actionUrl = null)
+    {
+        await SendBulkNotificationAsync(new BulkNotificationRequest
+        {
+            UserIds = userIds,
+            Title = title,
+            Message = message,
+            Type = type,
+            ActionUrl = actionUrl
+        });
+    }
+
+    public async Task NotifyNewMessageAsync(Guid userId, string senderName, string conversationId)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = "New Message",
+            Message = $"{senderName} sent you a message",
+            Type = NotificationType.NewMessage,
+            ActionUrl = $"/chats/{conversationId}",
+            IconClass = "message-circle"
+        });
+    }
+
+    public async Task NotifyNewAnswerAsync(Guid userId, string questionTitle, Guid questionId)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = "New Answer",
+            Message = $"Someone answered your question: {questionTitle}",
+            Type = NotificationType.NewAnswer,
+            ActionUrl = $"/qa/{questionId}",
+            IconClass = "message-square"
+        });
+    }
+
+    public async Task NotifyQuestionSolvedAsync(Guid userId, string questionTitle, Guid questionId)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = "Question Solved",
+            Message = $"Your question has been solved: {questionTitle}",
+            Type = NotificationType.QuestionSolved,
+            ActionUrl = $"/qa/{questionId}",
+            IconClass = "check-circle"
+        });
+    }
+
+    public async Task NotifyVoteReceivedAsync(Guid userId, string itemTitle, bool isUpvote)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = isUpvote ? "Upvote Received" : "Downvote Received",
+            Message = $"Your {itemTitle} received a {(isUpvote ? "upvote" : "downvote")}",
+            Type = NotificationType.VoteReceived,
+            IconClass = isUpvote ? "chevron-up" : "chevron-down"
+        });
+    }
+
+    public async Task NotifyCommentReceivedAsync(Guid userId, string itemTitle, string commenterName)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = "New Comment",
+            Message = $"{commenterName} commented on your {itemTitle}",
+            Type = NotificationType.CommentReceived,
+            IconClass = "message-circle"
+        });
+    }
+
+    public async Task NotifyFriendRequestAsync(Guid userId, string requesterName, Guid requesterId)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = "Friend Request",
+            Message = $"{requesterName} sent you a friend request",
+            Type = NotificationType.FriendRequest,
+            ActionUrl = $"/profile/{requesterId}",
+            IconClass = "user-plus"
+        });
+    }
+
+    private static string GetDefaultIcon(NotificationType type)
+    {
+        return type switch
+        {
+            NotificationType.Info => "info",
+            NotificationType.Success => "check-circle",
+            NotificationType.Warning => "alert-triangle",
+            NotificationType.Error => "alert-circle",
+            NotificationType.NewMessage => "message-circle",
+            NotificationType.NewAnswer => "message-square",
+            NotificationType.QuestionSolved => "check-circle-2",
+            NotificationType.VoteReceived => "thumbs-up",
+            NotificationType.CommentReceived => "message-circle",
+            NotificationType.FriendRequest => "user-plus",
+            NotificationType.SystemUpdate => "bell",
+            _ => "bell"
+        };
+    }
+}

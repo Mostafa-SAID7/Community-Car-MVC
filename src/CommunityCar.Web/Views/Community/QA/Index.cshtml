@@ -1,0 +1,320 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model CommunityCar.Application.Features.QA.DTOs.QASearchResponse
+@{
+    ViewData["Title"] = Localizer["PageTitle"];
+    var searchRequest = ViewBag.SearchRequest as CommunityCar.Application.Features.QA.DTOs.QASearchRequest;
+}
+
+<div class="qa-container">
+    <div class="qa-header">
+        <div>
+            <h1>@Localizer["HeaderTitle"]</h1>
+            <p class="qa-subtitle">@Localizer["HeaderSubtitle"]</p>
+        </div>
+        <a href="@Url.Action("Create", "QA")" class="btn btn-primary">
+            <i data-lucide="plus-circle"></i>@Localizer["AskQuestion"]
+        </a>
+    </div>
+
+    <!-- Stats Cards Row -->
+    <div class="qa-stats-cards">
+        <div class="qa-stat-card">
+            <div class="qa-stat-card-icon">
+                <i data-lucide="help-circle"></i>
+            </div>
+            <div class="qa-stat-card-content">
+                <span class="qa-stat-card-value">@Model.Stats.TotalQuestions</span>
+                <span class="qa-stat-card-label">@Localizer["TotalQuestions"]</span>
+            </div>
+        </div>
+        <div class="qa-stat-card qa-stat-card-success">
+            <div class="qa-stat-card-icon">
+                <i data-lucide="check-circle"></i>
+            </div>
+            <div class="qa-stat-card-content">
+                <span class="qa-stat-card-value">@Model.Stats.SolvedQuestions</span>
+                <span class="qa-stat-card-label">@Localizer["Solved"]</span>
+            </div>
+        </div>
+        <div class="qa-stat-card qa-stat-card-warning">
+            <div class="qa-stat-card-icon">
+                <i data-lucide="alert-circle"></i>
+            </div>
+            <div class="qa-stat-card-content">
+                <span class="qa-stat-card-value">@Model.Stats.OpenQuestions</span>
+                <span class="qa-stat-card-label">@Localizer["Open"]</span>
+            </div>
+        </div>
+        <div class="qa-stat-card qa-stat-card-info">
+            <div class="qa-stat-card-icon">
+                <i data-lucide="message-square"></i>
+            </div>
+            <div class="qa-stat-card-content">
+                <span class="qa-stat-card-value">@Model.Stats.TotalAnswers</span>
+                <span class="qa-stat-card-label">@Localizer["TotalAnswers"]</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="qa-search-container">
+            <!-- Main Content Column -->
+            <div class="col-12">
+                <!-- Enhanced Search and Toolbar -->
+                <div class="qa-toolbar">
+                    <div class="qa-search-wrapper grow">
+                        <span class="qa-search-icon">
+                            <i data-lucide="search" style="width: 18px;"></i>
+                        </span>
+                        <input type="text" class="qa-search-input" placeholder="@Localizer["SearchPlaceholder"]" id="qaSearchInput" value="@(searchRequest?.SearchTerm ?? "")">
+                    </div>
+                    
+                    <button class="qa-filter-btn" id="toggleViewBtn" title="@Localizer["ToggleView"]">
+                        <i data-lucide="layout-grid" style="width: 20px;"></i>
+                    </button>
+                    
+                    <button class="qa-filter-btn" id="toggleFiltersBtn" title="@Localizer["AdvancedFilters"]">
+                        <i data-lucide="sliders-horizontal" style="width: 20px;"></i>
+                    </button>
+                </div>
+
+                <!-- Enhanced Filters Panel -->
+                <div class="qa-filters-panel" id="filtersPanel">
+                    <div class="qa-filters-grid">
+                        <div class="qa-filter-group">
+                            <label class="qa-filter-label">@Localizer["SortBy"]</label>
+                            <select class="qa-filter-select" id="sortFilter">
+                                <option value="Newest" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.Newest)">@Localizer["Newest"]</option>
+                                <option value="MostVotes" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostVotes)">@Localizer["MostVotes"]</option>
+                                <option value="MostAnswers" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostAnswers)">@Localizer["MostAnswers"]</option>
+                                <option value="RecentActivity" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.RecentActivity)">@Localizer["RecentActivity"]</option>
+                                <option value="MostViews" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostViews)">@Localizer["MostViews"]</option>
+                            </select>
+                        </div>
+                        <div class="qa-filter-group">
+                            <label class="qa-filter-label">@Localizer["Difficulty"]</label>
+                            <select class="qa-filter-select" id="difficultyFilter">
+                                <option value="">@Localizer["AllLevels"]</option>
+                                <option value="Beginner" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Beginner)">@Localizer["Beginner"]</option>
+                                <option value="Intermediate" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Intermediate)">@Localizer["Intermediate"]</option>
+                                <option value="Advanced" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Advanced)">@Localizer["Advanced"]</option>
+                                <option value="Expert" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Expert)">@Localizer["Expert"]</option>
+                            </select>
+                        </div>
+                        <div class="qa-filter-group">
+                            <label class="qa-filter-label">@Localizer["Status"]</label>
+                            <select class="qa-filter-select" id="statusFilter">
+                                <option value="">@Localizer["All"]</option>
+                                <option value="Open" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Open)">@Localizer["Open"]</option>
+                                <option value="Solved" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Solved)">@Localizer["Solved"]</option>
+                                <option value="Unanswered" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Unanswered)">@Localizer["Unanswered"]</option>
+                                <option value="Pinned" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Pinned)">@Localizer["Pinned"]</option>
+                            </select>
+                        </div>
+                        <div class="qa-filter-group">
+                            <label class="qa-filter-label">@Localizer["CarMake"]</label>
+                            <select class="qa-filter-select" id="carMakeFilter">
+                                <option value="">@Localizer["AllMakes"]</option>
+                                @foreach (var make in Model.AvailableCarMakes)
+                                {
+                                    <option value="@make" selected="@(searchRequest?.CarMake == make)">@make</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="questionsContainer">
+                    <partial name="_QuestionList" model="Model" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section SidebarRight {
+    <aside class="sidebar sidebar-right d-none d-xl-block">
+        <div class="sidebar-content custom-scroll">
+            <!-- QA Stats -->
+            <div class="card sidebar-card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i data-lucide="bar-chart-3" style="width: 16px; height: 16px;"></i> @Localizer["QAStatistics"]</h6>
+                </div>
+                <div class="card-body">
+                    <div class="stat-row">
+                        <span>@Localizer["TotalQuestions"]</span>
+                        <strong>@Model.Stats.TotalQuestions</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>@Localizer["Solved"]</span>
+                        <strong class="text-success">@Model.Stats.SolvedQuestions</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>@Localizer["Open"]</span>
+                        <strong class="text-warning">@Model.Stats.OpenQuestions</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>@Localizer["TotalAnswers"]</span>
+                        <strong>@Model.Stats.TotalAnswers</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Tags -->
+            <div class="card sidebar-card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i data-lucide="tag" style="width: 16px; height: 16px;"></i> @Localizer["PopularTags"]</h6>
+                </div>
+                <div class="card-body">
+                    @foreach (var tag in Model.AvailableTags.Take(10))
+                    {
+                        <span class="badge bg-light text-dark me-1 mb-1">#@tag</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Car Makes -->
+            <div class="card sidebar-card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i data-lucide="car" style="width: 16px; height: 16px;"></i> @Localizer["PopularMakes"]</h6>
+                </div>
+                <div class="card-body">
+                    @foreach (var make in Model.AvailableCarMakes.Take(8))
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>@make</span>
+                            <small class="text-muted">Popular</small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </aside>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/feed.css" />
+}
+
+@section Scripts {
+    <script>
+        let searchTimeout;
+        let currentPage = 1;
+
+        async function performSearch(page = 1) {
+            currentPage = page;
+            const searchTerm = document.getElementById('qaSearchInput').value;
+            const sortBy = document.getElementById('sortFilter').value;
+            const difficulty = document.getElementById('difficultyFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const carMake = document.getElementById('carMakeFilter').value;
+
+            // Build query parameters
+            const params = new URLSearchParams({
+                SearchTerm: searchTerm,
+                SortBy: sortBy,
+                Page: page,
+                PageSize: 20
+            });
+
+            if (difficulty) params.append('Difficulty', difficulty);
+            if (status) params.append('Status', status);
+            if (carMake) params.append('CarMake', carMake);
+
+            const container = document.getElementById('questionsContainer');
+            // Add a subtle loading state
+            container.style.opacity = '0.6';
+            container.style.pointerEvents = 'none';
+
+            try {
+                const response = await fetch(`@Url.Action("Index", "QA")?${params.toString()}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (response.ok) {
+                    const html = await response.text();
+                    container.innerHTML = html;
+                    
+                    // Re-initialize Lucide icons for new content
+                    if (window.lucide) {
+                        lucide.createIcons();
+                    }
+                    
+                    // Update URL without reloading
+                    const newUrl = window.location.pathname + '?' + params.toString();
+                    window.history.pushState({ path: newUrl }, '', newUrl);
+                }
+            } catch (error) {
+                console.error('Error performing search:', error);
+            } finally {
+                container.style.opacity = '1';
+                container.style.pointerEvents = 'auto';
+            }
+        }
+
+        function changePage(page) {
+            performSearch(page);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetFilters() {
+            document.getElementById('qaSearchInput').value = '';
+            document.getElementById('sortFilter').value = 'Newest';
+            document.getElementById('difficultyFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('carMakeFilter').value = '';
+            performSearch(1);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+            const filtersPanel = document.getElementById('filtersPanel');
+            const toggleViewBtn = document.getElementById('toggleViewBtn');
+            const searchInput = document.getElementById('qaSearchInput');
+            const filters = ['sortFilter', 'difficultyFilter', 'statusFilter', 'carMakeFilter'];
+
+            // Toggle Filters Panel
+            toggleFiltersBtn.addEventListener('click', () => {
+                toggleFiltersBtn.classList.toggle('active');
+                if (filtersPanel.style.display === 'block') {
+                    filtersPanel.style.display = 'none';
+                } else {
+                    filtersPanel.style.display = 'block';
+                }
+            });
+
+            // Toggle Grid/List View
+            toggleViewBtn.addEventListener('click', () => {
+                const qaList = document.querySelector('.qa-list');
+                if (!qaList) return;
+                
+                qaList.classList.toggle('grid-view');
+                toggleViewBtn.classList.toggle('active');
+                
+                const viewIcon = toggleViewBtn.querySelector('i');
+                if (qaList.classList.contains('grid-view')) {
+                    viewIcon.setAttribute('data-lucide', 'list');
+                } else {
+                    viewIcon.setAttribute('data-lucide', 'layout-grid');
+                }
+                lucide.createIcons();
+            });
+
+            // AJAX filtering
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => performSearch(1), 500);
+            });
+
+            filters.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', () => performSearch(1));
+                }
+            });
+        });
+    </script>
+}
+

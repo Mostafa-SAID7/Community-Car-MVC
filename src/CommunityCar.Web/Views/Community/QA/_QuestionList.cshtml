@@ -1,0 +1,144 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model CommunityCar.Application.Features.QA.DTOs.QASearchResponse
+
+<div class="qa-list" id="questionsList">
+    @if (Model.Questions.Any())
+    {
+        @foreach (var question in Model.Questions)
+        {
+            <a href="@Url.Action("Details", "QA", new { id = question.Id })" class="qa-item @(question.IsPinned ? "qa-item-pinned" : "") @(question.IsLocked ? "qa-item-locked" : "")" data-difficulty="@question.Difficulty" data-status="@(question.IsSolved ? "solved" : "open")" data-car-make="@question.CarMake">
+                <div class="qa-main-info">
+                    <div class="qa-meta">
+                        <div class="qa-meta-user">
+                            <div class="qa-user-avatar-xs">
+                                @if (!string.IsNullOrEmpty(question.AuthorProfilePicture))
+                                {
+                                    <img src="@question.AuthorProfilePicture" alt="@question.AuthorName" />
+                                }
+                                else
+                                {
+                                    <i data-lucide="user" style="width: 12px;"></i>
+                                }
+                            </div>
+                            <div class="qa-user-details">
+                                <span class="qa-user-name">@question.AuthorName</span>
+                            </div>
+                        </div>
+                        <span class="qa-activity-meta">• @(question.LastActivityAt != question.CreatedAt ? Localizer["Active"] : Localizer["Asked"]) @(question.LastActivityAt != question.CreatedAt ? question.LastActivityTimeAgo : question.TimeAgo)</span>
+                    </div>
+
+                    <!-- Title in Middle -->
+                    <div class="qa-title-row">
+                        <h3 class="qa-title">
+                            @if (question.IsPinned)
+                            {
+                                <i data-lucide="pin" style="width: 14px; margin-right: 0.25rem;"></i>
+                            }
+                            @question.Title
+                        </h3>
+                        <div class="qa-badges">
+                            @if (question.IsSolved)
+                            {
+                                <span class="qa-badge-solved">
+                                    <i data-lucide="check-circle" style="width: 12px;"></i>@Localizer["Solved"]
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="qa-badge-open">
+                                    <i data-lucide="help-circle" style="width: 12px;"></i>@Localizer["Open"]
+                                </span>
+                            }
+                            <span class="qa-badge-difficulty qa-badge-@question.DifficultyColor">
+                                @question.DifficultyDisplay
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Tags and Car Info at Bottom -->
+                    <div class="qa-card-footer">
+                        @if (!string.IsNullOrEmpty(question.CarDisplayName))
+                        {
+                            <div class="qa-car-info">
+                                <i data-lucide="car" style="width: 14px;"></i>
+                                <span>@question.CarDisplayName</span>
+                            </div>
+                        }
+                        
+                        @if (question.Tags.Any())
+                        {
+                            <div class="qa-tags">
+                                @foreach (var tag in question.Tags.Take(3))
+                                {
+                                    <span class="qa-tag">@tag</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Stats on Right -->
+                <div class="qa-stats">
+                    <div class="qa-stat-box @(question.VoteScore > 0 ? "qa-stat-positive" : question.VoteScore < 0 ? "qa-stat-negative" : "")">
+                        <span class="qa-stat-value">@question.VoteScore</span>
+                        <span class="qa-stat-label">@Localizer["Votes"]</span>
+                    </div>
+                    <div class="qa-stat-box @(question.AnswerCount > 0 ? question.IsSolved ? "qa-stat-solved" : "qa-stat-answered" : "")">
+                        <span class="qa-stat-value">@question.AnswerCount</span>
+                        <span class="qa-stat-label">@Localizer["Answers"]</span>
+                    </div>
+                    <div class="qa-stat-box qa-stat-views">
+                        <span class="qa-stat-value">@question.ViewCount</span>
+                        <span class="qa-stat-label">@Localizer["Views"]</span>
+                    </div>
+                </div>
+            </a>
+        }
+
+        @if (Model.Pagination.TotalPages > 1)
+        {
+            <div class="qa-pagination">
+                <div class="qa-pagination-info">
+                    @Localizer["Showing"] @Model.Pagination.StartItem-@Model.Pagination.EndItem @Localizer["Of"] @Model.Pagination.TotalItems
+                </div>
+                
+                <nav class="qa-pagination-nav">
+                    @if (Model.Pagination.HasPreviousPage)
+                    {
+                        <a href="javascript:void(0)" onclick="changePage(@(Model.Pagination.CurrentPage - 1))" class="qa-page-btn">
+                            <i data-lucide="chevron-left" style="width: 16px;"></i>
+                            @Localizer["Previous"]
+                        </a>
+                    }
+                    
+                    @for (int i = Math.Max(1, Model.Pagination.CurrentPage - 2); i <= Math.Min(Model.Pagination.TotalPages, Model.Pagination.CurrentPage + 2); i++)
+                    {
+                        <a href="javascript:void(0)" onclick="changePage(@i)" class="qa-page-btn @(i == Model.Pagination.CurrentPage ? "active" : "")">
+                            @i
+                        </a>
+                    }
+                    
+                    @if (Model.Pagination.HasNextPage)
+                    {
+                        <a href="javascript:void(0)" onclick="changePage(@(Model.Pagination.CurrentPage + 1))" class="qa-page-btn">
+                            @Localizer["Next"]
+                            <i data-lucide="chevron-right" style="width: 16px;"></i>
+                        </a>
+                    }
+                </nav>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="qa-empty-state">
+            <div class="qa-empty-icon">
+                <i data-lucide="help-circle"></i>
+            </div>
+            <h3>@Localizer["NoQuestionsFound"]</h3>
+            <p>@Localizer["TryAdjustingFilters"]</p>
+            <button class="btn btn-outline-primary mt-3" onclick="resetFilters()">@Localizer["ClearFilters"]</button>
+        </div>
+    }
+</div>

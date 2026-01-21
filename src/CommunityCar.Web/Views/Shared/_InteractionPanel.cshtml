@@ -1,0 +1,131 @@
+@model CommunityCar.Application.Features.Interactions.ViewModels.InteractionSummaryVM
+
+<div class="interaction-panel" data-entity-id="@ViewBag.EntityId" data-entity-type="@ViewBag.EntityType">
+    <!-- Reactions Section -->
+    <div class="reactions-section">
+        <div class="reaction-summary">
+            @if (Model.Reactions.TotalReactions > 0)
+            {
+                <div class="reaction-counts">
+                    @foreach (var reaction in Model.Reactions.AvailableReactions.Where(r => r.Count > 0))
+                    {
+                        <span class="reaction-count @reaction.Color" title="@reaction.Count @reaction.Display reactions">
+                            <i class="fas fa-@reaction.Icon"></i>
+                            <span class="count">@reaction.Count</span>
+                        </span>
+                    }
+                </div>
+            }
+        </div>
+        
+        <div class="reaction-buttons">
+            @if (Model.CanReact)
+            {
+                <div class="reaction-picker">
+                    <button class="btn-reaction @(Model.Reactions.HasUserReacted ? "active" : "")" 
+                            data-action="toggle-reaction" 
+                            data-current-reaction="@Model.Reactions.UserReaction">
+                        @if (Model.Reactions.HasUserReacted)
+                        {
+                            var userReactionInfo = Model.Reactions.AvailableReactions.FirstOrDefault(r => r.Type == Model.Reactions.UserReaction);
+                            <i class="fas fa-@userReactionInfo?.Icon @userReactionInfo?.Color"></i>
+                            <span>@userReactionInfo?.Display</span>
+                        }
+                        else
+                        {
+                            <i class="far fa-thumbs-up"></i>
+                            <span>Like</span>
+                        }
+                    </button>
+                    
+                    <div class="reaction-options" style="display: none;">
+                        @foreach (var reaction in Model.Reactions.AvailableReactions)
+                        {
+                            <button class="reaction-option @reaction.Color" 
+                                    data-reaction-type="@reaction.Type" 
+                                    title="@reaction.Display">
+                                <i class="fas fa-@reaction.Icon"></i>
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="comments-section">
+        <div class="comment-summary">
+            <button class="btn-comment" data-action="toggle-comments">
+                <i class="far fa-comment"></i>
+                <span>Comment (@Model.CommentCount)</span>
+            </button>
+        </div>
+        
+        @if (Model.CanComment)
+        {
+            <div class="comment-form" style="display: none;">
+                <div class="comment-input-group">
+                    <textarea class="comment-input" placeholder="Write a comment..." rows="2"></textarea>
+                    <div class="comment-actions">
+                        <button class="btn btn-primary btn-sm" data-action="submit-comment">Post</button>
+                        <button class="btn btn-secondary btn-sm" data-action="cancel-comment">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        }
+        
+        <div class="comments-list" style="display: none;">
+            <!-- Comments will be loaded here via AJAX -->
+        </div>
+    </div>
+
+    <!-- Shares Section -->
+    <div class="shares-section">
+        <div class="share-summary">
+            @if (Model.Shares.TotalShares > 0)
+            {
+                <span class="share-count">@Model.Shares.TotalShares shares</span>
+            }
+        </div>
+        
+        @if (Model.CanShare)
+        {
+            <div class="share-buttons">
+                <button class="btn-share" data-action="toggle-share">
+                    <i class="fas fa-share"></i>
+                    <span>Share</span>
+                </button>
+                
+                <div class="share-options" style="display: none;">
+                    <button class="share-option" data-share-type="Internal" title="Share internally">
+                        <i class="fas fa-users"></i>
+                        <span>Share with community</span>
+                    </button>
+                    <button class="share-option" data-share-type="DirectLink" title="Copy link">
+                        <i class="fas fa-link"></i>
+                        <span>Copy link</span>
+                    </button>
+                    <button class="share-option" data-share-type="SocialMedia" data-platform="facebook" title="Share on Facebook">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </button>
+                    <button class="share-option" data-share-type="SocialMedia" data-platform="twitter" title="Share on Twitter">
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </button>
+                    <button class="share-option" data-share-type="SocialMedia" data-platform="whatsapp" title="Share on WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initializeInteractionPanel();
+});
+</script>

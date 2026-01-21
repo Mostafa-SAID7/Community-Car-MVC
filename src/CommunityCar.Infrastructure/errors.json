@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Microsoft (R) Visual C# Compiler",
+        "version": "4.14.0.0",
+        "fileVersion": "4.14.0-3.25465.8 (b0a9adbf)",
+        "semanticVersion": "4.14.0",
+        "language": "en-US"
+      },
+      "results": [
+        {
+          "ruleId": "CS0114",
+          "level": "warning",
+          "message": "'ApplicationDbContext.Users' hides inherited member 'IdentityUserContext<User, Guid, IdentityUserClaim<Guid>, IdentityUserLogin<Guid>, IdentityUserToken<Guid>>.Users'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/memos/OneDrive/Desktop/Projects/Community%20Car%20MVC/src/CommunityCar.Infrastructure/Persistence/ApplicationDbContext.cs",
+                "region": {
+                  "startLine": 38,
+                  "startColumn": 24,
+                  "endLine": 38,
+                  "endColumn": 29
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 2
+          }
+        },
+        {
+          "ruleId": "CS2012",
+          "level": "error",
+          "message": "Cannot open 'C:\\Users\\memos\\OneDrive\\Desktop\\Projects\\Community Car MVC\\src\\CommunityCar.Infrastructure\\obj\\Debug\\net9.0\\CommunityCar.Infrastructure.dll' for writing -- The process cannot access the file 'C:\\Users\\memos\\OneDrive\\Desktop\\Projects\\Community Car MVC\\src\\CommunityCar.Infrastructure\\obj\\Debug\\net9.0\\CommunityCar.Infrastructure.dll' because it is being used by another process."
+        }
+      ],
+      "rules": {
+        "CS0114": {
+          "id": "CS0114",
+          "shortDescription": "Member hides inherited member; missing override keyword",
+          "defaultLevel": "warning",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS0114)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry"
+            ]
+          }
+        },
+        "CS2012": {
+          "id": "CS2012",
+          "defaultLevel": "error",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS2012)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry",
+              "NotConfigurable"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

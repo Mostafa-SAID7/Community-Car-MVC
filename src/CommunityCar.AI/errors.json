@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Microsoft (R) Visual C# Compiler",
+        "version": "4.14.0.0",
+        "fileVersion": "4.14.0-3.25465.8 (b0a9adbf)",
+        "semanticVersion": "4.14.0",
+        "language": "en-US"
+      },
+      "results": [
+        {
+          "ruleId": "CS2012",
+          "level": "error",
+          "message": "Cannot open 'C:\\Users\\memos\\OneDrive\\Desktop\\Projects\\Community Car MVC\\src\\CommunityCar.AI\\obj\\Debug\\net9.0\\CommunityCar.AI.dll' for writing -- The process cannot access the file 'C:\\Users\\memos\\OneDrive\\Desktop\\Projects\\Community Car MVC\\src\\CommunityCar.AI\\obj\\Debug\\net9.0\\CommunityCar.AI.dll' because it is being used by another process."
+        }
+      ],
+      "rules": {
+        "CS2012": {
+          "id": "CS2012",
+          "defaultLevel": "error",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS2012)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry",
+              "NotConfigurable"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

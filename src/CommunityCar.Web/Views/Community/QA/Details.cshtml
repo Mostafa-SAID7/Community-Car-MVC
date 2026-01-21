@@ -1,0 +1,446 @@
+@model CommunityCar.Application.Features.QA.ViewModels.QuestionVM
+@{
+    ViewData["Title"] = $"{Model.Title} - Q&A";
+    var answers = ViewBag.Answers as IEnumerable<CommunityCar.Application.Features.QA.ViewModels.AnswerVM>;
+}
+
+<div class="qa-container">
+    <nav class="qa-breadcrumb">
+        <a href="@Url.Action("Index", "QA")" class="qa-back-nav">
+            <i data-lucide="arrow-left" class="me-1" style="width: 16px;"></i>Back to Q&A
+        </a>
+        <div class="qa-breadcrumb-divider">/</div>
+        <span class="qa-breadcrumb-current">Question Details</span>
+    </nav>
+    
+    <div class="qa-glass-card qa-question-detail">
+        <!-- Question Header -->
+        <div class="qa-detail-header">
+            <div class="qa-title-section">
+                <h1 class="qa-detail-title">@Model.Title</h1>
+                <div class="qa-badges-row">
+                    @if (Model.IsSolved)
+                    {
+                        <span class="qa-badge-solved">
+                            <i data-lucide="check-circle" style="width: 14px;"></i>Solved
+                        </span>
+                    }
+                    @if (Model.IsPinned)
+                    {
+                        <span class="qa-badge-pinned">
+                            <i data-lucide="pin" style="width: 14px;"></i>Pinned
+                        </span>
+                    }
+                    @if (Model.IsLocked)
+                    {
+                        <span class="qa-badge-locked">
+                            <i data-lucide="lock" style="width: 14px;"></i>Locked
+                        </span>
+                    }
+                    <span class="qa-badge-difficulty qa-badge-@Model.DifficultyColor">
+                        @Model.DifficultyDisplay
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Question Stats -->
+            <div class="qa-question-stats">
+                <div class="qa-stat-item">
+                    <span class="qa-stat-number">@Model.ViewCount</span>
+                    <span class="qa-stat-text">views</span>
+                </div>
+                <div class="qa-stat-item">
+                    <span class="qa-stat-number">@Model.AnswerCount</span>
+                    <span class="qa-stat-text">answers</span>
+                </div>
+                <div class="qa-stat-item">
+                    <span class="qa-stat-number">@Model.VoteScore</span>
+                    <span class="qa-stat-text">votes</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Car Information -->
+        @if (!string.IsNullOrEmpty(Model.CarDisplayName))
+        {
+            <div class="qa-car-details">
+                <div class="qa-car-header">
+                    <i data-lucide="car" style="width: 18px;"></i>
+                    <span>Vehicle Information</span>
+                </div>
+                <div class="qa-car-info-detailed">
+                    <span class="qa-car-name">@Model.CarDisplayName</span>
+                    @if (!string.IsNullOrEmpty(Model.CarEngine))
+                    {
+                        <span class="qa-car-engine">Engine: @Model.CarEngine</span>
+                    }
+                </div>
+            </div>
+        }
+        
+        <!-- Tags -->
+        @if (Model.Tags.Any())
+        {
+            <div class="qa-tags-section">
+                @foreach (var tag in Model.Tags)
+                {
+                    <span class="qa-tag-detailed">@tag</span>
+                }
+            </div>
+        }
+        
+        <!-- Author and Meta Information -->
+        <div class="qa-detail-meta">
+            <div class="qa-author-section">
+                <div class="qa-detail-avatar">
+                    @if (!string.IsNullOrEmpty(Model.AuthorProfilePicture))
+                    {
+                        <img src="@Model.AuthorProfilePicture" alt="@Model.AuthorName" />
+                    }
+                    else
+                    {
+                        <i data-lucide="user" style="width: 18px;"></i>
+                    }
+                </div>
+                <div class="qa-detail-user-info">
+                    <div class="qa-author-name-row">
+                        <span class="qa-detail-username">@Model.AuthorName</span>
+                        @if (Model.IsAuthorExpert)
+                        {
+                            <span class="qa-expert-badge-detailed">Expert</span>
+                        }
+                        @if (Model.AuthorReputation > 0)
+                        {
+                            <span class="qa-reputation-detailed">@Model.AuthorReputation pts</span>
+                        }
+                    </div>
+                    <div class="qa-question-dates">
+                        <span class="qa-detail-date">Asked @Model.TimeAgo</span>
+                        @if (Model.LastActivityAt != Model.CreatedAt)
+                        {
+                            <span class="qa-detail-activity">• Last active @Model.LastActivityTimeAgo</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="qa-action-buttons">
+                <button class="qa-action-btn" title="Bookmark">
+                    <i data-lucide="bookmark" style="width: 16px;"></i>
+                </button>
+                <button class="qa-action-btn" title="Share">
+                    <i data-lucide="share-2" style="width: 16px;"></i>
+                </button>
+                <button class="qa-action-btn" title="Report">
+                    <i data-lucide="flag" style="width: 16px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Question Content -->
+        <div class="qa-content-wrapper">
+            <div class="qa-vote-sidebar">
+                <form asp-action="Vote" method="post" class="qa-vote-form">
+                    <input type="hidden" name="entityId" value="@Model.Id" />
+                    <input type="hidden" name="entityType" value="Question" />
+                    <button type="submit" name="voteType" value="Upvote" class="qa-vote-btn @(Model.UserVoteType == CommunityCar.Domain.Enums.VoteType.Upvote ? "active" : "")" title="Upvote">
+                        <i data-lucide="chevron-up"></i>
+                    </button>
+                    <span class="qa-vote-count @(Model.VoteScore > 0 ? "positive" : Model.VoteScore < 0 ? "negative" : "")">@Model.VoteScore</span>
+                    <button type="submit" name="voteType" value="Downvote" class="qa-vote-btn @(Model.UserVoteType == CommunityCar.Domain.Enums.VoteType.Downvote ? "active" : "")" title="Downvote">
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                </form>
+                
+                <form asp-action="@(Model.IsBookmarked ? "Unbookmark" : "Bookmark")" method="post" class="qa-bookmark-form">
+                    <input type="hidden" name="questionId" value="@Model.Id" />
+                    <button type="submit" class="qa-bookmark-btn @(Model.IsBookmarked ? "active" : "")" title="@(Model.IsBookmarked ? "Remove bookmark" : "Bookmark")">
+                        <i data-lucide="bookmark" style="width: 18px;"></i>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="qa-body-content">
+                <div class="qa-body-text">
+                    @Html.Raw(Model.Body.Replace("\n", "<br/>"))
+                </div>
+                
+                @if (Model.IsSolved && Model.SolvedAt.HasValue)
+                {
+                    <div class="qa-solved-info">
+                        <i data-lucide="check-circle-2" style="width: 16px;"></i>
+                        <span>This question was solved @Model.SolvedAt.Value.ToString("MMM dd, yyyy")</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Answers Section -->
+<div class="qa-answers-section">
+    <div class="qa-answers-header-row">
+        <h2 class="qa-answers-header">
+            <i data-lucide="message-square" class="text-primary" style="width: 20px;"></i>
+            @(answers?.Count() ?? 0) Answer@(answers?.Count() == 1 ? "" : "s")
+        </h2>
+        
+        @if (answers?.Any() == true)
+        {
+            <div class="qa-answers-sort">
+                <select class="qa-sort-select" id="answerSort">
+                    <option value="votes">Highest Voted</option>
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                </select>
+            </div>
+        }
+    </div>
+
+    @if (answers != null && answers.Any())
+    {
+        @foreach (var answer in answers.OrderByDescending(a => a.IsAccepted).ThenByDescending(a => a.VoteScore))
+        {
+            <div class="qa-glass-card qa-answer-card @(answer.IsAccepted ? "qa-answer-accepted-border" : "")" data-answer-id="@answer.Id">
+                @if (answer.IsAccepted)
+                {
+                    <div class="qa-accepted-indicator">
+                        <i data-lucide="check-circle" style="width: 16px;"></i>
+                        <span>Accepted Answer</span>
+                        @if (answer.AcceptedAt.HasValue)
+                        {
+                            <span class="qa-accepted-time">• @answer.AcceptedTimeAgo</span>
+                        }
+                    </div>
+                }
+                
+                <div class="qa-content-wrapper">
+                    <div class="qa-vote-sidebar">
+                        <form asp-action="Vote" method="post" class="qa-vote-form">
+                            <input type="hidden" name="entityId" value="@answer.Id" />
+                            <input type="hidden" name="entityType" value="Answer" />
+                            <button type="submit" name="voteType" value="Upvote" class="qa-vote-btn @(answer.UserVoteType == CommunityCar.Domain.Enums.VoteType.Upvote ? "active" : "")">
+                                <i data-lucide="chevron-up"></i>
+                            </button>
+                            <span class="qa-vote-count @(answer.VoteScore > 0 ? "positive" : answer.VoteScore < 0 ? "negative" : "")">@answer.VoteScore</span>
+                            <button type="submit" name="voteType" value="Downvote" class="qa-vote-btn @(answer.UserVoteType == CommunityCar.Domain.Enums.VoteType.Downvote ? "active" : "")">
+                                <i data-lucide="chevron-down"></i>
+                            </button>
+                        </form>
+                        
+                        @if (!Model.IsSolved && !answer.IsAccepted)
+                        {
+                            <form asp-action="AcceptAnswer" method="post">
+                                <input type="hidden" name="answerId" value="@answer.Id" />
+                                <input type="hidden" name="questionId" value="@Model.Id" />
+                                <button type="submit" class="qa-accept-btn" title="Accept this answer">
+                                    <i data-lucide="check-circle" style="width: 18px;"></i>
+                                </button>
+                            </form>
+                        }
+                        
+                        <form asp-action="MarkHelpful" method="post" class="qa-helpful-form">
+                            <input type="hidden" name="answerId" value="@answer.Id" />
+                            <button type="submit" class="qa-helpful-btn @(answer.HasUserMarkedHelpful ? "active" : "")" title="Mark as helpful">
+                                <i data-lucide="thumbs-up" style="width: 16px;"></i>
+                                @if (answer.HelpfulCount > 0)
+                                {
+                                    <span>@answer.HelpfulCount</span>
+                                }
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="qa-answer-content">
+                        <!-- Answer Header -->
+                        <div class="qa-answer-header">
+                            <div class="qa-answer-author">
+                                <div class="qa-user-avatar-sm">
+                                    @if (!string.IsNullOrEmpty(answer.AuthorProfilePicture))
+                                    {
+                                        <img src="@answer.AuthorProfilePicture" alt="@answer.AuthorName" />
+                                    }
+                                    else
+                                    {
+                                        <i data-lucide="user" style="width: 16px;"></i>
+                                    }
+                                </div>
+                                <div class="qa-answer-author-info">
+                                    <div class="qa-author-name-row">
+                                        <span class="qa-author-name">@answer.AuthorName</span>
+                                        @if (answer.IsAuthorExpert)
+                                        {
+                                            <span class="qa-expert-badge">Expert</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(answer.AuthorTitle))
+                                        {
+                                            <span class="qa-author-title">@answer.AuthorTitle</span>
+                                        }
+                                        @if (answer.AuthorReputation > 0)
+                                        {
+                                            <span class="qa-reputation">@answer.AuthorReputation pts</span>
+                                        }
+                                    </div>
+                                    <div class="qa-answer-dates">
+                                        <span class="qa-answer-date">Answered @answer.TimeAgo</span>
+                                        @if (answer.IsEdited && answer.LastEditedAt.HasValue)
+                                        {
+                                            <span class="qa-edit-info">• Edited @answer.EditedTimeAgo</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            @if (answer.IsVerifiedByExpert)
+                            {
+                                <div class="qa-verified-badge" title="Verified by expert: @answer.VerifiedByName">
+                                    <i data-lucide="shield-check" style="width: 16px;"></i>
+                                    <span>Expert Verified</span>
+                                </div>
+                            }
+                        </div>
+                        
+                        <!-- Answer Body -->
+                        <div class="qa-body-text">
+                            @Html.Raw(answer.Body.Replace("\n", "<br/>"))
+                        </div>
+                        
+                        <!-- Answer Footer -->
+                        <div class="qa-answer-footer">
+                            @if (answer.IsEdited && !string.IsNullOrEmpty(answer.EditReason))
+                            {
+                                <div class="qa-edit-reason">
+                                    <i data-lucide="edit-3" style="width: 14px;"></i>
+                                    <span>Edit reason: @answer.EditReason</span>
+                                </div>
+                            }
+                            
+                            @if (answer.IsVerifiedByExpert && !string.IsNullOrEmpty(answer.VerificationNote))
+                            {
+                                <div class="qa-verification-note">
+                                    <i data-lucide="info" style="width: 14px;"></i>
+                                    <span>Expert note: @answer.VerificationNote</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="qa-glass-card qa-no-answers">
+            <div class="qa-no-answers-content">
+                <i data-lucide="message-circle" style="width: 48px;"></i>
+                <h3>No answers yet</h3>
+                <p>Be the first to share your knowledge and help solve this question!</p>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Your Answer Section -->
+@if (!Model.IsLocked)
+{
+    <div class="qa-glass-card qa-your-answer">
+        <h3 class="qa-your-answer-title">Your Answer</h3>
+        <p class="qa-answer-guidelines">
+            Please provide a detailed answer. Include steps, explanations, and any relevant experience.
+            For car-related questions, mention specific tools or parts if applicable.
+        </p>
+        
+        <form asp-action="Answer" asp-route-id="@Model.Id" method="post" class="qa-answer-form">
+            <div class="qa-answer-editor">
+                <textarea name="body" class="qa-textarea" placeholder="Write your answer here..." required rows="8"></textarea>
+                <div class="qa-editor-toolbar">
+                    <button type="button" class="qa-format-btn" title="Bold">
+                        <i data-lucide="bold" style="width: 16px;"></i>
+                    </button>
+                    <button type="button" class="qa-format-btn" title="Italic">
+                        <i data-lucide="italic" style="width: 16px;"></i>
+                    </button>
+                    <button type="button" class="qa-format-btn" title="Link">
+                        <i data-lucide="link" style="width: 16px;"></i>
+                    </button>
+                    <button type="button" class="qa-format-btn" title="Code">
+                        <i data-lucide="code" style="width: 16px;"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="qa-answer-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i data-lucide="send" style="width: 16px;"></i>
+                    Post Answer
+                </button>
+                <button type="button" class="btn btn-outline-secondary">
+                    <i data-lucide="eye" style="width: 16px;"></i>
+                    Preview
+                </button>
+            </div>
+        </form>
+    </div>
+}
+else
+{
+    <div class="qa-glass-card qa-locked-notice">
+        <div class="qa-locked-content">
+            <i data-lucide="lock" style="width: 24px;"></i>
+            <h4>This question is locked</h4>
+            <p>@(Model.CloseReason ?? "This question has been locked and is not accepting new answers.")</p>
+            @if (Model.ClosedAt.HasValue)
+            {
+                <p class="qa-locked-date">Locked on @Model.ClosedAt.Value.ToString("MMM dd, yyyy")</p>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const answerSort = document.getElementById('answerSort');
+            
+            if (answerSort) {
+                answerSort.addEventListener('change', () => {
+                    const answers = document.querySelectorAll('.qa-answer-card');
+                    const answersArray = Array.from(answers);
+                    const container = answers[0]?.parentNode;
+                    
+                    if (!container) return;
+                    
+                    answersArray.sort((a, b) => {
+                        const aAccepted = a.classList.contains('qa-answer-accepted-border');
+                        const bAccepted = b.classList.contains('qa-answer-accepted-border');
+                        
+                        // Always keep accepted answers at top
+                        if (aAccepted && !bAccepted) return -1;
+                        if (!aAccepted && bAccepted) return 1;
+                        
+                        const sortBy = answerSort.value;
+                        
+                        if (sortBy === 'votes') {
+                            const aVotes = parseInt(a.querySelector('.qa-vote-count').textContent);
+                            const bVotes = parseInt(b.querySelector('.qa-vote-count').textContent);
+                            return bVotes - aVotes;
+                        } else if (sortBy === 'newest') {
+                            const aId = a.dataset.answerId;
+                            const bId = b.dataset.answerId;
+                            return bId.localeCompare(aId);
+                        } else if (sortBy === 'oldest') {
+                            const aId = a.dataset.answerId;
+                            const bId = b.dataset.answerId;
+                            return aId.localeCompare(bId);
+                        }
+                        
+                        return 0;
+                    });
+                    
+                    answersArray.forEach(answer => container.appendChild(answer));
+                });
+            }
+        });
+    </script>
+}

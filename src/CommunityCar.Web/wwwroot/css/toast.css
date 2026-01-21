@@ -1,0 +1,93 @@
+/* Toastr Notification Enhancements */
+
+#toast-container>div {
+    opacity: 1 !important;
+    background-color: var(--header-pill-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid var(--header-pill-border) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-lg) !important;
+    color: hsl(var(--color-foreground)) !important;
+    padding: 1rem 1rem 1rem 3rem !important;
+    transition: all 0.3s var(--ease-out-circ);
+    background-image: none !important;
+}
+
+#toast-container>div:hover {
+    box-shadow: var(--shadow-xl) !important;
+    transform: translateY(-2px);
+}
+
+/* Base style for icons/accents */
+#toast-container>.toast:before {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+/* Success State */
+#toast-container>.toast-success .toast-progress {
+    background-color: #22c55e !important;
+    opacity: 0.5;
+}
+
+/* Error State */
+#toast-container>.toast-error .toast-progress {
+    background-color: var(--color-red-500) !important;
+    opacity: 0.5;
+}
+
+/* Warning State */
+#toast-container>.toast-warning .toast-progress {
+    background-color: #f59e0b !important;
+    opacity: 0.5;
+}
+
+/* Info State */
+#toast-container>.toast-info .toast-progress {
+    background-color: #3b82f6 !important;
+    opacity: 0.5;
+}
+
+/* Toast Title & Message */
+.toast-title {
+    font-weight: 700 !important;
+    font-size: 0.9375rem !important;
+    margin-bottom: 0.25rem !important;
+    color: hsl(var(--color-foreground)) !important;
+}
+
+.toast-message {
+    font-size: 0.875rem !important;
+    line-height: 1.4 !important;
+    color: hsl(var(--color-muted-foreground)) !important;
+}
+
+/* Close Button */
+.toast-close-button {
+    color: hsl(var(--color-foreground)) !important;
+    opacity: 0.3 !important;
+    transition: opacity 0.2s !important;
+}
+
+.toast-close-button:hover {
+    opacity: 0.8 !important;
+}
+
+/* Progress Bar */
+.toast-progress {
+    height: 3px !important;
+    bottom: 0 !important;
+    top: auto !important;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Dark Mode Overrides */
+.dark #toast-container>div {
+    background-color: rgba(23, 23, 23, 0.8) !important;
+    border-color: rgba(63, 63, 70, 0.5) !important;
+}

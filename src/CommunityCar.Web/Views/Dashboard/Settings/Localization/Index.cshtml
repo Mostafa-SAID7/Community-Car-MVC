@@ -1,0 +1,77 @@
+@model List<CommunityCar.Domain.Entities.Localization.LocalizationCulture>
+@{
+    ViewData["Title"] = "Localization Management";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml"; // Assuming a dashboard layout exists
+}
+
+<div class="dashboard-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Localization Management</h1>
+        <div>
+            <form asp-action="ImportFromFiles" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-secondary me-2">Import from Files</button>
+            </form>
+            <a href="@Url.Action("Resources", "Localization")" class="btn btn-info me-2">Manage Resources</a>
+            <a href="@Url.Action("AddCulture", "Localization")" class="btn btn-primary">Add Culture</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Display Name</th>
+                        <th>RTL</th>
+                        <th>Default</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var culture in Model)
+                    {
+                        <tr>
+                            <td><code>@culture.Name</code></td>
+                            <td>@culture.DisplayName</td>
+                            <td>
+                                @if (culture.IsRTL)
+                                {
+                                    <span class="badge bg-secondary">RTL</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-light text-dark">LTR</span>
+                                }
+                            </td>
+                            <td>
+                                @if (culture.IsDefault)
+                                {
+                                    <span class="badge bg-success">Default</span>
+                                }
+                            </td>
+                            <td>
+                                @if (culture.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactive</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <a href="@Url.Action("EditCulture", "Localization", new { id = culture.Id })" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <form asp-action="DeleteCulture" asp-route-id="@culture.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

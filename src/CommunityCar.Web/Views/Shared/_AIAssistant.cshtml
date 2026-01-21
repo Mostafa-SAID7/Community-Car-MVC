@@ -1,0 +1,44 @@
+<!-- AI Assistant FAB & Widget Wrapper -->
+<div class="ai-assist-wrapper">
+    <!-- Chat Widget -->
+    <div id="ai-chat-widget" class="ai-chat-widget d-none">
+        <div class="chat-header">
+            <div class="d-flex align-items-center gap-2">
+                <div class="chat-avatar">
+                    <i data-lucide="sparkles" size="16"></i>
+                </div>
+                <div>
+                    <h4 class="m-0 text-white text-sm font-bold">CC Assistant</h4>
+                    <span class="text-xs text-white opacity-70">Always helpful</span>
+                </div>
+            </div>
+            <button class="btn-close-chat" id="close-chat" aria-label="Close Chat">
+                <i data-lucide="x" size="16"></i>
+            </button>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            <div class="message ai-message">
+                <div class="message-content">
+                    Hello! I'm your Community Car AI assistant. How can I help you today?
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <input type="text" id="chat-input" placeholder="Ask anything..." autocomplete="off">
+                <button id="send-chat" class="btn-send" aria-label="Send Message">
+                    <i data-lucide="send" size="18"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAB Button -->
+    <div class="ai-assist-fab" id="ai-assist-btn">
+        <button class="btn btn-primary shadow-glow rounded-full p-4" id="toggle-chat" aria-label="AI Assistant">
+            <i data-lucide="sparkles" size="24"></i>
+        </button>
+    </div>
+</div>

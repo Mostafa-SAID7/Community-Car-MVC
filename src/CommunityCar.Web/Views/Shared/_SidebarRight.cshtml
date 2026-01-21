@@ -1,0 +1,124 @@
+@{
+    var feedData = ViewData["FeedSidebarData"] as FeedResponse;
+}
+
+<!-- Right Sidebar -->
+<aside class="sidebar sidebar-right d-none d-xl-block">
+    @if (feedData != null)
+    {
+        <!-- Trending Topics -->
+        <div class="sidebar-section mb-4">
+            <h3 class="sidebar-heading">
+                <i class="fas fa-fire"></i>
+                Trending Topics
+            </h3>
+            <div class="sidebar-content">
+                @if (feedData.TrendingTopics?.Any() == true)
+                {
+                    @foreach (var topic in feedData.TrendingTopics.Take(5))
+                    {
+                        <div class="trending-item">
+                            <div class="trending-topic">#@topic.Topic</div>
+                            <div class="trending-meta">@topic.PostCount posts • @topic.TimeAgo</div>
+                            <div class="trending-badge">@topic.TrendingReason</div>
+                        </div>
+                    }
+                    <a href="/trending" class="sidebar-link">View All Trending</a>
+                }
+                else
+                {
+                    <div class="empty-state">No trending topics right now</div>
+                }
+            </div>
+        </div>
+
+        <!-- People You May Know -->
+        @if (feedData.SuggestedFriends?.Any() == true)
+        {
+            <div class="sidebar-section mb-4">
+                <h3 class="sidebar-heading">
+                    <i class="fas fa-user-plus"></i>
+                    People You May Know
+                </h3>
+                <div class="sidebar-content">
+                    @foreach (var friend in feedData.SuggestedFriends.Take(3))
+                    {
+                        <div class="suggested-friend-item">
+                            <div class="friend-avatar">
+                                <img src="@(friend.Avatar ?? "/images/default-avatar.png")" alt="@friend.Name" />
+                            </div>
+                            <div class="friend-info">
+                                <div class="friend-name">@friend.Name</div>
+                                <div class="friend-reason">@friend.SuggestionReason</div>
+                                @if (friend.MutualFriendsCount > 0)
+                                {
+                                    <div class="friend-mutual">@friend.MutualFriendsCount mutual friends</div>
+                                }
+                            </div>
+                            <button class="btn-add-friend" onclick="sendFriendRequest('@friend.UserId')">
+                                <i class="fas fa-user-plus"></i>
+                            </button>
+                        </div>
+                    }
+                    <a href="/friends/suggestions" class="sidebar-link">See All Suggestions</a>
+                </div>
+            </div>
+        }
+
+        <!-- Community Stats -->
+        <div class="sidebar-section">
+            <h3 class="sidebar-heading">
+                <i class="fas fa-chart-line"></i>
+                Community Stats
+            </h3>
+            <div class="sidebar-content">
+                @if (feedData.Stats != null)
+                {
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">Total Posts</div>
+                            <div class="stat-value">@feedData.Stats.TotalItems.ToString("N0")</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Active Stories</div>
+                            <div class="stat-value">@feedData.Stats.ActiveStoriesCount</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Total Engagement</div>
+                            <div class="stat-value">@((feedData.Stats.TotalLikes + feedData.Stats.TotalComments).ToString("N0"))</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Last Updated</div>
+                            <div class="stat-value">@feedData.Stats.LastRefreshAgo</div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">Stats unavailable</div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Default Activity Section for non-feed pages -->
+        <h3 class="sidebar-heading">Activity</h3>
+        <div class="sidebar-content">
+            <div class="d-flex gap-3 mb-3">
+                <div class="flex-shrink-0" style="width: 32px; height: 32px; background: hsl(var(--color-accent)); border-radius: var(--radius-md);"></div>
+                <div>
+                    <p class="text-xs font-medium m-0">New member joined</p>
+                    <p class="text-xs m-0" style="color: hsl(var(--color-muted-foreground));">2 mins ago</p>
+                </div>
+            </div>
+            <div class="d-flex gap-3">
+                <div class="flex-shrink-0" style="width: 32px; height: 32px; background: hsl(var(--color-accent)); border-radius: var(--radius-md);"></div>
+                <div>
+                    <p class="text-xs font-medium m-0">Expert answered</p>
+                    <p class="text-xs m-0" style="color: hsl(var(--color-muted-foreground));">15 mins ago</p>
+                </div>
+            </div>
+        </div>
+    }
+</aside>

@@ -1,0 +1,110 @@
+@model IEnumerable<CommunityCar.Domain.Entities.Community.Posts.Post>
+@{
+    ViewData["Title"] = "Community Posts";
+}
+
+<div class="posts-container">
+    <div class="posts-header">
+        <h1>Community Posts</h1>
+        <a href="#" class="btn btn-primary">
+            <i data-lucide="plus-circle"></i>Create Post
+        </a>
+    </div>
+
+    <div class="posts-search-container">
+        <!-- Search and Toolbar -->
+        <div class="posts-toolbar">
+            <div class="posts-search-wrapper">
+                <span class="posts-search-icon">
+                    <i data-lucide="search" style="width: 18px;"></i>
+                </span>
+                <input type="text" class="posts-search-input" placeholder="Search posts..." id="postsSearchInput">
+            </div>
+            
+            <button class="posts-filter-btn" id="togglePostViewBtn" title="Toggle View">
+                <i data-lucide="layout-grid" style="width: 20px;"></i>
+            </button>
+            
+            <button class="posts-filter-btn" id="sortPostsBtn" title="Sort Posts">
+                <i data-lucide="arrow-down-a-z" style="width: 20px;"></i>
+            </button>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="posts-empty-state">
+                <i data-lucide="pen-tool" class="posts-empty-icon"></i>
+                <p class="mb-2">No posts yet. Start the conversation!</p>
+                <a href="#" class="btn btn-primary mt-3">Create First Post</a>
+            </div>
+        }
+        else
+        {
+            <div class="posts-list" id="postsList">
+                @foreach (var post in Model)
+                {
+                    <a href="@Url.Action("Details", "Posts", new { id = post.Id })" class="post-card">
+                        <!-- Post Header -->
+                        <div class="post-header">
+                            <div class="post-author-info">
+                                <div class="post-avatar">
+                                    <i data-lucide="user" style="width: 20px;"></i>
+                                </div>
+                                <div class="post-author-details">
+                                    <span class="post-author-name">@(post.AuthorId == Guid.Empty ? "Anonymous" : "User")</span>
+                                    <span class="post-timestamp">@post.CreatedAt.ToString("MMM dd, yyyy • HH:mm")</span>
+                                </div>
+                            </div>
+                            <span class="post-type-badge post-type-@post.Type.ToString().ToLower()">
+                                @post.Type.ToString()
+                            </span>
+                        </div>
+
+                        <!-- Post Content -->
+                        <h3 class="post-title">@post.Title</h3>
+                        <p class="post-content-preview">@post.Content</p>
+
+                        <!-- Post Actions -->
+                        <div class="post-actions">
+                            <button class="post-action-btn" onclick="event.preventDefault();">
+                                <i data-lucide="heart"></i>
+                                <span>0</span>
+                            </button>
+                            <button class="post-action-btn" onclick="event.preventDefault();">
+                                <i data-lucide="message-circle"></i>
+                                <span>0</span>
+                            </button>
+                            <button class="post-action-btn" onclick="event.preventDefault();">
+                                <i data-lucide="share-2"></i>
+                                <span>Share</span>
+                            </button>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleViewBtn = document.getElementById('togglePostViewBtn');
+            const postsList = document.getElementById('postsList');
+            const viewIcon = toggleViewBtn?.querySelector('i');
+
+            // Toggle Grid/List View
+            toggleViewBtn?.addEventListener('click', () => {
+                postsList.classList.toggle('grid-view');
+                toggleViewBtn.classList.toggle('active');
+                
+                if (postsList.classList.contains('grid-view')) {
+                    viewIcon.setAttribute('data-lucide', 'list');
+                } else {
+                    viewIcon.setAttribute('data-lucide', 'layout-grid');
+                }
+                lucide.createIcons();
+            });
+        });
+    </script>
+}

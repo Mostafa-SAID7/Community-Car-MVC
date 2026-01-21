@@ -1,0 +1,317 @@
+@{
+    ViewData["Title"] = "Chats";
+}
+
+<div class="chat-container">
+    <!-- Chat Sidebar -->
+    <div class="chat-sidebar">
+        <div class="chat-sidebar-header">
+            <h2 class="chat-sidebar-title">
+                <i data-lucide="message-circle"></i>
+                Messages
+            </h2>
+            <div class="chat-search">
+                <input type="text" class="chat-search-input" placeholder="Search conversations..." id="chat-search">
+            </div>
+        </div>
+        
+        <div class="chat-conversations" id="conversations-list">
+            <!-- Conversations will be loaded here -->
+            <div class="conversation-item" data-conversation-id="sample-1">
+                <div class="conversation-avatar">
+                    <div class="avatar-placeholder">JD</div>
+                    <div class="online-indicator"></div>
+                </div>
+                <div class="conversation-info">
+                    <div class="conversation-name">
+                        <span>John Doe</span>
+                        <span class="conversation-time">2m ago</span>
+                    </div>
+                    <div class="conversation-preview">Hey, how's your car project going?</div>
+                </div>
+                <span class="unread-badge">2</span>
+            </div>
+            
+            <div class="conversation-item" data-conversation-id="sample-2">
+                <div class="conversation-avatar">
+                    <div class="avatar-placeholder">SM</div>
+                </div>
+                <div class="conversation-info">
+                    <div class="conversation-name">
+                        <span>Sarah Miller</span>
+                        <span class="conversation-time">1h ago</span>
+                    </div>
+                    <div class="conversation-preview">Thanks for the help with the engine!</div>
+                </div>
+            </div>
+            
+            <div class="conversation-item" data-conversation-id="sample-3">
+                <div class="conversation-avatar">
+                    <div class="avatar-placeholder">CG</div>
+                </div>
+                <div class="conversation-info">
+                    <div class="conversation-name">
+                        <span>Car Group</span>
+                        <span class="conversation-time">3h ago</span>
+                    </div>
+                    <div class="conversation-preview">Mike: Anyone going to the car show this weekend?</div>
+                </div>
+                <span class="unread-badge">5</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chat Main Area -->
+    <div class="chat-main">
+        <div class="chat-empty-state" id="chat-empty-state">
+            <i data-lucide="message-circle"></i>
+            <h3>Select a conversation</h3>
+            <p>Choose a conversation from the sidebar to start chatting</p>
+            <button class="btn btn-primary" id="new-chat-btn">
+                <i data-lucide="plus"></i>
+                Start New Chat
+            </button>
+        </div>
+        
+        <!-- Chat Header (hidden initially) -->
+        <div class="chat-header" id="chat-header" style="display: none;">
+            <div class="chat-header-info">
+                <div class="chat-header-avatar">
+                    <div class="avatar-placeholder" id="chat-avatar">JD</div>
+                    <div class="online-indicator" id="chat-online-indicator"></div>
+                </div>
+                <div class="chat-header-details">
+                    <h3 id="chat-title">John Doe</h3>
+                    <div class="chat-header-status" id="chat-status">Online</div>
+                </div>
+            </div>
+            <div class="chat-header-actions">
+                <button class="chat-action-btn" title="Call">
+                    <i data-lucide="phone"></i>
+                </button>
+                <button class="chat-action-btn" title="Video Call">
+                    <i data-lucide="video"></i>
+                </button>
+                <button class="chat-action-btn" title="More Options">
+                    <i data-lucide="more-vertical"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Messages Area (hidden initially) -->
+        <div class="chat-messages" id="chat-messages" style="display: none;">
+            <!-- Messages will be loaded here -->
+        </div>
+        
+        <!-- Typing Indicator Area -->
+        <div id="typing-indicators"></div>
+        
+        <!-- Message Input (hidden initially) -->
+        <div class="chat-input-area" id="chat-input-area" style="display: none;">
+            <div class="chat-input-container">
+                <textarea class="chat-input" id="message-input" placeholder="Type a message..." rows="1"></textarea>
+                <div class="chat-input-actions">
+                    <button class="chat-input-btn" title="Attach File">
+                        <i data-lucide="paperclip"></i>
+                    </button>
+                    <button class="chat-input-btn" title="Emoji">
+                        <i data-lucide="smile"></i>
+                    </button>
+                    <button class="chat-send-btn chat-input-btn" id="send-message-btn" title="Send Message" disabled>
+                        <i data-lucide="send"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Connection Status -->
+<div class="chat-connection-status" style="display: none;"></div>
+
+@section Scripts {
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script src="~/js/signalr-chat.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const conversationItems = document.querySelectorAll('.conversation-item');
+            const chatEmptyState = document.getElementById('chat-empty-state');
+            const chatHeader = document.getElementById('chat-header');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInputArea = document.getElementById('chat-input-area');
+            const messageInput = document.getElementById('message-input');
+            const sendBtn = document.getElementById('send-message-btn');
+            
+            let currentConversationId = null;
+            
+            // Handle conversation selection
+            conversationItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const conversationId = this.getAttribute('data-conversation-id');
+                    selectConversation(conversationId, this);
+                });
+            });
+            
+            function selectConversation(conversationId, element) {
+                // Update active conversation
+                conversationItems.forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+                
+                // Hide empty state, show chat interface
+                chatEmptyState.style.display = 'none';
+                chatHeader.style.display = 'flex';
+                chatMessages.style.display = 'flex';
+                chatInputArea.style.display = 'block';
+                
+                // Update chat header
+                const avatar = element.querySelector('.avatar-placeholder').textContent;
+                const name = element.querySelector('.conversation-name span').textContent;
+                const hasOnline = element.querySelector('.online-indicator');
+                
+                document.getElementById('chat-avatar').textContent = avatar;
+                document.getElementById('chat-title').textContent = name;
+                document.getElementById('chat-status').textContent = hasOnline ? 'Online' : 'Offline';
+                document.getElementById('chat-status').classList.toggle('online', !!hasOnline);
+                document.getElementById('chat-online-indicator').style.display = hasOnline ? 'block' : 'none';
+                
+                // Clear unread badge
+                const unreadBadge = element.querySelector('.unread-badge');
+                if (unreadBadge) {
+                    unreadBadge.style.display = 'none';
+                }
+                
+                // Join conversation via SignalR
+                if (window.chatClient) {
+                    if (currentConversationId) {
+                        window.chatClient.leaveConversation(currentConversationId);
+                    }
+                    window.chatClient.joinConversation(conversationId);
+                    currentConversationId = conversationId;
+                }
+                
+                // Load messages for this conversation
+                loadMessages(conversationId);
+            }
+            
+            function loadMessages(conversationId) {
+                // Clear existing messages
+                chatMessages.innerHTML = '';
+                
+                // Add sample messages for demo
+                const sampleMessages = [
+                    {
+                        id: '1',
+                        content: 'Hey, how\'s your car project going?',
+                        isOwn: false,
+                        time: '10:30 AM'
+                    },
+                    {
+                        id: '2',
+                        content: 'It\'s going great! Just finished installing the new exhaust system.',
+                        isOwn: true,
+                        time: '10:32 AM'
+                    },
+                    {
+                        id: '3',
+                        content: 'That sounds awesome! How does it sound?',
+                        isOwn: false,
+                        time: '10:33 AM'
+                    }
+                ];
+                
+                sampleMessages.forEach(msg => {
+                    addMessageToChat(msg);
+                });
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function addMessageToChat(message) {
+                const messageGroup = document.createElement('div');
+                messageGroup.className = `message-group ${message.isOwn ? 'own' : 'other'}`;
+                
+                messageGroup.innerHTML = `
+                    <div class="message-item" data-message-id="${message.id}">
+                        <div class="message-bubble">${message.content}</div>
+                        <div class="message-meta">
+                            <span class="message-time">${message.time}</span>
+                            ${message.isOwn ? '<span class="message-status read"><i data-lucide="check-check"></i></span>' : ''}
+                        </div>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(messageGroup);
+                lucide.createIcons();
+            }
+            
+            // Handle message input
+            messageInput.addEventListener('input', function() {
+                const hasContent = this.value.trim().length > 0;
+                sendBtn.disabled = !hasContent;
+                
+                // Auto-resize textarea
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+                
+                // Send typing indicator
+                if (hasContent && currentConversationId && window.chatClient) {
+                    window.chatClient.startTyping(currentConversationId);
+                }
+            });
+            
+            messageInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            sendBtn.addEventListener('click', sendMessage);
+            
+            function sendMessage() {
+                const content = messageInput.value.trim();
+                if (!content || !currentConversationId) return;
+                
+                // Send via SignalR
+                if (window.chatClient) {
+                    window.chatClient.sendMessage(currentConversationId, content).then(success => {
+                        if (success) {
+                            // Add message to UI immediately for better UX
+                            const message = {
+                                id: Date.now().toString(),
+                                content: content,
+                                isOwn: true,
+                                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                            };
+                            addMessageToChat(message);
+                            
+                            // Clear input
+                            messageInput.value = '';
+                            messageInput.style.height = 'auto';
+                            sendBtn.disabled = true;
+                            
+                            // Stop typing indicator
+                            window.chatClient.stopTyping(currentConversationId);
+                            
+                            // Scroll to bottom
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                    });
+                }
+            }
+            
+            // Search functionality
+            const searchInput = document.getElementById('chat-search');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                conversationItems.forEach(item => {
+                    const name = item.querySelector('.conversation-name span').textContent.toLowerCase();
+                    const preview = item.querySelector('.conversation-preview').textContent.toLowerCase();
+                    const matches = name.includes(searchTerm) || preview.includes(searchTerm);
+                    item.style.display = matches ? 'flex' : 'none';
+                });
+            });
+        });
+    </script>
+}

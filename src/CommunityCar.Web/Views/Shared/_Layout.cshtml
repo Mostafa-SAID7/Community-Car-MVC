@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="user-id" content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
+    <title>@ViewData["Title"] - CommunityCar</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+    
+    <!-- Library Styles -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CommunityCar.Web.styles.css" asp-append-version="true" />
+    
+    @await RenderSectionAsync("Styles", required: false)
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <partial name="_Header" />
+    <div class="app-container">
+        <partial name="_SidebarLeft" />
+
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+
+            <div class="container-fluid px-4 py-4 mt-5">
+                @RenderBody()
+            </div>
+        </main>
+
+        @if (IsSectionDefined("SidebarRight"))
+        {
+            @RenderSection("SidebarRight")
+        }
+        else
+        {
+            <partial name="_SidebarRight" />
+        }
+
+    </div>
+
+    <partial name="_AIAssistant" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
+    <!-- SignalR -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <script src="~/lib/signalr/signalr.min.js"></script>
+        <script src="~/js/signalr-notifications.js" asp-append-version="true"></script>
+    }
+    
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/ai-assistant.js" asp-append-version="true"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,459 @@
+// Feed JavaScript Functionality
+
+let currentPage = 1;
+let isLoading = false;
+let feedType = 'personalized';
+
+// Initialize feed functionality
+function initializeFeed() {
+    feedType = new URLSearchParams(window.location.search).get('feedType') || 'personalized';
+    
+    // Mark posts as seen when they come into view
+    observePostVisibility();
+    
+    // Auto-refresh stories every 30 seconds
+    setInterval(refreshStories, 30000);
+    
+    // Initialize infinite scroll
+    initializeInfiniteScroll();
+}
+
+// Story functionality
+function loadStoriesData() {
+    fetch('/feed/api/stories')
+        .then(response => response.json())
+        .then(stories => {
+            updateStoriesDisplay(stories);
+        })
+        .catch(error => {
+            console.error('Error loading stories:', error);
+        });
+}
+
+function updateStoriesDisplay(stories) {
+    const container = document.querySelector('.stories-container');
+    if (!container) return;
+    
+    // Keep the "Add Story" button and update the rest
+    const addStoryBtn = container.querySelector('.add-story');
+    container.innerHTML = '';
+    if (addStoryBtn) {
+        container.appendChild(addStoryBtn);
+    }
+    
+    stories.forEach(story => {
+        const storyElement = createStoryElement(story);
+        container.appendChild(storyElement);
+    });
+}
+
+function createStoryElement(story) {
+    const storyDiv = document.createElement('div');
+    storyDiv.className = 'story-item';
+    storyDiv.setAttribute('data-story-id', story.id);
+    storyDiv.onclick = () => openStoryViewer(story.id);
+    
+    storyDiv.innerHTML = `
+        <div class="story-avatar ${story.isViewed ? 'viewed' : ''}">
+            <img src="${story.thumbnailUrl || story.mediaUrl}" alt="${story.authorName}" />
+            ${!story.isViewed ? '<div class="story-ring"></div>' : ''}
+        </div>
+        <span class="story-label">${story.authorName}</span>
+        <div class="story-time">${story.timeRemaining}</div>
+    `;
+    
+    return storyDiv;
+}
+
+function openStoryViewer(storyId) {
+    // TODO: Implement story viewer modal
+    console.log('Opening story:', storyId);
+    
+    // Mark story as viewed
+    markContentAsSeen(storyId, 'Story');
+}
+
+function refreshStories() {
+    loadStoriesData();
+}
+
+// Content interaction functions
+function toggleLike(contentId, contentType) {
+    const button = event.target.closest('.action-btn');
+    const isLiked = button.classList.contains('liked');
+    
+    interactWithContent(contentId, contentType, isLiked ? 'unlike' : 'like')
+        .then(success => {
+            if (success) {
+                button.classList.toggle('liked');
+                updateLikeCount(contentId, !isLiked);
+            }
+        });
+}
+
+function toggleComments(contentId) {
+    const commentsSection = document.getElementById(`comments-${contentId}`);
+    if (commentsSection.style.display === 'none') {
+        commentsSection.style.display = 'block';
+        loadComments(contentId);
+    } else {
+        commentsSection.style.display = 'none';
+    }
+}
+
+function shareContent(contentId, contentType) {
+    // TODO: Implement share functionality
+    if (navigator.share) {
+        navigator.share({
+            title: 'Check out this post',
+            url: window.location.href + `#post-${contentId}`
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(window.location.href + `#post-${contentId}`)
+            .then(() => {
+                showNotification('Link copied to clipboard!', 'success');
+            });
+    }
+    
+    interactWithContent(contentId, contentType, 'share');
+}
+
+function bookmarkContent(contentId, contentType) {
+    const button = event.target.closest('.action-btn');
+    const isBookmarked = button.classList.contains('bookmarked');
+    
+    interactWithContent(contentId, contentType, isBookmarked ? 'unbookmark' : 'bookmark')
+        .then(success => {
+            if (success) {
+                button.classList.toggle('bookmarked');
+                showNotification(
+                    isBookmarked ? 'Removed from bookmarks' : 'Added to bookmarks',
+                    'success'
+                );
+            }
+        });
+}
+
+function hideContent(contentId) {
+    const feedItem = document.querySelector(`[data-content-id="${contentId}"]`);
+    if (feedItem) {
+        feedItem.style.animation = 'slideUp 0.3s ease-out reverse';
+        setTimeout(() => {
+            feedItem.remove();
+        }, 300);
+    }
+}
+
+function reportContent(contentId, contentType) {
+    // TODO: Implement report functionality
+    showNotification('Content reported. Thank you for helping keep our community safe.', 'info');
+}
+
+// Comment functionality
+function handleCommentSubmit(event, contentId, contentType) {
+    if (event.key === 'Enter' && event.target.value.trim()) {
+        const comment = event.target.value.trim();
+        submitComment(contentId, contentType, comment)
+            .then(success => {
+                if (success) {
+                    event.target.value = '';
+                    loadComments(contentId);
+                    updateCommentCount(contentId, 1);
+                }
+            });
+    }
+}
+
+function submitComment(contentId, contentType, comment) {
+    return fetch('/feed/api/comments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            contentId: contentId,
+            contentType: contentType,
+            comment: comment
+        })
+    })
+    .then(response => response.json())
+    .then(data => data.success)
+    .catch(error => {
+        console.error('Error submitting comment:', error);
+        return false;
+    });
+}
+
+function loadComments(contentId) {
+    fetch(`/feed/api/comments/${contentId}`)
+        .then(response => response.json())
+        .then(comments => {
+            const commentsList = document.querySelector(`#comments-${contentId} .comments-list`);
+            if (commentsList) {
+                commentsList.innerHTML = comments.map(createCommentElement).join('');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading comments:', error);
+        });
+}
+
+function createCommentElement(comment) {
+    return `
+        <div class="comment mb-3">
+            <div class="d-flex">
+                <div class="user-avatar me-2">
+                    <img src="${comment.authorAvatar || '/images/default-avatar.png'}" alt="${comment.authorName}" />
+                </div>
+                <div class="comment-content">
+                    <div class="comment-bubble">
+                        <strong>${comment.authorName}</strong>
+                        <p class="mb-1">${comment.content}</p>
+                    </div>
+                    <small class="text-muted">${comment.timeAgo}</small>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// API interaction functions
+function interactWithContent(contentId, contentType, interactionType) {
+    return fetch('/feed/api/interact', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            contentId: contentId,
+            contentType: contentType,
+            interactionType: interactionType
+        })
+    })
+    .then(response => response.json())
+    .then(data => data.success)
+    .catch(error => {
+        console.error('Error interacting with content:', error);
+        return false;
+    });
+}
+
+function markContentAsSeen(contentId, contentType) {
+    fetch('/feed/api/mark-seen', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            contentId: contentId,
+            contentType: contentType
+        })
+    })
+    .catch(error => {
+        console.error('Error marking content as seen:', error);
+    });
+}
+
+// Infinite scroll and loading
+function initializeInfiniteScroll() {
+    window.addEventListener('scroll', () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
+            loadMoreContent();
+        }
+    });
+}
+
+function loadMoreContent() {
+    if (isLoading) return;
+    
+    isLoading = true;
+    const loadButton = document.querySelector('.btn:contains("Load More Posts")');
+    if (loadButton) {
+        loadButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+    }
+    
+    currentPage++;
+    
+    fetch(`/feed/api/feed?feedType=${feedType}&page=${currentPage}&pageSize=10`)
+        .then(response => response.json())
+        .then(data => {
+            appendFeedItems(data.feedItems);
+            
+            if (!data.hasMoreContent) {
+                if (loadButton) {
+                    loadButton.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading more content:', error);
+            currentPage--; // Revert page increment on error
+        })
+        .finally(() => {
+            isLoading = false;
+            if (loadButton) {
+                loadButton.innerHTML = 'Load More Posts';
+            }
+        });
+}
+
+function appendFeedItems(feedItems) {
+    const feedContainer = document.querySelector('.feed-items');
+    if (!feedContainer) return;
+    
+    feedItems.forEach(item => {
+        const feedItemElement = createFeedItemElement(item);
+        feedContainer.appendChild(feedItemElement);
+    });
+}
+
+function createFeedItemElement(item) {
+    // This would be a complex function to create the full feed item HTML
+    // For now, return a simplified version
+    const div = document.createElement('div');
+    div.className = 'card feed-item mb-4 animate-fade-in';
+    div.setAttribute('data-content-id', item.id);
+    div.setAttribute('data-content-type', item.contentType);
+    
+    // TODO: Implement full feed item HTML generation
+    div.innerHTML = `
+        <div class="card-body">
+            <h5 class="card-title">${item.title}</h5>
+            <p class="card-text">${item.summary || item.content.substring(0, 200)}...</p>
+        </div>
+    `;
+    
+    return div;
+}
+
+// Post visibility observer for marking as seen
+function observePostVisibility() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const contentId = entry.target.getAttribute('data-content-id');
+                const contentType = entry.target.getAttribute('data-content-type');
+                if (contentId && contentType) {
+                    markContentAsSeen(contentId, contentType);
+                }
+            }
+        });
+    }, {
+        threshold: 0.5,
+        rootMargin: '0px 0px -100px 0px'
+    });
+    
+    document.querySelectorAll('.feed-item').forEach(item => {
+        observer.observe(item);
+    });
+}
+
+// Create post modal functions
+function openCreatePostModal(type = 'text') {
+    // TODO: Implement create post modal
+    console.log('Opening create post modal for type:', type);
+}
+
+// Friend request functions
+function sendFriendRequest(userId) {
+    fetch('/api/friends/request', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: userId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const button = event.target.closest('button');
+            button.innerHTML = '<i class="fas fa-clock"></i>';
+            button.disabled = true;
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-secondary');
+            showNotification('Friend request sent!', 'success');
+        }
+    })
+    .catch(error => {
+        console.error('Error sending friend request:', error);
+        showNotification('Error sending friend request', 'error');
+    });
+}
+
+// Image modal functions
+function openImageModal(imageUrl) {
+    // TODO: Implement image modal/lightbox
+    console.log('Opening image modal for:', imageUrl);
+}
+
+// Utility functions
+function updateLikeCount(contentId, increment) {
+    const feedItem = document.querySelector(`[data-content-id="${contentId}"]`);
+    if (feedItem) {
+        const likeCountElement = feedItem.querySelector('.stat-item .fa-heart').nextSibling;
+        if (likeCountElement) {
+            const currentCount = parseInt(likeCountElement.textContent.trim()) || 0;
+            likeCountElement.textContent = ` ${currentCount + (increment ? 1 : -1)}`;
+        }
+    }
+}
+
+function updateCommentCount(contentId, increment) {
+    const feedItem = document.querySelector(`[data-content-id="${contentId}"]`);
+    if (feedItem) {
+        const commentCountElement = feedItem.querySelector('.stats-right .stat-item');
+        if (commentCountElement) {
+            const currentCount = parseInt(commentCountElement.textContent.split(' ')[0]) || 0;
+            commentCountElement.textContent = `${currentCount + increment} comments`;
+        }
+    }
+}
+
+function refreshFeedStats() {
+    fetch('/feed/api/stats')
+        .then(response => response.json())
+        .then(stats => {
+            updateStatsDisplay(stats);
+        })
+        .catch(error => {
+            console.error('Error refreshing feed stats:', error);
+        });
+}
+
+function updateStatsDisplay(stats) {
+    // Update stats in sidebar
+    const statsCard = document.querySelector('.sidebar-card .stat-row');
+    if (statsCard) {
+        // TODO: Update individual stat values
+    }
+}
+
+function showNotification(message, type = 'info') {
+    // Use existing notification system if available
+    if (window.notify) {
+        window.notify[type](message);
+    } else {
+        // Fallback to alert
+        alert(message);
+    }
+}
+
+// Export functions for global access
+window.feedFunctions = {
+    toggleLike,
+    toggleComments,
+    shareContent,
+    bookmarkContent,
+    hideContent,
+    reportContent,
+    handleCommentSubmit,
+    openCreatePostModal,
+    sendFriendRequest,
+    openImageModal,
+    openStoryViewer,
+    loadMoreContent
+};
+
+// Make functions globally accessible
+Object.assign(window, window.feedFunctions);

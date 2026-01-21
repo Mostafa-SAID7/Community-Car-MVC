@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Stories";
+}
+
+<div class="card glass mb-4">
+    <div class="card-body">
+        <h2 class="h4 mb-3">Community Stories</h2>
+        <div class="d-flex gap-3 overflow-auto pb-2 custom-scroll">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <div class="flex-shrink-0" style="width: 80px;">
+                    <div class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center mb-2" style="width: 80px; height: 80px; border: 3px solid var(--color-red-500);">
+                        <i data-lucide="user" class="text-primary"></i>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

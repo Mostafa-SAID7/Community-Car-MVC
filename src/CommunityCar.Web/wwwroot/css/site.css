@@ -1,0 +1,121 @@
+@import url('variables.css');
+@import url('typography.css');
+@import url('animations.css');
+@import url('components.css');
+@import url('toast.css');
+@import url('ai-assistant.css');
+@import url('auth.css');
+@import url('utilities.css');
+@import url('qa.css');
+@import url('posts.css');
+@import url('groups.css');
+@import url('chat.css');
+@import url('notifications.css');
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+  font-family: 'Alexandria', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Link Styles */
+a {
+  color: var(--color-red-500);
+  text-decoration: none;
+  transition: all var(--duration-250) var(--ease-out-circ);
+}
+
+a:hover {
+  color: var(--color-red-600);
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+/* Custom Form Styles */
+.form-control,
+.form-select {
+  background-color: hsl(var(--color-background));
+  border: 1px solid hsl(var(--color-border));
+  color: hsl(var(--color-foreground));
+  border-radius: var(--radius-md);
+  padding: 0.6rem 1rem;
+  transition: all var(--duration-250) var(--ease-out-circ);
+  box-shadow: var(--shadow-xs);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: hsl(var(--color-background));
+  border-color: var(--color-red-500);
+  color: hsl(var(--color-foreground));
+  box-shadow: 0 0 0 0.2rem rgba(251, 44, 54, 0.15);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--bs-secondary-color);
+}
+
+.dark .form-control,
+.dark .form-select {
+  background-color: hsl(var(--color-card));
+  border-color: hsl(var(--color-border));
+}
+
+.form-floating>.form-control-plaintext::placeholder,
+.form-floating>.form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+/* Header Search Icon */
+.search-pill i {
+  color: var(--color-red-500) !important;
+}
+
+/* Global Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--color-muted) / 0.3);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--color-muted-foreground) / 0.3);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--color-muted-foreground) / 0.5);
+  background-clip: content-box;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: hsl(var(--color-muted) / 0.1);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--color-muted-foreground) / 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--color-accent));
+}

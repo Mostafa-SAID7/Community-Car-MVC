@@ -1,0 +1,303 @@
+﻿@model CommunityCar.Application.Features.Feed.DTOs.FeedResponse
+@{
+    ViewData["Title"] = "Community Feed";
+    var feedType = ViewBag.FeedType as string ?? "personalized";
+    var currentUserId = ViewBag.CurrentUserId as Guid?;
+}
+
+<div class="feed-container">
+    <!-- Stories Section -->
+    <div class="stories-section mb-4">
+        <div class="stories-container">
+            <div class="story-item add-story">
+                <div class="story-avatar">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <span class="story-label">Your Story</span>
+            </div>
+            
+            @foreach (var story in Model.Stories.Take(10))
+            {
+                <div class="story-item" data-story-id="@story.Id">
+                    <div class="story-avatar @(story.IsViewed ? "viewed" : "")">
+                        <img src="@(story.ThumbnailUrl ?? story.MediaUrl)" alt="@story.AuthorName" />
+                        @if (!story.IsViewed)
+                        {
+                            <div class="story-ring"></div>
+                        }
+                    </div>
+                    <span class="story-label">@story.AuthorName</span>
+                    <div class="story-time">@story.TimeRemaining</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Feed Column -->
+        <div class="col-12">
+            <!-- Feed Navigation -->
+            <div class="feed-nav mb-4">
+                <div class="nav nav-pills" role="tablist">
+                    <a class="nav-link @(feedType == "personalized" ? "active" : "")" href="?feedType=personalized">
+                        <i class="fas fa-home"></i> For You
+                    </a>
+                    <a class="nav-link @(feedType == "trending" ? "active" : "")" href="?feedType=trending">
+                        <i class="fas fa-fire"></i> Trending
+                    </a>
+                    <a class="nav-link @(feedType == "friends" ? "active" : "")" href="?feedType=friends">
+                        <i class="fas fa-users"></i> Friends
+                    </a>
+                </div>
+            </div>
+
+            <!-- Create Post Section -->
+            @if (currentUserId.HasValue)
+            {
+                <div class="card create-post-card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="user-avatar me-3">
+                                <img src="/images/default-avatar.png" alt="Your Avatar" />
+                            </div>
+                            <input type="text" class="form-control create-post-input" placeholder="What's on your mind about cars?" readonly onclick="openCreatePostModal()" />
+                        </div>
+                        <div class="create-post-actions">
+                            <button class="btn btn-light" onclick="openCreatePostModal('photo')">
+                                <i class="fas fa-camera text-success"></i> Photo
+                            </button>
+                            <button class="btn btn-light" onclick="openCreatePostModal('review')">
+                                <i class="fas fa-star text-warning"></i> Review
+                            </button>
+                            <button class="btn btn-light" onclick="openCreatePostModal('question')">
+                                <i class="fas fa-question-circle text-info"></i> Ask
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Feed Items -->
+            <div class="feed-items">
+                @foreach (var item in Model.FeedItems)
+                {
+                    <div class="card feed-item mb-4" data-content-id="@item.Id" data-content-type="@item.ContentType">
+                        <!-- Post Header -->
+                        <div class="card-header border-0 bg-transparent">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <div class="user-avatar me-3">
+                                        <img src="@(item.AuthorAvatar ?? "/images/default-avatar.png")" alt="@item.AuthorName" />
+                                        @if (item.IsVerified)
+                                        {
+                                            <i class="fas fa-check-circle verified-badge"></i>
+                                        }
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">@item.AuthorName</h6>
+                                        <small class="text-muted">
+                                            @item.TimeAgo
+                                            @if (!string.IsNullOrEmpty(item.Location))
+                                            {
+                                                <span> • <i class="fas fa-map-marker-alt"></i> @item.Location</span>
+                                            }
+                                        </small>
+                                        @if (!string.IsNullOrEmpty(item.ReasonForShowing))
+                                        {
+                                            <div class="reason-badge">@item.ReasonForShowing</div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-muted" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="bookmarkContent('@item.Id', '@item.ContentType')">
+                                            <i class="fas fa-bookmark"></i> Save Post
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="hideContent('@item.Id')">
+                                            <i class="fas fa-eye-slash"></i> Hide
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="reportContent('@item.Id', '@item.ContentType')">
+                                            <i class="fas fa-flag"></i> Report
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post Content -->
+                        <div class="card-body">
+                            @if (!string.IsNullOrEmpty(item.Title))
+                            {
+                                <h5 class="card-title">@item.Title</h5>
+                            }
+                            
+                            @if (!string.IsNullOrEmpty(item.Summary))
+                            {
+                                <p class="card-text">@item.Summary</p>
+                            }
+                            else if (!string.IsNullOrEmpty(item.Content))
+                            {
+                                <p class="card-text">@(item.Content.Length > 300 ? item.Content.Substring(0, 300) + "..." : item.Content)</p>
+                            }
+
+                            <!-- Car Information -->
+                            @if (!string.IsNullOrEmpty(item.CarDisplayName))
+                            {
+                                <div class="car-info mb-3">
+                                    <i class="fas fa-car"></i> @item.CarDisplayName
+                                </div>
+                            }
+
+                            <!-- Rating for Reviews -->
+                            @if (item.Rating.HasValue)
+                            {
+                                <div class="rating mb-3">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="fas fa-star @(i <= item.Rating ? "text-warning" : "text-muted")"></i>
+                                    }
+                                    <span class="ms-2">@item.Rating.Value/5</span>
+                                </div>
+                            }
+
+                            <!-- Tags -->
+                            @if (item.Tags.Any())
+                            {
+                                <div class="tags mb-3">
+                                    @foreach (var tag in item.Tags.Take(5))
+                                    {
+                                        <span class="badge bg-light text-dark me-1">#@tag</span>
+                                    }
+                                </div>
+                            }
+
+                            <!-- Media -->
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <div class="post-media mb-3">
+                                    <img src="@item.ImageUrl" alt="Post Image" class="img-fluid rounded" onclick="openImageModal('@item.ImageUrl')" />
+                                </div>
+                            }
+                            else if (item.ImageUrls.Any())
+                            {
+                                <div class="post-media mb-3">
+                                    <div class="image-gallery">
+                                        @foreach (var imageUrl in item.ImageUrls.Take(4))
+                                        {
+                                            <img src="@imageUrl" alt="Post Image" class="gallery-image" onclick="openImageModal('@imageUrl')" />
+                                        }
+                                        @if (item.ImageUrls.Count() > 4)
+                                        {
+                                            <div class="more-images">+@(item.ImageUrls.Count() - 4)</div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Engagement Stats -->
+                            <div class="engagement-stats">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="stats-left">
+                                        @if (item.LikeCount > 0)
+                                        {
+                                            <span class="stat-item">
+                                                <i class="fas fa-heart text-danger"></i> @item.LikeCount
+                                            </span>
+                                        }
+                                        @if (item.ViewCount > 0)
+                                        {
+                                            <span class="stat-item">
+                                                <i class="fas fa-eye text-muted"></i> @item.ViewCount
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="stats-right">
+                                        @if (item.CommentCount > 0)
+                                        {
+                                            <span class="stat-item">@item.CommentCount comments</span>
+                                        }
+                                        @if (item.ShareCount > 0)
+                                        {
+                                            <span class="stat-item">@item.ShareCount shares</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post Actions -->
+                        <div class="card-footer border-0 bg-transparent">
+                            <div class="post-actions">
+                                <button class="btn btn-light action-btn @(item.IsLikedByUser ? "liked" : "")" onclick="toggleLike('@item.Id', '@item.ContentType')">
+                                    <i class="fas fa-heart"></i> Like
+                                </button>
+                                <button class="btn btn-light action-btn" onclick="toggleComments('@item.Id')">
+                                    <i class="fas fa-comment"></i> Comment
+                                </button>
+                                <button class="btn btn-light action-btn" onclick="shareContent('@item.Id', '@item.ContentType')">
+                                    <i class="fas fa-share"></i> Share
+                                </button>
+                                <button class="btn btn-light action-btn @(item.IsBookmarkedByUser ? "bookmarked" : "")" onclick="bookmarkContent('@item.Id', '@item.ContentType')">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Comments Section (Initially Hidden) -->
+                        <div class="comments-section" id="comments-@item.Id" style="display: none;">
+                            <div class="card-body border-top">
+                                <div class="comment-input mb-3">
+                                    <div class="d-flex">
+                                        <div class="user-avatar me-2">
+                                            <img src="/images/default-avatar.png" alt="Your Avatar" />
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Write a comment..." onkeypress="handleCommentSubmit(event, '@item.Id', '@item.ContentType')" />
+                                    </div>
+                                </div>
+                                <div class="comments-list">
+                                    <!-- Comments will be loaded dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Load More Button -->
+            @if (Model.HasMoreContent)
+            {
+                <div class="text-center mb-4">
+                    <button class="btn btn-outline-primary" onclick="loadMoreContent()">
+                        <i class="fas fa-spinner fa-spin" style="display: none;"></i>
+                        Load More Posts
+                    </button>
+                </div>
+            }
+        </div>
+
+
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/feed.css" />
+}
+
+@section Scripts {
+    <script src="~/js/feed.js"></script>
+    <script>
+        // Initialize feed functionality
+        $(document).ready(function() {
+            initializeFeed();
+            loadStoriesData();
+            
+            // Auto-refresh every 5 minutes
+            setInterval(function() {
+                refreshFeedStats();
+            }, 300000);
+        });
+    </script>
+}

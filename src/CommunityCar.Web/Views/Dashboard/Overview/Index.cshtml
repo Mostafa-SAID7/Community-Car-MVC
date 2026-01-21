@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Overview";
+}
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="card glass p-4 text-center">
+            <h3 class="text-xs text-muted text-uppercase mb-2">Total Users</h3>
+            <p class="text-2xl font-bold">12,450</p>
+            <div class="text-success text-xs mt-1">+12% from last month</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card glass p-4 text-center">
+            <h3 class="text-xs text-muted text-uppercase mb-2">Active Sessions</h3>
+            <p class="text-2xl font-bold">1,280</p>
+            <div class="text-primary text-xs mt-1">Real-time now</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card glass p-4 text-center">
+            <h3 class="text-xs text-muted text-uppercase mb-2">Posts Today</h3>
+            <p class="text-2xl font-bold">452</p>
+            <div class="text-success text-xs mt-1">+5% vs yesterday</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card glass p-4 text-center">
+            <h3 class="text-xs text-muted text-uppercase mb-2">Reports Open</h3>
+            <p class="text-2xl font-bold">8</p>
+            <div class="text-warning text-xs mt-1">Requires attention</div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card glass p-4" style="height: 400px;">
+            <h3 class="text-lg font-bold mb-4">Traffic Insights</h3>
+            <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                <i data-lucide="bar-chart" size="48" class="opacity-20 mb-3"></i>
+                <p>Chart visualization will appear here.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card glass p-4" style="height: 400px;">
+            <h3 class="text-lg font-bold mb-4">Recent Activity</h3>
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex gap-3 align-items-center">
+                    <div class="p-2 rounded bg-primary-subtle text-primary">
+                        <i data-lucide="user-plus" size="14"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm">New user registered</div>
+                        <div class="text-xs text-muted">2 minutes ago</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-3 align-items-center">
+                    <div class="p-2 rounded bg-warning-subtle text-warning">
+                        <i data-lucide="alert-triangle" size="14"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm">System spike detected</div>
+                        <div class="text-xs text-muted">15 minutes ago</div>
+                    </div>
+                </div>
+                <!-- More items can go here -->
+            </div>
+        </div>
+    </div>
+</div>

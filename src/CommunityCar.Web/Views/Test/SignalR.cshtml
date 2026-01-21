@@ -1,0 +1,319 @@
+@{
+    ViewData["Title"] = "SignalR Test";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i data-lucide="zap"></i>
+                        SignalR Test Dashboard
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Notification Tests -->
+                        <div class="col-md-6">
+                            <h4 class="mb-3">
+                                <i data-lucide="bell"></i>
+                                Notification Tests
+                            </h4>
+                            
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" onclick="sendTestNotification()">
+                                    <i data-lucide="bell-ring"></i>
+                                    Send Test Notification
+                                </button>
+                                
+                                <button class="btn btn-success" onclick="sendSuccessNotification()">
+                                    <i data-lucide="check-circle"></i>
+                                    Send Success Notification
+                                </button>
+                                
+                                <button class="btn btn-warning" onclick="sendWarningNotification()">
+                                    <i data-lucide="alert-triangle"></i>
+                                    Send Warning Notification
+                                </button>
+                                
+                                <button class="btn btn-danger" onclick="sendErrorNotification()">
+                                    <i data-lucide="alert-circle"></i>
+                                    Send Error Notification
+                                </button>
+                                
+                                <button class="btn btn-info" onclick="sendNewMessageNotification()">
+                                    <i data-lucide="message-circle"></i>
+                                    Send New Message Notification
+                                </button>
+                                
+                                <button class="btn btn-secondary" onclick="sendNewAnswerNotification()">
+                                    <i data-lucide="message-square"></i>
+                                    Send New Answer Notification
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Tests -->
+                        <div class="col-md-6">
+                            <h4 class="mb-3">
+                                <i data-lucide="message-circle"></i>
+                                Chat Tests
+                            </h4>
+                            
+                            <div class="mb-3">
+                                <label for="testMessage" class="form-label">Test Message</label>
+                                <textarea class="form-control" id="testMessage" rows="3" placeholder="Enter a test message...">Hello! This is a test message from SignalR.</textarea>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" onclick="sendChatMessage()">
+                                    <i data-lucide="send"></i>
+                                    Send Chat Message
+                                </button>
+                                
+                                <button class="btn btn-outline-primary" onclick="startTyping()">
+                                    <i data-lucide="edit-3"></i>
+                                    Start Typing Indicator
+                                </button>
+                                
+                                <button class="btn btn-outline-secondary" onclick="stopTyping()">
+                                    <i data-lucide="square"></i>
+                                    Stop Typing Indicator
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Connection Status -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <h5 class="alert-heading">
+                                    <i data-lucide="wifi"></i>
+                                    Connection Status
+                                </h5>
+                                <p class="mb-0">
+                                    <strong>Notifications:</strong> <span id="notification-status" class="badge bg-secondary">Connecting...</span><br>
+                                    <strong>Chat:</strong> <span id="chat-status" class="badge bg-secondary">Connecting...</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Test Results -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5>
+                                <i data-lucide="activity"></i>
+                                Test Results
+                            </h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    <pre id="test-results" class="mb-0" style="max-height: 300px; overflow-y: auto;">Ready to test SignalR functionality...\n</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script>
+        let notificationConnection = null;
+        let chatConnection = null;
+        const testConversationId = 'test-conversation-123';
+        
+        // Initialize connections
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializeConnections();
+        });
+        
+        async function initializeConnections() {
+            try {
+                // Initialize notification connection
+                notificationConnection = new signalR.HubConnectionBuilder()
+                    .withUrl("/hubs/notifications")
+                    .withAutomaticReconnect()
+                    .build();
+                
+                // Initialize chat connection
+                chatConnection = new signalR.HubConnectionBuilder()
+                    .withUrl("/hubs/chat")
+                    .withAutomaticReconnect()
+                    .build();
+                
+                // Set up notification event handlers
+                notificationConnection.on('ReceiveNotification', function(notification) {
+                    logResult('📢 Notification received: ' + JSON.stringify(notification, null, 2));
+                });
+                
+                // Set up chat event handlers
+                chatConnection.on('ReceiveMessage', function(message) {
+                    logResult('💬 Message received: ' + JSON.stringify(message, null, 2));
+                });
+                
+                chatConnection.on('UserTyping', function(userId, conversationId) {
+                    logResult('⌨️ User typing: ' + userId + ' in conversation: ' + conversationId);
+                });
+                
+                chatConnection.on('UserStoppedTyping', function(userId, conversationId) {
+                    logResult('⏹️ User stopped typing: ' + userId + ' in conversation: ' + conversationId);
+                });
+                
+                chatConnection.on('UserOnline', function(userId) {
+                    logResult('🟢 User online: ' + userId);
+                });
+                
+                chatConnection.on('UserOffline', function(userId) {
+                    logResult('🔴 User offline: ' + userId);
+                });
+                
+                // Start connections
+                await notificationConnection.start();
+                updateConnectionStatus('notification-status', 'Connected', 'success');
+                logResult('✅ Notification connection established');
+                
+                await chatConnection.start();
+                updateConnectionStatus('chat-status', 'Connected', 'success');
+                logResult('✅ Chat connection established');
+                
+                // Join test conversation
+                await chatConnection.invoke('JoinConversation', testConversationId);
+                logResult('🏠 Joined test conversation: ' + testConversationId);
+                
+            } catch (error) {
+                logResult('❌ Connection error: ' + error.toString());
+                updateConnectionStatus('notification-status', 'Error', 'danger');
+                updateConnectionStatus('chat-status', 'Error', 'danger');
+            }
+        }
+        
+        // Notification test functions
+        async function sendTestNotification() {
+            try {
+                const response = await fetch('/api/notifications/test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    }
+                });
+                
+                if (response.ok) {
+                    logResult('✅ Test notification sent successfully');
+                } else {
+                    logResult('❌ Failed to send test notification: ' + response.statusText);
+                }
+            } catch (error) {
+                logResult('❌ Error sending test notification: ' + error.toString());
+            }
+        }
+        
+        async function sendSuccessNotification() {
+            await sendCustomNotification('Success!', 'This is a success notification', 'Success');
+        }
+        
+        async function sendWarningNotification() {
+            await sendCustomNotification('Warning!', 'This is a warning notification', 'Warning');
+        }
+        
+        async function sendErrorNotification() {
+            await sendCustomNotification('Error!', 'This is an error notification', 'Error');
+        }
+        
+        async function sendNewMessageNotification() {
+            await sendCustomNotification('New Message', 'You have received a new message from John Doe', 'NewMessage');
+        }
+        
+        async function sendNewAnswerNotification() {
+            await sendCustomNotification('New Answer', 'Someone answered your question about car maintenance', 'NewAnswer');
+        }
+        
+        async function sendCustomNotification(title, message, type) {
+            try {
+                const response = await fetch('/api/notifications/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        message: message,
+                        type: type
+                    })
+                });
+                
+                if (response.ok) {
+                    logResult('✅ ' + type + ' notification sent successfully');
+                } else {
+                    logResult('❌ Failed to send ' + type + ' notification: ' + response.statusText);
+                }
+            } catch (error) {
+                logResult('❌ Error sending ' + type + ' notification: ' + error.toString());
+            }
+        }
+        
+        // Chat test functions
+        async function sendChatMessage() {
+            const messageInput = document.getElementById('testMessage');
+            const message = messageInput.value.trim();
+            
+            if (!message) {
+                logResult('❌ Please enter a message to send');
+                return;
+            }
+            
+            try {
+                await chatConnection.invoke('SendMessage', testConversationId, message);
+                logResult('✅ Chat message sent: ' + message);
+            } catch (error) {
+                logResult('❌ Error sending chat message: ' + error.toString());
+            }
+        }
+        
+        async function startTyping() {
+            try {
+                await chatConnection.invoke('StartTyping', testConversationId);
+                logResult('✅ Started typing indicator');
+            } catch (error) {
+                logResult('❌ Error starting typing indicator: ' + error.toString());
+            }
+        }
+        
+        async function stopTyping() {
+            try {
+                await chatConnection.invoke('StopTyping', testConversationId);
+                logResult('✅ Stopped typing indicator');
+            } catch (error) {
+                logResult('❌ Error stopping typing indicator: ' + error.toString());
+            }
+        }
+        
+        // Utility functions
+        function updateConnectionStatus(elementId, status, type) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = status;
+                element.className = 'badge bg-' + type;
+            }
+        }
+        
+        function logResult(message) {
+            const resultsElement = document.getElementById('test-results');
+            const timestamp = new Date().toLocaleTimeString();
+            resultsElement.textContent += '[' + timestamp + '] ' + message + '\n';
+            resultsElement.scrollTop = resultsElement.scrollHeight;
+        }
+        
+        // Handle connection state changes
+        if (typeof signalR !== 'undefined') {
+            // Connection state monitoring will be handled by the connection event handlers
+        }
+    </script>
+}
