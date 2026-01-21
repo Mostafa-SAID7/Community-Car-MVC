@@ -1,0 +1,27 @@
+name: Automated Code Review
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Install dotnet-format
+      run: dotnet tool install -g dotnet-format
+      
+    - name: Check Formatting
+      run: dotnet format --verify-no-changes
+      
+    - name: Static Analysis
+      run: |
+        dotnet build -c Release /p:RunCodeAnalysis=true
