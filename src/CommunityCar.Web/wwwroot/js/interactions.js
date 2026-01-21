@@ -350,7 +350,10 @@ class InteractionManager {
                             'Content-Type': 'application/json',
                             'RequestVerificationToken': this.getAntiForgeryToken()
                         },
-                        body: JSON.stringify(newContent)
+                        body: JSON.stringify({
+                            commentId: commentId,
+                            content: newContent
+                        })
                     });
 
                     const result = await response.json();

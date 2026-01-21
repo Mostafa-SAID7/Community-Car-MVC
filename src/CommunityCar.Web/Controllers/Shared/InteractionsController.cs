@@ -19,12 +19,20 @@ public class InteractionsController : Controller
         _currentUserService = currentUserService;
     }
 
+    private Guid? GetCurrentUserId()
+    {
+        var userIdString = _currentUserService.UserId;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            return null;
+        return userId;
+    }
+
     #region Reactions
 
     [HttpPost]
     public async Task<IActionResult> AddReaction(Guid entityId, EntityType entityType, ReactionType reactionType)
     {
-        var userId = _currentUserService.UserId;
+        var userId = GetCurrentUserId();
         if (!userId.HasValue)
             return Unauthorized();
 
@@ -41,7 +49,7 @@ public class InteractionsController : Controller
     [HttpPost]
     public async Task<IActionResult> RemoveReaction(Guid entityId, EntityType entityType)
     {
-        var userId = _currentUserService.UserId;
+        var userId = GetCurrentUserId();
         if (!userId.HasValue)
             return Unauthorized();
 
@@ -58,7 +66,7 @@ public class InteractionsController : Controller
     [HttpGet]
     public async Task<IActionResult> GetReactionSummary(Guid entityId, EntityType entityType)
     {
-        var userId = _currentUserService.UserId;
+        var userId = GetCurrentUserId();
         var summary = await _interactionService.GetReactionSummaryAsync(entityId, entityType, userId);
         return Json(summary);
     }
@@ -77,7 +85,7 @@ public class InteractionsController : Controller
     [HttpPost]
     public async Task<IActionResult> AddComment([FromBody] CreateCommentRequest request)
     {
-        var userId = _currentUserService.UserId;
+        var userId = GetCurrentUserId();
         if (!userId.HasValue)
             return Unauthorized();
 
@@ -87,15 +95,15 @@ public class InteractionsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateComment(Guid commentId, [FromBody] string newContent)
+    public async Task<IActionResult> UpdateComment(Guid commentId, [FromBody] UpdateCommentRequest request)
     {
-        var userId = _currentUserService.UserId;
+        var userId = GetCurrentUserId();
         if (!userId.HasValue)
             return Unauthorized();
 
         try
         {
-            var comment = await _interactionService.UpdateCommentAsync(commentId, newContent, userId.Value);
+            var comment = await _interactionService.UpdateCommentAsync(commentId, request.Content, userId.Value);
             return Json(new { success = true, comment });
         }
         catch (UnauthorizedAccessException)
@@ -107,7 +115,7 @@ public class InteractionsController : Controller
     [HttpPost]
     public async Task<IActionResult> DeleteComment(Guid commentId)
     {
-        var userId = _currentUserService.UserId;
+        var userId = GetCurrentUserId();
         if (!userId.HasValue)
             return Unauthorized();
 
@@ -118,7 +126,7 @@ public class InteractionsController : Controller
     [HttpPost]
     public async Task<IActionResult> AddReply([FromBody] CreateReplyRequest request)
     {
-        var userId = _currentUserService.UserId;
+        var userId = GetCurrentUserId();
         if (!userId.HasValue)
             return Unauthorized();
 

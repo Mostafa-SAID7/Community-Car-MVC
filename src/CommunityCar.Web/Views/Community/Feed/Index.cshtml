@@ -7,7 +7,7 @@
 
 <div class="feed-container">
     <!-- Stories Section -->
-    <div class="stories-section mb-4">
+    <div class="stories-section">
         <div class="stories-container">
             <div class="story-item add-story">
                 <div class="story-avatar">
@@ -37,7 +37,7 @@
         <!-- Main Feed Column -->
         <div class="col-12">
             <!-- Feed Navigation -->
-            <div class="feed-nav mb-4">
+            <div class="feed-nav">
                 <div class="nav nav-pills" role="tablist">
                     <a class="nav-link @(feedType == "personalized" ? "active" : "")" href="?feedType=personalized">
                         <i class="fas fa-home"></i> For You
@@ -54,8 +54,8 @@
             <!-- Create Post Section -->
             @if (currentUserId.HasValue)
             {
-                <div class="card create-post-card mb-4">
-                    <div class="card-body">
+                <div class="create-post-card">
+                    <div class="p-4">
                         <div class="d-flex align-items-center mb-3">
                             <div class="user-avatar me-3">
                                 <img src="/images/default-avatar.png" alt="Your Avatar" />
@@ -81,9 +81,9 @@
             <div class="feed-items">
                 @foreach (var item in Model.FeedItems)
                 {
-                    <div class="card feed-item mb-4" data-content-id="@item.Id" data-content-type="@item.ContentType">
+                    <div class="feed-item mb-4" data-content-id="@item.Id" data-content-type="@item.ContentType">
                         <!-- Post Header -->
-                        <div class="card-header border-0 bg-transparent">
+                        <div class="p-4 pb-0">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center">
                                     <div class="user-avatar me-3">
@@ -128,7 +128,7 @@
                         </div>
 
                         <!-- Post Content -->
-                        <div class="card-body">
+                        <div class="p-4">
                             @if (!string.IsNullOrEmpty(item.Title))
                             {
                                 <h5 class="card-title">@item.Title</h5>
@@ -178,7 +178,7 @@
                             @if (!string.IsNullOrEmpty(item.ImageUrl))
                             {
                                 <div class="post-media mb-3">
-                                    <img src="@item.ImageUrl" alt="Post Image" class="img-fluid rounded" onclick="openImageModal('@item.ImageUrl')" />
+                                    <img src="@item.ImageUrl" alt="Post Image" class="gallery-image rounded" onclick="openImageModal('@item.ImageUrl')" />
                                 </div>
                             }
                             else if (item.ImageUrls.Any())
@@ -229,26 +229,24 @@
                         </div>
 
                         <!-- Post Actions -->
-                        <div class="card-footer border-0 bg-transparent">
-                            <div class="post-actions">
-                                <button class="btn btn-light action-btn @(item.IsLikedByUser ? "liked" : "")" onclick="toggleLike('@item.Id', '@item.ContentType')">
-                                    <i class="fas fa-heart"></i> Like
-                                </button>
-                                <button class="btn btn-light action-btn" onclick="toggleComments('@item.Id')">
-                                    <i class="fas fa-comment"></i> Comment
-                                </button>
-                                <button class="btn btn-light action-btn" onclick="shareContent('@item.Id', '@item.ContentType')">
-                                    <i class="fas fa-share"></i> Share
-                                </button>
-                                <button class="btn btn-light action-btn @(item.IsBookmarkedByUser ? "bookmarked" : "")" onclick="bookmarkContent('@item.Id', '@item.ContentType')">
-                                    <i class="fas fa-bookmark"></i>
-                                </button>
-                            </div>
+                        <div class="post-actions">
+                            <button class="btn btn-light action-btn @(item.IsLikedByUser ? "liked" : "")" onclick="toggleLike('@item.Id', '@item.ContentType')">
+                                <i class="fas fa-heart"></i> Like
+                            </button>
+                            <button class="btn btn-light action-btn" onclick="toggleComments('@item.Id')">
+                                <i class="fas fa-comment"></i> Comment
+                            </button>
+                            <button class="btn btn-light action-btn" onclick="shareContent('@item.Id', '@item.ContentType')">
+                                <i class="fas fa-share"></i> Share
+                            </button>
+                            <button class="btn btn-light action-btn @(item.IsBookmarkedByUser ? "bookmarked" : "")" onclick="bookmarkContent('@item.Id', '@item.ContentType')">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
                         </div>
 
                         <!-- Comments Section (Initially Hidden) -->
                         <div class="comments-section" id="comments-@item.Id" style="display: none;">
-                            <div class="card-body border-top">
+                            <div class="p-4 border-top">
                                 <div class="comment-input mb-3">
                                     <div class="d-flex">
                                         <div class="user-avatar me-2">
