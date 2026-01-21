@@ -20,6 +20,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("Register")]
     public IActionResult Register()
     {
         if (User.Identity?.IsAuthenticated == true)
@@ -30,6 +31,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [Route("Register")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterVM model)
     {
@@ -74,12 +76,14 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("RegisterConfirmation")]
     public IActionResult RegisterConfirmation()
     {
         return View();
     }
 
     [HttpGet]
+    [Route("Login")]
     public IActionResult Login(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true)
@@ -92,6 +96,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [Route("Login")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginVM model, string? returnUrl = null)
     {
@@ -130,6 +135,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [Route("Logout")]
     [ValidateAntiForgeryToken]
     [Authorize]
     public async Task<IActionResult> Logout()
@@ -139,6 +145,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("ConfirmEmail")]
     public async Task<IActionResult> ConfirmEmail(string userId, string token)
     {
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
@@ -161,12 +168,14 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("ForgotPassword")]
     public IActionResult ForgotPassword()
     {
         return View();
     }
 
     [HttpPost]
+    [Route("ForgotPassword")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordVM model)
     {
@@ -188,6 +197,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("ResetPassword")]
     public IActionResult ResetPassword(string userId, string token)
     {
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
@@ -205,6 +215,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [Route("ResetPassword")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ResetPassword(ResetPasswordVM model)
     {
@@ -293,6 +304,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("AccessDenied")]
     public IActionResult AccessDenied()
     {
         return View();

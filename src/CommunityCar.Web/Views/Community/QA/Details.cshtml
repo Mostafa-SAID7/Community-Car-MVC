@@ -175,6 +175,13 @@
                 }
             </div>
         </div>
+        
+        <!-- Interaction Bar for Question -->
+        @{
+            ViewBag.EntityId = Model.Id;
+            ViewBag.EntityType = (int)CommunityCar.Domain.Enums.EntityType.Question;
+        }
+        <partial name="_InteractionBar" model="null" />
     </div>
 </div>
 
@@ -305,6 +312,13 @@
                         <div class="qa-body-text">
                             @Html.Raw(answer.Body.Replace("\n", "<br/>"))
                         </div>
+                        
+                        <!-- Interaction Bar for Answer -->
+                        @{
+                            ViewBag.EntityId = answer.Id;
+                            ViewBag.EntityType = (int)CommunityCar.Domain.Enums.EntityType.Answer;
+                        }
+                        <partial name="_InteractionBar" model="null" />
                         
                         <!-- Answer Footer -->
                         <div class="qa-answer-footer">

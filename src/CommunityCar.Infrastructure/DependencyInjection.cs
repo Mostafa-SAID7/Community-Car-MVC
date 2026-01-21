@@ -103,9 +103,9 @@ public static class DependencyInjection
         // Configure cookie authentication
         services.ConfigureApplicationCookie(options =>
         {
-            options.LoginPath = "/Account/Login";
-            options.LogoutPath = "/Account/Logout";
-            options.AccessDeniedPath = "/Account/AccessDenied";
+            options.LoginPath = "/Login";
+            options.LogoutPath = "/Logout";
+            options.AccessDeniedPath = "/AccessDenied";
             options.ExpireTimeSpan = TimeSpan.FromDays(30);
             options.SlidingExpiration = true;
             options.Cookie.HttpOnly = true;

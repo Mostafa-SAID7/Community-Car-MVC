@@ -1,0 +1,43 @@
+@model CommunityCar.Application.Features.Interactions.ViewModels.InteractionSummaryVM
+@{
+    ViewData["Title"] = "Test Interactions";
+}
+
+<div class="container mt-4">
+    <h2>Test Interactions - Like, Comment, Share</h2>
+    
+    <div class="card">
+        <div class="card-header">
+            <h4>Sample Question</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">How do I change the oil in my car?</h5>
+            <p class="card-text">
+                I have a 2020 Honda Civic and I want to learn how to change the oil myself. 
+                What tools do I need and what are the steps involved? Any safety tips would be appreciated.
+            </p>
+            
+            <!-- Interaction Bar -->
+            <partial name="_InteractionBar" model="Model" />
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <h4>Instructions:</h4>
+        <ul>
+            <li>Click the reaction buttons (like, love, etc.) to test reactions</li>
+            <li>Click "Comments" to open the comment section</li>
+            <li>Try adding a comment in the comment form</li>
+            <li>Click "Share" to test the share modal</li>
+            <li>All interactions should work with AJAX and show toast notifications</li>
+        </ul>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        console.log('Interactions test page loaded');
+        console.log('Entity ID:', '@ViewBag.EntityId');
+        console.log('Entity Type:', '@ViewBag.EntityType');
+    </script>
+}

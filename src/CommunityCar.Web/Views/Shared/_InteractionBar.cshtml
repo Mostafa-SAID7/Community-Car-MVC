@@ -1,0 +1,94 @@
+@model CommunityCar.Application.Features.Interactions.ViewModels.InteractionSummaryVM
+
+@{
+    var entityId = ViewBag.EntityId as Guid? ?? Guid.Empty;
+    var entityType = ViewBag.EntityType as int? ?? 0;
+}
+
+<div class="interaction-bar" data-entity-id="@entityId" data-entity-type="@entityType">
+    <!-- Reactions Section -->
+    <div class="reactions-container" id="reactions-@entityId">
+        @if (Model?.Reactions?.AvailableReactions != null)
+        {
+            @foreach (var reaction in Model.Reactions.AvailableReactions.Take(6))
+            {
+                <button class="reaction-btn @(Model.Reactions.UserReaction == reaction.Type ? "active" : "")" 
+                        data-entity-id="@entityId" 
+                        data-entity-type="@entityType" 
+                        data-reaction-type="@((int)reaction.Type)"
+                        title="@reaction.Display">
+                    <i class="@GetReactionIcon(reaction.Type)"></i>
+                    <span class="reaction-count">@reaction.Count</span>
+                </button>
+            }
+        }
+        else
+        {
+            <!-- Default reaction buttons -->
+            <button class="reaction-btn" data-entity-id="@entityId" data-entity-type="@entityType" data-reaction-type="0" title="Like">
+                <i class="fas fa-thumbs-up"></i>
+                <span class="reaction-count">0</span>
+            </button>
+            <button class="reaction-btn" data-entity-id="@entityId" data-entity-type="@entityType" data-reaction-type="1" title="Love">
+                <i class="fas fa-heart"></i>
+                <span class="reaction-count">0</span>
+            </button>
+            <button class="reaction-btn" data-entity-id="@entityId" data-entity-type="@entityType" data-reaction-type="2" title="Haha">
+                <i class="fas fa-laugh"></i>
+                <span class="reaction-count">0</span>
+            </button>
+        }
+        
+        @if (Model?.Reactions?.TotalReactions > 0)
+        {
+            <span class="total-reactions">@Model.Reactions.TotalReactions reactions</span>
+        }
+    </div>
+
+    <!-- Comment Button -->
+    <button class="interaction-btn comment-btn" data-entity-id="@entityId" data-entity-type="@entityType">
+        <i class="fas fa-comment"></i>
+        <span>@(Model?.CommentCount ?? 0) Comments</span>
+    </button>
+
+    <!-- Share Button -->
+    <button class="interaction-btn share-btn" data-entity-id="@entityId" data-entity-type="@entityType">
+        <i class="fas fa-share"></i>
+        <span>@(Model?.Shares?.TotalShares ?? 0) Shares</span>
+    </button>
+</div>
+
+<!-- Comments Section -->
+<div class="comments-section" id="comments-@entityId" style="display: none;">
+    <div class="comments-header">
+        <h4 class="comments-count">Comments (@(Model?.CommentCount ?? 0))</h4>
+    </div>
+
+    @if (Model?.CanComment == true)
+    {
+        <div class="comment-form" data-entity-id="@entityId" data-entity-type="@entityType">
+            <textarea class="comment-input" placeholder="Write a comment..." rows="3"></textarea>
+            <button class="submit-comment-btn">Post Comment</button>
+        </div>
+    }
+
+    <div class="comments-list" id="comments-list-@entityId">
+        <!-- Comments will be loaded dynamically -->
+    </div>
+</div>
+
+@functions {
+    private string GetReactionIcon(CommunityCar.Domain.Enums.ReactionType reactionType)
+    {
+        return reactionType switch
+        {
+            CommunityCar.Domain.Enums.ReactionType.Like => "fas fa-thumbs-up",
+            CommunityCar.Domain.Enums.ReactionType.Love => "fas fa-heart",
+            CommunityCar.Domain.Enums.ReactionType.Haha => "fas fa-laugh",
+            CommunityCar.Domain.Enums.ReactionType.Wow => "fas fa-bolt",
+            CommunityCar.Domain.Enums.ReactionType.Sad => "fas fa-frown",
+            CommunityCar.Domain.Enums.ReactionType.Angry => "fas fa-angry",
+            _ => "fas fa-thumbs-up"
+        };
+    }
+}
