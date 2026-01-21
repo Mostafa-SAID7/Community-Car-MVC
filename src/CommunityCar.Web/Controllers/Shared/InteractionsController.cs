@@ -156,7 +156,7 @@ public class InteractionsController : Controller
     [HttpPost]
     public async Task<IActionResult> ShareEntity([FromBody] ShareEntityRequest request)
     {
-        var userId = _currentUserService.UserId;
+        var userId = GetCurrentUserId();
         if (!userId.HasValue)
             return Unauthorized();
 
@@ -199,7 +199,7 @@ public class InteractionsController : Controller
     [HttpGet]
     public async Task<IActionResult> GetInteractionSummary(Guid entityId, EntityType entityType)
     {
-        var userId = _currentUserService.UserId;
+        var userId = GetCurrentUserId();
         var summary = await _interactionService.GetInteractionSummaryAsync(entityId, entityType, userId);
         return Json(summary);
     }
