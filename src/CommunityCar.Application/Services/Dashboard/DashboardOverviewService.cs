@@ -1,5 +1,4 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
@@ -7,36 +6,39 @@ namespace CommunityCar.Application.Services.Dashboard;
 
 public class DashboardOverviewService : IDashboardOverviewService
 {
-    private readonly ICurrentUserService _currentUserService;
-
-    public DashboardOverviewService(ICurrentUserService currentUserService)
+    public async Task<DashboardOverviewVM> GetOverviewAsync(DashboardOverviewRequest? request = null)
     {
-        _currentUserService = currentUserService;
-    }
+        var startDate = request?.StartDate ?? DateTime.UtcNow.AddDays(-30);
+        var endDate = request?.EndDate ?? DateTime.UtcNow;
 
-    public async Task<DashboardOverviewVM> GetOverviewAsync(DashboardOverviewRequest request)
-    {
-        // Calculate date range
-        var (startDate, endDate) = GetDateRange(request.TimeRange, request.StartDate, request.EndDate);
-
-        // In a real implementation, these would come from actual database queries
         var overview = new DashboardOverviewVM
         {
             Stats = new DashboardStatsVM
             {
-                TotalUsers = await GetTotalUsersAsync(),
-                TotalPosts = await GetTotalPostsAsync(),
-                TotalQuestions = await GetTotalQuestionsAsync(),
-                TotalAnswers = await GetTotalAnswersAsync(),
-                TotalReviews = await GetTotalReviewsAsync(),
-                TotalStories = await GetTotalStoriesAsync(),
-                TotalNews = await GetTotalNewsAsync(),
-                TotalInteractions = await GetTotalInteractionsAsync(),
-                ActiveUsersToday = await GetActiveUsersTodayAsync(),
-                ActiveUsersThisWeek = await GetActiveUsersThisWeekAsync(),
-                ActiveUsersThisMonth = await GetActiveUsersThisMonthAsync(),
-                GrowthRate = await CalculateGrowthRateAsync(),
-                LastUpdated = DateTime.UtcNow,
+                TotalUsers = 1250,
+                TotalPosts = 4500,
+                TotalComments = 12500,
+                TotalQuestions = 850,
+                TotalAnswers = 1200,
+                TotalReviews = 450,
+                TotalStories = 320,
+                TotalNews = 150,
+                TotalInteractions = 25000,
+                ActiveUsersToday = 125,
+                EngagementRate = 4.5m,
+                GrowthRate = 12.5m,
+                LastUpdated = DateTime.UtcNow
+            },
+            RecentActivity = await GetRecentActivityAsync(10),
+            TopContent = new List<TopContentVM>
+            {
+                new() { Id = Guid.NewGuid(), Title = "Top 10 Car Care Tips", AuthorName = "John Doe", Views = 1500, Likes = 250, Comments = 45, CreatedAt = DateTime.UtcNow.AddDays(-5) },
+                new() { Id = Guid.NewGuid(), Title = "Best SUV for 2024", AuthorName = "Jane Smith", Views = 1200, Likes = 180, Comments = 35, CreatedAt = DateTime.UtcNow.AddDays(-3) }
+            },
+            ActiveUsers = new List<ActiveUserVM>
+            {
+                new() { Id = Guid.NewGuid(), UserName = "user1", Email = "user1@example.com", IsOnline = true, LastActivity = DateTime.UtcNow },
+                new() { Id = Guid.NewGuid(), UserName = "user2", Email = "user2@example.com", IsOnline = false, LastActivity = DateTime.UtcNow.AddMinutes(-15) }
             },
             UserGrowthChart = await GetUserGrowthChartAsync(startDate, endDate),
             ContentChart = await GetContentChartAsync(startDate, endDate),
@@ -46,33 +48,66 @@ public class DashboardOverviewService : IDashboardOverviewService
         return overview;
     }
 
+    public async Task<DashboardOverviewVM> GetOverviewAsync()
+    {
+        return await GetOverviewAsync(null);
+    }
+
     public async Task<List<DashboardStatsVM>> GetQuickStatsAsync()
     {
-        return await Task.FromResult(new List<DashboardStatsVM>
+        return new List<DashboardStatsVM>
         {
-            new() { Title = "Total Users", Value = "1,234", Icon = "fas fa-users", Color = "primary", ChangePercentage = 12.5m, IsPositiveChange = true },
-            new() { Title = "Active Today", Value = "89", Icon = "fas fa-user-check", Color = "success", ChangePercentage = 5.2m, IsPositiveChange = true },
-            new() { Title = "Total Posts", Value = "5,678", Icon = "fas fa-file-alt", Color = "info", ChangePercentage = -2.1m, IsPositiveChange = false },
-            new() { Title = "Engagement Rate", Value = "78%", Icon = "fas fa-chart-line", Color = "warning", ChangePercentage = 8.7m, IsPositiveChange = true }
-        });
+            new() { Title = "Total Users", Value = "1,250", Icon = "bi-people", Color = "primary", ChangePercentage = 12.5m, IsPositiveChange = true },
+            new() { Title = "Active Now", Value = "125", Icon = "bi-activity", Color = "success", ChangePercentage = 5.2m, IsPositiveChange = true },
+            new() { Title = "New Orders", Value = "45", Icon = "bi-cart", Color = "warning", ChangePercentage = 2.1m, IsPositiveChange = false },
+            new() { Title = "Reports", Value = "12", Icon = "bi-flag", Color = "danger", ChangePercentage = 0, IsPositiveChange = true }
+        };
+    }
+
+    public async Task<DashboardStatsVM> GetStatsAsync(DateTime? startDate, DateTime? endDate)
+    {
+        var overview = await GetOverviewAsync(new DashboardOverviewRequest { StartDate = startDate, EndDate = endDate });
+        return overview.Stats;
+    }
+
+    public async Task<List<RecentActivityVM>> GetRecentActivityAsync(int count)
+    {
+        var activities = new List<RecentActivityVM>();
+        var types = new[] { "UserRegistered", "PostCreated", "CommentAdded", "ReportSubmitted" };
+        var random = new Random();
+
+        for (int i = 0; i < count; i++)
+        {
+            activities.Add(new RecentActivityVM
+            {
+                Type = types[random.Next(types.Length)],
+                Description = $"User {i + 1} performed an action",
+                UserName = $"user{i + 1}",
+                Timestamp = DateTime.UtcNow.AddMinutes(-random.Next(1, 1440)),
+                TimeAgo = $"{i + 1}h ago",
+                Icon = "bi-info-circle",
+                Color = "primary"
+            });
+        }
+
+        return await Task.FromResult(activities.OrderByDescending(a => a.Timestamp).ToList());
     }
 
     public async Task<List<ChartDataVM>> GetUserGrowthChartAsync(DateTime startDate, DateTime endDate)
     {
-        // Mock data - in real implementation, query from database
         var data = new List<ChartDataVM>();
-        var current = startDate;
         var random = new Random();
+        var current = startDate;
 
         while (current <= endDate)
         {
             data.Add(new ChartDataVM
             {
                 Label = current.ToString("MMM dd"),
-                Value = random.Next(10, 100),
+                Value = random.Next(10, 50),
                 Date = current
             });
-            current = current.AddDays(1);
+            current = current.AddDays(7);
         }
 
         return await Task.FromResult(data);
@@ -80,58 +115,51 @@ public class DashboardOverviewService : IDashboardOverviewService
 
     public async Task<List<ChartDataVM>> GetContentChartAsync(DateTime startDate, DateTime endDate)
     {
-        return await Task.FromResult(new List<ChartDataVM>
+        var data = new List<ChartDataVM>();
+        var random = new Random();
+        var current = startDate;
+
+        while (current <= endDate)
         {
-            new() { Label = "Posts", Value = 45, Color = "#007bff" },
-            new() { Label = "Questions", Value = 32, Color = "#28a745" },
-            new() { Label = "Reviews", Value = 28, Color = "#ffc107" },
-            new() { Label = "Stories", Value = 15, Color = "#dc3545" },
-            new() { Label = "News", Value = 12, Color = "#6f42c1" }
-        });
+            data.Add(new ChartDataVM
+            {
+                Label = current.ToString("MMM dd"),
+                Value = random.Next(50, 200),
+                Date = current
+            });
+            current = current.AddDays(7);
+        }
+
+        return await Task.FromResult(data);
     }
 
     public async Task<List<ChartDataVM>> GetEngagementChartAsync(DateTime startDate, DateTime endDate)
     {
-        return await Task.FromResult(new List<ChartDataVM>
+        var data = new List<ChartDataVM>();
+        var random = new Random();
+        var current = startDate;
+
+        while (current <= endDate)
         {
-            new() { Label = "Likes", Value = 1250, Color = "#e74c3c" },
-            new() { Label = "Comments", Value = 890, Color = "#3498db" },
-            new() { Label = "Shares", Value = 456, Color = "#2ecc71" },
-            new() { Label = "Bookmarks", Value = 234, Color = "#f39c12" }
-        });
+            data.Add(new ChartDataVM
+            {
+                Label = current.ToString("MMM dd"),
+                Value = random.Next(100, 500),
+                Date = current
+            });
+            current = current.AddDays(7);
+        }
+
+        return await Task.FromResult(data);
     }
 
     public async Task RefreshOverviewDataAsync()
     {
-        // In real implementation, this would refresh cached data
         await Task.CompletedTask;
     }
 
-    private (DateTime startDate, DateTime endDate) GetDateRange(string? timeRange, DateTime? startDate, DateTime? endDate)
+    public async Task RefreshMetricsAsync()
     {
-        var now = DateTime.UtcNow;
-        
-        return timeRange?.ToLower() switch
-        {
-            "today" => (now.Date, now.Date.AddDays(1).AddTicks(-1)),
-            "week" => (now.AddDays(-7), now),
-            "month" => (now.AddDays(-30), now),
-            "year" => (now.AddDays(-365), now),
-            "custom" when startDate.HasValue && endDate.HasValue => (startDate.Value, endDate.Value),
-            _ => (now.AddDays(-30), now)
-        };
+        await Task.CompletedTask;
     }
-
-    private async Task<int> GetTotalUsersAsync() => await Task.FromResult(1234);
-    private async Task<int> GetTotalPostsAsync() => await Task.FromResult(5678);
-    private async Task<int> GetTotalQuestionsAsync() => await Task.FromResult(890);
-    private async Task<int> GetTotalAnswersAsync() => await Task.FromResult(1456);
-    private async Task<int> GetTotalReviewsAsync() => await Task.FromResult(234);
-    private async Task<int> GetTotalStoriesAsync() => await Task.FromResult(567);
-    private async Task<int> GetTotalNewsAsync() => await Task.FromResult(123);
-    private async Task<int> GetTotalInteractionsAsync() => await Task.FromResult(12345);
-    private async Task<int> GetActiveUsersTodayAsync() => await Task.FromResult(89);
-    private async Task<int> GetActiveUsersThisWeekAsync() => await Task.FromResult(456);
-    private async Task<int> GetActiveUsersThisMonthAsync() => await Task.FromResult(789);
-    private async Task<decimal> CalculateGrowthRateAsync() => await Task.FromResult(12.5m);
 }

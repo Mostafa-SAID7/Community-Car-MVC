@@ -171,7 +171,7 @@ public class MonitoringController : Controller
     {
         try
         {
-            var success = await _monitoringService.ModeratContentAsync(id, request.Action, request.Reason);
+            var success = await _monitoringService.ModerateContentAsync(id, request.Action, request.Reason);
             if (success)
             {
                 return Json(new { success = true, message = $"Content {request.Action.ToLower()}d successfully" });

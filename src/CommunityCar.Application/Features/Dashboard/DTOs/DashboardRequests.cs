@@ -68,6 +68,7 @@ public class AnalyticsRequest
     
     public string? MetricType { get; set; }
     public string? GroupBy { get; set; } // day, week, month
+    public string? ContentType { get; set; } // Added for content analytics
 }
 
 public class SystemHealthRequest
@@ -102,7 +103,9 @@ public class ReportGenerationRequest
 public class DashboardSettingsRequest
 {
     public string Key { get; set; } = string.Empty;
+    public string SettingKey { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
 }
 
 public class ReportScheduleRequest

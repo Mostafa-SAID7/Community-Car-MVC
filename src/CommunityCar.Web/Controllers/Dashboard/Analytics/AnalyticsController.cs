@@ -31,7 +31,7 @@ public class AnalyticsController : Controller
     {
         try
         {
-            var analytics = await _analyticsService.GetUserAnalyticsAsync(request.StartDate, request.EndDate);
+            var analytics = await _analyticsService.GetUserAnalyticsAsync(request);
             return Json(new { success = true, data = analytics });
         }
         catch (Exception ex)
@@ -46,7 +46,7 @@ public class AnalyticsController : Controller
     {
         try
         {
-            var analytics = await _analyticsService.GetContentAnalyticsAsync(request.StartDate, request.EndDate);
+            var analytics = await _analyticsService.GetContentAnalyticsAsync(request);
             return Json(new { success = true, data = analytics });
         }
         catch (Exception ex)
@@ -117,12 +117,12 @@ public class AnalyticsController : Controller
     }
 
     [HttpPost("update")]
-    public async Task<IActionResult> UpdateAnalytics()
+    public async Task<IActionResult> UpdateAnalytics([FromBody] AnalyticsRequest request)
     {
         try
         {
-            await _analyticsService.UpdateAnalyticsAsync();
-            return Json(new { success = true, message = "Analytics updated successfully" });
+            var result = await _analyticsService.UpdateAnalyticsAsync(request);
+            return Json(new { success = result, message = result ? "Analytics updated successfully" : "Failed to update analytics" });
         }
         catch (Exception ex)
         {

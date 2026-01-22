@@ -12,4 +12,11 @@ public interface IDashboardAnalyticsService
     Task<List<ChartDataVM>> GetAnalyticsChartAsync(AnalyticsRequest request);
     Task UpdateUserAnalyticsAsync(Guid userId, string action);
     Task UpdateContentAnalyticsAsync(Guid contentId, string contentType, string action);
+
+    // Added to match AnalyticsController expectations
+    Task<TrafficAnalyticsVM> GetTrafficAnalyticsAsync(DateTime startDate, DateTime endDate);
+    Task<List<ChartDataVM>> GetUserGrowthChartAsync(int days);
+    Task<List<ChartDataVM>> GetEngagementChartAsync(int days);
+    Task<List<ChartDataVM>> GetContentCreationChartAsync(int days);
+    Task<bool> UpdateAnalyticsAsync(AnalyticsRequest request);
 }

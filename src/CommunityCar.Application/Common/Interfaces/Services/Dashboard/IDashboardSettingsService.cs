@@ -13,4 +13,12 @@ public interface IDashboardSettingsService
     Task<bool> ResetSettingAsync(string key);
     Task<bool> ResetCategoryAsync(string category);
     Task<List<string>> GetCategoriesAsync();
+
+    // Added to match DashboardSettingsController expectations
+    Task<List<DashboardSettingsVM>> GetSettingsAsync(Guid userId);
+    Task<List<DashboardSettingsVM>> GetSettingsByCategoryAsync(Guid userId, string category);
+    Task<DashboardSettingsVM?> GetSettingAsync(Guid userId, string key);
+    Task<bool> UpdateSettingAsync(Guid userId, DashboardSettingsRequest request);
+    Task<bool> ResetToDefaultAsync(Guid userId, string key);
+    Task<bool> ResetAllToDefaultAsync(Guid userId);
 }
