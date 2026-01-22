@@ -5,7 +5,7 @@ using CommunityCar.Domain.Entities.Community.Maps;
 
 namespace CommunityCar.Application.Features.Maps.Mappings;
 
-public class MapsMappingProfile : Profile
+public class MapsMappingProfile : AutoMapper.Profile
 {
     public MapsMappingProfile()
     {

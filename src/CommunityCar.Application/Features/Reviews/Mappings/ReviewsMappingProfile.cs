@@ -4,7 +4,7 @@ using CommunityCar.Domain.Entities.Community.Reviews;
 
 namespace CommunityCar.Application.Features.Reviews.Mappings;
 
-public class ReviewsMappingProfile : Profile
+public class ReviewsMappingProfile : AutoMapper.Profile
 {
     public ReviewsMappingProfile()
     {

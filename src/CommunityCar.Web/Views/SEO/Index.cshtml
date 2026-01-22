@@ -1,0 +1,309 @@
+@model CommunityCar.Application.Features.SEO.ViewModels.SEOAnalysisVM
+@{
+    ViewData["Title"] = "SEO Dashboard";
+    Layout = "_DashboardLayout";
+}
+
+<div class="dashboard-content">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">SEO Dashboard</h1>
+        <p class="dashboard-subtitle">Monitor and optimize your site's search engine performance</p>
+    </div>
+
+    <div class="row">
+        <!-- SEO Score Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Overall SEO Score</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="score-circle">
+                        <span class="score-number">@(Model?.Score ?? 0)</span>
+                        <span class="score-label">/ 100</span>
+                    </div>
+                    <div class="score-grade mt-3">
+                        @{
+                            var grade = (Model?.Score ?? 0) >= 80 ? "Excellent" : 
+                                       (Model?.Score ?? 0) >= 60 ? "Good" : 
+                                       (Model?.Score ?? 0) >= 40 ? "Needs Improvement" : "Poor";
+                            var gradeClass = (Model?.Score ?? 0) >= 80 ? "text-success" : 
+                                           (Model?.Score ?? 0) >= 60 ? "text-primary" : 
+                                           (Model?.Score ?? 0) >= 40 ? "text-warning" : "text-danger";
+                        }
+                        <span class="@gradeClass">@grade</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Quick Actions</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="analyzeUrl">Analyze Page SEO</label>
+                                <div class="input-group">
+                                    <input type="text" id="analyzeUrl" class="form-control" placeholder="Enter URL to analyze" value="/">
+                                    <button class="btn btn-primary" onclick="analyzePage()">Analyze</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="action-buttons">
+                                <a href="/SEO/Sitemap" class="btn btn-outline-primary" target="_blank">View Sitemap</a>
+                                <a href="/SEO/RSS" class="btn btn-outline-primary" target="_blank">View RSS Feed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEO Metrics -->
+    @if (Model?.Metrics != null)
+    {
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">SEO Metrics</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="metric-item">
+                                    <div class="metric-value">@Model.Metrics.TitleLength</div>
+                                    <div class="metric-label">Title Length</div>
+                                    <div class="metric-status @(Model.Metrics.TitleLength >= 30 && Model.Metrics.TitleLength <= 60 ? "text-success" : "text-warning")">
+                                        @(Model.Metrics.TitleLength >= 30 && Model.Metrics.TitleLength <= 60 ? "Good" : "Needs Attention")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="metric-item">
+                                    <div class="metric-value">@Model.Metrics.DescriptionLength</div>
+                                    <div class="metric-label">Description Length</div>
+                                    <div class="metric-status @(Model.Metrics.DescriptionLength >= 120 && Model.Metrics.DescriptionLength <= 160 ? "text-success" : "text-warning")">
+                                        @(Model.Metrics.DescriptionLength >= 120 && Model.Metrics.DescriptionLength <= 160 ? "Good" : "Needs Attention")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="metric-item">
+                                    <div class="metric-value">@Model.Metrics.H1Count</div>
+                                    <div class="metric-label">H1 Tags</div>
+                                    <div class="metric-status @(Model.Metrics.H1Count == 1 ? "text-success" : "text-warning")">
+                                        @(Model.Metrics.H1Count == 1 ? "Good" : "Should be 1")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="metric-item">
+                                    <div class="metric-value">@Model.Metrics.ImagesWithoutAlt</div>
+                                    <div class="metric-label">Images Missing Alt</div>
+                                    <div class="metric-status @(Model.Metrics.ImagesWithoutAlt == 0 ? "text-success" : "text-danger")">
+                                        @(Model.Metrics.ImagesWithoutAlt == 0 ? "Good" : "Fix Required")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Issues and Recommendations -->
+    <div class="row mt-4">
+        @if (Model?.Issues?.Any() == true)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">SEO Issues</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var issue in Model.Issues)
+                        {
+                            <div class="issue-item">
+                                <div class="issue-header">
+                                    <span class="issue-type">@issue.Type</span>
+                                    <span class="issue-severity severity-@issue.Severity.ToLower()">@issue.Severity</span>
+                                </div>
+                                <div class="issue-message">@issue.Message</div>
+                                <div class="issue-fix">
+                                    <strong>Fix:</strong> @issue.Fix
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model?.Recommendations?.Any() == true)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recommendations</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var recommendation in Model.Recommendations)
+                        {
+                            <div class="recommendation-item">
+                                <div class="recommendation-header">
+                                    <span class="recommendation-category">@recommendation.Category</span>
+                                    <span class="recommendation-priority priority-@recommendation.Priority.ToLower()">@recommendation.Priority</span>
+                                </div>
+                                <div class="recommendation-title">@recommendation.Title</div>
+                                <div class="recommendation-description">@recommendation.Description</div>
+                                <div class="recommendation-impact">
+                                    <strong>Impact:</strong> @recommendation.Impact
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    async function analyzePage() {
+        const url = document.getElementById('analyzeUrl').value;
+        if (!url) {
+            alert('Please enter a URL to analyze');
+            return;
+        }
+
+        try {
+            const response = await fetch('/SEO/AnalyzePage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `url=${encodeURIComponent(url)}`
+            });
+
+            const result = await response.json();
+            if (result.error) {
+                alert('Error: ' + result.error);
+            } else {
+                // Reload page with new analysis
+                location.reload();
+            }
+        } catch (error) {
+            alert('Error analyzing page: ' + error.message);
+        }
+    }
+</script>
+
+<style>
+    .score-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 8px solid var(--primary-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+
+    .score-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    .score-label {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    .metric-item {
+        text-align: center;
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    .metric-label {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+    }
+
+    .metric-status {
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-top: 0.25rem;
+    }
+
+    .issue-item, .recommendation-item {
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .issue-header, .recommendation-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .issue-type, .recommendation-category {
+        font-weight: 500;
+        color: var(--primary-color);
+    }
+
+    .severity-high, .priority-high {
+        background-color: var(--danger-color);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    .severity-medium, .priority-medium {
+        background-color: var(--warning-color);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    .severity-low, .priority-low {
+        background-color: var(--info-color);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        align-items: end;
+        height: 100%;
+    }
+</style>

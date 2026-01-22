@@ -8,7 +8,7 @@ using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Application.Services.Community;
 
-public class InteractionService : IInteractionService
+public partial class InteractionService : IInteractionService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly INotificationService _notificationService;

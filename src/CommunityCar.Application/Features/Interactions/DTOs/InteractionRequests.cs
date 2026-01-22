@@ -48,3 +48,8 @@ public class ReactionRequest
     public Guid UserId { get; set; }
     public ReactionType ReactionType { get; set; }
 }
+
+public class UpdateCommentContentRequest
+{
+    public string Content { get; set; } = string.Empty;
+}

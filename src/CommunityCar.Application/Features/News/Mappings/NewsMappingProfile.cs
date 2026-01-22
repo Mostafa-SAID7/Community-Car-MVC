@@ -4,7 +4,7 @@ using CommunityCar.Domain.Entities.Community.News;
 
 namespace CommunityCar.Application.Features.News.Mappings;
 
-public class NewsMappingProfile : Profile
+public class NewsMappingProfile : AutoMapper.Profile
 {
     public NewsMappingProfile()
     {

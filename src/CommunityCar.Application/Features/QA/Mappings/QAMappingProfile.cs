@@ -4,7 +4,7 @@ using CommunityCar.Domain.Entities.Community.QA;
 
 namespace CommunityCar.Application.Features.QA.Mappings;
 
-public class QAMappingProfile : Profile
+public class QAMappingProfile : AutoMapper.Profile
 {
     public QAMappingProfile()
     {

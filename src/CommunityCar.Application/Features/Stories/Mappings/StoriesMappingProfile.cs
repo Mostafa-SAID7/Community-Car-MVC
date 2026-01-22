@@ -4,7 +4,7 @@ using CommunityCar.Domain.Entities.Community.Stories;
 
 namespace CommunityCar.Application.Features.Stories.Mappings;
 
-public class StoriesMappingProfile : Profile
+public class StoriesMappingProfile : global::AutoMapper.Profile
 {
     public StoriesMappingProfile()
     {

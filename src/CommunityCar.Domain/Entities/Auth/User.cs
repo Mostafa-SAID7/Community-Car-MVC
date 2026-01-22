@@ -16,6 +16,9 @@ public class User : IdentityUser<Guid>, IBaseEntity
     public string? UpdatedBy { get; set; }
 
     public string FullName { get; set; } = string.Empty;
+    public string? Bio { get; set; }
+    public string? City { get; set; }
+    public string? Country { get; set; }
     public bool IsActive { get; private set; }
 
     // OAuth properties
@@ -204,6 +207,34 @@ public class User : IdentityUser<Guid>, IBaseEntity
         EmailTwoFactorToken = null;
         EmailTwoFactorTokenExpiry = null;
         Audit(UpdatedBy);
+    }
+
+    public void UpdateNotificationSettings(bool emailNotifications, bool pushNotifications, bool smsNotifications, bool marketingEmails)
+    {
+        // These would be stored in a separate UserSettings entity or as JSON in a settings column
+        // For now, we'll just audit the change
+        Audit(UpdatedBy);
+    }
+
+    public void UpdatePrivacySettings(Dictionary<string, bool> settings)
+    {
+        // These would be stored in a separate UserPrivacySettings entity or as JSON in a settings column
+        // For now, we'll just audit the change
+        Audit(UpdatedBy);
+    }
+
+    public Dictionary<string, bool> GetPrivacySettings()
+    {
+        // These would be retrieved from a separate UserPrivacySettings entity or from a JSON settings column
+        // For now, return default settings
+        return new Dictionary<string, bool>
+        {
+            ["ProfileVisible"] = true,
+            ["EmailVisible"] = false,
+            ["PhoneVisible"] = false,
+            ["AllowMessages"] = true,
+            ["AllowFriendRequests"] = true
+        };
     }
 
     public void Audit(string? user)

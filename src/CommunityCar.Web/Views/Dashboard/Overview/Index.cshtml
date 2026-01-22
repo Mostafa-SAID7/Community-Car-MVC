@@ -1,72 +1,318 @@
+@model CommunityCar.Application.Features.Dashboard.ViewModels.DashboardOverviewVM
 @{
-    ViewData["Title"] = "Overview";
+    ViewData["Title"] = "Dashboard Overview";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
-<div class="row g-4">
-    <div class="col-md-3">
-        <div class="card glass p-4 text-center">
-            <h3 class="text-xs text-muted text-uppercase mb-2">Total Users</h3>
-            <p class="text-2xl font-bold">12,450</p>
-            <div class="text-success text-xs mt-1">+12% from last month</div>
+<div class="dashboard-overview">
+    <!-- Stats Cards Row -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Total Users</h6>
+                            <h3 class="mb-0">@Model.Stats.TotalUsers.ToString("N0")</h3>
+                            <small class="text-white-50">+@Model.Stats.GrowthRate% this month</small>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Total Posts</h6>
+                            <h3 class="mb-0">@Model.Stats.TotalPosts.ToString("N0")</h3>
+                            <small class="text-white-50">Active today: @Model.Stats.ActiveUsersToday</small>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-edit fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Total Comments</h6>
+                            <h3 class="mb-0">@Model.Stats.TotalComments.ToString("N0")</h3>
+                            <small class="text-white-50">Engagement: @Model.Stats.EngagementRate%</small>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-comments fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-1">Q&A Items</h6>
+                            <h3 class="mb-0">@(Model.Stats.TotalQuestions + Model.Stats.TotalAnswers)</h3>
+                            <small class="text-white-50">@Model.Stats.TotalQuestions Q / @Model.Stats.TotalAnswers A</small>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-question-circle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card glass p-4 text-center">
-            <h3 class="text-xs text-muted text-uppercase mb-2">Active Sessions</h3>
-            <p class="text-2xl font-bold">1,280</p>
-            <div class="text-primary text-xs mt-1">Real-time now</div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <div class="col-lg-8 mb-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">User Growth</h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-outline-primary active" data-period="7">7D</button>
+                        <button type="button" class="btn btn-outline-primary" data-period="30">30D</button>
+                        <button type="button" class="btn btn-outline-primary" data-period="90">90D</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="userGrowthChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">System Health</h5>
+                </div>
+                <div class="card-body">
+                    <div class="system-health">
+                        <div class="health-status mb-3">
+                            <span class="badge badge-@(Model.SystemHealth.IsHealthy ? "success" : "danger") badge-lg">
+                                @(Model.SystemHealth.IsHealthy ? "Healthy" : "Issues Detected")
+                            </span>
+                        </div>
+                        
+                        <div class="health-metrics">
+                            <div class="metric mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>CPU Usage</span>
+                                    <span>@Model.SystemHealth.CpuUsage%</span>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-@(Model.SystemHealth.CpuUsage > 70 ? "danger" : Model.SystemHealth.CpuUsage > 50 ? "warning" : "success")" 
+                                         style="width: @Model.SystemHealth.CpuUsage%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>Memory Usage</span>
+                                    <span>@Model.SystemHealth.MemoryUsage%</span>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-@(Model.SystemHealth.MemoryUsage > 80 ? "danger" : Model.SystemHealth.MemoryUsage > 60 ? "warning" : "success")" 
+                                         style="width: @Model.SystemHealth.MemoryUsage%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>Disk Usage</span>
+                                    <span>@Model.SystemHealth.DiskUsage%</span>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-@(Model.SystemHealth.DiskUsage > 85 ? "danger" : Model.SystemHealth.DiskUsage > 70 ? "warning" : "success")" 
+                                         style="width: @Model.SystemHealth.DiskUsage%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="health-info mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-clock"></i> Last check: @Model.SystemHealth.LastCheck.ToString("HH:mm")
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card glass p-4 text-center">
-            <h3 class="text-xs text-muted text-uppercase mb-2">Posts Today</h3>
-            <p class="text-2xl font-bold">452</p>
-            <div class="text-success text-xs mt-1">+5% vs yesterday</div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-4 mb-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Activity</h5>
+                    <button class="btn btn-sm btn-outline-primary" onclick="refreshActivity()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="activity-list" id="activityList">
+                        @foreach (var activity in Model.RecentActivity)
+                        {
+                            <div class="activity-item">
+                                <div class="activity-icon bg-@activity.Color">
+                                    <i class="@activity.Icon"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-description">@activity.Description</div>
+                                    <div class="activity-meta">
+                                        <span class="activity-user">@activity.UserName</span>
+                                        <span class="activity-time">@activity.TimeAgo</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card glass p-4 text-center">
-            <h3 class="text-xs text-muted text-uppercase mb-2">Reports Open</h3>
-            <p class="text-2xl font-bold">8</p>
-            <div class="text-warning text-xs mt-1">Requires attention</div>
+        
+        <div class="col-lg-4 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Top Content</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="top-content-list">
+                        @foreach (var content in Model.TopContent)
+                        {
+                            <div class="top-content-item">
+                                <div class="content-info">
+                                    <div class="content-title">@content.Title</div>
+                                    <div class="content-meta">
+                                        <span class="content-type badge badge-secondary">@content.Type</span>
+                                        <span class="content-author">by @content.AuthorName</span>
+                                    </div>
+                                </div>
+                                <div class="content-stats">
+                                    <div class="stat">
+                                        <i class="fas fa-eye"></i> @content.Views
+                                    </div>
+                                    <div class="stat">
+                                        <i class="fas fa-heart"></i> @content.Likes
+                                    </div>
+                                    <div class="stat">
+                                        <i class="fas fa-comment"></i> @content.Comments
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Active Users</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="active-users-list">
+                        @foreach (var user in Model.ActiveUsers)
+                        {
+                            <div class="active-user-item">
+                                <div class="user-avatar">
+                                    @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
+                                    {
+                                        <img src="@user.ProfilePictureUrl" alt="@user.UserName" class="avatar-img">
+                                    }
+                                    else
+                                    {
+                                        <div class="avatar-placeholder">
+                                            @user.UserName.Substring(0, 1).ToUpper()
+                                        </div>
+                                    }
+                                    @if (user.IsOnline)
+                                    {
+                                        <span class="online-indicator"></span>
+                                    }
+                                </div>
+                                <div class="user-info">
+                                    <div class="user-name">@user.UserName</div>
+                                    <div class="user-activity">@user.LastActivityText</div>
+                                </div>
+                                <div class="user-stats">
+                                    <div class="stat-item">
+                                        <span class="stat-value">@user.PostsCount</span>
+                                        <span class="stat-label">Posts</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-md-8">
-        <div class="card glass p-4" style="height: 400px;">
-            <h3 class="text-lg font-bold mb-4">Traffic Insights</h3>
-            <div class="d-flex align-items-center justify-content-center h-100 text-muted">
-                <i data-lucide="bar-chart" size="48" class="opacity-20 mb-3"></i>
-                <p>Chart visualization will appear here.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card glass p-4" style="height: 400px;">
-            <h3 class="text-lg font-bold mb-4">Recent Activity</h3>
-            <div class="d-flex flex-column gap-3">
-                <div class="d-flex gap-3 align-items-center">
-                    <div class="p-2 rounded bg-primary-subtle text-primary">
-                        <i data-lucide="user-plus" size="14"></i>
-                    </div>
-                    <div>
-                        <div class="text-sm">New user registered</div>
-                        <div class="text-xs text-muted">2 minutes ago</div>
-                    </div>
-                </div>
-                <div class="d-flex gap-3 align-items-center">
-                    <div class="p-2 rounded bg-warning-subtle text-warning">
-                        <i data-lucide="alert-triangle" size="14"></i>
-                    </div>
-                    <div>
-                        <div class="text-sm">System spike detected</div>
-                        <div class="text-xs text-muted">15 minutes ago</div>
-                    </div>
-                </div>
-                <!-- More items can go here -->
-            </div>
-        </div>
-    </div>
-</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize charts
+        const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+        const userGrowthChart = new Chart(userGrowthCtx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Label))),
+                datasets: [{
+                    label: 'New Users',
+                    data: @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Value))),
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Refresh activity function
+        function refreshActivity() {
+            fetch('/dashboard/recent-activity')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update activity list
+                        console.log('Activity refreshed');
+                    }
+                })
+                .catch(error => console.error('Error refreshing activity:', error));
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshActivity, 30000);
+    </script>
+}

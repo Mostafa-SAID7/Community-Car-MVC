@@ -85,6 +85,7 @@ public static class DependencyInjection
         services.AddScoped<INewsRepository, NewsRepository>();
         services.AddScoped<IReviewsRepository, ReviewsRepository>();
         services.AddScoped<IStoriesRepository, StoriesRepository>();
+        services.AddScoped<IRatingRepository, RatingRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Authentication & Authorization services

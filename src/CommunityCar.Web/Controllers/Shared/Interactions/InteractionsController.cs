@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 
-namespace CommunityCar.Web.Controllers.Shared;
+namespace CommunityCar.Web.Controllers.Shared.Interactions;
 
 [Authorize]
 public class InteractionsController : Controller
