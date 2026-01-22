@@ -82,13 +82,34 @@ function toggleLike(contentId, contentType) {
     const button = event.target.closest('.action-btn');
     const isLiked = button.classList.contains('liked');
     
-    interactWithContent(contentId, contentType, isLiked ? 'unlike' : 'like')
-        .then(success => {
-            if (success) {
-                button.classList.toggle('liked');
-                updateLikeCount(contentId, !isLiked);
-            }
-        });
+    fetch('/feed/api/interact', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            contentId: contentId,
+            contentType: contentType,
+            interactionType: isLiked ? 'unlike' : 'like'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            button.classList.toggle('liked');
+            updateLikeCount(contentId, !isLiked);
+            showNotification(
+                isLiked ? 'Removed like' : 'Liked!',
+                'success'
+            );
+        } else {
+            showNotification('Failed to update like', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error toggling like:', error);
+        showNotification('Error updating like', 'error');
+    });
 }
 
 function toggleComments(contentId) {
@@ -102,52 +123,143 @@ function toggleComments(contentId) {
 }
 
 function shareContent(contentId, contentType) {
-    // TODO: Implement share functionality
-    if (navigator.share) {
-        navigator.share({
-            title: 'Check out this post',
-            url: window.location.href + `#post-${contentId}`
-        });
-    } else {
-        // Fallback: copy to clipboard
-        navigator.clipboard.writeText(window.location.href + `#post-${contentId}`)
-            .then(() => {
-                showNotification('Link copied to clipboard!', 'success');
-            });
-    }
-    
-    interactWithContent(contentId, contentType, 'share');
+    // First record the share interaction
+    fetch('/feed/api/interact', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            contentId: contentId,
+            contentType: contentType,
+            interactionType: 'share'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Then handle the actual sharing
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Check out this post',
+                    url: window.location.href + `#post-${contentId}`
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(window.location.href + `#post-${contentId}`)
+                    .then(() => {
+                        showNotification('Link copied to clipboard!', 'success');
+                    })
+                    .catch(() => {
+                        showNotification('Unable to copy link', 'error');
+                    });
+            }
+        } else {
+            showNotification('Failed to share content', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error sharing content:', error);
+        showNotification('Error sharing content', 'error');
+    });
 }
 
 function bookmarkContent(contentId, contentType) {
-    const button = event.target.closest('.action-btn');
+    const button = event.target.closest('.action-btn, .dropdown-item');
     const isBookmarked = button.classList.contains('bookmarked');
     
-    interactWithContent(contentId, contentType, isBookmarked ? 'unbookmark' : 'bookmark')
-        .then(success => {
-            if (success) {
+    fetch('/feed/api/bookmark', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            contentId: contentId,
+            contentType: contentType
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (button.classList.contains('action-btn')) {
                 button.classList.toggle('bookmarked');
-                showNotification(
-                    isBookmarked ? 'Removed from bookmarks' : 'Added to bookmarks',
-                    'success'
-                );
             }
-        });
+            showNotification(
+                isBookmarked ? 'Removed from bookmarks' : 'Added to bookmarks',
+                'success'
+            );
+        } else {
+            showNotification('Failed to bookmark content', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error bookmarking content:', error);
+        showNotification('Error bookmarking content', 'error');
+    });
 }
 
 function hideContent(contentId) {
-    const feedItem = document.querySelector(`[data-content-id="${contentId}"]`);
-    if (feedItem) {
-        feedItem.style.animation = 'slideUp 0.3s ease-out reverse';
-        setTimeout(() => {
-            feedItem.remove();
-        }, 300);
-    }
+    fetch('/feed/api/hide', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            contentId: contentId,
+            contentType: 'Post'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const feedItem = document.querySelector(`[data-content-id="${contentId}"]`);
+            if (feedItem) {
+                feedItem.style.animation = 'slideUp 0.3s ease-out reverse';
+                setTimeout(() => {
+                    feedItem.remove();
+                }, 300);
+            }
+            showNotification('Content hidden', 'success');
+        } else {
+            showNotification('Failed to hide content', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error hiding content:', error);
+        showNotification('Error hiding content', 'error');
+    });
 }
 
 function reportContent(contentId, contentType) {
-    // TODO: Implement report functionality
-    showNotification('Content reported. Thank you for helping keep our community safe.', 'info');
+    // Show a simple prompt for report reason
+    const reason = prompt('Please provide a reason for reporting this content:');
+    if (!reason || reason.trim() === '') {
+        return;
+    }
+
+    fetch('/feed/api/report', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            contentId: contentId,
+            contentType: contentType,
+            reason: reason.trim()
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Content reported. Thank you for helping keep our community safe.', 'success');
+        } else {
+            showNotification('Failed to report content', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error reporting content:', error);
+        showNotification('Error reporting content', 'error');
+    });
 }
 
 // Comment functionality
@@ -430,12 +542,12 @@ function updateStatsDisplay(stats) {
 }
 
 function showNotification(message, type = 'info') {
-    // Use existing notification system if available
-    if (window.notify) {
-        window.notify[type](message);
+    // Use the global notification system
+    if (window.showNotification && typeof window.showNotification === 'function') {
+        window.showNotification(message, type);
     } else {
-        // Fallback to alert
-        alert(message);
+        // Fallback to console if notification system isn't loaded yet
+        console.log(`${type.toUpperCase()}: ${message}`);
     }
 }
 

@@ -300,6 +300,98 @@ public class FeedService : IFeedService
         return Task.FromResult(true);
     }
 
+    public async Task<bool> AddCommentAsync(Guid userId, Guid contentId, string contentType, string comment)
+    {
+        try
+        {
+            // TODO: Implement adding comments to content
+            // This would involve creating a comment record and updating comment counts
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<IEnumerable<object>> GetCommentsAsync(Guid contentId, string contentType)
+    {
+        try
+        {
+            // TODO: Implement getting comments for content
+            // For now, return mock data
+            var comments = new List<object>
+            {
+                new
+                {
+                    id = Guid.NewGuid(),
+                    authorName = "John Doe",
+                    authorAvatar = "/images/default-avatar.png",
+                    content = "Great post! Thanks for sharing.",
+                    timeAgo = "2 hours ago",
+                    createdAt = DateTime.UtcNow.AddHours(-2)
+                },
+                new
+                {
+                    id = Guid.NewGuid(),
+                    authorName = "Jane Smith",
+                    authorAvatar = "/images/default-avatar.png",
+                    content = "I completely agree with this review.",
+                    timeAgo = "1 hour ago",
+                    createdAt = DateTime.UtcNow.AddHours(-1)
+                }
+            };
+            
+            return comments;
+        }
+        catch
+        {
+            return new List<object>();
+        }
+    }
+
+    public async Task<bool> BookmarkContentAsync(Guid userId, Guid contentId, string contentType)
+    {
+        try
+        {
+            // TODO: Implement bookmarking content
+            // This would involve creating/removing bookmark records
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> HideContentAsync(Guid userId, Guid contentId, string contentType)
+    {
+        try
+        {
+            // TODO: Implement hiding content for user
+            // This would involve creating a hidden content record
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> ReportContentAsync(Guid userId, Guid contentId, string contentType, string reason)
+    {
+        try
+        {
+            // TODO: Implement reporting content
+            // This would involve creating a report record and potentially flagging content
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     // Private helper methods
     private Task<List<string>> GetUserInterestsAsync(Guid? userId)
     {

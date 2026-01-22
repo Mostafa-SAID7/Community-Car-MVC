@@ -5,12 +5,13 @@
     --color-red-200: #ffc9c9;
     --color-red-300: #ffa2a2;
     --color-red-400: #ff6467;
-    --color-red-500: #fb2c36;
-    --color-red-600: #e7000b;
-    --color-red-700: #c10007;
-    --color-red-800: #9f0712;
-    --color-red-900: #82181a;
-    --color-red-950: #460809;
+    --color-red-500: #e11d48;
+    /* Slightly darker and more pink-red for better contrast */
+    --color-red-600: #be123c;
+    --color-red-700: #9f1239;
+    --color-red-800: #881337;
+    --color-red-900: #701a2d;
+    --color-red-950: #4c0519;
 
     /* Semantic Primary (based on Red 500) */
     --color-primary-h: 357;

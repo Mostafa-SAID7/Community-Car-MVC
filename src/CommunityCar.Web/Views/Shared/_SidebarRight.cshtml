@@ -9,7 +9,7 @@
         <!-- Trending Topics -->
         <div class="sidebar-section mb-4">
             <h3 class="sidebar-heading">
-                <i class="fas fa-fire"></i>
+                <i data-lucide="trending-up" size="16"></i>
                 Trending Topics
             </h3>
             <div class="sidebar-content">
@@ -27,7 +27,10 @@
                 }
                 else
                 {
-                    <div class="empty-state">No trending topics right now</div>
+                    <div class="empty-state text-center py-4">
+                        <i data-lucide="hash" class="text-muted mb-2"></i>
+                        <p class="text-xs text-muted m-0">No trending topics right now</p>
+                    </div>
                 }
             </div>
         </div>
@@ -37,7 +40,7 @@
         {
             <div class="sidebar-section mb-4">
                 <h3 class="sidebar-heading">
-                    <i class="fas fa-user-plus"></i>
+                    <i data-lucide="users" size="16"></i>
                     People You May Know
                 </h3>
                 <div class="sidebar-content">
@@ -55,8 +58,8 @@
                                     <div class="friend-mutual">@friend.MutualFriendsCount mutual friends</div>
                                 }
                             </div>
-                            <button class="btn-add-friend" onclick="sendFriendRequest('@friend.UserId')">
-                                <i class="fas fa-user-plus"></i>
+                            <button class="btn-add-friend" onclick="sendFriendRequest('@friend.UserId')" title="Add Friend">
+                                <i data-lucide="user-plus" size="14"></i>
                             </button>
                         </div>
                     }
@@ -68,7 +71,7 @@
         <!-- Community Stats -->
         <div class="sidebar-section">
             <h3 class="sidebar-heading">
-                <i class="fas fa-chart-line"></i>
+                <i data-lucide="bar-chart-2" size="16"></i>
                 Community Stats
             </h3>
             <div class="sidebar-content">
@@ -103,20 +106,27 @@
     else
     {
         <!-- Default Activity Section for non-feed pages -->
-        <h3 class="sidebar-heading">Activity</h3>
+        <!-- Default Activity Section for non-feed pages -->
+        <h3 class="sidebar-heading">
+            <i data-lucide="activity" size="16"></i> Activity
+        </h3>
         <div class="sidebar-content">
-            <div class="d-flex gap-3 mb-3">
-                <div class="flex-shrink-0" style="width: 32px; height: 32px; background: hsl(var(--color-accent)); border-radius: var(--radius-md);"></div>
+            <div class="d-flex gap-3 mb-3 align-items-center">
+                <div class="flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: hsl(var(--color-accent)); border-radius: var(--radius-md);">
+                    <i data-lucide="user-plus" size="16"></i>
+                </div>
                 <div>
                     <p class="text-xs font-medium m-0">New member joined</p>
-                    <p class="text-xs m-0" style="color: hsl(var(--color-muted-foreground));">2 mins ago</p>
+                    <p class="text-xs m-0 text-muted">2 mins ago</p>
                 </div>
             </div>
-            <div class="d-flex gap-3">
-                <div class="flex-shrink-0" style="width: 32px; height: 32px; background: hsl(var(--color-accent)); border-radius: var(--radius-md);"></div>
+            <div class="d-flex gap-3 align-items-center">
+                <div class="flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: hsl(var(--color-accent)); border-radius: var(--radius-md);">
+                    <i data-lucide="message-circle" size="16"></i>
+                </div>
                 <div>
                     <p class="text-xs font-medium m-0">Expert answered</p>
-                    <p class="text-xs m-0" style="color: hsl(var(--color-muted-foreground));">15 mins ago</p>
+                    <p class="text-xs m-0 text-muted">15 mins ago</p>
                 </div>
             </div>
         </div>

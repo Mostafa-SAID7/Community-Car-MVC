@@ -108,6 +108,97 @@ public class FeedController : Controller
         return Json(new { success = result });
     }
 
+    [HttpPost("api/comments")]
+    public async Task<IActionResult> SubmitComment([FromBody] CommentRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (!userId.HasValue)
+            return Unauthorized();
+
+        try
+        {
+            var result = await _feedService.AddCommentAsync(userId.Value, request.ContentId, request.ContentType, request.Comment);
+            return Json(new { success = result });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error submitting comment");
+            return Json(new { success = false, error = "Failed to submit comment" });
+        }
+    }
+
+    [HttpGet("api/comments/{contentId}")]
+    public async Task<IActionResult> GetComments(Guid contentId, string contentType = "Post")
+    {
+        try
+        {
+            var comments = await _feedService.GetCommentsAsync(contentId, contentType);
+            return Json(comments);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading comments");
+            return Json(new List<object>());
+        }
+    }
+
+    [HttpPost("api/bookmark")]
+    public async Task<IActionResult> BookmarkContent([FromBody] BookmarkRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (!userId.HasValue)
+            return Unauthorized();
+
+        try
+        {
+            var result = await _feedService.BookmarkContentAsync(userId.Value, request.ContentId, request.ContentType);
+            return Json(new { success = result });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error bookmarking content");
+            return Json(new { success = false, error = "Failed to bookmark content" });
+        }
+    }
+
+    [HttpPost("api/hide")]
+    public async Task<IActionResult> HideContent([FromBody] HideContentRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (!userId.HasValue)
+            return Unauthorized();
+
+        try
+        {
+            var result = await _feedService.HideContentAsync(userId.Value, request.ContentId, request.ContentType);
+            return Json(new { success = result });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error hiding content");
+            return Json(new { success = false, error = "Failed to hide content" });
+        }
+    }
+
+    [HttpPost("api/report")]
+    public async Task<IActionResult> ReportContent([FromBody] ReportContentRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (!userId.HasValue)
+            return Unauthorized();
+
+        try
+        {
+            var result = await _feedService.ReportContentAsync(userId.Value, request.ContentId, request.ContentType, request.Reason);
+            return Json(new { success = result });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error reporting content");
+            return Json(new { success = false, error = "Failed to report content" });
+        }
+    }
+
     [HttpGet("api/feed")]
     public async Task<IActionResult> GetFeedApi(string feedType = "personalized", int page = 1, int pageSize = 20, string contentTypes = "")
     {
@@ -165,4 +256,30 @@ public class InteractionRequest
     public Guid ContentId { get; set; }
     public string ContentType { get; set; } = string.Empty;
     public string InteractionType { get; set; } = string.Empty; // like, share, bookmark
+}
+
+public class CommentRequest
+{
+    public Guid ContentId { get; set; }
+    public string ContentType { get; set; } = string.Empty;
+    public string Comment { get; set; } = string.Empty;
+}
+
+public class BookmarkRequest
+{
+    public Guid ContentId { get; set; }
+    public string ContentType { get; set; } = string.Empty;
+}
+
+public class HideContentRequest
+{
+    public Guid ContentId { get; set; }
+    public string ContentType { get; set; } = string.Empty;
+}
+
+public class ReportContentRequest
+{
+    public Guid ContentId { get; set; }
+    public string ContentType { get; set; } = string.Empty;
+    public string Reason { get; set; } = string.Empty;
 }

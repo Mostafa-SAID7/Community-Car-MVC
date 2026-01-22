@@ -57,143 +57,143 @@
         </div>
     </div>
 
-    <div class="qa-search-container">
-            <!-- Main Content Column -->
-            <div class="col-12">
-                <!-- Enhanced Search and Toolbar -->
-                <div class="qa-toolbar">
-                    <div class="qa-search-wrapper grow">
-                        <span class="qa-search-icon">
-                            <i data-lucide="search" style="width: 18px;"></i>
-                        </span>
-                        <input type="text" class="qa-search-input" placeholder="@Localizer["SearchPlaceholder"]" id="qaSearchInput" value="@(searchRequest?.SearchTerm ?? "")">
-                    </div>
-                    
-                    <button class="qa-filter-btn" id="toggleViewBtn" title="@Localizer["ToggleView"]">
-                        <i data-lucide="layout-grid" style="width: 20px;"></i>
-                    </button>
-                    
-                    <button class="qa-filter-btn" id="toggleFiltersBtn" title="@Localizer["AdvancedFilters"]">
-                        <i data-lucide="sliders-horizontal" style="width: 20px;"></i>
-                    </button>
-                </div>
+    <!-- Enhanced Search and Toolbar -->
+    <div class="qa-toolbar">
+        <div class="qa-search-wrapper grow">
+            <span class="qa-search-icon">
+                <i data-lucide="search" style="width: 18px;"></i>
+            </span>
+            <input type="text" class="qa-search-input" placeholder="@Localizer["SearchPlaceholder"]" id="qaSearchInput" value="@(searchRequest?.SearchTerm ?? "")">
+        </div>
+        
+        <button class="qa-filter-btn" id="toggleViewBtn" title="@Localizer["ToggleView"]">
+            <i data-lucide="layout-grid" style="width: 20px;"></i>
+        </button>
+        
+        <button class="qa-filter-btn" id="toggleFiltersBtn" title="@Localizer["AdvancedFilters"]">
+            <i data-lucide="sliders-horizontal" style="width: 20px;"></i>
+        </button>
+    </div>
 
-                <!-- Enhanced Filters Panel -->
-                <div class="qa-filters-panel" id="filtersPanel">
-                    <div class="qa-filters-grid">
-                        <div class="qa-filter-group">
-                            <label class="qa-filter-label">@Localizer["SortBy"]</label>
-                            <select class="qa-filter-select" id="sortFilter">
-                                <option value="Newest" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.Newest)">@Localizer["Newest"]</option>
-                                <option value="MostVotes" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostVotes)">@Localizer["MostVotes"]</option>
-                                <option value="MostAnswers" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostAnswers)">@Localizer["MostAnswers"]</option>
-                                <option value="RecentActivity" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.RecentActivity)">@Localizer["RecentActivity"]</option>
-                                <option value="MostViews" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostViews)">@Localizer["MostViews"]</option>
-                            </select>
-                        </div>
-                        <div class="qa-filter-group">
-                            <label class="qa-filter-label">@Localizer["Difficulty"]</label>
-                            <select class="qa-filter-select" id="difficultyFilter">
-                                <option value="">@Localizer["AllLevels"]</option>
-                                <option value="Beginner" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Beginner)">@Localizer["Beginner"]</option>
-                                <option value="Intermediate" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Intermediate)">@Localizer["Intermediate"]</option>
-                                <option value="Advanced" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Advanced)">@Localizer["Advanced"]</option>
-                                <option value="Expert" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Expert)">@Localizer["Expert"]</option>
-                            </select>
-                        </div>
-                        <div class="qa-filter-group">
-                            <label class="qa-filter-label">@Localizer["Status"]</label>
-                            <select class="qa-filter-select" id="statusFilter">
-                                <option value="">@Localizer["All"]</option>
-                                <option value="Open" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Open)">@Localizer["Open"]</option>
-                                <option value="Solved" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Solved)">@Localizer["Solved"]</option>
-                                <option value="Unanswered" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Unanswered)">@Localizer["Unanswered"]</option>
-                                <option value="Pinned" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Pinned)">@Localizer["Pinned"]</option>
-                            </select>
-                        </div>
-                        <div class="qa-filter-group">
-                            <label class="qa-filter-label">@Localizer["CarMake"]</label>
-                            <select class="qa-filter-select" id="carMakeFilter">
-                                <option value="">@Localizer["AllMakes"]</option>
-                                @foreach (var make in Model.AvailableCarMakes)
-                                {
-                                    <option value="@make" selected="@(searchRequest?.CarMake == make)">@make</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="questionsContainer">
-                    <partial name="_QuestionList" model="Model" />
-                </div>
+    <!-- Enhanced Filters Panel -->
+    <div class="qa-filters-panel" id="filtersPanel">
+        <div class="qa-filters-grid">
+            <div class="qa-filter-group">
+                <label class="qa-filter-label">@Localizer["SortBy"]</label>
+                <select class="qa-filter-select" id="sortFilter">
+                    <option value="Newest" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.Newest)">@Localizer["Newest"]</option>
+                    <option value="MostVotes" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostVotes)">@Localizer["MostVotes"]</option>
+                    <option value="MostAnswers" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostAnswers)">@Localizer["MostAnswers"]</option>
+                    <option value="RecentActivity" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.RecentActivity)">@Localizer["RecentActivity"]</option>
+                    <option value="MostViews" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostViews)">@Localizer["MostViews"]</option>
+                </select>
+            </div>
+            <div class="qa-filter-group">
+                <label class="qa-filter-label">@Localizer["Difficulty"]</label>
+                <select class="qa-filter-select" id="difficultyFilter">
+                    <option value="">@Localizer["AllLevels"]</option>
+                    <option value="Beginner" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Beginner)">@Localizer["Beginner"]</option>
+                    <option value="Intermediate" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Intermediate)">@Localizer["Intermediate"]</option>
+                    <option value="Advanced" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Advanced)">@Localizer["Advanced"]</option>
+                    <option value="Expert" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Expert)">@Localizer["Expert"]</option>
+                </select>
+            </div>
+            <div class="qa-filter-group">
+                <label class="qa-filter-label">@Localizer["Status"]</label>
+                <select class="qa-filter-select" id="statusFilter">
+                    <option value="">@Localizer["All"]</option>
+                    <option value="Open" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Open)">@Localizer["Open"]</option>
+                    <option value="Solved" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Solved)">@Localizer["Solved"]</option>
+                    <option value="Unanswered" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Unanswered)">@Localizer["Unanswered"]</option>
+                    <option value="Pinned" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Pinned)">@Localizer["Pinned"]</option>
+                </select>
+            </div>
+            <div class="qa-filter-group">
+                <label class="qa-filter-label">@Localizer["CarMake"]</label>
+                <select class="qa-filter-select" id="carMakeFilter">
+                    <option value="">@Localizer["AllMakes"]</option>
+                    @foreach (var make in Model.AvailableCarMakes)
+                    {
+                        <option value="@make" selected="@(searchRequest?.CarMake == make)">@make</option>
+                    }
+                </select>
             </div>
         </div>
+    </div>
+
+    <!-- Questions List -->
+    <div id="questionsContainer">
+        <partial name="_QuestionList" model="Model" />
     </div>
 </div>
 
 @section SidebarRight {
-    <aside class="sidebar sidebar-right d-none d-xl-block">
-        <div class="sidebar-content custom-scroll">
-            <!-- QA Stats -->
-            <div class="card sidebar-card mb-4">
-                <div class="card-header">
-                    <h6 class="mb-0"><i data-lucide="bar-chart-3" style="width: 16px; height: 16px;"></i> @Localizer["QAStatistics"]</h6>
-                </div>
-                <div class="card-body">
-                    <div class="stat-row">
-                        <span>@Localizer["TotalQuestions"]</span>
-                        <strong>@Model.Stats.TotalQuestions</strong>
+    <aside class="sidebar sidebar-right sidebar-hidden-lg">
+        <!-- QA Stats -->
+        <div class="sidebar-section margin-bottom-4">
+            <h3 class="sidebar-heading">
+                <i class="fas fa-chart-bar"></i>
+                @Localizer["QAStatistics"]
+            </h3>
+            <div class="sidebar-content">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">@Localizer["TotalQuestions"]</div>
+                        <div class="stat-value">@Model.Stats.TotalQuestions</div>
                     </div>
-                    <div class="stat-row">
-                        <span>@Localizer["Solved"]</span>
-                        <strong class="text-success">@Model.Stats.SolvedQuestions</strong>
+                    <div class="stat-item">
+                        <div class="stat-label">@Localizer["Solved"]</div>
+                        <div class="stat-value text-success">@Model.Stats.SolvedQuestions</div>
                     </div>
-                    <div class="stat-row">
-                        <span>@Localizer["Open"]</span>
-                        <strong class="text-warning">@Model.Stats.OpenQuestions</strong>
+                    <div class="stat-item">
+                        <div class="stat-label">@Localizer["Open"]</div>
+                        <div class="stat-value text-warning">@Model.Stats.OpenQuestions</div>
                     </div>
-                    <div class="stat-row">
-                        <span>@Localizer["TotalAnswers"]</span>
-                        <strong>@Model.Stats.TotalAnswers</strong>
+                    <div class="stat-item">
+                        <div class="stat-label">@Localizer["TotalAnswers"]</div>
+                        <div class="stat-value">@Model.Stats.TotalAnswers</div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Popular Tags -->
-            <div class="card sidebar-card mb-4">
-                <div class="card-header">
-                    <h6 class="mb-0"><i data-lucide="tag" style="width: 16px; height: 16px;"></i> @Localizer["PopularTags"]</h6>
-                </div>
-                <div class="card-body">
+        <!-- Popular Tags -->
+        <div class="sidebar-section margin-bottom-4">
+            <h3 class="sidebar-heading">
+                <i class="fas fa-tags"></i>
+                @Localizer["PopularTags"]
+            </h3>
+            <div class="sidebar-content">
+                <div class="tags-container">
                     @foreach (var tag in Model.AvailableTags.Take(10))
                     {
-                        <span class="badge bg-light text-dark me-1 mb-1">#@tag</span>
+                        <span class="trending-topic">#@tag</span>
                     }
                 </div>
             </div>
+        </div>
 
-            <!-- Car Makes -->
-            <div class="card sidebar-card">
-                <div class="card-header">
-                    <h6 class="mb-0"><i data-lucide="car" style="width: 16px; height: 16px;"></i> @Localizer["PopularMakes"]</h6>
-                </div>
-                <div class="card-body">
-                    @foreach (var make in Model.AvailableCarMakes.Take(8))
-                    {
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span>@make</span>
-                            <small class="text-muted">Popular</small>
-                        </div>
-                    }
-                </div>
+        <!-- Car Makes -->
+        <div class="sidebar-section">
+            <h3 class="sidebar-heading">
+                <i class="fas fa-car"></i>
+                @Localizer["PopularMakes"]
+            </h3>
+            <div class="sidebar-content">
+                @foreach (var make in Model.AvailableCarMakes.Take(8))
+                {
+                    <div class="trending-item">
+                        <div class="trending-topic">@make</div>
+                        <div class="trending-meta">Popular</div>
+                    </div>
+                }
             </div>
         </div>
     </aside>
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/feed.css" />
+    <!-- QA styles are now in components.css -->
 }
 
 @section Scripts {

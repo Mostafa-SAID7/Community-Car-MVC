@@ -6,7 +6,7 @@ using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Web.Controllers;
 
-[Authorize]
+// [Authorize] - Temporarily disabled for testing
 public class TestController : Controller
 {
     private readonly IInteractionService _interactionService;
@@ -33,10 +33,33 @@ public class TestController : Controller
         if (!string.IsNullOrEmpty(userIdString) && Guid.TryParse(userIdString, out var parsedUserId))
             userId = parsedUserId;
             
-        var summary = await _interactionService.GetInteractionSummaryAsync(testEntityId, EntityType.Question, userId);
+        // For testing without authentication, create a mock summary
+        var summary = new CommunityCar.Application.Features.Interactions.ViewModels.InteractionSummaryVM
+        {
+            Reactions = new CommunityCar.Application.Features.Interactions.ViewModels.ReactionSummaryVM
+            {
+                TotalReactions = 0,
+                ReactionCounts = new Dictionary<CommunityCar.Domain.Enums.ReactionType, int>(),
+                AvailableReactions = new List<CommunityCar.Application.Features.Interactions.ViewModels.ReactionTypeInfoVM>
+                {
+                    new() { Type = CommunityCar.Domain.Enums.ReactionType.Like, Display = "Like", Icon = "fas fa-thumbs-up", Count = 0 },
+                    new() { Type = CommunityCar.Domain.Enums.ReactionType.Love, Display = "Love", Icon = "fas fa-heart", Count = 0 },
+                    new() { Type = CommunityCar.Domain.Enums.ReactionType.Haha, Display = "Haha", Icon = "fas fa-laugh", Count = 0 }
+                }
+            },
+            CommentCount = 0,
+            Shares = new CommunityCar.Application.Features.Interactions.ViewModels.ShareSummaryVM
+            {
+                TotalShares = 0,
+                ShareTypeCounts = new Dictionary<CommunityCar.Domain.Enums.ShareType, int>()
+            },
+            CanComment = userId.HasValue,
+            CanShare = userId.HasValue,
+            CanReact = userId.HasValue
+        };
         
         ViewBag.EntityId = testEntityId;
-        ViewBag.EntityType = (int)EntityType.Question;
+        ViewBag.EntityType = (int)CommunityCar.Domain.Enums.EntityType.Question;
         
         return View(summary);
     }

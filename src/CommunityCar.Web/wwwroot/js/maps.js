@@ -331,7 +331,8 @@ function submitPOI() {
     })
     .then(poi => {
         showToast('Location added successfully!', 'success');
-        bootstrap.Modal.getInstance(document.getElementById('addPOIModal')).hide();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addPOIModal'));
+        if (modal) modal.hide();
         form.reset();
         // Refresh search results
         if (currentLocation) {
@@ -377,7 +378,8 @@ function submitRoute() {
     })
     .then(route => {
         showToast('Route added successfully!', 'success');
-        bootstrap.Modal.getInstance(document.getElementById('addRouteModal')).hide();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addRouteModal'));
+        if (modal) modal.hide();
         form.reset();
     })
     .catch(error => {
@@ -388,35 +390,13 @@ function submitRoute() {
 
 // Show toast notification
 function showToast(message, type = 'info') {
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = `toast align-items-center text-white bg-${type === 'error' ? 'danger' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'primary'} border-0`;
-    toast.setAttribute('role', 'alert');
-    toast.innerHTML = `
-        <div class="d-flex">
-            <div class="toast-body">${message}</div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-        </div>
-    `;
-    
-    // Add to toast container or create one
-    let toastContainer = document.getElementById('toastContainer');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.id = 'toastContainer';
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
+    // Use the global showToast function from custom-bootstrap.js
+    if (window.showToast) {
+        window.showToast(message, type);
+    } else {
+        // Fallback to console if custom toast not available
+        console.log(`${type.toUpperCase()}: ${message}`);
     }
-    
-    toastContainer.appendChild(toast);
-    
-    // Show toast
-    const bsToast = new bootstrap.Toast(toast);
-    bsToast.show();
-    
-    // Remove toast element after it's hidden
-    toast.addEventListener('hidden.bs.toast', () => {
-        toast.remove();
+}
     });
 }
