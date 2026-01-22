@@ -41,7 +41,7 @@ public class Share : BaseEntity
             EntityType.Post => $"/posts/{EntityId}",
             EntityType.Question => $"/qa/{EntityId}",
             EntityType.Answer => $"/qa/{EntityId}#answer-{Id}",
-            EntityType.Story => $"/stories/{EntityId}",
+            EntityType.Story => $"/feed#story-{EntityId}",
             EntityType.Review => $"/reviews/{EntityId}",
             EntityType.Event => $"/events/{EntityId}",
             EntityType.Guide => $"/guides/{EntityId}",

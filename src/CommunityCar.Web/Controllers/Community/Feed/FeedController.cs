@@ -2,6 +2,8 @@ using System.Diagnostics;
 using System.Security.Claims;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Features.Feed.DTOs;
+using CommunityCar.Application.Features.Stories.DTOs;
+using CommunityCar.Application.Features.Stories.ViewModels;
 using CommunityCar.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +13,13 @@ public class FeedController : Controller
 {
     private readonly ILogger<FeedController> _logger;
     private readonly IFeedService _feedService;
+    private readonly IStoriesService _storiesService;
 
-    public FeedController(ILogger<FeedController> logger, IFeedService feedService)
+    public FeedController(ILogger<FeedController> logger, IFeedService feedService, IStoriesService storiesService)
     {
         _logger = logger;
         _feedService = feedService;
+        _storiesService = storiesService;
     }
 
     [HttpGet("")]
@@ -223,6 +227,163 @@ public class FeedController : Controller
         };
 
         return Json(feedResponse);
+    }
+
+    // Stories API Endpoints
+    [HttpPost("api/stories/create")]
+    public async Task<IActionResult> CreateStory([FromBody] CreateStoryRequest request)
+    {
+        try
+        {
+            var userId = GetCurrentUserId();
+            if (!userId.HasValue)
+                return Unauthorized();
+
+            request.AuthorId = userId.Value;
+            
+            var story = await _storiesService.CreateAsync(request);
+            return Json(new { success = true, story });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating story");
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpGet("api/stories/{id}")]
+    public async Task<IActionResult> GetStoryById(Guid id)
+    {
+        try
+        {
+            var story = await _storiesService.GetByIdAsync(id);
+            if (story == null)
+                return NotFound();
+
+            return Json(story);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting story by ID");
+            return NotFound();
+        }
+    }
+
+    [HttpPut("api/stories/{id}")]
+    public async Task<IActionResult> UpdateStory(Guid id, [FromBody] UpdateStoryRequest request)
+    {
+        try
+        {
+            var userId = GetCurrentUserId();
+            if (!userId.HasValue)
+                return Unauthorized();
+
+            var story = await _storiesService.UpdateAsync(id, request);
+            return Json(new { success = true, story });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating story");
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpDelete("api/stories/{id}")]
+    public async Task<IActionResult> DeleteStory(Guid id)
+    {
+        try
+        {
+            var userId = GetCurrentUserId();
+            if (!userId.HasValue)
+                return Unauthorized();
+
+            var result = await _storiesService.DeleteAsync(id);
+            return Json(new { success = result });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting story");
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost("api/stories/{id}/like")]
+    public async Task<IActionResult> LikeStory(Guid id)
+    {
+        try
+        {
+            var userId = GetCurrentUserId();
+            if (!userId.HasValue)
+                return Unauthorized();
+
+            var result = await _storiesService.LikeAsync(id, userId.Value);
+            return Json(new { success = result });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error liking story");
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost("api/stories/{id}/view")]
+    public async Task<IActionResult> IncrementStoryView(Guid id)
+    {
+        try
+        {
+            var result = await _storiesService.IncrementViewCountAsync(id);
+            return Json(new { success = result });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error incrementing story view");
+            return Json(new { success = false });
+        }
+    }
+
+    [HttpGet("api/stories/search")]
+    public async Task<IActionResult> SearchStories([FromQuery] StoriesSearchRequest request)
+    {
+        try
+        {
+            var result = await _storiesService.SearchStoriesAsync(request);
+            return Json(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error searching stories");
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpGet("api/stories/tags")]
+    public async Task<IActionResult> GetPopularStoryTags([FromQuery] int count = 20)
+    {
+        try
+        {
+            var tags = await _storiesService.GetPopularTagsAsync(count);
+            return Json(tags);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting popular tags");
+            return Json(new List<string>());
+        }
+    }
+
+    [HttpGet("api/stories/car-makes")]
+    public async Task<IActionResult> GetStoryCarMakes()
+    {
+        try
+        {
+            var carMakes = await _storiesService.GetAvailableCarMakesAsync();
+            return Json(carMakes);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting car makes");
+            return Json(new List<string>());
+        }
     }
 
     [HttpGet("privacy")]

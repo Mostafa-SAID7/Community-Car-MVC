@@ -338,7 +338,7 @@ public class InteractionService : IInteractionService
             EntityType.Post => $"{baseUrl}/posts/{entityId}",
             EntityType.Question => $"{baseUrl}/qa/{entityId}",
             EntityType.Answer => $"{baseUrl}/qa/{entityId}#answer",
-            EntityType.Story => $"{baseUrl}/stories/{entityId}",
+            EntityType.Story => $"{baseUrl}/feed#story-{entityId}",
             EntityType.Review => $"{baseUrl}/reviews/{entityId}",
             EntityType.Event => $"{baseUrl}/events/{entityId}",
             EntityType.Guide => $"{baseUrl}/guides/{entityId}",

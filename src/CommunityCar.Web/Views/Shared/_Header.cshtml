@@ -1,50 +1,50 @@
 <header class="header-wrapper">
     <div class="header-left-pill header-pill">
-        <button class="btn btn-ghost btn-icon d-flex show-mobile" id="sidebar-toggle" aria-label="Toggle Sidebar">
-            <i data-lucide="menu" size="18"></i>
+        <button class="btn btn-ghost btn-icon flex md:hidden" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <i data-lucide="menu" class="w-[18px] h-[18px]"></i>
         </button>
-        <a href="/" class="d-flex align-items-center text-decoration-none">
+        <a href="/" class="flex items-center text-inherit no-underline">
             <div class="brand-logo">
                 <span class="text-xs font-bold text-white">CC</span>
             </div>
-            <div class="brand-text d-none d-sm-flex">
+            <div class="hidden sm:flex flex-col justify-center">
                 <span class="brand-tagline">Community Car</span>
-                <span class="font-bold text-sm text-nowrap d-none d-lg-flex">Fueling Culture</span>
+                <span class="font-bold text-sm whitespace-nowrap hidden lg:flex">Fueling Culture</span>
             </div>
         </a>
     </div>
 
     <div class="header-center-pill header-pill">
         <div class="search-pill">
-            <i data-lucide="search" size="16"></i>
+            <i data-lucide="search" class="w-4 h-4"></i>
             <input type="text" placeholder="@SharedLocalizer["Search"]" class="search-input">
         </div>
         
-        <nav class="header-nav d-flex">
-            <a href="/" class="nav-link d-flex align-items-center" aria-label="@SharedLocalizer["Home"]">
-                <i data-lucide="home" size="18"></i>
-                <span class="d-none d-xl-inline ms-2">@SharedLocalizer["Home"]</span>
+        <nav class="flex items-center gap-1">
+            <a href="/" class="nav-link flex items-center" aria-label="@SharedLocalizer["Home"]">
+                <i data-lucide="home" class="w-[18px] h-[18px]"></i>
+                <span class="hidden xl:inline ml-2">@SharedLocalizer["Home"]</span>
             </a>
-            <a href="/chats" class="nav-link d-flex align-items-center" aria-label="@SharedLocalizer["Chat"]">
-                <i data-lucide="message-circle" size="18"></i>
-                <span class="d-none d-xl-inline ms-2">@SharedLocalizer["Chat"]</span>
+            <a href="/chats" class="nav-link flex items-center" aria-label="@SharedLocalizer["Chat"]">
+                <i data-lucide="message-circle" class="w-[18px] h-[18px]"></i>
+                <span class="hidden xl:inline ml-2">@SharedLocalizer["Chat"]</span>
             </a>
-            <a href="/friends" class="nav-link d-flex align-items-center" aria-label="@SharedLocalizer["Friends"]">
-                <i data-lucide="users" size="18"></i>
-                <span class="d-none d-xl-inline ms-2">@SharedLocalizer["Friends"]</span>
+            <a href="/friends" class="nav-link flex items-center" aria-label="@SharedLocalizer["Friends"]">
+                <i data-lucide="users" class="w-[18px] h-[18px]"></i>
+                <span class="hidden xl:inline ml-2">@SharedLocalizer["Friends"]</span>
             </a>
         </nav>
     </div>
     
     <div class="header-right-pill header-pill">
         <button class="btn btn-ghost btn-icon" id="theme-toggle">
-            <i data-lucide="sun" id="sun-icon" size="16"></i>
-            <i data-lucide="moon" id="moon-icon" size="16" class="d-none"></i>
+            <i data-lucide="sun" id="sun-icon" class="w-4 h-4"></i>
+            <i data-lucide="moon" id="moon-icon" class="w-4 h-4 hidden"></i>
         </button>
         
         <div class="notification-wrapper">
             <button class="notification-bell btn btn-ghost btn-icon" aria-label="Notifications">
-                <i data-lucide="bell" size="16"></i>
+                <i data-lucide="bell" class="w-4 h-4"></i>
                 <span class="notification-badge" style="display: none;"></span>
             </button>
             
