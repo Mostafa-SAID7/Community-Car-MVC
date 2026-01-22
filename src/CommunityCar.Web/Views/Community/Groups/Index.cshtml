@@ -9,76 +9,86 @@
     var filterPrivacy = ViewBag.FilterPrivacy as string ?? "all";
 }
 
-<div class="groups-container">
-    <div class="groups-header">
+<div class="container mx-auto px-4 py-6 max-w-7xl">
+    <div class="flex justify-between items-center mb-6">
         <div>
-            <h1>Community Groups</h1>
-            <p class="text-muted mb-0">Join enthusiasts sharing your interests</p>
+            <h1 class="text-3xl font-bold mb-1">Community Groups</h1>
+            <p class="text-muted-foreground mb-0">Join enthusiasts sharing your interests</p>
         </div>
-        <a href="@Url.Action("Create", "Groups")" class="btn btn-primary">
-            <i data-lucide="plus-circle"></i>Create Group
+        <a href="@Url.Action("Create", "Groups")" class="btn btn-primary gap-2">
+            <i data-lucide="plus-circle" class="w-5 h-5"></i>Create Group
         </a>
     </div>
 
-    <div class="groups-search-container">
+    <div class="card card-glass p-4 mb-6">
         <!-- Search and Toolbar -->
         <form method="get" action="@Url.Action("Index", "Groups")" id="groupsFilterForm">
-            <div class="groups-toolbar">
-                <div class="groups-search-wrapper">
-                    <span class="groups-search-icon">
-                        <i data-lucide="search" style="width: 18px;"></i>
+            <div class="flex flex-col md:flex-row gap-3">
+                <div class="relative flex-1">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                        <i data-lucide="search" class="w-4 h-4"></i>
                     </span>
-                    <input type="text" name="search" class="groups-search-input" placeholder="Search groups..." value="@search">
+                    <input type="text" name="search" class="form-control pl-10 w-full rounded-full bg-muted/50 border-transparent focus:bg-background focus:border-primary transition-colors" placeholder="Search groups..." value="@search">
                 </div>
                 
-                <button type="button" class="groups-filter-btn" id="sortButton">
-                    <i data-lucide="arrow-down-a-z" style="width: 18px;"></i>
-                    <span>Sort</span>
-                </button>
-                
-                <button type="button" class="groups-filter-btn @(filterPrivacy != "all" ? "active" : "")" id="filterButton">
-                    <i data-lucide="filter" style="width: 18px;"></i>
-                    <span>Filter</span>
-                </button>
+                <div class="flex gap-2">
+                    <button type="button" class="btn btn-ghost gap-2 border border-border bg-background/50" id="sortButton">
+                        <i data-lucide="arrow-down-a-z" class="w-4 h-4"></i>
+                        <span>Sort</span>
+                    </button>
+                    
+                    <button type="button" class="btn btn-ghost gap-2 border border-border bg-background/50 @(filterPrivacy != "all" ? "text-primary border-primary bg-primary/10" : "")" id="filterButton">
+                        <i data-lucide="filter" class="w-4 h-4"></i>
+                        <span>Filter</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Filters Panel -->
-            <div class="groups-filters-panel" id="filtersPanel" style="display: @(filterPrivacy != "all" ? "block" : "none")">
-                <div class="groups-filters-grid">
-                    <div class="groups-filter-group">
-                        <label class="groups-filter-label">Sort By</label>
-                        <select name="sortBy" class="groups-filter-select" onchange="this.form.submit()">
-                            <option value="newest" selected="@(sortBy == "newest")">Newest First</option>
-                            <option value="oldest" selected="@(sortBy == "oldest")">Oldest First</option>
-                            <option value="name" selected="@(sortBy == "name")">Name (A-Z)</option>
-                        </select>
+            <div class="mt-4 p-4 bg-muted/20 rounded-xl border border-border transition-all duration-300 mobile:hidden" id="filtersPanel" style="display: @(filterPrivacy != "all" ? "block" : "none")">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-medium text-muted-foreground">Sort By</label>
+                        <div class="relative">
+                            <select name="sortBy" class="form-select w-full rounded-lg" onchange="this.form.submit()">
+                                <option value="newest" selected="@(sortBy == "newest")">Newest First</option>
+                                <option value="oldest" selected="@(sortBy == "oldest")">Oldest First</option>
+                                <option value="name" selected="@(sortBy == "name")">Name (A-Z)</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="groups-filter-group">
-                        <label class="groups-filter-label">Privacy</label>
-                        <select name="filterPrivacy" class="groups-filter-select" onchange="this.form.submit()">
-                            <option value="all" selected="@(filterPrivacy == "all")">All Groups</option>
-                            <option value="public" selected="@(filterPrivacy == "public")">Public Only</option>
-                            <option value="private" selected="@(filterPrivacy == "private")">Private Only</option>
-                        </select>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-medium text-muted-foreground">Privacy</label>
+                        <div class="relative">
+                            <select name="filterPrivacy" class="form-select w-full rounded-lg" onchange="this.form.submit()">
+                                <option value="all" selected="@(filterPrivacy == "all")">All Groups</option>
+                                <option value="public" selected="@(filterPrivacy == "public")">Public Only</option>
+                                <option value="private" selected="@(filterPrivacy == "private")">Private Only</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
         </form>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid hsl(var(--color-border)); margin-top: 1rem;">
-            <p class="text-muted mb-0" style="font-size: 0.9rem;">
-                Showing <strong>@Model.Count()</strong> of <strong>@totalCount</strong> groups
+        <div class="flex justify-between items-center pt-4 mt-4 border-t border-border">
+            <p class="text-sm text-muted-foreground mb-0">
+                Showing <strong class="text-foreground">@Model.Count()</strong> of <strong class="text-foreground">@totalCount</strong> groups
             </p>
         </div>
+    </div>
 
         @if (!Model.Any())
         {
-            <div class="groups-empty-state">
-                <i data-lucide="users" class="groups-empty-icon"></i>
-                <p class="mb-2">No groups found matching your criteria</p>
+            <div class="text-center py-12">
+                <div class="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="users" class="w-8 h-8 text-muted-foreground"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">No groups found</h3>
+                <p class="text-muted-foreground mb-4 max-w-md mx-auto">We couldn't find any groups matching your criteria. Try adjusting your filters or search terms.</p>
                 @if (!string.IsNullOrEmpty(search))
                 {
-                    <a href="@Url.Action("Index", "Groups")" class="btn btn-ghost mt-2">Clear Search</a>
+                    <a href="@Url.Action("Index", "Groups")" class="btn btn-outline">Clear Search</a>
                 }
             </div>
         }
@@ -169,12 +179,11 @@
             <!-- Pagination -->
             @if (totalPages > 1)
             {
-                <div class="groups-pagination">
+                <div class="flex justify-center items-center gap-2 mt-8">
                     <!-- Previous Button -->
                     <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = currentPage - 1 })" 
-                       class="pagination-btn @(currentPage <= 1 ? "disabled" : "")"
-                       style="pointer-events: @(currentPage <= 1 ? "none" : "auto")">
-                        <i data-lucide="chevron-left" style="width: 18px;"></i>
+                       class="btn btn-icon btn-ghost w-9 h-9 @(currentPage <= 1 ? "opacity-50 pointer-events-none" : "")">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
                     </a>
 
                     <!-- Page Numbers -->
@@ -185,17 +194,17 @@
 
                     @if (startPage > 1)
                     {
-                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = 1 })" class="pagination-btn">1</a>
+                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = 1 })" class="btn btn-icon w-9 h-9 btn-ghost">1</a>
                         @if (startPage > 2)
                         {
-                            <span class="pagination-info">...</span>
+                            <span class="text-muted-foreground px-1">...</span>
                         }
                     }
 
                     @for (var i = startPage; i <= endPage; i++)
                     {
                         <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = i })" 
-                           class="pagination-btn @(i == currentPage ? "active" : "")">
+                           class="btn btn-icon w-9 h-9 @(i == currentPage ? "bg-primary text-white hover:bg-primary/90" : "btn-ghost")">
                             @i
                         </a>
                     }
@@ -204,21 +213,19 @@
                     {
                         @if (endPage < totalPages - 1)
                         {
-                            <span class="pagination-info">...</span>
+                            <span class="text-muted-foreground px-1">...</span>
                         }
-                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = totalPages })" class="pagination-btn">@totalPages</a>
+                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = totalPages })" class="btn btn-icon w-9 h-9 btn-ghost">@totalPages</a>
                     }
 
                     <!-- Next Button -->
                     <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = currentPage + 1 })" 
-                       class="pagination-btn @(currentPage >= totalPages ? "disabled" : "")"
-                       style="pointer-events: @(currentPage >= totalPages ? "none" : "auto")">
-                        <i data-lucide="chevron-right" style="width: 18px;"></i>
+                       class="btn btn-icon btn-ghost w-9 h-9 @(currentPage >= totalPages ? "opacity-50 pointer-events-none" : "")">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
                     </a>
-
-                    <span class="pagination-info">
-                        Page @currentPage of @totalPages
-                    </span>
+                </div>
+                <div class="text-center mt-2 text-xs text-muted-foreground">
+                    Page @currentPage of @totalPages
                 </div>
             }
         }

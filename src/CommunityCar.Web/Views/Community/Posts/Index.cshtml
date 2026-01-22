@@ -3,81 +3,91 @@
     ViewData["Title"] = "Community Posts";
 }
 
-<div class="posts-container">
-    <div class="posts-header">
-        <h1>Community Posts</h1>
-        <a href="#" class="btn btn-primary">
-            <i data-lucide="plus-circle"></i>Create Post
+<div class="container mx-auto px-4 py-6 max-w-7xl">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold mb-1">Community Posts</h1>
+            <p class="text-muted-foreground mb-0">Join the conversation</p>
+        </div>
+        <a href="#" class="btn btn-primary gap-2">
+            <i data-lucide="plus-circle" class="w-5 h-5"></i>Create Post
         </a>
     </div>
 
-    <div class="posts-search-container">
+    <div class="card card-glass p-4 mb-6">
         <!-- Search and Toolbar -->
-        <div class="posts-toolbar">
-            <div class="posts-search-wrapper">
-                <span class="posts-search-icon">
-                    <i data-lucide="search" style="width: 18px;"></i>
+        <div class="flex flex-col md:flex-row gap-3 items-center">
+            <div class="relative flex-1 w-full">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    <i data-lucide="search" class="w-4 h-4"></i>
                 </span>
-                <input type="text" class="posts-search-input" placeholder="Search posts..." id="postsSearchInput">
+                <input type="text" class="form-control pl-10 w-full rounded-full bg-muted/50 border-transparent focus:bg-background focus:border-primary transition-colors" placeholder="Search posts..." id="postsSearchInput">
             </div>
             
-            <button class="posts-filter-btn" id="togglePostViewBtn" title="Toggle View">
-                <i data-lucide="layout-grid" style="width: 20px;"></i>
-            </button>
-            
-            <button class="posts-filter-btn" id="sortPostsBtn" title="Sort Posts">
-                <i data-lucide="arrow-down-a-z" style="width: 20px;"></i>
-            </button>
+            <div class="flex gap-2">
+                <button class="btn btn-ghost btn-icon border border-border bg-background/50" id="togglePostViewBtn" title="Toggle View">
+                    <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                </button>
+                
+                <button class="btn btn-ghost btn-icon border border-border bg-background/50" id="sortPostsBtn" title="Sort Posts">
+                    <i data-lucide="arrow-down-a-z" class="w-5 h-5"></i>
+                </button>
+            </div>
         </div>
 
         @if (!Model.Any())
         {
-            <div class="posts-empty-state">
-                <i data-lucide="pen-tool" class="posts-empty-icon"></i>
-                <p class="mb-2">No posts yet. Start the conversation!</p>
-                <a href="#" class="btn btn-primary mt-3">Create First Post</a>
+            <div class="text-center py-12">
+                <div class="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="pen-tool" class="w-8 h-8 text-muted-foreground"></i>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">No posts yet</h3>
+                <p class="text-muted-foreground mb-4">Start the conversation by creating the first post!</p>
+                <a href="#" class="btn btn-primary">Create First Post</a>
             </div>
         }
         else
         {
-            <div class="posts-list" id="postsList">
+            <div class="flex flex-col gap-6" id="postsList">
                 @foreach (var post in Model)
                 {
-                    <a href="@Url.Action("Details", "Posts", new { id = post.Id })" class="post-card">
-                        <!-- Post Header -->
-                        <div class="post-header">
-                            <div class="post-author-info">
-                                <div class="post-avatar">
-                                    <i data-lucide="user" style="width: 20px;"></i>
+                    <a href="@Url.Action("Details", "Posts", new { id = post.Id })" class="card card-glass card-hover text-inherit no-underline">
+                        <div class="card-body">
+                            <!-- Post Header -->
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+                                        <i data-lucide="user" class="w-5 h-5 text-muted-foreground"></i>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold text-sm">@(post.AuthorId == Guid.Empty ? "Anonymous" : "User")</span>
+                                        <span class="text-xs text-muted-foreground">@post.CreatedAt.ToString("MMM dd, yyyy • HH:mm")</span>
+                                    </div>
                                 </div>
-                                <div class="post-author-details">
-                                    <span class="post-author-name">@(post.AuthorId == Guid.Empty ? "Anonymous" : "User")</span>
-                                    <span class="post-timestamp">@post.CreatedAt.ToString("MMM dd, yyyy • HH:mm")</span>
-                                </div>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                                    @post.Type.ToString()
+                                </span>
                             </div>
-                            <span class="post-type-badge post-type-@post.Type.ToString().ToLower()">
-                                @post.Type.ToString()
-                            </span>
-                        </div>
 
-                        <!-- Post Content -->
-                        <h3 class="post-title">@post.Title</h3>
-                        <p class="post-content-preview">@post.Content</p>
+                            <!-- Post Content -->
+                            <h3 class="text-xl font-bold mb-2">@post.Title</h3>
+                            <p class="text-muted-foreground line-clamp-3 mb-4">@post.Content</p>
 
-                        <!-- Post Actions -->
-                        <div class="post-actions">
-                            <button class="post-action-btn" onclick="event.preventDefault();">
-                                <i data-lucide="heart"></i>
-                                <span>0</span>
-                            </button>
-                            <button class="post-action-btn" onclick="event.preventDefault();">
-                                <i data-lucide="message-circle"></i>
-                                <span>0</span>
-                            </button>
-                            <button class="post-action-btn" onclick="event.preventDefault();">
-                                <i data-lucide="share-2"></i>
-                                <span>Share</span>
-                            </button>
+                            <!-- Post Actions -->
+                            <div class="flex gap-4 pt-4 border-t border-border mt-auto">
+                                <button class="btn btn-ghost btn-sm gap-2 text-muted-foreground hover:text-red-500" onclick="event.preventDefault();">
+                                    <i data-lucide="heart" class="w-4 h-4"></i>
+                                    <span>0</span>
+                                </button>
+                                <button class="btn btn-ghost btn-sm gap-2 text-muted-foreground hover:text-blue-500" onclick="event.preventDefault();">
+                                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                    <span>0</span>
+                                </button>
+                                <button class="btn btn-ghost btn-sm gap-2 text-muted-foreground hover:text-green-500" onclick="event.preventDefault();">
+                                    <i data-lucide="share-2" class="w-4 h-4"></i>
+                                    <span>Share</span>
+                                </button>
+                            </div>
                         </div>
                     </a>
                 }
@@ -95,14 +105,24 @@
 
             // Toggle Grid/List View
             toggleViewBtn?.addEventListener('click', () => {
-                postsList.classList.toggle('grid-view');
-                toggleViewBtn.classList.toggle('active');
+                const isGrid = postsList.classList.toggle('grid');
                 
-                if (postsList.classList.contains('grid-view')) {
+                if (isGrid) {
+                    // Switch to Grid
+                    postsList.classList.remove('flex', 'flex-col');
+                    postsList.classList.add('grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3');
                     viewIcon.setAttribute('data-lucide', 'list');
                 } else {
+                    // Switch to List
+                    postsList.classList.add('flex', 'flex-col');
+                    postsList.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3');
                     viewIcon.setAttribute('data-lucide', 'layout-grid');
                 }
+                
+                toggleViewBtn.classList.toggle('bg-primary/10');
+                toggleViewBtn.classList.toggle('text-primary');
+                toggleViewBtn.classList.toggle('border-primary');
+                
                 lucide.createIcons();
             });
         });

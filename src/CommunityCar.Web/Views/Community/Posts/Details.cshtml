@@ -3,119 +3,123 @@
     ViewData["Title"] = $"{Model.Title} - Posts";
 }
 
-<div class="post-detail-container">
-    <a href="@Url.Action("Index", "Posts")" class="post-back-nav">
-        <i data-lucide="arrow-left" class="me-1" style="width: 16px;"></i>Back to Posts
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <a href="@Url.Action("Index", "Posts")" class="btn btn-ghost btn-sm mb-6 pl-0 hover:bg-transparent hover:text-primary">
+        <i data-lucide="arrow-left" class="me-2 w-4 h-4"></i>Back to Posts
     </a>
 
-    <div class="post-detail-card">
-        <!-- Header -->
-        <div class="post-detail-header">
-            <div class="post-author-info">
-                <div class="post-avatar" style="width: 48px; height: 48px;">
-                    <i data-lucide="user" style="width: 24px;"></i>
+    <div class="card card-glass mb-6">
+        <div class="card-body p-8">
+            <!-- Header -->
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+                        <i data-lucide="user" class="w-6 h-6 text-muted-foreground"></i>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-lg">@(Model.AuthorId == Guid.Empty ? "Anonymous" : "User")</div>
+                        <div class="text-sm text-muted-foreground">Posted on @Model.CreatedAt.ToString("MMMM dd, yyyy at HH:mm")</div>
+                    </div>
                 </div>
-                <div class="post-author-details">
-                    <span class="post-author-name" style="font-size: 1rem;">@(Model.AuthorId == Guid.Empty ? "Anonymous" : "User")</span>
-                    <span class="post-timestamp">Posted on @Model.CreatedAt.ToString("MMMM dd, yyyy at HH:mm")</span>
-                </div>
+                <span class="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">
+                    @Model.Type.ToString()
+                </span>
             </div>
-            <span class="post-type-badge post-type-@Model.Type.ToString().ToLower()">
-                @Model.Type.ToString()
-            </span>
-        </div>
 
-        <!-- Meta -->
-        <div class="post-detail-meta">
-            <div style="display: flex; gap: 2rem; font-size: 0.85rem; color: hsl(var(--color-muted-foreground));">
-                <span><i data-lucide="clock" style="width: 14px; margin-right: 0.25rem;"></i>Created: @Model.CreatedAt.ToString("MMM dd, yyyy")</span>
+            <!-- Meta -->
+            <div class="flex gap-6 text-sm text-muted-foreground mb-8">
+                <span class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-2"></i>Created: @Model.CreatedAt.ToString("MMM dd, yyyy")</span>
                 @if (Model.UpdatedAt.HasValue)
                 {
-                    <span><i data-lucide="edit" style="width: 14px; margin-right: 0.25rem;"></i>Updated: @Model.UpdatedAt.Value.ToString("MMM dd, yyyy")</span>
+                    <span class="flex items-center"><i data-lucide="edit" class="w-4 h-4 mr-2"></i>Updated: @Model.UpdatedAt.Value.ToString("MMM dd, yyyy")</span>
                 }
             </div>
-        </div>
 
-        <!-- Content -->
-        <h1 class="post-title" style="font-size: 2rem; margin-bottom: 1.5rem;">@Model.Title</h1>
-        <div class="post-detail-content">
-            @Html.Raw(Model.Content.Replace("\n", "<br/>"))
-        </div>
+            <!-- Content -->
+            <h1 class="text-3xl font-bold mb-6">@Model.Title</h1>
+            <div class="prose prose-invert max-w-none mb-8">
+                @Html.Raw(Model.Content.Replace("\n", "<br/>"))
+            </div>
 
-        <!-- Actions -->
-        <div class="post-actions">
-            <button class="post-action-btn" style="font-size: 1rem; padding: 0.5rem 1rem;">
-                <i data-lucide="heart"></i>
-                <span>Like (0)</span>
-            </button>
-            <button class="post-action-btn" style="font-size: 1rem; padding: 0.5rem 1rem;">
-                <i data-lucide="message-circle"></i>
-                <span>Comment (0)</span>
-            </button>
-            <button class="post-action-btn" style="font-size: 1rem; padding: 0.5rem 1rem;">
-                <i data-lucide="share-2"></i>
-                <span>Share</span>
-            </button>
-            <button class="post-action-btn" style="font-size: 1rem; padding: 0.5rem 1rem; margin-left: auto;">
-                <i data-lucide="bookmark"></i>
-                <span>Save</span>
-            </button>
+            <!-- Actions -->
+            <div class="flex gap-4 pt-6 border-t border-border">
+                <button class="btn btn-ghost gap-2">
+                    <i data-lucide="heart" class="w-5 h-5"></i>
+                    <span>Like (0)</span>
+                </button>
+                <button class="btn btn-ghost gap-2">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    <span>Comment (0)</span>
+                </button>
+                <button class="btn btn-ghost gap-2">
+                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                    <span>Share</span>
+                </button>
+                <button class="btn btn-ghost gap-2 ml-auto">
+                    <i data-lucide="bookmark" class="w-5 h-5"></i>
+                    <span>Save</span>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Engagement Section -->
-    <div class="post-detail-card post-engagement">
-        <h3 class="h5 mb-3">Engagement</h3>
-        <div class="post-stats">
-            <div class="post-stat-item">
-                <span class="post-stat-value">0</span>
-                <span class="post-stat-label">Likes</span>
+    <div class="card card-glass mb-6">
+        <div class="card-body p-6">
+            <h3 class="text-xl font-bold mb-4">Engagement</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="text-center p-4 bg-muted/20 rounded-xl">
+                    <div class="text-2xl font-bold mb-1">0</div>
+                    <div class="text-sm text-muted-foreground">Likes</div>
+                </div>
+                <div class="text-center p-4 bg-muted/20 rounded-xl">
+                    <div class="text-2xl font-bold mb-1">0</div>
+                    <div class="text-sm text-muted-foreground">Comments</div>
+                </div>
+                <div class="text-center p-4 bg-muted/20 rounded-xl">
+                    <div class="text-2xl font-bold mb-1">0</div>
+                    <div class="text-sm text-muted-foreground">Shares</div>
+                </div>
+                <div class="text-center p-4 bg-muted/20 rounded-xl">
+                    <div class="text-2xl font-bold mb-1">0</div>
+                    <div class="text-sm text-muted-foreground">Views</div>
+                </div>
             </div>
-            <div class="post-stat-item">
-                <span class="post-stat-value">0</span>
-                <span class="post-stat-label">Comments</span>
+            
+            <div class="pt-4 border-t border-border text-center text-muted-foreground text-sm">
+                <p class="flex items-center justify-center gap-2 mb-0">
+                    <i data-lucide="info" class="w-4 h-4"></i>
+                    Comments and interactions coming soon!
+                </p>
             </div>
-            <div class="post-stat-item">
-                <span class="post-stat-value">0</span>
-                <span class="post-stat-label">Shares</span>
-            </div>
-            <div class="post-stat-item">
-                <span class="post-stat-value">0</span>
-                <span class="post-stat-label">Views</span>
-            </div>
-        </div>
-        
-        <div style="padding-top: 1rem; border-top: 1px solid hsl(var(--color-border));">
-            <p class="text-muted text-center mb-0" style="font-size: 0.9rem;">
-                <i data-lucide="info" style="width: 16px; margin-right: 0.5rem;"></i>
-                Comments and interactions coming soon!
-            </p>
         </div>
     </div>
 
     <!-- Related Info Card -->
-    <div class="post-detail-card">
-        <h3 class="h6 mb-3 text-muted">Post Information</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; font-size: 0.9rem;">
-            <div>
-                <strong>Post ID:</strong><br/>
-                <code style="font-size: 0.75rem; color: hsl(var(--color-muted-foreground));">@Model.Id</code>
-            </div>
-            <div>
-                <strong>Author ID:</strong><br/>
-                <code style="font-size: 0.75rem; color: hsl(var(--color-muted-foreground));">@Model.AuthorId</code>
-            </div>
-            <div>
-                <strong>Post Type:</strong><br/>
-                <span>@Model.Type.ToString()</span>
-            </div>
-            @if (!string.IsNullOrEmpty(Model.CreatedBy))
-            {
+    <div class="card card-glass">
+        <div class="card-body p-6">
+            <h3 class="text-lg font-bold mb-4 text-muted-foreground">Post Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                 <div>
-                    <strong>Created By:</strong><br/>
-                    <span>@Model.CreatedBy</span>
+                    <strong class="block mb-1">Post ID:</strong>
+                    <code class="text-xs bg-muted px-2 py-1 rounded">@Model.Id</code>
                 </div>
-            }
+                <div>
+                    <strong class="block mb-1">Author ID:</strong>
+                    <code class="text-xs bg-muted px-2 py-1 rounded">@Model.AuthorId</code>
+                </div>
+                <div>
+                    <strong class="block mb-1">Post Type:</strong>
+                    <span>@Model.Type.ToString()</span>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.CreatedBy))
+                {
+                    <div>
+                        <strong class="block mb-1">Created By:</strong>
+                        <span>@Model.CreatedBy</span>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>

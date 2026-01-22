@@ -8,26 +8,13 @@
 
 /* Stories Section */
 .stories-section {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
+    /* Card properties handled by .card class */
     margin-bottom: var(--spacing-6);
     position: relative;
-    transition: all 0.2s ease;
-}
-
-.dark .stories-section {
-    background: rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.05);
+    /* transition? handled by .card */
 }
 
 .stories-section:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
     border-color: rgba(251, 44, 54, 0.3);
 }
 
@@ -39,6 +26,7 @@
     padding-bottom: var(--spacing-3);
 }
 
+/* ... Story Items ... */
 .story-item {
     display: flex;
     flex-direction: column;
@@ -184,26 +172,10 @@
 
 /* Create Post Card */
 .create-post-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
     margin-bottom: var(--spacing-6);
-    overflow: hidden;
-    transition: all 0.2s ease;
-}
-
-.dark .create-post-card {
-    background: rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.05);
 }
 
 .create-post-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
     border-color: rgba(251, 44, 54, 0.3);
 }
 
@@ -242,54 +214,7 @@
     padding-top: var(--spacing-4);
 }
 
-.create-post-actions .btn {
-    flex: 1;
-    border-radius: var(--radius-lg);
-    padding: 0.75rem 1rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: all var(--duration-250);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border: 1px solid hsl(var(--color-border));
-    background: hsl(var(--color-background));
-    color: hsl(var(--color-foreground));
-}
-
-.create-post-actions .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-red-300);
-}
-
-.create-post-actions .btn i {
-    font-size: 1rem;
-}
-
-.create-post-actions .btn:hover .text-success {
-    color: var(--color-success-600) !important;
-}
-
-.create-post-actions .btn:hover .text-warning {
-    color: var(--color-warning-600) !important;
-}
-
-.create-post-actions .btn:hover .text-info {
-    color: var(--color-info-600) !important;
-}
-
 /* Feed Item */
 .feed-item {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
     margin-bottom: var(--spacing-6);
-    position: relative;
-    /* transition? */
 }

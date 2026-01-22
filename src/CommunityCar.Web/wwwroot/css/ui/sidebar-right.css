@@ -220,18 +220,5 @@
     color: var(--color-red-200);
 }
 
-/* RTL/Text Alignments */
-.sidebar-right .sidebar-heading,
-.sidebar-right .trending-item,
-.sidebar-right .suggested-friend-item,
-.sidebar-right .stat-item {
-    text-align: left;
-    direction: ltr;
-}
 
-.sidebar-right .sidebar-heading i,
-.sidebar-right .trending-item i,
-.sidebar-right .suggested-friend-item i {
-    margin-right: 0.5rem;
-    margin-left: 0;
-}
+/* Note: RTL/Direction handling is managed in layout.css for the sidebar container */

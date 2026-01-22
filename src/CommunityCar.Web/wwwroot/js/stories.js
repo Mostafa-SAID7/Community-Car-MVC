@@ -153,7 +153,7 @@ async function createStory() {
         };
 
         // Send request to server
-        const response = await fetch('/feed/api/stories/create', {
+        const response = await fetch('/api/stories', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ function parseTags(tagsString) {
 // Load stories data
 async function loadStoriesData() {
     try {
-        const response = await fetch('/feed/api/stories');
+        const response = await fetch('/api/feed/stories');
         const stories = await response.json();
         
         if (stories && Array.isArray(stories)) {
@@ -258,7 +258,7 @@ async function openStoryViewer(storyId) {
     
     try {
         // Fetch story details
-        const response = await fetch(`/feed/api/stories/${storyId}`);
+        const response = await fetch(`/api/stories/${storyId}`);
         const story = await response.json();
         
         if (!story) {
@@ -322,7 +322,7 @@ async function likeStory() {
     if (!currentStoryId) return;
     
     try {
-        const response = await fetch(`/feed/api/stories/${currentStoryId}/like`, {
+        const response = await fetch(`/api/stories/${currentStoryId}/like`, {
             method: 'POST'
         });
         
@@ -345,7 +345,7 @@ async function likeStory() {
 // Increment story view count
 async function incrementStoryView(storyId) {
     try {
-        await fetch(`/feed/api/stories/${storyId}/view`, {
+        await fetch(`/api/stories/${storyId}/view`, {
             method: 'POST'
         });
     } catch (error) {

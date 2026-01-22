@@ -20,7 +20,7 @@ function initializeFeed() {
 
 // Story functionality
 function loadStoriesData() {
-    fetch('/feed/api/stories')
+    fetch('/api/feed/stories')
         .then(response => response.json())
         .then(stories => {
             updateStoriesDisplay(stories);
@@ -82,7 +82,7 @@ function toggleLike(contentId, contentType) {
     const button = event.target.closest('.action-btn');
     const isLiked = button.classList.contains('liked');
     
-    fetch('/feed/api/interact', {
+    fetch('/api/feed/interact', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ function toggleComments(contentId) {
 
 function shareContent(contentId, contentType) {
     // First record the share interaction
-    fetch('/feed/api/interact', {
+    fetch('/api/feed/interact', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ function bookmarkContent(contentId, contentType) {
     const button = event.target.closest('.action-btn, .dropdown-item');
     const isBookmarked = button.classList.contains('bookmarked');
     
-    fetch('/feed/api/bookmark', {
+    fetch('/api/feed/bookmark', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -199,7 +199,7 @@ function bookmarkContent(contentId, contentType) {
 }
 
 function hideContent(contentId) {
-    fetch('/feed/api/hide', {
+    fetch('/api/feed/hide', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -237,7 +237,7 @@ function reportContent(contentId, contentType) {
         return;
     }
 
-    fetch('/feed/api/report', {
+    fetch('/api/feed/report', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -48,7 +48,7 @@ public class QAController : Controller
     public async Task<IActionResult> Search([FromQuery] QASearchRequest request)
     {
         var response = await _qaService.SearchQuestionsAsync(request);
-        return Json(response);
+        return View("~/Views/Community/QA/SearchResults.cshtml", response);
     }
 
     [HttpGet("{id:guid}")]
@@ -146,13 +146,6 @@ public class QAController : Controller
     {
         var userId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.VoteAsync(entityId, entityType, userId, voteType);
-
-        // Return JSON for AJAX requests
-        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-        {
-            var voteCount = await _qaService.GetVoteCountAsync(entityId, entityType);
-            return Json(new { success = true, voteCount });
-        }
 
         // Redirect back to referring page or details if unsure
         var referer = Request.Headers["Referer"].ToString();
@@ -287,30 +280,21 @@ public class QAController : Controller
         return RedirectToAction(nameof(Details), new { id = questionId });
     }
 
-    // API endpoints for AJAX
-    [HttpGet("api/tags")]
+    // AJAX endpoints for dynamic content
+    [HttpGet("tags")]
     public async Task<IActionResult> GetTags()
     {
         var tags = await _qaService.GetPopularTagsAsync(50);
         return Json(tags);
     }
 
-    [HttpGet("api/car-makes")]
+    [HttpGet("car-makes")]
     public async Task<IActionResult> GetCarMakes()
     {
         var makes = await _qaService.GetAvailableCarMakesAsync();
         return Json(makes);
     }
-
-    [HttpGet("api/stats")]
-    public async Task<IActionResult> GetStats()
-    {
-        var stats = await _qaService.GetQAStatsAsync();
-        return Json(stats);
-    }
 }
-
-// Request models
 public class CreateQuestionRequest
 {
     public string Title { get; set; } = string.Empty;
