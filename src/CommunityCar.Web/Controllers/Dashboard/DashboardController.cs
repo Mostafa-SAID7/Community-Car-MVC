@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard;
 
-[Route("dashboard")]
+[Route("dashboard/admin")]
 [Authorize(Roles = "Admin,Moderator")]
 public class DashboardController : Controller
 {
