@@ -1,29 +1,12 @@
-@import url('ui/variables.css');
-@import url('ui/typography.css');
-@import url('ui/layout.css');
-@import url('ui/buttons.css');
-@import url('ui/cards.css');
-@import url('ui/forms.css');
-@import url('ui/utilities.css');
-@import url('ui/avatars.css');
-@import url('ui/feed.css');
-@import url('ui/sidebar-right.css');
-@import url('ui/badges.css');
-@import url('ui/comments.css');
-@import url('ui/posts.css');
-@import url('ui/groups.css');
-@import url('ui/qa.css');
-@import url('ui/auth.css');
-@import url('ui/chat.css');
-
+/* Import CSS files in correct order */
+@import url('variables.css');
+@import url('typography.css');
+@import url('components.css');
+@import url('utilities.css');
 @import url('animations.css');
 @import url('toast.css');
 @import url('ai-assistant.css');
 @import url('notifications.css');
-
-/* Replaced by ui/ modules */
-/* @import url('components.css'); */
-/* @import url('groups.css'); */
 
 
 /* Bootstrap Integration - Custom styles work alongside Bootstrap */
