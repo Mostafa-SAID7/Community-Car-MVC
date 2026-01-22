@@ -11,17 +11,17 @@
 </div>
 
 <form asp-action="Register" method="post" class="auth-form-clean">
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
 
-    <div class="row">
-        <div class="col-md-6">
+    <div class="flex flex-wrap -mx-2">
+        <div class="w-full md:w-1/2 px-2">
             <div class="form-group">
                 <label asp-for="FirstName" class="form-label">First Name</label>
                 <input asp-for="FirstName" class="form-control" placeholder="John" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="w-full md:w-1/2 px-2">
             <div class="form-group">
                 <label asp-for="LastName" class="form-label">Last Name</label>
                 <input asp-for="LastName" class="form-control" placeholder="Doe" />
@@ -54,7 +54,7 @@
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">
+    <button type="submit" class="btn btn-primary w-full">
         Create Account
     </button>
 </form>
