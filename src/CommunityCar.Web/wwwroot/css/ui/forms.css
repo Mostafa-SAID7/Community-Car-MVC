@@ -1,0 +1,75 @@
+/* ===== UI FORMS ===== */
+/* Standardized Form Components */
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: hsl(var(--color-foreground));
+}
+
+/* Form Controls (Inputs, Selects) */
+.form-control,
+.form-select,
+.form-input {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: hsl(var(--color-foreground));
+    background-color: hsl(var(--color-background));
+    border: 1px solid hsl(var(--color-input));
+    border-radius: var(--radius-md);
+    min-height: 44px;
+    /* Touch-friendly */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dark .form-control,
+.dark .form-select {
+    background-color: hsl(var(--color-card));
+    border-color: hsl(var(--color-border));
+}
+
+/* Focus States */
+.form-control:focus,
+.form-select:focus,
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-red-500);
+    box-shadow: 0 0 0 3px rgba(251, 44, 54, 0.1);
+}
+
+/* File Upload Area */
+.image-upload-area {
+    border: 2px dashed hsl(var(--color-border));
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: hsl(var(--color-muted) / 0.2);
+}
+
+.image-upload-area:hover {
+    border-color: var(--color-primary);
+    background: hsl(var(--color-primary) / 0.05);
+}
+
+.upload-icon {
+    font-size: 3rem;
+    color: hsl(var(--color-muted-foreground));
+    margin-bottom: 1rem;
+}

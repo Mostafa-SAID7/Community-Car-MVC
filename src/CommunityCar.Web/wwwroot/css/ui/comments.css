@@ -1,0 +1,208 @@
+/* ===== UI COMMENTS COMPONENTS ===== */
+
+/* Interaction Bar */
+.interaction-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-3) 0;
+    border-top: 1px solid hsl(var(--color-border));
+    margin-top: var(--spacing-4);
+}
+
+.interaction-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-3);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: hsl(var(--color-muted-foreground));
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.interaction-btn:hover {
+    background: hsl(var(--color-muted) / 0.3);
+    color: hsl(var(--color-foreground));
+}
+
+.interaction-btn.active {
+    color: var(--color-red-500);
+    background: hsl(var(--color-red-500) / 0.1);
+}
+
+/* Reaction Buttons */
+.reactions-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.reaction-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2);
+    background: transparent;
+    border: 1px solid hsl(var(--color-border));
+    border-radius: var(--radius-md);
+    color: hsl(var(--color-muted-foreground));
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 60px;
+    justify-content: center;
+}
+
+.reaction-btn:hover {
+    border-color: var(--color-red-500);
+    color: var(--color-red-500);
+    transform: translateY(-1px);
+}
+
+.reaction-btn.active {
+    background: var(--color-red-500);
+    border-color: var(--color-red-500);
+    color: white;
+}
+
+.reaction-btn i {
+    font-size: 16px;
+}
+
+.reaction-count {
+    font-weight: 500;
+    margin-left: var(--spacing-2);
+}
+
+/* Comments Section */
+.comments-section {
+    margin-top: var(--spacing-4);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid hsl(var(--color-border));
+}
+
+.comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-4);
+}
+
+.comments-count {
+    font-weight: 600;
+    color: hsl(var(--color-foreground));
+}
+
+.comment-form {
+    display: flex;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-6);
+    padding: var(--spacing-4);
+    background: hsl(var(--color-muted) / 0.3);
+    border-radius: var(--radius-md);
+}
+
+.comment-input {
+    flex: 1;
+    padding: var(--spacing-3);
+    border: 1px solid hsl(var(--color-border));
+    border-radius: var(--radius-md);
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+    font-size: 0.875rem;
+}
+
+.comment-input:focus {
+    outline: none;
+    border-color: var(--color-red-500);
+    box-shadow: 0 0 0 2px rgba(251, 44, 54, 0.1);
+}
+
+.submit-comment-btn {
+    padding: var(--spacing-3) var(--spacing-4);
+    background: var(--color-red-500);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s ease;
+    align-self: flex-start;
+}
+
+.submit-comment-btn:hover {
+    background: var(--color-red-600);
+}
+
+/* Comment Item */
+.comment {
+    margin-bottom: var(--spacing-6);
+    padding: var(--spacing-4);
+    background: hsl(var(--color-background));
+    border-radius: var(--radius-md);
+    border: 1px solid hsl(var(--color-border));
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+}
+
+.comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: hsl(var(--color-foreground));
+    font-size: 0.875rem;
+}
+
+.comment-time {
+    color: hsl(var(--color-muted-foreground));
+    font-size: 0.75rem;
+}
+
+.comment-content {
+    margin-bottom: var(--spacing-3);
+    line-height: 1.5;
+    color: hsl(var(--color-foreground));
+}
+
+.comment-actions {
+    display: flex;
+    gap: var(--spacing-3);
+    align-items: center;
+}
+
+.comment-actions button {
+    background: none;
+    border: none;
+    color: hsl(var(--color-muted-foreground));
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+}
+
+.comment-actions button:hover {
+    color: var(--color-red-500);
+    background: hsl(var(--color-red-500) / 0.1);
+}

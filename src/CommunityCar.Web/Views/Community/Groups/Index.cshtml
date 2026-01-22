@@ -84,75 +84,83 @@
         }
         else
         {
-            <div class="groups-grid">
+            <div class="cards-grid cards-grid-auto-lg">
                 @foreach (var group in Model)
                 {
-                    <a href="@Url.Action("Details", "Groups", new { id = group.Id })" class="group-card">
-                        <!-- Post Header -->
-                        <div class="group-header">
-                            <div class="group-avatar">
-                                @group.Name.Substring(0, 1).ToUpper()
-                            </div>
-                            <div class="group-info">
-                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-                                    <h3 class="group-name" style="margin-bottom: 0;">@group.Name</h3>
-                                    @if (group.IsOfficial)
-                                    {
-                                        <i data-lucide="badge-check" style="width: 18px; color: var(--color-red-500);" title="Official Group"></i>
-                                    }
-                                    else if (group.IsVerified)
-                                    {
-                                        <i data-lucide="shield-check" style="width: 16px; color: var(--color-success-500);" title="Verified Group"></i>
-                                    }
+                    <a href="@Url.Action("Details", "Groups", new { id = group.Id })" class="card card-hover no-underline text-inherit h-full">
+                        <div class="card-body flex flex-col">
+                            <!-- Header -->
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-12 h-12 rounded-xl bg-muted flex items-center justify-center font-bold text-lg text-primary shrink-0 transition-transform">
+                                    @group.Name.Substring(0, 1).ToUpper()
                                 </div>
-                                <div class="group-category">
-                                    @if (!string.IsNullOrEmpty(group.Category))
-                                    {
-                                        <i data-lucide="tag" style="width: 12px;"></i>
-                                        <span>@group.Category</span>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h3 class="card-title text-base mb-0 truncate">@group.Name</h3>
+                                        @if (group.IsOfficial)
+                                        {
+                                            <i data-lucide="badge-check" style="width: 16px;" class="text-danger flex-shrink-0" title="Official Group"></i>
+                                        }
+                                        else if (group.IsVerified)
+                                        {
+                                            <i data-lucide="shield-check" style="width: 16px;" class="text-success flex-shrink-0" title="Verified Group"></i>
+                                        }
+                                    </div>
+                                    <div class="text-xs text-muted flex items-center gap-2 truncate">
+                                        @if (!string.IsNullOrEmpty(group.Category))
+                                        {
+                                            <span class="flex items-center gap-1">
+                                                <i data-lucide="tag" style="width: 10px;"></i>
+                                                @group.Category
+                                            </span>
+                                            @if (!string.IsNullOrEmpty(group.Location))
+                                            {
+                                                <span>•</span>
+                                            }
+                                        }
                                         @if (!string.IsNullOrEmpty(group.Location))
                                         {
-                                            <span>•</span>
+                                            <span class="flex items-center gap-1">
+                                                <i data-lucide="map-pin" style="width: 10px;"></i>
+                                                @group.Location
+                                            </span>
                                         }
-                                    }
-                                    @if (!string.IsNullOrEmpty(group.Location))
-                                    {
-                                        <i data-lucide="map-pin" style="width: 12px;"></i>
-                                        <span>@group.Location</span>
-                                    }
+                                    </div>
                                 </div>
                             </div>
+
+                            <p class="card-description line-clamp-2 mb-4 grow">@group.Description</p>
+                            
+                            @if (group.Tags.Any())
+                            {
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    @foreach (var tag in group.Tags.Take(3))
+                                    {
+                                        <span class="text-xs px-2 py-1 bg-muted rounded-md text-muted font-medium">
+                                            #@tag
+                                        </span>
+                                    }
+                                </div>
+                            }
                         </div>
 
-                        <p class="group-description">@group.Description</p>
-                        
-                        @if (group.Tags.Any())
-                        {
-                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
-                                @foreach (var tag in group.Tags.Take(3))
-                                {
-                                    <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background-color: hsl(var(--color-muted)); border-radius: var(--radius-md); color: hsl(var(--color-muted-foreground));">
-                                        #@tag
-                                    </span>
-                                }
+                        <div class="card-footer bg-transparent pt-0 pb-4 px-6 border-0 mt-auto">
+                            <div class="flex items-center justify-between w-full text-xs text-muted">
+                                <div class="flex gap-4">
+                                    <div class="flex items-center gap-1" title="@group.MemberCount.ToString("N0") members">
+                                        <i data-lucide="users" style="width: 14px;"></i>
+                                        <span class="font-medium text-foreground">@(group.MemberCount >= 1000 ? $"{group.MemberCount / 1000.0:F1}k" : group.MemberCount.ToString())</span>
+                                    </div>
+                                    <div class="flex items-center gap-1" title="@group.PostCount.ToString("N0") posts">
+                                        <i data-lucide="message-square" style="width: 14px;"></i>
+                                        <span class="font-medium text-foreground">@(group.PostCount >= 1000 ? $"{group.PostCount / 1000.0:F1}k" : group.PostCount.ToString())</span>
+                                    </div>
+                                </div>
+                                <span class="flex items-center gap-1 px-2 py-1 rounded-full bg-muted/50 uppercase font-bold tracking-wider" style="font-size: 0.65rem;">
+                                    <i data-lucide="@(group.Privacy == CommunityCar.Domain.Enums.GroupPrivacy.Public ? "globe" : "lock")" style="width: 10px;"></i>
+                                    @group.Privacy.ToString()
+                                </span>
                             </div>
-                        }
-
-                        <div class="group-stats">
-                            <div class="group-stat">
-                                <i data-lucide="users" style="width: 16px;"></i>
-                                <span class="group-stat-value">@group.MemberCount.ToString("N0")</span>
-                                <span>members</span>
-                            </div>
-                            <div class="group-stat">
-                                <i data-lucide="message-square" style="width: 16px;"></i>
-                                <span class="group-stat-value">@group.PostCount.ToString("N0")</span>
-                                <span>posts</span>
-                            </div>
-                            <span class="group-badge group-badge-@group.Privacy.ToString().ToLower()" style="margin-left: auto;">
-                                <i data-lucide="@(group.Privacy == CommunityCar.Domain.Enums.GroupPrivacy.Public ? "globe" : "lock")" style="width: 10px;"></i>
-                                @group.Privacy.ToString()
-                            </span>
                         </div>
                     </a>
                 }
