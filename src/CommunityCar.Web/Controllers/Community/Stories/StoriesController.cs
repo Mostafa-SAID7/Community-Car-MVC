@@ -15,10 +15,10 @@ public class StoriesController : Controller
         _storiesService = storiesService;
     }
 
-    public async Task<IActionResult> Index()
+    // Redirect to Feed page since Stories are now integrated there
+    public IActionResult Index()
     {
-        var activeStories = await _storiesService.GetActiveStoriesAsync();
-        return View("~/Views/Community/Stories/Index.cshtml", activeStories);
+        return RedirectToAction("Index", "Feed");
     }
 
     [HttpPost("create")]

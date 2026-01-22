@@ -6,81 +6,82 @@
     var searchRequest = ViewBag.SearchRequest as CommunityCar.Application.Features.QA.DTOs.QASearchRequest;
 }
 
-<div class="qa-container">
-    <div class="qa-header">
+<div class="flex flex-col gap-6 w-full mb-8">
+    <div class="flex justify-between items-center mb-6">
         <div>
-            <h1>@Localizer["HeaderTitle"]</h1>
-            <p class="qa-subtitle">@Localizer["HeaderSubtitle"]</p>
+            <h1 class="text-3xl font-bold text-foreground m-0">@Localizer["HeaderTitle"]</h1>
+            <p class="text-muted text-base">@Localizer["HeaderSubtitle"]</p>
         </div>
         <a href="@Url.Action("Create", "QA")" class="btn btn-primary">
-            <i data-lucide="plus-circle"></i>@Localizer["AskQuestion"]
+            <i data-lucide="plus-circle" class="mr-2 w-4 h-4"></i>@Localizer["AskQuestion"]
         </a>
     </div>
 
     <!-- Stats Cards Row -->
-    <div class="qa-stats-cards">
-        <div class="qa-stat-card">
-            <div class="qa-stat-card-icon">
-                <i data-lucide="help-circle"></i>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="card p-6 flex items-center gap-4 transition hover:shadow-md border-border/60">
+            <div class="w-12 h-12 rounded-md flex items-center justify-center bg-primary/10 text-primary shrink-0">
+                <i data-lucide="help-circle" class="w-6 h-6"></i>
             </div>
-            <div class="qa-stat-card-content">
-                <span class="qa-stat-card-value">@Model.Stats.TotalQuestions</span>
-                <span class="qa-stat-card-label">@Localizer["TotalQuestions"]</span>
-            </div>
-        </div>
-        <div class="qa-stat-card qa-stat-card-success">
-            <div class="qa-stat-card-icon">
-                <i data-lucide="check-circle"></i>
-            </div>
-            <div class="qa-stat-card-content">
-                <span class="qa-stat-card-value">@Model.Stats.SolvedQuestions</span>
-                <span class="qa-stat-card-label">@Localizer["Solved"]</span>
+            <div class="flex flex-col gap-1">
+                <span class="text-2xl font-bold leading-none text-foreground">@Model.Stats.TotalQuestions</span>
+                <span class="text-sm font-medium text-muted">@Localizer["TotalQuestions"]</span>
             </div>
         </div>
-        <div class="qa-stat-card qa-stat-card-warning">
-            <div class="qa-stat-card-icon">
-                <i data-lucide="alert-circle"></i>
+        <div class="card p-6 flex items-center gap-4 transition hover:shadow-md border-green-200/50 dark:border-green-900/30">
+            <div class="w-12 h-12 rounded-md flex items-center justify-center bg-green-100 text-green-600 dark:bg-green-500/10 dark:text-green-400 shrink-0">
+                <i data-lucide="check-circle" class="w-6 h-6"></i>
             </div>
-            <div class="qa-stat-card-content">
-                <span class="qa-stat-card-value">@Model.Stats.OpenQuestions</span>
-                <span class="qa-stat-card-label">@Localizer["Open"]</span>
+            <div class="flex flex-col gap-1">
+                <span class="text-2xl font-bold leading-none text-foreground">@Model.Stats.SolvedQuestions</span>
+                <span class="text-sm font-medium text-muted">@Localizer["Solved"]</span>
             </div>
         </div>
-        <div class="qa-stat-card qa-stat-card-info">
-            <div class="qa-stat-card-icon">
-                <i data-lucide="message-square"></i>
+        <div class="card p-6 flex items-center gap-4 transition hover:shadow-md border-yellow-200/50 dark:border-yellow-900/30">
+            <div class="w-12 h-12 rounded-md flex items-center justify-center bg-yellow-100 text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-400 shrink-0">
+                <i data-lucide="alert-circle" class="w-6 h-6"></i>
             </div>
-            <div class="qa-stat-card-content">
-                <span class="qa-stat-card-value">@Model.Stats.TotalAnswers</span>
-                <span class="qa-stat-card-label">@Localizer["TotalAnswers"]</span>
+            <div class="flex flex-col gap-1">
+                <span class="text-2xl font-bold leading-none text-foreground">@Model.Stats.OpenQuestions</span>
+                <span class="text-sm font-medium text-muted">@Localizer["Open"]</span>
+            </div>
+        </div>
+        <div class="card p-6 flex items-center gap-4 transition hover:shadow-md border-blue-200/50 dark:border-blue-900/30">
+            <div class="w-12 h-12 rounded-md flex items-center justify-center bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 shrink-0">
+                <i data-lucide="message-square" class="w-6 h-6"></i>
+            </div>
+            <div class="flex flex-col gap-1">
+                <span class="text-2xl font-bold leading-none text-foreground">@Model.Stats.TotalAnswers</span>
+                <span class="text-sm font-medium text-muted">@Localizer["TotalAnswers"]</span>
             </div>
         </div>
     </div>
 
     <!-- Enhanced Search and Toolbar -->
-    <div class="qa-toolbar">
-        <div class="qa-search-wrapper grow">
-            <span class="qa-search-icon">
-                <i data-lucide="search" style="width: 18px;"></i>
+    <div class="flex gap-4 items-center mb-6 flex-wrap">
+        <div class="flex items-center bg-background border border-input rounded-md px-4 py-2 transition hover:border-primary focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 grow">
+            <span class="text-muted mr-3">
+                <i data-lucide="search" class="w-5 h-5"></i>
             </span>
-            <input type="text" class="qa-search-input" placeholder="@Localizer["SearchPlaceholder"]" id="qaSearchInput" value="@(searchRequest?.SearchTerm ?? "")">
+            <input type="text" class="bg-transparent border-none text-foreground w-full outline-none text-base placeholder-muted" placeholder="@Localizer["SearchPlaceholder"]" id="qaSearchInput" value="@(searchRequest?.SearchTerm ?? "")">
         </div>
         
-        <button class="qa-filter-btn" id="toggleViewBtn" title="@Localizer["ToggleView"]">
-            <i data-lucide="layout-grid" style="width: 20px;"></i>
+        <!-- Toggle View Hidden since we are using list only for generic components -->
+        <button class="btn btn-secondary btn-icon hidden" id="toggleViewBtn" title="@Localizer["ToggleView"]">
+            <i data-lucide="layout-grid" class="w-5 h-5"></i>
         </button>
         
-        <button class="qa-filter-btn" id="toggleFiltersBtn" title="@Localizer["AdvancedFilters"]">
-            <i data-lucide="sliders-horizontal" style="width: 20px;"></i>
+        <button class="btn btn-secondary btn-icon h-[42px] w-[42px] flex items-center justify-center p-0" id="toggleFiltersBtn" title="@Localizer["AdvancedFilters"]">
+            <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
         </button>
     </div>
 
     <!-- Enhanced Filters Panel -->
-    <div class="qa-filters-panel" id="filtersPanel">
-        <div class="qa-filters-grid">
-            <div class="qa-filter-group">
-                <label class="qa-filter-label">@Localizer["SortBy"]</label>
-                <select class="qa-filter-select" id="sortFilter">
+    <div class="card p-6 hidden mb-6 shadow-lg animate-fade-in-down" id="filtersPanel">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="flex flex-col gap-2">
+                <label class="text-sm font-semibold text-muted">@Localizer["SortBy"]</label>
+                <select class="form-select bg-muted/50 border-input rounded-md px-3 py-2 text-sm focus:border-primary focus:ring-primary/20" id="sortFilter">
                     <option value="Newest" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.Newest)">@Localizer["Newest"]</option>
                     <option value="MostVotes" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostVotes)">@Localizer["MostVotes"]</option>
                     <option value="MostAnswers" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostAnswers)">@Localizer["MostAnswers"]</option>
@@ -88,9 +89,9 @@
                     <option value="MostViews" selected="@(searchRequest?.SortBy == CommunityCar.Application.Features.QA.DTOs.QASortBy.MostViews)">@Localizer["MostViews"]</option>
                 </select>
             </div>
-            <div class="qa-filter-group">
-                <label class="qa-filter-label">@Localizer["Difficulty"]</label>
-                <select class="qa-filter-select" id="difficultyFilter">
+            <div class="flex flex-col gap-2">
+                <label class="text-sm font-semibold text-muted">@Localizer["Difficulty"]</label>
+                <select class="form-select bg-muted/50 border-input rounded-md px-3 py-2 text-sm focus:border-primary focus:ring-primary/20" id="difficultyFilter">
                     <option value="">@Localizer["AllLevels"]</option>
                     <option value="Beginner" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Beginner)">@Localizer["Beginner"]</option>
                     <option value="Intermediate" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Intermediate)">@Localizer["Intermediate"]</option>
@@ -98,9 +99,9 @@
                     <option value="Expert" selected="@(searchRequest?.Difficulty == CommunityCar.Domain.Enums.DifficultyLevel.Expert)">@Localizer["Expert"]</option>
                 </select>
             </div>
-            <div class="qa-filter-group">
-                <label class="qa-filter-label">@Localizer["Status"]</label>
-                <select class="qa-filter-select" id="statusFilter">
+            <div class="flex flex-col gap-2">
+                <label class="text-sm font-semibold text-muted">@Localizer["Status"]</label>
+                <select class="form-select bg-muted/50 border-input rounded-md px-3 py-2 text-sm focus:border-primary focus:ring-primary/20" id="statusFilter">
                     <option value="">@Localizer["All"]</option>
                     <option value="Open" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Open)">@Localizer["Open"]</option>
                     <option value="Solved" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Solved)">@Localizer["Solved"]</option>
@@ -108,9 +109,9 @@
                     <option value="Pinned" selected="@(searchRequest?.Status == CommunityCar.Application.Features.QA.DTOs.QAStatus.Pinned)">@Localizer["Pinned"]</option>
                 </select>
             </div>
-            <div class="qa-filter-group">
-                <label class="qa-filter-label">@Localizer["CarMake"]</label>
-                <select class="qa-filter-select" id="carMakeFilter">
+            <div class="flex flex-col gap-2">
+                <label class="text-sm font-semibold text-muted">@Localizer["CarMake"]</label>
+                <select class="form-select bg-muted/50 border-input rounded-md px-3 py-2 text-sm focus:border-primary focus:ring-primary/20" id="carMakeFilter">
                     <option value="">@Localizer["AllMakes"]</option>
                     @foreach (var make in Model.AvailableCarMakes)
                     {
@@ -278,29 +279,22 @@
             // Toggle Filters Panel
             toggleFiltersBtn.addEventListener('click', () => {
                 toggleFiltersBtn.classList.toggle('active');
-                if (filtersPanel.style.display === 'block') {
-                    filtersPanel.style.display = 'none';
+                toggleFiltersBtn.classList.toggle('bg-primary/10');
+                toggleFiltersBtn.classList.toggle('text-primary');
+                
+                if (filtersPanel.classList.contains('hidden')) {
+                    filtersPanel.classList.remove('hidden');
                 } else {
-                    filtersPanel.style.display = 'block';
+                    filtersPanel.classList.add('hidden');
                 }
             });
 
-            // Toggle Grid/List View
+            // Toggle View functionality removed for generic component standardization
+            /*
             toggleViewBtn.addEventListener('click', () => {
-                const qaList = document.querySelector('.qa-list');
-                if (!qaList) return;
-                
-                qaList.classList.toggle('grid-view');
-                toggleViewBtn.classList.toggle('active');
-                
-                const viewIcon = toggleViewBtn.querySelector('i');
-                if (qaList.classList.contains('grid-view')) {
-                    viewIcon.setAttribute('data-lucide', 'list');
-                } else {
-                    viewIcon.setAttribute('data-lucide', 'layout-grid');
-                }
-                lucide.createIcons();
+                 // ...
             });
+            */
 
             // AJAX filtering
             searchInput.addEventListener('input', () => {

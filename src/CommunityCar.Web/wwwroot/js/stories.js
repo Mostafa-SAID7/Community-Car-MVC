@@ -198,11 +198,11 @@ function parseTags(tagsString) {
 // Load stories data
 async function loadStoriesData() {
     try {
-        const response = await fetch('/stories/search?isActive=true&pageSize=20');
-        const data = await response.json();
+        const response = await fetch('/feed/api/stories');
+        const stories = await response.json();
         
-        if (data.stories) {
-            updateStoriesDisplay(data.stories);
+        if (stories && Array.isArray(stories)) {
+            updateStoriesDisplay(stories);
         }
     } catch (error) {
         console.error('Load stories error:', error);
@@ -217,7 +217,9 @@ function updateStoriesDisplay(stories) {
     // Keep the "Add Story" button and clear the rest
     const addStoryBtn = container.querySelector('.flex-shrink-0');
     container.innerHTML = '';
-    container.appendChild(addStoryBtn);
+    if (addStoryBtn) {
+        container.appendChild(addStoryBtn);
+    }
 
     // Add stories
     stories.forEach(story => {
