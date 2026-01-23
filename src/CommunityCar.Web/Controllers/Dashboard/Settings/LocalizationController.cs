@@ -7,7 +7,6 @@ using System.Xml.Linq;
 namespace CommunityCar.Web.Controllers.Dashboard.Settings;
 
 [Route("dashboard/settings/localization")]
-[Authorize(Roles = "Admin")]
 public class LocalizationController : Controller
 {
     private readonly ILocalizationService _localizationService;

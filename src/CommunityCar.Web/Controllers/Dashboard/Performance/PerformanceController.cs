@@ -5,7 +5,6 @@ using CommunityCar.Application.Features.SEO.DTOs;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Performance;
 
-[Authorize(Roles = "Admin")]
 [Route("dashboard/performance")]
 public class PerformanceController : Controller
 {

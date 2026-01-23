@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace CommunityCar.Web.Controllers.Dashboard.Settings;
 
 [Route("dashboard/settings/maintenance")]
-[Authorize(Roles = "Admin")]
 public class MaintenanceController : Controller
 {
     private readonly IMaintenanceService _maintenanceService;

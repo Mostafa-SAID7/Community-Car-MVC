@@ -5,7 +5,6 @@ using CommunityCar.Application.Features.SEO.DTOs;
 
 namespace CommunityCar.Web.Controllers.Dashboard.SEO;
 
-[Authorize(Roles = "Admin")]
 [Route("dashboard/seo")]
 public class SEOController : Controller
 {
