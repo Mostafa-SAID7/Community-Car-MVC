@@ -116,41 +116,61 @@ window.notify = {
 
 // Sidebar handling for mobile
 const sidebarToggle = document.getElementById('sidebar-toggle');
-const appContainer = document.querySelector('.app-container');
+const mainContainer = document.getElementById('main-container');
+const leftSidebar = document.querySelector('.sidebar');
 
-if (sidebarToggle && appContainer) {
+if (sidebarToggle && mainContainer && leftSidebar) {
     console.log('Sidebar toggle initialized');
 
-    // Check if backdrop already exists to avoid duplicates
+    // Create backdrop if it doesn't exist
     let backdrop = document.querySelector('.sidebar-backdrop');
     if (!backdrop) {
         backdrop = document.createElement('div');
-        backdrop.className = 'sidebar-backdrop';
-        appContainer.appendChild(backdrop);
+        backdrop.className = 'sidebar-backdrop fixed inset-0 bg-black/50 z-30 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden';
+        document.body.appendChild(backdrop);
     }
 
     sidebarToggle.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
         console.log('Sidebar toggle clicked');
-        appContainer.classList.toggle('sidebar-visible');
+        
+        // Toggle sidebar visibility
+        leftSidebar.classList.toggle('translate-x-0');
+        leftSidebar.classList.toggle('-translate-x-[calc(100%+2rem)]');
+        
+        // Toggle backdrop
+        backdrop.classList.toggle('opacity-0');
+        backdrop.classList.toggle('pointer-events-none');
+        backdrop.classList.toggle('opacity-100');
+        backdrop.classList.toggle('pointer-events-auto');
     });
 
+    // Close sidebar when clicking backdrop
     backdrop.addEventListener('click', () => {
-        appContainer.classList.remove('sidebar-visible');
+        leftSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
+        leftSidebar.classList.remove('translate-x-0');
+        backdrop.classList.add('opacity-0', 'pointer-events-none');
+        backdrop.classList.remove('opacity-100', 'pointer-events-auto');
     });
 
     // Close on escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            appContainer.classList.remove('sidebar-visible');
+            leftSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
+            leftSidebar.classList.remove('translate-x-0');
+            backdrop.classList.add('opacity-0', 'pointer-events-none');
+            backdrop.classList.remove('opacity-100', 'pointer-events-auto');
         }
     });
 
     // Close on link click
     document.addEventListener('click', (e) => {
         if (e.target.closest('.sidebar a')) {
-            appContainer.classList.remove('sidebar-visible');
+            leftSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
+            leftSidebar.classList.remove('translate-x-0');
+            backdrop.classList.add('opacity-0', 'pointer-events-none');
+            backdrop.classList.remove('opacity-100', 'pointer-events-auto');
         }
     });
 }
