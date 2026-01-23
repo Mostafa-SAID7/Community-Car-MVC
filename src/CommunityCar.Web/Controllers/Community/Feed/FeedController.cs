@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Community.Feed;
 
+[Route("feed")]
 public class FeedController : Controller
 {
     private readonly ILogger<FeedController> _logger;
@@ -19,7 +20,8 @@ public class FeedController : Controller
     }
 
     [HttpGet("")]
-    [HttpGet("feed")]
+    [HttpGet("/")]
+    [HttpGet("/feed")]
     public async Task<IActionResult> Index(string feedType = "personalized", int page = 1, int pageSize = 20)
     {
         var userId = GetCurrentUserId();

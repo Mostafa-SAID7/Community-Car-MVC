@@ -839,6 +839,462 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   opacity: 1;
 }
+
+    /* Button Components */
+    .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(var(--radius) - 2px);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+    .btn:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-offset-width: 2px;
+}
+    .btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+    .btn-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+    .btn-primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+    .btn-primary:focus {
+  --tw-ring-color: hsl(var(--primary));
+}
+
+    .btn-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+    .btn-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+}
+
+    .btn-secondary:focus {
+  --tw-ring-color: hsl(var(--secondary));
+}
+
+    .btn-sm {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+    .btn-xs {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+    /* Card Components */
+    .card {
+  border-radius: var(--radius);
+  border-width: 1px;
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+    @media (max-width: 640px) {
+
+        /* Reduce padding on very small screens */
+        .card-header {
+    padding: 0.75rem;
+  }
+
+        /* Improve button sizes for touch */
+
+        /* Better form inputs on mobile */
+
+        /* Ensure main content is full width on mobile */
+
+        /* Prevent horizontal overflow */
+
+        /* Make sure content containers don't exceed viewport */
+
+        /* Mobile navigation styling */
+
+        /* Ensure mobile icons are properly sized */
+
+        /* Better spacing for mobile navigation */
+
+        /* Mobile header navigation improvements */
+
+        /* Ensure mobile navigation takes full width */
+
+        /* Dashboard mobile navigation improvements */
+
+        /* Dashboard mobile navigation icons */
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .card-header.gap-1,.card-header.gap-2,.card-header.gap-3,.card-header.gap-4 {
+            flex-wrap: wrap;
+        }
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .card-header.gap-1,.card-header.gap-2,.card-header.gap-3,.card-header.gap-4 {
+            flex-wrap: wrap;
+        }
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .card-header.gap-1,.card-header.gap-2,.card-header.gap-3,.card-header.gap-4 {
+            flex-wrap: wrap;
+        }
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .card-header.gap-1,.card-header.gap-2,.card-header.gap-3,.card-header.gap-4 {
+            flex-wrap: wrap;
+        }
+    }
+
+    .card-header {
+  display: flex;
+  flex-direction: column;
+}
+
+    .card-header > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.375rem * var(--tw-space-y-reverse));
+}
+
+    .card-header {
+  padding: 1.5rem;
+}
+
+    .card-title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+    /* Badge Components */
+    .badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border-width: 1px;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+    .badge:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: hsl(var(--ring));
+  --tw-ring-offset-width: 2px;
+}
+
+    .badge-secondary {
+  border-color: transparent;
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+    .badge-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+}
+
+    .badge-outline {
+  color: hsl(var(--foreground));
+}
+
+    /* Avatar Components */
+
+    /* Input Components */
+    @media (max-width: 640px) {
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .input.gap-1,.input.gap-2,.input.gap-3,.input.gap-4 {
+            flex-wrap: wrap;
+        }
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .input.gap-1,.input.gap-2,.input.gap-3,.input.gap-4 {
+            flex-wrap: wrap;
+        }
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .input.gap-1,.input.gap-2,.input.gap-3,.input.gap-4 {
+            flex-wrap: wrap;
+        }
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .input.gap-1,.input.gap-2,.input.gap-3,.input.gap-4 {
+            flex-wrap: wrap;
+        }
+    }
+    .input {
+  display: flex;
+  height: 2.5rem;
+  width: 100%;
+  border-radius: calc(var(--radius) - 2px);
+  border-width: 1px;
+  border-color: hsl(var(--input));
+  background-color: hsl(var(--background));
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-ring-offset-color: hsl(var(--background));
+}
+    .input::file-selector-button {
+  border-width: 0px;
+  background-color: transparent;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+    .input::-moz-placeholder {
+  color: hsl(var(--muted-foreground));
+}
+    .input::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+    .input:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: hsl(var(--ring));
+  --tw-ring-offset-width: 2px;
+}
+    .input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+    @media (max-width: 640px) {
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .textarea.gap-1,.textarea.gap-2,.textarea.gap-3,.textarea.gap-4 {
+            flex-wrap: wrap;
+        }
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .textarea.gap-1,.textarea.gap-2,.textarea.gap-3,.textarea.gap-4 {
+            flex-wrap: wrap;
+        }
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .textarea.gap-1,.textarea.gap-2,.textarea.gap-3,.textarea.gap-4 {
+            flex-wrap: wrap;
+        }
+
+        /* Ensure feed content doesn't overflow */
+
+        /* Fix horizontal scrolling in stories section */
+
+        /* Ensure images don't cause overflow */
+
+        /* Fix grid layouts on mobile */
+
+        /* Ensure flex containers wrap properly */
+
+        /* Fix button groups on mobile */
+        .textarea.gap-1,.textarea.gap-2,.textarea.gap-3,.textarea.gap-4 {
+            flex-wrap: wrap;
+        }
+    }
+
+    .textarea {
+  display: flex;
+  min-height: 80px;
+  width: 100%;
+  border-radius: calc(var(--radius) - 2px);
+  border-width: 1px;
+  border-color: hsl(var(--input));
+  background-color: hsl(var(--background));
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-ring-offset-color: hsl(var(--background));
+}
+
+    .textarea::-moz-placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+    .textarea::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+    .textarea:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: hsl(var(--ring));
+  --tw-ring-offset-width: 2px;
+}
+
+    .textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+    /* Select Components */
+
+    /* Separator */
 .\!container {
   width: 100% !important;
   margin-right: auto !important;
@@ -1031,6 +1487,9 @@ video {
 }
 .top-6 {
   top: 1.5rem;
+}
+.top-full {
+  top: 100%;
 }
 .z-10 {
   z-index: 10;
@@ -3067,6 +3526,10 @@ video {
 .text-orange-400 {
   --tw-text-opacity: 1;
   color: rgb(251 146 60 / var(--tw-text-opacity, 1));
+}
+.text-orange-500 {
+  --tw-text-opacity: 1;
+  color: rgb(249 115 22 / var(--tw-text-opacity, 1));
 }
 .text-orange-600 {
   --tw-text-opacity: 1;

@@ -1,0 +1,270 @@
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Web.Controllers.Community.Friends.FriendRequestsVM
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"];
+}
+
+<div class="container mx-auto px-4 py-8 max-w-6xl">
+    <!-- Header -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700 mb-6">
+        <div class="p-8">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-black text-foreground flex items-center gap-3">
+                    <div class="bg-orange-500/10 p-2 rounded-xl text-orange-500">
+                        <i data-lucide="user-plus" class="w-6 h-6"></i>
+                    </div>
+                    @Localizer["HeaderTitle"]
+                </h2>
+                <a href="/friends" class="btn-secondary">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    @Localizer["BackToFriends"]
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Pending Requests (Received) -->
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+            <div class="p-6">
+                <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                    <i data-lucide="inbox" class="w-5 h-5 text-orange-500"></i>
+                    @Localizer["ReceivedRequests"] (@Model.PendingRequests.Count())
+                </h3>
+                
+                @if (Model.PendingRequests.Any())
+                {
+                    <div class="space-y-4">
+                        @foreach (var request in Model.PendingRequests)
+                        {
+                            <div class="bg-muted/20 border border-border/50 rounded-2xl p-4 group hover:bg-muted/40 transition-all hover:border-primary/20">
+                                <div class="flex items-start gap-4">
+                                    <div class="relative">
+                                        @if (!string.IsNullOrEmpty(request.ProfilePictureUrl))
+                                        {
+                                            <img src="@request.ProfilePictureUrl" alt="@request.FullName" class="w-12 h-12 rounded-full object-cover" />
+                                        }
+                                        else
+                                        {
+                                            <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-black text-xs">
+                                                @request.FullName.Substring(0, Math.Min(2, request.FullName.Length)).ToUpper()
+                                            </div>
+                                        }
+                                    </div>
+                                    
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-sm font-black text-foreground">@request.FullName</h4>
+                                        <p class="text-xs text-muted-foreground">@@@request.UserName</p>
+                                        
+                                        @if (!string.IsNullOrEmpty(request.City))
+                                        {
+                                            <p class="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                                @request.City@(!string.IsNullOrEmpty(request.Country) ? $", {request.Country}" : "")
+                                            </p>
+                                        }
+                                        
+                                        @if (request.MutualFriendsCount > 0)
+                                        {
+                                            <p class="text-xs text-muted-foreground mt-1">@request.MutualFriendsCount mutual friends</p>
+                                        }
+                                        
+                                        @if (!string.IsNullOrEmpty(request.Bio))
+                                        {
+                                            <p class="text-xs text-muted-foreground mt-2 line-clamp-2">@request.Bio</p>
+                                        }
+                                        
+                                        <p class="text-xs text-muted-foreground mt-2">Sent @request.RequestDate.ToString("MMM dd, yyyy")</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-3 mt-4">
+                                    <button class="btn-sm btn-primary flex-1" onclick="acceptRequest('@request.FriendshipId')">
+                                        <i data-lucide="check" class="w-4 h-4"></i>
+                                        Accept
+                                    </button>
+                                    <button class="btn-sm btn-secondary flex-1" onclick="declineRequest('@request.FriendshipId')">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                        Decline
+                                    </button>
+                                    <button class="btn-sm btn-secondary" onclick="viewProfile('@request.UserId')">
+                                        <i data-lucide="user" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-8">
+                        <i data-lucide="inbox" class="w-12 h-12 text-muted-foreground mx-auto mb-4"></i>
+                        <p class="text-muted-foreground">No pending friend requests</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Sent Requests -->
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+            <div class="p-6">
+                <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                    <i data-lucide="send" class="w-5 h-5 text-blue-500"></i>
+                    @Localizer["SentRequests"] (@Model.SentRequests.Count())
+                </h3>
+                
+                @if (Model.SentRequests.Any())
+                {
+                    <div class="space-y-4">
+                        @foreach (var request in Model.SentRequests)
+                        {
+                            <div class="bg-muted/20 border border-border/50 rounded-2xl p-4 group hover:bg-muted/40 transition-all hover:border-primary/20">
+                                <div class="flex items-start gap-4">
+                                    <div class="relative">
+                                        @if (!string.IsNullOrEmpty(request.ProfilePictureUrl))
+                                        {
+                                            <img src="@request.ProfilePictureUrl" alt="@request.FullName" class="w-12 h-12 rounded-full object-cover" />
+                                        }
+                                        else
+                                        {
+                                            <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-black text-xs">
+                                                @request.FullName.Substring(0, Math.Min(2, request.FullName.Length)).ToUpper()
+                                            </div>
+                                        }
+                                    </div>
+                                    
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-sm font-black text-foreground">@request.FullName</h4>
+                                        <p class="text-xs text-muted-foreground">@@@request.UserName</p>
+                                        
+                                        @if (!string.IsNullOrEmpty(request.City))
+                                        {
+                                            <p class="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                                @request.City@(!string.IsNullOrEmpty(request.Country) ? $", {request.Country}" : "")
+                                            </p>
+                                        }
+                                        
+                                        @if (request.MutualFriendsCount > 0)
+                                        {
+                                            <p class="text-xs text-muted-foreground mt-1">@request.MutualFriendsCount mutual friends</p>
+                                        }
+                                        
+                                        <div class="flex items-center gap-2 mt-2">
+                                            <span class="inline-flex items-center gap-1 px-2 py-1 bg-yellow-500/10 text-yellow-600 text-xs rounded-full">
+                                                <i data-lucide="clock" class="w-3 h-3"></i>
+                                                Pending
+                                            </span>
+                                            <span class="text-xs text-muted-foreground">Sent @request.RequestDate.ToString("MMM dd, yyyy")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-3 mt-4">
+                                    <button class="btn-sm btn-secondary flex-1" onclick="cancelRequest('@request.FriendshipId')">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                        Cancel Request
+                                    </button>
+                                    <button class="btn-sm btn-secondary" onclick="viewProfile('@request.UserId')">
+                                        <i data-lucide="user" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-8">
+                        <i data-lucide="send" class="w-12 h-12 text-muted-foreground mx-auto mb-4"></i>
+                        <p class="text-muted-foreground">No sent friend requests</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_LocalizationScript")
+    <script>
+        async function acceptRequest(friendshipId) {
+            try {
+                const response = await fetch('/friends/accept-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    body: JSON.stringify({ friendshipId: friendshipId })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    window.notify.success(result.message);
+                    location.reload();
+                } else {
+                    window.notify.error(result.message);
+                }
+            } catch (error) {
+                window.notify.error('An error occurred while accepting the friend request.');
+            }
+        }
+
+        async function declineRequest(friendshipId) {
+            try {
+                const response = await fetch('/friends/decline-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    body: JSON.stringify({ friendshipId: friendshipId })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    window.notify.success(result.message);
+                    location.reload();
+                } else {
+                    window.notify.error(result.message);
+                }
+            } catch (error) {
+                window.notify.error('An error occurred while declining the friend request.');
+            }
+        }
+
+        async function cancelRequest(friendshipId) {
+            if (!confirm('Are you sure you want to cancel this friend request?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/friends/decline-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    body: JSON.stringify({ friendshipId: friendshipId })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    window.notify.success('Friend request cancelled');
+                    location.reload();
+                } else {
+                    window.notify.error(result.message);
+                }
+            } catch (error) {
+                window.notify.error('An error occurred while cancelling the friend request.');
+            }
+        }
+
+        function viewProfile(userId) {
+            window.location.href = `/profile/${userId}`;
+        }
+    </script>
+}

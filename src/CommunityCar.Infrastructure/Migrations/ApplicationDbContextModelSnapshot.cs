@@ -197,6 +197,43 @@ namespace CommunityCar.Infrastructure.Migrations
                     b.ToTable("Conversations");
                 });
 
+            modelBuilder.Entity("CommunityCar.Domain.Entities.Chats.ConversationParticipant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ConversationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastReadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversationId");
+
+                    b.ToTable("ConversationParticipants");
+                });
+
             modelBuilder.Entity("CommunityCar.Domain.Entities.Chats.Message", b =>
                 {
                     b.Property<Guid>("Id")
@@ -229,6 +266,8 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ConversationId");
 
                     b.ToTable("Messages");
                 });
@@ -594,6 +633,7 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("PriceRange")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PricingInfo")
@@ -1066,6 +1106,7 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("PurchasePrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("QualityRating")
@@ -2002,6 +2043,24 @@ namespace CommunityCar.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CommunityCar.Domain.Entities.Chats.ConversationParticipant", b =>
+                {
+                    b.HasOne("CommunityCar.Domain.Entities.Chats.Conversation", null)
+                        .WithMany("Participants")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CommunityCar.Domain.Entities.Chats.Message", b =>
+                {
+                    b.HasOne("CommunityCar.Domain.Entities.Chats.Conversation", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CommunityCar.Domain.Entities.Shared.Comment", b =>
                 {
                     b.HasOne("CommunityCar.Domain.Entities.Shared.Comment", null)
@@ -2058,6 +2117,13 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CommunityCar.Domain.Entities.Chats.Conversation", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("CommunityCar.Domain.Entities.Shared.Comment", b =>

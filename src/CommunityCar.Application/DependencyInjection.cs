@@ -1,4 +1,5 @@
 using System.Reflection;
+using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Localization;
 using CommunityCar.Application.Common.Interfaces.Services.Profile;
@@ -26,6 +27,7 @@ public static class DependencyInjection
         services.AddScoped<IStoriesService, StoriesService>();
         services.AddScoped<IFeedService, FeedService>();
         services.AddScoped<IInteractionService, InteractionService>();
+        services.AddScoped<IFriendsService, FriendsService>();
         services.AddScoped<ILocalizationService, LocalizationService>();
 
         // Profile services

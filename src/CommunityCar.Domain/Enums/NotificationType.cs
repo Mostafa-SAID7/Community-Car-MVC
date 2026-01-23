@@ -12,5 +12,9 @@ public enum NotificationType
     VoteReceived,
     CommentReceived,
     FriendRequest,
+    FriendRequestAccepted,
+    FriendRequestDeclined,
+    FriendRemoved,
+    UserBlocked,
     SystemUpdate
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CommunityCar.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class FixModelChanges : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,6 +20,16 @@ namespace CommunityCar.Infrastructure.Migrations
                     QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsAccepted = table.Column<bool>(type: "bit", nullable: false),
+                    AcceptedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    VoteScore = table.Column<int>(type: "int", nullable: false),
+                    IsEdited = table.Column<bool>(type: "bit", nullable: false),
+                    LastEditedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EditReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HelpfulCount = table.Column<int>(type: "int", nullable: false),
+                    IsVerifiedByExpert = table.Column<bool>(type: "bit", nullable: false),
+                    VerifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    VerifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    VerificationNote = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -80,6 +90,30 @@ namespace CommunityCar.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CheckIns",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PointOfInterestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CheckInTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Rating = table.Column<double>(type: "float", nullable: true),
+                    IsPrivate = table.Column<bool>(type: "bit", nullable: false),
+                    CheckInLatitude = table.Column<double>(type: "float", nullable: true),
+                    CheckInLongitude = table.Column<double>(type: "float", nullable: true),
+                    DistanceFromPOI = table.Column<double>(type: "float", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckIns", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,8 +224,19 @@ namespace CommunityCar.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Rules = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Privacy = table.Column<int>(type: "int", nullable: false),
+                    RequiresApproval = table.Column<bool>(type: "bit", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    IsOfficial = table.Column<bool>(type: "bit", nullable: false),
+                    CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MemberCount = table.Column<int>(type: "int", nullable: false),
+                    PostCount = table.Column<int>(type: "int", nullable: false),
+                    LastActivityAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -209,8 +254,21 @@ namespace CommunityCar.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
+                    PublishedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    IsFeatured = table.Column<bool>(type: "bit", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Difficulty = table.Column<int>(type: "int", nullable: false),
+                    EstimatedMinutes = table.Column<int>(type: "int", nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ViewCount = table.Column<int>(type: "int", nullable: false),
+                    BookmarkCount = table.Column<int>(type: "int", nullable: false),
+                    AverageRating = table.Column<double>(type: "float", nullable: false),
+                    RatingCount = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -219,6 +277,37 @@ namespace CommunityCar.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Guides", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LocalizationCultures",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsRTL = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LocalizationCultures", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LocalizationResources",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Culture = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    ResourceGroup = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LocalizationResources", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -238,25 +327,6 @@ namespace CommunityCar.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LogEntries", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Messages",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ConversationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsRead = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -286,8 +356,26 @@ namespace CommunityCar.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Headline = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PublishedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsPublished = table.Column<bool>(type: "bit", nullable: false),
+                    IsFeatured = table.Column<bool>(type: "bit", nullable: false),
+                    IsPinned = table.Column<bool>(type: "bit", nullable: false),
+                    ViewCount = table.Column<int>(type: "int", nullable: false),
+                    LikeCount = table.Column<int>(type: "int", nullable: false),
+                    CommentCount = table.Column<int>(type: "int", nullable: false),
+                    ShareCount = table.Column<int>(type: "int", nullable: false),
+                    Category = table.Column<int>(type: "int", nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SourceUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MetaTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MetaDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarMake = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarModel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarYear = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -307,10 +395,40 @@ namespace CommunityCar.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Latitude = table.Column<double>(type: "float", nullable: false),
                     Longitude = table.Column<double>(type: "float", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Category = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OpeningHours = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsOpen24Hours = table.Column<bool>(type: "bit", nullable: false),
+                    IsTemporarilyClosed = table.Column<bool>(type: "bit", nullable: false),
+                    AverageRating = table.Column<double>(type: "float", nullable: false),
+                    ReviewCount = table.Column<int>(type: "int", nullable: false),
+                    ViewCount = table.Column<int>(type: "int", nullable: false),
+                    CheckInCount = table.Column<int>(type: "int", nullable: false),
+                    Services = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SupportedVehicleTypes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentMethods = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amenities = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PriceRange = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
+                    PricingInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    VerifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    VerifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsReported = table.Column<bool>(type: "bit", nullable: false),
+                    ReportCount = table.Column<int>(type: "int", nullable: false),
+                    AllowCheckIns = table.Column<bool>(type: "bit", nullable: false),
+                    AllowReviews = table.Column<bool>(type: "bit", nullable: false),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false),
+                    EventStartTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EventEndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    MaxAttendees = table.Column<int>(type: "int", nullable: true),
+                    CurrentAttendees = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -346,6 +464,23 @@ namespace CommunityCar.Infrastructure.Migrations
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsSolved = table.Column<bool>(type: "bit", nullable: false),
+                    AcceptedAnswerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SolvedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ViewCount = table.Column<int>(type: "int", nullable: false),
+                    AnswerCount = table.Column<int>(type: "int", nullable: false),
+                    VoteScore = table.Column<int>(type: "int", nullable: false),
+                    LastActivityAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastActivityBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsPinned = table.Column<bool>(type: "bit", nullable: false),
+                    IsLocked = table.Column<bool>(type: "bit", nullable: false),
+                    CloseReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClosedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ClosedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Difficulty = table.Column<int>(type: "int", nullable: false),
+                    CarMake = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarModel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarYear = table.Column<int>(type: "int", nullable: true),
+                    CarEngine = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -365,6 +500,7 @@ namespace CommunityCar.Infrastructure.Migrations
                     EntityType = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Value = table.Column<int>(type: "int", nullable: false),
+                    Review = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -402,8 +538,31 @@ namespace CommunityCar.Infrastructure.Migrations
                     TargetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TargetType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReviewerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsVerifiedPurchase = table.Column<bool>(type: "bit", nullable: false),
+                    IsRecommended = table.Column<bool>(type: "bit", nullable: false),
+                    PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PurchasePrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
+                    HelpfulCount = table.Column<int>(type: "int", nullable: false),
+                    NotHelpfulCount = table.Column<int>(type: "int", nullable: false),
+                    ReplyCount = table.Column<int>(type: "int", nullable: false),
+                    ViewCount = table.Column<int>(type: "int", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    IsFlagged = table.Column<bool>(type: "bit", nullable: false),
+                    IsEdited = table.Column<bool>(type: "bit", nullable: false),
+                    EditedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CarMake = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarModel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarYear = table.Column<int>(type: "int", nullable: true),
+                    Mileage = table.Column<int>(type: "int", nullable: true),
+                    OwnershipDuration = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    QualityRating = table.Column<int>(type: "int", nullable: true),
+                    ValueRating = table.Column<int>(type: "int", nullable: true),
+                    ReliabilityRating = table.Column<int>(type: "int", nullable: true),
+                    PerformanceRating = table.Column<int>(type: "int", nullable: true),
+                    ComfortRating = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -415,6 +574,61 @@ namespace CommunityCar.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Routes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Difficulty = table.Column<int>(type: "int", nullable: false),
+                    DistanceKm = table.Column<double>(type: "float", nullable: false),
+                    EstimatedDurationMinutes = table.Column<int>(type: "int", nullable: false),
+                    AverageRating = table.Column<double>(type: "float", nullable: false),
+                    ReviewCount = table.Column<int>(type: "int", nullable: false),
+                    TimesCompleted = table.Column<int>(type: "int", nullable: false),
+                    IsScenic = table.Column<bool>(type: "bit", nullable: false),
+                    HasTolls = table.Column<bool>(type: "bit", nullable: false),
+                    IsOffRoad = table.Column<bool>(type: "bit", nullable: false),
+                    SurfaceType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BestTimeToVisit = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SafetyNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrentConditions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastConditionUpdate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    WaypointsJson = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Routes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Shares",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EntityType = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShareType = table.Column<int>(type: "int", nullable: false),
+                    ShareMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShareUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Platform = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shares", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stories",
                 columns: table => new
                 {
@@ -422,6 +636,28 @@ namespace CommunityCar.Infrastructure.Migrations
                     MediaUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Caption = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Duration = table.Column<int>(type: "int", nullable: false),
+                    ViewCount = table.Column<int>(type: "int", nullable: false),
+                    LikeCount = table.Column<int>(type: "int", nullable: false),
+                    ReplyCount = table.Column<int>(type: "int", nullable: false),
+                    ShareCount = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsArchived = table.Column<bool>(type: "bit", nullable: false),
+                    IsFeatured = table.Column<bool>(type: "bit", nullable: false),
+                    IsHighlighted = table.Column<bool>(type: "bit", nullable: false),
+                    Latitude = table.Column<double>(type: "float", nullable: true),
+                    Longitude = table.Column<double>(type: "float", nullable: true),
+                    LocationName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarMake = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarModel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarYear = table.Column<int>(type: "int", nullable: true),
+                    EventType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Visibility = table.Column<int>(type: "int", nullable: false),
+                    AllowReplies = table.Column<bool>(type: "bit", nullable: false),
+                    AllowSharing = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -440,7 +676,12 @@ namespace CommunityCar.Infrastructure.Migrations
                     Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsEncrypted = table.Column<bool>(type: "bit", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsReadOnly = table.Column<bool>(type: "bit", nullable: false),
+                    IsSecure = table.Column<bool>(type: "bit", nullable: false),
+                    ValidationRules = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DefaultValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -521,6 +762,9 @@ namespace CommunityCar.Infrastructure.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     GoogleId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FacebookId = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -615,6 +859,56 @@ namespace CommunityCar.Infrastructure.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ConversationParticipants",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ConversationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JoinedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastReadAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ConversationParticipants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ConversationParticipants_Conversations_ConversationId",
+                        column: x => x.ConversationId,
+                        principalTable: "Conversations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConversationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_Conversations_ConversationId",
+                        column: x => x.ConversationId,
+                        principalTable: "Conversations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -737,6 +1031,16 @@ namespace CommunityCar.Infrastructure.Migrations
                 column: "CommentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ConversationParticipants_ConversationId",
+                table: "ConversationParticipants",
+                column: "ConversationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_ConversationId",
+                table: "Messages",
+                column: "ConversationId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "Users",
                 column: "NormalizedEmail");
@@ -777,10 +1081,13 @@ namespace CommunityCar.Infrastructure.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
+                name: "CheckIns");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Conversations");
+                name: "ConversationParticipants");
 
             migrationBuilder.DropTable(
                 name: "Events");
@@ -796,6 +1103,12 @@ namespace CommunityCar.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Guides");
+
+            migrationBuilder.DropTable(
+                name: "LocalizationCultures");
+
+            migrationBuilder.DropTable(
+                name: "LocalizationResources");
 
             migrationBuilder.DropTable(
                 name: "LogEntries");
@@ -828,6 +1141,12 @@ namespace CommunityCar.Infrastructure.Migrations
                 name: "Reviews");
 
             migrationBuilder.DropTable(
+                name: "Routes");
+
+            migrationBuilder.DropTable(
+                name: "Shares");
+
+            migrationBuilder.DropTable(
                 name: "Stories");
 
             migrationBuilder.DropTable(
@@ -853,6 +1172,9 @@ namespace CommunityCar.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Conversations");
         }
     }
 }

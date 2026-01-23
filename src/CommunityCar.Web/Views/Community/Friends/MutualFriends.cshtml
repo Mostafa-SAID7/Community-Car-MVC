@@ -1,0 +1,104 @@
+@using Microsoft.Extensions.Localization
+@model IEnumerable<CommunityCar.Application.Features.Friends.ViewModels.FriendVM>
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["MutualFriends"];
+}
+
+<div class="container mx-auto px-4 py-8 max-w-6xl">
+    <!-- Header -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700 mb-6">
+        <div class="p-8">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-black text-foreground flex items-center gap-3">
+                    <div class="bg-blue-500/10 p-2 rounded-xl text-blue-500">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    @Localizer["MutualFriends"] (@Model.Count())
+                </h2>
+                <a href="/friends" class="btn-secondary">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    @Localizer["BackToFriends"]
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mutual Friends Grid -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6">
+            @if (Model.Any())
+            {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @foreach (var friend in Model)
+                    {
+                        <div class="bg-muted/20 border border-border/50 rounded-2xl p-6 group hover:bg-muted/40 transition-all hover:border-primary/20 text-center">
+                            <div class="relative inline-block mb-4">
+                                @if (!string.IsNullOrEmpty(friend.ProfilePictureUrl))
+                                {
+                                    <img src="@friend.ProfilePictureUrl" alt="@friend.FullName" class="w-16 h-16 rounded-full object-cover mx-auto" />
+                                }
+                                else
+                                {
+                                    <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-black text-lg shadow-lg mx-auto">
+                                        @friend.FullName.Substring(0, Math.Min(2, friend.FullName.Length)).ToUpper()
+                                    </div>
+                                }
+                                @if (friend.IsOnline)
+                                {
+                                    <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-500 border-2 border-background"></span>
+                                }
+                            </div>
+                            
+                            <h3 class="text-lg font-black text-foreground mb-1">@friend.FullName</h3>
+                            <p class="text-sm text-muted-foreground mb-2">@@@friend.UserName</p>
+                            
+                            @if (!string.IsNullOrEmpty(friend.City))
+                            {
+                                <p class="text-xs text-muted-foreground mb-2 flex items-center justify-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    @friend.City@(!string.IsNullOrEmpty(friend.Country) ? $", {friend.Country}" : "")
+                                </p>
+                            }
+                            
+                            <p class="text-xs text-muted-foreground mb-4">Friends since @friend.FriendsSince.ToString("MMM yyyy")</p>
+                            
+                            <div class="flex gap-2 justify-center">
+                                <a href="/chats?user=@friend.UserId" class="btn-sm btn-primary">
+                                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                    Message
+                                </a>
+                                <button class="btn-sm btn-secondary" onclick="viewProfile('@friend.UserId')">
+                                    <i data-lucide="user" class="w-4 h-4"></i>
+                                    Profile
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-12">
+                    <i data-lucide="users" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
+                    <h3 class="text-lg font-black text-foreground mb-2">No Mutual Friends</h3>
+                    <p class="text-muted-foreground mb-6">You don't have any mutual friends with this person.</p>
+                    <a href="/friends" class="btn-primary">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                        Back to Friends
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_LocalizationScript")
+    <script>
+        function viewProfile(userId) {
+            window.location.href = `/profile/${userId}`;
+        }
+    </script>
+}

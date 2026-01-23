@@ -20,6 +20,7 @@ using CommunityCar.Infrastructure.Services.Identity;
 using CommunityCar.Infrastructure.Services.Storage;
 using CommunityCar.Infrastructure.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
+using CommunityCar.Application.Services.Communication;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -74,6 +75,8 @@ public static class DependencyInjection
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
+        services.AddScoped<IConversationRepository, ConversationRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<IQARepository, QARepository>();
         services.AddScoped<IVoteRepository, VoteRepository>();
         services.AddScoped<IViewRepository, ViewRepository>();
@@ -88,6 +91,7 @@ public static class DependencyInjection
         services.AddScoped<IReviewsRepository, ReviewsRepository>();
         services.AddScoped<IStoriesRepository, StoriesRepository>();
         services.AddScoped<IRatingRepository, RatingRepository>();
+        services.AddScoped<IFriendsRepository, FriendsRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Authentication & Authorization services
@@ -96,6 +100,7 @@ public static class DependencyInjection
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<IChatService, ChatService>();
 
         // Storage services
         services.AddScoped<IFileStorageService, FileStorageService>();

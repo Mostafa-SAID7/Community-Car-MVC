@@ -1,0 +1,234 @@
+@using Microsoft.Extensions.Localization
+@model IEnumerable<CommunityCar.Application.Features.Friends.ViewModels.FriendSuggestionVM>
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PeopleYouMayKnow"];
+}
+
+<div class="container mx-auto px-4 py-8 max-w-6xl">
+    <!-- Header -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700 mb-6">
+        <div class="p-8">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-black text-foreground flex items-center gap-3">
+                    <div class="bg-blue-500/10 p-2 rounded-xl text-blue-500">
+                        <i data-lucide="user-search" class="w-6 h-6"></i>
+                    </div>
+                    @Localizer["PeopleYouMayKnow"]
+                </h2>
+                <a href="/friends" class="btn-secondary">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    @Localizer["BackToFriends"]
+                </a>
+            </div>
+            <p class="text-muted-foreground mt-4">@Localizer["HeaderSubtitle"]</p>
+        </div>
+    </div>
+
+    <!-- Suggestions Grid -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6">
+            @if (Model.Any())
+            {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach (var suggestion in Model)
+                    {
+                        <div class="bg-muted/20 border border-border/50 rounded-2xl p-6 group hover:bg-muted/40 transition-all hover:border-primary/20 text-center">
+                            <div class="relative inline-block mb-4">
+                                @if (!string.IsNullOrEmpty(suggestion.ProfilePictureUrl))
+                                {
+                                    <img src="@suggestion.ProfilePictureUrl" alt="@suggestion.FullName" class="w-20 h-20 rounded-full object-cover mx-auto" />
+                                }
+                                else
+                                {
+                                    <div class="w-20 h-20 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-black text-xl shadow-lg mx-auto">
+                                        @suggestion.FullName.Substring(0, Math.Min(2, suggestion.FullName.Length)).ToUpper()
+                                    </div>
+                                }
+                            </div>
+                            
+                            <h3 class="text-lg font-black text-foreground mb-1">@suggestion.FullName</h3>
+                            <p class="text-sm text-muted-foreground mb-2">@@@suggestion.UserName</p>
+                            
+                            @if (!string.IsNullOrEmpty(suggestion.City))
+                            {
+                                <p class="text-xs text-muted-foreground mb-3 flex items-center justify-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    @suggestion.City@(!string.IsNullOrEmpty(suggestion.Country) ? $", {suggestion.Country}" : "")
+                                </p>
+                            }
+                            
+                            @if (suggestion.MutualFriendsCount > 0)
+                            {
+                                <div class="mb-3">
+                                    <p class="text-xs text-blue-600 font-medium mb-1">@suggestion.MutualFriendsCount mutual friends</p>
+                                    @if (suggestion.MutualFriendsNames.Any())
+                                    {
+                                        <p class="text-xs text-muted-foreground">
+                                            @string.Join(", ", suggestion.MutualFriendsNames.Take(2))@(suggestion.MutualFriendsNames.Count() > 2 ? $" and {suggestion.MutualFriendsNames.Count() - 2} others" : "")
+                                        </p>
+                                    }
+                                </div>
+                            }
+                            
+                            @if (!string.IsNullOrEmpty(suggestion.Bio))
+                            {
+                                <p class="text-xs text-muted-foreground mb-4 line-clamp-3">@suggestion.Bio</p>
+                            }
+                            
+                            <div class="bg-primary/5 border border-primary/20 rounded-lg p-2 mb-4">
+                                <p class="text-xs text-primary font-medium">@suggestion.SuggestionReason</p>
+                            </div>
+                            
+                            <div class="flex gap-2 justify-center">
+                                <button class="btn-sm btn-primary flex-1" onclick="sendFriendRequest('@suggestion.UserId', '@suggestion.FullName')">
+                                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                                    Add Friend
+                                </button>
+                                <button class="btn-sm btn-secondary" onclick="viewProfile('@suggestion.UserId')">
+                                    <i data-lucide="user" class="w-4 h-4"></i>
+                                </button>
+                                <div class="relative">
+                                    <button class="btn-sm btn-secondary" onclick="toggleSuggestionMenu('@suggestion.UserId')">
+                                        <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                                    </button>
+                                    <div id="suggestion-menu-@suggestion.UserId" class="absolute right-0 top-full mt-2 w-48 bg-card border border-border rounded-xl shadow-lg hidden z-10">
+                                        <div class="p-2">
+                                            @if (suggestion.MutualFriendsCount > 0)
+                                            {
+                                                <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg" onclick="viewMutualFriends('@suggestion.UserId')">
+                                                    <i data-lucide="users" class="w-4 h-4 inline mr-2"></i>
+                                                    Mutual Friends
+                                                </button>
+                                            }
+                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg" onclick="hideSuggestion('@suggestion.UserId')">
+                                                <i data-lucide="eye-off" class="w-4 h-4 inline mr-2"></i>
+                                                Hide Suggestion
+                                            </button>
+                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg text-destructive" onclick="blockUser('@suggestion.UserId', '@suggestion.FullName')">
+                                                <i data-lucide="user-x" class="w-4 h-4 inline mr-2"></i>
+                                                Block User
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-12">
+                    <i data-lucide="user-search" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
+                    <h3 class="text-lg font-black text-foreground mb-2">No Suggestions Available</h3>
+                    <p class="text-muted-foreground mb-6">We couldn't find any friend suggestions for you right now. Check back later!</p>
+                    <a href="/friends" class="btn-primary">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                        Back to Friends
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_LocalizationScript")
+    <script>
+        async function sendFriendRequest(receiverId, receiverName) {
+            try {
+                const response = await fetch('/friends/send-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    body: JSON.stringify({ receiverId: receiverId })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    window.notify.success(result.message);
+                    // Update button to show request sent
+                    const button = event.target.closest('button');
+                    button.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Request Sent';
+                    button.disabled = true;
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-secondary');
+                } else {
+                    window.notify.error(result.message);
+                }
+            } catch (error) {
+                window.notify.error('An error occurred while sending the friend request.');
+            }
+        }
+
+        function toggleSuggestionMenu(userId) {
+            const menu = document.getElementById(`suggestion-menu-${userId}`);
+            // Close all other menus
+            document.querySelectorAll('[id^="suggestion-menu-"]').forEach(m => {
+                if (m !== menu) m.classList.add('hidden');
+            });
+            menu.classList.toggle('hidden');
+        }
+
+        function viewProfile(userId) {
+            window.location.href = `/profile/${userId}`;
+        }
+
+        function viewMutualFriends(userId) {
+            window.location.href = `/friends/mutual/${userId}`;
+        }
+
+        function hideSuggestion(userId) {
+            // Hide the suggestion card
+            const card = event.target.closest('.bg-muted\\/20');
+            if (card) {
+                card.style.display = 'none';
+                window.notify.success('Suggestion hidden');
+            }
+        }
+
+        async function blockUser(userId, userName) {
+            if (!confirm(`Are you sure you want to block ${userName}? This will prevent them from contacting you.`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/friends/block-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    body: JSON.stringify({ userToBlockId: userId })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    window.notify.success(result.message);
+                    // Hide the suggestion card
+                    const card = event.target.closest('.bg-muted\\/20');
+                    if (card) {
+                        card.style.display = 'none';
+                    }
+                } else {
+                    window.notify.error(result.message);
+                }
+            } catch (error) {
+                window.notify.error('An error occurred while blocking the user.');
+            }
+        }
+
+        // Close menus when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('[id^="suggestion-menu-"]') && !event.target.closest('button[onclick^="toggleSuggestionMenu"]')) {
+                document.querySelectorAll('[id^="suggestion-menu-"]').forEach(menu => {
+                    menu.classList.add('hidden');
+                });
+            }
+        });
+    </script>
+}

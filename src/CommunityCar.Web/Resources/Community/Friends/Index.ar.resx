@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>الأصدقاء - مجتمع السيارات</value>
+  </data>
+  <data name="HeaderTitle" xml:space="preserve">
+    <value>الأصدقاء</value>
+  </data>
+  <data name="HeaderSubtitle" xml:space="preserve">
+    <value>تواصل مع عشاق السيارات الآخرين في شبكة مجتمع السيارات</value>
+  </data>
+  <data name="AllFriends" xml:space="preserve">
+    <value>جميع الأصدقاء</value>
+  </data>
+  <data name="FriendRequests" xml:space="preserve">
+    <value>طلبات الصداقة</value>
+  </data>
+  <data name="FindFriends" xml:space="preserve">
+    <value>البحث عن أصدقاء</value>
+  </data>
+  <data name="PeopleYouMayKnow" xml:space="preserve">
+    <value>أشخاص قد تعرفهم</value>
+  </data>
+  <data name="MutualFriends" xml:space="preserve">
+    <value>الأصدقاء المشتركون</value>
+  </data>
+  <data name="SendFriendRequest" xml:space="preserve">
+    <value>إرسال طلب صداقة</value>
+  </data>
+  <data name="AcceptRequest" xml:space="preserve">
+    <value>قبول الطلب</value>
+  </data>
+  <data name="DeclineRequest" xml:space="preserve">
+    <value>رفض الطلب</value>
+  </data>
+  <data name="RemoveFriend" xml:space="preserve">
+    <value>إزالة صديق</value>
+  </data>
+  <data name="BlockUser" xml:space="preserve">
+    <value>حظر المستخدم</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>رسالة</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>الملف الشخصي</value>
+  </data>
+  <data name="BackToFriends" xml:space="preserve">
+    <value>العودة إلى الأصدقاء</value>
+  </data>
+  <data name="BackToOverview" xml:space="preserve">
+    <value>العودة إلى النظرة العامة</value>
+  </data>
+  <data name="NoFriendsYet" xml:space="preserve">
+    <value>لا يوجد أصدقاء بعد</value>
+  </data>
+  <data name="StartConnecting" xml:space="preserve">
+    <value>ابدأ في التواصل مع عشاق السيارات الآخرين!</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>لا توجد طلبات صداقة معلقة</value>
+  </data>
+  <data name="NoSentRequests" xml:space="preserve">
+    <value>لا توجد طلبات صداقة مرسلة</value>
+  </data>
+  <data name="NoSuggestionsAvailable" xml:space="preserve">
+    <value>لا توجد اقتراحات متاحة</value>
+  </data>
+  <data name="CheckBackLater" xml:space="preserve">
+    <value>لم نتمكن من العثور على أي اقتراحات صداقة لك الآن. تحقق مرة أخرى لاحقاً!</value>
+  </data>
+  <data name="ReceivedRequests" xml:space="preserve">
+    <value>الطلبات المستلمة</value>
+  </data>
+  <data name="SentRequests" xml:space="preserve">
+    <value>الطلبات المرسلة</value>
+  </data>
+  <data name="RecentFriends" xml:space="preserve">
+    <value>الأصدقاء الحديثون</value>
+  </data>
+  <data name="ViewAllFriends" xml:space="preserve">
+    <value>عرض جميع الأصدقاء ({0})</value>
+  </data>
+  <data name="ViewAllRequests" xml:space="preserve">
+    <value>عرض جميع الطلبات</value>
+  </data>
+  <data name="SeeMoreSuggestions" xml:space="preserve">
+    <value>رؤية المزيد من الاقتراحات</value>
+  </data>
+  <data name="SeeAllSuggestions" xml:space="preserve">
+    <value>رؤية جميع الاقتراحات</value>
+  </data>
+  <data name="FriendsSince" xml:space="preserve">
+    <value>أصدقاء منذ {0}</value>
+  </data>
+  <data name="MutualFriendsCount" xml:space="preserve">
+    <value>{0} أصدقاء مشتركون</value>
+  </data>
+  <data name="OneMutualFriend" xml:space="preserve">
+    <value>صديق مشترك واحد</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>أُرسل في {0}</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>معلق</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>إلغاء الطلب</value>
+  </data>
+  <data name="AddFriend" xml:space="preserve">
+    <value>إضافة صديق</value>
+  </data>
+  <data name="HideSuggestion" xml:space="preserve">
+    <value>إخفاء الاقتراح</value>
+  </data>
+  <data name="RequestSent" xml:space="preserve">
+    <value>تم إرسال الطلب</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>متصل</value>
+  </data>
+  <data name="LastSeen" xml:space="preserve">
+    <value>آخر ظهور {0}</value>
+  </data>
+  <data name="NoMutualFriends" xml:space="preserve">
+    <value>لا يوجد أصدقاء مشتركون</value>
+  </data>
+  <data name="NoMutualFriendsMessage" xml:space="preserve">
+    <value>ليس لديك أي أصدقاء مشتركين مع هذا الشخص.</value>
+  </data>
+</root>

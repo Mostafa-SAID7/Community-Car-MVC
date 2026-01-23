@@ -5,10 +5,13 @@ namespace CommunityCar.Domain.Entities.Chats;
 
 public class Message : BaseEntity
 {
-    public string Content { get; private set; }
+    public string Content { get; private set; } = string.Empty;
     public Guid ConversationId { get; private set; }
     public Guid SenderId { get; private set; }
     public bool IsRead { get; private set; }
+
+    // Parameterless constructor for EF
+    private Message() { }
 
     public Message(string content, Guid conversationId, Guid senderId)
     {

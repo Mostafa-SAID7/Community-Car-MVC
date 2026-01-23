@@ -32,15 +32,15 @@ class ChatClient {
     }
 
     setupEventHandlers() {
-        // Connection events
+    // Connection events
         this.connection.onreconnecting(() => {
             console.log('Chat connection lost. Reconnecting...');
-            this.showConnectionStatus('Reconnecting...', 'warning');
+            this.showConnectionStatus(window.chatLocalizer?.Reconnecting || 'Reconnecting...', 'warning');
         });
 
         this.connection.onreconnected(() => {
             console.log('Chat connection restored');
-            this.showConnectionStatus('Connected', 'success');
+            this.showConnectionStatus(window.chatLocalizer?.Connected || 'Connected', 'success');
             this.reconnectAttempts = 0;
             
             // Rejoin current conversation if any
@@ -51,7 +51,7 @@ class ChatClient {
 
         this.connection.onclose(() => {
             console.log('Chat connection closed');
-            this.showConnectionStatus('Disconnected', 'error');
+            this.showConnectionStatus(window.chatLocalizer?.Disconnected || 'Disconnected', 'error');
         });
 
         // Message events
@@ -257,7 +257,7 @@ class ChatClient {
             
             const statusText = element.querySelector('.chat-header-status');
             if (statusText) {
-                statusText.textContent = 'Online';
+                statusText.textContent = window.chatLocalizer?.Online || 'Online';
                 statusText.classList.add('online');
             }
         });
@@ -274,7 +274,7 @@ class ChatClient {
             
             const statusText = element.querySelector('.chat-header-status');
             if (statusText) {
-                statusText.textContent = 'Offline';
+                statusText.textContent = window.chatLocalizer?.Offline || 'Offline';
                 statusText.classList.remove('online');
             }
         });
@@ -338,20 +338,26 @@ class ChatClient {
         if (!messagesContainer) return;
         
         const typingIndicator = document.createElement('div');
-        typingIndicator.className = 'typing-indicator';
+        typingIndicator.className = 'typing-indicator flex items-center gap-3 p-4 animate-in fade-in duration-300';
         typingIndicator.setAttribute('data-typing-user', userId);
         
         typingIndicator.innerHTML = `
-            <span>Someone is typing</span>
-            <div class="typing-dots">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
+            <div class="w-8 h-8 rounded-full bg-muted border border-border flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
+                <i data-lucide="user" class="w-4 h-4"></i>
+            </div>
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-medium text-muted-foreground">${window.chatLocalizer?.Typing || 'Typing...'}</span>
+                <div class="flex gap-1">
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
+                </div>
             </div>
         `;
         
         messagesContainer.appendChild(typingIndicator);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        lucide.createIcons();
     }
 
     hideTypingIndicator(userId) {
@@ -398,17 +404,22 @@ class ChatClient {
 
     showConnectionStatus(message, type) {
         // Show connection status in UI
-        const statusElement = document.querySelector('.chat-connection-status');
-        if (statusElement) {
-            statusElement.textContent = message;
-            statusElement.className = `chat-connection-status ${type}`;
-            statusElement.style.display = 'block';
-            
-            if (type === 'success') {
-                setTimeout(() => {
-                    statusElement.style.display = 'none';
-                }, 3000);
-            }
+        let statusElement = document.querySelector('.chat-connection-status');
+        if (!statusElement) {
+            // Create status element if it doesn't exist
+            statusElement = document.createElement('div');
+            statusElement.className = 'chat-connection-status fixed top-4 right-4 px-4 py-2 rounded-lg text-sm font-medium z-50 transition-all';
+            document.body.appendChild(statusElement);
+        }
+        
+        statusElement.textContent = message;
+        statusElement.className = `chat-connection-status fixed top-4 right-4 px-4 py-2 rounded-lg text-sm font-medium z-50 transition-all ${type === 'success' ? 'bg-green-500 text-white' : type === 'warning' ? 'bg-yellow-500 text-white' : 'bg-red-500 text-white'}`;
+        statusElement.style.display = 'block';
+        
+        if (type === 'success') {
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 3000);
         }
     }
 
@@ -438,22 +449,328 @@ class ChatClient {
         const diffInMinutes = Math.floor((now - date) / (1000 * 60));
         
         if (diffInMinutes < 1) {
-            return 'Just now';
+            return window.chatLocalizer?.JustNow || 'Just now';
         } else if (diffInMinutes < 60) {
-            return `${diffInMinutes}m ago`;
+            const template = window.chatLocalizer?.MinutesAgo || '{0}m ago';
+            return template.replace('{0}', diffInMinutes);
         } else if (diffInMinutes < 1440) {
-            return `${Math.floor(diffInMinutes / 60)}h ago`;
+            const template = window.chatLocalizer?.HoursAgo || '{0}h ago';
+            return template.replace('{0}', Math.floor(diffInMinutes / 60));
         } else {
-            return date.toLocaleDateString();
+            const template = window.chatLocalizer?.DaysAgo || '{0}d ago';
+            const days = Math.floor(diffInMinutes / 1440);
+            if (days < 7) {
+                return template.replace('{0}', days);
+            } else {
+                return date.toLocaleDateString();
+            }
         }
     }
 }
 
-// Initialize chat client when DOM is loaded
+    // Initialize chat client when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof signalR !== 'undefined') {
         window.chatClient = new ChatClient();
+        
+        // Initialize chat UI interactions
+        initializeChatUI();
     } else {
         console.warn('SignalR library not loaded');
     }
 });
+
+// Chat UI initialization and API integration
+function initializeChatUI() {
+    const conversationItems = document.querySelectorAll('[data-conversation-id]');
+    const chatEmptyState = document.getElementById('chat-empty-state');
+    const chatHeader = document.getElementById('chat-header');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInputArea = document.getElementById('chat-input-area');
+    const messageInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-message-btn');
+    const newChatBtn = document.getElementById('new-chat-btn');
+    const searchInput = document.getElementById('chat-search');
+    
+    let currentConversationId = null;
+    
+    // Load conversations from API
+    loadConversations();
+    
+    // Conversation selection
+    conversationItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const conversationId = this.getAttribute('data-conversation-id');
+            selectConversation(conversationId);
+        });
+    });
+    
+    // Message input handling
+    messageInput.addEventListener('input', function() {
+        const hasContent = this.value.trim().length > 0;
+        sendBtn.disabled = !hasContent;
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 160) + 'px';
+        
+        // Send typing indicator
+        if (currentConversationId && hasContent) {
+            window.chatClient.startTyping(currentConversationId);
+        }
+    });
+    
+    messageInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    // Send message
+    sendBtn.addEventListener('click', sendMessage);
+    
+    // New conversation
+    if (newChatBtn) {
+        newChatBtn.addEventListener('click', () => {
+            // TODO: Implement new conversation modal
+            console.log('New conversation clicked');
+        });
+    }
+    
+    // Search functionality
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            filterConversations(query);
+        });
+    }
+    
+    async function loadConversations() {
+        try {
+            const response = await fetch('/chats/api/conversations');
+            if (response.ok) {
+                const conversations = await response.json();
+                renderConversations(conversations);
+            }
+        } catch (error) {
+            console.error('Failed to load conversations:', error);
+        }
+    }
+    
+    function renderConversations(conversations) {
+        const conversationsList = document.getElementById('conversations-list');
+        if (!conversationsList || conversations.length === 0) return;
+        
+        conversationsList.innerHTML = conversations.map(conv => `
+            <div class="flex items-center gap-4 p-4 cursor-pointer hover:bg-primary/5 transition-all border-l-4 border-l-transparent relative group/conv" data-conversation-id="${conv.Id}">
+                <div class="relative shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground font-black text-xs shadow-lg group-hover/conv:scale-105 transition-transform">
+                        ${getConversationAvatar(conv)}
+                    </div>
+                    ${conv.Participants?.some(p => p.IsOnline) ? '<div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-background rounded-full ring-1 ring-border shadow-sm"></div>' : ''}
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-center mb-0.5">
+                        <span class="font-black text-sm text-foreground tracking-tight">${conv.Title}</span>
+                        <span class="text-[9px] font-black uppercase text-muted-foreground opacity-60">${formatTimeAgo(conv.LastActivity)}</span>
+                    </div>
+                    <div class="text-[11px] font-medium text-muted-foreground truncate opacity-80 group-hover/conv:opacity-100 transition-opacity">
+                        ${conv.LastMessage?.Content || 'No messages yet'}
+                    </div>
+                </div>
+                ${conv.UnreadCount > 0 ? `<div class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 bg-primary text-primary-foreground text-[10px] font-black rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">${conv.UnreadCount}</div>` : ''}
+            </div>
+        `).join('');
+        
+        // Re-attach event listeners
+        conversationsList.querySelectorAll('[data-conversation-id]').forEach(item => {
+            item.addEventListener('click', function() {
+                const conversationId = this.getAttribute('data-conversation-id');
+                selectConversation(conversationId);
+            });
+        });
+    }
+    
+    async function selectConversation(conversationId) {
+        try {
+            // Update UI state
+            document.querySelectorAll('[data-conversation-id]').forEach(i => 
+                i.classList.remove('bg-primary/10', 'border-primary', 'active'));
+            document.querySelector(`[data-conversation-id="${conversationId}"]`)
+                ?.classList.add('bg-primary/10', 'border-primary', 'active');
+            
+            // Show chat interface
+            chatEmptyState.style.display = 'none';
+            chatHeader.style.display = 'flex';
+            chatMessages.style.display = 'flex';
+            chatInputArea.style.display = 'block';
+            
+            currentConversationId = conversationId;
+            
+            // Join conversation via SignalR
+            await window.chatClient.joinConversation(conversationId);
+            
+            // Load conversation details and messages
+            const [conversation, messages] = await Promise.all([
+                fetch(`/chats/api/conversations/${conversationId}`).then(r => r.json()),
+                fetch(`/chats/api/conversations/${conversationId}/messages`).then(r => r.json())
+            ]);
+            
+            // Update header
+            updateChatHeader(conversation);
+            
+            // Load messages
+            renderMessages(messages);
+            
+            // Mark conversation as read
+            await fetch(`/chats/api/conversations/${conversationId}/read`, { method: 'POST' });
+            
+        } catch (error) {
+            console.error('Failed to select conversation:', error);
+        }
+    }
+    
+    function updateChatHeader(conversation) {
+        const chatTitle = document.getElementById('chat-title');
+        const chatAvatar = document.getElementById('chat-avatar');
+        const chatStatus = document.getElementById('chat-status');
+        const chatOnlineIndicator = document.getElementById('chat-online-indicator');
+        
+        if (chatTitle) chatTitle.textContent = conversation.Title;
+        if (chatAvatar) chatAvatar.textContent = getConversationAvatar(conversation);
+        
+        const isOnline = conversation.Participants?.some(p => p.IsOnline);
+        if (chatStatus) {
+            chatStatus.textContent = isOnline ? 
+                (window.chatLocalizer?.Online || 'Online') : 
+                (window.chatLocalizer?.Offline || 'Offline');
+        }
+        if (chatOnlineIndicator) {
+            chatOnlineIndicator.style.display = isOnline ? 'block' : 'none';
+        }
+    }
+    
+    function renderMessages(messages) {
+        chatMessages.innerHTML = '';
+        
+        if (messages.length === 0) {
+            chatMessages.innerHTML = `
+                <div class="flex-1 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4 mx-auto">
+                            <i data-lucide="message-circle" class="w-8 h-8 text-muted-foreground opacity-30"></i>
+                        </div>
+                        <p class="text-sm text-muted-foreground">No messages yet. Start the conversation!</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+            return;
+        }
+        
+        // Group messages by date
+        const groupedMessages = groupMessagesByDate(messages);
+        
+        Object.entries(groupedMessages).forEach(([date, msgs]) => {
+            // Add date separator
+            const dateSeparator = document.createElement('div');
+            dateSeparator.className = 'flex justify-center my-6';
+            dateSeparator.innerHTML = `<span class="px-4 py-1.5 bg-muted/40 text-[10px] font-black uppercase tracking-widest text-muted-foreground rounded-full border border-border">${date}</span>`;
+            chatMessages.appendChild(dateSeparator);
+            
+            // Add messages
+            msgs.forEach(message => {
+                const messageElement = window.chatClient.createMessageElement(message, message.IsOwnMessage);
+                chatMessages.appendChild(messageElement);
+            });
+        });
+        
+        lucide.createIcons();
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    async function sendMessage() {
+        const content = messageInput.value.trim();
+        if (!content || !currentConversationId) return;
+        
+        try {
+            // Clear input immediately
+            messageInput.value = '';
+            sendBtn.disabled = true;
+            messageInput.style.height = 'auto';
+            
+            // Stop typing indicator
+            await window.chatClient.stopTyping(currentConversationId);
+            
+            // Send via SignalR (which will broadcast to all participants)
+            const success = await window.chatClient.sendMessage(currentConversationId, content);
+            
+            if (!success) {
+                // Fallback to API if SignalR fails
+                await fetch('/chats/api/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ConversationId: currentConversationId,
+                        Content: content
+                    })
+                });
+            }
+            
+        } catch (error) {
+            console.error('Failed to send message:', error);
+            // Restore message input on error
+            messageInput.value = content;
+            sendBtn.disabled = false;
+        }
+    }
+    
+    function filterConversations(query) {
+        const conversations = document.querySelectorAll('[data-conversation-id]');
+        conversations.forEach(conv => {
+            const title = conv.querySelector('.font-black.text-sm')?.textContent.toLowerCase() || '';
+            const preview = conv.querySelector('.text-\\[11px\\]')?.textContent.toLowerCase() || '';
+            const matches = title.includes(query) || preview.includes(query);
+            conv.style.display = matches ? 'flex' : 'none';
+        });
+    }
+    
+    function getConversationAvatar(conversation) {
+        if (conversation.IsGroupChat) {
+            return conversation.Title.substring(0, 2).toUpperCase();
+        } else {
+            const otherParticipant = conversation.Participants?.find(p => !p.IsCurrentUser);
+            return otherParticipant?.Name.substring(0, 2).toUpperCase() || 'U';
+        }
+    }
+    
+    function groupMessagesByDate(messages) {
+        const groups = {};
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        messages.forEach(message => {
+            const messageDate = new Date(message.CreatedAt);
+            let dateKey;
+            
+            if (messageDate.toDateString() === today.toDateString()) {
+                dateKey = 'Today';
+            } else if (messageDate.toDateString() === yesterday.toDateString()) {
+                dateKey = 'Yesterday';
+            } else {
+                dateKey = messageDate.toLocaleDateString();
+            }
+            
+            if (!groups[dateKey]) {
+                groups[dateKey] = [];
+            }
+            groups[dateKey].push(message);
+        });
+        
+        return groups;
+    }
+    
+    function formatTimeAgo(dateString) {
+        return window.chatClient?.formatTime(dateString) || 'Unknown';
+    }
+}

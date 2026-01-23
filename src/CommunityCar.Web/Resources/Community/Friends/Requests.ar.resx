@@ -58,43 +58,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="QA" xml:space="preserve">
-    <value>الأسئلة والأجوبة</value>
+  <data name="PageTitle" xml:space="preserve">
+    <value>طلبات الصداقة - مجتمع السيارات</value>
   </data>
-  <data name="Posts" xml:space="preserve">
-    <value>المنشورات</value>
+  <data name="HeaderTitle" xml:space="preserve">
+    <value>طلبات الصداقة</value>
   </data>
-  <data name="Guides" xml:space="preserve">
-    <value>الأدلة</value>
+  <data name="Accept" xml:space="preserve">
+    <value>قبول</value>
   </data>
-  <data name="Groups" xml:space="preserve">
-    <value>المجموعات</value>
+  <data name="Decline" xml:space="preserve">
+    <value>رفض</value>
   </data>
-  <data name="Friends" xml:space="preserve">
-    <value>الأصدقاء</value>
+  <data name="ConfirmAccept" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد قبول طلب الصداقة هذا؟</value>
   </data>
-  <data name="News" xml:space="preserve">
-    <value>الأخبار</value>
+  <data name="ConfirmDecline" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد رفض طلب الصداقة هذا؟</value>
   </data>
-  <data name="Events" xml:space="preserve">
-    <value>الأحداث</value>
+  <data name="ConfirmCancel" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد إلغاء طلب الصداقة هذا؟</value>
   </data>
-  <data name="Reviews" xml:space="preserve">
-    <value>المراجعات</value>
+  <data name="RequestAccepted" xml:space="preserve">
+    <value>تم قبول طلب الصداقة بنجاح!</value>
   </data>
-  <data name="Maps" xml:space="preserve">
-    <value>الخرائط</value>
+  <data name="RequestDeclined" xml:space="preserve">
+    <value>تم رفض طلب الصداقة</value>
   </data>
-  <data name="MyProfile" xml:space="preserve">
-    <value>ملفي الشخصي</value>
+  <data name="RequestCancelled" xml:space="preserve">
+    <value>تم إلغاء طلب الصداقة</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>الرئيسية</value>
+  <data name="BackToFriends" xml:space="preserve">
+    <value>العودة إلى الأصدقاء</value>
   </data>
-  <data name="Chat" xml:space="preserve">
-    <value>المحادثة</value>
+  <data name="ReceivedRequests" xml:space="preserve">
+    <value>الطلبات المستلمة</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>البحث...</value>
+  <data name="SentRequests" xml:space="preserve">
+    <value>الطلبات المرسلة</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>إلغاء الطلب</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>معلق</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>أُرسل في {0}</value>
   </data>
 </root>

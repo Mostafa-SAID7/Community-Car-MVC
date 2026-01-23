@@ -151,8 +151,45 @@ public class NotificationService : INotificationService
             Title = "Friend Request",
             Message = $"{requesterName} sent you a friend request",
             Type = NotificationType.FriendRequest,
-            ActionUrl = $"/profile/{requesterId}",
+            ActionUrl = $"/friends/requests",
             IconClass = "user-plus"
+        });
+    }
+
+    public async Task NotifyFriendRequestAcceptedAsync(Guid userId, string accepterName, Guid accepterId)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = "Friend Request Accepted",
+            Message = $"{accepterName} accepted your friend request",
+            Type = NotificationType.FriendRequestAccepted,
+            ActionUrl = $"/profile/{accepterId}",
+            IconClass = "user-check"
+        });
+    }
+
+    public async Task NotifyFriendRequestDeclinedAsync(Guid userId, string declinerName)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = "Friend Request Declined",
+            Message = $"{declinerName} declined your friend request",
+            Type = NotificationType.FriendRequestDeclined,
+            IconClass = "user-x"
+        });
+    }
+
+    public async Task NotifyFriendRemovedAsync(Guid userId, string removerName)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = "Friend Removed",
+            Message = $"{removerName} removed you from their friends",
+            Type = NotificationType.FriendRemoved,
+            IconClass = "user-minus"
         });
     }
 
@@ -170,6 +207,10 @@ public class NotificationService : INotificationService
             NotificationType.VoteReceived => "thumbs-up",
             NotificationType.CommentReceived => "message-circle",
             NotificationType.FriendRequest => "user-plus",
+            NotificationType.FriendRequestAccepted => "user-check",
+            NotificationType.FriendRequestDeclined => "user-x",
+            NotificationType.FriendRemoved => "user-minus",
+            NotificationType.UserBlocked => "user-x",
             NotificationType.SystemUpdate => "bell",
             _ => "bell"
         };

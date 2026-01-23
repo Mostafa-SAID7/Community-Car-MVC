@@ -15,4 +15,7 @@ public interface INotificationService
     Task NotifyVoteReceivedAsync(Guid userId, string itemTitle, bool isUpvote);
     Task NotifyCommentReceivedAsync(Guid userId, string itemTitle, string commenterName);
     Task NotifyFriendRequestAsync(Guid userId, string requesterName, Guid requesterId);
+    Task NotifyFriendRequestAcceptedAsync(Guid userId, string accepterName, Guid accepterId);
+    Task NotifyFriendRequestDeclinedAsync(Guid userId, string declinerName);
+    Task NotifyFriendRemovedAsync(Guid userId, string removerName);
 }

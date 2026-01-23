@@ -7,6 +7,8 @@ namespace CommunityCar.Application.Common.Interfaces.Repositories;
 public interface IUnitOfWork : IDisposable
 {
     IUserRepository Users { get; }
+    IConversationRepository Conversations { get; }
+    IMessageRepository Messages { get; }
     IQARepository QA { get; }
     IVoteRepository Votes { get; }
     IViewRepository Views { get; }

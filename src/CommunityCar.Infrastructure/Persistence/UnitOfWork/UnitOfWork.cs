@@ -12,6 +12,8 @@ public class UnitOfWork : IUnitOfWork
 
     public UnitOfWork(
         ApplicationDbContext context,
+        IConversationRepository conversationRepository,
+        IMessageRepository messageRepository,
         IQARepository qaRepository,
         IVoteRepository voteRepository,
         IViewRepository viewRepository,
@@ -29,6 +31,8 @@ public class UnitOfWork : IUnitOfWork
         IUserRepository userRepository)
     {
         _context = context;
+        Conversations = conversationRepository;
+        Messages = messageRepository;
         QA = qaRepository;
         Votes = voteRepository;
         Views = viewRepository;
@@ -46,6 +50,8 @@ public class UnitOfWork : IUnitOfWork
         Users = userRepository;
     }
 
+    public IConversationRepository Conversations { get; }
+    public IMessageRepository Messages { get; }
     public IQARepository QA { get; }
     public IVoteRepository Votes { get; }
     public IViewRepository Views { get; }

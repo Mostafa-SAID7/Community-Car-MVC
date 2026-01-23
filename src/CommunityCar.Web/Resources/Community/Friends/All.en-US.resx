@@ -58,43 +58,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="QA" xml:space="preserve">
-    <value>الأسئلة والأجوبة</value>
+  <data name="AllFriends" xml:space="preserve">
+    <value>All Friends</value>
   </data>
-  <data name="Posts" xml:space="preserve">
-    <value>المنشورات</value>
+  <data name="BackToOverview" xml:space="preserve">
+    <value>Back to Overview</value>
   </data>
-  <data name="Guides" xml:space="preserve">
-    <value>الأدلة</value>
+  <data name="NoFriendsYet" xml:space="preserve">
+    <value>No Friends Yet</value>
   </data>
-  <data name="Groups" xml:space="preserve">
-    <value>المجموعات</value>
+  <data name="StartConnecting" xml:space="preserve">
+    <value>Start connecting with other car enthusiasts!</value>
   </data>
-  <data name="Friends" xml:space="preserve">
-    <value>الأصدقاء</value>
+  <data name="FindFriends" xml:space="preserve">
+    <value>Find Friends</value>
   </data>
-  <data name="News" xml:space="preserve">
-    <value>الأخبار</value>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
   </data>
-  <data name="Events" xml:space="preserve">
-    <value>الأحداث</value>
+  <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
   </data>
-  <data name="Reviews" xml:space="preserve">
-    <value>المراجعات</value>
+  <data name="MutualFriends" xml:space="preserve">
+    <value>Mutual Friends</value>
   </data>
-  <data name="Maps" xml:space="preserve">
-    <value>الخرائط</value>
+  <data name="RemoveFriend" xml:space="preserve">
+    <value>Remove Friend</value>
   </data>
-  <data name="MyProfile" xml:space="preserve">
-    <value>ملفي الشخصي</value>
+  <data name="BlockUser" xml:space="preserve">
+    <value>Block User</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>الرئيسية</value>
+  <data name="FriendsSince" xml:space="preserve">
+    <value>Friends since {0}</value>
   </data>
-  <data name="Chat" xml:space="preserve">
-    <value>المحادثة</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>البحث...</value>
+  <data name="MutualFriendsCount" xml:space="preserve">
+    <value>{0} mutual friends</value>
   </data>
 </root>

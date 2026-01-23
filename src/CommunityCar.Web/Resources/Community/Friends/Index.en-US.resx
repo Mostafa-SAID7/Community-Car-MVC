@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Friends - Community Car</value>
+  </data>
+  <data name="HeaderTitle" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="HeaderSubtitle" xml:space="preserve">
+    <value>Connect with other car enthusiasts in the Community Car network</value>
+  </data>
+  <data name="AllFriends" xml:space="preserve">
+    <value>All Friends</value>
+  </data>
+  <data name="FriendRequests" xml:space="preserve">
+    <value>Friend Requests</value>
+  </data>
+  <data name="FindFriends" xml:space="preserve">
+    <value>Find Friends</value>
+  </data>
+  <data name="PeopleYouMayKnow" xml:space="preserve">
+    <value>People You May Know</value>
+  </data>
+  <data name="MutualFriends" xml:space="preserve">
+    <value>Mutual Friends</value>
+  </data>
+  <data name="SendFriendRequest" xml:space="preserve">
+    <value>Send Friend Request</value>
+  </data>
+  <data name="AcceptRequest" xml:space="preserve">
+    <value>Accept Request</value>
+  </data>
+  <data name="DeclineRequest" xml:space="preserve">
+    <value>Decline Request</value>
+  </data>
+  <data name="RemoveFriend" xml:space="preserve">
+    <value>Remove Friend</value>
+  </data>
+  <data name="BlockUser" xml:space="preserve">
+    <value>Block User</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="BackToFriends" xml:space="preserve">
+    <value>Back to Friends</value>
+  </data>
+  <data name="BackToOverview" xml:space="preserve">
+    <value>Back to Overview</value>
+  </data>
+  <data name="NoFriendsYet" xml:space="preserve">
+    <value>No Friends Yet</value>
+  </data>
+  <data name="StartConnecting" xml:space="preserve">
+    <value>Start connecting with other car enthusiasts!</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending friend requests</value>
+  </data>
+  <data name="NoSentRequests" xml:space="preserve">
+    <value>No sent friend requests</value>
+  </data>
+  <data name="NoSuggestionsAvailable" xml:space="preserve">
+    <value>No Suggestions Available</value>
+  </data>
+  <data name="CheckBackLater" xml:space="preserve">
+    <value>We couldn't find any friend suggestions for you right now. Check back later!</value>
+  </data>
+  <data name="ReceivedRequests" xml:space="preserve">
+    <value>Received Requests</value>
+  </data>
+  <data name="SentRequests" xml:space="preserve">
+    <value>Sent Requests</value>
+  </data>
+  <data name="RecentFriends" xml:space="preserve">
+    <value>Recent Friends</value>
+  </data>
+  <data name="ViewAllFriends" xml:space="preserve">
+    <value>View all {0} friends</value>
+  </data>
+  <data name="ViewAllRequests" xml:space="preserve">
+    <value>View all requests</value>
+  </data>
+  <data name="SeeMoreSuggestions" xml:space="preserve">
+    <value>See more suggestions</value>
+  </data>
+  <data name="SeeAllSuggestions" xml:space="preserve">
+    <value>See All Suggestions</value>
+  </data>
+  <data name="FriendsSince" xml:space="preserve">
+    <value>Friends since {0}</value>
+  </data>
+  <data name="MutualFriendsCount" xml:space="preserve">
+    <value>{0} mutual friends</value>
+  </data>
+  <data name="OneMutualFriend" xml:space="preserve">
+    <value>1 mutual friend</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Sent {0}</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Cancel Request</value>
+  </data>
+  <data name="AddFriend" xml:space="preserve">
+    <value>Add Friend</value>
+  </data>
+  <data name="HideSuggestion" xml:space="preserve">
+    <value>Hide Suggestion</value>
+  </data>
+  <data name="RequestSent" xml:space="preserve">
+    <value>Request Sent</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="LastSeen" xml:space="preserve">
+    <value>Last seen {0}</value>
+  </data>
+  <data name="NoMutualFriends" xml:space="preserve">
+    <value>No Mutual Friends</value>
+  </data>
+  <data name="NoMutualFriendsMessage" xml:space="preserve">
+    <value>You don't have any mutual friends with this person.</value>
+  </data>
+</root>

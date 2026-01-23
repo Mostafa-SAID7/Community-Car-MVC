@@ -49,6 +49,8 @@ public interface IApplicationDbContext
     DbSet<Story> Stories { get; }
     DbSet<NewsItem> News { get; }
     DbSet<PointOfInterest> PointsOfInterest { get; }
+    DbSet<CheckIn> CheckIns { get; }
+    DbSet<Route> Routes { get; }
 
     // Dashboard
     DbSet<Metric> Metrics { get; }
@@ -59,6 +61,7 @@ public interface IApplicationDbContext
 
     // Chats
     DbSet<Conversation> Conversations { get; }
+    DbSet<ConversationParticipant> ConversationParticipants { get; }
     DbSet<Message> Messages { get; }
 
     // Localization

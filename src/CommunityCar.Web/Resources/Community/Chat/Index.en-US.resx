@@ -58,43 +58,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="QA" xml:space="preserve">
-    <value>الأسئلة والأجوبة</value>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Chat - Community Car</value>
   </data>
-  <data name="Posts" xml:space="preserve">
-    <value>المنشورات</value>
+  <data name="HeaderTitle" xml:space="preserve">
+    <value>Inbox</value>
   </data>
-  <data name="Guides" xml:space="preserve">
-    <value>الأدلة</value>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Search threads...</value>
   </data>
-  <data name="Groups" xml:space="preserve">
-    <value>المجموعات</value>
+  <data name="StartThread" xml:space="preserve">
+    <value>Start Thread</value>
   </data>
-  <data name="Friends" xml:space="preserve">
-    <value>الأصدقاء</value>
+  <data name="SelectConversation" xml:space="preserve">
+    <value>Select a conversation</value>
   </data>
-  <data name="News" xml:space="preserve">
-    <value>الأخبار</value>
+  <data name="ConnectWithEnthusiasts" xml:space="preserve">
+    <value>Connect with other car enthusiasts to share tips, tricks, and parts.</value>
   </data>
-  <data name="Events" xml:space="preserve">
-    <value>الأحداث</value>
+  <data name="NewConversation" xml:space="preserve">
+    <value>New Conversation</value>
   </data>
-  <data name="Reviews" xml:space="preserve">
-    <value>المراجعات</value>
+  <data name="Online" xml:space="preserve">
+    <value>Online</value>
   </data>
-  <data name="Maps" xml:space="preserve">
-    <value>الخرائط</value>
+  <data name="Offline" xml:space="preserve">
+    <value>Offline</value>
   </data>
-  <data name="MyProfile" xml:space="preserve">
-    <value>ملفي الشخصي</value>
+  <data name="Typing" xml:space="preserve">
+    <value>Typing...</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>الرئيسية</value>
+  <data name="ComposeMessage" xml:space="preserve">
+    <value>Compose a message...</value>
   </data>
-  <data name="Chat" xml:space="preserve">
-    <value>المحادثة</value>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>البحث...</value>
+  <data name="Attach" xml:space="preserve">
+    <value>Attach</value>
+  </data>
+  <data name="Emoji" xml:space="preserve">
+    <value>Emoji</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Disconnected</value>
+  </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Reconnecting...</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Just now</value>
+  </data>
+  <data name="MinutesAgo" xml:space="preserve">
+    <value>{0}m ago</value>
+  </data>
+  <data name="HoursAgo" xml:space="preserve">
+    <value>{0}h ago</value>
+  </data>
+  <data name="DaysAgo" xml:space="preserve">
+    <value>{0}d ago</value>
   </data>
 </root>

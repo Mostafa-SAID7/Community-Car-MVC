@@ -58,43 +58,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="QA" xml:space="preserve">
-    <value>الأسئلة والأجوبة</value>
+  <data name="PeopleYouMayKnow" xml:space="preserve">
+    <value>People You May Know</value>
   </data>
-  <data name="Posts" xml:space="preserve">
-    <value>المنشورات</value>
+  <data name="BackToFriends" xml:space="preserve">
+    <value>Back to Friends</value>
   </data>
-  <data name="Guides" xml:space="preserve">
-    <value>الأدلة</value>
+  <data name="HeaderSubtitle" xml:space="preserve">
+    <value>Discover and connect with other car enthusiasts in your area</value>
   </data>
-  <data name="Groups" xml:space="preserve">
-    <value>المجموعات</value>
+  <data name="AddFriend" xml:space="preserve">
+    <value>Add Friend</value>
   </data>
-  <data name="Friends" xml:space="preserve">
-    <value>الأصدقاء</value>
+  <data name="RequestSent" xml:space="preserve">
+    <value>Request Sent</value>
   </data>
-  <data name="News" xml:space="preserve">
-    <value>الأخبار</value>
+  <data name="MutualFriends" xml:space="preserve">
+    <value>Mutual Friends</value>
   </data>
-  <data name="Events" xml:space="preserve">
-    <value>الأحداث</value>
+  <data name="HideSuggestion" xml:space="preserve">
+    <value>Hide Suggestion</value>
   </data>
-  <data name="Reviews" xml:space="preserve">
-    <value>المراجعات</value>
+  <data name="BlockUser" xml:space="preserve">
+    <value>Block User</value>
   </data>
-  <data name="Maps" xml:space="preserve">
-    <value>الخرائط</value>
+  <data name="NoSuggestionsAvailable" xml:space="preserve">
+    <value>No Suggestions Available</value>
   </data>
-  <data name="MyProfile" xml:space="preserve">
-    <value>ملفي الشخصي</value>
+  <data name="CheckBackLater" xml:space="preserve">
+    <value>We couldn't find any friend suggestions for you right now. Check back later!</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>الرئيسية</value>
+  <data name="BackToFriendsButton" xml:space="preserve">
+    <value>Back to Friends</value>
   </data>
-  <data name="Chat" xml:space="preserve">
-    <value>المحادثة</value>
+  <data name="MutualFriendsCount" xml:space="preserve">
+    <value>{0} mutual friends</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>البحث...</value>
+  <data name="AndOthers" xml:space="preserve">
+    <value>and {0} others</value>
   </data>
 </root>

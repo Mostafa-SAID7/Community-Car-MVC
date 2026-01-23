@@ -91,9 +91,8 @@ public class ChatHub : Hub
         // Create and save message
         var message = new Message(content.Trim(), conversationGuid, userGuid);
         
-        // TODO: Add message to repository when implemented
-        // await _unitOfWork.Messages.AddAsync(message);
-        // await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.Messages.AddAsync(message);
+        await _unitOfWork.SaveChangesAsync();
 
         // Get user info for the message
         var user = await _unitOfWork.Users.GetByIdAsync(userGuid);
@@ -120,13 +119,12 @@ public class ChatHub : Hub
         if (string.IsNullOrEmpty(userId))
             return;
 
-        // TODO: Implement message read status when repository is available
-        // var message = await _unitOfWork.Messages.GetByIdAsync(Guid.Parse(messageId));
-        // if (message != null)
-        // {
-        //     message.MarkAsRead();
-        //     await _unitOfWork.SaveChangesAsync();
-        // }
+        var message = await _unitOfWork.Messages.GetByIdAsync(Guid.Parse(messageId));
+        if (message != null)
+        {
+            message.MarkAsRead();
+            await _unitOfWork.SaveChangesAsync();
+        }
 
         await Clients.Caller.SendAsync("MessageMarkedAsRead", messageId);
     }

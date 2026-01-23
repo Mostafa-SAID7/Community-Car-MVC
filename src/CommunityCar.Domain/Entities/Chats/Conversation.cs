@@ -5,10 +5,15 @@ namespace CommunityCar.Domain.Entities.Chats;
 
 public class Conversation : AggregateRoot
 {
-    public string Title { get; private set; } // For group chats
+    public string Title { get; private set; } = string.Empty; // For group chats
     public bool IsGroupChat { get; private set; }
     
-    // Participants would be a collection of User IDs or a link entity
+    // Navigation properties
+    public virtual ICollection<ConversationParticipant> Participants { get; set; } = new List<ConversationParticipant>();
+    public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+    
+    // Parameterless constructor for EF
+    private Conversation() { }
     
     public Conversation(string title, bool isGroupChat)
     {

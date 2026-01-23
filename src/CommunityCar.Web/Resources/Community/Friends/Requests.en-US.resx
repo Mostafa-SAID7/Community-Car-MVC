@@ -58,43 +58,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="QA" xml:space="preserve">
-    <value>الأسئلة والأجوبة</value>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Friend Requests - Community Car</value>
   </data>
-  <data name="Posts" xml:space="preserve">
-    <value>المنشورات</value>
+  <data name="HeaderTitle" xml:space="preserve">
+    <value>Friend Requests</value>
   </data>
-  <data name="Guides" xml:space="preserve">
-    <value>الأدلة</value>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
   </data>
-  <data name="Groups" xml:space="preserve">
-    <value>المجموعات</value>
+  <data name="Decline" xml:space="preserve">
+    <value>Decline</value>
   </data>
-  <data name="Friends" xml:space="preserve">
-    <value>الأصدقاء</value>
+  <data name="ConfirmAccept" xml:space="preserve">
+    <value>Are you sure you want to accept this friend request?</value>
   </data>
-  <data name="News" xml:space="preserve">
-    <value>الأخبار</value>
+  <data name="ConfirmDecline" xml:space="preserve">
+    <value>Are you sure you want to decline this friend request?</value>
   </data>
-  <data name="Events" xml:space="preserve">
-    <value>الأحداث</value>
+  <data name="ConfirmCancel" xml:space="preserve">
+    <value>Are you sure you want to cancel this friend request?</value>
   </data>
-  <data name="Reviews" xml:space="preserve">
-    <value>المراجعات</value>
+  <data name="RequestAccepted" xml:space="preserve">
+    <value>Friend request accepted successfully!</value>
   </data>
-  <data name="Maps" xml:space="preserve">
-    <value>الخرائط</value>
+  <data name="RequestDeclined" xml:space="preserve">
+    <value>Friend request declined</value>
   </data>
-  <data name="MyProfile" xml:space="preserve">
-    <value>ملفي الشخصي</value>
+  <data name="RequestCancelled" xml:space="preserve">
+    <value>Friend request cancelled</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>الرئيسية</value>
+  <data name="BackToFriends" xml:space="preserve">
+    <value>Back to Friends</value>
   </data>
-  <data name="Chat" xml:space="preserve">
-    <value>المحادثة</value>
+  <data name="ReceivedRequests" xml:space="preserve">
+    <value>Received Requests</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>البحث...</value>
+  <data name="SentRequests" xml:space="preserve">
+    <value>Sent Requests</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Cancel Request</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Sent {0}</value>
   </data>
 </root>

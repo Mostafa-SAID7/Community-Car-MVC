@@ -16,6 +16,9 @@ public class Friendship : BaseEntity
     public Guid ReceiverId { get; private set; }
     public FriendshipStatus Status { get; private set; }
 
+    // Parameterless constructor for EF
+    private Friendship() { }
+
     public Friendship(Guid requesterId, Guid receiverId)
     {
         RequesterId = requesterId;
