@@ -20,8 +20,6 @@ public class FeedController : Controller
     }
 
     [HttpGet("")]
-    [HttpGet("/")]
-    [HttpGet("/feed")]
     public async Task<IActionResult> Index(string feedType = "personalized", int page = 1, int pageSize = 20)
     {
         var userId = GetCurrentUserId();
