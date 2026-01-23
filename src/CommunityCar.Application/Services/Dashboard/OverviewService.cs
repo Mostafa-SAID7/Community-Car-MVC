@@ -6,14 +6,14 @@ namespace CommunityCar.Application.Services.Dashboard;
 
 public class OverviewService : IOverviewService
 {
-    public async Task<DashboardOverviewVM> GetOverviewAsync(DashboardOverviewRequest? request = null)
+    public async Task<OverviewVM> GetOverviewAsync(OverviewRequest? request = null)
     {
         var startDate = request?.StartDate ?? DateTime.UtcNow.AddDays(-30);
         var endDate = request?.EndDate ?? DateTime.UtcNow;
 
-        var overview = new DashboardOverviewVM
+        var overview = new OverviewVM
         {
-            Stats = new DashboardStatsVM
+            Stats = new StatsVM
             {
                 TotalUsers = 1250,
                 TotalPosts = 4500,
@@ -48,15 +48,15 @@ public class OverviewService : IOverviewService
         return overview;
     }
 
-    public async Task<DashboardOverviewVM> GetOverviewAsync()
+    public async Task<OverviewVM> GetOverviewAsync()
     {
         return await GetOverviewAsync(null);
     }
 
 
-    public async Task<List<DashboardStatsVM>> GetQuickStatsAsync()
+    public async Task<List<StatsVM>> GetQuickStatsAsync()
     {
-        return new List<DashboardStatsVM>
+        return new List<StatsVM>
         {
             new () { Title = "Total Users", Value = "1,250", Icon = "bi-people", Color = "primary", ChangePercentage = 12.5m, IsPositiveChange = true },
             new () { Title = "Active Now", Value = "125", Icon = "bi-activity", Color = "success", ChangePercentage = 5.2m, IsPositiveChange = true },
@@ -65,9 +65,9 @@ public class OverviewService : IOverviewService
         };
     }
 
-    public async Task<DashboardStatsVM> GetStatsAsync(DateTime? startDate, DateTime? endDate)
+    public async Task<StatsVM> GetStatsAsync(DateTime? startDate, DateTime? endDate)
     {
-        var overview = await GetOverviewAsync(new DashboardOverviewRequest { StartDate = startDate, EndDate = endDate });
+        var overview = await GetOverviewAsync(new OverviewRequest { StartDate = startDate, EndDate = endDate });
         return overview.Stats;
     }
 

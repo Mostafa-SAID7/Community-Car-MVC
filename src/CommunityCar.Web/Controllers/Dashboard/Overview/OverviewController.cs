@@ -29,7 +29,7 @@ public class OverviewController : Controller
     {
         try
         {
-            var request = new DashboardOverviewRequest
+            var request = new OverviewRequest
             {
                 TimeRange = timeRange
             };
@@ -40,7 +40,7 @@ public class OverviewController : Controller
             ViewBag.QuickStats = quickStats;
             ViewBag.TimeRange = timeRange;
 
-            return View(overview);
+            return View("~/Views/Dashboard/Overview/Index.cshtml", overview);
         }
         catch (Exception ex)
         {

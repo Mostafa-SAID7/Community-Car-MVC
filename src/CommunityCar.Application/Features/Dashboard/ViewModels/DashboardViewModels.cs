@@ -1,8 +1,8 @@
 namespace CommunityCar.Application.Features.Dashboard.ViewModels;
 
-public class DashboardOverviewVM
+public class OverviewVM
 {
-    public DashboardStatsVM Stats { get; set; } = new();
+    public StatsVM Stats { get; set; } = new();
     public List<RecentActivityVM> RecentActivity { get; set; } = new();
     public List<TopContentVM> TopContent { get; set; } = new();
     public List<ActiveUserVM> ActiveUsers { get; set; } = new();
@@ -12,7 +12,7 @@ public class DashboardOverviewVM
     public SystemHealthVM SystemHealth { get; set; } = new();
 }
 
-public class DashboardStatsVM
+public class StatsVM
 {
     public int TotalUsers { get; set; }
     public int TotalPosts { get; set; }
@@ -29,7 +29,7 @@ public class DashboardStatsVM
     public decimal GrowthRate { get; set; }
     public decimal EngagementRate { get; set; }
     public DateTime LastUpdated { get; set; }
-    
+
     // Properties for Quick Stats widgets
     public string Title { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;
@@ -264,7 +264,7 @@ public class SystemReportVM
     public string? FileUrl { get; set; }
 }
 
-public class DashboardSettingsVM
+public class SettingsVM
 {
     public string Key { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;

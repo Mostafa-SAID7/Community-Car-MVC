@@ -36,8 +36,45 @@ public class AnalyticsController : Controller
                 EndDate = endDate ?? DateTime.UtcNow
             };
 
-            var analytics = await _analyticsService.GetUserAnalyticsAsync(request);
-            return View(analytics);
+            var dailyAnalytics = await _analyticsService.GetUserAnalyticsAsync(request);
+            
+            // Aggregate daily data into a single UserAnalyticsVM
+            var aggregateAnalytics = new UserAnalyticsVM
+            {
+                NewUsers = dailyAnalytics.Sum(x => x.NewUsers),
+                ActiveUsers = dailyAnalytics.Max(x => x.ActiveUsers), // Using Max for ActiveUsers as a proxy
+                ReturnUsers = dailyAnalytics.Sum(x => x.ReturnUsers),
+                RetentionRate = dailyAnalytics.Any() ? dailyAnalytics.Average(x => x.RetentionRate) : 0,
+                AverageSessionDuration = dailyAnalytics.Any() 
+                    ? TimeSpan.FromTicks((long)dailyAnalytics.Average(x => x.TimeSpentOnSite.Ticks))
+                    : TimeSpan.Zero,
+                UserGrowthData = dailyAnalytics.Select(x => new ChartDataVM 
+                { 
+                    Label = x.Date.ToString("MMM dd"), 
+                    Value = x.NewUsers,
+                    Date = x.Date
+                }).ToList(),
+                ActivityData = dailyAnalytics.Select(x => new ChartDataVM 
+                { 
+                    Label = x.Date.ToString("MMM dd"), 
+                    Value = x.ActiveUsers,
+                    Date = x.Date
+                }).ToList()
+            };
+
+            // Set some default/dummy data for properties not currently provided by the service
+            aggregateAnalytics.PostsCreated = dailyAnalytics.Sum(x => x.PostsCreated);
+            aggregateAnalytics.QuestionsAsked = dailyAnalytics.Sum(x => x.QuestionsAsked);
+            aggregateAnalytics.AnswersGiven = dailyAnalytics.Sum(x => x.AnswersGiven);
+            aggregateAnalytics.ReviewsWritten = dailyAnalytics.Sum(x => x.ReviewsWritten);
+            aggregateAnalytics.StoriesShared = dailyAnalytics.Sum(x => x.StoriesShared);
+            aggregateAnalytics.PageViews = dailyAnalytics.Sum(x => x.PageViews);
+            aggregateAnalytics.DeviceType = "Desktop/Mobile";
+            aggregateAnalytics.BrowserType = "Chrome/Safari";
+            aggregateAnalytics.Location = "Global";
+            aggregateAnalytics.MostVisitedSection = "Community Feed";
+
+            return View("~/Views/Dashboard/Analytics/Index.cshtml", aggregateAnalytics);
         }
         catch (Exception ex)
         {

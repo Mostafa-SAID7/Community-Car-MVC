@@ -89,6 +89,15 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
         builder.Entity<User>().ToTable("Users");
         builder.Entity<UserProfile>().ToTable("UserProfiles");
         
+        // Configure decimal properties to fix EF warnings
+        builder.Entity<PointOfInterest>()
+            .Property(p => p.PriceRange)
+            .HasPrecision(18, 2);
+            
+        builder.Entity<Review>()
+            .Property(r => r.PurchasePrice)
+            .HasPrecision(18, 2);
+        
         // Configure Route entity to ignore RouteWaypoint as a separate entity
         builder.Ignore<RouteWaypoint>();
     }

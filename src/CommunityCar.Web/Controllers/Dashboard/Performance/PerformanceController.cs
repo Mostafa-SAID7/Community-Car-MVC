@@ -24,7 +24,7 @@ public class PerformanceController : Controller
         try
         {
             var metrics = await _performanceService.GetCoreWebVitalsAsync("/");
-            return View(metrics);
+            return View("~/Views/Dashboard/Performance/Index.cshtml", metrics);
         }
         catch (Exception ex)
         {

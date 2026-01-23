@@ -32,7 +32,7 @@ public class ManagementController : Controller
             var history = await _managementService.GetUserManagementHistoryAsync(page, pageSize);
             ViewBag.CurrentPage = page;
             ViewBag.PageSize = pageSize;
-            return View(history);
+            return View("~/Views/Dashboard/Management/Index.cshtml", history);
         }
         catch (Exception ex)
         {

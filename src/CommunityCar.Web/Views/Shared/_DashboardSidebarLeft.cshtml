@@ -2,59 +2,58 @@
 <aside
     class="sidebar fixed left-4 top-28 bottom-20 w-16 xl:w-56 bg-card/40 backdrop-blur-xl border border-border rounded-xl shadow-2xl transition-all duration-300 z-40 -translate-x-[calc(100%+2rem)] md:translate-x-0">
     <nav class="flex flex-col gap-1 mt-2 px-2 h-full overflow-y-auto custom-scrollbar">
-        
-        <a href="/dashboard/overview"
+
+        <a asp-controller="Overview" asp-action="Index"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="layout-dashboard" class="w-[18px] h-[18px] shrink-0 text-primary"></i>
             <span class="hidden xl:inline">Overview</span>
         </a>
-        <a href="/dashboard/analytics"
+        <a asp-controller="Analytics" asp-action="Index"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="bar-chart-3" class="w-[18px] h-[18px] shrink-0"></i>
             <span class="hidden xl:inline">Analytics</span>
         </a>
 
-        
-        <a href="/dashboard/management"
+
+        <a asp-controller="Management" asp-action="Index"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="settings-2" class="w-[18px] h-[18px] shrink-0"></i>
             <span class="hidden xl:inline">Admin Control</span>
         </a>
-        <a href="/dashboard/reports"
+        <a asp-controller="Reports" asp-action="Index"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="flag" class="w-[18px] h-[18px] shrink-0"></i>
             <span class="hidden xl:inline">Reports</span>
         </a>
 
-        <div class="px-3 py-2 mt-2 text-xs font-bold text-muted-foreground uppercase tracking-wider hidden xl:block">
-            System</div>
-        <a href="/dashboard/monitoring"
+       
+        <a asp-controller="Monitoring" asp-action="Index"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="activity" class="w-[18px] h-[18px] shrink-0"></i>
             <span class="hidden xl:inline">Monitoring</span>
         </a>
-        <a href="/dashboard/settings"
+        <a asp-controller="Settings" asp-action="Index"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="sliders" class="w-[18px] h-[18px] shrink-0"></i>
             <span class="hidden xl:inline">Global Settings</span>
         </a>
-        <a href="/dashboard/performance"
+        <a asp-controller="Performance" asp-action="Index"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="gauge" class="w-[18px] h-[18px] shrink-0 text-blue-500"></i>
             <span class="hidden xl:inline text-blue-500">Performance</span>
         </a>
-        <a href="/dashboard/seo"
+        <a asp-controller="SEO" asp-action="Index"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="search-check" class="w-[18px] h-[18px] shrink-0 text-emerald-500"></i>
             <span class="hidden xl:inline text-emerald-500">SEO Audit</span>
         </a>
-        <a href="/dashboard/settings/maintenance"
+        <a asp-controller="Settings" asp-action="Maintenance"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="power" class="w-[18px] h-[18px] shrink-0 text-red-500"></i>
             <span class="hidden xl:inline text-red-500 font-bold">Maintenance</span>
         </a>
 
-        
+
         <a href="/"
             class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="log-out" class="w-[18px] h-[18px] shrink-0"></i>

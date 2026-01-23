@@ -10,14 +10,14 @@ namespace CommunityCar.Web.Controllers.Dashboard;
 [Authorize]
 public class DashboardController : Controller
 {
-    private readonly IDashboardOverviewService _overviewService;
-    private readonly IDashboardMonitoringService _monitoringService;
+    private readonly IOverviewService _overviewService;
+    private readonly IMonitoringService _monitoringService;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<DashboardController> _logger;
 
     public DashboardController(
-        IDashboardOverviewService overviewService,
-        IDashboardMonitoringService monitoringService,
+        IOverviewService overviewService,
+        IMonitoringService monitoringService,
         ICurrentUserService currentUserService,
         ILogger<DashboardController> logger)
     {
@@ -33,7 +33,7 @@ public class DashboardController : Controller
         try
         {
             // Get overview data for the last 30 days
-            var overviewRequest = new DashboardOverviewRequest
+            var overviewRequest = new OverviewRequest
             {
                 TimeRange = "month"
             };
@@ -100,12 +100,12 @@ public class DashboardController : Controller
     {
         var navigationItems = new[]
         {
-            new { Title = "Overview", Icon = "fas fa-tachometer-alt", Url = Url.Action("Index", "DashboardOverview", new { area = "" }), Description = "Dashboard overview and statistics" },
-            new { Title = "Analytics", Icon = "fas fa-chart-bar", Url = Url.Action("Index", "DashboardAnalytics", new { area = "" }), Description = "User and content analytics" },
-            new { Title = "Reports", Icon = "fas fa-file-alt", Url = Url.Action("Index", "DashboardReports", new { area = "" }), Description = "Generate and manage reports" },
-            new { Title = "Monitoring", Icon = "fas fa-heartbeat", Url = Url.Action("Index", "DashboardMonitoring", new { area = "" }), Description = "System health monitoring" },
-            new { Title = "Management", Icon = "fas fa-users-cog", Url = Url.Action("Index", "DashboardManagement", new { area = "" }), Description = "User management tools" },
-            new { Title = "Settings", Icon = "fas fa-cog", Url = Url.Action("Index", "DashboardSettings", new { area = "" }), Description = "Dashboard configuration" }
+            new { Title = "Overview", Icon = "fas fa-tachometer-alt", Url = Url.Action("Index", "Overview", new { area = "" }), Description = "Dashboard overview and statistics" },
+            new { Title = "Analytics", Icon = "fas fa-chart-bar", Url = Url.Action("Index", "Analytics", new { area = "" }), Description = "User and content analytics" },
+            new { Title = "Reports", Icon = "fas fa-file-alt", Url = Url.Action("Index", "Reports", new { area = "" }), Description = "Generate and manage reports" },
+            new { Title = "Monitoring", Icon = "fas fa-heartbeat", Url = Url.Action("Index", "Monitoring", new { area = "" }), Description = "System health monitoring" },
+            new { Title = "Management", Icon = "fas fa-users-cog", Url = Url.Action("Index", "Management", new { area = "" }), Description = "User management tools" },
+            new { Title = "Settings", Icon = "fas fa-cog", Url = Url.Action("Index", "Settings", new { area = "" }), Description = "Dashboard configuration" }
         };
 
         return Json(new { success = true, data = navigationItems });

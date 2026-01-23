@@ -24,7 +24,7 @@ public class SEOController : Controller
         try
         {
             var homeAnalysis = await _seoService.AnalyzePageSEOAsync("/");
-            return View(homeAnalysis);
+            return View("~/Views/Dashboard/SEO/Index.cshtml", homeAnalysis);
         }
         catch (Exception ex)
         {

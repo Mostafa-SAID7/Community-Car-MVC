@@ -5,9 +5,9 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
 public interface ISettingsService
 {
-    Task<List<DashboardSettingsVM>> GetSettingsAsync();
-    Task<List<DashboardSettingsVM>> GetSettingsByCategoryAsync(string category);
-    Task<DashboardSettingsVM?> GetSettingAsync(string key);
+    Task<List<SettingsVM>> GetSettingsAsync();
+    Task<List<SettingsVM>> GetSettingsByCategoryAsync(string category);
+    Task<SettingsVM?> GetSettingAsync(string key);
     Task<bool> UpdateSettingAsync(string key, string value);
     Task<bool> UpdateSettingsAsync(Dictionary<string, string> settings);
     Task<bool> ResetSettingAsync(string key);
@@ -15,10 +15,10 @@ public interface ISettingsService
     Task<List<string>> GetCategoriesAsync();
 
     // Added to match DashboardSettingsController expectations
-    Task<List<DashboardSettingsVM>> GetSettingsAsync(Guid userId);
-    Task<List<DashboardSettingsVM>> GetSettingsByCategoryAsync(Guid userId, string category);
-    Task<DashboardSettingsVM?> GetSettingAsync(Guid userId, string key);
-    Task<bool> UpdateSettingAsync(Guid userId, DashboardSettingsRequest request);
+    Task<List<SettingsVM>> GetSettingsAsync(Guid userId);
+    Task<List<SettingsVM>> GetSettingsByCategoryAsync(Guid userId, string category);
+    Task<SettingsVM?> GetSettingAsync(Guid userId, string key);
+    Task<bool> UpdateSettingAsync(Guid userId, SettingsRequest request);
     Task<bool> ResetToDefaultAsync(Guid userId, string key);
     Task<bool> ResetAllToDefaultAsync(Guid userId);
 }

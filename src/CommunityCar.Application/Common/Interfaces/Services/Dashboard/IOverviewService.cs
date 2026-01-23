@@ -5,16 +5,16 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
 public interface IOverviewService
 {
-    Task<DashboardOverviewVM> GetOverviewAsync(DashboardOverviewRequest? request = null);
-    Task<List<DashboardStatsVM>> GetQuickStatsAsync();
+    Task<OverviewVM> GetOverviewAsync(OverviewRequest? request = null);
+    Task<List<StatsVM>> GetQuickStatsAsync();
     Task<List<ChartDataVM>> GetUserGrowthChartAsync(DateTime startDate, DateTime endDate);
     Task<List<ChartDataVM>> GetContentChartAsync(DateTime startDate, DateTime endDate);
     Task<List<ChartDataVM>> GetEngagementChartAsync(DateTime startDate, DateTime endDate);
     Task RefreshOverviewDataAsync();
 
     // Added to match OverviewController expectations
-    Task<DashboardOverviewVM> GetOverviewAsync();
-    Task<DashboardStatsVM> GetStatsAsync(DateTime? startDate, DateTime? endDate);
+    Task<OverviewVM> GetOverviewAsync();
+    Task<StatsVM> GetStatsAsync(DateTime? startDate, DateTime? endDate);
     Task<List<RecentActivityVM>> GetRecentActivityAsync(int count);
     Task RefreshMetricsAsync();
 }

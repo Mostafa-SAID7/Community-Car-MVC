@@ -76,7 +76,7 @@ public class SettingsController : Controller
 
     [HttpPost("update")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateSetting(DashboardSettingsRequest request)
+    public async Task<IActionResult> UpdateSetting(SettingsRequest request)
     {
         if (!ModelState.IsValid)
         {
@@ -223,7 +223,7 @@ public class SettingsController : Controller
 
     [HttpPost("api/update")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateSettingApi([FromBody] DashboardSettingsRequest request)
+    public async Task<IActionResult> UpdateSettingApi([FromBody] SettingsRequest request)
     {
         if (!ModelState.IsValid)
         {
