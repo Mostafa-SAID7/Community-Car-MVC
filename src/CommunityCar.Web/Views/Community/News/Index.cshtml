@@ -2,16 +2,37 @@
     ViewData["Title"] = "News";
 }
 
-<div class="card card-glass mb-4">
-    <div class="card-body">
-        <h2 class="h4 mb-3">Car News</h2>
-        <div class="row g-4">
-            <div class="col-12">
-                <div class="border-bottom pb-3 mb-3">
-                    <span class="badge bg-primary mb-2">HOT</span>
-                    <h3 class="h5">New Community Car Features Released!</h3>
-                    <p class="text-sm text-muted">Read about the latest updates to our platform...</p>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700">
+        <div class="p-8">
+            <h2 class="text-2xl font-black text-foreground mb-8 flex items-center gap-3">
+                <div class="bg-red-500/10 p-2 rounded-xl text-red-500">
+                    <i data-lucide="newspaper" class="w-6 h-6"></i>
                 </div>
+                Platform News
+            </h2>
+            
+            <div class="space-y-8">
+                <article class="group cursor-pointer">
+                    <div class="bg-background/40 hover:bg-background/80 border border-border/50 rounded-2xl p-6 transition-all shadow-md group-hover:shadow-2xl hover:border-primary/20">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-red-600 text-white shadow-lg shadow-red-500/20">
+                                <i data-lucide="zap" class="w-3 h-3 fill-current"></i> HOT
+                            </span>
+                            <span class="text-[10px] font-bold text-muted-foreground uppercase opacity-60">Posted 2 days ago</span>
+                        </div>
+                        <h3 class="text-xl font-black text-foreground group-hover:text-primary transition-colors tracking-tight mb-3">New Community Car Features Released!</h3>
+                        <p class="text-sm text-muted-foreground font-medium leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">Explore our latest updates: full SignalR real-time chat, performance-optimized map explorer, and the brand new AI Mastery Assistant. Read about how we're making car enthusiasts' lives better.</p>
+                        <div class="mt-6 pt-4 border-t border-border/20 flex items-center justify-between">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">Read the full changelog →</span>
+                            <div class="flex -space-x-2">
+                                <div class="w-6 h-6 rounded-full bg-primary border-2 border-background"></div>
+                                <div class="w-6 h-6 rounded-full bg-blue-500 border-2 border-background"></div>
+                                <div class="w-6 h-6 rounded-full bg-green-500 border-2 border-background"></div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
             </div>
         </div>
     </div>

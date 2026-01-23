@@ -15,6 +15,7 @@ public class QuestionVM
     public DateTime CreatedAt { get; set; }
     public DateTime LastActivityAt { get; set; }
     public string? LastActivityBy { get; set; }
+    public string BodyPreview => Body.Length > 200 ? Body.Substring(0, 197) + "..." : Body;
     
     // Enhanced properties
     public int AnswerCount { get; set; }

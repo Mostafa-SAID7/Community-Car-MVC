@@ -1,0 +1,16 @@
+{
+    "name": "communitycar-web",
+    "version": "1.0.0",
+    "description": "Frontend tooling for CommunityCar ASP.NET Core MVC",
+    "scripts": {
+        "build:css": "postcss Styles/app.css -o wwwroot/css/app.min.css",
+        "watch:css": "postcss Styles/app.css -o wwwroot/css/app.min.css --watch"
+    },
+    "devDependencies": {
+        "tailwindcss": "^3.4.1",
+        "postcss": "^8.4.35",
+        "postcss-cli": "^11.0.0",
+        "autoprefixer": "^10.4.17",
+        "tailwindcss-animate": "^1.0.7"
+    }
+}

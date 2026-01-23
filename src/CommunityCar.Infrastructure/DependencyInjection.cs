@@ -18,6 +18,8 @@ using CommunityCar.Infrastructure.Services.Authentication;
 using CommunityCar.Infrastructure.Services.Communication;
 using CommunityCar.Infrastructure.Services.Identity;
 using CommunityCar.Infrastructure.Services.Storage;
+using CommunityCar.Infrastructure.Services.Dashboard;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -97,6 +99,10 @@ public static class DependencyInjection
 
         // Storage services
         services.AddScoped<IFileStorageService, FileStorageService>();
+
+        // System Services
+        services.AddMemoryCache();
+        services.AddScoped<IMaintenanceService, MaintenanceService>();
 
         // Add Authentication (Cookie only)
         services.AddAuthentication();

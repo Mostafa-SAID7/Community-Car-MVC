@@ -1,52 +1,57 @@
 @model CommunityCar.Application.Features.Interactions.ViewModels.InteractionSummaryVM
 
-<div class="interaction-panel" data-entity-id="@ViewBag.EntityId" data-entity-type="@ViewBag.EntityType">
+<div class="interaction-panel bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl space-y-6 transition-all hover:border-primary/10 group/panel" data-entity-id="@ViewBag.EntityId" data-entity-type="@ViewBag.EntityType">
     <!-- Reactions Section -->
-    <div class="reactions-section">
-        <div class="reaction-summary">
+    <div class="reactions-section space-y-4">
+        <div class="reaction-summary flex flex-wrap gap-3 items-center min-h-[1.5rem]">
             @if (Model.Reactions.TotalReactions > 0)
             {
-                <div class="reaction-counts">
-                    @foreach (var reaction in Model.Reactions.AvailableReactions.Where(r => r.Count > 0))
+                <div class="flex items-center -space-x-2 group/counts">
+                    @foreach (var reaction in Model.Reactions.AvailableReactions.Where(r => r.Count > 0).OrderByDescending(r => r.Count).Take(3))
                     {
-                        <span class="reaction-count @reaction.Color" title="@reaction.Count @reaction.Display reactions">
-                            <i class="fas fa-@reaction.Icon"></i>
-                            <span class="count">@reaction.Count</span>
-                        </span>
+                        <div class="w-7 h-7 rounded-full border-2 border-background ring-1 ring-border shadow-sm flex items-center justify-center p-1.5 transition-transform group-hover/counts:translate-x-0 cursor-help @(reaction.Type == CommunityCar.Domain.Enums.ReactionType.Like ? "bg-blue-500/10 text-blue-500" : reaction.Type == CommunityCar.Domain.Enums.ReactionType.Love ? "bg-destructive/10 text-destructive" : "bg-yellow-500/10 text-yellow-600")" title="@reaction.Count @reaction.Display">
+                            <i class="fas fa-@reaction.Icon text-[10px]"></i>
+                        </div>
                     }
                 </div>
+                <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Model.Reactions.TotalReactions reactions</span>
             }
         </div>
         
-        <div class="reaction-buttons">
+        <div class="reaction-buttons flex items-center gap-3">
             @if (Model.CanReact)
             {
-                <div class="reaction-picker">
-                    <button class="btn-reaction @(Model.Reactions.HasUserReacted ? "active" : "")" 
+                <div class="relative group/picker">
+                    <button class="btn-reaction inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all border @(Model.Reactions.HasUserReacted ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 ring-4 ring-primary/10 border-primary" : "bg-muted/50 text-muted-foreground hover:bg-muted border-border/50 shadow-sm")" 
                             data-action="toggle-reaction" 
-                            data-current-reaction="@Model.Reactions.UserReaction">
+                            data-current-reaction="@Model.Reactions.UserReaction"
+                            onmouseenter="document.querySelector('#reaction-options-@ViewBag.EntityId').style.display='flex'"
+                            onmouseleave="document.querySelector('#reaction-options-@ViewBag.EntityId').style.display='none'">
                         @if (Model.Reactions.HasUserReacted)
                         {
                             var userReactionInfo = Model.Reactions.AvailableReactions.FirstOrDefault(r => r.Type == Model.Reactions.UserReaction);
-                            <i class="fas fa-@userReactionInfo?.Icon @userReactionInfo?.Color"></i>
+                            <i class="fas fa-@userReactionInfo?.Icon @userReactionInfo?.Color scale-110"></i>
                             <span>@userReactionInfo?.Display</span>
                         }
                         else
                         {
-                            <i class="far fa-thumbs-up"></i>
+                            <i class="far fa-thumbs-up group-hover/picker:scale-125 transition-transform"></i>
                             <span>Like</span>
                         }
                     </button>
                     
-                    <div class="reaction-options" style="display: none;">
+                    <div id="reaction-options-@ViewBag.EntityId" class="reaction-options absolute bottom-[calc(100%+8px)] left-0 p-2 bg-popover/90 backdrop-blur-xl border border-border rounded-2xl shadow-2xl gap-1.5 z-50 animate-in slide-in-from-bottom-4 zoom-in-95 duration-300 hidden items-center" 
+                         onmouseenter="this.style.display='flex'"
+                         onmouseleave="this.style.display='none'">
                         @foreach (var reaction in Model.Reactions.AvailableReactions)
                         {
-                            <button class="reaction-option @reaction.Color" 
+                            <button class="reaction-option w-10 h-10 flex items-center justify-center rounded-full transition-all hover:scale-125 hover:rotate-12 active:scale-95 duration-200 @(reaction.Type == CommunityCar.Domain.Enums.ReactionType.Like ? "text-blue-500 hover:bg-blue-500/10" : reaction.Type == CommunityCar.Domain.Enums.ReactionType.Love ? "text-destructive hover:bg-destructive/10" : "text-yellow-600 hover:bg-yellow-500/10")" 
                                     data-reaction-type="@reaction.Type" 
                                     title="@reaction.Display">
-                                <i class="fas fa-@reaction.Icon"></i>
+                                <i class="fas fa-@reaction.Icon text-lg"></i>
                             </button>
                         }
+                        <div class="absolute -bottom-2 lg:left-8 w-4 h-4 bg-popover/90 border-r border-b border-border rotate-45"></div>
                     </div>
                 </div>
             }
@@ -54,70 +59,101 @@
     </div>
 
     <!-- Comments Section -->
-    <div class="comments-section">
-        <div class="comment-summary">
-            <button class="btn-comment" data-action="toggle-comments">
-                <i class="far fa-comment"></i>
+    <div class="comments-section space-y-4">
+        <div class="comment-summary flex items-center gap-3">
+            <button class="btn-comment inline-flex items-center gap-2 px-6 py-2.5 bg-muted/30 text-muted-foreground hover:text-foreground hover:bg-muted transition-all rounded-xl text-xs font-black uppercase tracking-widest border border-border/50 group/comment" data-action="toggle-comments">
+                <i class="far fa-comment group-hover/comment:scale-110 transition-transform"></i>
                 <span>Comment (@Model.CommentCount)</span>
             </button>
+            <div class="h-px flex-1 bg-border/40"></div>
         </div>
         
         @if (Model.CanComment)
         {
-            <div class="comment-form" style="display: none;">
-                <div class="comment-input-group">
-                    <textarea class="comment-input" placeholder="Write a comment..." rows="2"></textarea>
-                    <div class="comment-actions">
-                        <button class="btn btn-primary btn-sm" data-action="submit-comment">Post</button>
-                        <button class="btn btn-secondary btn-sm" data-action="cancel-comment">Cancel</button>
+            <div class="comment-form space-y-3 p-5 bg-muted/10 rounded-2xl border border-border/50 shadow-inner group/form hidden animate-in slide-in-from-top-2 duration-300">
+                <div class="relative">
+                    <textarea class="comment-input w-full bg-background border border-border rounded-xl p-4 text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none shadow-sm placeholder:text-muted-foreground" placeholder="Share your car knowledge..." rows="2"></textarea>
+                    <div class="absolute bottom-3 right-3 opacity-20 group-focus-within/form:opacity-100 transition-opacity">
+                        <i data-lucide="info" class="w-4 h-4 text-primary"></i>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50">Authoring as @User.Identity?.Name</span>
+                    <div class="flex gap-2">
+                        <button class="px-4 py-2 border border-border bg-background text-foreground hover:bg-muted rounded-lg text-[10px] font-black uppercase tracking-widest transition-all active:scale-95" data-action="cancel-comment">Cancel</button>
+                        <button class="px-6 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95" data-action="submit-comment">Post</button>
                     </div>
                 </div>
             </div>
         }
         
-        <div class="comments-list" style="display: none;">
-            <!-- Comments will be loaded here via AJAX -->
+        <div class="comments-list space-y-4 hidden animate-in fade-in duration-500">
+            <!-- Dynamic loading -->
+            <div class="flex flex-col items-center justify-center py-10 opacity-30">
+                <i data-lucide="loader-2" class="w-8 h-8 animate-spin mb-2"></i>
+                <span class="text-[10px] font-black uppercase tracking-widest">Fetching discussions...</span>
+            </div>
         </div>
     </div>
 
     <!-- Shares Section -->
     <div class="shares-section">
-        <div class="share-summary">
-            @if (Model.Shares.TotalShares > 0)
-            {
-                <span class="share-count">@Model.Shares.TotalShares shares</span>
-            }
+        <div class="share-summary flex items-center gap-3 mb-4">
+            <h4 class="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                 <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                 @(Model.Shares.TotalShares > 0 ? $"{Model.Shares.TotalShares} Shares" : "Share Content")
+            </h4>
+            <div class="h-px flex-1 bg-border/40"></div>
         </div>
         
         @if (Model.CanShare)
         {
-            <div class="share-buttons">
-                <button class="btn-share" data-action="toggle-share">
-                    <i class="fas fa-share"></i>
-                    <span>Share</span>
+            <div class="relative group/share">
+                <button class="btn-share inline-flex items-center gap-2 px-6 py-2.5 bg-muted/30 text-muted-foreground hover:text-foreground hover:bg-muted transition-all rounded-xl text-xs font-black uppercase tracking-widest border border-border/50 group/share-btn" data-action="toggle-share"
+                        onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'flex' ? 'none' : 'flex'">
+                    <i class="fas fa-share group-hover/share-btn:translate-x-1 group-hover/share-btn:-translate-y-1 transition-transform"></i>
+                    <span>Distribute</span>
                 </button>
                 
-                <div class="share-options" style="display: none;">
-                    <button class="share-option" data-share-type="Internal" title="Share internally">
-                        <i class="fas fa-users"></i>
-                        <span>Share with community</span>
+                <div class="share-options absolute bottom-[calc(100%+8px)] right-0 p-3 bg-popover/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl flex-col min-w-[240px] z-50 animate-in slide-in-from-bottom-4 zoom-in-95 duration-300 hidden ring-1 ring-border/20 shadow-primary/10">
+                    <div class="text-[9px] font-black text-muted-foreground uppercase tracking-widest p-2 mb-1 border-b border-border/40">Select Platform</div>
+                    
+                    <button class="share-option flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-xl group/s-opt" data-share-type="Internal">
+                        <div class="p-1.5 bg-muted border border-border rounded-lg group-hover/s-opt:bg-primary-foreground/20 group-hover/s-opt:border-transparent">
+                            <i class="fas fa-users w-4 text-center"></i>
+                        </div>
+                        <span>Community Feed</span>
                     </button>
-                    <button class="share-option" data-share-type="DirectLink" title="Copy link">
-                        <i class="fas fa-link"></i>
-                        <span>Copy link</span>
-                    </button>
-                    <button class="share-option" data-share-type="SocialMedia" data-platform="facebook" title="Share on Facebook">
-                        <i class="fab fa-facebook"></i>
+                    
+                    <button class="share-option flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-blue-600 hover:text-white transition-all rounded-xl group/s-opt" data-share-type="SocialMedia" data-platform="facebook">
+                        <div class="p-1.5 bg-muted border border-border rounded-lg group-hover/s-opt:bg-white/20 group-hover/s-opt:border-transparent">
+                            <i class="fab fa-facebook w-4 text-center"></i>
+                        </div>
                         <span>Facebook</span>
                     </button>
-                    <button class="share-option" data-share-type="SocialMedia" data-platform="twitter" title="Share on Twitter">
-                        <i class="fab fa-twitter"></i>
-                        <span>Twitter</span>
+                    
+                    <button class="share-option flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-slate-900 hover:text-white transition-all rounded-xl group/s-opt" data-share-type="SocialMedia" data-platform="twitter">
+                        <div class="p-1.5 bg-muted border border-border rounded-lg group-hover/s-opt:bg-white/20 group-hover/s-opt:border-transparent">
+                            <i class="fab fa-twitter w-4 text-center"></i>
+                        </div>
+                        <span>X / Twitter</span>
                     </button>
-                    <button class="share-option" data-share-type="SocialMedia" data-platform="whatsapp" title="Share on WhatsApp">
-                        <i class="fab fa-whatsapp"></i>
+                    
+                    <button class="share-option flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-green-600 hover:text-white transition-all rounded-xl group/s-opt" data-share-type="SocialMedia" data-platform="whatsapp">
+                        <div class="p-1.5 bg-muted border border-border rounded-lg group-hover/s-opt:bg-white/20 group-hover/s-opt:border-transparent">
+                            <i class="fab fa-whatsapp w-4 text-center"></i>
+                        </div>
                         <span>WhatsApp</span>
                     </button>
+                    
+                    <div class="mt-2 pt-2 border-t border-border/40">
+                         <button class="share-option flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-primary hover:bg-primary/10 transition-all rounded-xl group/s-opt w-full" data-share-type="DirectLink">
+                            <div class="p-1.5 bg-primary/5 border border-primary/20 rounded-lg group-hover/s-opt:bg-primary/20">
+                                <i class="fas fa-link w-4 text-center"></i>
+                            </div>
+                            <span>Copy Link</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         }
@@ -126,6 +162,8 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    initializeInteractionPanel();
+    if (typeof initializeInteractionPanel === 'function') {
+        initializeInteractionPanel();
+    }
 });
 </script>

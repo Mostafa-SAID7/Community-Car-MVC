@@ -1,125 +1,115 @@
 @model CommunityCar.Domain.Entities.Community.Posts.Post
 @{
-    ViewData["Title"] = $"{Model.Title} - Posts";
+    ViewData["Title"] = $"{Model.Title} - Broadcast Archive";
 }
 
-<div class="container mx-auto px-4 py-8 max-w-4xl">
-    <a href="@Url.Action("Index", "Posts")" class="btn btn-ghost btn-sm mb-6 pl-0 hover:bg-transparent hover:text-primary">
-        <i data-lucide="arrow-left" class="me-2 w-4 h-4"></i>Back to Posts
-    </a>
+<div class="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
+    <!-- Breadcrumb Layer -->
+    <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
+        <a href="@Url.Action("Index", "Posts")" class="hover:text-primary transition-colors flex items-center gap-2">
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Feed Registry
+        </a>
+        <span class="opacity-20">/</span>
+        <span class="text-foreground/40">Transmission Log</span>
+    </nav>
 
-    <div class="card card-glass mb-6">
-        <div class="card-body p-8">
-            <!-- Header -->
-            <div class="flex justify-between items-start mb-6">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-                        <i data-lucide="user" class="w-6 h-6 text-muted-foreground"></i>
+    <div class="relative group">
+        <!-- Structural Glow -->
+        <div class="absolute -inset-1 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 rounded-[2.5rem] blur-3xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+
+        <div class="relative bg-card/40 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] shadow-2xl overflow-hidden">
+            <!-- Article Header: Hero Style -->
+            <div class="p-8 md:p-14 space-y-8">
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3">
+                         <span class="px-4 py-1.5 rounded-2xl bg-primary/10 text-primary border border-primary/20 text-[9px] font-black uppercase tracking-widest">
+                            @Model.Type Payload
+                         </span>
+                         <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Frequency: @Model.CreatedAt.ToString("MMM dd, yyyy")</span>
                     </div>
-                    <div>
-                        <div class="font-semibold text-lg">@(Model.AuthorId == Guid.Empty ? "Anonymous" : "User")</div>
-                        <div class="text-sm text-muted-foreground">Posted on @Model.CreatedAt.ToString("MMMM dd, yyyy at HH:mm")</div>
+                    <h1 class="text-4xl md:text-5xl font-black text-foreground tracking-tighter leading-tight">@Model.Title</h1>
+                </div>
+
+                <div class="flex items-center justify-between pt-6 border-t border-border/20">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-muted border border-border flex items-center justify-center overflow-hidden shadow-inner group/avatar">
+                             <i data-lucide="user" class="w-7 h-7 text-muted-foreground opacity-30 group-hover/avatar:scale-110 transition-transform"></i>
+                        </div>
+                        <div>
+                             <span class="block text-sm font-black text-foreground underline decoration-primary decoration-4 underline-offset-4 decoration-transparent hover:decoration-primary transition-all cursor-pointer">@(Model.AuthorId == Guid.Empty ? "Protocol Ghost" : "Verified Enthusiast")</span>
+                             <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">System Contributor • Grade A</span>
+                        </div>
+                    </div>
+                    
+                    <div class="hidden sm:flex gap-8">
+                        <div class="text-right">
+                             <span class="block text-xl font-black text-foreground leading-none tracking-tighter">04.2k</span>
+                             <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Signal Pulse</span>
+                        </div>
+                        <div class="text-right">
+                             <span class="block text-xl font-black text-foreground leading-none tracking-tighter">128</span>
+                             <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Interactions</span>
+                        </div>
                     </div>
                 </div>
-                <span class="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">
-                    @Model.Type.ToString()
-                </span>
             </div>
 
-            <!-- Meta -->
-            <div class="flex gap-6 text-sm text-muted-foreground mb-8">
-                <span class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-2"></i>Created: @Model.CreatedAt.ToString("MMM dd, yyyy")</span>
-                @if (Model.UpdatedAt.HasValue)
-                {
-                    <span class="flex items-center"><i data-lucide="edit" class="w-4 h-4 mr-2"></i>Updated: @Model.UpdatedAt.Value.ToString("MMM dd, yyyy")</span>
-                }
+            <!-- Content Fluidity -->
+            <div class="px-8 md:px-14 py-12 bg-muted/10 border-y border-border/20">
+                <div class="prose prose-lg dark:prose-invert max-w-none text-foreground/80 leading-[1.8] font-medium">
+                    @Html.Raw(Model.Content.Replace("\n", "<br/>"))
+                </div>
             </div>
 
-            <!-- Content -->
-            <h1 class="text-3xl font-bold mb-6">@Model.Title</h1>
-            <div class="prose prose-invert max-w-none mb-8">
-                @Html.Raw(Model.Content.Replace("\n", "<br/>"))
-            </div>
+            <!-- Interaction Control Strip -->
+            <div class="p-8 md:px-14 flex items-center justify-between bg-card/40">
+                <div class="flex items-center gap-8">
+                    <button class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-red-500 transition-all">
+                         <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-red-500/10">
+                            <i data-lucide="heart" class="w-4 h-4 group-hover/tool:fill-current"></i>
+                         </div>
+                         Oscillate Liked
+                    </button>
+                    <button class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-all">
+                         <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-blue-500/10">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i>
+                         </div>
+                         Join Stream
+                    </button>
+                </div>
 
-            <!-- Actions -->
-            <div class="flex gap-4 pt-6 border-t border-border">
-                <button class="btn btn-ghost gap-2">
-                    <i data-lucide="heart" class="w-5 h-5"></i>
-                    <span>Like (0)</span>
-                </button>
-                <button class="btn btn-ghost gap-2">
-                    <i data-lucide="message-circle" class="w-5 h-5"></i>
-                    <span>Comment (0)</span>
-                </button>
-                <button class="btn btn-ghost gap-2">
-                    <i data-lucide="share-2" class="w-5 h-5"></i>
-                    <span>Share</span>
-                </button>
-                <button class="btn btn-ghost gap-2 ml-auto">
-                    <i data-lucide="bookmark" class="w-5 h-5"></i>
-                    <span>Save</span>
-                </button>
+                <div class="flex gap-3">
+                    <button class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90">
+                        <i data-lucide="share-2" class="w-5 h-5"></i>
+                    </button>
+                    <button class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90">
+                        <i data-lucide="bookmark" class="w-5 h-5"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Engagement Section -->
-    <div class="card card-glass mb-6">
-        <div class="card-body p-6">
-            <h3 class="text-xl font-bold mb-4">Engagement</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div class="text-center p-4 bg-muted/20 rounded-xl">
-                    <div class="text-2xl font-bold mb-1">0</div>
-                    <div class="text-sm text-muted-foreground">Likes</div>
-                </div>
-                <div class="text-center p-4 bg-muted/20 rounded-xl">
-                    <div class="text-2xl font-bold mb-1">0</div>
-                    <div class="text-sm text-muted-foreground">Comments</div>
-                </div>
-                <div class="text-center p-4 bg-muted/20 rounded-xl">
-                    <div class="text-2xl font-bold mb-1">0</div>
-                    <div class="text-sm text-muted-foreground">Shares</div>
-                </div>
-                <div class="text-center p-4 bg-muted/20 rounded-xl">
-                    <div class="text-2xl font-bold mb-1">0</div>
-                    <div class="text-sm text-muted-foreground">Views</div>
-                </div>
-            </div>
-            
-            <div class="pt-4 border-t border-border text-center text-muted-foreground text-sm">
-                <p class="flex items-center justify-center gap-2 mb-0">
-                    <i data-lucide="info" class="w-4 h-4"></i>
-                    Comments and interactions coming soon!
-                </p>
-            </div>
+    <!-- System Metadata Trace -->
+    <div class="p-8 bg-muted/20 border border-border/40 rounded-[2.5rem] grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Transport ID</span>
+            <code class="text-xs font-mono text-primary font-bold">@Model.Id.ToString().Substring(0, 18)...</code>
         </div>
-    </div>
-
-    <!-- Related Info Card -->
-    <div class="card card-glass">
-        <div class="card-body p-6">
-            <h3 class="text-lg font-bold mb-4 text-muted-foreground">Post Information</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                <div>
-                    <strong class="block mb-1">Post ID:</strong>
-                    <code class="text-xs bg-muted px-2 py-1 rounded">@Model.Id</code>
-                </div>
-                <div>
-                    <strong class="block mb-1">Author ID:</strong>
-                    <code class="text-xs bg-muted px-2 py-1 rounded">@Model.AuthorId</code>
-                </div>
-                <div>
-                    <strong class="block mb-1">Post Type:</strong>
-                    <span>@Model.Type.ToString()</span>
-                </div>
-                @if (!string.IsNullOrEmpty(Model.CreatedBy))
-                {
-                    <div>
-                        <strong class="block mb-1">Created By:</strong>
-                        <span>@Model.CreatedBy</span>
-                    </div>
-                }
-            </div>
+        <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Cipher Format</span>
+            <span class="text-xs font-black text-foreground">UTF-8 RAW</span>
+        </div>
+        <div class="space-y-1">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Originator</span>
+            <span class="text-xs font-black text-foreground">EN-AUT-GATEWAY</span>
+        </div>
+        <div class="space-y-1 text-right flex flex-col items-end">
+            <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Status</span>
+            <span class="flex items-center gap-2 text-xs font-black text-green-500">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                ACTIVE ARCHIVE
+            </span>
         </div>
     </div>
 </div>

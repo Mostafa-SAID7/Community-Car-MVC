@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard;
 
-[Route("dashboard/admin")]
-[Authorize(Roles = "Admin,Moderator")]
+[Route("dashboard")]
+[Authorize]
 public class DashboardController : Controller
 {
     private readonly IDashboardOverviewService _overviewService;
@@ -79,12 +79,13 @@ public class DashboardController : Controller
         {
             var systemHealth = await _monitoringService.GetSystemHealthAsync();
             var isHealthy = await _monitoringService.IsSystemHealthyAsync();
-            
-            return Json(new { 
-                success = true, 
-                data = systemHealth, 
+
+            return Json(new
+            {
+                success = true,
+                data = systemHealth,
                 isHealthy = isHealthy,
-                timestamp = DateTime.UtcNow 
+                timestamp = DateTime.UtcNow
             });
         }
         catch (Exception ex)

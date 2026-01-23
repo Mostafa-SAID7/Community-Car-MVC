@@ -1,48 +1,68 @@
 @{
-    ViewData["Title"] = "Email Confirmation";
+    ViewData["Title"] = "Email Confirmation Protocol";
     Layout = "_AuthLayout";
 }
 
-<div class="auth-header-clean">
-    <div class="auth-logo-clean">CC</div>
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <h1 class="auth-title-clean text-success">Email Confirmed!</h1>
-        <p class="auth-subtitle-clean">Your account is now active</p>
-    }
-    else
-    {
-        <h1 class="auth-title-clean text-danger">Confirmation Failed</h1>
-        <p class="auth-subtitle-clean">There was an issue with your confirmation</p>
-    }
-</div>
-
-<div class="text-center">
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success mb-4">
-            @TempData["SuccessMessage"]
-        </div>
-        <p class="mb-4">
-            Your email has been successfully confirmed. You can now sign in to your account.
-        </p>
-        <a asp-action="Login" class="btn btn-primary">Sign In Now</a>
-    }
-    else
-    {
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger mb-4">
-                @TempData["ErrorMessage"]
+<div class="max-w-md mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+    <div class="text-center space-y-6">
+        <div class="relative inline-flex items-center justify-center group">
+            <div class="absolute -inset-4 bg-primary/20 rounded-full blur-2xl group-hover:bg-primary/30 transition-colors"></div>
+            <div class="relative w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground shadow-2xl shadow-primary/40 transform -rotate-6 group-hover:rotate-0 transition-transform duration-500">
+                <i data-lucide="@(TempData["SuccessMessage"] != null ? "check-circle-2" : "alert-octagon")" class="w-10 h-10"></i>
             </div>
-        }
-        <p class="mb-4">
-            There was an error confirming your email. The link may have expired or is invalid.
-        </p>
-        <a asp-action="Register" class="btn btn-primary">Register Again</a>
-    }
-</div>
+        </div>
+        
+        <div class="space-y-2">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <h1 class="text-4xl font-black text-foreground tracking-tighter">Protocol Verified</h1>
+                <p class="text-sm font-medium text-muted-foreground uppercase tracking-widest opacity-60">Identity Link confirmed via AES-256</p>
+            }
+            else
+            {
+                <h1 class="text-4xl font-black text-destructive tracking-tighter">Protocol Failure</h1>
+                <p class="text-sm font-medium text-muted-foreground uppercase tracking-widest opacity-60">Handshake error detected in transmission</p>
+            }
+        </div>
+    </div>
 
-<div class="auth-links-clean">
-    <p><a asp-action="Login">Back to Sign In</a></p>
+    <div class="bg-card/40 backdrop-blur-xl border border-border/50 rounded-[2rem] p-8 md:p-10 shadow-2xl relative overflow-hidden group">
+        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent"></div>
+        
+        <div class="space-y-8 text-center">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="space-y-4">
+                    <p class="text-sm font-medium text-foreground/70 leading-relaxed uppercase tracking-wide">
+                        Your frequency is now synchronized with the Community Car registry. Full access to the enthusiast network is authorized.
+                    </p>
+                    <div class="pt-4">
+                        <a asp-action="Login" class="inline-flex w-full items-center justify-center px-8 py-5 bg-primary text-primary-foreground font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:scale-[0.98] transition-all gap-3">
+                            Initialize Session <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="space-y-4">
+                    <p class="text-sm font-medium text-muted-foreground/80 leading-relaxed uppercase tracking-wide">
+                        The requested confirmation fragment is either corrupted or has exceeded its operational TTL (Time-To-Live).
+                    </p>
+                    <div class="pt-4 space-y-3">
+                        <a asp-action="Register" class="inline-flex w-full items-center justify-center px-8 py-5 bg-foreground text-background font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-xl hover:-translate-y-1 transition-all">
+                            Restart Onboarding
+                        </a>
+                        <a asp-action="Login" class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">Return to Gateway</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="flex items-center justify-center gap-2 grayscale opacity-40">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+        <span class="text-[9px] font-black uppercase tracking-[0.2em]">Enthusiast Registry Service</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+    </div>
 </div>

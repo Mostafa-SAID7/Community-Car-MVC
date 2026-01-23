@@ -1,72 +1,72 @@
-<header class="header-wrapper">
-    <div class="header-left-pill header-pill">
-        <button class="btn btn-ghost btn-icon flex md:hidden" id="sidebar-toggle" aria-label="Toggle Sidebar">
+<header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-4 py-3 bg-background/80 backdrop-blur-md border-b border-border">
+    <div class="flex items-center gap-3 bg-card/50 backdrop-blur-sm rounded-full px-4 py-2 border border-border shadow-sm">
+        <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors md:hidden" id="sidebar-toggle" aria-label="Toggle Sidebar">
             <i data-lucide="menu" class="w-[18px] h-[18px]"></i>
         </button>
-        <a href="/" class="flex items-center text-inherit no-underline">
-            <div class="brand-logo">
-                <span class="text-xs font-bold text-white">CC</span>
+        <a href="/" class="flex items-center gap-2 text-inherit no-underline">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 shadow-md">
+                <span class="text-xs font-bold text-primary-foreground">CC</span>
             </div>
             <div class="hidden sm:flex flex-col justify-center">
-                <span class="brand-tagline">Community Car</span>
-                <span class="font-bold text-sm whitespace-nowrap hidden lg:flex">Fueling Culture</span>
+                <span class="text-sm font-semibold text-foreground">Community Car</span>
+                <span class="font-bold text-xs text-muted-foreground whitespace-nowrap hidden lg:flex">Fueling Culture</span>
             </div>
         </a>
     </div>
 
-    <div class="header-center-pill header-pill">
-        <div class="search-pill">
-            <i data-lucide="search" class="w-4 h-4"></i>
-            <input type="text" placeholder="@SharedLocalizer["Search"]" class="search-input">
+    <div class="flex items-center gap-3 bg-card/50 backdrop-blur-sm rounded-full px-4 py-2 border border-border shadow-sm flex-1 max-w-2xl">
+        <div class="flex items-center gap-2 flex-1 max-w-md">
+            <i data-lucide="search" class="w-4 h-4 text-muted-foreground"></i>
+            <input type="text" placeholder="@SharedLocalizer["Search"]" class="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground">
         </div>
         
-        <nav class="flex items-center gap-1">
-            <a href="/" class="nav-link flex items-center" aria-label="@SharedLocalizer["Home"]">
+        <nav class="hidden md:flex items-center gap-1">
+            <a href="/" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Home"]">
                 <i data-lucide="home" class="w-[18px] h-[18px]"></i>
-                <span class="hidden xl:inline ml-2">@SharedLocalizer["Home"]</span>
+                <span class="hidden xl:inline">@SharedLocalizer["Home"]</span>
             </a>
-            <a href="/chats" class="nav-link flex items-center" aria-label="@SharedLocalizer["Chat"]">
+            <a href="/chats" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Chat"]">
                 <i data-lucide="message-circle" class="w-[18px] h-[18px]"></i>
-                <span class="hidden xl:inline ml-2">@SharedLocalizer["Chat"]</span>
+                <span class="hidden xl:inline">@SharedLocalizer["Chat"]</span>
             </a>
-            <a href="/friends" class="nav-link flex items-center" aria-label="@SharedLocalizer["Friends"]">
+            <a href="/friends" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Friends"]">
                 <i data-lucide="users" class="w-[18px] h-[18px]"></i>
-                <span class="hidden xl:inline ml-2">@SharedLocalizer["Friends"]</span>
+                <span class="hidden xl:inline">@SharedLocalizer["Friends"]</span>
             </a>
         </nav>
     </div>
     
-    <div class="header-right-pill header-pill">
-        <a href="/Dashboard" class="btn btn-ghost btn-icon" aria-label="Dashboard">
+    <div class="flex items-center gap-2 bg-card/50 backdrop-blur-sm rounded-full px-3 py-2 border border-border shadow-sm">
+        <a href="/Dashboard" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Dashboard">
             <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
         </a>
-        <button class="btn btn-ghost btn-icon" id="theme-toggle">
+        <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="theme-toggle">
             <i data-lucide="sun" id="sun-icon" class="w-4 h-4"></i>
             <i data-lucide="moon" id="moon-icon" class="w-4 h-4 hidden"></i>
         </button>
         
-        <div class="notification-wrapper">
-            <button class="notification-bell btn btn-ghost btn-icon" aria-label="Notifications">
+        <div class="relative">
+            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors notification-bell" aria-label="Notifications">
                 <i data-lucide="bell" class="w-4 h-4"></i>
-                <span class="notification-badge" style="display: none;"></span>
+                <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground notification-badge" style="display: none;"></span>
             </button>
             
-            <div class="notification-dropdown">
-                <div class="notification-dropdown-header">
-                    <h3 class="notification-dropdown-title">Notifications</h3>
-                    <div class="notification-actions">
-                        <button class="notification-action-btn mark-all-read-btn">Mark all read</button>
+            <div class="absolute right-0 top-12 w-80 bg-card border border-border rounded-2xl shadow-lg hidden notification-dropdown">
+                <div class="flex items-center justify-between p-4 border-b border-border">
+                    <h3 class="text-sm font-semibold">Notifications</h3>
+                    <div class="flex items-center gap-2">
+                        <button class="text-xs text-primary hover:text-primary/80 transition-colors mark-all-read-btn">Mark all read</button>
                     </div>
                 </div>
-                <div class="notification-list">
-                    <div class="notification-loading">
-                        <i data-lucide="loader-2"></i>
-                        Loading notifications...
+                <div class="max-h-96 overflow-y-auto notification-list">
+                    <div class="flex flex-col items-center justify-center py-8 notification-loading">
+                        <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-muted-foreground"></i>
+                        <p class="text-sm text-muted-foreground mt-2">Loading notifications...</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <button class="btn btn-ghost user-initial" id="lang-toggle">AR</button>
+        <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors text-xs font-bold" id="lang-toggle">AR</button>
     </div>
 </header>

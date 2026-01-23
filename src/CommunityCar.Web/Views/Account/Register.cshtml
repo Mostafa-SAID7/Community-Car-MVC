@@ -4,63 +4,63 @@
     Layout = "_AuthLayout";
 }
 
-<div class="auth-header-clean">
-    <div class="auth-logo-clean">CC</div>
-    <h1 class="auth-title-clean">Create Account</h1>
-    <p class="auth-subtitle-clean">Join the CommunityCar community</p>
-</div>
+<div class="max-w-2xl mx-auto py-12 px-6">
+    <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 text-primary-foreground mb-4 shadow-lg">
+            <span class="text-2xl font-bold">CC</span>
+        </div>
+        <h1 class="text-3xl font-bold text-foreground mb-2">Create Account</h1>
+        <p class="text-muted-foreground">Join the CommunityCar community</p>
+    </div>
 
-<form asp-action="Register" method="post" class="auth-form-clean">
-    <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+    <form asp-action="Register" method="post" class="space-y-4">
+        <div asp-validation-summary="ModelOnly" class="p-3 rounded-md bg-destructive/10 text-destructive text-sm"></div>
 
-    <div class="flex flex-wrap -mx-2">
-        <div class="w-full md:w-1/2 px-2">
-            <div class="form-group">
-                <label asp-for="FirstName" class="form-label">First Name</label>
-                <input asp-for="FirstName" class="form-control" placeholder="John" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+                <label asp-for="FirstName" class="text-sm font-medium text-foreground">First Name</label>
+                <input asp-for="FirstName" class="w-full px-3 py-2 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground" placeholder="John" />
+                <span asp-validation-for="FirstName" class="text-destructive text-xs"></span>
+            </div>
+            <div class="space-y-2">
+                <label asp-for="LastName" class="text-sm font-medium text-foreground">Last Name</label>
+                <input asp-for="LastName" class="w-full px-3 py-2 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground" placeholder="Doe" />
+                <span asp-validation-for="LastName" class="text-destructive text-xs"></span>
             </div>
         </div>
-        <div class="w-full md:w-1/2 px-2">
-            <div class="form-group">
-                <label asp-for="LastName" class="form-label">Last Name</label>
-                <input asp-for="LastName" class="form-control" placeholder="Doe" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
+
+        <div class="space-y-2">
+            <label asp-for="FullName" class="text-sm font-medium text-foreground">Full Name</label>
+            <input asp-for="FullName" class="w-full px-3 py-2 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground" placeholder="John Doe" />
+            <span asp-validation-for="FullName" class="text-destructive text-xs"></span>
         </div>
+
+        <div class="space-y-2">
+            <label asp-for="Email" class="text-sm font-medium text-foreground">Email Address</label>
+            <input asp-for="Email" class="w-full px-3 py-2 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground" placeholder="Enter your email" />
+            <span asp-validation-for="Email" class="text-destructive text-xs"></span>
+        </div>
+
+        <div class="space-y-2">
+            <label asp-for="Password" class="text-sm font-medium text-foreground">Password</label>
+            <input asp-for="Password" class="w-full px-3 py-2 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground" placeholder="Create a password" />
+            <span asp-validation-for="Password" class="text-destructive text-xs"></span>
+        </div>
+
+        <div class="space-y-2">
+            <label asp-for="ConfirmPassword" class="text-sm font-medium text-foreground">Confirm Password</label>
+            <input asp-for="ConfirmPassword" class="w-full px-3 py-2 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground" placeholder="Confirm your password" />
+            <span asp-validation-for="ConfirmPassword" class="text-destructive text-xs"></span>
+        </div>
+
+        <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium py-2 px-4 rounded-md transition-colors">
+            Create Account
+        </button>
+    </form>
+
+    <div class="mt-6 text-center text-sm">
+        <p class="text-muted-foreground">Already have an account? <a asp-action="Login" class="text-primary hover:text-primary/80 transition-colors font-medium">Sign in</a></p>
     </div>
-
-    <div class="form-group">
-        <label asp-for="FullName" class="form-label">Full Name</label>
-        <input asp-for="FullName" class="form-control" placeholder="John Doe" />
-        <span asp-validation-for="FullName" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Email" class="form-label">Email Address</label>
-        <input asp-for="Email" class="form-control" placeholder="Enter your email" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Password" class="form-label">Password</label>
-        <input asp-for="Password" class="form-control" placeholder="Create a password" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
-        <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm your password" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary w-full">
-        Create Account
-    </button>
-</form>
-
-<div class="auth-links-clean">
-    <p>Already have an account? <a asp-action="Login">Sign in</a></p>
 </div>
 
 @section Scripts {

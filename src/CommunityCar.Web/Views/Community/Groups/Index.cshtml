@@ -9,253 +9,182 @@
     var filterPrivacy = ViewBag.FilterPrivacy as string ?? "all";
 }
 
-<div class="container mx-auto px-4 py-6 max-w-7xl">
-    <div class="flex justify-between items-center mb-6">
+<div class="space-y-8 animate-in fade-in duration-700">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h1 class="text-3xl font-bold mb-1">Community Groups</h1>
-            <p class="text-muted-foreground mb-0">Join enthusiasts sharing your interests</p>
+            <h1 class="text-3xl font-black text-foreground tracking-tight">Community Groups</h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Join enthusiasts sharing your automotive interests</p>
         </div>
-        <a href="@Url.Action("Create", "Groups")" class="btn btn-primary gap-2">
-            <i data-lucide="plus-circle" class="w-5 h-5"></i>Create Group
+        <a href="@Url.Action("Create", "Groups")" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
+            <i data-lucide="plus-circle" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+            Create Hub
         </a>
     </div>
 
-    <div class="card card-glass p-4 mb-6">
-        <!-- Search and Toolbar -->
+    <!-- Stats & Filters Toolbar -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl space-y-6">
         <form method="get" action="@Url.Action("Index", "Groups")" id="groupsFilterForm">
-            <div class="flex flex-col md:flex-row gap-3">
-                <div class="relative flex-1">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                        <i data-lucide="search" class="w-4 h-4"></i>
-                    </span>
-                    <input type="text" name="search" class="form-control pl-10 w-full rounded-full bg-muted/50 border-transparent focus:bg-background focus:border-primary transition-colors" placeholder="Search groups..." value="@search">
+            <div class="flex flex-col lg:flex-row gap-4">
+                <div class="relative flex-1 group">
+                    <input type="text" name="search" class="w-full bg-background border border-border pl-12 pr-4 py-3 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="Search by name, tag, or topic..." value="@search">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors"></i>
                 </div>
                 
-                <div class="flex gap-2">
-                    <button type="button" class="btn btn-ghost gap-2 border border-border bg-background/50" id="sortButton">
-                        <i data-lucide="arrow-down-a-z" class="w-4 h-4"></i>
-                        <span>Sort</span>
-                    </button>
-                    
-                    <button type="button" class="btn btn-ghost gap-2 border border-border bg-background/50 @(filterPrivacy != "all" ? "text-primary border-primary bg-primary/10" : "")" id="filterButton">
-                        <i data-lucide="filter" class="w-4 h-4"></i>
-                        <span>Filter</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Filters Panel -->
-            <div class="mt-4 p-4 bg-muted/20 rounded-xl border border-border transition-all duration-300 mobile:hidden" id="filtersPanel" style="display: @(filterPrivacy != "all" ? "block" : "none")">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-1.5">
-                        <label class="text-sm font-medium text-muted-foreground">Sort By</label>
-                        <div class="relative">
-                            <select name="sortBy" class="form-select w-full rounded-lg" onchange="this.form.submit()">
-                                <option value="newest" selected="@(sortBy == "newest")">Newest First</option>
-                                <option value="oldest" selected="@(sortBy == "oldest")">Oldest First</option>
-                                <option value="name" selected="@(sortBy == "name")">Name (A-Z)</option>
-                            </select>
-                        </div>
+                <div class="flex gap-3">
+                    <div class="relative">
+                        <select name="sortBy" class="bg-background border border-border px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-primary/10 transition-all appearance-none min-w-[160px]" onchange="this.form.submit()">
+                            <option value="newest" selected="@(sortBy == "newest")">Newest First</option>
+                            <option value="oldest" selected="@(sortBy == "oldest")">Oldest First</option>
+                            <option value="name" selected="@(sortBy == "name")">Alphabetical</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground pointer-events-none"></i>
                     </div>
-                    <div class="flex flex-col gap-1.5">
-                        <label class="text-sm font-medium text-muted-foreground">Privacy</label>
-                        <div class="relative">
-                            <select name="filterPrivacy" class="form-select w-full rounded-lg" onchange="this.form.submit()">
-                                <option value="all" selected="@(filterPrivacy == "all")">All Groups</option>
-                                <option value="public" selected="@(filterPrivacy == "public")">Public Only</option>
-                                <option value="private" selected="@(filterPrivacy == "private")">Private Only</option>
-                            </select>
-                        </div>
+
+                    <div class="relative">
+                        <select name="filterPrivacy" class="bg-background border border-border px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-primary/10 transition-all appearance-none min-w-[160px]" onchange="this.form.submit()">
+                            <option value="all" selected="@(filterPrivacy == "all")">All Access</option>
+                            <option value="public" selected="@(filterPrivacy == "public")">Public Hubs</option>
+                            <option value="private" selected="@(filterPrivacy == "private")">Private Hubs</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground pointer-events-none"></i>
                     </div>
                 </div>
             </div>
         </form>
 
-        <div class="flex justify-between items-center pt-4 mt-4 border-t border-border">
-            <p class="text-sm text-muted-foreground mb-0">
-                Showing <strong class="text-foreground">@Model.Count()</strong> of <strong class="text-foreground">@totalCount</strong> groups
+        <div class="flex items-center justify-between pt-4 border-t border-border/40">
+            <p class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">
+                Hub Discovery: <span class="text-foreground">@totalCount</span> groups available
             </p>
+            <div class="flex items-center gap-1.5 p-1 bg-muted rounded-lg border border-border/50">
+                <button class="p-1 px-2 text-[8px] font-black bg-background shadow-sm rounded border border-border">Grid View</button>
+                <button class="p-1 px-2 text-[8px] font-black text-muted-foreground opacity-50">List View</button>
+            </div>
         </div>
     </div>
 
-        @if (!Model.Any())
-        {
-            <div class="text-center py-12">
-                <div class="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="users" class="w-8 h-8 text-muted-foreground"></i>
-                </div>
-                <h3 class="text-lg font-semibold mb-2">No groups found</h3>
-                <p class="text-muted-foreground mb-4 max-w-md mx-auto">We couldn't find any groups matching your criteria. Try adjusting your filters or search terms.</p>
-                @if (!string.IsNullOrEmpty(search))
-                {
-                    <a href="@Url.Action("Index", "Groups")" class="btn btn-outline">Clear Search</a>
-                }
+    @if (!Model.Any())
+    {
+        <div class="flex flex-col items-center justify-center py-20 bg-muted/10 border-2 border-dashed border-border rounded-2xl text-center">
+            <div class="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6 shadow-inner animate-pulse">
+                <i data-lucide="users" class="w-10 h-10 text-muted-foreground opacity-30"></i>
             </div>
-        }
-        else
-        {
-            <div class="cards-grid cards-grid-auto-lg">
-                @foreach (var group in Model)
-                {
-                    <a href="@Url.Action("Details", "Groups", new { id = group.Id })" class="card card-hover no-underline text-inherit h-full">
-                        <div class="card-body flex flex-col">
-                            <!-- Header -->
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-12 h-12 rounded-xl bg-muted flex items-center justify-center font-bold text-lg text-primary shrink-0 transition-transform">
-                                    @group.Name.Substring(0, 1).ToUpper()
-                                </div>
-                                <div class="min-w-0 flex-1">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <h3 class="card-title text-base mb-0 truncate">@group.Name</h3>
-                                        @if (group.IsOfficial)
-                                        {
-                                            <i data-lucide="badge-check" style="width: 16px;" class="text-danger flex-shrink-0" title="Official Group"></i>
-                                        }
-                                        else if (group.IsVerified)
-                                        {
-                                            <i data-lucide="shield-check" style="width: 16px;" class="text-success flex-shrink-0" title="Verified Group"></i>
-                                        }
-                                    </div>
-                                    <div class="text-xs text-muted flex items-center gap-2 truncate">
-                                        @if (!string.IsNullOrEmpty(group.Category))
-                                        {
-                                            <span class="flex items-center gap-1">
-                                                <i data-lucide="tag" style="width: 10px;"></i>
-                                                @group.Category
-                                            </span>
-                                            @if (!string.IsNullOrEmpty(group.Location))
-                                            {
-                                                <span>•</span>
-                                            }
-                                        }
-                                        @if (!string.IsNullOrEmpty(group.Location))
-                                        {
-                                            <span class="flex items-center gap-1">
-                                                <i data-lucide="map-pin" style="width: 10px;"></i>
-                                                @group.Location
-                                            </span>
-                                        }
-                                    </div>
-                                </div>
+            <h3 class="text-2xl font-black text-foreground mb-3 tracking-tight">No Hubs Found</h3>
+            <p class="text-sm text-muted-foreground max-w-sm mx-auto font-medium opacity-80 mb-8">We couldn't find any groups matching your criteria. Try adjusting your filters or broadening your search.</p>
+            <a href="@Url.Action("Index", "Groups")" class="px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-primary/20 active:scale-95">Clear Filters</a>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach (var group in Model)
+            {
+                <a href="@Url.Action("Details", "Groups", new { id = group.Id })" class="group/card block bg-card/40 backdrop-blur-md border border-border rounded-2xl overflow-hidden shadow-lg transition-all hover:border-primary/30 hover:shadow-2xl hover:-translate-y-1 flex flex-col h-full relative">
+                    <div class="p-6 flex-1 flex flex-col">
+                        <!-- Group Header -->
+                        <div class="flex items-start gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center font-black text-xl text-primary-foreground shrink-0 shadow-lg shadow-primary/20 group-hover/card:scale-110 group-hover/card:rotate-6 transition-all duration-300">
+                                @group.Name.Substring(0, 1).ToUpper()
                             </div>
-
-                            <p class="card-description line-clamp-2 mb-4 grow">@group.Description</p>
-                            
-                            @if (group.Tags.Any())
-                            {
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    @foreach (var tag in group.Tags.Take(3))
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <h3 class="text-base font-black text-foreground truncate group-hover/card:text-primary transition-colors">@group.Name</h3>
+                                    @if (group.IsOfficial)
                                     {
-                                        <span class="text-xs px-2 py-1 bg-muted rounded-md text-muted font-medium">
-                                            #@tag
+                                        <i data-lucide="badge-check" class="w-4 h-4 text-red-500 fill-red-500/10" title="Official Hub"></i>
+                                    }
+                                    else if (group.IsVerified)
+                                    {
+                                        <i data-lucide="shield-check" class="w-4 h-4 text-green-500 fill-green-500/10" title="Verified Community"></i>
+                                    }
+                                </div>
+                                <div class="flex items-center flex-wrap gap-2">
+                                    <span class="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-tighter text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-md border border-border/30">
+                                        <i data-lucide="tag" class="w-2.5 h-2.5"></i>
+                                        @group.Category
+                                    </span>
+                                    @if (!string.IsNullOrEmpty(group.Location))
+                                    {
+                                        <span class="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-tighter text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-md border border-border/30">
+                                            <i data-lucide="map-pin" class="w-3 h-3 text-red-500/60"></i>
+                                            @group.Location
                                         </span>
                                     }
                                 </div>
-                            }
-                        </div>
-
-                        <div class="card-footer bg-transparent pt-0 pb-4 px-6 border-0 mt-auto">
-                            <div class="flex items-center justify-between w-full text-xs text-muted">
-                                <div class="flex gap-4">
-                                    <div class="flex items-center gap-1" title="@group.MemberCount.ToString("N0") members">
-                                        <i data-lucide="users" style="width: 14px;"></i>
-                                        <span class="font-medium text-foreground">@(group.MemberCount >= 1000 ? $"{group.MemberCount / 1000.0:F1}k" : group.MemberCount.ToString())</span>
-                                    </div>
-                                    <div class="flex items-center gap-1" title="@group.PostCount.ToString("N0") posts">
-                                        <i data-lucide="message-square" style="width: 14px;"></i>
-                                        <span class="font-medium text-foreground">@(group.PostCount >= 1000 ? $"{group.PostCount / 1000.0:F1}k" : group.PostCount.ToString())</span>
-                                    </div>
-                                </div>
-                                <span class="flex items-center gap-1 px-2 py-1 rounded-full bg-muted/50 uppercase font-bold tracking-wider" style="font-size: 0.65rem;">
-                                    <i data-lucide="@(group.Privacy == CommunityCar.Domain.Enums.GroupPrivacy.Public ? "globe" : "lock")" style="width: 10px;"></i>
-                                    @group.Privacy.ToString()
-                                </span>
                             </div>
                         </div>
-                    </a>
-                }
-            </div>
 
-            <!-- Pagination -->
-            @if (totalPages > 1)
-            {
-                <div class="flex justify-center items-center gap-2 mt-8">
-                    <!-- Previous Button -->
+                        <p class="text-[13px] text-muted-foreground leading-relaxed font-medium mb-6 line-clamp-2 opacity-80 group-hover/card:opacity-100 transition-opacity">@group.Description</p>
+                        
+                        @if (group.Tags.Any())
+                        {
+                            <div class="flex flex-wrap gap-2 mb-6 mt-auto">
+                                @foreach (var tag in group.Tags.Take(3))
+                                {
+                                    <span class="text-[9px] font-bold text-primary bg-primary/5 px-2.5 py-1 rounded-lg border border-primary/10 transition-colors group-hover/card:bg-primary/10">#@tag</span>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <div class="px-6 py-4 bg-muted/20 border-t border-border/30 mt-auto">
+                        <div class="flex items-center justify-between w-full">
+                            <div class="flex gap-4">
+                                <div class="flex items-center gap-1.5" title="Members">
+                                    <i data-lucide="users" class="w-3.5 h-3.5 text-muted-foreground"></i>
+                                    <span class="text-xs font-black text-foreground tabular-nums">@(group.MemberCount >= 1000 ? $"{group.MemberCount / 1000.0:F1}k" : group.MemberCount.ToString())</span>
+                                </div>
+                                <div class="flex items-center gap-1.5" title="Activity">
+                                    <i data-lucide="message-square" class="w-3.5 h-3.5 text-muted-foreground"></i>
+                                    <span class="text-xs font-black text-foreground tabular-nums">@(group.PostCount >= 1000 ? $"{group.PostCount / 1000.0:F1}k" : group.PostCount.ToString())</span>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-background/50 border border-border text-[8px] font-black uppercase tracking-widest text-muted-foreground shadow-sm">
+                                <i data-lucide="@(group.Privacy == CommunityCar.Domain.Enums.GroupPrivacy.Public ? "globe" : "lock")" class="w-2.5 h-2.5"></i>
+                                @group.Privacy
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (totalPages > 1)
+        {
+            <div class="flex flex-col items-center mt-12 gap-4">
+                <nav class="flex items-center gap-2 p-1.5 bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl">
                     <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = currentPage - 1 })" 
-                       class="btn btn-icon btn-ghost w-9 h-9 @(currentPage <= 1 ? "opacity-50 pointer-events-none" : "")">
+                       class="w-10 h-10 flex items-center justify-center rounded-2xl bg-background border border-border hover:border-primary hover:text-primary transition-all shadow-sm active:scale-95 @(currentPage <= 1 ? "opacity-30 pointer-events-none" : "")">
                         <i data-lucide="chevron-left" class="w-4 h-4"></i>
                     </a>
 
-                    <!-- Page Numbers -->
-                    @{
-                        var startPage = Math.Max(1, currentPage - 2);
-                        var endPage = Math.Min(totalPages, currentPage + 2);
-                    }
+                    <div class="flex items-center gap-1 px-2">
+                         @for (var i = 1; i <= totalPages; i++)
+                         {
+                            if (i == 1 || i == totalPages || (i >= currentPage - 2 && i <= currentPage + 2))
+                            {
+                                <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = i })" 
+                                   class="w-10 h-10 flex items-center justify-center rounded-2xl font-black text-xs transition-all @(i == currentPage ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-110" : "hover:bg-muted text-muted-foreground hover:text-foreground")">
+                                    @i
+                                </a>
+                            }
+                            else if (i == 2 || i == totalPages - 1)
+                            {
+                                <span class="text-muted-foreground/40 px-1 font-black">...</span>
+                            }
+                         }
+                    </div>
 
-                    @if (startPage > 1)
-                    {
-                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = 1 })" class="btn btn-icon w-9 h-9 btn-ghost">1</a>
-                        @if (startPage > 2)
-                        {
-                            <span class="text-muted-foreground px-1">...</span>
-                        }
-                    }
-
-                    @for (var i = startPage; i <= endPage; i++)
-                    {
-                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = i })" 
-                           class="btn btn-icon w-9 h-9 @(i == currentPage ? "bg-primary text-white hover:bg-primary/90" : "btn-ghost")">
-                            @i
-                        </a>
-                    }
-
-                    @if (endPage < totalPages)
-                    {
-                        @if (endPage < totalPages - 1)
-                        {
-                            <span class="text-muted-foreground px-1">...</span>
-                        }
-                        <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = totalPages })" class="btn btn-icon w-9 h-9 btn-ghost">@totalPages</a>
-                    }
-
-                    <!-- Next Button -->
                     <a href="@Url.Action("Index", "Groups", new { search, sortBy, filterPrivacy, page = currentPage + 1 })" 
-                       class="btn btn-icon btn-ghost w-9 h-9 @(currentPage >= totalPages ? "opacity-50 pointer-events-none" : "")">
+                       class="w-10 h-10 flex items-center justify-center rounded-2xl bg-background border border-border hover:border-primary hover:text-primary transition-all shadow-sm active:scale-95 @(currentPage >= totalPages ? "opacity-30 pointer-events-none" : "")">
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
                     </a>
+                </nav>
+                <div class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50">
+                    Showing @Model.Count() groups from page @currentPage
                 </div>
-                <div class="text-center mt-2 text-xs text-muted-foreground">
-                    Page @currentPage of @totalPages
-                </div>
-            }
+            </div>
         }
-    </div>
+    }
 </div>
-
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const filterButton = document.getElementById('filterButton');
-            const filtersPanel = document.getElementById('filtersPanel');
-
-            filterButton?.addEventListener('click', () => {
-                filterButton.classList.toggle('active');
-                if (filtersPanel.style.display === 'block') {
-                    filtersPanel.style.display = 'none';
-                } else {
-                    filtersPanel.style.display = 'block';
-                }
-            });
-
-            // Auto-submit on search input
-            const searchInput = document.querySelector('.groups-search-input');
-            let searchTimeout;
-            searchInput?.addEventListener('input', (e) => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    document.getElementById('groupsFilterForm').submit();
-                }, 500);
-            });
-        });
-    </script>
-}

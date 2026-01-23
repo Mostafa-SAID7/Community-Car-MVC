@@ -2,16 +2,32 @@
     ViewData["Title"] = "Friends";
 }
 
-<div class="card card-glass mb-4">
-    <div class="card-body">
-        <h2 class="h4 mb-3">Friends</h2>
-        <div class="d-flex flex-column gap-2">
-            <div class="d-flex justify-content-between align-items-center p-3 rounded bg-muted-subtle">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">U</div>
-                    <div>User One</div>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700">
+        <div class="p-8">
+            <h2 class="text-2xl font-black text-foreground mb-8 flex items-center gap-3">
+                <div class="bg-primary/10 p-2 rounded-xl text-primary">
+                    <i data-lucide="users" class="w-6 h-6"></i>
                 </div>
-                <button class="btn btn-sm btn-outline-primary">Message</button>
+                Friends
+            </h2>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <div class="flex items-center justify-between p-4 bg-muted/20 border border-border/50 rounded-2xl group hover:bg-muted/40 transition-all hover:border-primary/20">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-black text-xs shadow-lg group-hover:scale-110 transition-transform">
+                            U1
+                        </div>
+                        <div>
+                            <div class="text-sm font-black text-foreground">User One</div>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Online</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="bg-background border border-border hover:border-primary hover:text-primary px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95">Message</button>
+                </div>
             </div>
         </div>
     </div>

@@ -1,84 +1,81 @@
 ﻿<!DOCTYPE html>
 <html lang="en" class="light">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="user-id" content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
+    <meta name="user-id"
+        content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
     <title>@ViewData["Title"] - CommunityCar</title>
-    
+
     <performance-optimizations url="@Context.Request.Path" />
     <seo-meta page-type="@(ViewData["PageType"] ?? "Home")" entity-id="@(ViewData["EntityId"] as Guid?)" />
-    
-    <link rel="alternate" type="application/rss+xml" title="CommunityCar RSS Feed" href="@Url.Action("RSS", "SEO")" />
-    
+
+    <link rel="icon" type="image/png" href="~/images/logo/logo.png">
+    <link rel="alternate" type="application/rss+xml" title="CommunityCar RSS Feed"
+        href="@Url.Action("RSS", "DashboardSEO")" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Library Styles -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CommunityCar.Web.styles.css" asp-append-version="true" />
-    
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
+
     @await RenderSectionAsync("Styles", required: false)
-    
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
+
+<body class="font-sans antialiased">
     <partial name="_Header" />
-    <div class="app-container">
+
+    <!-- Main container with proper spacing for fixed header and sidebars -->
+    <div class="flex pt-28 pb-8 min-h-screen">
         <partial name="_SidebarLeft" />
 
-
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <div class="container-fluid px-4 py-4 mt-5">
+        <!-- Main Content Area with proper margins for sidebars -->
+        <main class="ml-28 xl:ml-[18rem] xl:mr-[25rem] px-4 whitespace-normal">
+            <div class="bg-card/30 backdrop-blur-xl border border-border rounded-xl shadow-2xl p-6 md:p-8">
                 @RenderBody()
             </div>
         </main>
 
         @if (IsSectionDefined("SidebarRight"))
         {
-            @RenderSection("SidebarRight")
+            <div class="fixed right-4 top-24 bottom-8 w-80 hidden xl:block">
+                @RenderSection("SidebarRight")
+            </div>
         }
         else
         {
             <partial name="_SidebarRight" />
         }
-
     </div>
 
     <partial name="_AIAssistant" />
 
     <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
-    
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>
-    
+
     <!-- SignalR -->
     @if (User.Identity?.IsAuthenticated == true)
     {
         <script src="~/lib/signalr/signalr.min.js" defer></script>
         <script src="~/js/signalr-notifications.js" asp-append-version="true" defer></script>
     }
-    
+
     <script src="~/js/site.js" asp-append-version="true" defer></script>
     <script src="~/js/notifications.js" asp-append-version="true" defer></script>
     <script src="~/js/ai-assistant.js" asp-append-version="true" defer></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             lucide.createIcons();
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

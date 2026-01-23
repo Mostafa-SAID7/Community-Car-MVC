@@ -1,25 +1,71 @@
 ﻿@model ErrorViewModel
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = "System Anomaly Detected";
+    Layout = "_DashboardLayout";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<div class="max-w-4xl mx-auto py-12 space-y-12 animate-in fade-in duration-1000">
+    <div class="flex flex-col md:flex-row items-center gap-10">
+        <div class="relative group">
+            <div class="absolute -inset-4 bg-destructive/10 rounded-[2rem] blur-2xl group-hover:bg-destructive/20 transition-all duration-1000"></div>
+            <div class="relative w-32 h-32 rounded-[2.5rem] bg-card border border-destructive/20 flex items-center justify-center text-destructive shadow-2xl rotate-3 group-hover:rotate-0 transition-transform">
+                <i data-lucide="unplug" class="w-16 h-16"></i>
+            </div>
+        </div>
+        
+        <div class="text-center md:text-left space-y-4">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-destructive/10 border border-destructive/20 rounded-full text-destructive text-[10px] font-black uppercase tracking-widest">
+                <span class="w-2 h-2 rounded-full bg-destructive animate-ping"></span>
+                Critical System Fault
+            </div>
+            <h1 class="text-5xl font-black text-foreground tracking-tighter leading-tight">System Anomaly <br class="hidden md:block"/> Detected</h1>
+            <p class="text-sm font-medium text-muted-foreground max-w-md uppercase tracking-widest opacity-60 leading-relaxed">The application encountered an unhandled exception during fragment processing.</p>
+        </div>
+    </div>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Debug Trace Console -->
+        <div class="bg-black/90 rounded-[2rem] p-8 shadow-2xl border border-white/5 relative overflow-hidden group">
+            <div class="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
+                <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Telemetry Relay</span>
+                <div class="flex gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+                </div>
+            </div>
+            <div class="space-y-6 font-mono">
+                @if (Model.ShowRequestId)
+                {
+                    <div class="space-y-2">
+                        <span class="block text-[9px] font-black uppercase tracking-widest text-primary/50">Request ID</span>
+                        <code class="block text-xs text-white/90 break-all leading-relaxed">@Model.RequestId</code>
+                    </div>
+                }
+                <div class="space-y-2">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-primary/50">Context Node</span>
+                    <code class="block text-xs text-white/90">EN-AUT-MVC-FAILOVER</code>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-white/5">
+                <p class="text-[9px] text-muted-foreground/40 leading-relaxed uppercase tracking-widest">Incident logged in central registry for tactical analysis.</p>
+            </div>
+        </div>
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+        <!-- Directive Panel -->
+        <div class="bg-card/40 backdrop-blur-xl border border-border/50 rounded-[2rem] p-10 flex flex-col justify-center space-y-8">
+            <h3 class="text-xs font-black uppercase tracking-[0.3em] text-foreground">Immediate Directives:</h3>
+            <div class="space-y-4">
+                <a href="javascript:location.reload()" class="flex items-center justify-between p-5 bg-background border border-border/50 rounded-2xl hover:border-primary transition-all group/opt">
+                    <span class="text-[10px] font-black uppercase tracking-widest">Retry Protocol</span>
+                    <i data-lucide="refresh-cw" class="w-4 h-4 text-muted-foreground group-hover/opt:text-primary transition-colors"></i>
+                </a>
+                <a asp-controller="Feed" asp-action="Index" class="flex items-center justify-between p-5 bg-background border border-border/50 rounded-2xl hover:border-primary transition-all group/opt">
+                    <span class="text-[10px] font-black uppercase tracking-widest">Foundation Return</span>
+                    <i data-lucide="home" class="w-4 h-4 text-muted-foreground group-hover/opt:text-primary transition-colors"></i>
+                </a>
+            </div>
+            <p class="text-[9px] font-medium text-muted-foreground/60 uppercase tracking-widest leading-relaxed">If failure persists, please contact the engineering detachment with the provided Telemetry ID.</p>
+        </div>
+    </div>
+</div>

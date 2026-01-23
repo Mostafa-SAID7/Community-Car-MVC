@@ -1,0 +1,70 @@
+@model CommunityCar.Domain.Entities.Localization.LocalizationCulture
+@{
+    var isEdit = Model.Id != Guid.Empty;
+    ViewData["Title"] = isEdit ? "Modify Culture" : "Deploy Culture";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div class="flex items-center justify-between border-b border-border/50 pb-6">
+        <div>
+            <h1 class="text-3xl font-black text-foreground tracking-tighter">@(isEdit ? "Adjust Profile" : "Initialize Locale")</h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Globalizing the enthusiast experience</p>
+        </div>
+        <a href="@Url.Action("Index")" class="px-6 py-2.5 bg-muted/50 hover:bg-muted text-foreground rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-border/50">Return to Hub</a>
+    </div>
+
+    <div class="bg-card/40 backdrop-blur-xl border border-border rounded-3xl p-10 shadow-2xl relative overflow-hidden group">
+        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+        
+        <form asp-action="SaveCulture" method="post" class="relative space-y-10">
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="space-y-3">
+                    <label asp-for="Name" class="text-[10px] font-black uppercase tracking-widest text-primary">IETF Language Port</label>
+                    <input asp-for="Name" class="w-full bg-background/50 border border-border px-5 py-4 rounded-2xl text-sm font-black tracking-tight outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-inner" placeholder="e.g. ja-JP" required />
+                    <p class="text-[9px] font-medium text-muted-foreground opacity-60">Standard BCP 47 protocol (e.g., en-GB, de-DE)</p>
+                </div>
+
+                <div class="space-y-3">
+                    <label asp-for="DisplayName" class="text-[10px] font-black uppercase tracking-widest text-primary">Identity Label</label>
+                    <input asp-for="DisplayName" class="w-full bg-background/50 border border-border px-5 py-4 rounded-2xl text-sm font-black tracking-tight outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-inner" placeholder="e.g. Japanese (Internal)" required />
+                    <p class="text-[9px] font-medium text-muted-foreground opacity-60">Human-readable descriptor for selection</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <label class="bg-muted/30 border border-border/50 p-6 rounded-2xl flex items-center justify-between cursor-pointer group/toggle hover:bg-muted/50 transition-all">
+                    <div class="space-y-1">
+                        <span class="block text-[10px] font-black uppercase tracking-widest text-foreground">RTL Logic</span>
+                        <span class="block text-[8px] font-black uppercase text-muted-foreground opacity-50 tracking-widest leading-none">Mirror UI</span>
+                    </div>
+                    <input asp-for="IsRTL" type="checkbox" class="w-5 h-5 rounded-lg border-border text-primary focus:ring-primary bg-background transition-all" />
+                </label>
+
+                <label class="bg-muted/30 border border-border/50 p-6 rounded-2xl flex items-center justify-between cursor-pointer group/toggle hover:bg-muted/50 transition-all">
+                    <div class="space-y-1">
+                        <span class="block text-[10px] font-black uppercase tracking-widest text-foreground">System Default</span>
+                        <span class="block text-[8px] font-black uppercase text-muted-foreground opacity-50 tracking-widest leading-none">Fallback Node</span>
+                    </div>
+                    <input asp-for="IsDefault" type="checkbox" class="w-5 h-5 rounded-lg border-border text-primary focus:ring-primary bg-background transition-all" />
+                </label>
+
+                <label class="bg-muted/30 border border-border/50 p-6 rounded-2xl flex items-center justify-between cursor-pointer group/toggle hover:bg-muted/50 transition-all">
+                    <div class="space-y-1">
+                        <span class="block text-[10px] font-black uppercase tracking-widest text-foreground">Active Status</span>
+                        <span class="block text-[8px] font-black uppercase text-muted-foreground opacity-50 tracking-widest leading-none">Live Relay</span>
+                    </div>
+                    <input asp-for="IsActive" type="checkbox" class="w-5 h-5 rounded-lg border-border text-primary focus:ring-primary bg-background transition-all" />
+                </label>
+            </div>
+
+            <div class="pt-8 flex gap-4">
+                <button type="submit" class="flex-1 bg-foreground text-background py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all">
+                    Deploy Profile
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

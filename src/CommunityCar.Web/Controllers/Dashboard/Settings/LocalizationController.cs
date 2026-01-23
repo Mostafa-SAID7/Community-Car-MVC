@@ -21,7 +21,7 @@ public class LocalizationController : Controller
     public async Task<IActionResult> Index()
     {
         var cultures = await _localizationService.GetSupportedCulturesAsync();
-        return View("~/Views/Dashboard/Settings/Localization/Index.cshtml", cultures);
+        return View(cultures);
     }
 
     [HttpGet("resources")]
@@ -31,14 +31,14 @@ public class LocalizationController : Controller
         ViewBag.Cultures = await _localizationService.GetSupportedCulturesAsync();
         ViewBag.SelectedCulture = culture;
         ViewBag.SelectedGroup = group;
-        return View("~/Views/Dashboard/Settings/Localization/Resources.cshtml", resources);
+        return View("Resources", resources);
     }
 
     [HttpGet("resources/add")]
     public async Task<IActionResult> AddResource()
     {
         ViewBag.Cultures = await _localizationService.GetSupportedCulturesAsync();
-        return View("~/Views/Dashboard/Settings/Localization/EditResource.cshtml", new LocalizationResource());
+        return View("EditResource", new LocalizationResource());
     }
 
     [HttpGet("resources/edit/{id:guid}")]
@@ -48,7 +48,7 @@ public class LocalizationController : Controller
         if (resource == null) return NotFound();
 
         ViewBag.Cultures = await _localizationService.GetSupportedCulturesAsync();
-        return View("~/Views/Dashboard/Settings/Localization/EditResource.cshtml", resource);
+        return View("EditResource", resource);
     }
 
     [HttpPost("resources/save")]
@@ -58,7 +58,7 @@ public class LocalizationController : Controller
         if (!ModelState.IsValid)
         {
             ViewBag.Cultures = await _localizationService.GetSupportedCulturesAsync();
-            return View("~/Views/Dashboard/Settings/Localization/EditResource.cshtml", resource);
+            return View("EditResource", resource);
         }
 
         await _localizationService.SetResourceValueAsync(resource.Key, resource.Value, resource.Culture, resource.ResourceGroup);
@@ -76,7 +76,7 @@ public class LocalizationController : Controller
     [HttpGet("cultures/add")]
     public IActionResult AddCulture()
     {
-        return View("~/Views/Dashboard/Settings/Localization/EditCulture.cshtml", new LocalizationCulture());
+        return View("EditCulture", new LocalizationCulture());
     }
 
     [HttpPost("cultures/save")]
@@ -85,7 +85,7 @@ public class LocalizationController : Controller
     {
         if (!ModelState.IsValid)
         {
-            return View("~/Views/Dashboard/Settings/Localization/EditCulture.cshtml", culture);
+            return View("EditCulture", culture);
         }
 
         if (culture.Id == Guid.Empty)
@@ -120,7 +120,7 @@ public class LocalizationController : Controller
         {
             var fileName = Path.GetFileNameWithoutExtension(file);
             var parts = fileName.Split('.'); // SharedResource.en-US
-            
+
             string? group = null;
             string culture = "en-US";
 

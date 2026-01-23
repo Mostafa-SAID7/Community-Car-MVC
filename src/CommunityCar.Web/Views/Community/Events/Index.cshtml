@@ -2,11 +2,25 @@
     ViewData["Title"] = "Events";
 }
 
-<div class="card card-glass mb-4">
-    <div class="card-body">
-        <h2 class="h4 mb-3">Upcoming Events</h2>
-        <div class="alert alert-info border-0">
-            <i data-lucide="info" size="18" class="me-2"></i> No upcoming events found. Check back later!
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6 md:p-8">
+            <h2 class="text-2xl font-black text-foreground mb-6 flex items-center gap-3">
+                <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                    <i data-lucide="calendar" class="w-6 h-6"></i>
+                </div>
+                Upcoming Events
+            </h2>
+            
+            <div class="bg-blue-500/5 border border-blue-500/10 rounded-2xl p-6 flex items-center gap-4 text-blue-600 dark:text-blue-400">
+                <div class="bg-blue-500/10 p-3 rounded-full">
+                    <i data-lucide="info" class="w-6 h-6"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-bold uppercase tracking-wider mb-1">No upcoming events</p>
+                    <p class="text-xs opacity-80 font-medium">There are currently no events scheduled for the community. Check back later for car meets, road trips, and racing events!</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

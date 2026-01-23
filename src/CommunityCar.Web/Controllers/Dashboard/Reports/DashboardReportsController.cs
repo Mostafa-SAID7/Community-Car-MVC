@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CommunityCar.Web.Controllers.Dashboard.Reports;
 
 [Route("dashboard/reports")]
-[Authorize(Roles = "Admin,Moderator")]
+[Authorize]
 public class DashboardReportsController : Controller
 {
     private readonly IDashboardReportsService _reportsService;

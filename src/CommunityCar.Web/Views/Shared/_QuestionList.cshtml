@@ -2,74 +2,89 @@
 @inject IViewLocalizer Localizer
 @model CommunityCar.Application.Features.QA.DTOs.QASearchResponse
 
-<div class="flex flex-col gap-4" id="questionsList">
+<div class="flex flex-col gap-12" id="questionsList">
     @if (Model.Questions.Any())
     {
         @foreach (var question in Model.Questions)
         {
-            <a href="@Url.Action("Details", "QA", new { id = question.Id })" class="card flex-row gap-6 p-6 items-center hover:shadow-md transition-all text-inherit no-underline mb-4 @(question.IsPinned ? "border-l-4 border-l-primary" : "")" data-difficulty="@question.Difficulty" data-status="@(question.IsSolved ? "solved" : "open")" data-car-make="@question.CarMake">
-                <div class="flex-1 border-r border-border pr-6">
-                    <div class="flex items-center gap-2 mb-3 text-muted text-xs">
-                        <div class="flex items-center gap-2">
-                            <div class="avatar-xs">
-                                @if (!string.IsNullOrEmpty(question.AuthorProfilePicture))
-                                {
-                                    <img src="@question.AuthorProfilePicture" alt="@question.AuthorName" class="rounded-full w-full h-full object-cover" />
-                                }
-                                else
-                                {
-                                    <i data-lucide="user" class="w-3 h-3"></i>
-                                }
-                            </div>
-                            <span class="font-semibold text-primary">@question.AuthorName</span>
+            <a href="@Url.Action("Details", "QA", new { id = question.Id })" class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 flex flex-col md:flex-row gap-8 items-start md:items-center hover:border-primary/20 hover:shadow-2xl transition-all group/card text-inherit no-underline relative shadow-lg @(question.IsPinned ? "ring-2 ring-primary/30" : "")" data-difficulty="@question.Difficulty" data-status="@(question.IsSolved ? "solved" : "open")" data-car-make="@question.CarMake">
+                
+                @if (question.IsPinned)
+                {
+                    <div class="absolute top-0 left-6 -translate-y-1/2 bg-primary text-primary-foreground px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest shadow-lg flex items-center gap-1">
+                        <i data-lucide="pin" class="w-2.5 h-2.5"></i> Pinned
+                    </div>
+                }
+
+                <div class="flex-1 w-full md:border-r md:border-border/50 md:pr-8">
+                    <!-- Author Info Header -->
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-7 h-7 rounded-full bg-muted flex items-center justify-center overflow-hidden border border-border ring-2 ring-primary/5 shadow-inner">
+                            @if (!string.IsNullOrEmpty(question.AuthorProfilePicture))
+                            {
+                                <img src="@question.AuthorProfilePicture" alt="@question.AuthorName" class="w-full h-full object-cover" />
+                            }
+                            else
+                            {
+                                <i data-lucide="user" class="w-3.5 h-3.5 text-muted-foreground"></i>
+                            }
                         </div>
-                        <span class="opacity-70">• @(question.LastActivityAt != question.CreatedAt ? Localizer["Active"] : Localizer["Asked"]) @(question.LastActivityAt != question.CreatedAt ? (question.LastActivityTimeAgo ?? question.TimeAgo) : question.TimeAgo)</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black text-primary uppercase tracking-tight">@question.AuthorName</span>
+                            <span class="text-[9px] font-bold text-muted-foreground uppercase opacity-60 tracking-widest">
+                                • @(question.LastActivityAt != question.CreatedAt ? Localizer["Active"] : Localizer["Asked"]) @(question.LastActivityAt != question.CreatedAt ? (question.LastActivityTimeAgo ?? question.TimeAgo) : question.TimeAgo)
+                            </span>
+                        </div>
                     </div>
 
-                    <!-- Title in Middle -->
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="text-lg font-semibold m-0 text-primary leading-tight group-hover:text-red-600">
-                            @if (question.IsPinned)
-                            {
-                                <i data-lucide="pin" style="width: 14px; margin-right: 0.25rem;"></i>
-                            }
+                    <!-- Title & Badges in Middle -->
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
+                        <h3 class="text-xl font-black text-foreground group-hover/card:text-primary transition-colors leading-tight tracking-tight flex-1">
                             @question.Title
                         </h3>
-                        <div class="flex items-center gap-2 shrink-0 ml-3">
+                        <div class="flex items-center gap-2 shrink-0">
                             @if (question.IsSolved)
                             {
-                                <span class="badge badge-success badge-sm">
-                                    <i data-lucide="check-circle" class="w-3 h-3 mr-1"></i>@Localizer["Solved"]
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-green-500/10 text-green-600 border border-green-500/20 shadow-sm">
+                                    <i data-lucide="check-circle" class="w-3 h-3"></i>@Localizer["Solved"]
                                 </span>
                             }
                             else
                             {
-                                <span class="badge badge-warning badge-sm">
-                                    <i data-lucide="help-circle" class="w-3 h-3 mr-1"></i>@Localizer["Open"]
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-yellow-500/10 text-yellow-600 border border-yellow-500/20 shadow-sm">
+                                    <i data-lucide="help-circle" class="w-3 h-3"></i>@Localizer["Open"]
                                 </span>
                             }
-                            <span class="badge badge-outline badge-sm">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-border text-muted-foreground shadow-sm">
                                 @question.DifficultyDisplay
                             </span>
                         </div>
                     </div>
                     
+                    <!-- Body Preview (Added for depth) -->
+                    @if (!string.IsNullOrEmpty(question.BodyPreview))
+                    {
+                        <p class="text-[13px] text-muted-foreground line-clamp-2 leading-relaxed font-medium mb-4 opacity-80 group-hover/card:opacity-100 transition-opacity">
+                            @question.BodyPreview
+                        </p>
+                    }
+                    
                     <!-- Tags and Car Info at Bottom -->
-                    <div class="flex items-center gap-4 flex-wrap mt-3 pt-3 border-t border-border">
+                    <div class="flex items-center gap-4 flex-wrap mt-2 pt-4 border-t border-border/40">
                         @if (!string.IsNullOrEmpty(question.CarDisplayName))
                         {
-                            <div class="flex items-center gap-2 text-sm text-muted">
-                                <i data-lucide="car" class="w-4 h-4"></i>
+                            <div class="flex items-center gap-1.5 text-[10px] font-black text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-lg border border-primary/10 transition-colors group-hover/card:bg-primary/10 shadow-sm">
+                                <i data-lucide="car" class="w-3.5 h-3.5"></i>
                                 <span>@question.CarDisplayName</span>
                             </div>
                         }
                         
                         @if (question.Tags.Any())
                         {
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 @foreach (var tag in question.Tags.Take(3))
                                 {
-                                    <span class="badge badge-secondary badge-xs">#@tag</span>
+                                    <span class="text-[9px] font-bold text-muted-foreground bg-muted/30 px-2 py-0.5 rounded-md border border-border/50 uppercase tracking-tight hover:bg-muted/50 transition-colors">#@tag</span>
                                 }
                             </div>
                         }
@@ -77,52 +92,55 @@
                 </div>
 
                 <!-- Stats on Right -->
-                <div class="flex gap-4 p-3 bg-muted/40 rounded-md border border-border shrink-0">
-                    <div class="flex flex-col items-center justify-center min-w-[60px] @(question.VoteScore > 0 ? "text-success" : "")">
-                        <span class="font-bold text-base">@question.VoteScore</span>
-                        <span class="text-xs text-muted">@Localizer["Votes"]</span>
+                <div class="grid grid-cols-3 md:flex md:flex-col gap-4 p-4 bg-muted/20 rounded-2xl border border-border/50 shrink-0 w-full md:w-auto md:min-w-[120px] transition-all group-hover/card:bg-muted/30">
+                    <div class="flex flex-col items-center justify-center p-2 rounded-xl bg-background/50 shadow-sm ring-1 ring-border/50 @(question.VoteScore > 0 ? "text-green-500" : "")">
+                        <span class="font-black text-base tabular-nums">@question.VoteScore</span>
+                        <span class="text-[8px] font-black text-muted-foreground uppercase tracking-widest mt-1 opacity-60">@Localizer["Votes"]</span>
                     </div>
-                    <div class="flex flex-col items-center justify-center min-w-[60px] @(question.AnswerCount > 0 ? "text-primary font-semibold" : "")">
-                        <span class="font-bold text-base">@question.AnswerCount</span>
-                        <span class="text-xs text-muted">@Localizer["Answers"]</span>
+                    <div class="flex flex-col items-center justify-center p-2 rounded-xl bg-background/50 shadow-sm ring-1 ring-border/50 @(question.AnswerCount > 0 ? "text-primary ring-primary/20 bg-primary/5" : "")">
+                        <span class="font-black text-base tabular-nums">@question.AnswerCount</span>
+                        <span class="text-[8px] font-black text-muted-foreground uppercase tracking-widest mt-1 opacity-60">@Localizer["Answers"]</span>
                     </div>
-                    <div class="flex flex-col items-center justify-center min-w-[60px] text-muted">
-                        <span class="font-bold text-base">@question.ViewCount</span>
-                        <span class="text-xs text-muted">@Localizer["Views"]</span>
+                    <div class="flex flex-col items-center justify-center p-2 rounded-xl bg-background/50 shadow-sm ring-1 ring-border/50">
+                        <span class="font-black text-base tabular-nums text-muted-foreground">@question.ViewCount</span>
+                        <span class="text-[8px] font-black text-muted-foreground uppercase tracking-widest mt-1 opacity-60">@Localizer["Views"]</span>
                     </div>
                 </div>
             </a>
         }
 
+        <!-- Pagination Section -->
         @if (Model.Pagination.TotalPages > 1)
         {
-            <div class="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4 border-t border-border pt-4">
-                <div class="text-sm text-muted">
-                    @Localizer["Showing"] @Model.Pagination.StartItem-@Model.Pagination.EndItem @Localizer["Of"] @Model.Pagination.TotalItems @Localizer["Questions"]
+            <div class="flex flex-col sm:flex-row justify-between items-center mt-12 gap-6 border-t border-border/50 pt-8 animate-in slide-in-from-bottom-2 duration-500">
+                <div class="text-[10px] uppercase font-black tracking-widest text-muted-foreground bg-muted p-2 px-4 rounded-full border border-border">
+                    @Localizer["Showing"] <span class="text-foreground">@Model.Pagination.StartItem-@Model.Pagination.EndItem</span> @Localizer["Of"] <span class="text-foreground">@Model.Pagination.TotalItems</span> @Localizer["Questions"]
                 </div>
                 
-                <nav class="flex items-center gap-1">
+                <nav class="flex items-center gap-2">
                     @if (Model.Pagination.HasPreviousPage)
                     {
-                        <a href="javascript:void(0)" onclick="changePage(@(Model.Pagination.CurrentPage - 1))" class="btn btn-secondary btn-sm">
-                            <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i>
+                        <button onclick="changePage(@(Model.Pagination.CurrentPage - 1))" class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-primary hover:text-primary text-foreground rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95 group">
+                            <i data-lucide="chevron-left" class="w-3 h-3 group-hover:-translate-x-0.5 transition-transform"></i>
                             @Localizer["Previous"]
-                        </a>
+                        </button>
                     }
                     
-                    @for (int i = Math.Max(1, Model.Pagination.CurrentPage - 2); i <= Math.Min(Model.Pagination.TotalPages, Model.Pagination.CurrentPage + 2); i++)
-                    {
-                        <a href="javascript:void(0)" onclick="changePage(@i)" class="btn btn-sm @(i == Model.Pagination.CurrentPage ? "btn-primary" : "btn-secondary")">
-                            @i
-                        </a>
-                    }
+                    <div class="flex items-center gap-1.5 p-1 bg-muted/40 rounded-2xl border border-border/50">
+                        @for (int i = Math.Max(1, Model.Pagination.CurrentPage - 2); i <= Math.Min(Model.Pagination.TotalPages, Model.Pagination.CurrentPage + 2); i++)
+                        {
+                            <button onclick="changePage(@i)" class="w-9 h-9 flex items-center justify-center rounded-xl text-xs font-black transition-all @(i == Model.Pagination.CurrentPage ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105" : "hover:bg-background text-muted-foreground hover:text-foreground")">
+                                @i
+                            </button>
+                        }
+                    </div>
                     
                     @if (Model.Pagination.HasNextPage)
                     {
-                        <a href="javascript:void(0)" onclick="changePage(@(Model.Pagination.CurrentPage + 1))" class="btn btn-secondary btn-sm">
+                        <button onclick="changePage(@(Model.Pagination.CurrentPage + 1))" class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-primary hover:text-primary text-foreground rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95 group">
                             @Localizer["Next"]
-                            <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
-                        </a>
+                            <i data-lucide="chevron-right" class="w-3 h-3 group-hover:translate-x-0.5 transition-transform"></i>
+                        </button>
                     }
                 </nav>
             </div>
@@ -130,13 +148,16 @@
     }
     else
     {
-        <div class="qa-empty-state">
-            <div class="qa-empty-icon">
-                <i data-lucide="help-circle"></i>
+        <div class="flex flex-col items-center justify-center py-20 bg-muted/10 border-2 border-dashed border-border rounded-2xl text-center">
+            <div class="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6 shadow-inner animate-pulse">
+                <i data-lucide="help-circle" class="w-10 h-10 text-muted-foreground opacity-40"></i>
             </div>
-            <h3>@Localizer["NoQuestionsFound"]</h3>
-            <p>@Localizer["TryAdjustingFilters"]</p>
-            <button class="btn btn-outline-primary mt-3" onclick="resetFilters()">@Localizer["ClearFilters"]</button>
+            <h3 class="text-2xl font-black text-foreground mb-3 tracking-tight">@Localizer["NoQuestionsFound"]</h3>
+            <p class="text-sm text-muted-foreground max-w-sm mx-auto font-medium opacity-80 mb-8">@Localizer["TryAdjustingFilters"]</p>
+            <button class="px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-primary/20 active:scale-95 flex items-center gap-2" onclick="resetFilters()">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                @Localizer["ClearFilters"]
+            </button>
         </div>
     }
 </div>

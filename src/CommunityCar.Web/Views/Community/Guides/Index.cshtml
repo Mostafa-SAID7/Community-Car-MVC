@@ -2,16 +2,35 @@
     ViewData["Title"] = "Guides";
 }
 
-<div class="card card-glass mb-4">
-    <div class="card-body">
-        <h2 class="h4 mb-3">Service Guides</h2>
-        <div class="list-group list-group-flush">
-            <a href="#" class="list-group-item list-group-item-action bg-transparent border-bottom">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Winter Maintenance Tips</h5>
-                    <small>12/2025</small>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700">
+        <div class="p-8 border-b border-border/50 bg-muted/20">
+            <h2 class="text-2xl font-black text-foreground flex items-center gap-3">
+                <div class="bg-indigo-500/10 p-2 rounded-2xl text-indigo-500">
+                    <i data-lucide="book-open" class="w-6 h-6"></i>
                 </div>
-                <p class="mb-1 text-sm text-muted">A comprehensive guide for the cold season...</p>
+                Mastery Guides
+            </h2>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Deep dives into maintenance, performance tuning, and car care</p>
+        </div>
+        
+        <div class="divide-y divide-border/30">
+            <a href="#" class="block p-8 hover:bg-muted/30 transition-all group">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[8px] font-black uppercase tracking-widest border border-indigo-500/20">Maintenance</span>
+                            <span class="text-[10px] font-bold text-muted-foreground opacity-60">15 min read</span>
+                        </div>
+                        <h3 class="text-xl font-black text-foreground group-hover:text-primary transition-colors leading-tight">Winter Maintenance & Storage Essentials</h3>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground bg-muted p-2 px-4 rounded-lg border border-border shadow-inner">Released 12/2025</span>
+                </div>
+                <p class="text-sm text-muted-foreground font-medium leading-relaxed max-w-2xl opacity-80 group-hover:opacity-100 transition-opacity">A comprehensive guide for the cold season. From battery health and fluid selections to long-term storage best practices for performance vehicles.</p>
+                <div class="mt-6 flex items-center gap-2 text-primary">
+                    <span class="text-[10px] font-black uppercase tracking-widest">Expert Verified Guide</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-2"></i>
+                </div>
             </a>
         </div>
     </div>
