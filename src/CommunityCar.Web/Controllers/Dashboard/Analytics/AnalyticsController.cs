@@ -40,7 +40,7 @@ public class AnalyticsController : Controller
             var aggregateAnalytics = new UserAnalyticsVM
             {
                 NewUsers = dailyAnalytics.Sum(x => x.NewUsers),
-                ActiveUsers = dailyAnalytics.Max(x => x.ActiveUsers), // Using Max for ActiveUsers as a proxy
+                ActiveUsers = dailyAnalytics.Any() ? dailyAnalytics.Max(x => x.ActiveUsers) : 0, // Using Max for ActiveUsers as a proxy
                 ReturnUsers = dailyAnalytics.Sum(x => x.ReturnUsers),
                 RetentionRate = dailyAnalytics.Any() ? dailyAnalytics.Average(x => x.RetentionRate) : 0,
                 AverageSessionDuration = dailyAnalytics.Any() 

@@ -7,11 +7,11 @@ const html = document.documentElement;
 function updateIcons(theme) {
     if (!sunIcon || !moonIcon) return;
     if (theme === 'dark') {
-        sunIcon.classList.add('d-none');
-        moonIcon.classList.remove('d-none');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
     } else {
-        sunIcon.classList.remove('d-none');
-        moonIcon.classList.add('d-none');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
     }
 }
 

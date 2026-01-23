@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (toggleChat && chatWidget) {
         toggleChat.addEventListener('click', () => {
-            chatWidget.classList.toggle('d-none');
-            if (!chatWidget.classList.contains('d-none')) {
+            chatWidget.classList.toggle('hidden');
+            if (!chatWidget.classList.contains('hidden')) {
                 chatInput.focus();
                 scrollToBottom();
                 if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (closeChat) {
         closeChat.addEventListener('click', () => {
-            chatWidget.classList.add('d-none');
+            chatWidget.classList.add('hidden');
         });
     }
 
@@ -34,10 +34,33 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!chatMessages) return;
 
         const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${isAi ? 'ai-message' : 'user-message'}`;
-        msgDiv.innerHTML = `<div class="message-content">${text}</div>`;
+        msgDiv.className = 'flex gap-3 mb-4'; // Tailwind flex container
+
+        let innerHTML = '';
+        if (isAi) {
+            innerHTML = `
+                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground shrink-0 mt-1">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </div>
+                <div class="flex-1 bg-card border border-border rounded-lg p-3 shadow-sm">
+                    <p class="text-sm text-foreground">${text}</p>
+                </div>
+            `;
+        } else {
+            innerHTML = `
+                <div class="flex-1 bg-primary text-primary-foreground rounded-lg p-3 shadow-sm ml-12">
+                     <p class="text-sm">${text}</p>
+                </div>
+                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground shrink-0 mt-1">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                </div>
+            `;
+        }
+
+        msgDiv.innerHTML = innerHTML;
         chatMessages.appendChild(msgDiv);
         scrollToBottom();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     async function handleChatSend() {
@@ -51,11 +74,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Show typing indicator
         const typingDiv = document.createElement('div');
-        typingDiv.className = 'message ai-message typing-indicator';
+        typingDiv.className = 'flex gap-3 mb-4 typing-indicator';
         typingDiv.id = 'chat-typing';
-        typingDiv.innerHTML = '<div class="message-content">Thinking...</div>';
+        typingDiv.innerHTML = `
+            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground shrink-0 mt-1">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <div class="flex-1 bg-card border border-border rounded-lg p-3 shadow-sm">
+                <div class="flex space-x-1">
+                    <div class="w-2 h-2 bg-foreground/50 rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                    <div class="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+                </div>
+            </div>
+        `;
         chatMessages.appendChild(typingDiv);
         scrollToBottom();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
 
         try {
             const response = await fetch('/api/ai-chat/send', {

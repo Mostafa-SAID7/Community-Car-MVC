@@ -3,7 +3,7 @@ let currentStoryId = null;
 let uploadedMediaUrl = null;
 
 // Initialize stories functionality
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeStoryForm();
     loadStoriesData();
 });
@@ -13,9 +13,9 @@ function initializeStoryForm() {
     // Caption character counter
     const captionInput = document.getElementById('storyCaption');
     const captionCount = document.getElementById('captionCount');
-    
+
     if (captionInput && captionCount) {
-        captionInput.addEventListener('input', function() {
+        captionInput.addEventListener('input', function () {
             captionCount.textContent = this.value.length;
         });
     }
@@ -29,7 +29,7 @@ function initializeStoryForm() {
     // Current location handler
     const useLocationCheckbox = document.getElementById('useCurrentLocation');
     if (useLocationCheckbox) {
-        useLocationCheckbox.addEventListener('change', function() {
+        useLocationCheckbox.addEventListener('change', function () {
             if (this.checked) {
                 getCurrentLocation();
             }
@@ -41,7 +41,7 @@ function initializeStoryForm() {
 function openCreateStoryModal() {
     const modal = new bootstrap.Modal(document.getElementById('createStoryModal'));
     modal.show();
-    
+
     // Reset form
     document.getElementById('createStoryForm').reset();
     document.getElementById('captionCount').textContent = '0';
@@ -70,7 +70,7 @@ async function handleMediaUpload(event) {
         // TODO: Implement actual file upload to server
         // For now, create a temporary URL
         uploadedMediaUrl = URL.createObjectURL(file);
-        
+
         // Update story type based on file type
         const storyTypeSelect = document.getElementById('storyType');
         if (file.type.startsWith('image/')) {
@@ -78,7 +78,7 @@ async function handleMediaUpload(event) {
         } else if (file.type.startsWith('video/')) {
             storyTypeSelect.value = '1'; // Video
         }
-        
+
         showToast('Media uploaded successfully', 'success');
     } catch (error) {
         console.error('Upload error:', error);
@@ -94,20 +94,20 @@ function getCurrentLocation() {
     }
 
     navigator.geolocation.getCurrentPosition(
-        function(position) {
+        function (position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
-            
+
             // TODO: Reverse geocode to get location name
             document.getElementById('locationName').value = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-            
+
             // Store coordinates for later use
             document.getElementById('locationName').dataset.latitude = lat;
             document.getElementById('locationName').dataset.longitude = lng;
-            
+
             showToast('Location added successfully', 'success');
         },
-        function(error) {
+        function (error) {
             console.error('Geolocation error:', error);
             showToast('Failed to get current location', 'error');
         }
@@ -123,10 +123,10 @@ async function createStory() {
 
     const createBtn = document.getElementById('createStoryBtn');
     const spinner = document.getElementById('createStorySpinner');
-    
+
     // Show loading state
     createBtn.disabled = true;
-    spinner.classList.remove('d-none');
+    spinner.classList.remove('hidden');
 
     try {
         // Collect form data
@@ -165,11 +165,11 @@ async function createStory() {
 
         if (result.success) {
             showToast('Story created successfully!', 'success');
-            
+
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('createStoryModal'));
             modal.hide();
-            
+
             // Refresh stories display
             loadStoriesData();
         } else {
@@ -181,14 +181,14 @@ async function createStory() {
     } finally {
         // Hide loading state
         createBtn.disabled = false;
-        spinner.classList.add('d-none');
+        spinner.classList.add('hidden');
     }
 }
 
 // Parse tags from input string
 function parseTags(tagsString) {
     if (!tagsString) return [];
-    
+
     return tagsString
         .split(',')
         .map(tag => tag.trim().replace(/^#/, ''))
@@ -200,7 +200,7 @@ async function loadStoriesData() {
     try {
         const response = await fetch('/api/feed/stories');
         const stories = await response.json();
-        
+
         if (stories && Array.isArray(stories)) {
             updateStoriesDisplay(stories);
         }
@@ -233,10 +233,10 @@ function createStoryElement(story) {
     const div = document.createElement('div');
     div.className = 'flex-shrink-0';
     div.style.width = '80px';
-    
+
     const thumbnailUrl = story.thumbnailUrl || story.mediaUrl || '';
     const backgroundStyle = thumbnailUrl ? `background-image: url('${thumbnailUrl}'); background-size: cover; background-position: center;` : '';
-    
+
     div.innerHTML = `
         <div class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center mb-2 cursor-pointer position-relative" 
              style="width: 80px; height: 80px; border: 3px solid var(--color-red-500); ${backgroundStyle}"
@@ -248,19 +248,19 @@ function createStoryElement(story) {
             <small class="text-muted">${story.authorName || 'User'}</small>
         </div>
     `;
-    
+
     return div;
 }
 
 // Open story viewer
 async function openStoryViewer(storyId) {
     currentStoryId = storyId;
-    
+
     try {
         // Fetch story details
         const response = await fetch(`/api/stories/${storyId}`);
         const story = await response.json();
-        
+
         if (!story) {
             showToast('Story not found', 'error');
             return;
@@ -272,7 +272,7 @@ async function openStoryViewer(storyId) {
         document.getElementById('storyCaption').textContent = story.caption || '';
         document.getElementById('storyLikeCount').textContent = story.likeCount || 0;
         document.getElementById('storyViewCount').textContent = story.viewCount || 0;
-        
+
         // Update media container
         const mediaContainer = document.getElementById('storyMediaContainer');
         if (story.type === 1) { // Video
@@ -287,7 +287,7 @@ async function openStoryViewer(storyId) {
                 <img src="${story.mediaUrl}" class="w-100" style="max-height: 400px; object-fit: contain;" alt="Story media">
             `;
         }
-        
+
         // Update tags
         const tagsContainer = document.getElementById('storyTags');
         if (story.tags && story.tags.length > 0) {
@@ -295,7 +295,7 @@ async function openStoryViewer(storyId) {
         } else {
             tagsContainer.innerHTML = '';
         }
-        
+
         // Update location
         const locationContainer = document.getElementById('storyLocation');
         if (story.locationName) {
@@ -303,14 +303,14 @@ async function openStoryViewer(storyId) {
         } else {
             locationContainer.innerHTML = '';
         }
-        
+
         // Show modal
         const modal = new bootstrap.Modal(document.getElementById('storyViewerModal'));
         modal.show();
-        
+
         // Increment view count
         incrementStoryView(storyId);
-        
+
     } catch (error) {
         console.error('Load story error:', error);
         showToast('Failed to load story', 'error');
@@ -320,20 +320,20 @@ async function openStoryViewer(storyId) {
 // Like story
 async function likeStory() {
     if (!currentStoryId) return;
-    
+
     try {
         const response = await fetch(`/api/stories/${currentStoryId}/like`, {
             method: 'POST'
         });
-        
+
         const result = await response.json();
-        
+
         if (result.success) {
             // Update like count in UI
             const likeCountElement = document.getElementById('storyLikeCount');
             const currentCount = parseInt(likeCountElement.textContent) || 0;
             likeCountElement.textContent = currentCount + 1;
-            
+
             showToast('Story liked!', 'success');
         }
     } catch (error) {
@@ -361,7 +361,7 @@ function showToast(message, type = 'info') {
     toast.setAttribute('role', 'alert');
     toast.setAttribute('aria-live', 'assertive');
     toast.setAttribute('aria-atomic', 'true');
-    
+
     toast.innerHTML = `
         <div class="d-flex">
             <div class="toast-body">
@@ -370,7 +370,7 @@ function showToast(message, type = 'info') {
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     `;
-    
+
     // Add to toast container or create one
     let toastContainer = document.querySelector('.toast-container');
     if (!toastContainer) {
@@ -379,15 +379,15 @@ function showToast(message, type = 'info') {
         toastContainer.style.zIndex = '1100';
         document.body.appendChild(toastContainer);
     }
-    
+
     toastContainer.appendChild(toast);
-    
+
     // Show toast
     const bsToast = new bootstrap.Toast(toast);
     bsToast.show();
-    
+
     // Remove from DOM after hiding
-    toast.addEventListener('hidden.bs.toast', function() {
+    toast.addEventListener('hidden.bs.toast', function () {
         toast.remove();
     });
 }
