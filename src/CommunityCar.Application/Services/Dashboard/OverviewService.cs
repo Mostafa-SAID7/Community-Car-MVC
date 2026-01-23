@@ -4,7 +4,7 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
 
-public class DashboardOverviewService : IDashboardOverviewService
+public class OverviewService : IOverviewService
 {
     public async Task<DashboardOverviewVM> GetOverviewAsync(DashboardOverviewRequest? request = null)
     {
@@ -53,12 +53,13 @@ public class DashboardOverviewService : IDashboardOverviewService
         return await GetOverviewAsync(null);
     }
 
+
     public async Task<List<DashboardStatsVM>> GetQuickStatsAsync()
     {
         return new List<DashboardStatsVM>
         {
-            new() { Title = "Total Users", Value = "1,250", Icon = "bi-people", Color = "primary", ChangePercentage = 12.5m, IsPositiveChange = true },
-            new() { Title = "Active Now", Value = "125", Icon = "bi-activity", Color = "success", ChangePercentage = 5.2m, IsPositiveChange = true },
+            new () { Title = "Total Users", Value = "1,250", Icon = "bi-people", Color = "primary", ChangePercentage = 12.5m, IsPositiveChange = true },
+            new () { Title = "Active Now", Value = "125", Icon = "bi-activity", Color = "success", ChangePercentage = 5.2m, IsPositiveChange = true },
             new() { Title = "New Orders", Value = "45", Icon = "bi-cart", Color = "warning", ChangePercentage = 2.1m, IsPositiveChange = false },
             new() { Title = "Reports", Value = "12", Icon = "bi-flag", Color = "danger", ChangePercentage = 0, IsPositiveChange = true }
         };

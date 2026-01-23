@@ -8,16 +8,16 @@ namespace CommunityCar.Web.Controllers.Dashboard.Settings;
 
 [Route("dashboard/settings")]
 [Authorize]
-public class DashboardSettingsController : Controller
+public class SettingsController : Controller
 {
-    private readonly IDashboardSettingsService _settingsService;
+    private readonly ISettingsService _settingsService;
     private readonly ICurrentUserService _currentUserService;
-    private readonly ILogger<DashboardSettingsController> _logger;
+    private readonly ILogger<SettingsController> _logger;
 
-    public DashboardSettingsController(
-        IDashboardSettingsService settingsService,
+    public SettingsController(
+        ISettingsService settingsService,
         ICurrentUserService currentUserService,
-        ILogger<DashboardSettingsController> logger)
+        ILogger<SettingsController> logger)
     {
         _settingsService = settingsService;
         _currentUserService = currentUserService;
@@ -34,7 +34,7 @@ public class DashboardSettingsController : Controller
                 return RedirectToAction("Login", "Account");
             }
 
-            var settings = string.IsNullOrEmpty(category) 
+            var settings = string.IsNullOrEmpty(category)
                 ? await _settingsService.GetSettingsAsync(userId)
                 : await _settingsService.GetSettingsByCategoryAsync(userId, category);
 
@@ -183,7 +183,7 @@ public class DashboardSettingsController : Controller
                 return Json(new { success = false, message = "User not authenticated" });
             }
 
-            var settings = string.IsNullOrEmpty(category) 
+            var settings = string.IsNullOrEmpty(category)
                 ? await _settingsService.GetSettingsAsync(userId)
                 : await _settingsService.GetSettingsByCategoryAsync(userId, category);
 

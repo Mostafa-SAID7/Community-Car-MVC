@@ -3,7 +3,7 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
-public interface IDashboardSettingsService
+public interface ISettingsService
 {
     Task<List<DashboardSettingsVM>> GetSettingsAsync();
     Task<List<DashboardSettingsVM>> GetSettingsByCategoryAsync(string category);

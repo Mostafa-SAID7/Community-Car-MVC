@@ -7,12 +7,12 @@ namespace CommunityCar.Web.Controllers.Dashboard.Performance;
 
 [Authorize(Roles = "Admin")]
 [Route("dashboard/performance")]
-public class DashboardPerformanceController : Controller
+public class PerformanceController : Controller
 {
     private readonly IPerformanceService _performanceService;
-    private readonly ILogger<DashboardPerformanceController> _logger;
+    private readonly ILogger<PerformanceController> _logger;
 
-    public DashboardPerformanceController(IPerformanceService performanceService, ILogger<DashboardPerformanceController> logger)
+    public PerformanceController(IPerformanceService performanceService, ILogger<PerformanceController> logger)
     {
         _performanceService = performanceService;
         _logger = logger;

@@ -3,7 +3,7 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
-public interface IDashboardAnalyticsService
+public interface IAnalyticsService
 {
     Task<List<UserAnalyticsVM>> GetUserAnalyticsAsync(AnalyticsRequest request);
     Task<List<ContentAnalyticsVM>> GetContentAnalyticsAsync(AnalyticsRequest request);

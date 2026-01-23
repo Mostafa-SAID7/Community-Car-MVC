@@ -4,7 +4,7 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
 
-public class DashboardAnalyticsService : IDashboardAnalyticsService
+public class AnalyticsService : IAnalyticsService
 {
     public async Task<List<UserAnalyticsVM>> GetUserAnalyticsAsync(AnalyticsRequest request)
     {
@@ -138,28 +138,28 @@ public class DashboardAnalyticsService : IDashboardAnalyticsService
 
     public async Task<List<ChartDataVM>> GetUserGrowthChartAsync(int days)
     {
-        return await GetAnalyticsChartAsync(new AnalyticsRequest 
-        { 
-            StartDate = DateTime.UtcNow.AddDays(-days), 
-            EndDate = DateTime.UtcNow 
+        return await GetAnalyticsChartAsync(new AnalyticsRequest
+        {
+            StartDate = DateTime.UtcNow.AddDays(-days),
+            EndDate = DateTime.UtcNow
         });
     }
 
     public async Task<List<ChartDataVM>> GetEngagementChartAsync(int days)
     {
-        return await GetAnalyticsChartAsync(new AnalyticsRequest 
-        { 
-            StartDate = DateTime.UtcNow.AddDays(-days), 
-            EndDate = DateTime.UtcNow 
+        return await GetAnalyticsChartAsync(new AnalyticsRequest
+        {
+            StartDate = DateTime.UtcNow.AddDays(-days),
+            EndDate = DateTime.UtcNow
         });
     }
 
     public async Task<List<ChartDataVM>> GetContentCreationChartAsync(int days)
     {
-        return await GetAnalyticsChartAsync(new AnalyticsRequest 
-        { 
-            StartDate = DateTime.UtcNow.AddDays(-days), 
-            EndDate = DateTime.UtcNow 
+        return await GetAnalyticsChartAsync(new AnalyticsRequest
+        {
+            StartDate = DateTime.UtcNow.AddDays(-days),
+            EndDate = DateTime.UtcNow
         });
     }
 
@@ -169,3 +169,4 @@ public class DashboardAnalyticsService : IDashboardAnalyticsService
         return true;
     }
 }
+

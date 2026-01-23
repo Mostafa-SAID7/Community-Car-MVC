@@ -8,16 +8,16 @@ namespace CommunityCar.Web.Controllers.Dashboard.Reports;
 
 [Route("dashboard/reports")]
 [Authorize]
-public class DashboardReportsController : Controller
+public class ReportsController : Controller
 {
-    private readonly IDashboardReportsService _reportsService;
+    private readonly IReportsService _reportsService;
     private readonly ICurrentUserService _currentUserService;
-    private readonly ILogger<DashboardReportsController> _logger;
+    private readonly ILogger<ReportsController> _logger;
 
-    public DashboardReportsController(
-        IDashboardReportsService reportsService,
+    public ReportsController(
+        IReportsService reportsService,
         ICurrentUserService currentUserService,
-        ILogger<DashboardReportsController> logger)
+        ILogger<ReportsController> logger)
     {
         _reportsService = reportsService;
         _currentUserService = currentUserService;

@@ -6,14 +6,14 @@ namespace CommunityCar.Web.Controllers.Dashboard.Monitoring;
 
 [Route("dashboard/monitoring")]
 [Authorize(Roles = "Admin")]
-public class DashboardMonitoringController : Controller
+public class MonitoringController : Controller
 {
-    private readonly IDashboardMonitoringService _monitoringService;
-    private readonly ILogger<DashboardMonitoringController> _logger;
+    private readonly IMonitoringService _monitoringService;
+    private readonly ILogger<MonitoringController> _logger;
 
-    public DashboardMonitoringController(
-        IDashboardMonitoringService monitoringService,
-        ILogger<DashboardMonitoringController> logger)
+    public MonitoringController(
+        IMonitoringService monitoringService,
+        ILogger<MonitoringController> logger)
     {
         _monitoringService = monitoringService;
         _logger = logger;
@@ -26,7 +26,7 @@ public class DashboardMonitoringController : Controller
         {
             var systemHealth = await _monitoringService.GetSystemHealthAsync();
             var isHealthy = await _monitoringService.IsSystemHealthyAsync();
-            
+
             ViewBag.IsSystemHealthy = isHealthy;
             return View(systemHealth);
         }
@@ -74,12 +74,13 @@ public class DashboardMonitoringController : Controller
         {
             var systemHealth = await _monitoringService.GetSystemHealthAsync();
             var isHealthy = await _monitoringService.IsSystemHealthyAsync();
-            
-            return Json(new { 
-                success = true, 
-                data = systemHealth, 
+
+            return Json(new
+            {
+                success = true,
+                data = systemHealth,
                 isHealthy = isHealthy,
-                timestamp = DateTime.UtcNow 
+                timestamp = DateTime.UtcNow
             });
         }
         catch (Exception ex)
@@ -116,7 +117,7 @@ public class DashboardMonitoringController : Controller
         {
             var start = startDate ?? DateTime.UtcNow.AddHours(-24);
             var end = endDate ?? DateTime.UtcNow;
-            
+
             var performanceData = await _monitoringService.GetPerformanceChartAsync(serviceName, start, end);
             return Json(new { success = true, data = performanceData });
         }
@@ -134,13 +135,13 @@ public class DashboardMonitoringController : Controller
         try
         {
             var success = await _monitoringService.UpdateSystemHealthAsync(
-                serviceName, 
-                request.Status, 
-                request.ResponseTime, 
-                request.CpuUsage, 
-                request.MemoryUsage, 
-                request.DiskUsage, 
-                request.ActiveConnections, 
+                serviceName,
+                request.Status,
+                request.ResponseTime,
+                request.CpuUsage,
+                request.MemoryUsage,
+                request.DiskUsage,
+                request.ActiveConnections,
                 request.ErrorCount);
 
             if (success)

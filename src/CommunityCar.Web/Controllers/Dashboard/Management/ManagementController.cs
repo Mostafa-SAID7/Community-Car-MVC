@@ -8,16 +8,16 @@ namespace CommunityCar.Web.Controllers.Dashboard.Management;
 
 [Route("dashboard/management")]
 [Authorize]
-public class DashboardManagementController : Controller
+public class ManagementController : Controller
 {
-    private readonly IDashboardManagementService _managementService;
+    private readonly IManagementService _managementService;
     private readonly ICurrentUserService _currentUserService;
-    private readonly ILogger<DashboardManagementController> _logger;
+    private readonly ILogger<ManagementController> _logger;
 
-    public DashboardManagementController(
-        IDashboardManagementService managementService,
+    public ManagementController(
+        IManagementService managementService,
         ICurrentUserService currentUserService,
-        ILogger<DashboardManagementController> logger)
+        ILogger<ManagementController> logger)
     {
         _managementService = managementService;
         _currentUserService = currentUserService;

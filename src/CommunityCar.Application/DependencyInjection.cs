@@ -27,7 +27,7 @@ public static class DependencyInjection
         services.AddScoped<IFeedService, FeedService>();
         services.AddScoped<IInteractionService, InteractionService>();
         services.AddScoped<ILocalizationService, LocalizationService>();
-        
+
         // Profile services
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IProfileManagementService, ProfileManagementService>();
@@ -36,19 +36,19 @@ public static class DependencyInjection
         services.AddScoped<IProfileEmailService, ProfileEmailService>();
         services.AddScoped<IProfileAccountService, ProfileAccountService>();
         services.AddScoped<IAccountManagementService, AccountManagementService>();
-        
+
         // Dashboard services
-        services.AddScoped<IDashboardOverviewService, DashboardOverviewService>();
-        services.AddScoped<IDashboardAnalyticsService, DashboardAnalyticsService>();
-        services.AddScoped<IDashboardReportsService, DashboardReportsService>();
-        services.AddScoped<IDashboardMonitoringService, DashboardMonitoringService>();
-        services.AddScoped<IDashboardManagementService, DashboardManagementService>();
-        services.AddScoped<IDashboardSettingsService, DashboardSettingsService>();
-        
+        services.AddScoped<IOverviewService, OverviewService>();
+        services.AddScoped<IAnalyticsService, AnalyticsService>();
+        services.AddScoped<IReportsService, ReportsService>();
+        services.AddScoped<IMonitoringService, MonitoringService>();
+        services.AddScoped<IManagementService, ManagementService>();
+        services.AddScoped<ISettingsService, SettingsService>();
+
         // SEO and Performance services
         services.AddScoped<ISEOService, SEOService>();
         services.AddScoped<IPerformanceService, PerformanceService>();
-        
+
         return services;
     }
 }

@@ -3,7 +3,7 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
-public interface IDashboardManagementService
+public interface IManagementService
 {
     Task<List<UserManagementVM>> GetUserManagementHistoryAsync(int page = 1, int pageSize = 20);
     Task<List<UserManagementVM>> GetUserManagementHistoryByUserAsync(Guid userId, int page = 1, int pageSize = 20);

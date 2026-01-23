@@ -5,11 +5,11 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
 
-public class DashboardManagementService : IDashboardManagementService
+public class ManagementService : IManagementService
 {
     private readonly ICurrentUserService _currentUserService;
 
-    public DashboardManagementService(ICurrentUserService currentUserService)
+    public ManagementService(ICurrentUserService currentUserService)
     {
         _currentUserService = currentUserService;
     }
@@ -25,7 +25,7 @@ public class DashboardManagementService : IDashboardManagementService
         {
             var action = actions[random.Next(actions.Length)];
             var actionDate = DateTime.UtcNow.AddDays(-random.Next(1, 30));
-            
+
             history.Add(new UserManagementVM
             {
                 Id = Guid.NewGuid(),

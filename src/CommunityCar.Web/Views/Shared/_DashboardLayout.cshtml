@@ -26,7 +26,8 @@
             <partial name="_DashboardSidebarLeft" />
 
             <!-- Main Content Area (Wider since no right sidebar) -->
-            <main class="flex-1 transition-all duration-300 md:ml-24 xl:ml-[16.5rem] xl:mr-4 px-4 whitespace-normal">
+            <main
+                class="flex transition-all duration-300 ml-28 xl:ml-[18rem] @(IsSectionDefined("SidebarRight") ? "xl:mr-[25rem]" : "xl:mr-4") px-4 whitespace-normal">
                 <div class="bg-card/30 backdrop-blur-xl border border-border rounded-xl shadow-2xl p-6 md:p-8">
                     <div class="mb-8">
                         <h1 class="text-2xl font-black text-foreground">@ViewData["Title"]</h1>
@@ -37,6 +38,13 @@
                     @RenderBody()
                 </div>
             </main>
+
+            @if (IsSectionDefined("SidebarRight"))
+            {
+                <div class="fixed right-4 top-24 bottom-8 w-80 hidden xl:block">
+                    @RenderSection("SidebarRight")
+                </div>
+            }
         </div>
     </div>
 

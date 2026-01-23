@@ -3,7 +3,7 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
 
-public class DashboardMonitoringService : IDashboardMonitoringService
+public class MonitoringService : IMonitoringService
 {
     public async Task<List<SystemHealthVM>> GetSystemHealthAsync()
     {
@@ -53,7 +53,7 @@ public class DashboardMonitoringService : IDashboardMonitoringService
         return allServices.FirstOrDefault(s => s.ServiceName.Equals(serviceName, StringComparison.OrdinalIgnoreCase));
     }
 
-    public async Task<bool> UpdateSystemHealthAsync(string serviceName, string status, double responseTime, 
+    public async Task<bool> UpdateSystemHealthAsync(string serviceName, string status, double responseTime,
         double cpuUsage, double memoryUsage, double diskUsage, int activeConnections, int errorCount)
     {
         await Task.CompletedTask;

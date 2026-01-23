@@ -5,11 +5,11 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
 
-public class DashboardReportsService : IDashboardReportsService
+public class ReportsService : IReportsService
 {
     private readonly ICurrentUserService _currentUserService;
 
-    public DashboardReportsService(ICurrentUserService currentUserService)
+    public ReportsService(ICurrentUserService currentUserService)
     {
         _currentUserService = currentUserService;
     }
@@ -29,7 +29,7 @@ public class DashboardReportsService : IDashboardReportsService
             var status = statuses[random.Next(statuses.Length)];
             var format = formats[random.Next(formats.Length)];
             var createdDate = DateTime.UtcNow.AddDays(-random.Next(1, 30));
-            
+
             reports.Add(new SystemReportVM
             {
                 Id = Guid.NewGuid(),

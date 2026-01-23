@@ -8,16 +8,16 @@ namespace CommunityCar.Web.Controllers.Dashboard.Overview;
 
 [Route("dashboard/overview")]
 [Authorize]
-public class DashboardOverviewController : Controller
+public class OverviewController : Controller
 {
-    private readonly IDashboardOverviewService _overviewService;
+    private readonly IOverviewService _overviewService;
     private readonly ICurrentUserService _currentUserService;
-    private readonly ILogger<DashboardOverviewController> _logger;
+    private readonly ILogger<OverviewController> _logger;
 
-    public DashboardOverviewController(
-        IDashboardOverviewService overviewService,
+    public OverviewController(
+        IOverviewService overviewService,
         ICurrentUserService currentUserService,
-        ILogger<DashboardOverviewController> logger)
+        ILogger<OverviewController> logger)
     {
         _overviewService = overviewService;
         _currentUserService = currentUserService;

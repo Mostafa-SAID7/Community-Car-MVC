@@ -4,7 +4,7 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
 
-public class DashboardSettingsService : IDashboardSettingsService
+public class SettingsService : ISettingsService
 {
     public async Task<List<DashboardSettingsVM>> GetSettingsAsync()
     {

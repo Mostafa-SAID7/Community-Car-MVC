@@ -7,12 +7,12 @@ namespace CommunityCar.Web.Controllers.Dashboard.SEO;
 
 [Authorize(Roles = "Admin")]
 [Route("dashboard/seo")]
-public class DashboardSEOController : Controller
+public class SEOController : Controller
 {
     private readonly ISEOService _seoService;
-    private readonly ILogger<DashboardSEOController> _logger;
+    private readonly ILogger<SEOController> _logger;
 
-    public DashboardSEOController(ISEOService seoService, ILogger<DashboardSEOController> logger)
+    public SEOController(ISEOService seoService, ILogger<SEOController> logger)
     {
         _seoService = seoService;
         _logger = logger;

@@ -3,7 +3,7 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
-public interface IDashboardOverviewService
+public interface IOverviewService
 {
     Task<DashboardOverviewVM> GetOverviewAsync(DashboardOverviewRequest? request = null);
     Task<List<DashboardStatsVM>> GetQuickStatsAsync();

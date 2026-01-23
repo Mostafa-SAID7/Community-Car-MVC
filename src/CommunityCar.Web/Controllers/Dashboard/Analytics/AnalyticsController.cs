@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Dashboard.DTOs;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,16 +9,16 @@ namespace CommunityCar.Web.Controllers.Dashboard.Analytics;
 
 [Route("dashboard/analytics")]
 [Authorize]
-public class DashboardAnalyticsController : Controller
+public class AnalyticsController : Controller
 {
-    private readonly IDashboardAnalyticsService _analyticsService;
+    private readonly IAnalyticsService _analyticsService;
     private readonly ICurrentUserService _currentUserService;
-    private readonly ILogger<DashboardAnalyticsController> _logger;
+    private readonly ILogger<AnalyticsController> _logger;
 
-    public DashboardAnalyticsController(
-        IDashboardAnalyticsService analyticsService,
+    public AnalyticsController(
+        IAnalyticsService analyticsService,
         ICurrentUserService currentUserService,
-        ILogger<DashboardAnalyticsController> logger)
+        ILogger<AnalyticsController> logger)
     {
         _analyticsService = analyticsService;
         _currentUserService = currentUserService;
@@ -25,9 +26,24 @@ public class DashboardAnalyticsController : Controller
     }
 
     [HttpGet("")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index(DateTime? startDate = null, DateTime? endDate = null)
     {
-        return View();
+        try
+        {
+            var request = new AnalyticsRequest
+            {
+                StartDate = startDate ?? DateTime.UtcNow.AddDays(-30),
+                EndDate = endDate ?? DateTime.UtcNow
+            };
+
+            var analytics = await _analyticsService.GetUserAnalyticsAsync(request);
+            return View(analytics);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading analytics for index");
+            return View(new UserAnalyticsVM());
+        }
     }
 
     [HttpGet("users")]
@@ -128,7 +144,7 @@ public class DashboardAnalyticsController : Controller
         {
             var analyticsDate = date ?? DateTime.UtcNow.Date;
             var analytics = await _analyticsService.GetUserAnalyticsByIdAsync(userId, analyticsDate);
-            
+
             if (analytics == null)
             {
                 return NotFound();
@@ -151,7 +167,7 @@ public class DashboardAnalyticsController : Controller
         {
             var analyticsDate = date ?? DateTime.UtcNow.Date;
             var analytics = await _analyticsService.GetContentAnalyticsByIdAsync(contentId, contentType, analyticsDate);
-            
+
             if (analytics == null)
             {
                 return NotFound();

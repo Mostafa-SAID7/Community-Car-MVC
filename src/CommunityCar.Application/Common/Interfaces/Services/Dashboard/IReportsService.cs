@@ -3,7 +3,7 @@ using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
-public interface IDashboardReportsService
+public interface IReportsService
 {
     Task<List<SystemReportVM>> GetReportsAsync(int page = 1, int pageSize = 20);
     Task<SystemReportVM?> GetReportByIdAsync(Guid reportId);
