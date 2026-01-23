@@ -32,13 +32,25 @@
     <partial name="_Header" />
 
     <!-- Main container with proper spacing for fixed header and sidebars -->
-    <div class="flex pt-28 pb-8 min-h-screen">
+    <div class="flex pt-28 pb-8 min-h-screen" id="main-container">
         <partial name="_SidebarLeft" />
 
-        <!-- Main Content Area with proper margins for sidebars -->
-        <main class="ml-28 xl:ml-[18rem] xl:mr-[25rem] px-4 whitespace-normal">
-            <div class="bg-card/30 backdrop-blur-xl border border-border rounded-xl shadow-2xl p-6 md:p-8">
-                @RenderBody()
+        <!-- Main Content Area with responsive margins that adjust to sidebar widths -->
+        <main class="flex-1 transition-all duration-300 px-4" id="main-content" 
+              style="margin-left: 5rem; margin-right: 0;">
+            <div class="max-w-none w-full">
+                <div class="bg-card/30 backdrop-blur-xl border border-border rounded-xl shadow-2xl p-6 md:p-8">
+                    <!-- Header with sidebar toggle -->
+                    <div class="flex items-center justify-between mb-6 xl:mb-0">
+                        <button id="sidebar-toggle" class="xl:hidden p-2 rounded-lg hover:bg-accent transition-colors">
+                            <i data-lucide="menu" class="w-5 h-5"></i>
+                        </button>
+                        <button id="right-sidebar-toggle" class="xl:hidden p-2 rounded-lg hover:bg-accent transition-colors ml-auto">
+                            <i data-lucide="sidebar" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    @RenderBody()
+                </div>
             </div>
         </main>
 
@@ -73,6 +85,74 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             lucide.createIcons();
+            
+            // Main layout sidebar responsive behavior
+            const mainContent = document.getElementById('main-content');
+            const leftSidebar = document.querySelector('aside:first-of-type'); // Left sidebar
+            const rightSidebar = document.querySelector('aside:last-of-type'); // Right sidebar
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const rightSidebarToggle = document.getElementById('right-sidebar-toggle');
+            
+            function updateMainContentMargins() {
+                if (window.innerWidth >= 1280) { // xl breakpoint
+                    // Large screens: left sidebar expanded (224px + 16px left margin + 16px gap = 256px)
+                    // Right sidebar visible (320px + 16px right margin + 16px gap = 352px)
+                    mainContent.style.marginLeft = '15rem';
+                    mainContent.style.marginRight = '22rem';
+                } else if (window.innerWidth >= 768) { // md breakpoint
+                    // Medium screens: left sidebar collapsed (64px + 16px left margin + 16px gap = 96px)
+                    // Right sidebar hidden
+                    mainContent.style.marginLeft = '5rem';
+                    mainContent.style.marginRight = '0';
+                } else {
+                    // Small screens: both sidebars hidden
+                    mainContent.style.marginLeft = '1rem';
+                    mainContent.style.marginRight = '1rem';
+                }
+            }
+            
+            // Update margins on load and resize
+            updateMainContentMargins();
+            window.addEventListener('resize', updateMainContentMargins);
+            
+            // Left sidebar toggle for mobile
+            if (sidebarToggle && leftSidebar) {
+                sidebarToggle.addEventListener('click', function() {
+                    leftSidebar.classList.toggle('sidebar-visible');
+                    document.body.classList.toggle('left-sidebar-visible');
+                });
+            }
+            
+            // Right sidebar toggle for mobile
+            if (rightSidebarToggle && rightSidebar) {
+                rightSidebarToggle.addEventListener('click', function() {
+                    rightSidebar.classList.toggle('sidebar-visible');
+                    document.body.classList.toggle('right-sidebar-visible');
+                });
+            }
+            
+            // Close sidebars when clicking outside on mobile
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth < 1280) {
+                    // Close left sidebar
+                    if (leftSidebar && 
+                        !leftSidebar.contains(e.target) && 
+                        !sidebarToggle?.contains(e.target) &&
+                        leftSidebar.classList.contains('sidebar-visible')) {
+                        leftSidebar.classList.remove('sidebar-visible');
+                        document.body.classList.remove('left-sidebar-visible');
+                    }
+                    
+                    // Close right sidebar
+                    if (rightSidebar && 
+                        !rightSidebar.contains(e.target) && 
+                        !rightSidebarToggle?.contains(e.target) &&
+                        rightSidebar.classList.contains('sidebar-visible')) {
+                        rightSidebar.classList.remove('sidebar-visible');
+                        document.body.classList.remove('right-sidebar-visible');
+                    }
+                }
+            });
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

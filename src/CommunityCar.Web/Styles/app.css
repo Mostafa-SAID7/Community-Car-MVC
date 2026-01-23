@@ -67,16 +67,29 @@
         @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-[35] opacity-0 pointer-events-none transition-opacity duration-300;
     }
 
-    .sidebar-visible .sidebar-backdrop {
+    .sidebar-visible .sidebar-backdrop,
+    .left-sidebar-visible .sidebar-backdrop,
+    .right-sidebar-visible .sidebar-backdrop {
         @apply opacity-100 pointer-events-auto;
     }
 
-    /* Drawer behavior for sidebar on small screens */
+    /* Left sidebar drawer behavior */
     .sidebar {
         @apply -translate-x-full md:translate-x-0 transition-transform duration-300;
     }
 
-    .sidebar-visible .sidebar {
+    .sidebar-visible .sidebar,
+    .left-sidebar-visible .sidebar {
         @apply translate-x-0;
+    }
+
+    /* Right sidebar drawer behavior */
+    .sidebar-right {
+        @apply translate-x-full xl:translate-x-0 transition-transform duration-300;
+    }
+
+    .sidebar-visible .sidebar-right,
+    .right-sidebar-visible .sidebar-right {
+        @apply translate-x-0 block;
     }
 }
