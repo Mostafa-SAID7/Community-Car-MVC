@@ -24,6 +24,7 @@
         --input: 214.3 31.8% 91.4%;
         --ring: 357 97% 58%;
         --radius: 0.5rem;
+        --vh: 1vh;
     }
 
     .dark {
@@ -56,6 +57,33 @@
 
     body {
         @apply bg-background text-foreground;
+    }
+
+    /* Mobile viewport height fix */
+    .min-h-screen {
+        min-height: 100vh;
+        min-height: calc(var(--vh, 1vh) * 100);
+    }
+
+    /* Mobile touch improvements */
+    @media (max-width: 768px) {
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        button, a {
+            @apply touch-manipulation;
+        }
+        
+        /* Improve scrolling on mobile */
+        .overflow-y-auto {
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Better mobile text sizing */
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
     }
 
     /* Sidebar Responsiveness */
@@ -91,5 +119,28 @@
     .sidebar-visible .sidebar-right,
     .right-sidebar-visible .sidebar-right {
         @apply translate-x-0 block;
+    }
+
+    /* Mobile-specific improvements */
+    @media (max-width: 640px) {
+        /* Reduce padding on very small screens */
+        .p-6 {
+            @apply p-3;
+        }
+        
+        .p-8 {
+            @apply p-4;
+        }
+        
+        /* Improve button sizes for touch */
+        button {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Better form inputs on mobile */
+        input, textarea, select {
+            @apply text-base; /* Prevents zoom on iOS */
+        }
     }
 }
