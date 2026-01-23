@@ -1,5 +1,4 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Settings;

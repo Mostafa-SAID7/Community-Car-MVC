@@ -1,4 +1,4 @@
-@model IEnumerable<CommunityCar.Application.Features.Dashboard.DTOs.ReportGenerationRequest>
+@model IEnumerable<CommunityCar.Application.Features.Dashboard.ViewModels.SystemReportVM>
 @{
     ViewData["Title"] = "Reports";
     ViewData["PageType"] = "Reports";
@@ -73,6 +73,7 @@
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900">@report.ReportType</div>
+                                            <div class="text-sm text-gray-500">@report.Description</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">
@@ -80,18 +81,33 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                                Completed
+                                            @{
+                                                var statusClass = report.Status.ToLower() switch
+                                                {
+                                                    "generated" => "bg-green-100 text-green-800",
+                                                    "generating" => "bg-yellow-100 text-yellow-800",
+                                                    "failed" => "bg-red-100 text-red-800",
+                                                    "scheduled" => "bg-blue-100 text-blue-800",
+                                                    _ => "bg-gray-100 text-gray-800"
+                                                };
+                                            }
+                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full @statusClass">
+                                                @report.Status
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            @DateTime.Now.ToString("MMM dd, yyyy")
+                                            @report.CreatedAt.ToString("MMM dd, yyyy HH:mm")
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex items-center justify-end space-x-2">
-                                                <a href="#" class="text-primary-600 hover:text-primary-900">View</a>
-                                                <a href="#" class="text-primary-600 hover:text-primary-900">Download</a>
-                                                <form method="post" class="inline">
+                                                <a href="@Url.Action("Details", "Reports", new { id = report.Id })" 
+                                                   class="text-primary-600 hover:text-primary-900">View</a>
+                                                @if (report.Status.ToLower() == "generated")
+                                                {
+                                                    <a href="@Url.Action("Download", "Reports", new { id = report.Id })" 
+                                                       class="text-primary-600 hover:text-primary-900">Download</a>
+                                                }
+                                                <form asp-action="Delete" asp-route-id="@report.Id" method="post" class="inline">
                                                     @Html.AntiForgeryToken()
                                                     <button type="submit" 
                                                             class="text-red-600 hover:text-red-900"

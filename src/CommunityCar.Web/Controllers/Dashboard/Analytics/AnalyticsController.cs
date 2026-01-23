@@ -2,13 +2,11 @@ using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Analytics;
 
 [Route("dashboard/analytics")]
-[Authorize]
 public class AnalyticsController : Controller
 {
     private readonly IAnalyticsService _analyticsService;

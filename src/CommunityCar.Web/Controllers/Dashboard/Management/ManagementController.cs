@@ -1,13 +1,11 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Dashboard.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Management;
 
 [Route("dashboard/management")]
-[Authorize]
 public class ManagementController : Controller
 {
     private readonly IManagementService _managementService;

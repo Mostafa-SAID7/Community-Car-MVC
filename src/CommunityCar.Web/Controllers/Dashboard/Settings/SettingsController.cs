@@ -1,13 +1,11 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Dashboard.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Settings;
 
 [Route("dashboard/settings")]
-[Authorize]
 public class SettingsController : Controller
 {
     private readonly ISettingsService _settingsService;

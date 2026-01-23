@@ -62,11 +62,11 @@ public class ReportsService : IReportsService
         return reports.FirstOrDefault(r => r.Id == reportId);
     }
 
-    public async Task<bool> GenerateReportAsync(ReportGenerationRequest request)
+    public async Task<Guid> GenerateReportAsync(ReportGenerationRequest request)
     {
         // In real implementation, queue report generation job
         await Task.CompletedTask;
-        return true;
+        return Guid.NewGuid(); // Return the ID of the generated report
     }
 
     public async Task<bool> DeleteReportAsync(Guid reportId)

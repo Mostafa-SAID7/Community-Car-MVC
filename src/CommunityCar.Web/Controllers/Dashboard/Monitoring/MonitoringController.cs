@@ -1,11 +1,9 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Monitoring;
 
 [Route("dashboard/monitoring")]
-[Authorize(Roles = "Admin")]
 public class MonitoringController : Controller
 {
     private readonly IMonitoringService _monitoringService;

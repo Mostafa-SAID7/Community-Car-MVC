@@ -1,4 +1,4 @@
-@model CommunityCar.Domain.Entities.Auth.User
+@model CommunityCar.Web.Models.Profile.ProfileIndexVM
 @{
     ViewData["Title"] = "My Profile";
 }
@@ -41,7 +41,7 @@
                 <div class="flex flex-wrap items-center gap-6 mt-3 text-muted-foreground font-bold text-sm">
                     <div class="flex items-center gap-2 transition-colors hover:text-primary cursor-default">
                         <i data-lucide="at-sign" class="w-4 h-4 opacity-50"></i>
-                        @Model.UserName
+                        @Model.Email
                     </div>
                     <div class="flex items-center gap-2 opacity-60">
                         <i data-lucide="calendar" class="w-4 h-4 opacity-50"></i>
@@ -53,18 +53,18 @@
             <!-- Stats Bar (Hidden on mobile) -->
             <div class="hidden lg:flex items-center gap-8 bg-card/60 backdrop-blur-2xl border border-white/5 p-6 px-10 rounded-3xl shadow-2xl mb-4">
                 <div class="text-center group/stat cursor-pointer">
-                    <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">0</div>
+                    <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">@Model.PostsCount</div>
                     <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">Posts</div>
                 </div>
                 <div class="w-px h-8 bg-border/20"></div>
                 <div class="text-center group/stat cursor-pointer">
-                    <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">0</div>
-                    <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">Followers</div>
+                    <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">@Model.CommentsCount</div>
+                    <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">Comments</div>
                 </div>
                 <div class="w-px h-8 bg-border/20"></div>
                 <div class="text-center group/stat cursor-pointer">
-                    <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">0</div>
-                    <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">Following</div>
+                    <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">@Model.LikesReceived</div>
+                    <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">Likes</div>
                 </div>
             </div>
         </div>

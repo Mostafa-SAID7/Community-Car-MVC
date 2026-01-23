@@ -7,7 +7,7 @@ public interface IReportsService
 {
     Task<List<SystemReportVM>> GetReportsAsync(int page = 1, int pageSize = 20);
     Task<SystemReportVM?> GetReportByIdAsync(Guid reportId);
-    Task<bool> GenerateReportAsync(ReportGenerationRequest request);
+    Task<Guid> GenerateReportAsync(ReportGenerationRequest request);
     Task<bool> DeleteReportAsync(Guid reportId);
     Task<byte[]> DownloadReportAsync(Guid reportId);
     Task<List<SystemReportVM>> GetReportsByTypeAsync(string reportType, int page = 1, int pageSize = 20);

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.SEO;
 using CommunityCar.Application.Features.SEO.DTOs;
 

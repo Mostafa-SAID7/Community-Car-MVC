@@ -1,13 +1,11 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Dashboard.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard;
 
 [Route("dashboard")]
-[Authorize]
 public class DashboardController : Controller
 {
     private readonly IOverviewService _overviewService;
