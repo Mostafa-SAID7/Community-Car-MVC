@@ -41,13 +41,13 @@ public class SettingsController : Controller
             ViewBag.Category = category;
             ViewBag.Categories = new[] { "Display", "Notifications", "Performance", "Security" };
 
-            return View(settings);
+            return View("~/Views/Dashboard/Settings/Index.cshtml", settings);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading dashboard settings");
             TempData["ErrorMessage"] = "Failed to load dashboard settings. Please try again.";
-            return View();
+            return View("~/Views/Dashboard/Settings/Index.cshtml");
         }
     }
 
@@ -64,7 +64,7 @@ public class SettingsController : Controller
             var settings = await _settingsService.GetSettingsByCategoryAsync(userId, category);
             ViewBag.Category = category;
 
-            return View("Index", settings);
+            return View("~/Views/Dashboard/Settings/Index.cshtml", settings);
         }
         catch (Exception ex)
         {

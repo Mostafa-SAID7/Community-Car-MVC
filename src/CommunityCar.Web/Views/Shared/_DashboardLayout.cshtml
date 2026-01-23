@@ -32,22 +32,30 @@
     <partial name="_Header" />
 
     <!-- Main container with proper spacing for fixed header and sidebars -->
-    <div class="flex pt-28 pb-8 min-h-screen">
+    <div class="flex pt-28 pb-8 min-h-screen" id="dashboard-container">
         <partial name="_DashboardSidebarLeft" />
 
-        <!-- Main Content Area with proper margins for sidebars -->
-        <main class="ml-28 xl:ml-[18rem] xl:mr-[25rem] px-4 whitespace-normal">
-            <div class="bg-card/30 backdrop-blur-xl border border-border rounded-xl shadow-2xl p-6 md:p-8">
-                <div class="mb-6">
-                    <h1 class="text-2xl font-black text-foreground">@ViewData["Title"]</h1>
-                    <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                        Manage your community platform and view real-time analytics.
-                    </p>
+        <!-- Main Content Area with responsive margins that adjust to sidebar width -->
+        <main class="flex-1 transition-all duration-300 px-4" id="main-content" 
+              style="margin-left: 5rem;">
+            <div class="max-w-none w-full">
+                <div class="bg-card/30 backdrop-blur-xl border border-border rounded-xl shadow-2xl p-6 md:p-8">
+                    <!-- Header with sidebar toggle -->
+                    <div class="mb-6 flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-black text-foreground">@ViewData["Title"]</h1>
+                            <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+                                Manage your community platform and view real-time analytics.
+                            </p>
+                        </div>
+                        <button id="sidebar-toggle" class="xl:hidden p-2 rounded-lg hover:bg-accent transition-colors">
+                            <i data-lucide="menu" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    @RenderBody()
                 </div>
-                @RenderBody()
             </div>
         </main>
-
     </div>
 
     <partial name="_AIAssistant" />
@@ -68,6 +76,47 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             lucide.createIcons();
+            
+            // Dashboard sidebar responsive behavior
+            const mainContent = document.getElementById('main-content');
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            
+            function updateMainContentMargin() {
+                if (window.innerWidth >= 1280) { // xl breakpoint
+                    // Large screens: sidebar is expanded (224px + 16px left margin + 16px gap = 256px)
+                    mainContent.style.marginLeft = '15rem';
+                } else if (window.innerWidth >= 768) { // md breakpoint
+                    // Medium screens: sidebar is collapsed (64px + 16px left margin + 16px gap = 96px)
+                    mainContent.style.marginLeft = '5rem';
+                } else {
+                    // Small screens: sidebar is hidden
+                    mainContent.style.marginLeft = '1rem';
+                }
+            }
+            
+            // Update margin on load and resize
+            updateMainContentMargin();
+            window.addEventListener('resize', updateMainContentMargin);
+            
+            // Sidebar toggle for mobile
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('sidebar-visible');
+                    document.body.classList.toggle('sidebar-visible');
+                });
+                
+                // Close sidebar when clicking outside on mobile
+                document.addEventListener('click', function(e) {
+                    if (window.innerWidth < 768 && 
+                        !sidebar.contains(e.target) && 
+                        !sidebarToggle.contains(e.target) &&
+                        sidebar.classList.contains('sidebar-visible')) {
+                        sidebar.classList.remove('sidebar-visible');
+                        document.body.classList.remove('sidebar-visible');
+                    }
+                });
+            }
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

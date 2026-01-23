@@ -32,20 +32,20 @@ public class ReportsController : Controller
             var reports = await _reportsService.GetReportsAsync(page, pageSize);
             ViewBag.CurrentPage = page;
             ViewBag.PageSize = pageSize;
-            return View(reports);
+            return View("~/Views/Dashboard/Reports/Index.cshtml", reports);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading reports");
             TempData["ErrorMessage"] = "Failed to load reports. Please try again.";
-            return View();
+            return View("~/Views/Dashboard/Reports/Index.cshtml");
         }
     }
 
     [HttpGet("generate")]
     public IActionResult Generate()
     {
-        return View();
+        return View("~/Views/Dashboard/Reports/Generate.cshtml");
     }
 
     [HttpPost("generate")]
@@ -54,7 +54,7 @@ public class ReportsController : Controller
     {
         if (!ModelState.IsValid)
         {
-            return View(request);
+            return View("~/Views/Dashboard/Reports/Generate.cshtml", request);
         }
 
         try
@@ -67,7 +67,7 @@ public class ReportsController : Controller
         {
             _logger.LogError(ex, "Error generating report");
             ModelState.AddModelError("", "Failed to generate report. Please try again.");
-            return View(request);
+            return View("~/Views/Dashboard/Reports/Generate.cshtml", request);
         }
     }
 
@@ -82,7 +82,7 @@ public class ReportsController : Controller
                 return NotFound();
             }
 
-            return View(report);
+            return View("~/Views/Dashboard/Reports/Details.cshtml", report);
         }
         catch (Exception ex)
         {

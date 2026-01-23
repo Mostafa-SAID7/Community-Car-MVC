@@ -28,13 +28,13 @@ public class MonitoringController : Controller
             var isHealthy = await _monitoringService.IsSystemHealthyAsync();
 
             ViewBag.IsSystemHealthy = isHealthy;
-            return View(systemHealth);
+            return View("~/Views/Dashboard/Monitoring/Index.cshtml", systemHealth);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading system monitoring");
             TempData["ErrorMessage"] = "Failed to load system monitoring data. Please try again.";
-            return View();
+            return View("~/Views/Dashboard/Monitoring/Index.cshtml");
         }
     }
 

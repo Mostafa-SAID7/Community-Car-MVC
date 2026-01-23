@@ -1,6 +1,10 @@
 <!-- Dashboard Left Sidebar -->
 <aside
     class="sidebar fixed left-4 top-28 bottom-20 w-16 xl:w-56 bg-card/40 backdrop-blur-xl border border-border rounded-xl shadow-2xl transition-all duration-300 z-40 -translate-x-[calc(100%+2rem)] md:translate-x-0">
+    
+    <!-- Sidebar backdrop for mobile -->
+    <div class="sidebar-backdrop md:hidden"></div>
+    
     <nav class="flex flex-col gap-1 mt-2 px-2 h-full overflow-y-auto custom-scrollbar">
 
         <a asp-controller="Overview" asp-action="Index"
