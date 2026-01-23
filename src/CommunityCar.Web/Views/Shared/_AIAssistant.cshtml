@@ -1,8 +1,8 @@
 <!-- AI Assistant FAB & Widget Wrapper -->
 <div class="fixed bottom-6 right-6 z-50">
     <!-- Chat Widget -->
-    <div id="ai-chat-widget" class="hidden fixed bottom-24 right-6 w-96 h-[600px] bg-card border border-border rounded-lg shadow-2xl flex flex-col overflow-hidden">
-        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
+    <div id="ai-chat-widget" class="fixed bottom-24 right-4 w-80 h-[500px] max-h-[70vh] max-w-[calc(100vw-2rem)] md:right-6 md:w-96 md:h-[600px] md:max-h-[80vh] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 opacity-0 pointer-events-none translate-y-10 scale-95 origin-bottom-right transition-all duration-300 ease-in-out">
+        <div class="flex-none flex items-center justify-between p-4 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
             <div class="flex items-center gap-3">
                 <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-foreground/20">
                     <i data-lucide="sparkles" class="w-5 h-5"></i>
@@ -17,7 +17,7 @@
             </button>
         </div>
         
-        <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/20 custom-scrollbar" id="chat-messages">
+        <div class="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 bg-muted/20 custom-scrollbar scroll-smooth" id="chat-messages">
             <div class="flex gap-3">
                 <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground shrink-0 mt-1">
                     <i data-lucide="sparkles" class="w-4 h-4"></i>
@@ -28,7 +28,7 @@
             </div>
         </div>
         
-        <div class="p-4 border-t border-border bg-card">
+        <div class="flex-none p-4 border-t border-border bg-card">
             <div class="flex items-center gap-2">
                 <input type="text" id="chat-input" placeholder="Ask anything..." autocomplete="off" class="flex-1 px-4 py-2 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
                 <button id="send-chat" class="inline-flex items-center justify-center h-10 w-10 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors" aria-label="Send Message">

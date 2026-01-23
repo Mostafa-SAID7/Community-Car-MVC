@@ -1,192 +1,428 @@
-// Global Notification System
-(function() {
-    'use strict';
-    
-    // Global notification function
-    window.showNotification = function(message, type = 'info', options = {}) {
-        // Default options
-        const defaultOptions = {
-            duration: 5000,
-            closable: true,
-            position: 'top-right',
-            maxToasts: 5
-        };
+// SignalR Notifications Client
+class NotificationClient {
+    constructor() {
+        this.connection = null;
+        this.notifications = [];
+        this.unreadCount = 0;
+        this.isDropdownOpen = false;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
         
-        const config = { ...defaultOptions, ...options };
-        
-        // Use existing notification systems if available
-        if (window.toastr && !options.forceCustom) {
-            const toastrOptions = {
-                timeOut: config.duration,
-                closeButton: config.closable,
-                positionClass: `toast-${config.position}`,
-                preventDuplicates: true
-            };
+        this.init();
+    }
+
+    async init() {
+        try {
+            // Initialize SignalR connection
+            this.connection = new signalR.HubConnectionBuilder()
+                .withUrl("/hubs/notifications")
+                .withAutomaticReconnect([0, 2000, 10000, 30000])
+                .build();
+
+            // Set up event handlers
+            this.setupEventHandlers();
             
-            toastr.options = toastrOptions;
-            toastr[type](message);
-            return;
-        }
-        
-        // Create custom toast notification
-        createCustomToast(message, type, config);
-    };
-    
-    function createCustomToast(message, type, config) {
-        // Create toast container if it doesn't exist
-        let toastContainer = document.getElementById('toast-container');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.id = 'toast-container';
-            document.body.appendChild(toastContainer);
-        }
-        
-        // Create toast notification
-        const toast = document.createElement('div');
-        toast.className = `toast-notification toast-${type}`;
-        toast.setAttribute('role', 'alert');
-        toast.setAttribute('aria-live', 'polite');
-        
-        // Create toast content
-        const content = document.createElement('div');
-        content.className = 'toast-content';
-        
-        // Add icon based on type
-        const icon = document.createElement('i');
-        icon.className = getIconClass(type);
-        
-        // Add message
-        const messageSpan = document.createElement('span');
-        messageSpan.className = 'toast-message';
-        messageSpan.textContent = message;
-        
-        content.appendChild(icon);
-        content.appendChild(messageSpan);
-        toast.appendChild(content);
-        
-        // Add close button if closable
-        if (config.closable) {
-            const closeBtn = document.createElement('button');
-            closeBtn.className = 'toast-close';
-            closeBtn.innerHTML = '×';
-            closeBtn.setAttribute('aria-label', 'Close notification');
-            closeBtn.setAttribute('type', 'button');
-            toast.appendChild(closeBtn);
+            // Start connection
+            await this.start();
             
-            closeBtn.addEventListener('click', (e) => {
+            // Initialize UI
+            this.initializeUI();
+            
+            console.log('Notification client initialized successfully');
+        } catch (error) {
+            console.error('Failed to initialize notification client:', error);
+        }
+    }
+
+    setupEventHandlers() {
+        // Connection events
+        this.connection.onreconnecting(() => {
+            console.log('Notification connection lost. Reconnecting...');
+        });
+
+        this.connection.onreconnected(() => {
+            console.log('Notification connection restored');
+            this.reconnectAttempts = 0;
+        });
+
+        this.connection.onclose(() => {
+            console.log('Notification connection closed');
+        });
+
+        // Notification events
+        this.connection.on('ReceiveNotification', (notification) => {
+            this.handleReceiveNotification(notification);
+        });
+
+        this.connection.on('NotificationMarkedAsRead', (notificationId) => {
+            this.handleNotificationMarkedAsRead(notificationId);
+        });
+
+        this.connection.on('AllNotificationsMarkedAsRead', () => {
+            this.handleAllNotificationsMarkedAsRead();
+        });
+    }
+
+    async start() {
+        try {
+            await this.connection.start();
+            console.log('Notification SignalR connection started');
+        } catch (error) {
+            console.error('Error starting notification connection:', error);
+            
+            // Retry connection
+            if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                this.reconnectAttempts++;
+                setTimeout(() => this.start(), 5000);
+            }
+        }
+    }
+
+    initializeUI() {
+        // Set up notification bell click handler
+        const notificationBell = document.querySelector('.notification-bell');
+        if (notificationBell) {
+            notificationBell.addEventListener('click', (e) => {
                 e.stopPropagation();
-                removeToast(toast, toastContainer);
+                this.toggleNotificationDropdown();
             });
         }
-        
-        // Add to container
-        toastContainer.appendChild(toast);
-        
-        // Auto remove if duration is set
-        let autoRemoveTimer;
-        if (config.duration > 0) {
-            autoRemoveTimer = setTimeout(() => {
-                removeToast(toast, toastContainer);
-            }, config.duration);
+
+        // Set up mark all as read button
+        const markAllBtn = document.querySelector('.mark-all-read-btn');
+        if (markAllBtn) {
+            markAllBtn.addEventListener('click', () => {
+                this.markAllAsRead();
+            });
         }
-        
-        // Pause auto-remove on hover
-        toast.addEventListener('mouseenter', () => {
-            if (autoRemoveTimer) {
-                clearTimeout(autoRemoveTimer);
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (this.isDropdownOpen && !e.target.closest('.notification-wrapper')) {
+                this.closeNotificationDropdown();
             }
         });
+
+        // Load existing notifications
+        this.loadNotifications();
+    }
+
+    async loadNotifications() {
+        try {
+            // TODO: Load notifications from API when implemented
+            // const response = await fetch('/api/notifications');
+            // const data = await response.json();
+            // this.notifications = data.notifications || [];
+            // this.unreadCount = data.unreadCount || 0;
+            // this.updateNotificationUI();
+        } catch (error) {
+            console.error('Error loading notifications:', error);
+        }
+    }
+
+    // Event handlers
+    handleReceiveNotification(notification) {
+        console.log('Received notification:', notification);
         
-        // Resume auto-remove on mouse leave
-        toast.addEventListener('mouseleave', () => {
-            if (config.duration > 0) {
-                autoRemoveTimer = setTimeout(() => {
-                    removeToast(toast, toastContainer);
-                }, 1000); // Give 1 second after mouse leave
-            }
+        // Add to notifications array
+        this.notifications.unshift(notification);
+        
+        // Update unread count
+        if (!notification.IsRead) {
+            this.unreadCount++;
+        }
+        
+        // Update UI
+        this.updateNotificationUI();
+        
+        // Show toast notification
+        this.showToastNotification(notification);
+        
+        // Play notification sound
+        this.playNotificationSound();
+    }
+
+    handleNotificationMarkedAsRead(notificationId) {
+        const notification = this.notifications.find(n => n.Id === notificationId);
+        if (notification && !notification.IsRead) {
+            notification.IsRead = true;
+            this.unreadCount = Math.max(0, this.unreadCount - 1);
+            this.updateNotificationUI();
+        }
+    }
+
+    handleAllNotificationsMarkedAsRead() {
+        this.notifications.forEach(notification => {
+            notification.IsRead = true;
         });
-        
-        // Limit number of toasts
-        limitToasts(toastContainer, config.maxToasts);
-        
-        return toast;
+        this.unreadCount = 0;
+        this.updateNotificationUI();
     }
-    
-    function removeToast(toast, container) {
-        if (toast.parentNode) {
-            toast.style.animation = 'slideOutRight 0.3s ease-out';
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.parentNode.removeChild(toast);
-                }
-                // Clean up container if empty
-                if (container.children.length === 0) {
-                    container.remove();
-                }
-            }, 300);
+
+    // UI Methods
+    toggleNotificationDropdown() {
+        const dropdown = document.querySelector('.notification-dropdown');
+        if (!dropdown) return;
+
+        if (this.isDropdownOpen) {
+            this.closeNotificationDropdown();
+        } else {
+            this.openNotificationDropdown();
         }
     }
-    
-    function limitToasts(container, maxToasts) {
-        const toasts = container.querySelectorAll('.toast-notification');
-        if (toasts.length > maxToasts) {
-            const excessCount = toasts.length - maxToasts;
-            for (let i = 0; i < excessCount; i++) {
-                const oldestToast = toasts[i];
-                removeToast(oldestToast, container);
+
+    openNotificationDropdown() {
+        const dropdown = document.querySelector('.notification-dropdown');
+        if (!dropdown) return;
+
+        dropdown.classList.add('visible');
+        this.isDropdownOpen = true;
+        
+        // Load notifications if empty
+        if (this.notifications.length === 0) {
+            this.loadNotifications();
+        }
+        
+        this.renderNotifications();
+    }
+
+    closeNotificationDropdown() {
+        const dropdown = document.querySelector('.notification-dropdown');
+        if (!dropdown) return;
+
+        dropdown.classList.remove('visible');
+        this.isDropdownOpen = false;
+    }
+
+    updateNotificationUI() {
+        // Update notification badge
+        const badge = document.querySelector('.notification-badge');
+        if (badge) {
+            if (this.unreadCount > 0) {
+                badge.style.display = 'block';
+                if (this.unreadCount > 9) {
+                    badge.classList.add('has-count');
+                    badge.textContent = '9+';
+                } else if (this.unreadCount > 1) {
+                    badge.classList.add('has-count');
+                    badge.textContent = this.unreadCount.toString();
+                } else {
+                    badge.classList.remove('has-count');
+                }
+            } else {
+                badge.style.display = 'none';
             }
         }
+
+        // Update dropdown if open
+        if (this.isDropdownOpen) {
+            this.renderNotifications();
+        }
     }
-    
-    function getIconClass(type) {
-        const iconMap = {
-            success: 'fas fa-check-circle',
-            error: 'fas fa-exclamation-circle',
-            warning: 'fas fa-exclamation-triangle',
-            info: 'fas fa-info-circle'
-        };
-        return iconMap[type] || iconMap.info;
-    }
-    
-    // Convenience methods
-    window.notify = {
-        success: (message, options) => showNotification(message, 'success', options),
-        error: (message, options) => showNotification(message, 'error', options),
-        warning: (message, options) => showNotification(message, 'warning', options),
-        info: (message, options) => showNotification(message, 'info', options)
-    };
-    
-    // Initialize on DOM ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeNotifications);
-    } else {
-        initializeNotifications();
-    }
-    
-    function initializeNotifications() {
-        // Add global styles if not already present
-        if (!document.getElementById('notification-styles')) {
-            const styles = document.createElement('style');
-            styles.id = 'notification-styles';
-            styles.textContent = `
-                .toast-content {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    flex: 1;
-                }
-                
-                .toast-content i {
-                    font-size: 16px;
-                    flex-shrink: 0;
-                }
-                
-                .toast-message {
-                    flex: 1;
-                    line-height: 1.4;
-                }
+
+    renderNotifications() {
+        const notificationList = document.querySelector('.notification-list');
+        if (!notificationList) return;
+
+        if (this.notifications.length === 0) {
+            notificationList.innerHTML = `
+                <div class="notification-empty">
+                    <i data-lucide="bell"></i>
+                    <h3>No notifications</h3>
+                    <p>You're all caught up!</p>
+                </div>
             `;
-            document.head.appendChild(styles);
+        } else {
+            notificationList.innerHTML = this.notifications
+                .slice(0, 20) // Show only latest 20 notifications
+                .map(notification => this.createNotificationHTML(notification))
+                .join('');
+        }
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Add click handlers
+        this.addNotificationClickHandlers();
+    }
+
+    createNotificationHTML(notification) {
+        const timeAgo = this.formatTimeAgo(notification.CreatedAt);
+        const unreadClass = notification.IsRead ? '' : 'unread';
+        
+        return `
+            <div class="notification-item ${unreadClass}" data-notification-id="${notification.Id}" data-action-url="${notification.ActionUrl || ''}">
+                <div class="notification-icon ${notification.Type}">
+                    <i data-lucide="${notification.IconClass}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${this.escapeHtml(notification.Title)}</div>
+                    <div class="notification-message">${this.escapeHtml(notification.Message)}</div>
+                    <div class="notification-time">${timeAgo}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    addNotificationClickHandlers() {
+        const notificationItems = document.querySelectorAll('.notification-item');
+        notificationItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const notificationId = item.getAttribute('data-notification-id');
+                const actionUrl = item.getAttribute('data-action-url');
+                
+                // Mark as read
+                if (item.classList.contains('unread')) {
+                    this.markAsRead(notificationId);
+                }
+                
+                // Navigate to action URL
+                if (actionUrl && actionUrl !== 'null') {
+                    window.location.href = actionUrl;
+                }
+                
+                this.closeNotificationDropdown();
+            });
+        });
+    }
+
+    showToastNotification(notification) {
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = 'notification-toast';
+        toast.innerHTML = `
+            <div class="notification-toast-content">
+                <div class="notification-toast-icon ${notification.Type}">
+                    <i data-lucide="${notification.IconClass}"></i>
+                </div>
+                <div class="notification-toast-body">
+                    <div class="notification-toast-title">${this.escapeHtml(notification.Title)}</div>
+                    <div class="notification-toast-message">${this.escapeHtml(notification.Message)}</div>
+                </div>
+                <button class="notification-toast-close" type="button">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="notification-toast-progress"></div>
+        `;
+
+        // Add to DOM
+        document.body.appendChild(toast);
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Show toast
+        setTimeout(() => {
+            toast.classList.add('visible');
+        }, 100);
+
+        // Set up close button
+        const closeBtn = toast.querySelector('.notification-toast-close');
+        closeBtn.addEventListener('click', () => {
+            this.removeToast(toast);
+        });
+
+        // Auto-remove after 5 seconds
+        const progressBar = toast.querySelector('.notification-toast-progress');
+        progressBar.style.width = '100%';
+        progressBar.style.transitionDuration = '5s';
+        
+        setTimeout(() => {
+            progressBar.style.width = '0%';
+        }, 100);
+
+        setTimeout(() => {
+            this.removeToast(toast);
+        }, 5000);
+
+        // Click to navigate
+        if (notification.ActionUrl) {
+            toast.addEventListener('click', (e) => {
+                if (!e.target.closest('.notification-toast-close')) {
+                    window.location.href = notification.ActionUrl;
+                }
+            });
         }
     }
-})();
+
+    removeToast(toast) {
+        toast.classList.add('removing');
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.parentElement.removeChild(toast);
+            }
+        }, 300);
+    }
+
+    // API Methods
+    async markAsRead(notificationId) {
+        if (!this.connection || this.connection.state !== signalR.HubConnectionState.Connected) {
+            return;
+        }
+
+        try {
+            await this.connection.invoke('MarkNotificationAsRead', notificationId);
+        } catch (error) {
+            console.error('Error marking notification as read:', error);
+        }
+    }
+
+    async markAllAsRead() {
+        if (!this.connection || this.connection.state !== signalR.HubConnectionState.Connected) {
+            return;
+        }
+
+        try {
+            await this.connection.invoke('MarkAllNotificationsAsRead');
+        } catch (error) {
+            console.error('Error marking all notifications as read:', error);
+        }
+    }
+
+    // Utility Methods
+    playNotificationSound() {
+        try {
+            const audio = new Audio('/sounds/notification.mp3');
+            audio.volume = 0.2;
+            audio.play().catch(() => {
+                // Ignore audio play errors (user interaction required)
+            });
+        } catch (error) {
+            // Ignore audio errors
+        }
+    }
+
+    formatTimeAgo(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+        
+        if (diffInMinutes < 1) {
+            return 'Just now';
+        } else if (diffInMinutes < 60) {
+            return `${diffInMinutes}m ago`;
+        } else if (diffInMinutes < 1440) {
+            return `${Math.floor(diffInMinutes / 60)}h ago`;
+        } else if (diffInMinutes < 10080) {
+            return `${Math.floor(diffInMinutes / 1440)}d ago`;
+        } else {
+            return date.toLocaleDateString();
+        }
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+}
+
+// Initialize notification client when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof signalR !== 'undefined') {
+        window.notificationClient = new NotificationClient();
+    } else {
+        console.warn('SignalR library not loaded');
+    }
+});

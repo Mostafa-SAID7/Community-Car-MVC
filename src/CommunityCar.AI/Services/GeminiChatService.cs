@@ -29,7 +29,7 @@ public class GeminiChatService : IAIChatService
             return "Error: Gemini API Key is missing.";
         }
 
-        var url = $"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={apiKey}";
+        var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={apiKey}";
 
         var requestBody = new
         {

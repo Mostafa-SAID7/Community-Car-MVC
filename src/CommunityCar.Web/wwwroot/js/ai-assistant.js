@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (toggleChat && chatWidget) {
         toggleChat.addEventListener('click', () => {
-            chatWidget.classList.toggle('hidden');
-            if (!chatWidget.classList.contains('hidden')) {
+            chatWidget.classList.toggle('active');
+            if (chatWidget.classList.contains('active')) {
                 chatInput.focus();
                 scrollToBottom();
                 if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -20,13 +20,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (closeChat) {
         closeChat.addEventListener('click', () => {
-            chatWidget.classList.add('hidden');
+            chatWidget.classList.remove('active');
         });
     }
 
     function scrollToBottom() {
         if (chatMessages) {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            requestAnimationFrame(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
         }
     }
 
