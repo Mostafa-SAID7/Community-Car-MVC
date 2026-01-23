@@ -1,0 +1,170 @@
+@model IEnumerable<CommunityCar.Application.Features.Dashboard.DTOs.SettingsRequest>
+@{
+    ViewData["Title"] = "Dashboard Settings";
+    ViewData["PageType"] = "Settings";
+    var category = ViewBag.Category as string;
+    var categories = ViewBag.Categories as string[] ?? new string[0];
+}
+
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Dashboard Settings</h1>
+            <p class="mt-2 text-gray-600">Manage your dashboard preferences and configurations</p>
+        </div>
+
+        <!-- Success/Error Messages -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Categories Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
+                    <nav class="space-y-2">
+                        <a href="@Url.Action("Index", "Settings", new { area = "" })" 
+                           class="@(string.IsNullOrEmpty(category) ? "bg-primary-50 text-primary-700 border-primary-200" : "text-gray-700 hover:bg-gray-50") block px-3 py-2 rounded-md text-sm font-medium border">
+                            All Settings
+                        </a>
+                        @foreach (var cat in categories)
+                        {
+                            <a href="@Url.Action("Category", "Settings", new { category = cat })" 
+                               class="@(category == cat ? "bg-primary-50 text-primary-700 border-primary-200" : "text-gray-700 hover:bg-gray-50") block px-3 py-2 rounded-md text-sm font-medium border">
+                                @cat
+                            </a>
+                        }
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-900">
+                            @if (!string.IsNullOrEmpty(category))
+                            {
+                                @($"{category} Settings")
+                            }
+                            else
+                            {
+                                @("All Settings")
+                            }
+                        </h2>
+                    </div>
+
+                    <div class="p-6">
+                        @if (Model != null && Model.Any())
+                        {
+                            <div class="space-y-6">
+                                @foreach (var setting in Model)
+                                {
+                                    <div class="border border-gray-200 rounded-lg p-4">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex-1">
+                                                <h4 class="text-sm font-medium text-gray-900">@setting.SettingKey</h4>
+                                                <p class="text-sm text-gray-500 mt-1">Category: @setting.Category</p>
+                                            </div>
+                                            <div class="flex items-center space-x-3">
+                                                <form asp-action="UpdateSetting" method="post" class="inline-flex items-center space-x-2">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="SettingKey" value="@setting.SettingKey" />
+                                                    <input type="hidden" name="Category" value="@setting.Category" />
+                                                    <input type="text" name="Value" value="@setting.Value" 
+                                                           class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+                                                    <button type="submit" 
+                                                            class="px-3 py-1 bg-primary-600 text-white text-sm rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                                        Update
+                                                    </button>
+                                                </form>
+                                                <form asp-action="ResetSetting" asp-route-settingKey="@setting.SettingKey" method="post" class="inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" 
+                                                            class="px-3 py-1 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                                            onclick="return confirm('Are you sure you want to reset this setting to default?')">
+                                                        Reset
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Reset All Settings -->
+                            <div class="mt-8 pt-6 border-t border-gray-200">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-900">Reset All Settings</h3>
+                                        <p class="text-sm text-gray-500 mt-1">Reset all settings to their default values</p>
+                                    </div>
+                                    <form asp-action="ResetAllSettings" method="post" class="inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" 
+                                                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                                onclick="return confirm('Are you sure you want to reset ALL settings to default? This action cannot be undone.')">
+                                            Reset All Settings
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-12">
+                                <div class="text-gray-400 mb-4">
+                                    <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">No Settings Found</h3>
+                                <p class="text-gray-500">
+                                    @if (!string.IsNullOrEmpty(category))
+                                    {
+                                        @($"No settings found for the '{category}' category.")
+                                    }
+                                    else
+                                    {
+                                        @("No settings have been configured yet.")
+                                    }
+                                </p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-save settings on input change (optional enhancement)
+        document.addEventListener('DOMContentLoaded', function() {
+            const settingInputs = document.querySelectorAll('input[name="Value"]');
+            settingInputs.forEach(input => {
+                let timeout;
+                input.addEventListener('input', function() {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        // Could implement auto-save here
+                        console.log('Setting changed:', this.value);
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+}
