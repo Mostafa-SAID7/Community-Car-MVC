@@ -135,11 +135,20 @@ if (sidebarToggle && mainContainer && leftSidebar) {
         e.stopPropagation();
         console.log('Sidebar toggle clicked');
         
-        // Toggle sidebar visibility
-        leftSidebar.classList.toggle('translate-x-0');
-        leftSidebar.classList.toggle('-translate-x-[calc(100%+2rem)]');
+        // Check if we're on mobile (screen width < 768px)
+        const isMobile = window.innerWidth < 768;
         
-        // Toggle backdrop
+        if (isMobile) {
+            // Mobile: toggle between -translate-x-full and translate-x-0
+            leftSidebar.classList.toggle('-translate-x-full');
+            leftSidebar.classList.toggle('translate-x-0');
+        } else {
+            // Desktop: toggle between normal position and hidden
+            leftSidebar.classList.toggle('md:translate-x-0');
+            leftSidebar.classList.toggle('md:-translate-x-[calc(100%+2rem)]');
+        }
+        
+        // Toggle backdrop (only visible on mobile)
         backdrop.classList.toggle('opacity-0');
         backdrop.classList.toggle('pointer-events-none');
         backdrop.classList.toggle('opacity-100');
@@ -148,8 +157,16 @@ if (sidebarToggle && mainContainer && leftSidebar) {
 
     // Close sidebar when clicking backdrop
     backdrop.addEventListener('click', () => {
-        leftSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
-        leftSidebar.classList.remove('translate-x-0');
+        const isMobile = window.innerWidth < 768;
+        
+        if (isMobile) {
+            leftSidebar.classList.add('-translate-x-full');
+            leftSidebar.classList.remove('translate-x-0');
+        } else {
+            leftSidebar.classList.add('md:-translate-x-[calc(100%+2rem)]');
+            leftSidebar.classList.remove('md:translate-x-0');
+        }
+        
         backdrop.classList.add('opacity-0', 'pointer-events-none');
         backdrop.classList.remove('opacity-100', 'pointer-events-auto');
     });
@@ -157,8 +174,16 @@ if (sidebarToggle && mainContainer && leftSidebar) {
     // Close on escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            leftSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
-            leftSidebar.classList.remove('translate-x-0');
+            const isMobile = window.innerWidth < 768;
+            
+            if (isMobile) {
+                leftSidebar.classList.add('-translate-x-full');
+                leftSidebar.classList.remove('translate-x-0');
+            } else {
+                leftSidebar.classList.add('md:-translate-x-[calc(100%+2rem)]');
+                leftSidebar.classList.remove('md:translate-x-0');
+            }
+            
             backdrop.classList.add('opacity-0', 'pointer-events-none');
             backdrop.classList.remove('opacity-100', 'pointer-events-auto');
         }
@@ -167,10 +192,35 @@ if (sidebarToggle && mainContainer && leftSidebar) {
     // Close on link click
     document.addEventListener('click', (e) => {
         if (e.target.closest('.sidebar a')) {
-            leftSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
-            leftSidebar.classList.remove('translate-x-0');
+            const isMobile = window.innerWidth < 768;
+            
+            if (isMobile) {
+                leftSidebar.classList.add('-translate-x-full');
+                leftSidebar.classList.remove('translate-x-0');
+            } else {
+                leftSidebar.classList.add('md:-translate-x-[calc(100%+2rem)]');
+                leftSidebar.classList.remove('md:translate-x-0');
+            }
+            
             backdrop.classList.add('opacity-0', 'pointer-events-none');
             backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+        }
+    });
+
+    // Handle window resize to reset sidebar state
+    window.addEventListener('resize', () => {
+        const isMobile = window.innerWidth < 768;
+        
+        if (!isMobile) {
+            // On desktop, ensure sidebar is visible and backdrop is hidden
+            leftSidebar.classList.remove('-translate-x-full', 'translate-x-0');
+            leftSidebar.classList.add('md:translate-x-0');
+            backdrop.classList.add('opacity-0', 'pointer-events-none');
+            backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+        } else {
+            // On mobile, ensure sidebar is hidden by default
+            leftSidebar.classList.add('-translate-x-full');
+            leftSidebar.classList.remove('translate-x-0', 'md:translate-x-0', 'md:-translate-x-[calc(100%+2rem)]');
         }
     });
 }

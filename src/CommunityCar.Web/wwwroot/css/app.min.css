@@ -603,12 +603,6 @@ video {
     }
 
     /* Sidebar Responsiveness */
-    .app-container {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-  animation-duration: 300ms;
-}
 
     .sidebar-backdrop {
   pointer-events: none;
@@ -872,6 +866,9 @@ video {
 .pointer-events-none {
   pointer-events: none;
 }
+.pointer-events-auto {
+  pointer-events: auto;
+}
 .visible {
   visibility: visible;
 }
@@ -1037,6 +1034,9 @@ video {
 }
 .z-10 {
   z-index: 10;
+}
+.z-30 {
+  z-index: 30;
 }
 .z-40 {
   z-index: 40;
@@ -1597,8 +1597,16 @@ video {
   --tw-translate-x: calc(calc(100% + 2rem) * -1);
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
+.-translate-x-full {
+  --tw-translate-x: -100%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
 .-translate-y-1\/2 {
   --tw-translate-y: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.translate-x-0 {
+  --tw-translate-x: 0px;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .translate-x-\[calc\(100\%\+2rem\)\] {
@@ -2160,6 +2168,9 @@ video {
 }
 .bg-black\/5 {
   background-color: rgb(0 0 0 / 0.05);
+}
+.bg-black\/50 {
+  background-color: rgb(0 0 0 / 0.5);
 }
 .bg-black\/90 {
   background-color: rgb(0 0 0 / 0.9);
@@ -3195,6 +3206,9 @@ video {
 }
 .opacity-10 {
   opacity: 0.1;
+}
+.opacity-100 {
+  opacity: 1;
 }
 .opacity-20 {
   opacity: 0.2;
@@ -4853,6 +4867,10 @@ video {
 }
 @media (min-width: 768px) {
 
+  .md\:left-4 {
+    left: 1rem;
+  }
+
   .md\:right-6 {
     right: 1.5rem;
   }
@@ -4920,6 +4938,11 @@ video {
 
   .md\:flex-none {
     flex: none;
+  }
+
+  .md\:-translate-x-\[calc\(100\%\+2rem\)\] {
+    --tw-translate-x: calc(calc(100% + 2rem) * -1);
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 
   .md\:translate-x-0 {
