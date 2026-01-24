@@ -1,0 +1,287 @@
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Application.Features.Reviews.ViewModels.ReviewCreateVM
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["CreateReview"];
+}
+
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Header -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden mb-6">
+        <div class="p-8">
+            <h2 class="text-3xl font-black text-foreground flex items-center gap-3">
+                <div class="bg-primary/10 p-3 rounded-xl text-primary">
+                    <i data-lucide="star" class="w-8 h-8"></i>
+                </div>
+                @Localizer["CreateReview"]
+            </h2>
+            <p class="text-muted-foreground mt-2">@Localizer["CreateReviewDescription"]</p>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form asp-action="Create" method="post" class="space-y-6">
+        @Html.AntiForgeryToken()
+        
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+            <div class="p-8 space-y-6">
+                <!-- Target Information (if provided) -->
+                @if (Model.TargetId != Guid.Empty)
+                {
+                    <input asp-for="TargetId" type="hidden" />
+                    <input asp-for="TargetType" type="hidden" />
+                    <div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
+                        <p class="text-sm text-primary">
+                            <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
+                            @Localizer["ReviewingSpecificItem"]: @Model.TargetType
+                        </p>
+                    </div>
+                }
+
+                <!-- Title and Rating -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2">
+                        <label asp-for="Title" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["ReviewTitle"] <span class="text-red-500">*</span>
+                        </label>
+                        <input asp-for="Title" class="input w-full" placeholder="@Localizer["ReviewTitlePlaceholder"]" />
+                        <span asp-validation-for="Title" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Rating" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["OverallRating"] <span class="text-red-500">*</span>
+                        </label>
+                        <select asp-for="Rating" class="select-trigger w-full">
+                            <option value="">@Localizer["SelectRating"]</option>
+                            <option value="5">⭐⭐⭐⭐⭐ @Localizer["Excellent"]</option>
+                            <option value="4">⭐⭐⭐⭐ @Localizer["VeryGood"]</option>
+                            <option value="3">⭐⭐⭐ @Localizer["Good"]</option>
+                            <option value="2">⭐⭐ @Localizer["Fair"]</option>
+                            <option value="1">⭐ @Localizer["Poor"]</option>
+                        </select>
+                        <span asp-validation-for="Rating" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Car Information -->
+                <div class="border-t border-border pt-6">
+                    <h3 class="text-lg font-medium text-foreground mb-4">@Localizer["VehicleInformation"]</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label asp-for="CarMake" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["CarMake"]
+                            </label>
+                            <input asp-for="CarMake" class="input w-full" placeholder="@Localizer["CarMakePlaceholder"]" />
+                            <span asp-validation-for="CarMake" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <div>
+                            <label asp-for="CarModel" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["CarModel"]
+                            </label>
+                            <input asp-for="CarModel" class="input w-full" placeholder="@Localizer["CarModelPlaceholder"]" />
+                            <span asp-validation-for="CarModel" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <div>
+                            <label asp-for="CarYear" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["CarYear"]
+                            </label>
+                            <input asp-for="CarYear" type="number" class="input w-full" placeholder="@DateTime.Now.Year" min="1900" max="@(DateTime.Now.Year + 1)" />
+                            <span asp-validation-for="CarYear" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Content -->
+                <div>
+                    <label asp-for="Comment" class="block text-sm font-medium text-foreground mb-2">
+                        @Localizer["ReviewContent"] <span class="text-red-500">*</span>
+                    </label>
+                    <textarea asp-for="Comment" rows="8" class="textarea w-full" placeholder="@Localizer["ReviewContentPlaceholder"]"></textarea>
+                    <span asp-validation-for="Comment" class="text-red-500 text-sm"></span>
+                </div>
+
+                <!-- Detailed Ratings -->
+                <div class="border-t border-border pt-6">
+                    <h3 class="text-lg font-medium text-foreground mb-4">@Localizer["DetailedRatings"] (@Localizer["Optional"])</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div>
+                            <label asp-for="QualityRating" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["Quality"]
+                            </label>
+                            <select asp-for="QualityRating" class="select-trigger w-full">
+                                <option value="">@Localizer["NotRated"]</option>
+                                <option value="5">⭐⭐⭐⭐⭐</option>
+                                <option value="4">⭐⭐⭐⭐</option>
+                                <option value="3">⭐⭐⭐</option>
+                                <option value="2">⭐⭐</option>
+                                <option value="1">⭐</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label asp-for="ValueRating" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["Value"]
+                            </label>
+                            <select asp-for="ValueRating" class="select-trigger w-full">
+                                <option value="">@Localizer["NotRated"]</option>
+                                <option value="5">⭐⭐⭐⭐⭐</option>
+                                <option value="4">⭐⭐⭐⭐</option>
+                                <option value="3">⭐⭐⭐</option>
+                                <option value="2">⭐⭐</option>
+                                <option value="1">⭐</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label asp-for="ReliabilityRating" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["Reliability"]
+                            </label>
+                            <select asp-for="ReliabilityRating" class="select-trigger w-full">
+                                <option value="">@Localizer["NotRated"]</option>
+                                <option value="5">⭐⭐⭐⭐⭐</option>
+                                <option value="4">⭐⭐⭐⭐</option>
+                                <option value="3">⭐⭐⭐</option>
+                                <option value="2">⭐⭐</option>
+                                <option value="1">⭐</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label asp-for="PerformanceRating" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["Performance"]
+                            </label>
+                            <select asp-for="PerformanceRating" class="select-trigger w-full">
+                                <option value="">@Localizer["NotRated"]</option>
+                                <option value="5">⭐⭐⭐⭐⭐</option>
+                                <option value="4">⭐⭐⭐⭐</option>
+                                <option value="3">⭐⭐⭐</option>
+                                <option value="2">⭐⭐</option>
+                                <option value="1">⭐</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label asp-for="ComfortRating" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["Comfort"]
+                            </label>
+                            <select asp-for="ComfortRating" class="select-trigger w-full">
+                                <option value="">@Localizer["NotRated"]</option>
+                                <option value="5">⭐⭐⭐⭐⭐</option>
+                                <option value="4">⭐⭐⭐⭐</option>
+                                <option value="3">⭐⭐⭐</option>
+                                <option value="2">⭐⭐</option>
+                                <option value="1">⭐</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pros and Cons -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label asp-for="Pros" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["Pros"]
+                        </label>
+                        <textarea asp-for="Pros" rows="4" class="textarea w-full" placeholder="@Localizer["ProsPlaceholder"]"></textarea>
+                        <span asp-validation-for="Pros" class="text-red-500 text-sm"></span>
+                        <p class="text-xs text-muted-foreground mt-1">@Localizer["ProsHint"]</p>
+                    </div>
+
+                    <div>
+                        <label asp-for="Cons" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["Cons"]
+                        </label>
+                        <textarea asp-for="Cons" rows="4" class="textarea w-full" placeholder="@Localizer["ConsPlaceholder"]"></textarea>
+                        <span asp-validation-for="Cons" class="text-red-500 text-sm"></span>
+                        <p class="text-xs text-muted-foreground mt-1">@Localizer["ConsHint"]</p>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="border-t border-border pt-6">
+                    <h3 class="text-lg font-medium text-foreground mb-4">@Localizer["AdditionalInformation"] (@Localizer["Optional"])</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <label asp-for="Mileage" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["Mileage"]
+                            </label>
+                            <input asp-for="Mileage" type="number" class="input w-full" placeholder="@Localizer["MileagePlaceholder"]" min="0" />
+                            <span asp-validation-for="Mileage" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <div>
+                            <label asp-for="OwnershipDuration" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["OwnershipDuration"]
+                            </label>
+                            <input asp-for="OwnershipDuration" class="input w-full" placeholder="@Localizer["OwnershipDurationPlaceholder"]" />
+                            <span asp-validation-for="OwnershipDuration" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <div>
+                            <label asp-for="PurchaseDate" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["PurchaseDate"]
+                            </label>
+                            <input asp-for="PurchaseDate" type="date" class="input w-full" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="PurchaseDate" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <div>
+                            <label asp-for="PurchasePrice" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["PurchasePrice"]
+                            </label>
+                            <input asp-for="PurchasePrice" type="number" class="input w-full" placeholder="@Localizer["PurchasePricePlaceholder"]" min="0" step="0.01" />
+                            <span asp-validation-for="PurchasePrice" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images -->
+                <div>
+                    <label asp-for="ImageUrls" class="block text-sm font-medium text-foreground mb-2">
+                        @Localizer["Images"]
+                    </label>
+                    <textarea asp-for="ImageUrls" rows="3" class="textarea w-full" placeholder="@Localizer["ImageUrlsPlaceholder"]"></textarea>
+                    <span asp-validation-for="ImageUrls" class="text-red-500 text-sm"></span>
+                    <p class="text-xs text-muted-foreground mt-1">@Localizer["ImageUrlsHint"]</p>
+                </div>
+
+                <!-- Options -->
+                <div class="border-t border-border pt-6">
+                    <h3 class="text-lg font-medium text-foreground mb-4">@Localizer["ReviewOptions"]</h3>
+                    
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3">
+                            <input asp-for="IsVerifiedPurchase" type="checkbox" class="rounded border-border" />
+                            <span class="text-sm text-foreground">@Localizer["VerifiedPurchase"]</span>
+                        </label>
+
+                        <label class="flex items-center gap-3">
+                            <input asp-for="IsRecommended" type="checkbox" class="rounded border-border" />
+                            <span class="text-sm text-foreground">@Localizer["RecommendToOthers"]</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 justify-end">
+            <a href="/reviews" class="btn-secondary">
+                <i data-lucide="x" class="w-4 h-4"></i>
+                @Localizer["Cancel"]
+            </a>
+            <button type="submit" class="btn-primary">
+                <i data-lucide="star" class="w-4 h-4"></i>
+                @Localizer["CreateReview"]
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/reviews.js"></script>
+}

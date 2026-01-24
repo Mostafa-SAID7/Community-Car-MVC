@@ -116,6 +116,12 @@ public class ReviewsService : IReviewsService
         // Map to ViewModels
         var reviewVMs = _mapper.Map<List<ReviewVM>>(pagedReviews);
 
+        // Set computed properties
+        foreach (var vm in reviewVMs)
+        {
+            SetComputedProperties(vm);
+        }
+
         // Calculate pagination info
         var totalPages = (int)Math.Ceiling((double)totalCount / request.PageSize);
         var pagination = new PaginationInfo
@@ -146,7 +152,11 @@ public class ReviewsService : IReviewsService
     public async Task<ReviewVM?> GetByIdAsync(Guid id)
     {
         var review = await _unitOfWork.Reviews.GetByIdAsync(id);
-        return review != null ? _mapper.Map<ReviewVM>(review) : null;
+        if (review == null) return null;
+        
+        var vm = _mapper.Map<ReviewVM>(review);
+        SetComputedProperties(vm);
+        return vm;
     }
 
     public async Task<ReviewVM> CreateAsync(CreateReviewRequest request)
@@ -302,7 +312,14 @@ public class ReviewsService : IReviewsService
     public async Task<IEnumerable<ReviewVM>> GetReviewsByTargetAsync(Guid targetId, string targetType)
     {
         var reviews = await _unitOfWork.Reviews.GetByTargetAsync(targetId, targetType);
-        return _mapper.Map<List<ReviewVM>>(reviews);
+        var vms = _mapper.Map<List<ReviewVM>>(reviews);
+        
+        foreach (var vm in vms)
+        {
+            SetComputedProperties(vm);
+        }
+        
+        return vms;
     }
 
     public async Task<double> GetAverageRatingByTargetAsync(Guid targetId, string targetType)
@@ -330,5 +347,66 @@ public class ReviewsService : IReviewsService
         score += review.Rating * 0.2;
 
         return score;
+    }
+
+    private static void SetComputedProperties(ReviewVM vm)
+    {
+        // Set TimeAgo
+        vm.TimeAgo = GetTimeAgo(vm.CreatedAt);
+
+        // Set HelpfulnessScore
+        vm.HelpfulnessScore = vm.HelpfulCount - vm.NotHelpfulCount;
+
+        // Set HasImages
+        vm.HasImages = vm.ImageUrls.Any();
+
+        // Set HasDetailedRatings
+        vm.HasDetailedRatings = vm.QualityRating.HasValue || vm.ValueRating.HasValue || 
+                               vm.ReliabilityRating.HasValue || vm.PerformanceRating.HasValue || 
+                               vm.ComfortRating.HasValue;
+
+        // Set AverageDetailedRating
+        if (vm.HasDetailedRatings)
+        {
+            var ratings = new[] { vm.QualityRating, vm.ValueRating, vm.ReliabilityRating, vm.PerformanceRating, vm.ComfortRating }
+                .Where(r => r.HasValue)
+                .Select(r => r.Value)
+                .ToArray();
+
+            vm.AverageDetailedRating = ratings.Any() ? ratings.Average() : vm.Rating;
+        }
+        else
+        {
+            vm.AverageDetailedRating = vm.Rating;
+        }
+
+        // Set CarDisplayName
+        vm.CarDisplayName = !string.IsNullOrEmpty(vm.CarMake) && !string.IsNullOrEmpty(vm.CarModel) 
+            ? $"{vm.CarYear} {vm.CarMake} {vm.CarModel}".Trim()
+            : !string.IsNullOrEmpty(vm.CarMake) 
+                ? vm.CarMake 
+                : string.Empty;
+    }
+
+    private static string GetTimeAgo(DateTime dateTime)
+    {
+        var timeSpan = DateTime.UtcNow - dateTime;
+
+        if (timeSpan.TotalDays >= 365)
+            return $"{(int)(timeSpan.TotalDays / 365)} year{((int)(timeSpan.TotalDays / 365) == 1 ? "" : "s")} ago";
+
+        if (timeSpan.TotalDays >= 30)
+            return $"{(int)(timeSpan.TotalDays / 30)} month{((int)(timeSpan.TotalDays / 30) == 1 ? "" : "s")} ago";
+
+        if (timeSpan.TotalDays >= 1)
+            return $"{(int)timeSpan.TotalDays} day{((int)timeSpan.TotalDays == 1 ? "" : "s")} ago";
+
+        if (timeSpan.TotalHours >= 1)
+            return $"{(int)timeSpan.TotalHours} hour{((int)timeSpan.TotalHours == 1 ? "" : "s")} ago";
+
+        if (timeSpan.TotalMinutes >= 1)
+            return $"{(int)timeSpan.TotalMinutes} minute{((int)timeSpan.TotalMinutes == 1 ? "" : "s")} ago";
+
+        return "Just now";
     }
 }

@@ -99,16 +99,16 @@ function toggleLike(contentId, contentType) {
             button.classList.toggle('liked');
             updateLikeCount(contentId, !isLiked);
             showNotification(
-                isLiked ? 'Removed like' : 'Liked!',
+                isLiked ? (window.feedLocalizer?.RemovedLike || 'Removed like') : (window.feedLocalizer?.Liked || 'Liked!'),
                 'success'
             );
         } else {
-            showNotification('Failed to update like', 'error');
+            showNotification(window.feedLocalizer?.FailedToUpdateLike || 'Failed to update like', 'error');
         }
     })
     .catch(error => {
         console.error('Error toggling like:', error);
-        showNotification('Error updating like', 'error');
+        showNotification(window.feedLocalizer?.ErrorUpdatingLike || 'Error updating like', 'error');
     });
 }
 
@@ -148,19 +148,19 @@ function shareContent(contentId, contentType) {
                 // Fallback: copy to clipboard
                 navigator.clipboard.writeText(window.location.href + `#post-${contentId}`)
                     .then(() => {
-                        showNotification('Link copied to clipboard!', 'success');
+                        showNotification(window.feedLocalizer?.LinkCopiedToClipboard || 'Link copied to clipboard!', 'success');
                     })
                     .catch(() => {
-                        showNotification('Unable to copy link', 'error');
+                        showNotification(window.feedLocalizer?.UnableToCopyLink || 'Unable to copy link', 'error');
                     });
             }
         } else {
-            showNotification('Failed to share content', 'error');
+            showNotification(window.feedLocalizer?.FailedToShare || 'Failed to share content', 'error');
         }
     })
     .catch(error => {
         console.error('Error sharing content:', error);
-        showNotification('Error sharing content', 'error');
+        showNotification(window.feedLocalizer?.ErrorSharingContent || 'Error sharing content', 'error');
     });
 }
 
@@ -185,16 +185,16 @@ function bookmarkContent(contentId, contentType) {
                 button.classList.toggle('bookmarked');
             }
             showNotification(
-                isBookmarked ? 'Removed from bookmarks' : 'Added to bookmarks',
+                isBookmarked ? (window.feedLocalizer?.RemovedFromBookmarks || 'Removed from bookmarks') : (window.feedLocalizer?.AddedToBookmarks || 'Added to bookmarks'),
                 'success'
             );
         } else {
-            showNotification('Failed to bookmark content', 'error');
+            showNotification(window.feedLocalizer?.FailedToBookmark || 'Failed to bookmark content', 'error');
         }
     })
     .catch(error => {
         console.error('Error bookmarking content:', error);
-        showNotification('Error bookmarking content', 'error');
+        showNotification(window.feedLocalizer?.ErrorBookmarkingContent || 'Error bookmarking content', 'error');
     });
 }
 
@@ -219,20 +219,20 @@ function hideContent(contentId) {
                     feedItem.remove();
                 }, 300);
             }
-            showNotification('Content hidden', 'success');
+            showNotification(window.feedLocalizer?.ContentHidden || 'Content hidden', 'success');
         } else {
-            showNotification('Failed to hide content', 'error');
+            showNotification(window.feedLocalizer?.FailedToHideContent || 'Failed to hide content', 'error');
         }
     })
     .catch(error => {
         console.error('Error hiding content:', error);
-        showNotification('Error hiding content', 'error');
+        showNotification(window.feedLocalizer?.ErrorHidingContent || 'Error hiding content', 'error');
     });
 }
 
 function reportContent(contentId, contentType) {
     // Show a simple prompt for report reason
-    const reason = prompt('Please provide a reason for reporting this content:');
+    const reason = prompt(window.feedLocalizer?.ReportReason || 'Please provide a reason for reporting this content:');
     if (!reason || reason.trim() === '') {
         return;
     }
@@ -251,14 +251,14 @@ function reportContent(contentId, contentType) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showNotification('Content reported. Thank you for helping keep our community safe.', 'success');
+            showNotification(window.feedLocalizer?.ContentReported || 'Content reported. Thank you for helping keep our community safe.', 'success');
         } else {
-            showNotification('Failed to report content', 'error');
+            showNotification(window.feedLocalizer?.FailedToReportContent || 'Failed to report content', 'error');
         }
     })
     .catch(error => {
         console.error('Error reporting content:', error);
-        showNotification('Error reporting content', 'error');
+        showNotification(window.feedLocalizer?.ErrorReportingContent || 'Error reporting content', 'error');
     });
 }
 
@@ -382,7 +382,7 @@ function loadMoreContent() {
     isLoading = true;
     const loadButton = document.querySelector('.btn:contains("Load More Posts")');
     if (loadButton) {
-        loadButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+        loadButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${window.feedLocalizer?.Loading || 'Loading...'}`;
     }
     
     currentPage++;
@@ -405,7 +405,7 @@ function loadMoreContent() {
         .finally(() => {
             isLoading = false;
             if (loadButton) {
-                loadButton.innerHTML = 'Load More Posts';
+                loadButton.innerHTML = window.feedLocalizer?.LoadMorePosts || 'Load More Posts';
             }
         });
 }
@@ -484,12 +484,12 @@ function sendFriendRequest(userId) {
             button.disabled = true;
             button.classList.remove('btn-primary');
             button.classList.add('btn-secondary');
-            showNotification('Friend request sent!', 'success');
+            showNotification(window.feedLocalizer?.FriendRequestSent || 'Friend request sent!', 'success');
         }
     })
     .catch(error => {
         console.error('Error sending friend request:', error);
-        showNotification('Error sending friend request', 'error');
+        showNotification(window.feedLocalizer?.ErrorSendingFriendRequest || 'Error sending friend request', 'error');
     });
 }
 
@@ -543,8 +543,8 @@ function updateStatsDisplay(stats) {
 
 function showNotification(message, type = 'info') {
     // Use the global notification system
-    if (window.showNotification && typeof window.showNotification === 'function') {
-        window.showNotification(message, type);
+    if (window.notify && typeof window.notify[type] === 'function') {
+        window.notify[type](message);
     } else {
         // Fallback to console if notification system isn't loaded yet
         console.log(`${type.toUpperCase()}: ${message}`);

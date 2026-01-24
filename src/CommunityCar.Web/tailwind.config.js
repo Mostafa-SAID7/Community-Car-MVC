@@ -5,6 +5,10 @@ module.exports = {
         './Views/**/*.cshtml',
         './Pages/**/*.cshtml',
         './wwwroot/js/**/*.js',
+        './Areas/**/*.cshtml',
+        './Components/**/*.cshtml',
+        './TagHelpers/**/*.cs',
+        './Models/**/*.cs'
     ],
     theme: {
         container: {

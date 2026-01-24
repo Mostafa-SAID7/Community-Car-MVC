@@ -6,34 +6,28 @@
     ViewData["Title"] = Localizer["AllFriends"];
 }
 
-<div class="container mx-auto px-4 py-8 max-w-6xl">
+<div class="space-y-8 animate-in fade-in duration-700">
     <!-- Header -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700 mb-6">
-        <div class="p-8">
-            <div class="flex items-center justify-between">
-                <h2 class="text-2xl font-black text-foreground flex items-center gap-3">
-                    <div class="bg-primary/10 p-2 rounded-xl text-primary">
-                        <i data-lucide="users" class="w-6 h-6"></i>
-                    </div>
-                    @Localizer["AllFriends"] (@Model.Count())
-                </h2>
-                <a href="/friends" class="btn-secondary">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    @Localizer["BackToOverview"]
-                </a>
-            </div>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+            <h1 class="text-3xl font-black text-foreground tracking-tight">@Localizer["AllFriends"] (@Model.Count())</h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Manage your connections and friendships</p>
         </div>
+        <a href="/friends" class="inline-flex items-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+            @Localizer["BackToOverview"]
+        </a>
     </div>
 
     <!-- Friends Grid -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
         <div class="p-6">
             @if (Model.Any())
             {
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach (var friend in Model)
                     {
-                        <div class="bg-muted/20 border border-border/50 rounded-2xl p-6 group hover:bg-muted/40 transition-all hover:border-primary/20 text-center">
+                        <div class="bg-background/50 border border-border rounded-2xl p-6 group hover:bg-muted/40 transition-all hover:border-primary/20 hover:shadow-md text-center">
                             <div class="relative inline-block mb-4">
                                 @if (!string.IsNullOrEmpty(friend.ProfilePictureUrl))
                                 {
@@ -64,35 +58,38 @@
                             
                             @if (friend.MutualFriendsCount > 0)
                             {
-                                <p class="text-xs text-muted-foreground mb-4">@friend.MutualFriendsCount mutual friends</p>
+                                <p class="text-xs text-muted-foreground mb-4 flex items-center justify-center gap-1">
+                                    <i data-lucide="users" class="w-3 h-3"></i>
+                                    @friend.MutualFriendsCount mutual friends
+                                </p>
                             }
                             
                             <p class="text-xs text-muted-foreground mb-4">Friends since @friend.FriendsSince.ToString("MMM yyyy")</p>
                             
                             <div class="flex gap-2 justify-center">
-                                <a href="/chats?user=@friend.UserId" class="btn-sm btn-primary">
-                                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                <a href="/chats?user=@friend.UserId" class="inline-flex items-center gap-1 px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-bold transition-all active:scale-95">
+                                    <i data-lucide="message-circle" class="w-3 h-3"></i>
                                     Message
                                 </a>
-                                <button class="btn-sm btn-secondary" onclick="viewProfile('@friend.UserId')">
-                                    <i data-lucide="user" class="w-4 h-4"></i>
+                                <button class="inline-flex items-center gap-1 px-3 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-bold transition-all active:scale-95" onclick="viewProfile('@friend.UserId')">
+                                    <i data-lucide="user" class="w-3 h-3"></i>
                                     Profile
                                 </button>
                                 <div class="relative">
-                                    <button class="btn-sm btn-secondary" onclick="toggleFriendMenu('@friend.UserId')">
-                                        <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                                    <button class="inline-flex items-center gap-1 px-3 py-2 bg-background border border-border hover:border-muted-foreground hover:text-muted-foreground rounded-xl text-xs font-bold transition-all active:scale-95" onclick="toggleFriendMenu('@friend.UserId')">
+                                        <i data-lucide="more-horizontal" class="w-3 h-3"></i>
                                     </button>
                                     <div id="friend-menu-@friend.UserId" class="absolute right-0 top-full mt-2 w-48 bg-card border border-border rounded-xl shadow-lg hidden z-10">
                                         <div class="p-2">
-                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg" onclick="viewMutualFriends('@friend.UserId')">
+                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg transition-colors" onclick="viewMutualFriends('@friend.UserId')">
                                                 <i data-lucide="users" class="w-4 h-4 inline mr-2"></i>
                                                 Mutual Friends
                                             </button>
-                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg text-destructive" onclick="removeFriend('@friend.UserId', '@friend.FullName')">
+                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg text-destructive transition-colors" onclick="removeFriend('@friend.UserId', '@friend.FullName')">
                                                 <i data-lucide="user-minus" class="w-4 h-4 inline mr-2"></i>
                                                 Remove Friend
                                             </button>
-                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg text-destructive" onclick="blockUser('@friend.UserId', '@friend.FullName')">
+                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted rounded-lg text-destructive transition-colors" onclick="blockUser('@friend.UserId', '@friend.FullName')">
                                                 <i data-lucide="user-x" class="w-4 h-4 inline mr-2"></i>
                                                 Block User
                                             </button>
@@ -106,12 +103,12 @@
             }
             else
             {
-                <div class="text-center py-12">
-                    <i data-lucide="users" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
-                    <h3 class="text-lg font-black text-foreground mb-2">No Friends Yet</h3>
-                    <p class="text-muted-foreground mb-6">Start connecting with other car enthusiasts!</p>
-                    <a href="/friends/suggestions" class="btn-primary">
-                        <i data-lucide="user-search" class="w-4 h-4"></i>
+                <div class="text-center py-16">
+                    <i data-lucide="users" class="w-20 h-20 text-muted-foreground mx-auto mb-6"></i>
+                    <h3 class="text-xl font-black text-foreground mb-3">No Friends Yet</h3>
+                    <p class="text-muted-foreground mb-8 max-w-md mx-auto">Start connecting with other car enthusiasts and build your community!</p>
+                    <a href="/friends/suggestions" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
+                        <i data-lucide="user-search" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
                         Find Friends
                     </a>
                 </div>

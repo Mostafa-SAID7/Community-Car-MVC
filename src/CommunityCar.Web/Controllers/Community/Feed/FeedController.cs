@@ -1,9 +1,10 @@
-using System.Diagnostics;
-using System.Security.Claims;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Features.Feed.DTOs;
 using CommunityCar.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Security.Claims;
+using System.Globalization;
 
 namespace CommunityCar.Web.Controllers.Community.Feed;
 
@@ -22,6 +23,11 @@ public class FeedController : Controller
     [HttpGet("")]
     public async Task<IActionResult> Index(string feedType = "personalized", int page = 1, int pageSize = 20)
     {
+        // Debug current culture
+        var currentCulture = CultureInfo.CurrentCulture.Name;
+        var currentUICulture = CultureInfo.CurrentUICulture.Name;
+        Console.WriteLine($"Feed Index - Current Culture: {currentCulture}, UI Culture: {currentUICulture}");
+        
         var userId = GetCurrentUserId();
         
         var request = new FeedRequest

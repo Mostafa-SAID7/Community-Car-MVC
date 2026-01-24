@@ -97,4 +97,203 @@
   <data name="Search" xml:space="preserve">
     <value>Search...</value>
   </data>
+  
+  <!-- Guides Section -->
+  <data name="AllGuides" xml:space="preserve">
+    <value>All Guides</value>
+  </data>
+  <data name="FeaturedGuides" xml:space="preserve">
+    <value>Featured Guides</value>
+  </data>
+  <data name="VerifiedGuides" xml:space="preserve">
+    <value>Verified Guides</value>
+  </data>
+  <data name="PopularGuides" xml:space="preserve">
+    <value>Popular Guides</value>
+  </data>
+  <data name="RecentGuides" xml:space="preserve">
+    <value>Recent Guides</value>
+  </data>
+  <data name="MyGuides" xml:space="preserve">
+    <value>My Guides</value>
+  </data>
+  <data name="CreateGuide" xml:space="preserve">
+    <value>Create Guide</value>
+  </data>
+  <data name="EditGuide" xml:space="preserve">
+    <value>Edit Guide</value>
+  </data>
+  <data name="DeleteGuide" xml:space="preserve">
+    <value>Delete Guide</value>
+  </data>
+  <data name="PublishGuide" xml:space="preserve">
+    <value>Publish Guide</value>
+  </data>
+  <data name="UnpublishGuide" xml:space="preserve">
+    <value>Unpublish Guide</value>
+  </data>
+  <data name="BookmarkGuide" xml:space="preserve">
+    <value>Bookmark Guide</value>
+  </data>
+  <data name="UnbookmarkGuide" xml:space="preserve">
+    <value>Remove Bookmark</value>
+  </data>
+  <data name="RateGuide" xml:space="preserve">
+    <value>Rate Guide</value>
+  </data>
+  <data name="ShareGuide" xml:space="preserve">
+    <value>Share Guide</value>
+  </data>
+  <data name="GuideTitle" xml:space="preserve">
+    <value>Guide Title</value>
+  </data>
+  <data name="GuideContent" xml:space="preserve">
+    <value>Guide Content</value>
+  </data>
+  <data name="GuideSummary" xml:space="preserve">
+    <value>Guide Summary</value>
+  </data>
+  <data name="GuideCategory" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="GuideDifficulty" xml:space="preserve">
+    <value>Difficulty Level</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Estimated Time</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="Prerequisites" xml:space="preserve">
+    <value>Prerequisites</value>
+  </data>
+  <data name="RequiredTools" xml:space="preserve">
+    <value>Required Tools</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="PublishedOn" xml:space="preserve">
+    <value>Published on</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>Last updated</value>
+  </data>
+  <data name="Views" xml:space="preserve">
+    <value>Views</value>
+  </data>
+  <data name="Bookmarks" xml:space="preserve">
+    <value>Bookmarks</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="Ratings" xml:space="preserve">
+    <value>ratings</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>Verified</value>
+  </data>
+  <data name="Featured" xml:space="preserve">
+    <value>Featured</value>
+  </data>
+  <data name="Draft" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="Published" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  
+  <!-- Difficulty Levels -->
+  <data name="Beginner" xml:space="preserve">
+    <value>Beginner</value>
+  </data>
+  <data name="Intermediate" xml:space="preserve">
+    <value>Intermediate</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  
+  <!-- Categories -->
+  <data name="Maintenance" xml:space="preserve">
+    <value>Maintenance</value>
+  </data>
+  <data name="Repair" xml:space="preserve">
+    <value>Repair</value>
+  </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
+  <data name="Detailing" xml:space="preserve">
+    <value>Detailing</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>Performance</value>
+  </data>
+  <data name="Safety" xml:space="preserve">
+    <value>Safety</value>
+  </data>
+  <data name="Seasonal" xml:space="preserve">
+    <value>Seasonal</value>
+  </data>
+  
+  <!-- Filter and Sort -->
+  <data name="FilterBy" xml:space="preserve">
+    <value>Filter by</value>
+  </data>
+  <data name="SortBy" xml:space="preserve">
+    <value>Sort by</value>
+  </data>
+  <data name="Newest" xml:space="preserve">
+    <value>Newest</value>
+  </data>
+  <data name="Oldest" xml:space="preserve">
+    <value>Oldest</value>
+  </data>
+  <data name="MostPopular" xml:space="preserve">
+    <value>Most Popular</value>
+  </data>
+  <data name="HighestRated" xml:space="preserve">
+    <value>Highest Rated</value>
+  </data>
+  <data name="MostViewed" xml:space="preserve">
+    <value>Most Viewed</value>
+  </data>
+  
+  <!-- Actions and Messages -->
+  <data name="GuideCreatedSuccessfully" xml:space="preserve">
+    <value>Guide created successfully!</value>
+  </data>
+  <data name="GuideUpdatedSuccessfully" xml:space="preserve">
+    <value>Guide updated successfully!</value>
+  </data>
+  <data name="GuideDeletedSuccessfully" xml:space="preserve">
+    <value>Guide deleted successfully!</value>
+  </data>
+  <data name="GuidePublishedSuccessfully" xml:space="preserve">
+    <value>Guide published successfully!</value>
+  </data>
+  <data name="GuideBookmarkedSuccessfully" xml:space="preserve">
+    <value>Guide bookmarked successfully!</value>
+  </data>
+  <data name="GuideRatedSuccessfully" xml:space="preserve">
+    <value>Thank you for rating this guide!</value>
+  </data>
+  <data name="NoGuidesFound" xml:space="preserve">
+    <value>No guides found matching your criteria.</value>
+  </data>
+  <data name="LoadingGuides" xml:space="preserve">
+    <value>Loading guides...</value>
+  </data>
+  <data name="RelatedGuides" xml:space="preserve">
+    <value>Related Guides</value>
+  </data>
+  <data name="MoreFromAuthor" xml:space="preserve">
+    <value>More from this author</value>
+  </data>
 </root>

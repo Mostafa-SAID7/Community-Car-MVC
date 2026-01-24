@@ -1,0 +1,268 @@
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Application.Features.Reviews.DTOs.ReviewsSearchResponse
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["ReviewsForTarget"];
+    var targetId = ViewBag.TargetId as Guid?;
+    var targetType = ViewBag.TargetType as string ?? "Vehicle";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden mb-8">
+        <div class="p-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h2 class="text-3xl font-black text-foreground flex items-center gap-3">
+                        <div class="bg-primary/10 p-3 rounded-xl text-primary">
+                            <i data-lucide="star" class="w-8 h-8"></i>
+                        </div>
+                        @Localizer["ReviewsFor"] @targetType
+                    </h2>
+                    <p class="text-muted-foreground mt-2">@Localizer["ReviewsForTargetDescription"]</p>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    @if (User.Identity?.IsAuthenticated == true && targetId.HasValue)
+                    {
+                        <a href="/reviews/create?targetId=@targetId&targetType=@targetType" class="btn-primary">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            @Localizer["WriteReview"]
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Reviews.Any())
+    {
+        <!-- Reviews Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 text-center">
+                <div class="text-3xl font-black text-primary mb-2">@Model.Reviews.Count()</div>
+                <div class="text-sm text-muted-foreground">@Localizer["TotalReviews"]</div>
+            </div>
+            
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 text-center">
+                <div class="text-3xl font-black text-green-600 mb-2">@(Model.Reviews.Any() ? Model.Reviews.Average(r => r.Rating).ToString("F1") : "0.0")</div>
+                <div class="text-sm text-muted-foreground">@Localizer["AverageRating"]</div>
+            </div>
+            
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 text-center">
+                <div class="text-3xl font-black text-blue-600 mb-2">@Model.Reviews.Count(r => r.IsRecommended)</div>
+                <div class="text-sm text-muted-foreground">@Localizer["Recommended"]</div>
+            </div>
+            
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 text-center">
+                <div class="text-3xl font-black text-purple-600 mb-2">@Model.Reviews.Count(r => r.IsVerifiedPurchase)</div>
+                <div class="text-sm text-muted-foreground">@Localizer["VerifiedPurchases"]</div>
+            </div>
+        </div>
+
+        <!-- Rating Distribution -->
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden mb-8">
+            <div class="p-6">
+                <h3 class="text-lg font-black text-foreground mb-4">@Localizer["RatingDistribution"]</h3>
+                <div class="space-y-2">
+                    @for (int rating = 5; rating >= 1; rating--)
+                    {
+                        var count = Model.Reviews.Count(r => r.Rating == rating);
+                        var percentage = Model.Reviews.Any() ? (count * 100.0 / Model.Reviews.Count()) : 0;
+                        
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-1 w-16">
+                                <span class="text-sm font-medium">@rating</span>
+                                <i data-lucide="star" class="w-4 h-4 text-amber-500 fill-current"></i>
+                            </div>
+                            <div class="flex-1 bg-muted rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full transition-all duration-300" style="width: @percentage%"></div>
+                            </div>
+                            <div class="text-sm text-muted-foreground w-12 text-right">@count</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews List -->
+        <div class="space-y-6">
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden hover-lift">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-xl font-black text-foreground">
+                                        <a href="/reviews/@review.Id" class="hover:text-primary transition-colors">@review.Title</a>
+                                    </h3>
+                                    <div class="flex items-center text-amber-500">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i data-lucide="star" class="w-4 h-4 @(i <= review.Rating ? "fill-current" : "")"></i>
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                                    <span>@Localizer["By"] @review.ReviewerName</span>
+                                    <span>@review.TimeAgo</span>
+                                    @if (review.IsVerifiedPurchase)
+                                    {
+                                        <span class="badge badge-success">
+                                            <i data-lucide="shield-check" class="w-3 h-3"></i>
+                                            @Localizer["VerifiedPurchase"]
+                                        </span>
+                                    }
+                                    @if (review.IsRecommended)
+                                    {
+                                        <span class="badge badge-primary">
+                                            <i data-lucide="thumbs-up" class="w-3 h-3"></i>
+                                            @Localizer["Recommended"]
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                    @review.ViewCount
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="thumbs-up" class="w-4 h-4"></i>
+                                    @review.HelpfulCount
+                                </span>
+                            </div>
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(review.Comment))
+                        {
+                            <p class="text-muted-foreground line-clamp-3 mb-4">
+                                @(review.Comment.Length > 300 ? review.Comment.Substring(0, 300) + "..." : review.Comment)
+                            </p>
+                        }
+                        
+                        @if (review.HasDetailedRatings)
+                        {
+                            <div class="bg-background/50 rounded-xl p-4 mb-4">
+                                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+                                    @if (review.QualityRating.HasValue)
+                                    {
+                                        <div class="text-center">
+                                            <div class="text-lg font-black text-foreground">@review.QualityRating</div>
+                                            <div class="text-muted-foreground">@Localizer["Quality"]</div>
+                                        </div>
+                                    }
+                                    @if (review.ValueRating.HasValue)
+                                    {
+                                        <div class="text-center">
+                                            <div class="text-lg font-black text-foreground">@review.ValueRating</div>
+                                            <div class="text-muted-foreground">@Localizer["Value"]</div>
+                                        </div>
+                                    }
+                                    @if (review.ReliabilityRating.HasValue)
+                                    {
+                                        <div class="text-center">
+                                            <div class="text-lg font-black text-foreground">@review.ReliabilityRating</div>
+                                            <div class="text-muted-foreground">@Localizer["Reliability"]</div>
+                                        </div>
+                                    }
+                                    @if (review.PerformanceRating.HasValue)
+                                    {
+                                        <div class="text-center">
+                                            <div class="text-lg font-black text-foreground">@review.PerformanceRating</div>
+                                            <div class="text-muted-foreground">@Localizer["Performance"]</div>
+                                        </div>
+                                    }
+                                    @if (review.ComfortRating.HasValue)
+                                    {
+                                        <div class="text-center">
+                                            <div class="text-lg font-black text-foreground">@review.ComfortRating</div>
+                                            <div class="text-muted-foreground">@Localizer["Comfort"]</div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        
+                        @if (review.Pros.Any() || review.Cons.Any())
+                        {
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @if (review.Pros.Any())
+                                {
+                                    <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
+                                        <h5 class="font-medium text-green-800 dark:text-green-200 mb-2 flex items-center gap-1">
+                                            <i data-lucide="plus" class="w-4 h-4"></i>
+                                            @Localizer["Pros"]
+                                        </h5>
+                                        <ul class="text-sm text-green-700 dark:text-green-300 space-y-1">
+                                            @foreach (var pro in review.Pros.Take(3))
+                                            {
+                                                <li class="flex items-start gap-1">
+                                                    <i data-lucide="check" class="w-3 h-3 mt-0.5 flex-shrink-0"></i>
+                                                    @pro
+                                                </li>
+                                            }
+                                            @if (review.Pros.Count() > 3)
+                                            {
+                                                <li class="text-xs">+@(review.Pros.Count() - 3) more...</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                                
+                                @if (review.Cons.Any())
+                                {
+                                    <div class="bg-red-50 dark:bg-red-900/20 rounded-xl p-4">
+                                        <h5 class="font-medium text-red-800 dark:text-red-200 mb-2 flex items-center gap-1">
+                                            <i data-lucide="minus" class="w-4 h-4"></i>
+                                            @Localizer["Cons"]
+                                        </h5>
+                                        <ul class="text-sm text-red-700 dark:text-red-300 space-y-1">
+                                            @foreach (var con in review.Cons.Take(3))
+                                            {
+                                                <li class="flex items-start gap-1">
+                                                    <i data-lucide="x" class="w-3 h-3 mt-0.5 flex-shrink-0"></i>
+                                                    @con
+                                                </li>
+                                            }
+                                            @if (review.Cons.Count() > 3)
+                                            {
+                                                <li class="text-xs">+@(review.Cons.Count() - 3) more...</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="text-center py-16">
+            <div class="bg-muted/20 border border-border/50 rounded-2xl p-12 max-w-md mx-auto">
+                <i data-lucide="star" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
+                <h3 class="text-xl font-black text-foreground mb-2">@Localizer["NoReviewsForTarget"]</h3>
+                <p class="text-muted-foreground mb-6">@Localizer["NoReviewsForTargetDescription"]</p>
+                @if (User.Identity?.IsAuthenticated == true && targetId.HasValue)
+                {
+                    <a href="/reviews/create?targetId=@targetId&targetType=@targetType" class="btn-primary">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        @Localizer["WriteFirstReview"]
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/reviews.js"></script>
+}

@@ -7,13 +7,18 @@ using CommunityCar.Domain.Base;
 namespace CommunityCar.Domain.Entities.Auth;
 
 // Inherit from IdentityUser<Guid> for ASP.NET Core Identity compatibility
-public class User : IdentityUser<Guid>, IBaseEntity
+public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
 {
     // Re-implementing BaseEntity properties manually since we can't multiple inherit
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string? CreatedBy { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public string? UpdatedBy { get; set; }
+    
+    // Soft Delete Properties
+    public bool IsDeleted { get; private set; } = false;
+    public DateTime? DeletedAt { get; private set; }
+    public string? DeletedBy { get; private set; }
 
     public string FullName { get; set; } = string.Empty;
     public string? Bio { get; set; }
@@ -77,6 +82,30 @@ public class User : IdentityUser<Guid>, IBaseEntity
     {
         IsActive = false;
         Audit(UpdatedBy);
+    }
+
+    public virtual void SoftDelete(string deletedBy)
+    {
+        if (IsDeleted) return;
+        
+        IsDeleted = true;
+        DeletedAt = DateTime.UtcNow;
+        DeletedBy = deletedBy;
+        IsActive = false; // Also deactivate the user
+        UpdatedBy = deletedBy;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public virtual void Restore(string restoredBy)
+    {
+        if (!IsDeleted) return;
+        
+        IsDeleted = false;
+        DeletedAt = null;
+        DeletedBy = null;
+        IsActive = true; // Reactivate the user
+        UpdatedBy = restoredBy;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void UpdateLastLogin(string? provider = null)

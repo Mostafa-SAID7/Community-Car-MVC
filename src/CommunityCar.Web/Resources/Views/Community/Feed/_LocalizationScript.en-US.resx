@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemovedLike" xml:space="preserve">
+    <value>Removed like</value>
+  </data>
+  <data name="Liked" xml:space="preserve">
+    <value>Liked!</value>
+  </data>
+  <data name="FailedToUpdateLike" xml:space="preserve">
+    <value>Failed to update like</value>
+  </data>
+  <data name="ErrorUpdatingLike" xml:space="preserve">
+    <value>Error updating like</value>
+  </data>
+  <data name="FailedToShare" xml:space="preserve">
+    <value>Failed to share content</value>
+  </data>
+  <data name="ErrorSharingContent" xml:space="preserve">
+    <value>Error sharing content</value>
+  </data>
+  <data name="LinkCopiedToClipboard" xml:space="preserve">
+    <value>Link copied to clipboard!</value>
+  </data>
+  <data name="UnableToCopyLink" xml:space="preserve">
+    <value>Unable to copy link</value>
+  </data>
+  <data name="RemovedFromBookmarks" xml:space="preserve">
+    <value>Removed from bookmarks</value>
+  </data>
+  <data name="AddedToBookmarks" xml:space="preserve">
+    <value>Added to bookmarks</value>
+  </data>
+  <data name="FailedToBookmark" xml:space="preserve">
+    <value>Failed to bookmark content</value>
+  </data>
+  <data name="ErrorBookmarkingContent" xml:space="preserve">
+    <value>Error bookmarking content</value>
+  </data>
+  <data name="ContentHidden" xml:space="preserve">
+    <value>Content hidden</value>
+  </data>
+  <data name="FailedToHideContent" xml:space="preserve">
+    <value>Failed to hide content</value>
+  </data>
+  <data name="ErrorHidingContent" xml:space="preserve">
+    <value>Error hiding content</value>
+  </data>
+  <data name="ReportReason" xml:space="preserve">
+    <value>Please provide a reason for reporting this content:</value>
+  </data>
+  <data name="ContentReported" xml:space="preserve">
+    <value>Content reported. Thank you for helping keep our community safe.</value>
+  </data>
+  <data name="FailedToReportContent" xml:space="preserve">
+    <value>Failed to report content</value>
+  </data>
+  <data name="ErrorReportingContent" xml:space="preserve">
+    <value>Error reporting content</value>
+  </data>
+  <data name="FriendRequestSent" xml:space="preserve">
+    <value>Friend request sent!</value>
+  </data>
+  <data name="ErrorSendingFriendRequest" xml:space="preserve">
+    <value>Error sending friend request</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="LoadMorePosts" xml:space="preserve">
+    <value>Load More Posts</value>
+  </data>
+</root>

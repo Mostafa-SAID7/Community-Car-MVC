@@ -1,0 +1,242 @@
+@{
+    ViewData["Title"] = "Create New Post";
+}
+
+<div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
+        <a href="@Url.Action("Index", "Posts")" class="hover:text-primary transition-colors flex items-center gap-2">
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Interaction Feed
+        </a>
+        <i data-lucide="chevron-right" class="w-3 h-3 opacity-30"></i>
+        <span class="text-foreground">New Broadcast</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="text-center">
+        <h1 class="text-3xl font-black text-foreground tracking-tight mb-3">Create New Post</h1>
+        <p class="text-muted-foreground font-medium opacity-80 max-w-2xl mx-auto">Share your automotive knowledge, experiences, or questions with the community. Your voice matters in our collective journey.</p>
+    </div>
+
+    <!-- Create Form -->
+    <div class="max-w-4xl mx-auto">
+        <form method="post" action="@Url.Action("Create", "Posts")" class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-8 shadow-xl space-y-8">
+            @Html.AntiForgeryToken()
+
+            <!-- Post Type Selection -->
+            <div class="space-y-6">
+                <h2 class="text-xl font-black text-foreground flex items-center gap-3">
+                    <i data-lucide="radio" class="w-5 h-5"></i>
+                    Broadcast Type
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="flex items-start gap-4 p-4 bg-muted/20 border border-border/30 rounded-xl hover:border-primary/30 transition-colors cursor-pointer" onclick="selectPostType('Text', this)">
+                        <input type="radio" id="type-text" name="type" value="Text" checked class="mt-1 text-primary focus:ring-primary">
+                        <div class="flex-1">
+                            <label for="type-text" class="block text-sm font-black text-foreground mb-1 cursor-pointer">
+                                <i data-lucide="type" class="w-4 h-4 inline mr-2"></i>
+                                Text Post
+                            </label>
+                            <p class="text-xs text-muted-foreground opacity-80">Share thoughts, questions, or discussions</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 bg-muted/20 border border-border/30 rounded-xl hover:border-primary/30 transition-colors cursor-pointer" onclick="selectPostType('Image', this)">
+                        <input type="radio" id="type-image" name="type" value="Image" class="mt-1 text-primary focus:ring-primary">
+                        <div class="flex-1">
+                            <label for="type-image" class="block text-sm font-black text-foreground mb-1 cursor-pointer">
+                                <i data-lucide="image" class="w-4 h-4 inline mr-2"></i>
+                                Photo Post
+                            </label>
+                            <p class="text-xs text-muted-foreground opacity-80">Share photos with descriptions</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 bg-muted/20 border border-border/30 rounded-xl hover:border-primary/30 transition-colors cursor-pointer" onclick="selectPostType('Link', this)">
+                        <input type="radio" id="type-link" name="type" value="Link" class="mt-1 text-primary focus:ring-primary">
+                        <div class="flex-1">
+                            <label for="type-link" class="block text-sm font-black text-foreground mb-1 cursor-pointer">
+                                <i data-lucide="link" class="w-4 h-4 inline mr-2"></i>
+                                Link Share
+                            </label>
+                            <p class="text-xs text-muted-foreground opacity-80">Share interesting articles or resources</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 bg-muted/20 border border-border/30 rounded-xl hover:border-primary/30 transition-colors cursor-pointer" onclick="selectPostType('Poll', this)">
+                        <input type="radio" id="type-poll" name="type" value="Poll" class="mt-1 text-primary focus:ring-primary">
+                        <div class="flex-1">
+                            <label for="type-poll" class="block text-sm font-black text-foreground mb-1 cursor-pointer">
+                                <i data-lucide="bar-chart-3" class="w-4 h-4 inline mr-2"></i>
+                                Poll
+                            </label>
+                            <p class="text-xs text-muted-foreground opacity-80">Ask the community for opinions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post Content -->
+            <div class="space-y-6 pt-6 border-t border-border/20">
+                <h2 class="text-xl font-black text-foreground flex items-center gap-3">
+                    <i data-lucide="edit-3" class="w-5 h-5"></i>
+                    Content
+                </h2>
+
+                <div class="space-y-6">
+                    <div>
+                        <label for="title" class="block text-sm font-black text-foreground mb-2">Title *</label>
+                        <input type="text" id="title" name="title" required maxlength="200" 
+                               class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                               placeholder="Give your post a compelling title...">
+                        <p class="text-xs text-muted-foreground mt-1 opacity-60">Make it clear and engaging to attract readers</p>
+                    </div>
+
+                    <div>
+                        <label for="content" class="block text-sm font-black text-foreground mb-2">Content *</label>
+                        <textarea id="content" name="content" required maxlength="5000" rows="8"
+                                  class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none"
+                                  placeholder="Share your thoughts, experiences, or questions with the community..."></textarea>
+                        <div class="flex justify-between items-center mt-2">
+                            <p class="text-xs text-muted-foreground opacity-60">Use markdown for formatting. Be detailed and helpful.</p>
+                            <span class="text-xs text-muted-foreground opacity-60" id="contentCounter">0 / 5000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Options -->
+            <div class="space-y-6 pt-6 border-t border-border/20">
+                <h2 class="text-xl font-black text-foreground flex items-center gap-3">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    Options
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="tags" class="block text-sm font-black text-foreground mb-2">Tags</label>
+                        <input type="text" id="tags" name="tags" maxlength="200"
+                               class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                               placeholder="e.g., mustang, restoration, diy">
+                        <p class="text-xs text-muted-foreground mt-1 opacity-60">Separate tags with commas to help others find your post</p>
+                    </div>
+
+                    <div>
+                        <label for="group" class="block text-sm font-black text-foreground mb-2">Post to Group</label>
+                        <select id="group" name="groupId" 
+                                class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none">
+                            <option value="">General Feed</option>
+                            <option value="group1">Classic Mustang Enthusiasts</option>
+                            <option value="group2">Vintage Car Restoration</option>
+                            <option value="group3">American Muscle</option>
+                            <option value="group4">European Classics</option>
+                        </select>
+                        <p class="text-xs text-muted-foreground mt-1 opacity-60">Optional: Share with a specific community</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border/20">
+                <button type="submit" class="flex-1 px-8 py-4 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 flex items-center justify-center gap-3">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                    Broadcast Post
+                </button>
+                <button type="button" class="flex-1 px-8 py-4 bg-muted/20 border border-border hover:border-primary hover:text-primary rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3">
+                    <i data-lucide="save" class="w-5 h-5"></i>
+                    Save Draft
+                </button>
+                <a href="@Url.Action("Index", "Posts")" class="flex-1 px-8 py-4 bg-background border border-border hover:border-primary hover:text-primary rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Guidelines -->
+    <div class="max-w-4xl mx-auto bg-muted/10 border border-border/30 rounded-2xl p-6">
+        <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-5 h-5 text-green-500"></i>
+            Community Guidelines
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
+            <div class="flex items-start gap-3">
+                <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 shrink-0"></i>
+                <div>
+                    <strong class="text-foreground">Be Helpful:</strong> Share knowledge and experiences that benefit others
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 shrink-0"></i>
+                <div>
+                    <strong class="text-foreground">Stay On Topic:</strong> Keep posts automotive-related and relevant
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 shrink-0"></i>
+                <div>
+                    <strong class="text-foreground">Be Respectful:</strong> Treat all community members with courtesy
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 shrink-0"></i>
+                <div>
+                    <strong class="text-foreground">Use Clear Titles:</strong> Help others understand your post at a glance
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectPostType(type, element) {
+    // Remove active state from all options
+    document.querySelectorAll('[onclick*="selectPostType"]').forEach(el => {
+        el.classList.remove('border-primary', 'bg-primary/5');
+        el.classList.add('border-border/30');
+    });
+    
+    // Add active state to selected option
+    element.classList.remove('border-border/30');
+    element.classList.add('border-primary', 'bg-primary/5');
+    
+    // Update placeholder text based on type
+    const contentTextarea = document.getElementById('content');
+    const titleInput = document.getElementById('title');
+    
+    switch(type) {
+        case 'Text':
+            titleInput.placeholder = "Give your post a compelling title...";
+            contentTextarea.placeholder = "Share your thoughts, experiences, or questions with the community...";
+            break;
+        case 'Image':
+            titleInput.placeholder = "Describe what you're sharing...";
+            contentTextarea.placeholder = "Tell us about these photos. What's the story behind them?";
+            break;
+        case 'Link':
+            titleInput.placeholder = "What's this link about?";
+            contentTextarea.placeholder = "Paste the URL and tell us why it's worth sharing...";
+            break;
+        case 'Poll':
+            titleInput.placeholder = "What question do you want to ask?";
+            contentTextarea.placeholder = "Provide context for your poll and list the options...";
+            break;
+    }
+}
+
+// Character counter
+document.getElementById('content').addEventListener('input', function() {
+    const counter = document.getElementById('contentCounter');
+    const current = this.value.length;
+    const max = 5000;
+    counter.textContent = `${current} / ${max}`;
+    
+    if (current > max * 0.9) {
+        counter.classList.add('text-red-500');
+    } else {
+        counter.classList.remove('text-red-500');
+    }
+});
+</script>

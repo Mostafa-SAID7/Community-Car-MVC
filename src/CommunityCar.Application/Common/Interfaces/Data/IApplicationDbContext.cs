@@ -36,6 +36,10 @@ public interface IApplicationDbContext
     DbSet<Tag> Tags { get; }
     DbSet<Category> Categories { get; }
     DbSet<View> Views { get; }
+    
+    // Error Management
+    DbSet<ErrorLog> ErrorLogs { get; }
+    DbSet<ErrorOccurrence> ErrorOccurrences { get; }
 
     // Community
     DbSet<Post> Posts { get; }

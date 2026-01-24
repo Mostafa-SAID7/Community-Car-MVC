@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
+using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories;
@@ -16,6 +17,7 @@ using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
 using CommunityCar.Infrastructure.Persistence.UnitOfWork;
 using CommunityCar.Infrastructure.Services.Authentication;
 using CommunityCar.Infrastructure.Services.Communication;
+using CommunityCar.Infrastructure.Services.Community;
 using CommunityCar.Infrastructure.Services.Identity;
 using CommunityCar.Infrastructure.Services.Storage;
 using CommunityCar.Infrastructure.Services.Dashboard;
@@ -40,7 +42,8 @@ public static class DependencyInjection
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString,
-                builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                    .EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null)));
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddHttpContextAccessor();
@@ -91,7 +94,11 @@ public static class DependencyInjection
         services.AddScoped<IReviewsRepository, ReviewsRepository>();
         services.AddScoped<IStoriesRepository, StoriesRepository>();
         services.AddScoped<IRatingRepository, RatingRepository>();
+        services.AddScoped<IEventsRepository, EventsRepository>();
+        services.AddScoped<IGroupsRepository, GroupsRepository>();
+        services.AddScoped<IPostsRepository, PostsRepository>();
         services.AddScoped<IFriendsRepository, FriendsRepository>();
+        services.AddScoped<IGuidesRepository, GuidesRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Authentication & Authorization services
@@ -101,6 +108,8 @@ public static class DependencyInjection
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IChatService, ChatService>();
+        services.AddScoped<IGuidesNotificationService, GuidesNotificationService>();
+        services.AddScoped<INewsNotificationService, NewsNotificationService>();
 
         // Storage services
         services.AddScoped<IFileStorageService, FileStorageService>();

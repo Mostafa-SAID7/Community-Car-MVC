@@ -22,22 +22,21 @@ public class NewsSearchRequest
     public int? MaxLikes { get; set; }
     public int? MinComments { get; set; }
     public int? MaxComments { get; set; }
-    public NewsSortBy SortBy { get; set; } = NewsSortBy.Default;
+    public string SortBy { get; set; } = "newest";
     public int Page { get; set; } = 1;
-    public int PageSize { get; set; } = 20;
+    public int PageSize { get; set; } = 12;
 }
 
 public enum NewsSortBy
 {
-    Default = 0,
-    Newest = 1,
-    Oldest = 2,
-    MostViews = 3,
-    LeastViews = 4,
-    MostLikes = 5,
-    LeastLikes = 6,
-    MostComments = 7,
-    LeastComments = 8,
-    MostShares = 9,
-    Relevance = 10
+    Newest,
+    Oldest,
+    MostViews,
+    LeastViews,
+    MostLikes,
+    LeastLikes,
+    MostComments,
+    LeastComments,
+    MostShares,
+    Relevance
 }

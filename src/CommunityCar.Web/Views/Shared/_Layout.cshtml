@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="user-id"
         content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
+    
+    @if (TempData["ToasterType"] != null)
+    {
+        <meta name="toaster-type" content="@TempData["ToasterType"]" />
+        <meta name="toaster-title" content="@TempData["ToasterTitle"]" />
+        <meta name="toaster-message" content="@TempData["ToasterMessage"]" />
+    }
+    
     <title>@ViewData["Title"] - CommunityCar</title>
 
     <performance-optimizations url="@Context.Request.Path" />
@@ -38,9 +46,9 @@
         <!-- Main Content Area positioned between sidebars -->
         @{
             var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
-            var mainContentClass = hideRightSidebar ? "xl:mr-0" : "xl:mr-[21rem]";
+            var mainContentClass = hideRightSidebar ? "xl:mr-0 rtl:xl:mr-0 rtl:xl:ml-0" : "xl:mr-[21rem] rtl:xl:mr-0 rtl:xl:ml-[21rem]";
         }
-        <main class="flex-1 transition-all duration-300 px-2 sm:px-3 md:px-4 mt-24 md:ml-20 xl:ml-60 @mainContentClass" id="main-content">
+        <main class="flex-1 transition-all duration-300 px-2 sm:px-3 md:px-4 mt-24 md:ml-20 xl:ml-60 rtl:md:ml-0 rtl:md:mr-20 rtl:xl:ml-0 rtl:xl:mr-60 @mainContentClass" id="main-content">
             <div class="max-w-none w-full overflow-x-hidden">
                 <div class="bg-card/30 backdrop-blur-xl border border-border rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 w-full">
                     <!-- Header with sidebar toggles -->
@@ -126,7 +134,7 @@
         {
             @if (IsSectionDefined("SidebarRight"))
             {
-                <div class="fixed right-4 top-24 bottom-8 w-80 hidden xl:block">
+                <div class="fixed right-4 rtl:right-auto rtl:left-4 top-24 bottom-8 w-80 hidden xl:block">
                     @RenderSection("SidebarRight")
                 </div>
             }
@@ -142,6 +150,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>
+    <script src="~/js/toaster.js" asp-append-version="true" defer></script>
+    <script src="~/js/error-boundary.js" asp-append-version="true" defer></script>
 
     <!-- SignalR -->
     @if (User.Identity?.IsAuthenticated == true)

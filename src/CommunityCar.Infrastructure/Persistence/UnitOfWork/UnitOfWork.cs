@@ -28,6 +28,9 @@ public class UnitOfWork : IUnitOfWork
         IReviewsRepository reviewsRepository,
         IStoriesRepository storiesRepository,
         IRatingRepository ratingRepository,
+        IEventsRepository eventsRepository,
+        IGroupsRepository groupsRepository,
+        IPostsRepository postsRepository,
         IUserRepository userRepository)
     {
         _context = context;
@@ -47,6 +50,9 @@ public class UnitOfWork : IUnitOfWork
         Reviews = reviewsRepository;
         Stories = storiesRepository;
         Ratings = ratingRepository;
+        Events = eventsRepository;
+        Groups = groupsRepository;
+        Posts = postsRepository;
         Users = userRepository;
     }
 
@@ -66,6 +72,9 @@ public class UnitOfWork : IUnitOfWork
     public IReviewsRepository Reviews { get; }
     public IStoriesRepository Stories { get; }
     public IRatingRepository Ratings { get; }
+    public IEventsRepository Events { get; }
+    public IGroupsRepository Groups { get; }
+    public IPostsRepository Posts { get; }
     public IUserRepository Users { get; }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

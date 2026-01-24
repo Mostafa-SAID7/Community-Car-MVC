@@ -1,37 +1,422 @@
+@using Microsoft.Extensions.Localization
+@using CommunityCar.Domain.Enums
+@model CommunityCar.Application.Features.Guides.ViewModels.GuideListVM
+@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Guides";
+    ViewData["Title"] = Localizer["PageTitle"];
 }
 
-<div class="container mx-auto px-4 py-8 max-w-4xl">
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700">
-        <div class="p-8 border-b border-border/50 bg-muted/20">
-            <h2 class="text-2xl font-black text-foreground flex items-center gap-3">
-                <div class="bg-indigo-500/10 p-2 rounded-2xl text-indigo-500">
+<div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Header Section -->
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div>
+            <h1 class="text-3xl font-black text-foreground tracking-tight flex items-center gap-3">
+                <div class="bg-primary/10 p-2 rounded-xl text-primary">
                     <i data-lucide="book-open" class="w-6 h-6"></i>
                 </div>
-                Mastery Guides
-            </h2>
-            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Deep dives into maintenance, performance tuning, and car care</p>
+                @SharedLocalizer["Guides"]
+            </h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@Localizer["PageDescription"]</p>
         </div>
-        
-        <div class="divide-y divide-border/30">
-            <a href="#" class="block p-8 hover:bg-muted/30 transition-all group">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[8px] font-black uppercase tracking-widest border border-indigo-500/20">Maintenance</span>
-                            <span class="text-[10px] font-bold text-muted-foreground opacity-60">15 min read</span>
-                        </div>
-                        <h3 class="text-xl font-black text-foreground group-hover:text-primary transition-colors leading-tight">Winter Maintenance & Storage Essentials</h3>
-                    </div>
-                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground bg-muted p-2 px-4 rounded-lg border border-border shadow-inner">Released 12/2025</span>
-                </div>
-                <p class="text-sm text-muted-foreground font-medium leading-relaxed max-w-2xl opacity-80 group-hover:opacity-100 transition-opacity">A comprehensive guide for the cold season. From battery health and fluid selections to long-term storage best practices for performance vehicles.</p>
-                <div class="mt-6 flex items-center gap-2 text-primary">
-                    <span class="text-[10px] font-black uppercase tracking-widest">Expert Verified Guide</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-2"></i>
-                </div>
+        <div class="flex items-center gap-3">
+            <a href="/guides/create" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-sm font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
+                <i data-lucide="plus" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                @SharedLocalizer["CreateGuide"]
             </a>
         </div>
     </div>
+
+    <!-- Search and Filters -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6">
+            <form method="get" class="space-y-6">
+                <!-- Search Bar -->
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="w-5 h-5 text-muted-foreground"></i>
+                    </div>
+                    <input type="text" name="search" value="@Model.CurrentSearch" 
+                           class="w-full pl-12 pr-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" 
+                           placeholder="@Localizer["SearchPlaceholder"]" />
+                </div>
+
+                <!-- Filter Pills -->
+                <div class="flex flex-wrap gap-4">
+                    <!-- Category Filter -->
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-bold text-foreground">@SharedLocalizer["GuideCategory"]:</label>
+                        <select name="category" class="bg-background border border-border rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none">
+                            <option value="">@SharedLocalizer["FilterBy"] @SharedLocalizer["GuideCategory"]</option>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category" selected="@(Model.CurrentCategory == category)">@SharedLocalizer[category]</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Difficulty Filter -->
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-bold text-foreground">@SharedLocalizer["GuideDifficulty"]:</label>
+                        <select name="difficulty" class="bg-background border border-border rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none">
+                            <option value="">@SharedLocalizer["FilterBy"] @SharedLocalizer["GuideDifficulty"]</option>
+                            <option value="@GuideDifficulty.Beginner" selected="@(Model.CurrentDifficulty == "Beginner")">@SharedLocalizer["Beginner"]</option>
+                            <option value="@GuideDifficulty.Intermediate" selected="@(Model.CurrentDifficulty == "Intermediate")">@SharedLocalizer["Intermediate"]</option>
+                            <option value="@GuideDifficulty.Advanced" selected="@(Model.CurrentDifficulty == "Advanced")">@SharedLocalizer["Advanced"]</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort Filter -->
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-bold text-foreground">@SharedLocalizer["SortBy"]:</label>
+                        <select name="sortBy" class="bg-background border border-border rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none">
+                            <option value="newest" selected="@(Model.CurrentSortBy == "newest")">@SharedLocalizer["Newest"]</option>
+                            <option value="popular" selected="@(Model.CurrentSortBy == "popular")">@SharedLocalizer["MostPopular"]</option>
+                            <option value="rating" selected="@(Model.CurrentSortBy == "rating")">@SharedLocalizer["HighestRated"]</option>
+                            <option value="bookmarks" selected="@(Model.CurrentSortBy == "bookmarks")">Most Bookmarked</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Actions -->
+                    <div class="flex items-center gap-2 ml-auto">
+                        <button type="submit" class="btn-primary">
+                            <i data-lucide="filter" class="w-4 h-4"></i>
+                            Apply Filters
+                        </button>
+                        <a href="/guides" class="btn-secondary">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                            @Localizer["ClearFilters"]
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Categories -->
+    <div class="flex flex-wrap gap-3">
+        <a href="/guides?category=" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all @(string.IsNullOrEmpty(Model.CurrentCategory) ? "bg-primary text-primary-foreground" : "bg-muted/30 text-muted-foreground hover:bg-muted/50 hover:text-foreground")">
+            <i data-lucide="grid-3x3" class="w-4 h-4"></i>
+            @SharedLocalizer["AllGuides"]
+        </a>
+        @foreach (var category in Model.Categories.Take(6))
+        {
+            <a href="/guides?category=@category" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all @(Model.CurrentCategory == category ? "bg-primary text-primary-foreground" : "bg-muted/30 text-muted-foreground hover:bg-muted/50 hover:text-foreground")">
+                @SharedLocalizer[category]
+            </a>
+        }
+    </div>
+
+    <!-- Results Info -->
+    @if (Model.TotalCount > 0)
+    {
+        <div class="flex items-center justify-between">
+            <p class="text-sm text-muted-foreground font-medium">
+                @Localizer["ShowingResults", Model.Guides.Count, Model.TotalCount]
+            </p>
+            @if (!string.IsNullOrEmpty(Model.CurrentSearch) || !string.IsNullOrEmpty(Model.CurrentCategory))
+            {
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="text-muted-foreground">Filtered by:</span>
+                    @if (!string.IsNullOrEmpty(Model.CurrentSearch))
+                    {
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded-lg text-xs font-bold">"@Model.CurrentSearch"</span>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.CurrentCategory))
+                    {
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded-lg text-xs font-bold">@SharedLocalizer[Model.CurrentCategory]</span>
+                    }
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Guides Grid -->
+    @if (Model.Guides.Any())
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var guide in Model.Guides)
+            {
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden transition-all hover:shadow-2xl hover:border-primary/20 group">
+                    <!-- Guide Image -->
+                    @if (!string.IsNullOrEmpty(guide.ThumbnailUrl) || !string.IsNullOrEmpty(guide.CoverImageUrl))
+                    {
+                        <div class="aspect-video overflow-hidden relative">
+                            <img src="@(guide.ThumbnailUrl ?? guide.CoverImageUrl)" alt="@guide.Title" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            
+                            <!-- Badges -->
+                            <div class="absolute top-3 left-3 flex gap-2">
+                                @if (guide.IsFeatured)
+                                {
+                                    <span class="px-2 py-1 bg-yellow-500 text-yellow-900 rounded-lg text-xs font-black uppercase tracking-wider">
+                                        @SharedLocalizer["Featured"]
+                                    </span>
+                                }
+                                @if (guide.IsVerified)
+                                {
+                                    <span class="px-2 py-1 bg-blue-500 text-white rounded-lg text-xs font-black uppercase tracking-wider">
+                                        @SharedLocalizer["Verified"]
+                                    </span>
+                                }
+                            </div>
+
+                            <!-- Bookmark Button -->
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-background/80 backdrop-blur-sm rounded-full flex items-center justify-center text-muted-foreground hover:text-yellow-500 hover:bg-yellow-500/10 transition-all @(guide.IsBookmarked ? "text-yellow-500 bg-yellow-500/10" : "")" 
+                                    onclick="toggleBookmark('@guide.Id', this)">
+                                <i data-lucide="bookmark" class="w-4 h-4 @(guide.IsBookmarked ? "fill-current" : "")"></i>
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Placeholder for guides without images -->
+                        <div class="aspect-video bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center relative">
+                            <i data-lucide="book-open" class="w-12 h-12 text-primary/30"></i>
+                            
+                            <!-- Badges -->
+                            <div class="absolute top-3 left-3 flex gap-2">
+                                @if (guide.IsFeatured)
+                                {
+                                    <span class="px-2 py-1 bg-yellow-500 text-yellow-900 rounded-lg text-xs font-black uppercase tracking-wider">
+                                        @SharedLocalizer["Featured"]
+                                    </span>
+                                }
+                                @if (guide.IsVerified)
+                                {
+                                    <span class="px-2 py-1 bg-blue-500 text-white rounded-lg text-xs font-black uppercase tracking-wider">
+                                        @SharedLocalizer["Verified"]
+                                    </span>
+                                }
+                            </div>
+
+                            <!-- Bookmark Button -->
+                            <button class="absolute top-3 right-3 w-8 h-8 bg-background/80 backdrop-blur-sm rounded-full flex items-center justify-center text-muted-foreground hover:text-yellow-500 hover:bg-yellow-500/10 transition-all @(guide.IsBookmarked ? "text-yellow-500 bg-yellow-500/10" : "")" 
+                                    onclick="toggleBookmark('@guide.Id', this)">
+                                <i data-lucide="bookmark" class="w-4 h-4 @(guide.IsBookmarked ? "fill-current" : "")"></i>
+                            </button>
+                        </div>
+                    }
+
+                    <!-- Guide Content -->
+                    <div class="p-6">
+                        <!-- Category and Difficulty -->
+                        <div class="flex items-center gap-2 mb-3">
+                            @if (!string.IsNullOrEmpty(guide.Category))
+                            {
+                                <span class="px-2 py-1 bg-primary/10 text-primary rounded-lg text-xs font-bold uppercase tracking-wider">
+                                    @SharedLocalizer[guide.Category]
+                                </span>
+                            }
+                            <span class="px-2 py-1 rounded-lg text-xs font-bold uppercase tracking-wider @GetDifficultyClasses(guide.Difficulty)">
+                                @SharedLocalizer[guide.Difficulty.ToString()]
+                            </span>
+                            <span class="text-xs text-muted-foreground font-medium ml-auto">
+                                @guide.EstimatedTimeText
+                            </span>
+                        </div>
+
+                        <!-- Title -->
+                        <h3 class="text-lg font-black text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            <a href="/guides/@guide.Id">@guide.Title</a>
+                        </h3>
+
+                        <!-- Summary -->
+                        @if (!string.IsNullOrEmpty(guide.Summary))
+                        {
+                            <p class="text-sm text-muted-foreground font-medium line-clamp-3 mb-4">
+                                @guide.Summary
+                            </p>
+                        }
+
+                        <!-- Author -->
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-8 h-8 rounded-full overflow-hidden">
+                                @if (!string.IsNullOrEmpty(guide.AuthorAvatar))
+                                {
+                                    <img src="@guide.AuthorAvatar" alt="@guide.AuthorName" class="w-full h-full object-cover" />
+                                }
+                                else
+                                {
+                                    <div class="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
+                                        @guide.AuthorName.Substring(0, Math.Min(2, guide.AuthorName.Length)).ToUpper()
+                                    </div>
+                                }
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-bold text-foreground truncate">@guide.AuthorName</p>
+                                <p class="text-xs text-muted-foreground">@guide.TimeAgo</p>
+                            </div>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="flex items-center justify-between pt-4 border-t border-border/40">
+                            <div class="flex items-center gap-4">
+                                @if (guide.AverageRating > 0)
+                                {
+                                    <div class="flex items-center gap-1">
+                                        <i data-lucide="star" class="w-4 h-4 text-yellow-500 fill-current"></i>
+                                        <span class="text-sm font-bold text-foreground">@guide.AverageRating.ToString("F1")</span>
+                                        <span class="text-xs text-muted-foreground">(@guide.RatingCount)</span>
+                                    </div>
+                                }
+                                <div class="flex items-center gap-1 text-muted-foreground">
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                    <span class="text-xs font-medium">@guide.ViewCount</span>
+                                </div>
+                                <div class="flex items-center gap-1 text-muted-foreground">
+                                    <i data-lucide="bookmark" class="w-4 h-4"></i>
+                                    <span class="text-xs font-medium">@guide.BookmarkCount</span>
+                                </div>
+                            </div>
+                            <a href="/guides/@guide.Id" class="text-primary hover:text-primary/80 text-sm font-bold">
+                                Read Guide →
+                            </a>
+                        </div>
+
+                        <!-- Tags -->
+                        @if (guide.Tags.Any())
+                        {
+                            <div class="flex flex-wrap gap-1 mt-4">
+                                @foreach (var tag in guide.Tags.Take(3))
+                                {
+                                    <span class="px-2 py-1 bg-muted/30 text-muted-foreground rounded text-xs font-medium">
+                                        #@tag
+                                    </span>
+                                }
+                                @if (guide.Tags.Count > 3)
+                                {
+                                    <span class="px-2 py-1 bg-muted/30 text-muted-foreground rounded text-xs font-medium">
+                                        +@(guide.Tags.Count - 3) more
+                                    </span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (Model.Pagination.TotalPages > 1)
+        {
+            <div class="flex justify-center">
+                <nav class="flex items-center gap-2">
+                    @if (Model.Pagination.HasPreviousPage)
+                    {
+                        <a href="?page=@(Model.Pagination.CurrentPage - 1)&search=@Model.CurrentSearch&category=@Model.CurrentCategory&difficulty=@Model.CurrentDifficulty&sortBy=@Model.CurrentSortBy" 
+                           class="px-4 py-2 bg-background border border-border rounded-lg text-sm font-medium hover:bg-muted/50 transition-all">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </a>
+                    }
+
+                    @for (int i = Math.Max(1, Model.Pagination.CurrentPage - 2); i <= Math.Min(Model.Pagination.TotalPages, Model.Pagination.CurrentPage + 2); i++)
+                    {
+                        <a href="?page=@i&search=@Model.CurrentSearch&category=@Model.CurrentCategory&difficulty=@Model.CurrentDifficulty&sortBy=@Model.CurrentSortBy" 
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition-all @(i == Model.Pagination.CurrentPage ? "bg-primary text-primary-foreground" : "bg-background border border-border hover:bg-muted/50")">
+                            @i
+                        </a>
+                    }
+
+                    @if (Model.Pagination.HasNextPage)
+                    {
+                        <a href="?page=@(Model.Pagination.CurrentPage + 1)&search=@Model.CurrentSearch&category=@Model.CurrentCategory&difficulty=@Model.CurrentDifficulty&sortBy=@Model.CurrentSortBy" 
+                           class="px-4 py-2 bg-background border border-border rounded-lg text-sm font-medium hover:bg-muted/50 transition-all">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </a>
+                    }
+                </nav>
+            </div>
+        }
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="text-center py-16">
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-12 max-w-md mx-auto">
+                <i data-lucide="book-open" class="w-16 h-16 text-muted-foreground mx-auto mb-6"></i>
+                <h3 class="text-xl font-black text-foreground mb-2">@Localizer["NoResultsTitle"]</h3>
+                <p class="text-muted-foreground mb-6">@Localizer["NoResultsMessage"]</p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="/guides" class="btn-secondary">
+                        @Localizer["ClearFilters"]
+                    </a>
+                    <a href="/guides/create" class="btn-primary">
+                        @Localizer["CreateYourFirstGuide"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Popular Tags -->
+    @if (Model.PopularTags.Any())
+    {
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+            <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                <i data-lucide="hash" class="w-5 h-5 text-primary"></i>
+                Popular Tags
+            </h3>
+            <div class="flex flex-wrap gap-2">
+                @foreach (var tag in Model.PopularTags)
+                {
+                    <a href="/guides?tag=@tag" class="px-3 py-1 bg-muted/30 hover:bg-primary/10 hover:text-primary text-muted-foreground rounded-lg text-sm font-medium transition-all">
+                        #@tag
+                    </a>
+                }
+            </div>
+        </div>
+    }
 </div>
+
+@functions {
+    private string GetDifficultyClasses(GuideDifficulty difficulty)
+    {
+        return difficulty switch
+        {
+            GuideDifficulty.Beginner => "bg-green-500/10 text-green-600 dark:text-green-400",
+            GuideDifficulty.Intermediate => "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
+            GuideDifficulty.Advanced => "bg-red-500/10 text-red-600 dark:text-red-400",
+            _ => "bg-muted/30 text-muted-foreground"
+        };
+    }
+}
+
+@section Scripts {
+    @await Html.PartialAsync("~/Views/Community/Guides/_LocalizationScript.cshtml")
+    <script src="~/js/guides.js"></script>
+    <script>
+        async function toggleBookmark(guideId, button) {
+            try {
+                const isBookmarked = button.querySelector('i').classList.contains('fill-current');
+                const action = isBookmarked ? 'unbookmark' : 'bookmark';
+                
+                const response = await fetch(`/guides/${guideId}/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    }
+                });
+                
+                if (response.ok) {
+                    const icon = button.querySelector('i');
+                    if (isBookmarked) {
+                        icon.classList.remove('fill-current');
+                        button.classList.remove('text-yellow-500', 'bg-yellow-500/10');
+                        button.classList.add('text-muted-foreground');
+                    } else {
+                        icon.classList.add('fill-current');
+                        button.classList.add('text-yellow-500', 'bg-yellow-500/10');
+                        button.classList.remove('text-muted-foreground');
+                    }
+                } else {
+                    window.notify?.error('Failed to update bookmark');
+                }
+            } catch (error) {
+                console.error('Error toggling bookmark:', error);
+                window.notify?.error('An error occurred');
+            }
+        }
+    </script>
+}

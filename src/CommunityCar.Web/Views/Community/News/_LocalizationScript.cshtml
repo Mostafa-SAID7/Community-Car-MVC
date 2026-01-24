@@ -1,0 +1,95 @@
+@using Microsoft.Extensions.Localization
+@inject IViewLocalizer Localizer
+
+<script>
+    // News localization strings
+    window.newsLocalizations = {
+        // General
+        'loading': '@Localizer["Loading"]',
+        'error': '@Localizer["Error"]',
+        'success': '@Localizer["Success"]',
+        'confirm': '@Localizer["Confirm"]',
+        'cancel': '@Localizer["Cancel"]',
+        
+        // News specific
+        'newsCreated': '@Localizer["NewsCreatedSuccessfully"]',
+        'newsUpdated': '@Localizer["NewsUpdatedSuccessfully"]',
+        'newsDeleted': '@Localizer["NewsDeletedSuccessfully"]',
+        'newsPublished': '@Localizer["NewsPublishedSuccessfully"]',
+        'newsUnpublished': '@Localizer["NewsUnpublishedSuccessfully"]',
+        
+        // Actions
+        'like': '@Localizer["Like"]',
+        'unlike': '@Localizer["Unlike"]',
+        'liked': '@Localizer["Liked"]',
+        'bookmark': '@Localizer["Bookmark"]',
+        'bookmarked': '@Localizer["Bookmarked"]',
+        'bookmarkRemoved': '@Localizer["BookmarkRemoved"]',
+        'share': '@Localizer["Share"]',
+        'linkCopied': '@Localizer["LinkCopiedToClipboard"]',
+        
+        // Confirmations
+        'confirmDelete': '@Localizer["AreYouSureYouWantToDeleteThisNews"]',
+        'confirmPublish': '@Localizer["AreYouSureYouWantToPublishThisNews"]',
+        'confirmUnpublish': '@Localizer["AreYouSureYouWantToUnpublishThisNews"]',
+        
+        // Errors
+        'errorCreating': '@Localizer["ErrorCreatingNews"]',
+        'errorUpdating': '@Localizer["ErrorUpdatingNews"]',
+        'errorDeleting': '@Localizer["ErrorDeletingNews"]',
+        'errorPublishing': '@Localizer["ErrorPublishingNews"]',
+        'errorUnpublishing': '@Localizer["ErrorUnpublishingNews"]',
+        'errorLiking': '@Localizer["ErrorLikingNews"]',
+        'errorBookmarking': '@Localizer["ErrorBookmarkingNews"]',
+        'errorSharing': '@Localizer["ErrorSharingNews"]',
+        'errorLoading': '@Localizer["ErrorLoadingNews"]',
+        
+        // Search and filters
+        'noResults': '@Localizer["NoNewsFound"]',
+        'searchPlaceholder': '@Localizer["SearchNewsPlaceholder"]',
+        'filterBy': '@Localizer["FilterBy"]',
+        'sortBy': '@Localizer["SortBy"]',
+        'clearFilters': '@Localizer["ClearFilters"]',
+        
+        // Categories
+        'general': '@Localizer["General"]',
+        'carReviews': '@Localizer["CarReviews"]',
+        'industry': '@Localizer["Industry"]',
+        'technology': '@Localizer["Technology"]',
+        'events': '@Localizer["Events"]',
+        'tips': '@Localizer["Tips"]',
+        
+        // Sorting
+        'newest': '@Localizer["Newest"]',
+        'oldest': '@Localizer["Oldest"]',
+        'mostViewed': '@Localizer["MostViewed"]',
+        'mostLiked': '@Localizer["MostLiked"]',
+        'featured': '@Localizer["Featured"]',
+        
+        // Stats
+        'views': '@Localizer["Views"]',
+        'likes': '@Localizer["Likes"]',
+        'comments': '@Localizer["Comments"]',
+        'shares': '@Localizer["Shares"]',
+        
+        // Time
+        'justNow': '@Localizer["JustNow"]',
+        'minuteAgo': '@Localizer["MinuteAgo"]',
+        'minutesAgo': '@Localizer["MinutesAgo"]',
+        'hourAgo': '@Localizer["HourAgo"]',
+        'hoursAgo': '@Localizer["HoursAgo"]',
+        'dayAgo': '@Localizer["DayAgo"]',
+        'daysAgo': '@Localizer["DaysAgo"]',
+        'weekAgo': '@Localizer["WeekAgo"]',
+        'weeksAgo': '@Localizer["WeeksAgo"]',
+        'monthAgo': '@Localizer["MonthAgo"]',
+        'monthsAgo': '@Localizer["MonthsAgo"]',
+        'yearAgo': '@Localizer["YearAgo"]',
+        'yearsAgo': '@Localizer["YearsAgo"]'
+    };
+
+    // Helper function to get localized string
+    window.getNewsLocalization = function(key, defaultValue = '') {
+        return window.newsLocalizations[key] || defaultValue || key;
+    };
+</script>

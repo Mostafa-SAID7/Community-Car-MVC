@@ -1,17 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Domain.Entities.Community.Guides;
+using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Features.Guides.DTOs;
+using CommunityCar.Application.Features.Guides.ViewModels;
 using CommunityCar.Domain.Enums;
+using Microsoft.Extensions.Localization;
 
 namespace CommunityCar.Web.Controllers.Community.Guides;
 
 [Route("guides")]
 public class GuidesController : Controller
 {
+    private readonly IGuidesService _guidesService;
+    private readonly ICurrentUserService _currentUserService;
+    private readonly IStringLocalizer<GuidesController> _localizer;
     private readonly ILogger<GuidesController> _logger;
 
-    public GuidesController(ILogger<GuidesController> logger)
+    public GuidesController(
+        IGuidesService guidesService,
+        ICurrentUserService currentUserService,
+        IStringLocalizer<GuidesController> localizer,
+        ILogger<GuidesController> logger)
     {
+        _guidesService = guidesService;
+        _currentUserService = currentUserService;
+        _localizer = localizer;
         _logger = logger;
     }
 
@@ -20,287 +34,123 @@ public class GuidesController : Controller
         string? search = null,
         string? category = null,
         GuideDifficulty? difficulty = null,
+        string? tag = null,
         string? sortBy = "newest",
         int page = 1,
         int pageSize = 12)
     {
-        // Mock data for demonstration
-        var allGuides = new List<Guide>();
-
-        var guide1 = new Guide(
-            "Complete Engine Oil Change Guide",
-            "Learn how to properly change your engine oil...",
-            Guid.Empty,
-            "Step-by-step instructions for changing engine oil in classic cars",
-            "Maintenance",
-            GuideDifficulty.Beginner,
-            45
-        );
-        guide1.Publish();
-        guide1.Feature();
-        for (int i = 0; i < 3456; i++) guide1.IncrementViewCount();
-        for (int i = 0; i < 234; i++) guide1.IncrementBookmarkCount();
-        guide1.AddRating(5); guide1.AddRating(4.5); guide1.AddRating(5); guide1.AddRating(4);
-        guide1.AddTag("oil-change"); guide1.AddTag("maintenance"); guide1.AddTag("beginner");
-        guide1.AddRequiredTool("Oil filter wrench"); guide1.AddRequiredTool("Oil drain pan"); guide1.AddRequiredTool("Funnel");
-        allGuides.Add(guide1);
-
-        var guide2 = new Guide(
-            "Brake System Overhaul - Complete Guide",
-            "Master class on brake system maintenance and replacement...",
-            Guid.Empty,
-            "Comprehensive guide to brake system repair and maintenance",
-            "Brakes",
-            GuideDifficulty.Intermediate,
-            180
-        );
-        guide2.Publish();
-        guide2.Verify();
-        for (int i = 0; i < 2134; i++) guide2.IncrementViewCount();
-        for (int i = 0; i < 156; i++) guide2.IncrementBookmarkCount();
-        guide2.AddRating(4.5); guide2.AddRating(5); guide2.AddRating(4.5);
-        guide2.AddTag("brakes"); guide2.AddTag("safety"); guide2.AddTag("intermediate");
-        guide2.AddPrerequisite("Basic automotive knowledge");
-        guide2.AddRequiredTool("Brake bleeder kit"); guide2.AddRequiredTool("Torque wrench");
-        allGuides.Add(guide2);
-
-        var guide3 = new Guide(
-            "Carburetor Tuning for Vintage Cars",
-            "Advanced tuning guide for classic carburetors...",
-            Guid.Empty,
-            "Expert-level carburetor adjustment and tuning techniques",
-            "Engine",
-            GuideDifficulty.Advanced,
-            120
-        );
-        guide3.Publish();
-        guide3.Verify();
-        for (int i = 0; i < 1567; i++) guide3.IncrementViewCount();
-        for (int i = 0; i < 89; i++) guide3.IncrementBookmarkCount();
-        guide3.AddRating(5); guide3.AddRating(4.5); guide3.AddRating(5);
-        guide3.AddTag("carburetor"); guide3.AddTag("tuning"); guide3.AddTag("advanced");
-        guide3.AddPrerequisite("Understanding of carburetor basics");
-        guide3.AddRequiredTool("Carburetor synchronizer"); guide3.AddRequiredTool("AFR gauge");
-        allGuides.Add(guide3);
-
-        var guide4 = new Guide(
-            "Paint Restoration Techniques",
-            "Bring back the shine to your classic car's paint...",
-            Guid.Empty,
-            "Professional paint correction and restoration methods",
-            "Bodywork",
-            GuideDifficulty.Intermediate,
-            240
-        );
-        guide4.Publish();
-        guide4.Feature();
-        for (int i = 0; i < 2876; i++) guide4.IncrementViewCount();
-        for (int i = 0; i < 198; i++) guide4.IncrementBookmarkCount();
-        guide4.AddRating(5); guide4.AddRating(5); guide4.AddRating(4.5); guide4.AddRating(5);
-        guide4.AddTag("paint"); guide4.AddTag("restoration"); guide4.AddTag("detailing");
-        guide4.AddRequiredTool("Dual-action polisher"); guide4.AddRequiredTool("Compound and polish");
-        allGuides.Add(guide4);
-
-        var guide5 = new Guide(
-            "Electrical System Diagnostics",
-            "Troubleshoot and repair electrical issues in classic cars...",
-            Guid.Empty,
-            "Systematic approach to diagnosing electrical problems",
-            "Electrical",
-            GuideDifficulty.Advanced,
-            90
-        );
-        guide5.Publish();
-        guide5.Verify();
-        for (int i = 0; i < 1834; i++) guide5.IncrementViewCount();
-        for (int i = 0; i < 112; i++) guide5.IncrementBookmarkCount();
-        guide5.AddRating(4.5); guide5.AddRating(4); guide5.AddRating(5);
-        guide5.AddTag("electrical"); guide5.AddTag("diagnostics"); guide5.AddTag("troubleshooting");
-        guide5.AddPrerequisite("Basic electrical knowledge");
-        guide5.AddRequiredTool("Multimeter"); guide5.AddRequiredTool("Wiring diagram");
-        allGuides.Add(guide5);
-
-        var guide6 = new Guide(
-            "Transmission Fluid Service",
-            "Keep your transmission running smooth with proper fluid maintenance...",
-            Guid.Empty,
-            "Complete guide to transmission fluid checking and changing",
-            "Transmission",
-            GuideDifficulty.Beginner,
-            60
-        );
-        guide6.Publish();
-        for (int i = 0; i < 1456; i++) guide6.IncrementViewCount();
-        for (int i = 0; i < 78; i++) guide6.IncrementBookmarkCount();
-        guide6.AddRating(4); guide6.AddRating(4.5); guide6.AddRating(4.5);
-        guide6.AddTag("transmission"); guide6.AddTag("fluid"); guide6.AddTag("maintenance");
-        guide6.AddRequiredTool("Transmission fluid pump"); guide6.AddRequiredTool("Drain pan");
-        allGuides.Add(guide6);
-
-        var guide7 = new Guide(
-            "Suspension Upgrade Guide",
-            "Modernize your classic's handling with suspension upgrades...",
-            Guid.Empty,
-            "Comprehensive guide to suspension modification and improvement",
-            "Suspension",
-            GuideDifficulty.Expert,
-            300
-        );
-        guide7.Publish();
-        guide7.Verify();
-        for (int i = 0; i < 987; i++) guide7.IncrementViewCount();
-        for (int i = 0; i < 67; i++) guide7.IncrementBookmarkCount();
-        guide7.AddRating(5); guide7.AddRating(5);
-        guide7.AddTag("suspension"); guide7.AddTag("upgrade"); guide7.AddTag("expert");
-        guide7.AddPrerequisite("Advanced mechanical skills");
-        guide7.AddRequiredTool("Spring compressor"); guide7.AddRequiredTool("Alignment tools");
-        allGuides.Add(guide7);
-
-        var guide8 = new Guide(
-            "Interior Restoration Basics",
-            "Restore your classic car's interior to showroom condition...",
-            Guid.Empty,
-            "Step-by-step interior cleaning, repair, and restoration",
-            "Interior",
-            GuideDifficulty.Beginner,
-            150
-        );
-        guide8.Publish();
-        guide8.Feature();
-        for (int i = 0; i < 2345; i++) guide8.IncrementViewCount();
-        for (int i = 0; i < 145; i++) guide8.IncrementBookmarkCount();
-        guide8.AddRating(4.5); guide8.AddRating(5); guide8.AddRating(4.5); guide8.AddRating(5);
-        guide8.AddTag("interior"); guide8.AddTag("restoration"); guide8.AddTag("upholstery");
-        guide8.AddRequiredTool("Upholstery cleaner"); guide8.AddRequiredTool("Leather conditioner");
-        allGuides.Add(guide8);
-
-        var guide9 = new Guide(
-            "Rust Prevention and Treatment",
-            "Stop rust in its tracks and restore affected areas...",
-            Guid.Empty,
-            "Effective methods for rust prevention and removal",
-            "Bodywork",
-            GuideDifficulty.Intermediate,
-            120
-        );
-        guide9.Publish();
-        for (int i = 0; i < 1678; i++) guide9.IncrementViewCount();
-        for (int i = 0; i < 94; i++) guide9.IncrementBookmarkCount();
-        guide9.AddRating(4.5); guide9.AddRating(4); guide9.AddRating(4.5);
-        guide9.AddTag("rust"); guide9.AddTag("prevention"); guide9.AddTag("bodywork");
-        guide9.AddRequiredTool("Wire brush"); guide9.AddRequiredTool("Rust converter");
-        allGuides.Add(guide9);
-
-        var guide10 = new Guide(
-            "Cooling System Maintenance",
-            "Prevent overheating with proper cooling system care...",
-            Guid.Empty,
-            "Complete cooling system inspection and maintenance guide",
-            "Engine",
-            GuideDifficulty.Beginner,
-            75
-        );
-        guide10.Publish();
-        for (int i = 0; i < 1234; i++) guide10.IncrementViewCount();
-        for (int i = 0; i < 56; i++) guide10.IncrementBookmarkCount();
-        guide10.AddRating(4); guide10.AddRating(4.5);
-        guide10.AddTag("cooling"); guide10.AddTag("radiator"); guide10.AddTag("maintenance");
-        guide10.AddRequiredTool("Coolant tester"); guide10.AddRequiredTool("Funnel");
-        allGuides.Add(guide10);
-
-        // Apply filters
-        if (!string.IsNullOrWhiteSpace(search))
+        try
         {
-            allGuides = allGuides.Where(g =>
-                g.Title.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                (g.Summary != null && g.Summary.Contains(search, StringComparison.OrdinalIgnoreCase))
-            ).ToList();
+            var currentUserId = _currentUserService.UserId != null ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
+            
+            var filter = new GuideFilterDTO
+            {
+                Search = search,
+                Category = category,
+                Difficulty = difficulty,
+                Tag = tag,
+                SortBy = sortBy,
+                Page = page,
+                PageSize = pageSize,
+                IsPublished = true
+            };
+
+            var result = await _guidesService.GetGuidesAsync(filter, currentUserId);
+            
+            return View("~/Views/Community/Guides/Index.cshtml", result);
         }
-
-        if (!string.IsNullOrWhiteSpace(category) && category != "all")
+        catch (Exception ex)
         {
-            allGuides = allGuides.Where(g => g.Category == category).ToList();
+            _logger.LogError(ex, "Error loading guides");
+            TempData["Error"] = _localizer["An error occurred while loading guides."].Value;
+            return View("~/Views/Community/Guides/Index.cshtml", new GuideListVM());
         }
-
-        if (difficulty.HasValue)
-        {
-            allGuides = allGuides.Where(g => g.Difficulty == difficulty.Value).ToList();
-        }
-
-        // Apply sorting
-        allGuides = sortBy?.ToLower() switch
-        {
-            "popular" => allGuides.OrderByDescending(g => g.ViewCount).ToList(),
-            "rating" => allGuides.OrderByDescending(g => g.AverageRating).ToList(),
-            "newest" or _ => allGuides.OrderByDescending(g => g.PublishedAt ?? g.CreatedAt).ToList(),
-        };
-
-        // Calculate pagination
-        var totalCount = allGuides.Count;
-        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-        page = Math.Max(1, Math.Min(page, Math.Max(1, totalPages)));
-
-        var paginatedGuides = allGuides
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-
-        ViewBag.CurrentPage = page;
-        ViewBag.TotalPages = totalPages;
-        ViewBag.TotalCount = totalCount;
-        ViewBag.Search = search;
-        ViewBag.Category = category;
-        ViewBag.Difficulty = difficulty;
-        ViewBag.SortBy = sortBy;
-
-        return await Task.FromResult(View("~/Views/Community/Guides/Index.cshtml", paginatedGuides));
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Details(Guid id)
     {
-        // Mock data
-        var guide = new Guide(
-            "Complete Engine Oil Change Guide",
-            "## Introduction\n\nChanging your engine oil is one of the most important maintenance tasks...\n\n## Tools Required\n\n- Oil filter wrench\n- Oil drain pan\n- Funnel\n\n## Steps\n\n1. **Warm up the engine** - Run the car for 5 minutes\n2. **Locate the drain plug** - Found under the oil pan\n3. **Drain the oil** - Remove plug and let oil drain completely...",
-            Guid.Empty,
-            "Step-by-step instructions for changing engine oil in classic cars",
-            "Maintenance",
-            GuideDifficulty.Beginner,
-            45
-        );
-        guide.Publish();
-        
-        if (guide == null)
+        try
         {
+            var currentUserId = _currentUserService.UserId != null ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
+            
+            var guide = await _guidesService.GetGuideAsync(id, currentUserId);
+            if (guide == null)
+            {
+                return NotFound();
+            }
+
+            // Increment view count
+            await _guidesService.IncrementViewCountAsync(id);
+
+            return View("~/Views/Community/Guides/Details.cshtml", guide);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading guide {GuideId}", id);
             return NotFound();
         }
-
-        return await Task.FromResult(View("~/Views/Community/Guides/Details.cshtml", guide));
     }
 
     [HttpGet("create")]
     [Authorize]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
-        return View("~/Views/Community/Guides/Create.cshtml");
+        var viewModel = await _guidesService.GetCreateViewModelAsync();
+        return View("~/Views/Community/Guides/Create.cshtml", viewModel);
     }
 
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public async Task<IActionResult> Create(string title, string content, string? summary, string? category, GuideDifficulty difficulty, int estimatedMinutes)
+    public async Task<IActionResult> Create(GuideCreateVM model)
     {
-        if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(content))
+        if (!ModelState.IsValid)
         {
-            ModelState.AddModelError("", "Title and Content are required.");
-            return View("~/Views/Community/Guides/Create.cshtml");
+            return View("~/Views/Community/Guides/Create.cshtml", model);
         }
 
-        // TODO: Get actual user ID and call service
-        _logger.LogInformation("Guide created: {Title}", title);
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            
+            var dto = new CreateGuideDTO
+            {
+                Title = model.Title,
+                Content = model.Content,
+                Summary = model.Summary,
+                Category = model.Category,
+                Difficulty = model.Difficulty,
+                EstimatedMinutes = model.EstimatedMinutes,
+                ThumbnailUrl = model.ThumbnailUrl,
+                CoverImageUrl = model.CoverImageUrl,
+                Tags = model.TagsInput?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList() ?? new List<string>(),
+                Prerequisites = model.PrerequisitesInput?.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(p => p.Trim()).Where(p => !string.IsNullOrEmpty(p)).ToList() ?? new List<string>(),
+                RequiredTools = model.RequiredToolsInput?.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList() ?? new List<string>()
+            };
 
-        return await Task.FromResult(RedirectToAction(nameof(Index)));
+            var result = await _guidesService.CreateGuideAsync(dto, currentUserId);
+
+            if (result.Success)
+            {
+                TempData["Success"] = _localizer["GuideCreatedSuccessfully"].Value;
+                return RedirectToAction(nameof(Details), new { id = result.GuideId });
+            }
+            else
+            {
+                ModelState.AddModelError("", result.Message);
+                return View("~/Views/Community/Guides/Create.cshtml", model);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating guide");
+            ModelState.AddModelError("", _localizer["An error occurred while creating the guide."]);
+            return View("~/Views/Community/Guides/Create.cshtml", model);
+        }
     }
 
     [HttpPost("{id:guid}/bookmark")]
@@ -308,8 +158,25 @@ public class GuidesController : Controller
     [Authorize]
     public async Task<IActionResult> Bookmark(Guid id)
     {
-        // TODO: Implement bookmark functionality
-        _logger.LogInformation("Guide {GuideId} bookmarked", id);
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var result = await _guidesService.BookmarkGuideAsync(id, currentUserId);
+
+            if (result.Success)
+            {
+                TempData["Success"] = _localizer["GuideBookmarkedSuccessfully"].Value;
+            }
+            else
+            {
+                TempData["Error"] = result.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error bookmarking guide {GuideId}", id);
+            TempData["Error"] = _localizer["An error occurred while bookmarking the guide."].Value;
+        }
 
         var referer = Request.Headers["Referer"].ToString();
         if (!string.IsNullOrEmpty(referer))
@@ -317,6 +184,335 @@ public class GuidesController : Controller
             return Redirect(referer);
         }
 
-        return await Task.FromResult(RedirectToAction(nameof(Details), new { id }));
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpPost("{id:guid}/unbookmark")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Unbookmark(Guid id)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var result = await _guidesService.UnbookmarkGuideAsync(id, currentUserId);
+
+            if (result.Success)
+            {
+                TempData["Success"] = _localizer["Bookmark removed successfully"].Value;
+            }
+            else
+            {
+                TempData["Error"] = result.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error unbookmarking guide {GuideId}", id);
+            TempData["Error"] = _localizer["An error occurred while removing the bookmark."].Value;
+        }
+
+        var referer = Request.Headers["Referer"].ToString();
+        if (!string.IsNullOrEmpty(referer))
+        {
+            return Redirect(referer);
+        }
+
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpPost("{id:guid}/rate")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Rate(Guid id, double rating)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var result = await _guidesService.RateGuideAsync(id, currentUserId, rating);
+
+            if (result.Success)
+            {
+                TempData["Success"] = _localizer["GuideRatedSuccessfully"].Value;
+            }
+            else
+            {
+                TempData["Error"] = result.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error rating guide {GuideId}", id);
+            TempData["Error"] = _localizer["An error occurred while rating the guide."].Value;
+        }
+
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpPost("{id:guid}/publish")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Publish(Guid id)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var result = await _guidesService.PublishGuideAsync(id, currentUserId);
+
+            if (result.Success)
+            {
+                TempData["Success"] = _localizer["GuidePublishedSuccessfully"].Value;
+            }
+            else
+            {
+                TempData["Error"] = result.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error publishing guide {GuideId}", id);
+            TempData["Error"] = _localizer["An error occurred while publishing the guide."].Value;
+        }
+
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpGet("{id:guid}/edit")]
+    [Authorize]
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var guide = await _guidesService.GetGuideAsync(id, currentUserId);
+            
+            if (guide == null)
+            {
+                return NotFound();
+            }
+
+            if (!guide.CanEdit)
+            {
+                TempData["Error"] = "You don't have permission to edit this guide.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            var viewModel = new GuideCreateVM
+            {
+                Title = guide.Guide.Title,
+                Content = guide.Guide.Content,
+                Summary = guide.Guide.Summary,
+                Category = guide.Guide.Category,
+                Difficulty = guide.Guide.Difficulty,
+                EstimatedMinutes = guide.Guide.EstimatedMinutes,
+                ThumbnailUrl = guide.Guide.ThumbnailUrl,
+                CoverImageUrl = guide.Guide.CoverImageUrl,
+                TagsInput = string.Join(", ", guide.Guide.Tags),
+                PrerequisitesInput = string.Join("\n", guide.Guide.Prerequisites),
+                RequiredToolsInput = string.Join("\n", guide.Guide.RequiredTools)
+            };
+
+            ViewBag.GuideId = id;
+            ViewBag.CreatedAt = guide.Guide.CreatedAt.ToString("MMM dd, yyyy");
+            ViewBag.UpdatedAt = guide.Guide.UpdatedAt?.ToString("MMM dd, yyyy") ?? "N/A";
+            ViewBag.Status = guide.Guide.IsPublished ? "Published" : "Draft";
+
+            return View("~/Views/Community/Guides/Edit.cshtml", viewModel);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading guide for edit {GuideId}", id);
+            return NotFound();
+        }
+    }
+
+    [HttpPost("{id:guid}/update")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Update(Guid id, GuideCreateVM model)
+    {
+        if (!ModelState.IsValid)
+        {
+            ViewBag.GuideId = id;
+            return View("~/Views/Community/Guides/Edit.cshtml", model);
+        }
+
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            
+            var dto = new UpdateGuideDTO
+            {
+                Id = id,
+                Title = model.Title,
+                Content = model.Content,
+                Summary = model.Summary,
+                Category = model.Category,
+                Difficulty = model.Difficulty,
+                EstimatedMinutes = model.EstimatedMinutes,
+                ThumbnailUrl = model.ThumbnailUrl,
+                CoverImageUrl = model.CoverImageUrl,
+                Tags = model.TagsInput?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList() ?? new List<string>(),
+                Prerequisites = model.PrerequisitesInput?.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(p => p.Trim()).Where(p => !string.IsNullOrEmpty(p)).ToList() ?? new List<string>(),
+                RequiredTools = model.RequiredToolsInput?.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList() ?? new List<string>()
+            };
+
+            var result = await _guidesService.UpdateGuideAsync(dto, currentUserId);
+
+            if (result.Success)
+            {
+                TempData["Success"] = _localizer["GuideUpdatedSuccessfully"].Value;
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            else
+            {
+                ModelState.AddModelError("", result.Message);
+                ViewBag.GuideId = id;
+                return View("~/Views/Community/Guides/Edit.cshtml", model);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating guide {GuideId}", id);
+            ModelState.AddModelError("", _localizer["An error occurred while updating the guide."]);
+            ViewBag.GuideId = id;
+            return View("~/Views/Community/Guides/Edit.cshtml", model);
+        }
+    }
+
+    [HttpPost("{id:guid}/delete")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var result = await _guidesService.DeleteGuideAsync(id, currentUserId);
+
+            if (result.Success)
+            {
+                TempData["Success"] = _localizer["GuideDeletedSuccessfully"].Value;
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["Error"] = result.Message;
+                return RedirectToAction(nameof(Details), new { id });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting guide {GuideId}", id);
+            TempData["Error"] = _localizer["An error occurred while deleting the guide."].Value;
+            return RedirectToAction(nameof(Details), new { id });
+        }
+    }
+
+    [HttpPost("{id:guid}/verify")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Verify(Guid id)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var result = await _guidesService.VerifyGuideAsync(id, currentUserId);
+
+            if (result.Success)
+            {
+                TempData["Success"] = "Guide verified successfully!";
+            }
+            else
+            {
+                TempData["Error"] = result.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error verifying guide {GuideId}", id);
+            TempData["Error"] = "An error occurred while verifying the guide.";
+        }
+
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpGet("my-guides")]
+    [Authorize]
+    public async Task<IActionResult> MyGuides(string? filter = "all", int page = 1, int pageSize = 10)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            
+            var filterDto = new GuideFilterDTO
+            {
+                AuthorId = currentUserId,
+                Page = page,
+                PageSize = pageSize,
+                SortBy = "newest"
+            };
+
+            // Apply filter
+            switch (filter?.ToLower())
+            {
+                case "published":
+                    filterDto.IsPublished = true;
+                    break;
+                case "drafts":
+                    filterDto.IsPublished = false;
+                    break;
+                case "featured":
+                    filterDto.IsFeatured = true;
+                    filterDto.IsPublished = true;
+                    break;
+                case "all":
+                default:
+                    // No additional filter
+                    break;
+            }
+
+            var result = await _guidesService.GetGuidesAsync(filterDto, currentUserId);
+            ViewBag.Filter = filter;
+            
+            return View("~/Views/Community/Guides/MyGuides.cshtml", result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading user guides");
+            TempData["Error"] = _localizer["An error occurred while loading your guides."].Value;
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    [HttpPost("{id:guid}/feature")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Feature(Guid id)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var result = await _guidesService.FeatureGuideAsync(id, currentUserId);
+
+            if (result.Success)
+            {
+                TempData["Success"] = "Guide featured successfully!";
+            }
+            else
+            {
+                TempData["Error"] = result.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error featuring guide {GuideId}", id);
+            TempData["Error"] = "An error occurred while featuring the guide.";
+        }
+
+        return RedirectToAction(nameof(Details), new { id });
     }
 }

@@ -1,0 +1,403 @@
+@using Microsoft.Extensions.Localization
+@using CommunityCar.Domain.Enums
+@model CommunityCar.Application.Features.Guides.ViewModels.GuideCreateVM
+@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@{
+    ViewData["Title"] = SharedLocalizer["EditGuide"];
+    var guideId = ViewBag.GuideId as Guid?;
+}
+
+<div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div>
+            <h1 class="text-3xl font-black text-foreground tracking-tight flex items-center gap-3">
+                <div class="bg-primary/10 p-2 rounded-xl text-primary">
+                    <i data-lucide="edit-3" class="w-6 h-6"></i>
+                </div>
+                @SharedLocalizer["EditGuide"]
+            </h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Update your guide content and settings</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="/guides/@guideId" class="btn-secondary">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                Back to Guide
+            </a>
+        </div>
+    </div>
+
+    <!-- Edit Form -->
+    <form method="post" action="/guides/@guideId/update" class="space-y-8" id="editGuideForm">
+        @Html.AntiForgeryToken()
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Basic Information -->
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                    <h2 class="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                        <i data-lucide="edit-3" class="w-5 h-5 text-primary"></i>
+                        Basic Information
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <!-- Title -->
+                        <div>
+                            <label for="Title" class="block text-sm font-bold text-foreground mb-2">
+                                @SharedLocalizer["GuideTitle"] <span class="text-destructive">*</span>
+                            </label>
+                            <input type="text" id="Title" name="Title" value="@Model.Title" required
+                                   class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                                   placeholder="Enter a descriptive title for your guide..." />
+                            <span asp-validation-for="Title" class="text-destructive text-xs font-medium"></span>
+                        </div>
+
+                        <!-- Summary -->
+                        <div>
+                            <label for="Summary" class="block text-sm font-bold text-foreground mb-2">
+                                @SharedLocalizer["GuideSummary"]
+                            </label>
+                            <textarea id="Summary" name="Summary" rows="3"
+                                      class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none"
+                                      placeholder="Brief summary of what this guide covers...">@Model.Summary</textarea>
+                            <span asp-validation-for="Summary" class="text-destructive text-xs font-medium"></span>
+                            <p class="text-xs text-muted-foreground mt-1">This will be shown in guide listings and search results.</p>
+                        </div>
+
+                        <!-- Content -->
+                        <div>
+                            <label for="Content" class="block text-sm font-bold text-foreground mb-2">
+                                @SharedLocalizer["GuideContent"] <span class="text-destructive">*</span>
+                            </label>
+                            <div class="border border-border rounded-xl overflow-hidden">
+                                <div class="bg-muted/30 px-4 py-2 border-b border-border flex items-center gap-2">
+                                    <i data-lucide="type" class="w-4 h-4 text-muted-foreground"></i>
+                                    <span class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Markdown Editor</span>
+                                    <div class="ml-auto flex items-center gap-2">
+                                        <button type="button" onclick="togglePreview()" class="text-xs font-bold text-primary hover:text-primary/80 transition-colors">
+                                            Preview
+                                        </button>
+                                    </div>
+                                </div>
+                                <textarea id="Content" name="Content" rows="20" required
+                                          class="w-full px-4 py-3 bg-background border-0 text-sm font-mono focus:ring-0 outline-none resize-none"
+                                          placeholder="Write your guide content here using Markdown...">@Model.Content</textarea>
+                                <div id="contentPreview" class="hidden px-4 py-3 bg-background prose prose-sm max-w-none dark:prose-invert"></div>
+                            </div>
+                            <span asp-validation-for="Content" class="text-destructive text-xs font-medium"></span>
+                            <p class="text-xs text-muted-foreground mt-1">Use Markdown formatting for rich content. Support for headers, lists, code blocks, and more.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media -->
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                    <h2 class="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                        <i data-lucide="image" class="w-5 h-5 text-primary"></i>
+                        Media & Images
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <!-- Cover Image -->
+                        <div>
+                            <label for="CoverImageUrl" class="block text-sm font-bold text-foreground mb-2">
+                                Cover Image URL
+                            </label>
+                            <input type="url" id="CoverImageUrl" name="CoverImageUrl" value="@Model.CoverImageUrl"
+                                   class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                                   placeholder="https://example.com/cover-image.jpg" />
+                            <span asp-validation-for="CoverImageUrl" class="text-destructive text-xs font-medium"></span>
+                            <p class="text-xs text-muted-foreground mt-1">Large banner image displayed at the top of your guide.</p>
+                        </div>
+
+                        <!-- Thumbnail -->
+                        <div>
+                            <label for="ThumbnailUrl" class="block text-sm font-bold text-foreground mb-2">
+                                Thumbnail URL
+                            </label>
+                            <input type="url" id="ThumbnailUrl" name="ThumbnailUrl" value="@Model.ThumbnailUrl"
+                                   class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                                   placeholder="https://example.com/thumbnail.jpg" />
+                            <span asp-validation-for="ThumbnailUrl" class="text-destructive text-xs font-medium"></span>
+                            <p class="text-xs text-muted-foreground mt-1">Small image shown in guide listings and cards.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lists -->
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                    <h2 class="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                        <i data-lucide="list" class="w-5 h-5 text-primary"></i>
+                        Prerequisites & Tools
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <!-- Prerequisites -->
+                        <div>
+                            <label for="PrerequisitesInput" class="block text-sm font-bold text-foreground mb-2">
+                                @SharedLocalizer["Prerequisites"]
+                            </label>
+                            <textarea id="PrerequisitesInput" name="PrerequisitesInput" rows="3"
+                                      class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none"
+                                      placeholder="Basic automotive knowledge&#10;Access to a garage or workspace&#10;Safety equipment">@Model.PrerequisitesInput</textarea>
+                            <span asp-validation-for="PrerequisitesInput" class="text-destructive text-xs font-medium"></span>
+                            <p class="text-xs text-muted-foreground mt-1">Enter each prerequisite on a new line.</p>
+                        </div>
+
+                        <!-- Required Tools -->
+                        <div>
+                            <label for="RequiredToolsInput" class="block text-sm font-bold text-foreground mb-2">
+                                @SharedLocalizer["RequiredTools"]
+                            </label>
+                            <textarea id="RequiredToolsInput" name="RequiredToolsInput" rows="4"
+                                      class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none"
+                                      placeholder="Socket wrench set&#10;Oil filter wrench&#10;Oil drain pan&#10;Funnel">@Model.RequiredToolsInput</textarea>
+                            <span asp-validation-for="RequiredToolsInput" class="text-destructive text-xs font-medium"></span>
+                            <p class="text-xs text-muted-foreground mt-1">Enter each tool on a new line.</p>
+                        </div>
+
+                        <!-- Tags -->
+                        <div>
+                            <label for="TagsInput" class="block text-sm font-bold text-foreground mb-2">
+                                @SharedLocalizer["Tags"]
+                            </label>
+                            <input type="text" id="TagsInput" name="TagsInput" value="@Model.TagsInput"
+                                   class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                                   placeholder="oil-change, maintenance, diy, beginner" />
+                            <span asp-validation-for="TagsInput" class="text-destructive text-xs font-medium"></span>
+                            <p class="text-xs text-muted-foreground mt-1">Separate tags with commas. Use lowercase and hyphens instead of spaces.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Guide Settings -->
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                    <h2 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="settings" class="w-5 h-5 text-primary"></i>
+                        Guide Settings
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <!-- Category -->
+                        <div>
+                            <label for="Category" class="block text-sm font-bold text-foreground mb-2">
+                                @SharedLocalizer["GuideCategory"]
+                            </label>
+                            <select id="Category" name="Category" 
+                                    class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                                <option value="">Select a category...</option>
+                                @foreach (var category in Model.AvailableCategories)
+                                {
+                                    <option value="@category" selected="@(Model.Category == category)">@SharedLocalizer[category]</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Category" class="text-destructive text-xs font-medium"></span>
+                        </div>
+
+                        <!-- Difficulty -->
+                        <div>
+                            <label for="Difficulty" class="block text-sm font-bold text-foreground mb-2">
+                                @SharedLocalizer["GuideDifficulty"] <span class="text-destructive">*</span>
+                            </label>
+                            <select id="Difficulty" name="Difficulty" required
+                                    class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                                <option value="@GuideDifficulty.Beginner" selected="@(Model.Difficulty == GuideDifficulty.Beginner)">@SharedLocalizer["Beginner"]</option>
+                                <option value="@GuideDifficulty.Intermediate" selected="@(Model.Difficulty == GuideDifficulty.Intermediate)">@SharedLocalizer["Intermediate"]</option>
+                                <option value="@GuideDifficulty.Advanced" selected="@(Model.Difficulty == GuideDifficulty.Advanced)">@SharedLocalizer["Advanced"]</option>
+                            </select>
+                            <span asp-validation-for="Difficulty" class="text-destructive text-xs font-medium"></span>
+                        </div>
+
+                        <!-- Estimated Time -->
+                        <div>
+                            <label for="EstimatedMinutes" class="block text-sm font-bold text-foreground mb-2">
+                                @SharedLocalizer["EstimatedTime"] (minutes) <span class="text-destructive">*</span>
+                            </label>
+                            <input type="number" id="EstimatedMinutes" name="EstimatedMinutes" value="@Model.EstimatedMinutes" min="5" max="1440" required
+                                   class="w-full px-4 py-3 bg-background border border-border rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                                   placeholder="30" />
+                            <span asp-validation-for="EstimatedMinutes" class="text-destructive text-xs font-medium"></span>
+                            <p class="text-xs text-muted-foreground mt-1">How long will this guide take to complete?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Version Info -->
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                    <h2 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="clock" class="w-5 h-5 text-primary"></i>
+                        Version Info
+                    </h2>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Created:</span>
+                            <span class="text-foreground font-medium">@ViewBag.CreatedAt</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Last Updated:</span>
+                            <span class="text-foreground font-medium">@ViewBag.UpdatedAt</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Status:</span>
+                            <span class="text-foreground font-medium">@ViewBag.Status</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-3">
+                    <button type="submit" class="w-full btn-primary">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        @SharedLocalizer["GuideUpdatedSuccessfully"]
+                    </button>
+                    <button type="button" onclick="saveDraft()" class="w-full btn-secondary">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                        Save as Draft
+                    </button>
+                    <a href="/guides/@guideId" class="w-full btn-outline block text-center">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                        Cancel Changes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("~/Views/Community/Guides/_LocalizationScript.cshtml")
+    <script src="~/js/guides.js"></script>
+    <script>
+        let previewMode = false;
+
+        function togglePreview() {
+            const textarea = document.getElementById('Content');
+            const preview = document.getElementById('contentPreview');
+            const button = event.target;
+            
+            previewMode = !previewMode;
+            
+            if (previewMode) {
+                // Show preview
+                textarea.classList.add('hidden');
+                preview.classList.remove('hidden');
+                preview.innerHTML = marked.parse(textarea.value);
+                button.textContent = 'Edit';
+            } else {
+                // Show editor
+                textarea.classList.remove('hidden');
+                preview.classList.add('hidden');
+                button.textContent = 'Preview';
+            }
+        }
+
+        function saveDraft() {
+            // Add a hidden input to indicate this is a draft save
+            const form = document.getElementById('editGuideForm');
+            const draftInput = document.createElement('input');
+            draftInput.type = 'hidden';
+            draftInput.name = 'SaveAsDraft';
+            draftInput.value = 'true';
+            form.appendChild(draftInput);
+            form.submit();
+        }
+
+        // Auto-save functionality
+        let autoSaveTimeout;
+        let hasUnsavedChanges = false;
+
+        function autoSave() {
+            clearTimeout(autoSaveTimeout);
+            hasUnsavedChanges = true;
+            
+            autoSaveTimeout = setTimeout(() => {
+                const formData = new FormData(document.getElementById('editGuideForm'));
+                formData.set('AutoSave', 'true');
+                
+                fetch('/guides/@guideId/auto-save', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => {
+                    if (response.ok) {
+                        hasUnsavedChanges = false;
+                        console.log('Auto-saved');
+                        // Show subtle indicator
+                        showAutoSaveIndicator();
+                    }
+                }).catch(error => {
+                    console.error('Auto-save failed:', error);
+                });
+            }, 30000); // Auto-save every 30 seconds
+        }
+
+        function showAutoSaveIndicator() {
+            // Create or update auto-save indicator
+            let indicator = document.getElementById('autoSaveIndicator');
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.id = 'autoSaveIndicator';
+                indicator.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-3 py-1 rounded-lg text-xs font-bold opacity-0 transition-opacity';
+                indicator.textContent = 'Auto-saved';
+                document.body.appendChild(indicator);
+            }
+            
+            indicator.classList.remove('opacity-0');
+            setTimeout(() => {
+                indicator.classList.add('opacity-0');
+            }, 2000);
+        }
+
+        // Add auto-save listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', autoSave);
+                input.addEventListener('change', autoSave);
+            });
+
+            // Warn about unsaved changes
+            window.addEventListener('beforeunload', function(e) {
+                if (hasUnsavedChanges) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+        });
+
+        // Form validation
+        document.getElementById('editGuideForm').addEventListener('submit', function(e) {
+            const title = document.getElementById('Title').value.trim();
+            const content = document.getElementById('Content').value.trim();
+            
+            if (!title || !content) {
+                e.preventDefault();
+                window.notify?.error('Please fill in all required fields');
+                return false;
+            }
+            
+            if (title.length < 10) {
+                e.preventDefault();
+                window.notify?.error('Title must be at least 10 characters long');
+                return false;
+            }
+            
+            if (content.length < 100) {
+                e.preventDefault();
+                window.notify?.error('Content must be at least 100 characters long');
+                return false;
+            }
+            
+            hasUnsavedChanges = false; // Reset flag on successful submit
+            return true;
+        });
+    </script>
+    
+    <!-- Include Marked.js for Markdown preview -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+}

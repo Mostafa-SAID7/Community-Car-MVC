@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Domain.Entities.Community.Groups;
+using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Features.Groups.DTOs;
 using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Web.Controllers.Community.Groups;
@@ -8,10 +9,12 @@ namespace CommunityCar.Web.Controllers.Community.Groups;
 [Route("groups")]
 public class GroupsController : Controller
 {
+    private readonly IGroupsService _groupsService;
     private readonly ILogger<GroupsController> _logger;
 
-    public GroupsController(ILogger<GroupsController> logger)
+    public GroupsController(IGroupsService groupsService, ILogger<GroupsController> logger)
     {
+        _groupsService = groupsService;
         _logger = logger;
     }
 
@@ -23,172 +26,96 @@ public class GroupsController : Controller
         int page = 1,
         int pageSize = 12)
     {
-        // Mock data for demonstration - replace with actual service call when available
-        var allGroups = new List<Group>();
-        
-        var group1 = new Group("Classic Mustang Enthusiasts", "Dedicated to Ford Mustang lovers from 1964-1973", GroupPrivacy.Public, Guid.Empty, "Ford", null, false, "Detroit, MI");
-        for (int i = 0; i < 487; i++) group1.IncrementMemberCount();
-        for (int i = 0; i < 156; i++) group1.IncrementPostCount();
-        group1.MarkAsOfficial();
-        group1.AddTag("mustang"); group1.AddTag("ford"); group1.AddTag("muscle-car");
-        allGroups.Add(group1);
-
-        var group2 = new Group("Vintage Car Restoration", "Share tips, progress, and ask questions about restoring classic cars", GroupPrivacy.Public, Guid.Empty, "General", "Be respectful. Share knowledge. No spam.");
-        for (int i = 0; i < 1243; i++) group2.IncrementMemberCount();
-        for (int i = 0; i < 892; i++) group2.IncrementPostCount();
-        group2.Verify();
-        group2.AddTag("restoration"); group2.AddTag("diy"); group2.AddTag("classic-cars");
-        allGroups.Add(group2);
-
-        var group3 = new Group("Electric Vehicle Conversion", "Converting classic cars to electric power", GroupPrivacy.Private, Guid.Empty, "Modification", null, true);
-        for (int i = 0; i < 156; i++) group3.IncrementMemberCount();
-        for (int i = 0; i < 67; i++) group3.IncrementPostCount();
-        group3.AddTag("ev"); group3.AddTag("electric"); group3.AddTag("modification");
-        allGroups.Add(group3);
-
-        var group4 = new Group("British Sports Cars", "MG, Triumph, Austin-Healey and more", GroupPrivacy.Public, Guid.Empty, "British", null, false, "London, UK");
-        for (int i = 0; i < 678; i++) group4.IncrementMemberCount();
-        for (int i = 0; i < 234; i++) group4.IncrementPostCount();
-        group4.Verify();
-        group4.AddTag("british"); group4.AddTag("mg"); group4.AddTag("triumph");
-        allGroups.Add(group4);
-
-        var group5 = new Group("American Muscle", "Discussing classic American muscle cars", GroupPrivacy.Public, Guid.Empty, "American");
-        for (int i = 0; i < 2156; i++) group5.IncrementMemberCount();
-        for (int i = 0; i < 1523; i++) group5.IncrementPostCount();
-        group5.MarkAsOfficial();
-        group5.AddTag("muscle"); group5.AddTag("american"); group5.AddTag("v8");
-        allGroups.Add(group5);
-
-        var group6 = new Group("European Classics", "Mercedes, BMW, Porsche vintage models", GroupPrivacy.Public, Guid.Empty, "European");
-        for (int i = 0; i < 934; i++) group6.IncrementMemberCount();
-        for (int i = 0; i < 445; i++) group6.IncrementPostCount();
-        group6.AddTag("european"); group6.AddTag("mercedes"); group6.AddTag("bmw");
-        allGroups.Add(group6);
-
-        var group7 = new Group("JDM Legends", "Japanese Domestic Market classics", GroupPrivacy.Private, Guid.Empty, "Japanese", null, true);
-        for (int i = 0; i < 567; i++) group7.IncrementMemberCount();
-        for (int i = 0; i < 289; i++) group7.IncrementPostCount();
-        group7.AddTag("jdm"); group7.AddTag("japan"); group7.AddTag("skyline");
-        allGroups.Add(group7);
-
-        var group8 = new Group("Corvette Club", "All generations of America's sports car", GroupPrivacy.Public, Guid.Empty, "Chevrolet", "Corvette owners and enthusiasts only. Family-friendly discussions.", false, "Bowling Green, KY");
-        for (int i = 0; i < 1834; i++) group8.IncrementMemberCount();
-        for (int i = 0; i < 967; i++) group8.IncrementPostCount();
-        group8.MarkAsOfficial();
-        group8.AddTag("corvette"); group8.AddTag("chevrolet"); group8.AddTag("sports-car");
-        allGroups.Add(group8);
-
-        var group9 = new Group("VW Air-Cooled", "Beetles, Buses, and Type 3s", GroupPrivacy.Public, Guid.Empty, "Volkswagen");
-        for (int i = 0; i < 876; i++) group9.IncrementMemberCount();
-        for (int i = 0; i < 523; i++) group9.IncrementPostCount();
-        group9.Verify();
-        group9.AddTag("vw"); group9.AddTag("beetle"); group9.AddTag("bus");
-        allGroups.Add(group9);
-
-        var group10 = new Group("Alfa Romeo Owners", "Italian passion and performance", GroupPrivacy.Private, Guid.Empty, "Italian", null, true);
-        for (int i = 0; i < 234; i++) group10.IncrementMemberCount();
-        for (int i = 0; i < 112; i++) group10.IncrementPostCount();
-        group10.AddTag("alfa-romeo"); group10.AddTag("italian"); group10.AddTag("performance");
-        allGroups.Add(group10);
-
-        var group11 = new Group("Hot Rod Builders", "Custom builds and modifications", GroupPrivacy.Public, Guid.Empty, "Modification");
-        for (int i = 0; i < 1456; i++) group11.IncrementMemberCount();
-        for (int i = 0; i < 834; i++) group11.IncrementPostCount();
-        group11.AddTag("hot-rod"); group11.AddTag("custom"); group11.AddTag("build");
-        allGroups.Add(group11);
-
-        var group12 = new Group("Motorcycle Classics", "Vintage motorcycles and restoration", GroupPrivacy.Public, Guid.Empty, "Motorcycle");
-        for (int i = 0; i < 645; i++) group12.IncrementMemberCount();
-        for (int i = 0; i < 378; i++) group12.IncrementPostCount();
-        group12.AddTag("motorcycle"); group12.AddTag("vintage"); group12.AddTag("restoration");
-        allGroups.Add(group12);
-
-        var group13 = new Group("Truck & Van Classics", "Classic trucks and vans community", GroupPrivacy.Public, Guid.Empty, "Trucks");
-        for (int i = 0; i < 534; i++) group13.IncrementMemberCount();
-        for (int i = 0; i < 267; i++) group13.IncrementPostCount();
-        group13.AddTag("truck"); group13.AddTag("van"); group13.AddTag("commercial");
-        allGroups.Add(group13);
-
-        var group14 = new Group("Racing Heritage", "Historic racing cars and motorsports", GroupPrivacy.Private, Guid.Empty, "Racing", "Serious discussions only. No off-topic posts.", true);
-        for (int i = 0; i < 389; i++) group14.IncrementMemberCount();
-        for (int i = 0; i < 189; i++) group14.IncrementPostCount();
-        group14.Verify();
-        group14.AddTag("racing"); group14.AddTag("motorsport"); group14.AddTag("historic");
-        allGroups.Add(group14);
-
-        var group15 = new Group("Parts Marketplace", "Buy, sell, and trade classic car parts", GroupPrivacy.Public, Guid.Empty, "Marketplace", "No scams. Verified sellers only. Be honest about condition.");
-        for (int i = 0; i < 3421; i++) group15.IncrementMemberCount();
-        for (int i = 0; i < 2134; i++) group15.IncrementPostCount();
-        group15.Verify();
-        group15.AddTag("parts"); group15.AddTag("marketplace"); group15.AddTag("buy-sell");
-        allGroups.Add(group15);
-
-        // Apply search filter
-        if (!string.IsNullOrWhiteSpace(search))
+        try
         {
-            allGroups = allGroups.Where(g => 
-                g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                g.Description.Contains(search, StringComparison.OrdinalIgnoreCase)
-            ).ToList();
-        }
-
-        // Apply privacy filter
-        if (!string.IsNullOrWhiteSpace(filterPrivacy) && filterPrivacy != "all")
-        {
-            if (Enum.TryParse<GroupPrivacy>(filterPrivacy, true, out var privacy))
+            var request = new GroupsSearchRequest
             {
-                allGroups = allGroups.Where(g => g.Privacy == privacy).ToList();
-            }
+                SearchTerm = search,
+                SortBy = sortBy,
+                Privacy = !string.IsNullOrWhiteSpace(filterPrivacy) && filterPrivacy != "all" && 
+                         Enum.TryParse<GroupPrivacy>(filterPrivacy, true, out var privacy) ? privacy : null,
+                Page = page,
+                PageSize = pageSize
+            };
+
+            var response = await _groupsService.SearchGroupsAsync(request);
+
+            // Pass pagination data to view
+            ViewBag.CurrentPage = response.Page;
+            ViewBag.TotalPages = (int)Math.Ceiling(response.TotalCount / (double)response.PageSize);
+            ViewBag.TotalCount = response.TotalCount;
+            ViewBag.PageSize = response.PageSize;
+            ViewBag.Search = search;
+            ViewBag.SortBy = sortBy;
+            ViewBag.FilterPrivacy = filterPrivacy;
+
+            // Convert ViewModels to a simple model for the view
+            var groups = response.Items.Select(vm => new
+            {
+                vm.Id,
+                vm.Name,
+                vm.Description,
+                vm.Privacy,
+                vm.OwnerId,
+                vm.Category,
+                Rules = vm.Rules ?? string.Empty,
+                vm.RequiresApproval,
+                vm.Location,
+                vm.MemberCount,
+                vm.PostCount,
+                vm.IsOfficial,
+                vm.IsVerified,
+                Tags = vm.Tags?.ToList() ?? new List<string>(),
+                vm.CreatedAt
+            }).ToList();
+
+            return View("~/Views/Community/Groups/Index.cshtml", groups);
         }
-
-        // Apply sorting
-        allGroups = sortBy?.ToLower() switch
+        catch (Exception ex)
         {
-            "name" => allGroups.OrderBy(g => g.Name).ToList(),
-            "oldest" => allGroups.OrderBy(g => g.CreatedAt).ToList(),
-            "newest" or _ => allGroups.OrderByDescending(g => g.CreatedAt).ToList(),
-        };
-
-        // Calculate pagination
-        var totalCount = allGroups.Count;
-        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-        page = Math.Max(1, Math.Min(page, Math.Max(1, totalPages)));
-
-        var paginatedGroups = allGroups
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-
-        // Pass pagination data to view
-        ViewBag.CurrentPage = page;
-        ViewBag.TotalPages = totalPages;
-        ViewBag.TotalCount = totalCount;
-        ViewBag.PageSize = pageSize;
-        ViewBag.Search = search;
-        ViewBag.SortBy = sortBy;
-        ViewBag.FilterPrivacy = filterPrivacy;
-
-        return await Task.FromResult(View("~/Views/Community/Groups/Index.cshtml", paginatedGroups));
+            _logger.LogError(ex, "Error loading groups index");
+            return View("~/Views/Community/Groups/Index.cshtml", new List<CommunityCar.Domain.Entities.Community.Groups.Group>());
+        }
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Details(Guid id)
     {
-        // Mock data for demonstration
-        var group = new Group(
-            "Classic Mustang Enthusiasts",
-            "Dedicated to Ford Mustang lovers from 1964-1973. Share your restoration projects, ask questions, and connect with fellow enthusiasts.",
-            GroupPrivacy.Public,
-            Guid.Empty
-        );
-
-        if (group == null)
+        try
         {
+            var groupVM = await _groupsService.GetGroupByIdAsync(id);
+            if (groupVM == null)
+            {
+                return NotFound();
+            }
+
+            // Convert ViewModel to a simple model for the view
+            var group = new
+            {
+                groupVM.Id,
+                groupVM.Name,
+                groupVM.Description,
+                groupVM.Privacy,
+                groupVM.OwnerId,
+                groupVM.Category,
+                groupVM.Rules,
+                groupVM.RequiresApproval,
+                groupVM.Location,
+                groupVM.MemberCount,
+                groupVM.PostCount,
+                groupVM.IsOfficial,
+                groupVM.IsVerified,
+                Tags = groupVM.Tags?.ToList() ?? new List<string>(),
+                groupVM.CreatedAt
+            };
+
+            return View("~/Views/Community/Groups/Details.cshtml", group);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading group details for {GroupId}", id);
             return NotFound();
         }
-
-        return await Task.FromResult(View("~/Views/Community/Groups/Details.cshtml", group));
     }
 
     [HttpGet("create")]
@@ -201,18 +128,47 @@ public class GroupsController : Controller
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public async Task<IActionResult> Create(string name, string description, GroupPrivacy privacy)
+    public async Task<IActionResult> Create(string name, string description, GroupPrivacy privacy, 
+        string? category = null, string? location = null, string? rules = null)
     {
         if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
         {
-            ModelState.AddModelError("", "Name and Description are required.");
+            TempData["ToasterType"] = "validation";
+            TempData["ToasterTitle"] = "Validation Error";
+            TempData["ToasterMessage"] = "Name and Description are required.";
             return View("~/Views/Community/Groups/Create.cshtml");
         }
 
-        // TODO: Get actual user ID and call service
-        _logger.LogInformation("Group created: {Name}", name);
+        try
+        {
+            var request = new CreateGroupRequest
+            {
+                Name = name,
+                Description = description,
+                Privacy = privacy,
+                Category = category,
+                Location = location,
+                Rules = rules,
+                RequiresApproval = privacy == GroupPrivacy.Private
+            };
 
-        return await Task.FromResult(RedirectToAction(nameof(Index)));
+            var groupVM = await _groupsService.CreateGroupAsync(request);
+            _logger.LogInformation("Group created: {GroupName} with ID {GroupId}", name, groupVM.Id);
+
+            TempData["ToasterType"] = "success";
+            TempData["ToasterTitle"] = "Success";
+            TempData["ToasterMessage"] = $"Group '{name}' has been created successfully!";
+
+            return RedirectToAction(nameof(Details), new { id = groupVM.Id });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating group: {GroupName}", name);
+            TempData["ToasterType"] = "error";
+            TempData["ToasterTitle"] = "Error";
+            TempData["ToasterMessage"] = "An error occurred while creating the group. Please try again.";
+            return View("~/Views/Community/Groups/Create.cshtml");
+        }
     }
 
     [HttpPost("{id:guid}/join")]
@@ -220,8 +176,31 @@ public class GroupsController : Controller
     [Authorize]
     public async Task<IActionResult> Join(Guid id)
     {
-        // TODO: Implement join functionality
-        _logger.LogInformation("User joined group {GroupId}", id);
+        try
+        {
+            var success = await _groupsService.JoinGroupAsync(id);
+            if (success)
+            {
+                _logger.LogInformation("User joined group {GroupId}", id);
+                TempData["ToasterType"] = "success";
+                TempData["ToasterTitle"] = "Success";
+                TempData["ToasterMessage"] = "You have successfully joined the group!";
+            }
+            else
+            {
+                _logger.LogWarning("Failed to join group {GroupId}", id);
+                TempData["ToasterType"] = "warning";
+                TempData["ToasterTitle"] = "Warning";
+                TempData["ToasterMessage"] = "Unable to join the group. It may require approval or be full.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error joining group {GroupId}", id);
+            TempData["ToasterType"] = "error";
+            TempData["ToasterTitle"] = "Error";
+            TempData["ToasterMessage"] = "An error occurred while joining the group. Please try again.";
+        }
 
         var referer = Request.Headers["Referer"].ToString();
         if (!string.IsNullOrEmpty(referer))
@@ -229,6 +208,97 @@ public class GroupsController : Controller
             return Redirect(referer);
         }
 
-        return await Task.FromResult(RedirectToAction(nameof(Details), new { id }));
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpGet("{id:guid}/edit")]
+    [Authorize]
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        try
+        {
+            var groupVM = await _groupsService.GetGroupByIdAsync(id);
+            if (groupVM == null)
+            {
+                return NotFound();
+            }
+
+            // Convert ViewModel to simple model for the view
+            var group = new
+            {
+                groupVM.Id,
+                groupVM.Name,
+                groupVM.Description,
+                groupVM.Privacy,
+                groupVM.Category,
+                groupVM.Location,
+                groupVM.Rules,
+                groupVM.RequiresApproval,
+                groupVM.OwnerId,
+                groupVM.CreatedAt
+            };
+
+            return View("~/Views/Community/Groups/Edit.cshtml", group);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading group edit for {GroupId}", id);
+            return NotFound();
+        }
+    }
+
+    [HttpPost("{id:guid}/edit")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Edit(Guid id, string name, string description, GroupPrivacy privacy, 
+        string? category = null, string? location = null, string? rules = null, bool requiresApproval = false)
+    {
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
+        {
+            TempData["ToasterType"] = "validation";
+            TempData["ToasterTitle"] = "Validation Error";
+            TempData["ToasterMessage"] = "Name and Description are required.";
+            return await Edit(id);
+        }
+
+        try
+        {
+            var request = new UpdateGroupRequest
+            {
+                Id = id,
+                Name = name,
+                Description = description,
+                Privacy = privacy,
+                Category = category,
+                Location = location,
+                Rules = rules,
+                RequiresApproval = requiresApproval
+            };
+
+            var updatedGroup = await _groupsService.UpdateGroupAsync(id, request);
+            if (updatedGroup != null)
+            {
+                _logger.LogInformation("Group updated: {GroupName} with ID {GroupId}", name, id);
+                TempData["ToasterType"] = "success";
+                TempData["ToasterTitle"] = "Success";
+                TempData["ToasterMessage"] = $"Group '{name}' has been updated successfully!";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            else
+            {
+                TempData["ToasterType"] = "error";
+                TempData["ToasterTitle"] = "Error";
+                TempData["ToasterMessage"] = "Failed to update the group. Please try again.";
+                return await Edit(id);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating group: {GroupId}", id);
+            TempData["ToasterType"] = "error";
+            TempData["ToasterTitle"] = "Error";
+            TempData["ToasterMessage"] = "An error occurred while updating the group. Please try again.";
+            return await Edit(id);
+        }
     }
 }

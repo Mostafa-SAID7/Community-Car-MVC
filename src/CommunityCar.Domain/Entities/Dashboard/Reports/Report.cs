@@ -82,7 +82,7 @@ public class ReportSchedule : BaseEntity
     public bool IsActive { get; set; }
     public DateTime? LastRun { get; set; }
     public DateTime? NextRun { get; set; }
-    public Guid CreatedBy { get; set; }
+    public Guid ScheduleCreatedBy { get; set; } // Renamed to avoid hiding BaseEntity.CreatedBy
     public List<string> Recipients { get; set; } = new();
 
     public void UpdateNextRun(DateTime nextRun)

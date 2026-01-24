@@ -1,0 +1,366 @@
+@model CommunityCar.Application.Features.Maps.ViewModels.PointOfInterestVM
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="space-y-8 animate-in fade-in duration-700">
+    <!-- POI Header -->
+    <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+        <div class="flex-1">
+            <div class="flex items-center gap-3 mb-4">
+                <a href="/maps" class="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    Back to Maps
+                </a>
+            </div>
+            
+            <div class="flex items-start gap-4 mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shrink-0">
+                    <i data-lucide="map-pin" class="w-8 h-8"></i>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">@Model.Name</h1>
+                    <p class="text-muted-foreground font-medium mb-3">@Model.Description</p>
+                    
+                    <div class="flex flex-wrap items-center gap-4">
+                        @if (Model.IsVerified)
+                        {
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-xs font-bold uppercase tracking-wider border border-green-500/20">
+                                <i data-lucide="shield-check" class="w-3 h-3"></i>
+                                Verified
+                            </span>
+                        }
+                        
+                        @if (Model.IsOpen24Hours)
+                        {
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-500/10 text-blue-600 rounded-full text-xs font-bold uppercase tracking-wider border border-blue-500/20">
+                                <i data-lucide="clock" class="w-3 h-3"></i>
+                                24/7
+                            </span>
+                        }
+                        
+                        @if (Model.IsTemporarilyClosed)
+                        {
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-500/10 text-red-600 rounded-full text-xs font-bold uppercase tracking-wider border border-red-500/20">
+                                <i data-lucide="x-circle" class="w-3 h-3"></i>
+                                Temporarily Closed
+                            </span>
+                        }
+                        
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-muted/50 text-muted-foreground rounded-full text-xs font-bold uppercase tracking-wider">
+                            <i data-lucide="tag" class="w-3 h-3"></i>
+                            @Model.Type.ToString().Replace("_", " ")
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            @if (Model.AllowCheckIns)
+            {
+                <button type="button" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95" onclick="checkInToLocation('@Model.Id')">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    Check In
+                </button>
+            }
+            
+            <button type="button" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
+                Share
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Main Info -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Location & Contact -->
+            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Location & Contact</h3>
+                
+                <div class="space-y-4">
+                    @if (!string.IsNullOrEmpty(Model.Address))
+                    {
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-muted-foreground mt-0.5 shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-foreground">@Model.Address</p>
+                                <p class="text-sm text-muted-foreground">@Model.Latitude.ToString("F4"), @Model.Longitude.ToString("F4")</p>
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                    {
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 text-muted-foreground shrink-0"></i>
+                            <a href="tel:@Model.PhoneNumber" class="font-medium text-primary hover:underline">@Model.PhoneNumber</a>
+                        </div>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(Model.Website))
+                    {
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="globe" class="w-5 h-5 text-muted-foreground shrink-0"></i>
+                            <a href="@Model.Website" target="_blank" class="font-medium text-primary hover:underline">Visit Website</a>
+                        </div>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(Model.OpeningHours))
+                    {
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="clock" class="w-5 h-5 text-muted-foreground mt-0.5 shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-foreground">Hours</p>
+                                <p class="text-sm text-muted-foreground">@Model.OpeningHours</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Services & Features -->
+            @if (Model.Services.Any() || Model.PaymentMethods.Any() || Model.Amenities.Any())
+            {
+                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Services & Features</h3>
+                    
+                    @if (Model.Services.Any())
+                    {
+                        <div class="mb-6">
+                            <h4 class="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Services</h4>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach (var service in Model.Services)
+                                {
+                                    <span class="px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium border border-primary/20">@service</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (Model.PaymentMethods.Any())
+                    {
+                        <div class="mb-6">
+                            <h4 class="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Payment Methods</h4>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach (var method in Model.PaymentMethods)
+                                {
+                                    <span class="px-3 py-1.5 bg-green-500/10 text-green-600 rounded-lg text-sm font-medium border border-green-500/20">@method</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (Model.Amenities.Any())
+                    {
+                        <div>
+                            <h4 class="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Amenities</h4>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach (var amenity in Model.Amenities)
+                                {
+                                    <span class="px-3 py-1.5 bg-blue-500/10 text-blue-600 rounded-lg text-sm font-medium border border-blue-500/20">@amenity</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            <!-- Event Details (if applicable) -->
+            @if (Model.EventStartTime.HasValue || Model.EventEndTime.HasValue)
+            {
+                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Event Details</h3>
+                    
+                    <div class="space-y-4">
+                        @if (Model.EventStartTime.HasValue)
+                        {
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="calendar" class="w-5 h-5 text-muted-foreground shrink-0"></i>
+                                <div>
+                                    <p class="font-medium text-foreground">Start Time</p>
+                                    <p class="text-sm text-muted-foreground">@Model.EventStartTime.Value.ToString("MMM dd, yyyy h:mm tt")</p>
+                                </div>
+                            </div>
+                        }
+                        
+                        @if (Model.EventEndTime.HasValue)
+                        {
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="calendar-x" class="w-5 h-5 text-muted-foreground shrink-0"></i>
+                                <div>
+                                    <p class="font-medium text-foreground">End Time</p>
+                                    <p class="text-sm text-muted-foreground">@Model.EventEndTime.Value.ToString("MMM dd, yyyy h:mm tt")</p>
+                                </div>
+                            </div>
+                        }
+                        
+                        @if (Model.MaxAttendees.HasValue)
+                        {
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="users" class="w-5 h-5 text-muted-foreground shrink-0"></i>
+                                <div>
+                                    <p class="font-medium text-foreground">Capacity</p>
+                                    <p class="text-sm text-muted-foreground">@Model.CurrentAttendees / @Model.MaxAttendees attendees</p>
+                                </div>
+                            </div>
+                        }
+                        
+                        @if (Model.IsEventActive)
+                        {
+                            <div class="p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
+                                <p class="text-green-600 font-medium text-sm">🔴 Event is currently active!</p>
+                            </div>
+                        }
+                        else if (Model.IsEventUpcoming)
+                        {
+                            <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                                <p class="text-blue-600 font-medium text-sm">📅 Upcoming event</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Images -->
+            @if (Model.ImageUrls.Any())
+            {
+                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Photos</h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        @foreach (var imageUrl in Model.ImageUrls)
+                        {
+                            <div class="aspect-square rounded-xl overflow-hidden bg-muted/20 border border-border">
+                                <img src="@imageUrl" alt="@Model.Name" class="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Right Column - Stats & Actions -->
+        <div class="space-y-6">
+            <!-- Stats -->
+            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Statistics</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-muted-foreground">Rating</span>
+                        <div class="flex items-center gap-2">
+                            @if (Model.AverageRating > 0)
+                            {
+                                <div class="flex items-center">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i data-lucide="star" class="w-4 h-4 @(i <= Model.AverageRating ? "text-amber-500 fill-current" : "text-muted-foreground/30")"></i>
+                                    }
+                                </div>
+                                <span class="text-sm font-medium">@Model.AverageRating.ToString("F1")</span>
+                                <span class="text-xs text-muted-foreground">(@Model.ReviewCount)</span>
+                            }
+                            else
+                            {
+                                <span class="text-sm text-muted-foreground">No ratings yet</span>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-muted-foreground">Views</span>
+                        <span class="font-medium">@Model.ViewCount.ToString("N0")</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-muted-foreground">Check-ins</span>
+                        <span class="font-medium">@Model.CheckInCount.ToString("N0")</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-muted-foreground">Added</span>
+                        <span class="text-sm text-muted-foreground">@Model.CreatedAt.ToString("MMM dd, yyyy")</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Quick Actions</h3>
+                
+                <div class="space-y-3">
+                    @if (Model.AllowCheckIns)
+                    {
+                        <button type="button" class="w-full flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary hover:bg-primary/20 rounded-xl transition-all border border-primary/20" onclick="checkInToLocation('@Model.Id')">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i>
+                            <span class="font-medium">Check In Here</span>
+                        </button>
+                    }
+                    
+                    <button type="button" class="w-full flex items-center gap-3 px-4 py-3 bg-muted/20 text-foreground hover:bg-muted/30 rounded-xl transition-all border border-border" onclick="viewCheckIns('@Model.Id')">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        <span class="font-medium">View Check-ins</span>
+                    </button>
+                    
+                    <button type="button" class="w-full flex items-center gap-3 px-4 py-3 bg-muted/20 text-foreground hover:bg-muted/30 rounded-xl transition-all border border-border">
+                        <i data-lucide="navigation" class="w-5 h-5"></i>
+                        <span class="font-medium">Get Directions</span>
+                    </button>
+                    
+                    <button type="button" class="w-full flex items-center gap-3 px-4 py-3 bg-muted/20 text-foreground hover:bg-muted/30 rounded-xl transition-all border border-border">
+                        <i data-lucide="bookmark" class="w-5 h-5"></i>
+                        <span class="font-medium">Save Location</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Report -->
+            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+                <button type="button" class="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-500/10 rounded-xl transition-all border border-red-500/20" onclick="reportLocation('@Model.Id')">
+                    <i data-lucide="flag" class="w-5 h-5"></i>
+                    <span class="font-medium">Report Issue</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/maps.js"></script>
+    <script>
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        
+        function reportLocation(poiId) {
+            if (confirm('Report this location for inappropriate content or incorrect information?')) {
+                fetch(`/maps/poi/${poiId}/report`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        showToast('Location reported successfully. Thank you for your feedback.', 'success');
+                    } else {
+                        showToast('Error reporting location. Please try again.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error reporting location:', error);
+                    showToast('Error reporting location. Please try again.', 'error');
+                });
+            }
+        }
+        
+        function viewCheckIns(poiId) {
+            // This would typically open a modal or navigate to a check-ins page
+            window.location.href = `/maps/poi/${poiId}/checkins`;
+        }
+    </script>
+}

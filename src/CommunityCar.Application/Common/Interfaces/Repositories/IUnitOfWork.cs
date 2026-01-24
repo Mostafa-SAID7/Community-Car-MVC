@@ -23,5 +23,8 @@ public interface IUnitOfWork : IDisposable
     IReviewsRepository Reviews { get; }
     IStoriesRepository Stories { get; }
     IRatingRepository Ratings { get; }
+    IEventsRepository Events { get; }
+    IGroupsRepository Groups { get; }
+    IPostsRepository Posts { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

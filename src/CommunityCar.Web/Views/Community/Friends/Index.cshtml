@@ -6,63 +6,90 @@
     ViewData["Title"] = Localizer["PageTitle"];
 }
 
-<div class="container mx-auto px-4 py-8 max-w-6xl">
+<div class="space-y-8 animate-in fade-in duration-700">
     <!-- Header Section -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700 mb-6">
-        <div class="p-8">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-black text-foreground flex items-center gap-3">
-                    <div class="bg-primary/10 p-2 rounded-xl text-primary">
-                        <i data-lucide="users" class="w-6 h-6"></i>
-                    </div>
-                    @Localizer["HeaderTitle"]
-                </h2>
-                <div class="flex items-center gap-4">
-                    <div class="text-center">
-                        <div class="text-2xl font-black text-primary">@Model.TotalFriends</div>
-                        <div class="text-xs text-muted-foreground">@SharedLocalizer["Friends"]</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-black text-orange-500">@Model.PendingRequests</div>
-                        <div class="text-xs text-muted-foreground">@Localizer["FriendRequests"]</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="flex gap-3 mb-6">
-                <a href="/friends/all" class="btn-primary">
-                    <i data-lucide="users" class="w-4 h-4"></i>
-                    @Localizer["AllFriends"]
-                </a>
-                <a href="/friends/requests" class="btn-secondary">
-                    <i data-lucide="user-plus" class="w-4 h-4"></i>
-                    @Localizer["FriendRequests"] (@Model.PendingRequests)
-                </a>
-                <a href="/friends/suggestions" class="btn-secondary">
-                    <i data-lucide="user-search" class="w-4 h-4"></i>
-                    @Localizer["FindFriends"]
-                </a>
-            </div>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+            <h1 class="text-3xl font-black text-foreground tracking-tight">@Localizer["HeaderTitle"]</h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@Localizer["HeaderSubtitle"]</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="/friends/suggestions" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
+                <i data-lucide="user-search" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                @Localizer["FindFriends"]
+            </a>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Metrics Radar -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-primary/20">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.TotalFriends</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@SharedLocalizer["Friends"]</div>
+        </div>
+        
+        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-orange-500/20">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                <i data-lucide="user-plus" class="w-5 h-5"></i>
+            </div>
+            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.PendingRequests</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["FriendRequests"]</div>
+        </div>
+        
+        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-green-500/20">
+            <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                <i data-lucide="user-check" class="w-5 h-5"></i>
+            </div>
+            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@(Model.RecentFriends.Count())</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["RecentFriends"]</div>
+        </div>
+        
+        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-blue-500/20">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+            </div>
+            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@(Model.Suggestions.Count())</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Suggestions"]</div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/friends/all" class="inline-flex items-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group flex-1 justify-center">
+                <i data-lucide="users" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                @Localizer["AllFriends"]
+            </a>
+            <a href="/friends/requests" class="inline-flex items-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-orange-500 hover:text-orange-600 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group flex-1 justify-center">
+                <i data-lucide="user-plus" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                @Localizer["FriendRequests"] (@Model.PendingRequests)
+            </a>
+            <a href="/friends/suggestions" class="inline-flex items-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-blue-500 hover:text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group flex-1 justify-center">
+                <i data-lucide="user-search" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                @Localizer["FindFriends"]
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Recent Friends -->
         <div class="lg:col-span-2">
-            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-6">
-                    <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                    <h3 class="text-lg font-black text-foreground mb-6 flex items-center gap-2">
                         <i data-lucide="users" class="w-5 h-5 text-primary"></i>
                         @Localizer["RecentFriends"]
                     </h3>
                     
                     @if (Model.RecentFriends.Any())
                     {
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-4">
                             @foreach (var friend in Model.RecentFriends)
                             {
-                                <div class="flex items-center gap-4 p-4 bg-muted/20 border border-border/50 rounded-2xl group hover:bg-muted/40 transition-all hover:border-primary/20">
+                                <div class="flex items-center gap-4 p-4 bg-background/50 border border-border rounded-2xl group hover:bg-muted/40 transition-all hover:border-primary/20 hover:shadow-md">
                                     <div class="relative">
                                         @if (!string.IsNullOrEmpty(friend.ProfilePictureUrl))
                                         {
@@ -84,20 +111,26 @@
                                         <div class="text-xs text-muted-foreground">
                                             @if (!string.IsNullOrEmpty(friend.City))
                                             {
-                                                <span>@friend.City</span>
+                                                <span class="flex items-center gap-1">
+                                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                                    @friend.City
+                                                </span>
                                             }
                                             @if (friend.MutualFriendsCount > 0)
                                             {
-                                                <span class="ml-2">• @friend.MutualFriendsCount mutual</span>
+                                                <span class="mt-1 flex items-center gap-1">
+                                                    <i data-lucide="users" class="w-3 h-3"></i>
+                                                    @friend.MutualFriendsCount mutual friends
+                                                </span>
                                             }
                                         </div>
                                     </div>
                                     <div class="flex gap-2">
-                                        <a href="/chats?user=@friend.UserId" class="btn-sm btn-primary">
-                                            <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                        <a href="/chats?user=@friend.UserId" class="inline-flex items-center gap-1 px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-bold transition-all active:scale-95">
+                                            <i data-lucide="message-circle" class="w-3 h-3"></i>
                                         </a>
-                                        <button class="btn-sm btn-secondary" onclick="viewProfile('@friend.UserId')">
-                                            <i data-lucide="user" class="w-4 h-4"></i>
+                                        <button class="inline-flex items-center gap-1 px-3 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-bold transition-all active:scale-95" onclick="viewProfile('@friend.UserId')">
+                                            <i data-lucide="user" class="w-3 h-3"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -106,8 +139,8 @@
                         
                         @if (Model.TotalFriends > Model.RecentFriends.Count())
                         {
-                            <div class="mt-4 text-center">
-                                <a href="/friends/all" class="text-primary hover:text-primary/80 text-sm font-medium">
+                            <div class="mt-6 text-center">
+                                <a href="/friends/all" class="text-primary hover:text-primary/80 text-sm font-medium transition-colors">
                                     View all @Model.TotalFriends friends →
                                 </a>
                             </div>
@@ -115,10 +148,14 @@
                     }
                     else
                     {
-                        <div class="text-center py-8">
-                            <i data-lucide="users" class="w-12 h-12 text-muted-foreground mx-auto mb-4"></i>
-                            <p class="text-muted-foreground">No friends yet</p>
-                            <a href="/friends/suggestions" class="btn-primary mt-4">Find Friends</a>
+                        <div class="text-center py-12">
+                            <i data-lucide="users" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
+                            <h3 class="text-lg font-black text-foreground mb-2">No Friends Yet</h3>
+                            <p class="text-muted-foreground mb-6">Start connecting with other car enthusiasts!</p>
+                            <a href="/friends/suggestions" class="inline-flex items-center gap-2.5 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
+                                <i data-lucide="user-search" class="w-4 h-4"></i>
+                                Find Friends
+                            </a>
                         </div>
                     }
                 </div>
@@ -130,7 +167,7 @@
             <!-- Friend Requests -->
             @if (Model.RecentRequests.Any())
             {
-                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
                     <div class="p-6">
                         <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
                             <i data-lucide="user-plus" class="w-5 h-5 text-orange-500"></i>
@@ -140,7 +177,7 @@
                         <div class="space-y-3">
                             @foreach (var request in Model.RecentRequests)
                             {
-                                <div class="flex items-center gap-3 p-3 bg-muted/20 border border-border/50 rounded-xl">
+                                <div class="flex items-center gap-3 p-3 bg-background/50 border border-border rounded-xl hover:bg-muted/40 transition-all">
                                     @if (!string.IsNullOrEmpty(request.ProfilePictureUrl))
                                     {
                                         <img src="@request.ProfilePictureUrl" alt="@request.FullName" class="w-10 h-10 rounded-full object-cover" />
@@ -156,10 +193,10 @@
                                         <div class="text-xs text-muted-foreground">@request.RequestDate.ToString("MMM dd")</div>
                                     </div>
                                     <div class="flex gap-1">
-                                        <button class="btn-xs btn-primary" onclick="acceptRequest('@request.FriendshipId')">
+                                        <button class="inline-flex items-center justify-center w-7 h-7 bg-green-500 text-white hover:bg-green-600 rounded-lg text-xs transition-all active:scale-95" onclick="acceptRequest('@request.FriendshipId')">
                                             <i data-lucide="check" class="w-3 h-3"></i>
                                         </button>
-                                        <button class="btn-xs btn-secondary" onclick="declineRequest('@request.FriendshipId')">
+                                        <button class="inline-flex items-center justify-center w-7 h-7 bg-background border border-border hover:border-red-500 hover:text-red-600 rounded-lg text-xs transition-all active:scale-95" onclick="declineRequest('@request.FriendshipId')">
                                             <i data-lucide="x" class="w-3 h-3"></i>
                                         </button>
                                     </div>
@@ -170,7 +207,7 @@
                         @if (Model.PendingRequests > Model.RecentRequests.Count())
                         {
                             <div class="mt-4 text-center">
-                                <a href="/friends/requests" class="text-primary hover:text-primary/80 text-sm font-medium">
+                                <a href="/friends/requests" class="text-primary hover:text-primary/80 text-sm font-medium transition-colors">
                                     View all requests →
                                 </a>
                             </div>
@@ -182,7 +219,7 @@
             <!-- Friend Suggestions -->
             @if (Model.Suggestions.Any())
             {
-                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
                     <div class="p-6">
                         <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
                             <i data-lucide="user-search" class="w-5 h-5 text-blue-500"></i>
@@ -192,7 +229,7 @@
                         <div class="space-y-3">
                             @foreach (var suggestion in Model.Suggestions)
                             {
-                                <div class="flex items-center gap-3 p-3 bg-muted/20 border border-border/50 rounded-xl">
+                                <div class="flex items-center gap-3 p-3 bg-background/50 border border-border rounded-xl hover:bg-muted/40 transition-all">
                                     @if (!string.IsNullOrEmpty(suggestion.ProfilePictureUrl))
                                     {
                                         <img src="@suggestion.ProfilePictureUrl" alt="@suggestion.FullName" class="w-10 h-10 rounded-full object-cover" />
@@ -207,7 +244,7 @@
                                         <div class="text-sm font-medium text-foreground truncate">@suggestion.FullName</div>
                                         <div class="text-xs text-muted-foreground truncate">@suggestion.SuggestionReason</div>
                                     </div>
-                                    <button class="btn-xs btn-primary" onclick="sendFriendRequest('@suggestion.UserId')">
+                                    <button class="inline-flex items-center justify-center w-7 h-7 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-xs transition-all active:scale-95" onclick="sendFriendRequest('@suggestion.UserId')">
                                         <i data-lucide="user-plus" class="w-3 h-3"></i>
                                     </button>
                                 </div>
@@ -215,7 +252,7 @@
                         </div>
                         
                         <div class="mt-4 text-center">
-                            <a href="/friends/suggestions" class="text-primary hover:text-primary/80 text-sm font-medium">
+                            <a href="/friends/suggestions" class="text-primary hover:text-primary/80 text-sm font-medium transition-colors">
                                 See more suggestions →
                             </a>
                         </div>

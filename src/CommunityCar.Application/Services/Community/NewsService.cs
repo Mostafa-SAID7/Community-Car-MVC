@@ -13,11 +13,13 @@ public class NewsService : INewsService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly INewsNotificationService _newsNotificationService;
 
-    public NewsService(IUnitOfWork unitOfWork, IMapper mapper)
+    public NewsService(IUnitOfWork unitOfWork, IMapper mapper, INewsNotificationService newsNotificationService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _newsNotificationService = newsNotificationService;
     }
 
     public async Task<NewsSearchResponse> SearchNewsAsync(NewsSearchRequest request)
@@ -138,19 +140,12 @@ public class NewsService : INewsService
         // Apply sorting
         queryable = request.SortBy switch
         {
-            NewsSortBy.Newest => queryable.OrderByDescending(n => n.PublishedAt),
-            NewsSortBy.Oldest => queryable.OrderBy(n => n.PublishedAt),
-            NewsSortBy.MostViews => queryable.OrderByDescending(n => n.ViewCount),
-            NewsSortBy.LeastViews => queryable.OrderBy(n => n.ViewCount),
-            NewsSortBy.MostLikes => queryable.OrderByDescending(n => n.LikeCount),
-            NewsSortBy.LeastLikes => queryable.OrderBy(n => n.LikeCount),
-            NewsSortBy.MostComments => queryable.OrderByDescending(n => n.CommentCount),
-            NewsSortBy.LeastComments => queryable.OrderBy(n => n.CommentCount),
-            NewsSortBy.MostShares => queryable.OrderByDescending(n => n.ShareCount),
-            NewsSortBy.Relevance => !string.IsNullOrWhiteSpace(request.SearchTerm) 
-                ? queryable.OrderByDescending(n => CalculateRelevanceScore(n, request.SearchTerm))
-                : queryable.OrderByDescending(n => n.PublishedAt),
-            _ => queryable.OrderByDescending(n => n.IsPinned).ThenByDescending(n => n.IsFeatured).ThenByDescending(n => n.PublishedAt)
+            "newest" => queryable.OrderByDescending(n => n.PublishedAt ?? n.CreatedAt),
+            "oldest" => queryable.OrderBy(n => n.PublishedAt ?? n.CreatedAt),
+            "mostViewed" => queryable.OrderByDescending(n => n.ViewCount),
+            "mostLiked" => queryable.OrderByDescending(n => n.LikeCount),
+            "featured" => queryable.OrderByDescending(n => n.IsFeatured).ThenByDescending(n => n.PublishedAt ?? n.CreatedAt),
+            _ => queryable.OrderByDescending(n => n.IsPinned).ThenByDescending(n => n.IsFeatured).ThenByDescending(n => n.PublishedAt ?? n.CreatedAt)
         };
 
         // Apply pagination
@@ -160,177 +155,316 @@ public class NewsService : INewsService
         // Map to ViewModels
         var newsVMs = _mapper.Map<List<NewsItemVM>>(pagedNews);
 
+        // Set computed properties
+        foreach (var vm in newsVMs)
+        {
+            SetComputedProperties(vm);
+        }
+
         // Calculate pagination info
         var totalPages = (int)Math.Ceiling((double)totalCount / request.PageSize);
-        var pagination = new PaginationInfo
-        {
-            CurrentPage = request.Page,
-            PageSize = request.PageSize,
-            TotalItems = totalCount,
-            TotalPages = totalPages,
-            HasPreviousPage = request.Page > 1,
-            HasNextPage = request.Page < totalPages,
-            StartItem = skip + 1,
-            EndItem = Math.Min(skip + request.PageSize, totalCount)
-        };
-
-        // Get stats
-        var stats = await GetNewsStatsAsync();
-
-        // Get available filters
-        var availableTags = await GetPopularTagsAsync(50);
-        var availableCarMakes = await GetAvailableCarMakesAsync();
 
         return new NewsSearchResponse
         {
-            NewsItems = newsVMs,
-            Pagination = pagination,
-            Stats = stats,
-            AvailableTags = availableTags,
-            AvailableCarMakes = availableCarMakes
+            Items = newsVMs,
+            TotalCount = totalCount,
+            CurrentPage = request.Page,
+            PageSize = request.PageSize,
+            TotalPages = totalPages,
+            HasPreviousPage = request.Page > 1,
+            HasNextPage = request.Page < totalPages
         };
     }
 
-    public async Task<NewsItemVM?> GetByIdAsync(Guid id)
+    public async Task<NewsItemVM?> GetByIdAsync(Guid id, Guid? currentUserId = null)
     {
         var newsItem = await _unitOfWork.News.GetByIdAsync(id);
-        return newsItem != null ? _mapper.Map<NewsItemVM>(newsItem) : null;
+        if (newsItem == null) return null;
+
+        var vm = _mapper.Map<NewsItemVM>(newsItem);
+        
+        // Set computed properties
+        SetComputedProperties(vm);
+        
+        // Set user-specific properties if currentUserId is provided
+        if (currentUserId.HasValue)
+        {
+            vm.CanEdit = newsItem.AuthorId == currentUserId.Value;
+            vm.CanDelete = newsItem.AuthorId == currentUserId.Value;
+            // TODO: Check if user has liked/bookmarked this news item
+        }
+
+        return vm;
     }
 
     public async Task<NewsItemVM?> GetBySlugAsync(string slug)
     {
         var newsItem = await _unitOfWork.News.GetBySlugAsync(slug);
-        return newsItem != null ? _mapper.Map<NewsItemVM>(newsItem) : null;
+        if (newsItem == null) return null;
+        
+        var vm = _mapper.Map<NewsItemVM>(newsItem);
+        SetComputedProperties(vm);
+        return vm;
     }
 
-    public async Task<NewsItemVM> CreateAsync(CreateNewsRequest request)
+    public async Task<Guid> CreateAsync(NewsCreateVM model, Guid authorId)
     {
-        var newsItem = new NewsItem(request.Headline, request.Body, request.AuthorId, request.Category);
+        var newsItem = new NewsItem(model.Headline, model.Body, authorId, model.Category);
         
-        if (!string.IsNullOrWhiteSpace(request.Summary))
-            newsItem.UpdateContent(request.Headline, request.Body, request.Summary);
+        if (!string.IsNullOrWhiteSpace(model.Summary))
+            newsItem.UpdateContent(model.Headline, model.Body, model.Summary);
         
-        if (!string.IsNullOrWhiteSpace(request.ImageUrl))
-            newsItem.SetMainImage(request.ImageUrl);
+        if (!string.IsNullOrWhiteSpace(model.ImageUrl))
+            newsItem.SetMainImage(model.ImageUrl);
         
-        newsItem.SetSource(request.Source, request.SourceUrl);
-        newsItem.UpdateSeoData(request.MetaTitle, request.MetaDescription);
-        newsItem.SetCarInfo(request.CarMake, request.CarModel, request.CarYear);
+        newsItem.SetSource(model.Source, model.SourceUrl);
+        newsItem.UpdateSeoData(model.MetaTitle, model.MetaDescription);
+        newsItem.SetCarInfo(model.CarMake, model.CarModel, model.CarYear);
         
-        foreach (var tag in request.Tags)
+        foreach (var tag in model.GetTagsList())
             newsItem.AddTag(tag);
         
-        foreach (var imageUrl in request.ImageUrls)
+        foreach (var imageUrl in model.ImageUrls)
             newsItem.AddImage(imageUrl);
         
-        if (request.IsFeatured)
+        if (model.IsFeatured)
             newsItem.SetFeatured(true);
         
-        if (request.IsPinned)
+        if (model.IsPinned)
             newsItem.SetPinned(true);
         
-        if (request.PublishImmediately)
+        if (model.PublishImmediately)
+        {
             newsItem.Publish();
+            
+            // Send notification for published news
+            var author = await _unitOfWork.Users.GetByIdAsync(authorId);
+            if (author != null)
+            {
+                await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, author.FullName);
+            }
+        }
 
         await _unitOfWork.News.AddAsync(newsItem);
         await _unitOfWork.SaveChangesAsync();
 
-        return _mapper.Map<NewsItemVM>(newsItem);
+        return newsItem.Id;
     }
 
-    public async Task<NewsItemVM> UpdateAsync(Guid id, UpdateNewsRequest request)
+    public async Task UpdateAsync(Guid id, NewsEditVM model, Guid currentUserId)
     {
         var newsItem = await _unitOfWork.News.GetByIdAsync(id);
         if (newsItem == null)
             throw new ArgumentException("News item not found");
 
-        newsItem.UpdateContent(request.Headline, request.Body, request.Summary);
-        newsItem.UpdateCategory(request.Category);
-        newsItem.SetSource(request.Source, request.SourceUrl);
-        newsItem.UpdateSeoData(request.MetaTitle, request.MetaDescription);
-        newsItem.SetCarInfo(request.CarMake, request.CarModel, request.CarYear);
-        newsItem.SetFeatured(request.IsFeatured);
-        newsItem.SetPinned(request.IsPinned);
+        if (newsItem.AuthorId != currentUserId)
+            throw new UnauthorizedAccessException("You can only edit your own news items");
 
-        if (!string.IsNullOrWhiteSpace(request.ImageUrl))
-            newsItem.SetMainImage(request.ImageUrl);
+        newsItem.UpdateContent(model.Headline, model.Body, model.Summary);
+        newsItem.UpdateCategory(model.Category);
+        newsItem.SetSource(model.Source, model.SourceUrl);
+        newsItem.UpdateSeoData(model.MetaTitle, model.MetaDescription);
+        newsItem.SetCarInfo(model.CarMake, model.CarModel, model.CarYear);
+        newsItem.SetFeatured(model.IsFeatured);
+        newsItem.SetPinned(model.IsPinned);
 
-        // Update tags
-        foreach (var tag in request.Tags)
+        if (!string.IsNullOrWhiteSpace(model.ImageUrl))
+            newsItem.SetMainImage(model.ImageUrl);
+
+        // Clear and update tags
+        newsItem.ClearTags();
+        foreach (var tag in model.GetTagsList())
             newsItem.AddTag(tag);
 
-        // Update images
-        foreach (var imageUrl in request.ImageUrls)
-            newsItem.AddImage(imageUrl);
-
         await _unitOfWork.SaveChangesAsync();
-        return _mapper.Map<NewsItemVM>(newsItem);
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id, Guid currentUserId)
     {
         var newsItem = await _unitOfWork.News.GetByIdAsync(id);
         if (newsItem == null)
-            return false;
+            throw new ArgumentException("News item not found");
+
+        if (newsItem.AuthorId != currentUserId)
+            throw new UnauthorizedAccessException("You can only delete your own news items");
 
         await _unitOfWork.News.DeleteAsync(newsItem);
         await _unitOfWork.SaveChangesAsync();
-        return true;
     }
 
-    public async Task<bool> PublishAsync(Guid id)
+    public async Task PublishAsync(Guid id, Guid currentUserId)
     {
         var newsItem = await _unitOfWork.News.GetByIdAsync(id);
         if (newsItem == null)
-            return false;
+            throw new ArgumentException("News item not found");
+
+        if (newsItem.AuthorId != currentUserId)
+            throw new UnauthorizedAccessException("You can only publish your own news items");
 
         newsItem.Publish();
         await _unitOfWork.SaveChangesAsync();
-        return true;
+
+        // Send notification for published news
+        var author = await _unitOfWork.Users.GetByIdAsync(currentUserId);
+        if (author != null)
+        {
+            await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, author.FullName);
+        }
     }
 
-    public async Task<bool> UnpublishAsync(Guid id)
+    public async Task UnpublishAsync(Guid id, Guid currentUserId)
     {
         var newsItem = await _unitOfWork.News.GetByIdAsync(id);
         if (newsItem == null)
-            return false;
+            throw new ArgumentException("News item not found");
+
+        if (newsItem.AuthorId != currentUserId)
+            throw new UnauthorizedAccessException("You can only unpublish your own news items");
 
         newsItem.Unpublish();
         await _unitOfWork.SaveChangesAsync();
-        return true;
     }
 
-    public async Task<bool> SetFeaturedAsync(Guid id, bool featured)
+    public async Task SetFeaturedAsync(Guid id, bool featured)
     {
         var newsItem = await _unitOfWork.News.GetByIdAsync(id);
         if (newsItem == null)
-            return false;
+            throw new ArgumentException("News item not found");
 
+        var wasFeatured = newsItem.IsFeatured;
         newsItem.SetFeatured(featured);
         await _unitOfWork.SaveChangesAsync();
-        return true;
+
+        // Send notification if news item was just featured
+        if (featured && !wasFeatured)
+        {
+            var author = await _unitOfWork.Users.GetByIdAsync(newsItem.AuthorId);
+            if (author != null)
+            {
+                await _newsNotificationService.NotifyNewsFeaturedAsync(newsItem, author.FullName);
+            }
+        }
     }
 
-    public async Task<bool> SetPinnedAsync(Guid id, bool pinned)
+    public async Task SetPinnedAsync(Guid id, bool pinned)
     {
         var newsItem = await _unitOfWork.News.GetByIdAsync(id);
         if (newsItem == null)
-            return false;
+            throw new ArgumentException("News item not found");
 
         newsItem.SetPinned(pinned);
         await _unitOfWork.SaveChangesAsync();
-        return true;
     }
 
-    public async Task<bool> IncrementViewCountAsync(Guid id)
+    public async Task IncrementViewCountAsync(Guid id)
     {
         var newsItem = await _unitOfWork.News.GetByIdAsync(id);
         if (newsItem == null)
-            return false;
+            return;
 
         newsItem.IncrementViewCount();
         await _unitOfWork.SaveChangesAsync();
-        return true;
+    }
+
+    public async Task LikeAsync(Guid id, Guid userId)
+    {
+        var newsItem = await _unitOfWork.News.GetByIdAsync(id);
+        if (newsItem == null)
+            throw new ArgumentException("News item not found");
+
+        // TODO: Check if user already liked this news item
+        // For now, just increment the count
+        newsItem.IncrementLikeCount();
+        await _unitOfWork.SaveChangesAsync();
+
+        // Send notification to author
+        var liker = await _unitOfWork.Users.GetByIdAsync(userId);
+        var author = await _unitOfWork.Users.GetByIdAsync(newsItem.AuthorId);
+        if (liker != null && author != null)
+        {
+            await _newsNotificationService.NotifyNewsLikedAsync(newsItem, author.FullName, liker.FullName, userId);
+        }
+    }
+
+    public async Task UnlikeAsync(Guid id, Guid userId)
+    {
+        var newsItem = await _unitOfWork.News.GetByIdAsync(id);
+        if (newsItem == null)
+            throw new ArgumentException("News item not found");
+
+        // TODO: Check if user has liked this news item
+        // For now, just decrement the count
+        newsItem.DecrementLikeCount();
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task CommentAsync(Guid id, Guid userId)
+    {
+        var newsItem = await _unitOfWork.News.GetByIdAsync(id);
+        if (newsItem == null)
+            throw new ArgumentException("News item not found");
+
+        newsItem.IncrementCommentCount();
+        await _unitOfWork.SaveChangesAsync();
+
+        // Send notification to author
+        var commenter = await _unitOfWork.Users.GetByIdAsync(userId);
+        var author = await _unitOfWork.Users.GetByIdAsync(newsItem.AuthorId);
+        if (commenter != null && author != null)
+        {
+            await _newsNotificationService.NotifyNewsCommentedAsync(newsItem, author.FullName, commenter.FullName, userId);
+        }
+    }
+
+    public async Task ShareAsync(Guid id, Guid userId)
+    {
+        var newsItem = await _unitOfWork.News.GetByIdAsync(id);
+        if (newsItem == null)
+            throw new ArgumentException("News item not found");
+
+        newsItem.IncrementShareCount();
+        await _unitOfWork.SaveChangesAsync();
+
+        // Send notification to author
+        var sharer = await _unitOfWork.Users.GetByIdAsync(userId);
+        var author = await _unitOfWork.Users.GetByIdAsync(newsItem.AuthorId);
+        if (sharer != null && author != null)
+        {
+            await _newsNotificationService.NotifyNewsSharedAsync(newsItem, author.FullName, sharer.FullName, userId);
+        }
+    }
+
+    public async Task BookmarkAsync(Guid id, Guid userId)
+    {
+        var newsItem = await _unitOfWork.News.GetByIdAsync(id);
+        if (newsItem == null)
+            throw new ArgumentException("News item not found");
+
+        // TODO: Implement bookmark functionality with a separate Bookmark entity
+        // For now, we'll just track it in memory or use a simple approach
+        // This would typically involve creating a Bookmark entity and repository
+        
+        // Placeholder implementation - in a real scenario, you'd save to a Bookmarks table
+        await Task.CompletedTask;
+    }
+
+    public async Task UnbookmarkAsync(Guid id, Guid userId)
+    {
+        var newsItem = await _unitOfWork.News.GetByIdAsync(id);
+        if (newsItem == null)
+            throw new ArgumentException("News item not found");
+
+        // TODO: Implement unbookmark functionality with a separate Bookmark entity
+        // For now, we'll just track it in memory or use a simple approach
+        
+        // Placeholder implementation - in a real scenario, you'd remove from a Bookmarks table
+        await Task.CompletedTask;
+    }
+
+    public async Task<int> GetLikeCountAsync(Guid id)
+    {
+        var newsItem = await _unitOfWork.News.GetByIdAsync(id);
+        return newsItem?.LikeCount ?? 0;
     }
 
     public async Task<IEnumerable<string>> GetPopularTagsAsync(int count = 20)
@@ -371,37 +505,68 @@ public class NewsService : INewsService
         };
     }
 
-    private static double CalculateRelevanceScore(NewsItem newsItem, string searchTerm)
+    private static void SetComputedProperties(NewsItemVM vm)
     {
-        var score = 0.0;
-        var lowerSearchTerm = searchTerm.ToLowerInvariant();
+        // Set TimeAgo
+        vm.TimeAgo = GetTimeAgo(vm.PublishedAt ?? vm.CreatedAt);
 
-        // Title matches get higher score
-        if (newsItem.Headline.ToLowerInvariant().Contains(lowerSearchTerm))
-            score += 10;
+        // Set ReadingTime (estimate based on word count)
+        var wordCount = CountWords(vm.Body);
+        vm.ReadingTime = Math.Max(1, (int)Math.Ceiling(wordCount / 200.0)); // Assuming 200 words per minute
 
-        // Body matches get medium score
-        if (newsItem.Body.ToLowerInvariant().Contains(lowerSearchTerm))
-            score += 5;
+        // Set Excerpt (safe substring)
+        vm.Excerpt = CreateExcerpt(vm.Summary ?? vm.Body);
+    }
 
-        // Summary matches get medium score
-        if (newsItem.Summary?.ToLowerInvariant().Contains(lowerSearchTerm) == true)
-            score += 7;
+    private static string GetTimeAgo(DateTime dateTime)
+    {
+        var timeSpan = DateTime.UtcNow - dateTime;
 
-        // Tag matches get high score
-        if (newsItem.Tags.Any(t => t.ToLowerInvariant().Contains(lowerSearchTerm)))
-            score += 8;
+        if (timeSpan.TotalDays >= 365)
+            return $"{(int)(timeSpan.TotalDays / 365)} year{((int)(timeSpan.TotalDays / 365) == 1 ? "" : "s")} ago";
 
-        // Car info matches get medium score
-        if (newsItem.CarMake?.ToLowerInvariant().Contains(lowerSearchTerm) == true ||
-            newsItem.CarModel?.ToLowerInvariant().Contains(lowerSearchTerm) == true)
-            score += 6;
+        if (timeSpan.TotalDays >= 30)
+            return $"{(int)(timeSpan.TotalDays / 30)} month{((int)(timeSpan.TotalDays / 30) == 1 ? "" : "s")} ago";
 
-        // Boost score based on engagement
-        score += newsItem.ViewCount * 0.01;
-        score += newsItem.LikeCount * 0.1;
-        score += newsItem.CommentCount * 0.2;
+        if (timeSpan.TotalDays >= 1)
+            return $"{(int)timeSpan.TotalDays} day{((int)timeSpan.TotalDays == 1 ? "" : "s")} ago";
 
-        return score;
+        if (timeSpan.TotalHours >= 1)
+            return $"{(int)timeSpan.TotalHours} hour{((int)timeSpan.TotalHours == 1 ? "" : "s")} ago";
+
+        if (timeSpan.TotalMinutes >= 1)
+            return $"{(int)timeSpan.TotalMinutes} minute{((int)timeSpan.TotalMinutes == 1 ? "" : "s")} ago";
+
+        return "Just now";
+    }
+
+    private static int CountWords(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return 0;
+
+        return text.Split(new char[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length;
+    }
+
+    private static string CreateExcerpt(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return string.Empty;
+
+        // Remove HTML tags if any
+        var plainText = System.Text.RegularExpressions.Regex.Replace(text, "<.*?>", string.Empty);
+        
+        // Limit to 150 characters
+        if (plainText.Length <= 150)
+            return plainText;
+
+        // Find the last space before 150 characters to avoid cutting words
+        var excerpt = plainText.Substring(0, 150);
+        var lastSpace = excerpt.LastIndexOf(' ');
+        
+        if (lastSpace > 100) // Only use the last space if it's not too early
+            excerpt = excerpt.Substring(0, lastSpace);
+
+        return excerpt + "...";
     }
 }

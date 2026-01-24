@@ -54,6 +54,8 @@ const cultureCookie = getCookie('.AspNetCore.Culture');
 let currentLang = 'en';
 let currentDir = 'ltr';
 
+console.log('Culture cookie found:', cultureCookie);
+
 if (cultureCookie) {
     currentLang = cultureCookie.includes('ar') ? 'ar' : 'en';
     currentDir = currentLang === 'ar' ? 'rtl' : 'ltr';
@@ -63,23 +65,52 @@ if (cultureCookie) {
     currentDir = currentLang === 'ar' ? 'rtl' : 'ltr';
 }
 
+console.log('Detected language:', { currentLang, currentDir });
+
+// Apply language and direction
 html.setAttribute('lang', currentLang);
 html.setAttribute('dir', currentDir);
+document.body.setAttribute('dir', currentDir);
+
+// Update toggle button text
 if (langToggle) langToggle.textContent = currentLang === 'en' ? 'AR' : 'EN';
+
+// Apply RTL-specific styles
+if (currentDir === 'rtl') {
+    document.body.classList.add('rtl');
+} else {
+    document.body.classList.remove('rtl');
+}
 
 if (langToggle) {
     langToggle.addEventListener('click', () => {
         const isEn = html.getAttribute('lang') === 'en';
         const newLang = isEn ? 'ar-EG' : 'en-US';
         const newCulture = `c=${newLang}|uic=${newLang}`;
+        const newDir = isEn ? 'rtl' : 'ltr';
+
+        console.log('Language toggle clicked:', { isEn, newLang, newCulture, newDir });
 
         // Set the ASP.NET Core culture cookie
         setCookie('.AspNetCore.Culture', newCulture, 365);
 
         // Also update localStorage for persistence
         localStorage.setItem('lang', isEn ? 'ar' : 'en');
-        localStorage.setItem('dir', isEn ? 'rtl' : 'ltr');
+        localStorage.setItem('dir', newDir);
 
+        // Apply direction immediately for smoother transition
+        html.setAttribute('dir', newDir);
+        html.setAttribute('lang', isEn ? 'ar' : 'en');
+        document.body.setAttribute('dir', newDir);
+        
+        if (newDir === 'rtl') {
+            document.body.classList.add('rtl');
+        } else {
+            document.body.classList.remove('rtl');
+        }
+
+        console.log('Cookie set, reloading page...');
+        
         // Reload to apply server-side localization
         window.location.reload();
     });
@@ -113,6 +144,38 @@ window.notify = {
     info: (msg, title) => typeof toastr !== 'undefined' && toastr.info(msg, title),
     warning: (msg, title) => typeof toastr !== 'undefined' && toastr.warning(msg, title)
 };
+
+// Handle TempData toaster messages
+document.addEventListener('DOMContentLoaded', function() {
+    // Check for TempData toaster messages
+    const toasterType = document.querySelector('meta[name="toaster-type"]')?.content;
+    const toasterTitle = document.querySelector('meta[name="toaster-title"]')?.content;
+    const toasterMessage = document.querySelector('meta[name="toaster-message"]')?.content;
+    
+    if (toasterType && toasterMessage && window.toaster) {
+        setTimeout(() => {
+            switch(toasterType) {
+                case 'success':
+                    window.toaster.success(toasterMessage, toasterTitle);
+                    break;
+                case 'error':
+                    window.toaster.error(toasterMessage, toasterTitle);
+                    break;
+                case 'warning':
+                    window.toaster.warning(toasterMessage, toasterTitle);
+                    break;
+                case 'info':
+                    window.toaster.info(toasterMessage, toasterTitle);
+                    break;
+                case 'validation':
+                    window.toaster.validation(toasterMessage, toasterTitle);
+                    break;
+                default:
+                    window.toaster.info(toasterMessage, toasterTitle);
+            }
+        }, 100); // Small delay to ensure toaster is initialized
+    }
+});
 
 // Sidebar handling for mobile
 const sidebarToggle = document.getElementById('sidebar-toggle');

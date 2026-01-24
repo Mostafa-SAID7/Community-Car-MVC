@@ -23,6 +23,8 @@ using CommunityCar.Domain.Entities.Dashboard.Settings;
 using CommunityCar.Domain.Entities.Localization;
 using CommunityCar.Domain.Entities.Profile;
 using CommunityCar.Domain.Entities.Shared;
+using CommunityCar.Domain.Base;
+using CommunityCar.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity;
 
 namespace CommunityCar.Infrastructure.Persistence.Data;
@@ -47,6 +49,10 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<View> Views => Set<View>();
     public DbSet<Share> Shares => Set<Share>();
+    
+    // Error Management
+    public DbSet<ErrorLog> ErrorLogs => Set<ErrorLog>();
+    public DbSet<ErrorOccurrence> ErrorOccurrences => Set<ErrorOccurrence>();
 
     // Community
     public DbSet<Post> Posts => Set<Post>();
@@ -83,8 +89,11 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
     {
         base.OnModelCreating(builder);
         
-        // TODO: Apply configurations from assembly
-        // builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        // Apply configurations from assembly
+        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        // Configure soft delete global query filters
+        builder.ConfigureSoftDeleteFilter();
 
         // Basic configurations
         builder.Entity<User>().ToTable("Users");
@@ -105,6 +114,16 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        // Handle soft delete audit trail
+        foreach (var entry in ChangeTracker.Entries<ISoftDeletable>())
+        {
+            if (entry.State == EntityState.Deleted)
+            {
+                entry.State = EntityState.Modified;
+                entry.Entity.SoftDelete("System"); // You can get current user here
+            }
+        }
+
         return await base.SaveChangesAsync(cancellationToken);
     }
 }

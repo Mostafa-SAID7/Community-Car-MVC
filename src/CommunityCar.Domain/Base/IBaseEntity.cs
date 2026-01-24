@@ -9,4 +9,16 @@ public interface IBaseEntity
     DateTime? UpdatedAt { get; }
     string? CreatedBy { get; }
     string? UpdatedBy { get; }
+    bool IsDeleted { get; }
+    DateTime? DeletedAt { get; }
+    string? DeletedBy { get; }
+}
+
+public interface ISoftDeletable
+{
+    bool IsDeleted { get; }
+    DateTime? DeletedAt { get; }
+    string? DeletedBy { get; }
+    void SoftDelete(string deletedBy);
+    void Restore(string restoredBy);
 }

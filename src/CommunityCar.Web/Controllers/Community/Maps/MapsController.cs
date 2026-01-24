@@ -22,6 +22,72 @@ public class MapsController : Controller
         return View("~/Views/Community/Maps/Index.cshtml", stats);
     }
 
+    [HttpGet("poi")]
+    public async Task<IActionResult> POIList([FromQuery] MapsSearchRequest request)
+    {
+        var result = await _mapsService.SearchPointsOfInterestAsync(request);
+        
+        // Pass search parameters to view for form persistence
+        ViewBag.SearchTerm = request.SearchTerm;
+        ViewBag.Type = request.Type?.ToString();
+        ViewBag.Category = request.Category?.ToString();
+        ViewBag.IsVerified = request.IsVerified?.ToString().ToLower();
+        ViewBag.IsOpen24Hours = request.IsOpen24Hours?.ToString().ToLower();
+        
+        return View("~/Views/Community/Maps/POIList.cshtml", result);
+    }
+
+    [HttpGet("routes")]
+    public async Task<IActionResult> RouteList([FromQuery] MapsRouteSearchRequest request)
+    {
+        var result = await _mapsService.SearchRoutesAsync(request);
+        
+        // Pass search parameters to view for form persistence
+        ViewBag.SearchTerm = request.SearchTerm;
+        ViewBag.Type = request.Type?.ToString();
+        ViewBag.Difficulty = request.Difficulty?.ToString();
+        ViewBag.IsScenic = request.IsScenic?.ToString().ToLower();
+        ViewBag.IsOffRoad = request.IsOffRoad?.ToString().ToLower();
+        ViewBag.HasTolls = request.HasTolls == false ? "true" : "false"; // Inverted for "No Tolls" checkbox
+        
+        return View("~/Views/Community/Maps/RouteList.cshtml", result);
+    }
+
+    [HttpGet("poi/{id}")]
+    public async Task<IActionResult> POIDetails(Guid id)
+    {
+        var poi = await _mapsService.GetPointOfInterestByIdAsync(id);
+        if (poi == null)
+            return NotFound();
+
+        return View("~/Views/Community/Maps/POIDetails.cshtml", poi);
+    }
+
+    [HttpGet("routes/{id}")]
+    public async Task<IActionResult> RouteDetails(Guid id)
+    {
+        var route = await _mapsService.GetRouteByIdAsync(id);
+        if (route == null)
+            return NotFound();
+
+        return View("~/Views/Community/Maps/RouteDetails.cshtml", route);
+    }
+
+    [HttpGet("poi/{id}/checkins")]
+    public async Task<IActionResult> POICheckIns(Guid id, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        var poi = await _mapsService.GetPointOfInterestByIdAsync(id);
+        if (poi == null)
+            return NotFound();
+
+        var checkIns = await _mapsService.GetCheckInsAsync(id, page, pageSize);
+        
+        ViewBag.POIName = poi.Name;
+        ViewBag.POIId = id.ToString();
+        
+        return View("~/Views/Community/Maps/CheckIns.cshtml", checkIns);
+    }
+
     [HttpGet("search")]
     public async Task<IActionResult> Search([FromQuery] MapsSearchRequest request)
     {
@@ -36,8 +102,8 @@ public class MapsController : Controller
         return Json(result);
     }
 
-    [HttpGet("poi/{id}")]
-    public async Task<IActionResult> GetPointOfInterest(Guid id)
+    [HttpGet("poi/{id}/json")]
+    public async Task<IActionResult> GetPointOfInterestJson(Guid id)
     {
         var poi = await _mapsService.GetPointOfInterestByIdAsync(id);
         if (poi == null)
@@ -46,8 +112,8 @@ public class MapsController : Controller
         return Json(poi);
     }
 
-    [HttpGet("routes/{id}")]
-    public async Task<IActionResult> GetRoute(Guid id)
+    [HttpGet("routes/{id}/json")]
+    public async Task<IActionResult> GetRouteJson(Guid id)
     {
         var route = await _mapsService.GetRouteByIdAsync(id);
         if (route == null)

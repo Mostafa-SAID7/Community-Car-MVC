@@ -1,0 +1,234 @@
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Application.Features.News.ViewModels.NewsSearchResponse
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+
+@if (Model.Items.Any())
+{
+    <!-- Featured News (if any) -->
+    @if (Model.Items.Any(n => n.IsFeatured))
+    {
+        <div class="mb-8">
+            <h3 class="text-xl font-black text-foreground mb-4 flex items-center gap-2">
+                <i data-lucide="star" class="w-5 h-5 text-yellow-500"></i>
+                @Localizer["FeaturedNews"]
+            </h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                @foreach (var featuredItem in Model.Items.Where(n => n.IsFeatured).Take(2))
+                {
+                    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden hover-lift group">
+                        @if (!string.IsNullOrEmpty(featuredItem.ImageUrl))
+                        {
+                            <div class="relative h-48 overflow-hidden">
+                                <img src="@featuredItem.ImageUrl" alt="@featuredItem.Headline" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <div class="absolute top-4 left-4">
+                                    <span class="badge badge-default bg-yellow-500 text-yellow-50">
+                                        <i data-lucide="star" class="w-3 h-3"></i>
+                                        @Localizer["Featured"]
+                                    </span>
+                                </div>
+                                @if (featuredItem.IsPinned)
+                                {
+                                    <div class="absolute top-4 right-4">
+                                        <span class="badge badge-default bg-red-500 text-red-50">
+                                            <i data-lucide="pin" class="w-3 h-3"></i>
+                                            @Localizer["Pinned"]
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="badge badge-outline">@featuredItem.Category</span>
+                                @if (!string.IsNullOrEmpty(featuredItem.CarMake))
+                                {
+                                    <span class="badge badge-secondary">@featuredItem.CarMake @featuredItem.CarModel</span>
+                                }
+                            </div>
+                            
+                            <h4 class="text-xl font-black text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                                <a href="/news/@featuredItem.Id">@featuredItem.Headline</a>
+                            </h4>
+                            
+                            @if (!string.IsNullOrEmpty(featuredItem.Summary))
+                            {
+                                <p class="text-muted-foreground mb-4 line-clamp-3">@featuredItem.Summary</p>
+                            }
+                            
+                            <div class="flex items-center justify-between text-sm text-muted-foreground">
+                                <div class="flex items-center gap-4">
+                                    <span class="flex items-center gap-1">
+                                        <i data-lucide="eye" class="w-4 h-4"></i>
+                                        @featuredItem.ViewCount
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i data-lucide="heart" class="w-4 h-4"></i>
+                                        @featuredItem.LikeCount
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                        @featuredItem.CommentCount
+                                    </span>
+                                </div>
+                                <span>@(featuredItem.PublishedAt?.ToString("MMM dd, yyyy") ?? featuredItem.CreatedAt.ToString("MMM dd, yyyy"))</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Regular News Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        @foreach (var item in Model.Items.Where(n => !n.IsFeatured))
+        {
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden hover-lift group">
+                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                {
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="@item.ImageUrl" alt="@item.Headline" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        @if (item.IsPinned)
+                        {
+                            <div class="absolute top-4 right-4">
+                                <span class="badge badge-default bg-red-500 text-red-50">
+                                    <i data-lucide="pin" class="w-3 h-3"></i>
+                                    @Localizer["Pinned"]
+                                </span>
+                            </div>
+                        }
+                    </div>
+                }
+                
+                <div class="p-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="badge badge-outline">@item.Category</span>
+                        @if (!string.IsNullOrEmpty(item.CarMake))
+                        {
+                            <span class="badge badge-secondary">@item.CarMake @item.CarModel</span>
+                        }
+                    </div>
+                    
+                    <h4 class="text-lg font-black text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                        <a href="/news/@item.Id">@item.Headline</a>
+                    </h4>
+                    
+                    @if (!string.IsNullOrEmpty(item.Summary))
+                    {
+                        <p class="text-muted-foreground mb-4 line-clamp-3">@item.Summary</p>
+                    }
+                    
+                    <!-- Tags -->
+                    @if (item.Tags.Any())
+                    {
+                        <div class="flex flex-wrap gap-1 mb-4">
+                            @foreach (var tag in item.Tags.Take(3))
+                            {
+                                <span class="badge badge-outline text-xs">#@tag</span>
+                            }
+                            @if (item.Tags.Count > 3)
+                            {
+                                <span class="text-xs text-muted-foreground">+@(item.Tags.Count - 3) more</span>
+                            }
+                        </div>
+                    }
+                    
+                    <div class="flex items-center justify-between text-sm text-muted-foreground">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                @item.ViewCount
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="heart" class="w-4 h-4"></i>
+                                @item.LikeCount
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                @item.CommentCount
+                            </span>
+                        </div>
+                        <span>@(item.PublishedAt?.ToString("MMM dd") ?? item.CreatedAt.ToString("MMM dd"))</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <div class="flex justify-center">
+            <nav class="flex items-center gap-2">
+                @{
+                    var queryString = ViewContext.HttpContext.Request.QueryString.Value;
+                    var additionalParams = "";
+                    if (!string.IsNullOrEmpty(queryString) && queryString.Length > 1)
+                    {
+                        // Remove the leading '?' and add '&' prefix for additional parameters
+                        var cleanQuery = queryString.StartsWith("?") ? queryString.Substring(1) : queryString;
+                        // Remove existing page parameter if present
+                        var queryParams = cleanQuery.Split('&').Where(p => !p.StartsWith("page=")).ToArray();
+                        if (queryParams.Any())
+                        {
+                            additionalParams = "&" + string.Join("&", queryParams);
+                        }
+                    }
+                }
+
+                @if (Model.CurrentPage > 1)
+                {
+                    <a href="?page=@(Model.CurrentPage - 1)@Html.Raw(additionalParams)" 
+                       class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+                        <i data-lucide="chevron-left" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                        @Localizer["Previous"]
+                    </a>
+                }
+
+                @for (int i = Math.Max(1, Model.CurrentPage - 2); i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); i++)
+                {
+                    @if (i == Model.CurrentPage)
+                    {
+                        <span class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-primary/20">@i</span>
+                    }
+                    else
+                    {
+                        <a href="?page=@i@Html.Raw(additionalParams)" 
+                           class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">@i</a>
+                    }
+                }
+
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <a href="?page=@(Model.CurrentPage + 1)@Html.Raw(additionalParams)" 
+                       class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+                        @Localizer["Next"]
+                        <i data-lucide="chevron-right" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                    </a>
+                }
+            </nav>
+        </div>
+    }
+}
+else
+{
+    <!-- Empty State -->
+    <div class="text-center py-16">
+        <div class="bg-muted/20 border border-border/50 rounded-2xl p-12 max-w-md mx-auto">
+            <i data-lucide="newspaper" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
+            <h3 class="text-xl font-black text-foreground mb-2">@Localizer["NoNewsFound"]</h3>
+            <p class="text-muted-foreground mb-6">@Localizer["NoNewsFoundDescription"]</p>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a href="/news/create" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
+                    <i data-lucide="plus" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                    @Localizer["CreateFirstNews"]
+                </a>
+            }
+        </div>
+    </div>
+}

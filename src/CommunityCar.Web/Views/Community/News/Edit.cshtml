@@ -1,0 +1,212 @@
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Application.Features.News.ViewModels.NewsEditVM
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["EditNews"];
+}
+
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Header -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden mb-6">
+        <div class="p-8">
+            <h2 class="text-3xl font-black text-foreground flex items-center gap-3">
+                <div class="bg-primary/10 p-3 rounded-xl text-primary">
+                    <i data-lucide="edit" class="w-8 h-8"></i>
+                </div>
+                @Localizer["EditNews"]
+            </h2>
+            <p class="text-muted-foreground mt-2">@Localizer["EditNewsDescription"]</p>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form asp-action="Edit" method="post" class="space-y-6">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+        
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+            <div class="p-8 space-y-6">
+                <!-- Headline -->
+                <div>
+                    <label asp-for="Headline" class="block text-sm font-medium text-foreground mb-2">
+                        @Localizer["Headline"] <span class="text-red-500">*</span>
+                    </label>
+                    <input asp-for="Headline" class="input w-full" placeholder="@Localizer["HeadlinePlaceholder"]" />
+                    <span asp-validation-for="Headline" class="text-red-500 text-sm"></span>
+                </div>
+
+                <!-- Category and Car Info -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label asp-for="Category" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["Category"] <span class="text-red-500">*</span>
+                        </label>
+                        <select asp-for="Category" class="select-trigger w-full">
+                            <option value="">@Localizer["SelectCategory"]</option>
+                            <option value="General">@Localizer["General"]</option>
+                            <option value="CarReviews">@Localizer["CarReviews"]</option>
+                            <option value="Industry">@Localizer["Industry"]</option>
+                            <option value="Technology">@Localizer["Technology"]</option>
+                            <option value="Events">@Localizer["Events"]</option>
+                            <option value="Tips">@Localizer["Tips"]</option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="CarMake" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["CarMake"]
+                        </label>
+                        <input asp-for="CarMake" class="input w-full" placeholder="@Localizer["CarMakePlaceholder"]" />
+                        <span asp-validation-for="CarMake" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="CarModel" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["CarModel"]
+                        </label>
+                        <input asp-for="CarModel" class="input w-full" placeholder="@Localizer["CarModelPlaceholder"]" />
+                        <span asp-validation-for="CarModel" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="CarYear" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["CarYear"]
+                        </label>
+                        <input asp-for="CarYear" type="number" class="input w-full" placeholder="@DateTime.Now.Year" min="1900" max="@DateTime.Now.Year" />
+                        <span asp-validation-for="CarYear" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div>
+                    <label asp-for="Summary" class="block text-sm font-medium text-foreground mb-2">
+                        @Localizer["Summary"]
+                    </label>
+                    <textarea asp-for="Summary" rows="3" class="textarea w-full" placeholder="@Localizer["SummaryPlaceholder"]"></textarea>
+                    <span asp-validation-for="Summary" class="text-red-500 text-sm"></span>
+                    <p class="text-xs text-muted-foreground mt-1">@Localizer["SummaryHint"]</p>
+                </div>
+
+                <!-- Main Image -->
+                <div>
+                    <label asp-for="ImageUrl" class="block text-sm font-medium text-foreground mb-2">
+                        @Localizer["MainImage"]
+                    </label>
+                    <input asp-for="ImageUrl" type="url" class="input w-full" placeholder="@Localizer["ImageUrlPlaceholder"]" />
+                    <span asp-validation-for="ImageUrl" class="text-red-500 text-sm"></span>
+                </div>
+
+                <!-- Content -->
+                <div>
+                    <label asp-for="Body" class="block text-sm font-medium text-foreground mb-2">
+                        @Localizer["Content"] <span class="text-red-500">*</span>
+                    </label>
+                    <textarea asp-for="Body" rows="15" class="textarea w-full" placeholder="@Localizer["ContentPlaceholder"]"></textarea>
+                    <span asp-validation-for="Body" class="text-red-500 text-sm"></span>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <label asp-for="Tags" class="block text-sm font-medium text-foreground mb-2">
+                        @Localizer["Tags"]
+                    </label>
+                    <input asp-for="Tags" class="input w-full" placeholder="@Localizer["TagsPlaceholder"]" />
+                    <span asp-validation-for="Tags" class="text-red-500 text-sm"></span>
+                    <p class="text-xs text-muted-foreground mt-1">@Localizer["TagsHint"]</p>
+                </div>
+
+                <!-- Source -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label asp-for="Source" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["Source"]
+                        </label>
+                        <input asp-for="Source" class="input w-full" placeholder="@Localizer["SourcePlaceholder"]" />
+                        <span asp-validation-for="Source" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="SourceUrl" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["SourceUrl"]
+                        </label>
+                        <input asp-for="SourceUrl" type="url" class="input w-full" placeholder="@Localizer["SourceUrlPlaceholder"]" />
+                        <span asp-validation-for="SourceUrl" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- SEO -->
+                <div class="border-t border-border pt-6">
+                    <h3 class="text-lg font-medium text-foreground mb-4">@Localizer["SEOSettings"]</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label asp-for="MetaTitle" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["MetaTitle"]
+                            </label>
+                            <input asp-for="MetaTitle" class="input w-full" placeholder="@Localizer["MetaTitlePlaceholder"]" />
+                            <span asp-validation-for="MetaTitle" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <div>
+                            <label asp-for="MetaDescription" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["MetaDescription"]
+                            </label>
+                            <textarea asp-for="MetaDescription" rows="2" class="textarea w-full" placeholder="@Localizer["MetaDescriptionPlaceholder"]"></textarea>
+                            <span asp-validation-for="MetaDescription" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Options -->
+                <div class="border-t border-border pt-6">
+                    <h3 class="text-lg font-medium text-foreground mb-4">@Localizer["PublishingOptions"]</h3>
+                    
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3">
+                            <input asp-for="IsFeatured" type="checkbox" class="rounded border-border" />
+                            <span class="text-sm text-foreground">@Localizer["MarkAsFeatured"]</span>
+                        </label>
+
+                        <label class="flex items-center gap-3">
+                            <input asp-for="IsPinned" type="checkbox" class="rounded border-border" />
+                            <span class="text-sm text-foreground">@Localizer["PinToTop"]</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 justify-end">
+            <a href="/news/@Model.Id" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+                <i data-lucide="x" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                @Localizer["Cancel"]
+            </a>
+            <button type="submit" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
+                <i data-lucide="save" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                @Localizer["SaveChanges"]
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-save functionality (optional)
+        let autoSaveTimeout;
+        function autoSave() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                // TODO: Implement auto-save to localStorage or server
+                console.log('Auto-saving changes...');
+            }, 30000); // Auto-save every 30 seconds
+        }
+
+        // Bind auto-save to form inputs
+        document.querySelectorAll('input, textarea, select').forEach(element => {
+            element.addEventListener('input', autoSave);
+        });
+    </script>
+}

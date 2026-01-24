@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Car Maintenance and Repair Guides</value>
+  </data>
+  <data name="PageDescription" xml:space="preserve">
+    <value>Discover comprehensive car maintenance and repair guides created by automotive experts and enthusiasts.</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>Welcome to our comprehensive collection of automotive guides! Whether you're a beginner or an experienced mechanic, you'll find step-by-step instructions for maintaining and repairing your vehicle.</value>
+  </data>
+  <data name="BrowseByCategory" xml:space="preserve">
+    <value>Browse by Category</value>
+  </data>
+  <data name="BrowseByDifficulty" xml:space="preserve">
+    <value>Browse by Difficulty</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Search guides by title, content, or tags...</value>
+  </data>
+  <data name="NoResultsTitle" xml:space="preserve">
+    <value>No Guides Found</value>
+  </data>
+  <data name="NoResultsMessage" xml:space="preserve">
+    <value>We couldn't find any guides matching your search criteria. Try adjusting your filters or search terms.</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Clear All Filters</value>
+  </data>
+  <data name="ShowingResults" xml:space="preserve">
+    <value>Showing {0} of {1} guides</value>
+  </data>
+  <data name="LoadMore" xml:space="preserve">
+    <value>Load More Guides</value>
+  </data>
+  <data name="CreateYourFirstGuide" xml:space="preserve">
+    <value>Create Your First Guide</value>
+  </data>
+  <data name="ShareYourKnowledge" xml:space="preserve">
+    <value>Share your automotive knowledge with the community by creating detailed guides.</value>
+  </data>
+</root>

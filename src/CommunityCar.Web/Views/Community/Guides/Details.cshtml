@@ -1,0 +1,600 @@
+@using Microsoft.Extensions.Localization
+@using CommunityCar.Domain.Enums
+@model CommunityCar.Application.Features.Guides.ViewModels.GuideDetailVM
+@inject IViewLocalizer Localizer
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@{
+    ViewData["Title"] = Model.Guide.Title;
+}
+
+<div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Guide Header -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+        @if (!string.IsNullOrEmpty(Model.Guide.CoverImageUrl))
+        {
+            <div class="aspect-video md:aspect-[21/9] overflow-hidden relative">
+                <img src="@Model.Guide.CoverImageUrl" alt="@Model.Guide.Title" 
+                     class="w-full h-full object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                
+                <!-- Header Content Overlay -->
+                <div class="absolute bottom-0 left-0 right-0 p-8">
+                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                        <div class="flex-1">
+                            <!-- Badges -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                @if (Model.Guide.IsFeatured)
+                                {
+                                    <span class="px-3 py-1 bg-yellow-500 text-yellow-900 rounded-lg text-sm font-black uppercase tracking-wider shadow-lg">
+                                        <i data-lucide="star" class="w-4 h-4 inline mr-1"></i>
+                                        @SharedLocalizer["Featured"]
+                                    </span>
+                                }
+                                @if (Model.Guide.IsVerified)
+                                {
+                                    <span class="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm font-black uppercase tracking-wider shadow-lg">
+                                        <i data-lucide="shield-check" class="w-4 h-4 inline mr-1"></i>
+                                        @SharedLocalizer["Verified"]
+                                    </span>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Guide.Category))
+                                {
+                                    <span class="px-3 py-1 bg-primary text-primary-foreground rounded-lg text-sm font-black uppercase tracking-wider shadow-lg">
+                                        @SharedLocalizer[Model.Guide.Category]
+                                    </span>
+                                }
+                                <span class="px-3 py-1 rounded-lg text-sm font-black uppercase tracking-wider shadow-lg @GetDifficultyClasses(Model.Guide.Difficulty)">
+                                    @SharedLocalizer[Model.Guide.Difficulty.ToString()]
+                                </span>
+                            </div>
+
+                            <!-- Title -->
+                            <h1 class="text-3xl lg:text-4xl font-black text-white mb-4 leading-tight">
+                                @Model.Guide.Title
+                            </h1>
+
+                            <!-- Summary -->
+                            @if (!string.IsNullOrEmpty(Model.Guide.Summary))
+                            {
+                                <p class="text-lg text-white/90 font-medium leading-relaxed mb-6 max-w-3xl">
+                                    @Model.Guide.Summary
+                                </p>
+                            }
+
+                            <!-- Author and Meta -->
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/20">
+                                        @if (!string.IsNullOrEmpty(Model.Guide.AuthorAvatar))
+                                        {
+                                            <img src="@Model.Guide.AuthorAvatar" alt="@Model.Guide.AuthorName" class="w-full h-full object-cover" />
+                                        }
+                                        else
+                                        {
+                                            <div class="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-bold">
+                                                @Model.Guide.AuthorName.Substring(0, Math.Min(2, Model.Guide.AuthorName.Length)).ToUpper()
+                                            </div>
+                                        }
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-bold">@SharedLocalizer["Author"]: @Model.Guide.AuthorName</p>
+                                        <p class="text-white/70 text-sm">@SharedLocalizer["PublishedOn"] @Model.Guide.PublishedAt?.ToString("MMM dd, yyyy") • @Model.Guide.TimeAgo</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-wrap gap-3">
+                            @if (Model.Guide.AverageRating > 0)
+                            {
+                                <div class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-xl text-white">
+                                    <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-current"></i>
+                                    <span class="font-bold">@Model.Guide.AverageRating.ToString("F1")</span>
+                                    <span class="text-sm opacity-70">(@Model.Guide.RatingCount @SharedLocalizer["Ratings"])</span>
+                                </div>
+                            }
+                            <button class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-xl text-white transition-all @(Model.Guide.IsBookmarked ? "bg-yellow-500/20 text-yellow-300" : "")" 
+                                    onclick="toggleBookmark('@Model.Guide.Id', this)">
+                                <i data-lucide="bookmark" class="w-5 h-5 @(Model.Guide.IsBookmarked ? "fill-current" : "")"></i>
+                                <span class="font-bold">@(Model.Guide.IsBookmarked ? SharedLocalizer["UnbookmarkGuide"] : SharedLocalizer["BookmarkGuide"])</span>
+                            </button>
+                            <button class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-xl text-white transition-all" 
+                                    onclick="shareGuide('@Model.Guide.Id')">
+                                <i data-lucide="share-2" class="w-5 h-5"></i>
+                                <span class="font-bold">@SharedLocalizer["ShareGuide"]</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Header without cover image -->
+            <div class="p-8 bg-gradient-to-br from-primary/10 to-primary/5">
+                <!-- Badges -->
+                <div class="flex flex-wrap gap-2 mb-4">
+                    @if (Model.Guide.IsFeatured)
+                    {
+                        <span class="px-3 py-1 bg-yellow-500 text-yellow-900 rounded-lg text-sm font-black uppercase tracking-wider">
+                            <i data-lucide="star" class="w-4 h-4 inline mr-1"></i>
+                            @SharedLocalizer["Featured"]
+                        </span>
+                    }
+                    @if (Model.Guide.IsVerified)
+                    {
+                        <span class="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm font-black uppercase tracking-wider">
+                            <i data-lucide="shield-check" class="w-4 h-4 inline mr-1"></i>
+                            @SharedLocalizer["Verified"]
+                        </span>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Guide.Category))
+                    {
+                        <span class="px-3 py-1 bg-primary text-primary-foreground rounded-lg text-sm font-black uppercase tracking-wider">
+                            @SharedLocalizer[Model.Guide.Category]
+                        </span>
+                    }
+                    <span class="px-3 py-1 rounded-lg text-sm font-black uppercase tracking-wider @GetDifficultyClasses(Model.Guide.Difficulty)">
+                        @SharedLocalizer[Model.Guide.Difficulty.ToString()]
+                    </span>
+                </div>
+
+                <!-- Title -->
+                <h1 class="text-3xl lg:text-4xl font-black text-foreground mb-4 leading-tight">
+                    @Model.Guide.Title
+                </h1>
+
+                <!-- Summary -->
+                @if (!string.IsNullOrEmpty(Model.Guide.Summary))
+                {
+                    <p class="text-lg text-muted-foreground font-medium leading-relaxed mb-6 max-w-3xl">
+                        @Model.Guide.Summary
+                    </p>
+                }
+
+                <!-- Author and Meta -->
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full overflow-hidden ring-2 ring-border">
+                                @if (!string.IsNullOrEmpty(Model.Guide.AuthorAvatar))
+                                {
+                                    <img src="@Model.Guide.AuthorAvatar" alt="@Model.Guide.AuthorName" class="w-full h-full object-cover" />
+                                }
+                                else
+                                {
+                                    <div class="w-full h-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-bold">
+                                        @Model.Guide.AuthorName.Substring(0, Math.Min(2, Model.Guide.AuthorName.Length)).ToUpper()
+                                    </div>
+                                }
+                            </div>
+                            <div>
+                                <p class="text-foreground font-bold">@SharedLocalizer["Author"]: @Model.Guide.AuthorName</p>
+                                <p class="text-muted-foreground text-sm">@SharedLocalizer["PublishedOn"] @Model.Guide.PublishedAt?.ToString("MMM dd, yyyy") • @Model.Guide.TimeAgo</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap gap-3">
+                        @if (Model.Guide.AverageRating > 0)
+                        {
+                            <div class="flex items-center gap-2 px-4 py-2 bg-background border border-border rounded-xl">
+                                <i data-lucide="star" class="w-5 h-5 text-yellow-500 fill-current"></i>
+                                <span class="font-bold text-foreground">@Model.Guide.AverageRating.ToString("F1")</span>
+                                <span class="text-sm text-muted-foreground">(@Model.Guide.RatingCount @SharedLocalizer["Ratings"])</span>
+                            </div>
+                        }
+                        <button class="flex items-center gap-2 px-4 py-2 bg-background border border-border hover:bg-muted/50 rounded-xl transition-all @(Model.Guide.IsBookmarked ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-600" : "")" 
+                                onclick="toggleBookmark('@Model.Guide.Id', this)">
+                            <i data-lucide="bookmark" class="w-5 h-5 @(Model.Guide.IsBookmarked ? "fill-current" : "")"></i>
+                            <span class="font-bold">@(Model.Guide.IsBookmarked ? SharedLocalizer["UnbookmarkGuide"] : SharedLocalizer["BookmarkGuide"])</span>
+                        </button>
+                        <button class="flex items-center gap-2 px-4 py-2 bg-background border border-border hover:bg-muted/50 rounded-xl transition-all" 
+                                onclick="shareGuide('@Model.Guide.Id')">
+                            <i data-lucide="share-2" class="w-5 h-5"></i>
+                            <span class="font-bold">@SharedLocalizer["ShareGuide"]</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Guide Info and Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Main Content -->
+        <div class="lg:col-span-3 space-y-8">
+            <!-- Guide Content -->
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-8">
+                <div class="prose prose-lg max-w-none dark:prose-invert">
+                    @Html.Raw(Model.Guide.Content)
+                </div>
+            </div>
+
+            <!-- Rating Section -->
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                <h3 class="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                    <i data-lucide="star" class="w-6 h-6 text-yellow-500"></i>
+                    @SharedLocalizer["RateGuide"]
+                </h3>
+                
+                @if (Model.Guide.UserRating.HasValue)
+                {
+                    <p class="text-sm text-muted-foreground mb-4">@SharedLocalizer["You rated this guide"] @Model.Guide.UserRating.Value @SharedLocalizer["stars"]</p>
+                }
+                
+                <div class="flex items-center gap-2 mb-4">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <button class="w-8 h-8 text-2xl transition-all hover:scale-110 @(Model.Guide.UserRating >= i ? "text-yellow-500" : "text-muted-foreground hover:text-yellow-400")" 
+                                onclick="rateGuide('@Model.Guide.Id', @i)">
+                            <i data-lucide="star" class="w-full h-full @(Model.Guide.UserRating >= i ? "fill-current" : "")"></i>
+                        </button>
+                    }
+                </div>
+                
+                @if (Model.Guide.RatingCount > 0)
+                {
+                    <p class="text-sm text-muted-foreground">
+                        @SharedLocalizer["Average rating"]: @Model.Guide.AverageRating.ToString("F1") / 5.0 (@Model.Guide.RatingCount @SharedLocalizer["Ratings"])
+                    </p>
+                }
+            </div>
+
+            <!-- Admin Actions -->
+            @if (Model.CanEdit || Model.CanDelete || Model.CanVerify || Model.CanFeature)
+            {
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                    <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="settings" class="w-5 h-5 text-primary"></i>
+                        Admin Actions
+                    </h3>
+                    <div class="flex flex-wrap gap-3">
+                        @if (Model.CanEdit)
+                        {
+                            <a href="/guides/@Model.Guide.Id/edit" class="btn-secondary">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                                @SharedLocalizer["EditGuide"]
+                            </a>
+                        }
+                        @if (Model.CanVerify && !Model.Guide.IsVerified)
+                        {
+                            <form method="post" action="/guides/@Model.Guide.Id/verify" class="inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-primary">
+                                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                                    Verify Guide
+                                </button>
+                            </form>
+                        }
+                        @if (Model.CanFeature && !Model.Guide.IsFeatured)
+                        {
+                            <form method="post" action="/guides/@Model.Guide.Id/feature" class="inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-primary">
+                                    <i data-lucide="star" class="w-4 h-4"></i>
+                                    Feature Guide
+                                </button>
+                            </form>
+                        }
+                        @if (!Model.Guide.IsPublished)
+                        {
+                            <form method="post" action="/guides/@Model.Guide.Id/publish" class="inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-primary">
+                                    <i data-lucide="send" class="w-4 h-4"></i>
+                                    @SharedLocalizer["PublishGuide"]
+                                </button>
+                            </form>
+                        }
+                        @if (Model.CanDelete)
+                        {
+                            <button onclick="confirmDelete('@Model.Guide.Id')" class="btn-destructive">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                @SharedLocalizer["DeleteGuide"]
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Guide Info -->
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                    <i data-lucide="info" class="w-5 h-5 text-primary"></i>
+                    Guide Information
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-muted-foreground">@SharedLocalizer["EstimatedTime"]:</span>
+                        <span class="text-sm font-bold text-foreground">@Model.Guide.EstimatedTimeText</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-muted-foreground">@SharedLocalizer["Views"]:</span>
+                        <span class="text-sm font-bold text-foreground">@Model.Guide.ViewCount.ToString("N0")</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-muted-foreground">@SharedLocalizer["Bookmarks"]:</span>
+                        <span class="text-sm font-bold text-foreground">@Model.Guide.BookmarkCount.ToString("N0")</span>
+                    </div>
+                    @if (Model.Guide.UpdatedAt != Model.Guide.CreatedAt)
+                    {
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-muted-foreground">@SharedLocalizer["LastUpdated"]:</span>
+                            <span class="text-sm font-bold text-foreground">@Model.Guide.UpdatedAt?.ToString("MMM dd, yyyy")</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Prerequisites -->
+            @if (Model.Guide.Prerequisites.Any())
+            {
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                    <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+                        @SharedLocalizer["Prerequisites"]
+                    </h3>
+                    <ul class="space-y-2">
+                        @foreach (var prerequisite in Model.Guide.Prerequisites)
+                        {
+                            <li class="flex items-start gap-2 text-sm">
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-primary mt-0.5 flex-shrink-0"></i>
+                                <span class="text-foreground">@prerequisite</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <!-- Required Tools -->
+            @if (Model.Guide.RequiredTools.Any())
+            {
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                    <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="wrench" class="w-5 h-5 text-orange-500"></i>
+                        @SharedLocalizer["RequiredTools"]
+                    </h3>
+                    <ul class="space-y-2">
+                        @foreach (var tool in Model.Guide.RequiredTools)
+                        {
+                            <li class="flex items-start gap-2 text-sm">
+                                <i data-lucide="tool" class="w-4 h-4 text-primary mt-0.5 flex-shrink-0"></i>
+                                <span class="text-foreground">@tool</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <!-- Tags -->
+            @if (Model.Guide.Tags.Any())
+            {
+                <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+                    <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="hash" class="w-5 h-5 text-primary"></i>
+                        @SharedLocalizer["Tags"]
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach (var tag in Model.Guide.Tags)
+                        {
+                            <a href="/guides?tag=@tag" class="px-3 py-1 bg-muted/30 hover:bg-primary/10 hover:text-primary text-muted-foreground rounded-lg text-sm font-medium transition-all">
+                                #@tag
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Related Guides -->
+    @if (Model.RelatedGuides.Any())
+    {
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+            <h3 class="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-6 h-6 text-primary"></i>
+                @SharedLocalizer["RelatedGuides"]
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach (var relatedGuide in Model.RelatedGuides)
+                {
+                    <div class="bg-background border border-border rounded-xl p-4 hover:border-primary/20 transition-all group">
+                        <div class="flex items-center gap-2 mb-2">
+                            @if (!string.IsNullOrEmpty(relatedGuide.Category))
+                            {
+                                <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-bold uppercase tracking-wider">
+                                    @SharedLocalizer[relatedGuide.Category]
+                                </span>
+                            }
+                            <span class="px-2 py-1 rounded text-xs font-bold uppercase tracking-wider @GetDifficultyClasses(relatedGuide.Difficulty)">
+                                @SharedLocalizer[relatedGuide.Difficulty.ToString()]
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            <a href="/guides/@relatedGuide.Id">@relatedGuide.Title</a>
+                        </h4>
+                        @if (!string.IsNullOrEmpty(relatedGuide.Summary))
+                        {
+                            <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@relatedGuide.Summary</p>
+                        }
+                        <div class="flex items-center justify-between text-xs text-muted-foreground">
+                            <span>@relatedGuide.EstimatedTimeText</span>
+                            @if (relatedGuide.AverageRating > 0)
+                            {
+                                <div class="flex items-center gap-1">
+                                    <i data-lucide="star" class="w-3 h-3 text-yellow-500 fill-current"></i>
+                                    <span>@relatedGuide.AverageRating.ToString("F1")</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- More from Author -->
+    @if (Model.AuthorOtherGuides.Any())
+    {
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6">
+            <h3 class="text-xl font-black text-foreground mb-6 flex items-center gap-2">
+                <i data-lucide="user" class="w-6 h-6 text-primary"></i>
+                @SharedLocalizer["MoreFromAuthor"]
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach (var authorGuide in Model.AuthorOtherGuides)
+                {
+                    <div class="bg-background border border-border rounded-xl p-4 hover:border-primary/20 transition-all group">
+                        <div class="flex items-center gap-2 mb-2">
+                            @if (!string.IsNullOrEmpty(authorGuide.Category))
+                            {
+                                <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-bold uppercase tracking-wider">
+                                    @SharedLocalizer[authorGuide.Category]
+                                </span>
+                            }
+                            <span class="px-2 py-1 rounded text-xs font-bold uppercase tracking-wider @GetDifficultyClasses(authorGuide.Difficulty)">
+                                @SharedLocalizer[authorGuide.Difficulty.ToString()]
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            <a href="/guides/@authorGuide.Id">@authorGuide.Title</a>
+                        </h4>
+                        @if (!string.IsNullOrEmpty(authorGuide.Summary))
+                        {
+                            <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@authorGuide.Summary</p>
+                        }
+                        <div class="flex items-center justify-between text-xs text-muted-foreground">
+                            <span>@authorGuide.EstimatedTimeText</span>
+                            @if (authorGuide.AverageRating > 0)
+                            {
+                                <div class="flex items-center gap-1">
+                                    <i data-lucide="star" class="w-3 h-3 text-yellow-500 fill-current"></i>
+                                    <span>@authorGuide.AverageRating.ToString("F1")</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@functions {
+    private string GetDifficultyClasses(GuideDifficulty difficulty)
+    {
+        return difficulty switch
+        {
+            GuideDifficulty.Beginner => "bg-green-500/10 text-green-600 dark:text-green-400",
+            GuideDifficulty.Intermediate => "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
+            GuideDifficulty.Advanced => "bg-red-500/10 text-red-600 dark:text-red-400",
+            _ => "bg-muted/30 text-muted-foreground"
+        };
+    }
+}
+
+@section Scripts {
+    @await Html.PartialAsync("~/Views/Community/Guides/_LocalizationScript.cshtml")
+    <script src="~/js/guides.js"></script>
+    <script>
+        async function toggleBookmark(guideId, button) {
+            try {
+                const isBookmarked = button.querySelector('i').classList.contains('fill-current');
+                const action = isBookmarked ? 'unbookmark' : 'bookmark';
+                
+                const response = await fetch(`/guides/${guideId}/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    }
+                });
+                
+                if (response.ok) {
+                    const icon = button.querySelector('i');
+                    const text = button.querySelector('span');
+                    if (isBookmarked) {
+                        icon.classList.remove('fill-current');
+                        button.classList.remove('text-yellow-600', 'bg-yellow-500/10', 'border-yellow-500/20');
+                        text.textContent = '@SharedLocalizer["BookmarkGuide"]';
+                    } else {
+                        icon.classList.add('fill-current');
+                        button.classList.add('text-yellow-600', 'bg-yellow-500/10', 'border-yellow-500/20');
+                        text.textContent = '@SharedLocalizer["UnbookmarkGuide"]';
+                    }
+                    window.notify?.success(isBookmarked ? 'Bookmark removed' : '@SharedLocalizer["GuideBookmarkedSuccessfully"]');
+                } else {
+                    window.notify?.error('Failed to update bookmark');
+                }
+            } catch (error) {
+                console.error('Error toggling bookmark:', error);
+                window.notify?.error('An error occurred');
+            }
+        }
+
+        async function rateGuide(guideId, rating) {
+            try {
+                const response = await fetch(`/guides/${guideId}/rate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    body: `rating=${rating}`
+                });
+                
+                if (response.ok) {
+                    // Update star display
+                    const stars = document.querySelectorAll('[onclick^="rateGuide"]');
+                    stars.forEach((star, index) => {
+                        const icon = star.querySelector('i');
+                        if (index < rating) {
+                            star.classList.add('text-yellow-500');
+                            star.classList.remove('text-muted-foreground');
+                            icon.classList.add('fill-current');
+                        } else {
+                            star.classList.remove('text-yellow-500');
+                            star.classList.add('text-muted-foreground');
+                            icon.classList.remove('fill-current');
+                        }
+                    });
+                    window.notify?.success('@SharedLocalizer["GuideRatedSuccessfully"]');
+                } else {
+                    window.notify?.error('Failed to rate guide');
+                }
+            } catch (error) {
+                console.error('Error rating guide:', error);
+                window.notify?.error('An error occurred');
+            }
+        }
+
+        function shareGuide(guideId) {
+            if (navigator.share) {
+                navigator.share({
+                    title: '@Model.Guide.Title',
+                    text: '@Model.Guide.Summary',
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                window.notify?.success('Link copied to clipboard');
+            }
+        }
+
+        function confirmDelete(guideId) {
+            if (confirm('Are you sure you want to delete this guide? This action cannot be undone.')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/guides/${guideId}/delete`;
+                form.innerHTML = '@Html.AntiForgeryToken()';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+}

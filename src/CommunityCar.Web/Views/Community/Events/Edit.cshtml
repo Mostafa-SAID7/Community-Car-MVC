@@ -1,0 +1,232 @@
+@model CommunityCar.Application.Features.Events.DTOs.UpdateEventRequest
+@{
+    ViewData["Title"] = "Edit Event";
+}
+
+<div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Back Button -->
+    <div>
+        <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Back to Events
+        </a>
+    </div>
+
+    <!-- Edit Event Form -->
+    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                    <i data-lucide="edit" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-black text-foreground">Edit Event</h2>
+                    <p class="text-sm text-muted-foreground">Update your event details</p>
+                </div>
+            </div>
+
+            <form method="post" class="space-y-6">
+                @Html.AntiForgeryToken()
+                
+                <!-- Basic Information -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-foreground">Basic Information</h3>
+                    
+                    <div>
+                        <label for="Title" class="block text-sm font-medium text-foreground mb-2">Event Title *</label>
+                        <input type="text" id="Title" name="Title" value="@Model.Title" required
+                               class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="e.g., Weekend Car Meet at Central Park">
+                        <span asp-validation-for="Title" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label for="Description" class="block text-sm font-medium text-foreground mb-2">Description *</label>
+                        <textarea id="Description" name="Description" required rows="4"
+                                  class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                  placeholder="Describe your event, what to expect, what to bring...">@Model.Description</textarea>
+                        <span asp-validation-for="Description" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Date & Time -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-foreground">Date & Time</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="StartTime" class="block text-sm font-medium text-foreground mb-2">Start Date & Time *</label>
+                            <input type="datetime-local" id="StartTime" name="StartTime" 
+                                   value="@Model.StartTime.ToString("yyyy-MM-ddTHH:mm")" required
+                                   class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <span asp-validation-for="StartTime" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <div>
+                            <label for="EndTime" class="block text-sm font-medium text-foreground mb-2">End Date & Time *</label>
+                            <input type="datetime-local" id="EndTime" name="EndTime" 
+                                   value="@Model.EndTime.ToString("yyyy-MM-ddTHH:mm")" required
+                                   class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <span asp-validation-for="EndTime" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-foreground">Location</h3>
+                    
+                    <div>
+                        <label for="Location" class="block text-sm font-medium text-foreground mb-2">Location *</label>
+                        <input type="text" id="Location" name="Location" value="@Model.Location" required
+                               class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="e.g., Central Park, New York, NY">
+                        <span asp-validation-for="Location" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label for="LocationDetails" class="block text-sm font-medium text-foreground mb-2">Location Details</label>
+                        <textarea id="LocationDetails" name="LocationDetails" rows="2"
+                                  class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                  placeholder="Additional location details, parking info, meeting point...">@Model.LocationDetails</textarea>
+                        <span asp-validation-for="LocationDetails" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="Latitude" class="block text-sm font-medium text-foreground mb-2">Latitude (Optional)</label>
+                            <input type="number" id="Latitude" name="Latitude" value="@Model.Latitude" step="any"
+                                   class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="40.7829">
+                            <span asp-validation-for="Latitude" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <div>
+                            <label for="Longitude" class="block text-sm font-medium text-foreground mb-2">Longitude (Optional)</label>
+                            <input type="number" id="Longitude" name="Longitude" value="@Model.Longitude" step="any"
+                                   class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="-73.9654">
+                            <span asp-validation-for="Longitude" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Settings -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-foreground">Attendance Settings</h3>
+                    
+                    <div>
+                        <label for="MaxAttendees" class="block text-sm font-medium text-foreground mb-2">Maximum Attendees (Optional)</label>
+                        <input type="number" id="MaxAttendees" name="MaxAttendees" value="@Model.MaxAttendees" min="1"
+                               class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="Leave empty for unlimited">
+                        <span asp-validation-for="MaxAttendees" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="RequiresApproval" name="RequiresApproval" value="true" @(Model.RequiresApproval ? "checked" : "")
+                               class="rounded border-border text-primary focus:ring-primary">
+                        <label for="RequiresApproval" class="text-sm text-foreground">Require approval to join</label>
+                        <span asp-validation-for="RequiresApproval" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Pricing -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-foreground">Pricing (Optional)</h3>
+                    
+                    <div>
+                        <label for="TicketPrice" class="block text-sm font-medium text-foreground mb-2">Ticket Price</label>
+                        <input type="number" id="TicketPrice" name="TicketPrice" value="@Model.TicketPrice" min="0" step="0.01"
+                               class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="0.00 (Leave empty for free event)">
+                        <span asp-validation-for="TicketPrice" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label for="TicketInfo" class="block text-sm font-medium text-foreground mb-2">Ticket Information</label>
+                        <textarea id="TicketInfo" name="TicketInfo" rows="2"
+                                  class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                  placeholder="Payment instructions, what's included, refund policy...">@Model.TicketInfo</textarea>
+                        <span asp-validation-for="TicketInfo" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Contact & Additional Info -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-foreground">Contact & Additional Info</h3>
+                    
+                    <div>
+                        <label for="ExternalUrl" class="block text-sm font-medium text-foreground mb-2">External URL</label>
+                        <input type="url" id="ExternalUrl" name="ExternalUrl" value="@Model.ExternalUrl"
+                               class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="https://example.com/event-details">
+                        <span asp-validation-for="ExternalUrl" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label for="ContactInfo" class="block text-sm font-medium text-foreground mb-2">Contact Information</label>
+                        <textarea id="ContactInfo" name="ContactInfo" rows="2"
+                                  class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                  placeholder="Phone number, email, or other contact details...">@Model.ContactInfo</textarea>
+                        <span asp-validation-for="ContactInfo" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="IsPublic" name="IsPublic" value="true" @(Model.IsPublic ? "checked" : "")
+                               class="rounded border-border text-primary focus:ring-primary">
+                        <label for="IsPublic" class="text-sm text-foreground">Make this event public</label>
+                        <span asp-validation-for="IsPublic" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border">
+                    <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        Update Event
+                    </button>
+                    <a href="/events" class="flex-1 inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-update end time when start time changes
+document.getElementById('StartTime').addEventListener('change', function() {
+    const startTime = new Date(this.value);
+    const endTime = new Date(startTime.getTime() + (2 * 60 * 60 * 1000)); // Add 2 hours
+    
+    const endTimeInput = document.getElementById('EndTime');
+    if (!endTimeInput.value || new Date(endTimeInput.value) <= startTime) {
+        endTimeInput.value = endTime.toISOString().slice(0, 16);
+    }
+});
+
+// Get current location for coordinates
+function getCurrentLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById('Latitude').value = position.coords.latitude.toFixed(6);
+            document.getElementById('Longitude').value = position.coords.longitude.toFixed(6);
+        });
+    }
+}
+
+// Add button to get current location
+document.addEventListener('DOMContentLoaded', function() {
+    const latitudeInput = document.getElementById('Latitude');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'inline-flex items-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 mt-2';
+    button.innerHTML = '<i data-lucide="map-pin" class="w-4 h-4"></i>Use Current Location';
+    button.onclick = getCurrentLocation;
+    
+    latitudeInput.parentNode.appendChild(button);
+});
+</script>

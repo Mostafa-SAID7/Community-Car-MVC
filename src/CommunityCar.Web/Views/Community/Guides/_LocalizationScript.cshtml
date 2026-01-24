@@ -1,0 +1,81 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+
+<script>
+    // Guides localization strings
+    window.guidesLocalization = {
+        // Actions
+        'GuideCreatedSuccessfully': '@SharedLocalizer["GuideCreatedSuccessfully"]',
+        'GuideUpdatedSuccessfully': '@SharedLocalizer["GuideUpdatedSuccessfully"]',
+        'GuideDeletedSuccessfully': '@SharedLocalizer["GuideDeletedSuccessfully"]',
+        'GuidePublishedSuccessfully': '@SharedLocalizer["GuidePublishedSuccessfully"]',
+        'GuideBookmarkedSuccessfully': '@SharedLocalizer["GuideBookmarkedSuccessfully"]',
+        'GuideRatedSuccessfully': '@SharedLocalizer["GuideRatedSuccessfully"]',
+        
+        // Labels
+        'BookmarkGuide': '@SharedLocalizer["BookmarkGuide"]',
+        'UnbookmarkGuide': '@SharedLocalizer["UnbookmarkGuide"]',
+        'RateGuide': '@SharedLocalizer["RateGuide"]',
+        'ShareGuide': '@SharedLocalizer["ShareGuide"]',
+        'CreateGuide': '@SharedLocalizer["CreateGuide"]',
+        'EditGuide': '@SharedLocalizer["EditGuide"]',
+        'DeleteGuide': '@SharedLocalizer["DeleteGuide"]',
+        'PublishGuide': '@SharedLocalizer["PublishGuide"]',
+        
+        // Status
+        'Loading': '@SharedLocalizer["LoadingGuides"]',
+        'NoGuidesFound': '@SharedLocalizer["NoGuidesFound"]',
+        'Error': 'An error occurred',
+        'Success': 'Success',
+        
+        // Difficulty levels
+        'Beginner': '@SharedLocalizer["Beginner"]',
+        'Intermediate': '@SharedLocalizer["Intermediate"]',
+        'Advanced': '@SharedLocalizer["Advanced"]',
+        
+        // Categories
+        'Maintenance': '@SharedLocalizer["Maintenance"]',
+        'Repair': '@SharedLocalizer["Repair"]',
+        'Diagnostics': '@SharedLocalizer["Diagnostics"]',
+        'Detailing': '@SharedLocalizer["Detailing"]',
+        'Performance': '@SharedLocalizer["Performance"]',
+        'Safety': '@SharedLocalizer["Safety"]',
+        'Seasonal': '@SharedLocalizer["Seasonal"]',
+        
+        // Time
+        'Minutes': '@SharedLocalizer["Minutes"]',
+        'EstimatedTime': '@SharedLocalizer["EstimatedTime"]',
+        
+        // Stats
+        'Views': '@SharedLocalizer["Views"]',
+        'Bookmarks': '@SharedLocalizer["Bookmarks"]',
+        'Rating': '@SharedLocalizer["Rating"]',
+        'Ratings': '@SharedLocalizer["Ratings"]',
+        
+        // Confirmation messages
+        'ConfirmDelete': 'Are you sure you want to delete this guide? This action cannot be undone.',
+        'ConfirmPublish': 'Are you sure you want to publish this guide?',
+        'ConfirmUnpublish': 'Are you sure you want to unpublish this guide?',
+        
+        // Validation
+        'TitleRequired': 'Guide title is required',
+        'ContentRequired': 'Guide content is required',
+        'TitleTooShort': 'Title must be at least 10 characters long',
+        'ContentTooShort': 'Content must be at least 100 characters long',
+        'InvalidRating': 'Rating must be between 1 and 5 stars',
+        
+        // Sharing
+        'LinkCopied': 'Link copied to clipboard',
+        'ShareFailed': 'Failed to share guide',
+        
+        // Auto-save
+        'AutoSaved': 'Auto-saved',
+        'AutoSaveFailed': 'Auto-save failed',
+        'UnsavedChanges': 'You have unsaved changes. Are you sure you want to leave?'
+    };
+    
+    // Helper function to get localized string
+    window.getGuideString = function(key, defaultValue) {
+        return window.guidesLocalization[key] || defaultValue || key;
+    };
+</script>

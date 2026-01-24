@@ -24,10 +24,14 @@ public static class DependencyInjection
         services.AddScoped<IMapsService, MapsService>();
         services.AddScoped<INewsService, NewsService>();
         services.AddScoped<IReviewsService, ReviewsService>();
+        services.AddScoped<IEventsService, EventsService>();
+        services.AddScoped<IGroupsService, GroupsService>();
+        services.AddScoped<IPostsService, PostsService>();
         services.AddScoped<IStoriesService, StoriesService>();
         services.AddScoped<IFeedService, FeedService>();
         services.AddScoped<IInteractionService, InteractionService>();
         services.AddScoped<IFriendsService, FriendsService>();
+        services.AddScoped<IGuidesService, GuidesService>();
         services.AddScoped<ILocalizationService, LocalizationService>();
 
         // Profile services
@@ -44,6 +48,9 @@ public static class DependencyInjection
         services.AddScoped<IAnalyticsService, AnalyticsService>();
         services.AddScoped<IReportsService, ReportsService>();
         services.AddScoped<IMonitoringService, MonitoringService>();
+        
+        // Error Management
+        services.AddScoped<IErrorService, CommunityCar.Application.Services.Dashboard.ErrorService>();
         services.AddScoped<IManagementService, ManagementService>();
         services.AddScoped<ISettingsService, SettingsService>();
 

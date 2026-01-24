@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Domain.Entities.Community.Posts;
+using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Features.Posts.DTOs;
 using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Web.Controllers.Community.Posts;
@@ -8,65 +9,87 @@ namespace CommunityCar.Web.Controllers.Community.Posts;
 [Route("posts")]
 public class PostsController : Controller
 {
+    private readonly IPostsService _postsService;
     private readonly ILogger<PostsController> _logger;
 
-    public PostsController(ILogger<PostsController> logger)
+    public PostsController(IPostsService postsService, ILogger<PostsController> logger)
     {
+        _postsService = postsService;
         _logger = logger;
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(
+        string? search = null,
+        string? sortBy = "newest",
+        PostType? filterType = null,
+        int page = 1,
+        int pageSize = 10)
     {
-        // Mock data for demonstration - replace with actual service call when available
-        var posts = new List<Post>
+        try
         {
-            new Post(
-                "How to maintain your classic car during winter?",
-                "Winter can be tough on classic cars. Here are some essential tips to keep your vehicle in top shape during the cold months...",
-                PostType.Text,
-                Guid.Empty
-            ),
-            new Post(
-                "My 1967 Mustang Restoration Journey",
-                "After 6 months of hard work, my Mustang is finally coming together. Check out the progress!",
-                PostType.Image,
-                Guid.Empty
-            ),
-            new Post(
-                "Best engine oils for vintage cars",
-                "https://example.com/best-oils-vintage-cars - A comprehensive guide on choosing the right engine oil",
-                PostType.Link,
-                Guid.Empty
-            ),
-            new Post(
-                "What's your dream classic car?",
-                "Let's discuss! What classic car would you love to own and why?",
-                PostType.Poll,
-                Guid.Empty
-            )
-        };
+            var request = new PostsSearchRequest
+            {
+                SearchTerm = search,
+                SortBy = sortBy,
+                Type = filterType,
+                Page = page,
+                PageSize = pageSize
+            };
 
-        return await Task.FromResult(View("~/Views/Community/Posts/Index.cshtml", posts));
+            var response = await _postsService.SearchPostsAsync(request);
+
+            // Convert ViewModels to simple models for the view
+            var posts = response.Items.Select(vm => new
+            {
+                vm.Id,
+                vm.Title,
+                vm.Content,
+                vm.Type,
+                vm.AuthorId,
+                vm.CreatedAt,
+                vm.UpdatedAt
+            }).ToList();
+
+            return View("~/Views/Community/Posts/Index.cshtml", posts);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading posts index");
+            return View("~/Views/Community/Posts/Index.cshtml", new List<CommunityCar.Domain.Entities.Community.Posts.Post>());
+        }
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Details(Guid id)
     {
-        // Mock data for demonstration - replace with actual service call when available
-        var post = new Post(
-            "How to maintain your classic car during winter?",
-            "Winter can be tough on classic cars. Here are some essential tips to keep your vehicle in top shape during the cold months.\n\n1. **Storage**: Store your car in a dry, climate-controlled garage.\n2. **Battery**: Disconnect the battery or use a trickle charger.\n3. **Fuel**: Add fuel stabilizer to prevent degradation.\n4. **Tires**: Inflate tires to the proper pressure to prevent flat spots.\n5. **Cover**: Use a breathable car cover to protect the paint.",
-            PostType.Text,
-            Guid.Empty
-        );
-
-        if (post == null)
+        try
         {
+            var postVM = await _postsService.GetPostByIdAsync(id);
+            if (postVM == null)
+            {
+                return NotFound();
+            }
+
+            // Convert ViewModel to simple model for the view
+            var post = new
+            {
+                postVM.Id,
+                postVM.Title,
+                postVM.Content,
+                postVM.Type,
+                postVM.AuthorId,
+                postVM.CreatedAt,
+                postVM.UpdatedAt
+            };
+
+            return View("~/Views/Community/Posts/Details.cshtml", post);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading post details for {PostId}", id);
             return NotFound();
         }
-
-        return await Task.FromResult(View("~/Views/Community/Posts/Details.cshtml", post));
     }
 
     [HttpGet("create")]
@@ -83,17 +106,38 @@ public class PostsController : Controller
     {
         if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(content))
         {
-            ModelState.AddModelError("", "Title and Content are required.");
+            TempData["ToasterType"] = "validation";
+            TempData["ToasterTitle"] = "Validation Error";
+            TempData["ToasterMessage"] = "Title and Content are required.";
             return View("~/Views/Community/Posts/Create.cshtml");
         }
 
-        // TODO: Get actual user ID from ICurrentUserService
-        var authorId = Guid.Empty;
-        
-        // TODO: Call service to create post
-        _logger.LogInformation("Post created: {Title} by {AuthorId}", title, authorId);
+        try
+        {
+            var request = new CreatePostRequest
+            {
+                Title = title,
+                Content = content,
+                Type = type
+            };
 
-        return await Task.FromResult(RedirectToAction(nameof(Index)));
+            var postVM = await _postsService.CreatePostAsync(request);
+            _logger.LogInformation("Post created: {PostTitle} with ID {PostId}", title, postVM.Id);
+
+            TempData["ToasterType"] = "success";
+            TempData["ToasterTitle"] = "Success";
+            TempData["ToasterMessage"] = $"Post '{title}' has been created successfully!";
+
+            return RedirectToAction(nameof(Details), new { id = postVM.Id });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating post: {PostTitle}", title);
+            TempData["ToasterType"] = "error";
+            TempData["ToasterTitle"] = "Error";
+            TempData["ToasterMessage"] = "An error occurred while creating the post. Please try again.";
+            return View("~/Views/Community/Posts/Create.cshtml");
+        }
     }
 
     [HttpPost("{id:guid}/like")]
@@ -101,8 +145,21 @@ public class PostsController : Controller
     [Authorize]
     public async Task<IActionResult> Like(Guid id)
     {
-        // TODO: Implement like functionality
-        _logger.LogInformation("Post {PostId} liked", id);
+        try
+        {
+            // TODO: Implement like functionality in service
+            _logger.LogInformation("Post {PostId} liked", id);
+            TempData["ToasterType"] = "success";
+            TempData["ToasterTitle"] = "Success";
+            TempData["ToasterMessage"] = "Post liked successfully!";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error liking post {PostId}", id);
+            TempData["ToasterType"] = "error";
+            TempData["ToasterTitle"] = "Error";
+            TempData["ToasterMessage"] = "An error occurred while liking the post.";
+        }
 
         var referer = Request.Headers["Referer"].ToString();
         if (!string.IsNullOrEmpty(referer))
@@ -110,7 +167,7 @@ public class PostsController : Controller
             return Redirect(referer);
         }
 
-        return await Task.FromResult(RedirectToAction(nameof(Details), new { id }));
+        return RedirectToAction(nameof(Details), new { id });
     }
 
     [HttpPost("{id:guid}/comment")]
@@ -120,12 +177,124 @@ public class PostsController : Controller
     {
         if (string.IsNullOrWhiteSpace(content))
         {
+            TempData["ToasterType"] = "validation";
+            TempData["ToasterTitle"] = "Validation Error";
+            TempData["ToasterMessage"] = "Comment content is required.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        // TODO: Implement comment functionality
-        _logger.LogInformation("Comment added to post {PostId}", id);
+        try
+        {
+            // TODO: Implement comment functionality in service
+            _logger.LogInformation("Comment added to post {PostId}", id);
+            TempData["ToasterType"] = "success";
+            TempData["ToasterTitle"] = "Success";
+            TempData["ToasterMessage"] = "Comment added successfully!";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error adding comment to post {PostId}", id);
+            TempData["ToasterType"] = "error";
+            TempData["ToasterTitle"] = "Error";
+            TempData["ToasterMessage"] = "An error occurred while adding the comment.";
+        }
 
-        return await Task.FromResult(RedirectToAction(nameof(Details), new { id }));
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpGet("{id:guid}/edit")]
+    [Authorize]
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        try
+        {
+            var postVM = await _postsService.GetPostByIdAsync(id);
+            if (postVM == null)
+            {
+                return NotFound();
+            }
+
+            // Convert ViewModel to simple model for the view
+            var post = new
+            {
+                postVM.Id,
+                postVM.Title,
+                postVM.Content,
+                postVM.Type,
+                postVM.Category,
+                Tags = postVM.Tags?.ToList() ?? new List<string>(),
+                postVM.IsPinned,
+                postVM.AllowComments,
+                postVM.AuthorId,
+                postVM.CreatedAt,
+                postVM.UpdatedAt
+            };
+
+            return View("~/Views/Community/Posts/Edit.cshtml", post);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading post edit for {PostId}", id);
+            return NotFound();
+        }
+    }
+
+    [HttpPost("{id:guid}/edit")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Edit(Guid id, string title, string content, PostType type, 
+        string? category = null, string? tags = null, bool isPinned = false, bool allowComments = true)
+    {
+        if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(content))
+        {
+            TempData["ToasterType"] = "validation";
+            TempData["ToasterTitle"] = "Validation Error";
+            TempData["ToasterMessage"] = "Title and Content are required.";
+            return await Edit(id);
+        }
+
+        try
+        {
+            var request = new UpdatePostRequest
+            {
+                Id = id,
+                Title = title,
+                Content = content,
+                Type = type,
+                Category = category,
+                Tags = !string.IsNullOrWhiteSpace(tags) ? 
+                    tags.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(t => t.Trim())
+                        .Where(t => !string.IsNullOrEmpty(t))
+                        .ToList() : new List<string>(),
+                IsPinned = isPinned,
+                AllowComments = allowComments
+            };
+
+            var updatedPost = await _postsService.UpdatePostAsync(id, request);
+            if (updatedPost != null)
+            {
+                _logger.LogInformation("Post updated: {PostTitle} with ID {PostId}", title, id);
+                TempData["ToasterType"] = "success";
+                TempData["ToasterTitle"] = "Success";
+                TempData["ToasterMessage"] = $"Post '{title}' has been updated successfully!";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            else
+            {
+                TempData["ToasterType"] = "error";
+                TempData["ToasterTitle"] = "Error";
+                TempData["ToasterMessage"] = "Failed to update the post. Please try again.";
+                return await Edit(id);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating post: {PostId}", id);
+            TempData["ToasterType"] = "error";
+            TempData["ToasterTitle"] = "Error";
+            TempData["ToasterMessage"] = "An error occurred while updating the post. Please try again.";
+            return await Edit(id);
+        }
     }
 }

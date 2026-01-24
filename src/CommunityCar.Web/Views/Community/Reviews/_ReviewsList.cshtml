@@ -1,0 +1,191 @@
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Application.Features.Reviews.DTOs.ReviewsSearchResponse
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+
+@if (Model.Reviews.Any())
+{
+    <!-- Reviews Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        @foreach (var review in Model.Reviews)
+        {
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden hover-lift group">
+                <div class="p-6">
+                    <!-- Header -->
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-lg font-black text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                                <a href="/reviews/@review.Id">@review.Title</a>
+                            </h4>
+                            @if (!string.IsNullOrEmpty(review.CarDisplayName))
+                            {
+                                <div class="text-sm text-muted-foreground mt-1">@review.CarDisplayName</div>
+                            }
+                            <div class="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                                <span>@review.ReviewerName</span>
+                                @if (review.IsVerifiedPurchase)
+                                {
+                                    <span class="badge badge-success text-xs">
+                                        <i data-lucide="shield-check" class="w-3 h-3"></i>
+                                        @Localizer["Verified"]
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <!-- Star Rating -->
+                            <div class="flex items-center text-amber-500">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i data-lucide="star" class="w-4 h-4 @(i <= review.Rating ? "fill-current" : "")"></i>
+                                }
+                            </div>
+                            <span class="text-xs text-muted-foreground">@review.Rating/5</span>
+                        </div>
+                    </div>
+
+                    <!-- Comment Preview -->
+                    <p class="text-sm text-muted-foreground line-clamp-3 leading-relaxed mb-4">
+                        "@review.Comment"
+                    </p>
+
+                    <!-- Pros/Cons Preview -->
+                    @if (review.Pros.Any() || review.Cons.Any())
+                    {
+                        <div class="grid grid-cols-2 gap-2 mb-4 text-xs">
+                            @if (review.Pros.Any())
+                            {
+                                <div>
+                                    <div class="text-green-600 font-semibold mb-1">
+                                        <i data-lucide="plus" class="w-3 h-3 inline"></i>
+                                        @Localizer["Pros"]
+                                    </div>
+                                    <div class="text-muted-foreground">
+                                        @string.Join(", ", review.Pros.Take(2))
+                                        @if (review.Pros.Count() > 2)
+                                        {
+                                            <span>...</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            @if (review.Cons.Any())
+                            {
+                                <div>
+                                    <div class="text-red-600 font-semibold mb-1">
+                                        <i data-lucide="minus" class="w-3 h-3 inline"></i>
+                                        @Localizer["Cons"]
+                                    </div>
+                                    <div class="text-muted-foreground">
+                                        @string.Join(", ", review.Cons.Take(2))
+                                        @if (review.Cons.Count() > 2)
+                                        {
+                                            <span>...</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <!-- Recommendation -->
+                    @if (review.IsRecommended)
+                    {
+                        <div class="flex items-center gap-2 mb-4">
+                            <i data-lucide="thumbs-up" class="w-4 h-4 text-green-600"></i>
+                            <span class="text-sm text-green-600 font-semibold">@Localizer["Recommended"]</span>
+                        </div>
+                    }
+
+                    <!-- Footer -->
+                    <div class="flex items-center justify-between text-sm text-muted-foreground pt-4 border-t border-border/30">
+                        <div class="flex items-center gap-4">
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                @review.ViewCount
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="thumbs-up" class="w-4 h-4"></i>
+                                @review.HelpfulCount
+                            </span>
+                            @if (review.HasImages)
+                            {
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="image" class="w-4 h-4"></i>
+                                    @review.ImageUrls.Count()
+                                </span>
+                            }
+                        </div>
+                        <span>@review.TimeAgo</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.Pagination.TotalPages > 1)
+    {
+        <div class="flex justify-center">
+            <nav class="flex items-center gap-2">
+                @{
+                    var queryString = ViewContext.HttpContext.Request.QueryString.Value;
+                    var additionalParams = "";
+                    if (!string.IsNullOrEmpty(queryString) && queryString.Length > 1)
+                    {
+                        additionalParams = "&" + queryString.Substring(1);
+                    }
+                }
+
+                @if (Model.Pagination.CurrentPage > 1)
+                {
+                    <a href="?page=@(Model.Pagination.CurrentPage - 1)@Html.Raw(additionalParams)" 
+                       class="btn-secondary btn-sm">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        @Localizer["Previous"]
+                    </a>
+                }
+
+                @for (int i = Math.Max(1, Model.Pagination.CurrentPage - 2); i <= Math.Min(Model.Pagination.TotalPages, Model.Pagination.CurrentPage + 2); i++)
+                {
+                    @if (i == Model.Pagination.CurrentPage)
+                    {
+                        <span class="btn-primary btn-sm">@i</span>
+                    }
+                    else
+                    {
+                        <a href="?page=@i@Html.Raw(additionalParams)" 
+                           class="btn-secondary btn-sm">@i</a>
+                    }
+                }
+
+                @if (Model.Pagination.CurrentPage < Model.Pagination.TotalPages)
+                {
+                    <a href="?page=@(Model.Pagination.CurrentPage + 1)@Html.Raw(additionalParams)" 
+                       class="btn-secondary btn-sm">
+                        @Localizer["Next"]
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
+                }
+            </nav>
+        </div>
+    }
+}
+else
+{
+    <!-- Empty State -->
+    <div class="text-center py-16">
+        <div class="bg-muted/20 border border-border/50 rounded-2xl p-12 max-w-md mx-auto">
+            <i data-lucide="star" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
+            <h3 class="text-xl font-black text-foreground mb-2">@Localizer["NoReviewsFound"]</h3>
+            <p class="text-muted-foreground mb-6">@Localizer["NoReviewsFoundDescription"]</p>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a href="/reviews/create" class="btn-primary">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    @Localizer["WriteFirstReview"]
+                </a>
+            }
+        </div>
+    </div>
+}

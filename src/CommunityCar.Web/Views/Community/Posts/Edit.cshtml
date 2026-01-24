@@ -1,0 +1,96 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Edit Post";
+}
+
+<div class="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
+    <div class="flex items-center gap-4">
+        <a href="@Url.Action("Details", "Posts", new { id = Model.Id })" class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-bold transition-all">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Back to Post
+        </a>
+        <div>
+            <h1 class="text-3xl font-black text-foreground tracking-tight">Edit Post</h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Update your community post</p>
+        </div>
+    </div>
+
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-8">
+            <form method="post" action="@Url.Action("Edit", "Posts", new { id = Model.Id })" class="space-y-6">
+                @Html.AntiForgeryToken()
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="title" class="block text-sm font-bold text-foreground mb-2">Post Title *</label>
+                        <input type="text" id="title" name="title" value="@Model.Title" required class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="Enter post title">
+                    </div>
+
+                    <div>
+                        <label for="content" class="block text-sm font-bold text-foreground mb-2">Content *</label>
+                        <textarea id="content" name="content" rows="12" required class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" placeholder="Share your thoughts, experiences, or questions with the community">@Model.Content</textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="type" class="block text-sm font-bold text-foreground mb-2">Post Type</label>
+                            <!select id="type" name="type" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none">
+                                @{
+                                    var typeValue = Model.Type.ToString();
+                                }
+                                <!option value="Discussion" @(typeValue == "Discussion" ? "selected" : "")>Discussion</!option>
+                                <!option value="Question" @(typeValue == "Question" ? "selected" : "")>Question</!option>
+                                <!option value="Showcase" @(typeValue == "Showcase" ? "selected" : "")>Showcase</!option>
+                                <!option value="News" @(typeValue == "News" ? "selected" : "")>News</!option>
+                                <!option value="Event" @(typeValue == "Event" ? "selected" : "")>Event</!option>
+                            </!select>
+                        </div>
+
+                        <div>
+                            <label for="category" class="block text-sm font-bold text-foreground mb-2">Category</label>
+                            <input type="text" id="category" name="category" value="@Model.Category" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="e.g., Maintenance, Modifications, Events">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="tags" class="block text-sm font-bold text-foreground mb-2">Tags</label>
+                        <input type="text" id="tags" name="tags" value="@string.Join(", ", Model.Tags ?? new List<string>())" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="Enter tags separated by commas (e.g., bmw, maintenance, diy)">
+                        <p class="text-xs text-muted-foreground mt-1">Separate tags with commas to help others find your post</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-6 border-t border-border/50">
+                    <div class="flex items-center gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" name="isPinned" @(Model.IsPinned ? "checked" : "") class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20">
+                            <span class="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">Pin this post</span>
+                        </label>
+                        
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" name="allowComments" @(Model.AllowComments ? "checked" : "") class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20">
+                            <span class="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">Allow comments</span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <a href="@Url.Action("Details", "Posts", new { id = Model.Id })" class="px-6 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-sm font-bold transition-all">
+                            Cancel
+                        </a>
+                        <button type="submit" class="px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-bold transition-all shadow-lg shadow-primary/20 active:scale-95">
+                            Update Post
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+}

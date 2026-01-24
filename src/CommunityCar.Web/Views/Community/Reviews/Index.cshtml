@@ -1,49 +1,132 @@
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Application.Features.Reviews.DTOs.ReviewsSearchResponse
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "Reviews";
+    ViewData["Title"] = "Vehicle Reviews";
 }
 
-<div class="container mx-auto px-4 py-8 max-w-4xl">
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-in fade-in duration-700">
+<div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Header Section -->
+    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden mb-8">
         <div class="p-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                 <div>
-                    <h2 class="text-2xl font-black text-foreground flex items-center gap-3">
-                        <div class="bg-primary/10 p-2 rounded-2xl text-primary">
-                            <i data-lucide="star" class="w-6 h-6"></i>
+                    <h1 class="text-3xl font-black text-foreground flex items-center gap-3">
+                        <div class="bg-primary/10 p-3 rounded-2xl text-primary">
+                            <i data-lucide="star" class="w-8 h-8"></i>
                         </div>
-                        Vehicle Reviews
-                    </h2>
-                    <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Authentic owner experiences and expert ratings</p>
+                        @Localizer["VehicleReviews"]
+                    </h1>
+                    <p class="text-muted-foreground mt-2">@Localizer["AuthenticOwnerExperiences"]</p>
                 </div>
-                <button class="bg-primary text-primary-foreground px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all">Write Review</button>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a href="/reviews/create" class="btn-primary">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        @Localizer["WriteReview"]
+                    </a>
+                }
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Sample Review Card -->
-                <div class="bg-background/50 border border-border/50 rounded-2xl p-6 hover:border-primary/20 transition-all group shadow-inner">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="min-w-0">
-                            <h4 class="text-lg font-black text-foreground group-hover:text-primary transition-colors truncate">Tesla Model 3 Performance</h4>
-                            <div class="flex items-center gap-2 mt-1 text-[10px] font-bold text-muted-foreground uppercase opacity-60">
-                                <span>2024 Model</span>
-                                <span>•</span>
-                                <span>Owner Verifed</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center text-amber-500 gap-0.5">
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                        </div>
+
+            <!-- Search and Filters -->
+            <form method="get" class="space-y-6" id="reviewsSearchForm">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <input type="text" name="search" value="@ViewBag.SearchRequest?.SearchTerm" 
+                               placeholder="@Localizer["SearchReviews"]" 
+                               class="input-field">
                     </div>
-                    <p class="text-sm text-muted-foreground line-clamp-2 leading-relaxed font-medium mb-4 italic opacity-80">"Unbelievable acceleration and tech. The track mode is a game changer for weekend meets..."</p>
-                    <div class="flex items-center gap-2 pt-4 border-t border-border/30">
-                        <span class="text-[9px] font-black uppercase tracking-widest text-primary">Read Full Story →</span>
+                    <div>
+                        <select name="rating" class="input-field">
+                            <option value="">@Localizer["AllRatings"]</option>
+                            <option value="5" selected="@(ViewBag.SearchRequest?.Rating == 5)">5 ⭐ @Localizer["Excellent"]</option>
+                            <option value="4" selected="@(ViewBag.SearchRequest?.Rating == 4)">4 ⭐ @Localizer["VeryGood"]</option>
+                            <option value="3" selected="@(ViewBag.SearchRequest?.Rating == 3)">3 ⭐ @Localizer["Good"]</option>
+                            <option value="2" selected="@(ViewBag.SearchRequest?.Rating == 2)">2 ⭐ @Localizer["Fair"]</option>
+                            <option value="1" selected="@(ViewBag.SearchRequest?.Rating == 1)">1 ⭐ @Localizer["Poor"]</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select name="carMake" class="input-field">
+                            <option value="">@Localizer["AllMakes"]</option>
+                            @foreach (var make in Model.AvailableCarMakes)
+                            {
+                                <option value="@make" selected="@(ViewBag.SearchRequest?.CarMake == make)">@make</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <select name="sortBy" class="input-field">
+                            <option value="Default">@Localizer["Default"]</option>
+                            <option value="Newest" selected="@(ViewBag.SearchRequest?.SortBy.ToString() == "Newest")">@Localizer["Newest"]</option>
+                            <option value="Oldest" selected="@(ViewBag.SearchRequest?.SortBy.ToString() == "Oldest")">@Localizer["Oldest"]</option>
+                            <option value="HighestRating" selected="@(ViewBag.SearchRequest?.SortBy.ToString() == "HighestRating")">@Localizer["HighestRating"]</option>
+                            <option value="LowestRating" selected="@(ViewBag.SearchRequest?.SortBy.ToString() == "LowestRating")">@Localizer["LowestRating"]</option>
+                            <option value="MostHelpful" selected="@(ViewBag.SearchRequest?.SortBy.ToString() == "MostHelpful")">@Localizer["MostHelpful"]</option>
+                            <option value="MostViews" selected="@(ViewBag.SearchRequest?.SortBy.ToString() == "MostViews")">@Localizer["MostViewed"]</option>
+                        </select>
                     </div>
                 </div>
-            </div>
+                
+                <div class="flex flex-wrap gap-4">
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="isVerifiedPurchase" value="true" 
+                               checked="@(ViewBag.SearchRequest?.IsVerifiedPurchase == true)" 
+                               class="checkbox">
+                        <span class="text-sm">@Localizer["VerifiedPurchaseOnly"]</span>
+                    </label>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="isRecommended" value="true" 
+                               checked="@(ViewBag.SearchRequest?.IsRecommended == true)" 
+                               class="checkbox">
+                        <span class="text-sm">@Localizer["RecommendedOnly"]</span>
+                    </label>
+                </div>
+
+                <div class="flex gap-4">
+                    <button type="submit" class="btn-primary">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        @Localizer["Search"]
+                    </button>
+                    <a href="/reviews" class="btn-secondary">
+                        @Localizer["ClearFilters"]
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
+
+    <!-- Stats Section -->
+    @if (Model.Stats.TotalReviews > 0)
+    {
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 text-center">
+                <div class="text-2xl font-black text-foreground">@Model.Stats.TotalReviews</div>
+                <div class="text-sm text-muted-foreground">@Localizer["TotalReviews"]</div>
+            </div>
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 text-center">
+                <div class="text-2xl font-black text-foreground">@Model.Stats.AverageRating.ToString("F1")</div>
+                <div class="text-sm text-muted-foreground">@Localizer["AverageRating"]</div>
+            </div>
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 text-center">
+                <div class="text-2xl font-black text-foreground">@Model.Stats.VerifiedPurchaseReviews</div>
+                <div class="text-sm text-muted-foreground">@Localizer["VerifiedPurchases"]</div>
+            </div>
+            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 text-center">
+                <div class="text-2xl font-black text-foreground">@Model.Stats.TotalHelpfulVotes</div>
+                <div class="text-sm text-muted-foreground">@Localizer["HelpfulVotes"]</div>
+            </div>
+        </div>
+    }
+
+    <!-- Reviews List -->
+    <div id="reviewsContainer">
+        @await Html.PartialAsync("~/Views/Community/Reviews/_ReviewsList.cshtml", Model)
+    </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/reviews.js"></script>
+}

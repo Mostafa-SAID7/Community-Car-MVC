@@ -1,0 +1,867 @@
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Application.Features.News.ViewModels.NewsItemVM
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Model.Headline;
+    ViewData["MetaDescription"] = Model.MetaDescription ?? Model.Summary ?? Model.Headline;
+}
+
+<!-- Loading Skeleton -->
+<div id="loadingSkeleton" class="container mx-auto px-4 py-8 max-w-4xl hidden">
+    <div class="animate-pulse">
+        <!-- Breadcrumb Skeleton -->
+        <div class="flex items-center gap-2 mb-6">
+            <div class="h-4 bg-muted rounded w-16"></div>
+            <div class="h-4 bg-muted rounded w-4"></div>
+            <div class="h-4 bg-muted rounded w-20"></div>
+            <div class="h-4 bg-muted rounded w-4"></div>
+            <div class="h-4 bg-muted rounded w-32"></div>
+        </div>
+
+        <!-- Article Skeleton -->
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+            <!-- Image Skeleton -->
+            <div class="h-64 md:h-80 bg-muted"></div>
+            
+            <div class="p-8">
+                <!-- Meta Skeleton -->
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-4">
+                        <div class="h-6 bg-muted rounded w-20"></div>
+                        <div class="h-6 bg-muted rounded w-24"></div>
+                    </div>
+                    <div class="h-4 bg-muted rounded w-32"></div>
+                </div>
+
+                <!-- Title Skeleton -->
+                <div class="space-y-3 mb-4">
+                    <div class="h-8 bg-muted rounded w-full"></div>
+                    <div class="h-8 bg-muted rounded w-3/4"></div>
+                </div>
+
+                <!-- Summary Skeleton -->
+                <div class="space-y-2 mb-6">
+                    <div class="h-4 bg-muted rounded w-full"></div>
+                    <div class="h-4 bg-muted rounded w-5/6"></div>
+                </div>
+
+                <!-- Author Skeleton -->
+                <div class="flex items-center gap-4 mb-6 p-4 bg-muted/20 border border-border/50 rounded-xl">
+                    <div class="w-12 h-12 bg-muted rounded-full"></div>
+                    <div>
+                        <div class="h-4 bg-muted rounded w-24 mb-2"></div>
+                        <div class="h-3 bg-muted rounded w-16"></div>
+                    </div>
+                </div>
+
+                <!-- Content Skeleton -->
+                <div class="space-y-4 mb-8">
+                    <div class="h-4 bg-muted rounded w-full"></div>
+                    <div class="h-4 bg-muted rounded w-full"></div>
+                    <div class="h-4 bg-muted rounded w-3/4"></div>
+                    <div class="h-4 bg-muted rounded w-full"></div>
+                    <div class="h-4 bg-muted rounded w-5/6"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div id="mainContent" class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Article Controls -->
+    <div class="fixed top-20 right-4 z-50 flex flex-col gap-2" id="articleControls">
+        <!-- Table of Contents Toggle -->
+        <button onclick="toggleTableOfContents()" class="inline-flex items-center justify-center w-12 h-12 bg-background/95 backdrop-blur-md border border-border hover:border-primary hover:text-primary rounded-xl transition-all shadow-lg shadow-black/10 active:scale-95 group" title="Table of Contents">
+            <i data-lucide="table-of-contents" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+        </button>
+        
+        <!-- Font Size Controls -->
+        <div class="flex flex-col gap-1">
+            <button onclick="increaseFontSize()" class="inline-flex items-center justify-center w-12 h-12 bg-background/95 backdrop-blur-md border border-border hover:border-primary hover:text-primary rounded-xl transition-all shadow-lg shadow-black/10 active:scale-95 group" title="Increase Font Size">
+                <i data-lucide="a-large-small" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+            </button>
+            <button onclick="decreaseFontSize()" class="inline-flex items-center justify-center w-12 h-12 bg-background/95 backdrop-blur-md border border-border hover:border-primary hover:text-primary rounded-xl transition-all shadow-lg shadow-black/10 active:scale-95 group" title="Decrease Font Size">
+                <i data-lucide="a-large-small" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+            </button>
+            <button onclick="resetFontSize()" class="inline-flex items-center justify-center w-12 h-12 bg-background/95 backdrop-blur-md border border-border hover:border-primary hover:text-primary rounded-xl transition-all shadow-lg shadow-black/10 active:scale-95 group" title="Reset Font Size">
+                <i data-lucide="rotate-ccw" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+            </button>
+        </div>
+        
+        <!-- Full Screen Toggle -->
+        <button onclick="toggleFullScreen()" class="inline-flex items-center justify-center w-12 h-12 bg-background/95 backdrop-blur-md border border-border hover:border-primary hover:text-primary rounded-xl transition-all shadow-lg shadow-black/10 active:scale-95 group" title="Full Screen Reading">
+            <i data-lucide="maximize" class="w-5 h-5 group-hover:scale-110 transition-transform" id="fullscreenIcon"></i>
+        </button>
+    </div>
+
+    <!-- Table of Contents -->
+    <div id="tableOfContents" class="fixed top-20 left-4 z-50 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-xl p-6 max-w-sm w-80 max-h-96 overflow-y-auto hidden">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-black text-foreground flex items-center gap-2">
+                <i data-lucide="table-of-contents" class="w-5 h-5 text-primary"></i>
+                Table of Contents
+            </h3>
+            <button onclick="toggleTableOfContents()" class="inline-flex items-center justify-center w-8 h-8 bg-background border border-border hover:border-primary hover:text-primary rounded-lg transition-all shadow-lg shadow-black/5 active:scale-95 group">
+                <i data-lucide="x" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+            </button>
+        </div>
+        <nav id="tocNav" class="space-y-2 text-sm">
+            <!-- TOC items will be generated here -->
+        </nav>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+        <a href="/news" class="hover:text-primary transition-colors">@Localizer["News"]</a>
+        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        <a href="/news/category/@Model.Category" class="hover:text-primary transition-colors">@Model.Category</a>
+        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        <span class="text-foreground">@Model.Headline</span>
+    </nav>
+
+    <!-- Article Header -->
+    <article class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden" id="articleContent">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="relative h-64 md:h-80 overflow-hidden">
+                <img src="@Model.ImageUrl" alt="@Model.Headline" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                
+                <!-- Badges -->
+                <div class="absolute top-4 left-4 flex gap-2">
+                    @if (Model.IsFeatured)
+                    {
+                        <span class="badge badge-default bg-yellow-500 text-yellow-50">
+                            <i data-lucide="star" class="w-3 h-3"></i>
+                            @Localizer["Featured"]
+                        </span>
+                    }
+                    @if (Model.IsPinned)
+                    {
+                        <span class="badge badge-default bg-red-500 text-red-50">
+                            <i data-lucide="pin" class="w-3 h-3"></i>
+                            @Localizer["Pinned"]
+                        </span>
+                    }
+                </div>
+
+                <!-- Action Buttons -->
+                @if (Model.CanEdit || Model.CanDelete)
+                {
+                    <div class="absolute top-4 right-4 flex gap-2">
+                        @if (Model.CanEdit)
+                        {
+                            <a href="/news/@Model.Id/edit" class="inline-flex items-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group" onclick="showToast('Redirecting to edit...', 'info')">
+                                <i data-lucide="edit" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                                @Localizer["Edit"]
+                            </a>
+                        }
+                        @if (Model.CanDelete)
+                        {
+                            <button onclick="deleteNews('@Model.Id')" class="inline-flex items-center gap-2.5 px-4 py-2.5 bg-red-500 text-red-50 hover:bg-red-600 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-red-500/20 active:scale-95 group">
+                                <i data-lucide="trash-2" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                                @Localizer["Delete"]
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="p-8" id="articleBody">
+            <!-- Article Meta -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-4">
+                    <span class="badge badge-outline">@Model.Category</span>
+                    @if (!string.IsNullOrEmpty(Model.CarMake))
+                    {
+                        <span class="badge badge-secondary">@Model.CarMake @Model.CarModel</span>
+                    }
+                </div>
+                <div class="text-sm text-muted-foreground">
+                    @Model.PublishedAt?.ToString("MMMM dd, yyyy") ?? Model.CreatedAt.ToString("MMMM dd, yyyy")
+                </div>
+            </div>
+
+            <!-- Article Title -->
+            <h1 class="text-3xl md:text-4xl font-black text-foreground mb-4" id="articleTitle">@Model.Headline</h1>
+
+            <!-- Article Summary -->
+            @if (!string.IsNullOrEmpty(Model.Summary))
+            {
+                <p class="text-lg text-muted-foreground mb-6 leading-relaxed" id="articleSummary">@Model.Summary</p>
+            }
+
+            <!-- Author Info -->
+            <div class="flex items-center gap-4 mb-6 p-4 bg-muted/20 border border-border/50 rounded-xl">
+                @if (!string.IsNullOrEmpty(Model.AuthorProfilePicture))
+                {
+                    <img src="@Model.AuthorProfilePicture" alt="@Model.AuthorName" class="w-12 h-12 rounded-full object-cover" loading="lazy" />
+                }
+                else
+                {
+                    <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-black">
+                        @Model.AuthorName.Substring(0, Math.Min(2, Model.AuthorName.Length)).ToUpper()
+                    </div>
+                }
+                <div>
+                    <div class="font-medium text-foreground">@Model.AuthorName</div>
+                    <div class="text-sm text-muted-foreground">@Localizer["Author"]</div>
+                </div>
+            </div>
+
+            <!-- Article Content -->
+            <div class="prose prose-lg max-w-none mb-8" id="articleMainContent">
+                @Html.Raw(Model.Body)
+            </div>
+
+            <!-- Tags -->
+            @if (Model.Tags.Any())
+            {
+                <div class="mb-6">
+                    <h3 class="text-sm font-medium text-muted-foreground mb-3">@Localizer["Tags"]</h3>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <a href="/news?tag=@tag" class="badge badge-outline hover:badge-default transition-colors">
+                                #@tag
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Source -->
+            @if (!string.IsNullOrEmpty(Model.Source))
+            {
+                <div class="mb-6 p-4 bg-muted/20 border border-border/50 rounded-xl">
+                    <div class="text-sm font-medium text-foreground mb-1">@Localizer["Source"]</div>
+                    @if (!string.IsNullOrEmpty(Model.SourceUrl))
+                    {
+                        <a href="@Model.SourceUrl" target="_blank" class="text-primary hover:text-primary/80 text-sm">
+                            @Model.Source
+                            <i data-lucide="external-link" class="w-3 h-3 inline ml-1"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="text-sm text-muted-foreground">@Model.Source</span>
+                    }
+                </div>
+            }
+
+            <!-- Engagement Stats -->
+            <div class="flex items-center justify-between py-4 border-t border-border">
+                <div class="flex items-center gap-6">
+                    <span class="flex items-center gap-2 text-muted-foreground">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        @Model.ViewCount @Localizer["Views"]
+                    </span>
+                    <button onclick="toggleLike('@Model.Id')" class="flex items-center gap-2 text-muted-foreground hover:text-red-500 transition-colors @(Model.IsLikedByCurrentUser ? "text-red-500 liked" : "")" id="likeButton">
+                        <i data-lucide="heart" class="w-4 h-4 @(Model.IsLikedByCurrentUser ? "fill-current" : "")"></i>
+                        <span id="likeCount">@Model.LikeCount</span> @Localizer["Likes"]
+                    </button>
+                    <span class="flex items-center gap-2 text-muted-foreground">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i>
+                        @Model.CommentCount @Localizer["Comments"]
+                    </span>
+                    <span class="flex items-center gap-2 text-muted-foreground">
+                        <i data-lucide="share" class="w-4 h-4"></i>
+                        @Model.ShareCount @Localizer["Shares"]
+                    </span>
+                </div>
+                
+                <!-- Share Buttons -->
+                <div class="flex items-center gap-2">
+                    <button onclick="shareNews()" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
+                        <i data-lucide="share-2" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                        @Localizer["Share"]
+                    </button>
+                    <button onclick="bookmarkNews('@Model.Id')" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group @(Model.IsBookmarkedByCurrentUser ? "text-yellow-500 border-yellow-500 bookmarked" : "")">
+                        <i data-lucide="bookmark" class="w-4 h-4 group-hover:scale-125 transition-transform @(Model.IsBookmarkedByCurrentUser ? "fill-current" : "")"></i>
+                        @Localizer["Bookmark"]
+                    </button>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <!-- Related News -->
+    <div class="mt-12" id="relatedNewsSection">
+        <h2 class="text-2xl font-black text-foreground mb-6">@Localizer["RelatedNews"]</h2>
+        <div id="relatedNewsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Loading skeleton for related news -->
+            <div class="related-news-skeleton">
+                <div class="animate-pulse">
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden mb-6">
+                            <div class="h-48 bg-muted"></div>
+                            <div class="p-4">
+                                <div class="h-4 bg-muted rounded w-20 mb-2"></div>
+                                <div class="h-6 bg-muted rounded w-full mb-2"></div>
+                                <div class="h-6 bg-muted rounded w-3/4 mb-3"></div>
+                                <div class="h-4 bg-muted rounded w-full mb-2"></div>
+                                <div class="h-4 bg-muted rounded w-2/3"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let isLiked = @Model.IsLikedByCurrentUser.ToString().ToLower();
+        let isBookmarked = @Model.IsBookmarkedByCurrentUser.ToString().ToLower();
+        let currentFontSize = 100; // percentage
+        let isFullScreen = false;
+        let tocVisible = false;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show loading skeleton initially
+            showLoadingSkeleton();
+            
+            // Simulate loading delay (remove in production or use actual loading states)
+            setTimeout(() => {
+                hideLoadingSkeleton();
+                initializePage();
+            }, 800);
+        });
+
+        function initializePage() {
+            generateTableOfContents();
+            loadRelatedNews();
+            setupValidation();
+            
+            // Initialize like button state
+            updateLikeButtonState();
+            updateBookmarkButtonState();
+        }
+
+        function showLoadingSkeleton() {
+            document.getElementById('loadingSkeleton').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+        }
+
+        function hideLoadingSkeleton() {
+            document.getElementById('loadingSkeleton').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+        }
+
+        function generateTableOfContents() {
+            const content = document.getElementById('articleMainContent');
+            const tocNav = document.getElementById('tocNav');
+            const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            
+            if (headings.length === 0) {
+                // Hide TOC button if no headings found
+                const tocButton = document.querySelector('[onclick="toggleTableOfContents()"]');
+                if (tocButton) {
+                    tocButton.style.display = 'none';
+                }
+                return;
+            }
+
+            tocNav.innerHTML = '';
+            
+            headings.forEach((heading, index) => {
+                // Add ID to heading if it doesn't have one
+                if (!heading.id) {
+                    heading.id = `heading-${index}`;
+                }
+                
+                const level = parseInt(heading.tagName.charAt(1));
+                const tocItem = document.createElement('a');
+                tocItem.href = `#${heading.id}`;
+                tocItem.textContent = heading.textContent;
+                
+                // Style based on heading level
+                let levelClass = '';
+                let iconClass = '';
+                switch(level) {
+                    case 1:
+                        levelClass = 'font-bold text-foreground';
+                        iconClass = 'w-4 h-4 text-primary';
+                        break;
+                    case 2:
+                        levelClass = 'font-semibold text-foreground ml-2';
+                        iconClass = 'w-3 h-3 text-primary/80';
+                        break;
+                    case 3:
+                        levelClass = 'font-medium text-muted-foreground ml-4';
+                        iconClass = 'w-3 h-3 text-primary/60';
+                        break;
+                    default:
+                        levelClass = 'text-muted-foreground ml-6';
+                        iconClass = 'w-2 h-2 text-primary/40';
+                }
+                
+                tocItem.className = `flex items-center gap-2 py-2 px-3 hover:bg-primary/10 hover:text-primary transition-all rounded-lg text-sm ${levelClass} group`;
+                
+                // Add icon based on heading level
+                const icon = document.createElement('i');
+                icon.setAttribute('data-lucide', level <= 2 ? 'hash' : 'minus');
+                icon.className = `${iconClass} group-hover:scale-110 transition-transform`;
+                
+                tocItem.insertBefore(icon, tocItem.firstChild);
+                
+                tocItem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Highlight the clicked item temporarily
+                    tocItem.classList.add('bg-primary/20', 'text-primary');
+                    setTimeout(() => {
+                        tocItem.classList.remove('bg-primary/20', 'text-primary');
+                    }, 2000);
+                });
+                
+                tocNav.appendChild(tocItem);
+            });
+            
+            // Re-initialize Lucide icons for the new TOC items
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function toggleTableOfContents() {
+            const toc = document.getElementById('tableOfContents');
+            tocVisible = !tocVisible;
+            
+            if (tocVisible) {
+                toc.classList.remove('hidden');
+                toc.classList.add('animate-in', 'slide-in-from-left-4', 'duration-300');
+            } else {
+                toc.classList.add('hidden');
+                toc.classList.remove('animate-in', 'slide-in-from-left-4', 'duration-300');
+            }
+        }
+
+        function increaseFontSize() {
+            if (currentFontSize < 150) {
+                currentFontSize += 10;
+                updateFontSize();
+            }
+        }
+
+        function decreaseFontSize() {
+            if (currentFontSize > 70) {
+                currentFontSize -= 10;
+                updateFontSize();
+            }
+        }
+
+        function resetFontSize() {
+            currentFontSize = 100;
+            updateFontSize();
+        }
+
+        function updateFontSize() {
+            const articleBody = document.getElementById('articleBody');
+            articleBody.style.fontSize = `${currentFontSize}%`;
+            
+            // Save preference to localStorage
+            localStorage.setItem('newsArticleFontSize', currentFontSize);
+        }
+
+        function toggleFullScreen() {
+            const article = document.getElementById('articleContent');
+            const controls = document.getElementById('articleControls');
+            const toc = document.getElementById('tableOfContents');
+            const icon = document.getElementById('fullscreenIcon');
+            const mainContent = document.getElementById('mainContent');
+            
+            isFullScreen = !isFullScreen;
+            
+            if (isFullScreen) {
+                // Enter full screen mode
+                article.classList.add('fixed', 'inset-0', 'z-50', 'overflow-y-auto', 'bg-background', 'p-8');
+                controls.classList.remove('top-20', 'right-4');
+                controls.classList.add('top-4', 'right-4', 'z-[60]');
+                
+                // Hide TOC in full screen
+                if (toc && !toc.classList.contains('hidden')) {
+                    toc.classList.add('hidden');
+                }
+                
+                // Change icon to minimize/close
+                icon.setAttribute('data-lucide', 'minimize-2');
+                icon.setAttribute('title', 'Exit Full Screen');
+                
+                // Prevent body scroll
+                document.body.style.overflow = 'hidden';
+                
+                // Hide main content container
+                mainContent.style.display = 'none';
+            } else {
+                // Exit full screen mode
+                article.classList.remove('fixed', 'inset-0', 'z-50', 'overflow-y-auto', 'bg-background', 'p-8');
+                controls.classList.remove('top-4', 'right-4', 'z-[60]');
+                controls.classList.add('top-20', 'right-4');
+                
+                // Change icon back to maximize
+                icon.setAttribute('data-lucide', 'maximize');
+                icon.setAttribute('title', 'Full Screen Reading');
+                
+                // Restore body scroll
+                document.body.style.overflow = '';
+                
+                // Show main content container
+                mainContent.style.display = 'block';
+            }
+            
+            // Re-initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        async function loadRelatedNews() {
+            try {
+                const response = await fetch(`/news/@Model.Id/related`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                if (response.ok) {
+                    const html = await response.text();
+                    document.getElementById('relatedNewsContainer').innerHTML = html;
+                } else {
+                    // Show fallback content
+                    document.getElementById('relatedNewsContainer').innerHTML = `
+                        <div class="col-span-full text-center py-8">
+                            <p class="text-muted-foreground">No related articles found.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Failed to load related news:', error);
+                document.getElementById('relatedNewsContainer').innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <p class="text-muted-foreground">Failed to load related articles.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function setupValidation() {
+            // Client-side validation for forms and interactions
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!validateForm(form)) {
+                        e.preventDefault();
+                        showToast('Please check the form for errors', 'error');
+                    }
+                });
+            });
+        }
+
+        function validateForm(form) {
+            let isValid = true;
+            const requiredFields = form.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    field.classList.remove('border-red-500');
+                }
+            });
+            
+            return isValid;
+        }
+
+        async function toggleLike(newsId) {
+            if (!@(User.Identity?.IsAuthenticated == true ? "true" : "false")) {
+                showToast('Please log in to like articles', 'warning');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1500);
+                return;
+            }
+
+            const likeButton = document.getElementById('likeButton');
+            const originalState = isLiked;
+            
+            // Optimistic update
+            isLiked = !isLiked;
+            updateLikeButtonState();
+
+            try {
+                const action = originalState ? 'unlike' : 'like';
+                const response = await fetch(`/news/${newsId}/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': getAntiForgeryToken()
+                    }
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('likeCount').textContent = result.likeCount;
+                    showToast(originalState ? 'Article unliked' : 'Article liked', 'success');
+                } else {
+                    // Revert optimistic update
+                    isLiked = originalState;
+                    updateLikeButtonState();
+                    showToast(result.message || 'An error occurred', 'error');
+                }
+            } catch (error) {
+                // Revert optimistic update
+                isLiked = originalState;
+                updateLikeButtonState();
+                showToast('Network error. Please try again.', 'error');
+            }
+        }
+
+        function updateLikeButtonState() {
+            const likeButton = document.getElementById('likeButton');
+            const heartIcon = likeButton.querySelector('i[data-lucide="heart"]');
+            
+            if (isLiked) {
+                likeButton.classList.add('text-red-500', 'liked');
+                likeButton.classList.remove('text-muted-foreground');
+                heartIcon.classList.add('fill-current');
+            } else {
+                likeButton.classList.remove('text-red-500', 'liked');
+                likeButton.classList.add('text-muted-foreground');
+                heartIcon.classList.remove('fill-current');
+            }
+        }
+
+        async function deleteNews(newsId) {
+            if (!confirm('@Localizer["ConfirmDelete"]')) {
+                return;
+            }
+
+            showToast('Deleting article...', 'info');
+
+            try {
+                const response = await fetch(`/news/${newsId}/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': getAntiForgeryToken()
+                    }
+                });
+                
+                if (response.ok) {
+                    showToast('@Localizer["NewsDeletedSuccessfully"]', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/news';
+                    }, 1500);
+                } else {
+                    const result = await response.json();
+                    showToast(result.message || '@Localizer["ErrorDeletingNews"]', 'error');
+                }
+            } catch (error) {
+                showToast('Network error. Please try again.', 'error');
+            }
+        }
+
+        function shareNews() {
+            const title = '@Model.Headline';
+            const text = '@Model.Summary';
+            const url = window.location.href;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: text,
+                    url: url
+                }).then(() => {
+                    showToast('Article shared successfully', 'success');
+                }).catch((error) => {
+                    if (error.name !== 'AbortError') {
+                        fallbackShare(url);
+                    }
+                });
+            } else {
+                fallbackShare(url);
+            }
+        }
+
+        function fallbackShare(url) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('@Localizer["LinkCopiedToClipboard"]', 'success');
+                }).catch(() => {
+                    showShareModal(url);
+                });
+            } else {
+                showShareModal(url);
+            }
+        }
+
+        function showShareModal(url) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-card border border-border rounded-2xl p-6 max-w-md w-full animate-in zoom-in-95 duration-300">
+                    <h3 class="text-lg font-medium text-foreground mb-4">Share this article</h3>
+                    <div class="space-y-3">
+                        <input type="text" value="${url}" readonly class="input w-full" onclick="this.select()">
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="window.open('https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent('@Model.Headline')}', '_blank')" class="inline-flex items-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+                                <i data-lucide="twitter" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                                Twitter
+                            </button>
+                            <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}', '_blank')" class="inline-flex items-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+                                <i data-lucide="facebook" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                                Facebook
+                            </button>
+                            <button onclick="window.open('https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}', '_blank')" class="inline-flex items-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+                                <i data-lucide="linkedin" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                                LinkedIn
+                            </button>
+                        </div>
+                        <button onclick="this.closest('.fixed').remove()" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group w-full">
+                            Close
+                        </button>edin" class="w-4 h-4"></i>
+                                LinkedIn
+                            </button>
+                        </div>
+                        <button onclick="this.closest('.fixed').remove()" class="btn-sm btn-outline w-full">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Close on backdrop click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+
+            // Initialize Lucide icons for the modal
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        async function bookmarkNews(newsId) {
+            if (!@(User.Identity?.IsAuthenticated == true ? "true" : "false")) {
+                showToast('Please log in to bookmark articles', 'warning');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1500);
+                return;
+            }
+
+            const originalState = isBookmarked;
+            
+            // Optimistic update
+            isBookmarked = !isBookmarked;
+            updateBookmarkButtonState();
+
+            try {
+                const action = originalState ? 'unbookmark' : 'bookmark';
+                const response = await fetch(`/news/${newsId}/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': getAntiForgeryToken()
+                    }
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showToast(originalState ? 'Bookmark removed' : 'Article bookmarked', 'success');
+                } else {
+                    // Revert optimistic update
+                    isBookmarked = originalState;
+                    updateBookmarkButtonState();
+                    showToast(result.message || 'An error occurred', 'error');
+                }
+            } catch (error) {
+                // Revert optimistic update
+                isBookmarked = originalState;
+                updateBookmarkButtonState();
+                showToast('Network error. Please try again.', 'error');
+            }
+        }
+
+        function updateBookmarkButtonState() {
+            const bookmarkButtons = document.querySelectorAll('[onclick*="bookmarkNews"]');
+            bookmarkButtons.forEach(button => {
+                const bookmarkIcon = button.querySelector('i[data-lucide="bookmark"]');
+                
+                if (isBookmarked) {
+                    button.classList.add('text-yellow-500', 'bookmarked');
+                    button.classList.remove('text-muted-foreground');
+                    if (bookmarkIcon) bookmarkIcon.classList.add('fill-current');
+                } else {
+                    button.classList.remove('text-yellow-500', 'bookmarked');
+                    button.classList.add('text-muted-foreground');
+                    if (bookmarkIcon) bookmarkIcon.classList.remove('fill-current');
+                }
+            });
+        }
+
+        function getAntiForgeryToken() {
+            return document.querySelector('input[name="__RequestVerificationToken"]')?.value ||
+                   document.querySelector('meta[name="__RequestVerificationToken"]')?.content;
+        }
+
+        function showToast(message, type = 'info') {
+            // Use the existing toaster system
+            if (window.ToasterSystem) {
+                window.ToasterSystem.show(message, type);
+            } else if (window.notify) {
+                window.notify[type](message);
+            } else {
+                // Fallback
+                console.log(`${type.toUpperCase()}: ${message}`);
+            }
+        }
+
+        // Load saved font size preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedFontSize = localStorage.getItem('newsArticleFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseInt(savedFontSize);
+                updateFontSize();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '=':
+                    case '+':
+                        e.preventDefault();
+                        increaseFontSize();
+                        break;
+                    case '-':
+                        e.preventDefault();
+                        decreaseFontSize();
+                        break;
+                    case '0':
+                        e.preventDefault();
+                        resetFontSize();
+                        break;
+                }
+            }
+            
+            // ESC to exit full screen
+            if (e.key === 'Escape' && isFullScreen) {
+                toggleFullScreen();
+            }
+        });
+    </script>
+}

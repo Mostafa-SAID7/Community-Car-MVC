@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="QA" xml:space="preserve">
+    <value>الأسئلة والأجوبة</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>المنشورات</value>
+  </data>
+  <data name="Guides" xml:space="preserve">
+    <value>الأدلة</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>المجموعات</value>
+  </data>
+  <data name="Friends" xml:space="preserve">
+    <value>الأصدقاء</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>الأخبار</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>الأحداث</value>
+  </data>
+  <data name="Reviews" xml:space="preserve">
+    <value>المراجعات</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>الخرائط</value>
+  </data>
+  <data name="MyProfile" xml:space="preserve">
+    <value>ملفي الشخصي</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>المحادثة</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>البحث...</value>
+  </data>
+  
+  <!-- Guides Section -->
+  <data name="AllGuides" xml:space="preserve">
+    <value>جميع الأدلة</value>
+  </data>
+  <data name="FeaturedGuides" xml:space="preserve">
+    <value>الأدلة المميزة</value>
+  </data>
+  <data name="VerifiedGuides" xml:space="preserve">
+    <value>الأدلة المعتمدة</value>
+  </data>
+  <data name="PopularGuides" xml:space="preserve">
+    <value>الأدلة الشائعة</value>
+  </data>
+  <data name="RecentGuides" xml:space="preserve">
+    <value>الأدلة الحديثة</value>
+  </data>
+  <data name="MyGuides" xml:space="preserve">
+    <value>أدلتي</value>
+  </data>
+  <data name="CreateGuide" xml:space="preserve">
+    <value>إنشاء دليل</value>
+  </data>
+  <data name="EditGuide" xml:space="preserve">
+    <value>تعديل الدليل</value>
+  </data>
+  <data name="DeleteGuide" xml:space="preserve">
+    <value>حذف الدليل</value>
+  </data>
+  <data name="PublishGuide" xml:space="preserve">
+    <value>نشر الدليل</value>
+  </data>
+  <data name="UnpublishGuide" xml:space="preserve">
+    <value>إلغاء نشر الدليل</value>
+  </data>
+  <data name="BookmarkGuide" xml:space="preserve">
+    <value>حفظ الدليل</value>
+  </data>
+  <data name="UnbookmarkGuide" xml:space="preserve">
+    <value>إزالة الحفظ</value>
+  </data>
+  <data name="RateGuide" xml:space="preserve">
+    <value>تقييم الدليل</value>
+  </data>
+  <data name="ShareGuide" xml:space="preserve">
+    <value>مشاركة الدليل</value>
+  </data>
+  <data name="GuideTitle" xml:space="preserve">
+    <value>عنوان الدليل</value>
+  </data>
+  <data name="GuideContent" xml:space="preserve">
+    <value>محتوى الدليل</value>
+  </data>
+  <data name="GuideSummary" xml:space="preserve">
+    <value>ملخص الدليل</value>
+  </data>
+  <data name="GuideCategory" xml:space="preserve">
+    <value>الفئة</value>
+  </data>
+  <data name="GuideDifficulty" xml:space="preserve">
+    <value>مستوى الصعوبة</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>الوقت المقدر</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>دقيقة</value>
+  </data>
+  <data name="Prerequisites" xml:space="preserve">
+    <value>المتطلبات المسبقة</value>
+  </data>
+  <data name="RequiredTools" xml:space="preserve">
+    <value>الأدوات المطلوبة</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>العلامات</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>المؤلف</value>
+  </data>
+  <data name="PublishedOn" xml:space="preserve">
+    <value>نُشر في</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>آخر تحديث</value>
+  </data>
+  <data name="Views" xml:space="preserve">
+    <value>المشاهدات</value>
+  </data>
+  <data name="Bookmarks" xml:space="preserve">
+    <value>المحفوظات</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>التقييم</value>
+  </data>
+  <data name="Ratings" xml:space="preserve">
+    <value>تقييمات</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>معتمد</value>
+  </data>
+  <data name="Featured" xml:space="preserve">
+    <value>مميز</value>
+  </data>
+  <data name="Draft" xml:space="preserve">
+    <value>مسودة</value>
+  </data>
+  <data name="Published" xml:space="preserve">
+    <value>منشور</value>
+  </data>
+  
+  <!-- Difficulty Levels -->
+  <data name="Beginner" xml:space="preserve">
+    <value>مبتدئ</value>
+  </data>
+  <data name="Intermediate" xml:space="preserve">
+    <value>متوسط</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>متقدم</value>
+  </data>
+  
+  <!-- Categories -->
+  <data name="Maintenance" xml:space="preserve">
+    <value>الصيانة</value>
+  </data>
+  <data name="Repair" xml:space="preserve">
+    <value>الإصلاح</value>
+  </data>
+  <data name="Diagnostics" xml:space="preserve">
+    <value>التشخيص</value>
+  </data>
+  <data name="Detailing" xml:space="preserve">
+    <value>التنظيف والتجميل</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>الأداء</value>
+  </data>
+  <data name="Safety" xml:space="preserve">
+    <value>السلامة</value>
+  </data>
+  <data name="Seasonal" xml:space="preserve">
+    <value>موسمي</value>
+  </data>
+  
+  <!-- Filter and Sort -->
+  <data name="FilterBy" xml:space="preserve">
+    <value>تصفية حسب</value>
+  </data>
+  <data name="SortBy" xml:space="preserve">
+    <value>ترتيب حسب</value>
+  </data>
+  <data name="Newest" xml:space="preserve">
+    <value>الأحدث</value>
+  </data>
+  <data name="Oldest" xml:space="preserve">
+    <value>الأقدم</value>
+  </data>
+  <data name="MostPopular" xml:space="preserve">
+    <value>الأكثر شعبية</value>
+  </data>
+  <data name="HighestRated" xml:space="preserve">
+    <value>الأعلى تقييماً</value>
+  </data>
+  <data name="MostViewed" xml:space="preserve">
+    <value>الأكثر مشاهدة</value>
+  </data>
+  
+  <!-- Actions and Messages -->
+  <data name="GuideCreatedSuccessfully" xml:space="preserve">
+    <value>تم إنشاء الدليل بنجاح!</value>
+  </data>
+  <data name="GuideUpdatedSuccessfully" xml:space="preserve">
+    <value>تم تحديث الدليل بنجاح!</value>
+  </data>
+  <data name="GuideDeletedSuccessfully" xml:space="preserve">
+    <value>تم حذف الدليل بنجاح!</value>
+  </data>
+  <data name="GuidePublishedSuccessfully" xml:space="preserve">
+    <value>تم نشر الدليل بنجاح!</value>
+  </data>
+  <data name="GuideBookmarkedSuccessfully" xml:space="preserve">
+    <value>تم حفظ الدليل بنجاح!</value>
+  </data>
+  <data name="GuideRatedSuccessfully" xml:space="preserve">
+    <value>شكراً لك على تقييم هذا الدليل!</value>
+  </data>
+  <data name="NoGuidesFound" xml:space="preserve">
+    <value>لم يتم العثور على أدلة تطابق معاييرك.</value>
+  </data>
+  <data name="LoadingGuides" xml:space="preserve">
+    <value>جاري تحميل الأدلة...</value>
+  </data>
+  <data name="RelatedGuides" xml:space="preserve">
+    <value>أدلة ذات صلة</value>
+  </data>
+  <data name="MoreFromAuthor" xml:space="preserve">
+    <value>المزيد من هذا المؤلف</value>
+  </data>
+</root>

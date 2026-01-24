@@ -1,0 +1,331 @@
+@model CommunityCar.Application.Features.Events.ViewModels.EventVM
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Back Button -->
+    <div>
+        <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Back to Events
+        </a>
+    </div>
+
+    <!-- Event Header -->
+    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6 md:p-8">
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+                <div class="flex-1">
+                    <h1 class="text-3xl font-black text-foreground mb-4">@Model.Title</h1>
+                    <p class="text-muted-foreground mb-4">@Model.Description</p>
+                    
+                    <!-- Event Status -->
+                    <div class="flex items-center gap-2 mb-4">
+                        @if (Model.IsUpcoming)
+                        {
+                            <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium">Upcoming</span>
+                        }
+                        else if (Model.IsActive)
+                        {
+                            <span class="bg-orange-500/10 text-orange-600 dark:text-orange-400 px-3 py-1 rounded-full text-sm font-medium">Active Now</span>
+                        }
+                        else
+                        {
+                            <span class="bg-gray-500/10 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full text-sm font-medium">Past Event</span>
+                        }
+                        
+                        @if (Model.IsFree)
+                        {
+                            <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium">FREE</span>
+                        }
+                        else if (Model.TicketPrice.HasValue)
+                        {
+                            <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium">$@Model.TicketPrice.Value</span>
+                        }
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col gap-2">
+                    @if (Model.IsUpcoming)
+                    {
+                        <button onclick="joinEvent('@Model.Id')" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95" id="joinBtn">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            Join Event
+                        </button>
+                        <button onclick="leaveEvent('@Model.Id')" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 hidden" id="leaveBtn">
+                            <i data-lucide="user-minus" class="w-4 h-4"></i>
+                            Leave Event
+                        </button>
+                    }
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                        if (currentUserId == Model.OrganizerId.ToString())
+                        {
+                            <a href="/events/@Model.Id/edit" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                                Edit Event
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Details Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Event Information -->
+            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-foreground mb-4">Event Details</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                                <i data-lucide="calendar" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-foreground">Date & Time</div>
+                                <div class="text-sm text-muted-foreground">
+                                    <div>Starts: @Model.StartTime.ToString("dddd, MMMM dd, yyyy 'at' h:mm tt")</div>
+                                    <div>Ends: @Model.EndTime.ToString("dddd, MMMM dd, yyyy 'at' h:mm tt")</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                                <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-foreground">Location</div>
+                                <div class="text-sm text-muted-foreground">
+                                    <div>@Model.Location</div>
+                                    @if (!string.IsNullOrEmpty(Model.LocationDetails))
+                                    {
+                                        <div class="mt-1">@Model.LocationDetails</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-foreground">Attendance</div>
+                                <div class="text-sm text-muted-foreground">
+                                    @Model.AttendeeCount attendees
+                                    @if (Model.MaxAttendees.HasValue)
+                                    {
+                                        <span>/ @Model.MaxAttendees.Value max</span>
+                                        @if (!Model.HasAvailableSpots)
+                                        {
+                                            <span class="text-red-500 font-medium">(Full)</span>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.TicketPrice.HasValue || !string.IsNullOrEmpty(Model.TicketInfo))
+                        {
+                            <div class="flex items-start gap-3">
+                                <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                                    <i data-lucide="credit-card" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-foreground">Pricing</div>
+                                    <div class="text-sm text-muted-foreground">
+                                        @if (Model.TicketPrice.HasValue)
+                                        {
+                                            <div>${@Model.TicketPrice.Value}</div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.TicketInfo))
+                                        {
+                                            <div>@Model.TicketInfo</div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            @if (Model.Tags.Any())
+            {
+                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-foreground mb-4">Tags</h3>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach (var tag in Model.Tags)
+                            {
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">#@tag</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Images -->
+            @if (Model.ImageUrls.Any())
+            {
+                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-foreground mb-4">Photos</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            @foreach (var imageUrl in Model.ImageUrls)
+                            {
+                                <img src="@imageUrl" alt="Event photo" class="w-full h-32 object-cover rounded-lg" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Organizer Info -->
+            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-lg font-bold text-foreground mb-4">Organizer</h3>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <i data-lucide="user" class="w-5 h-5 text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="font-medium text-foreground">Event Organizer</div>
+                            <div class="text-sm text-muted-foreground">@Model.OrganizerId</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            @if (!string.IsNullOrEmpty(Model.ExternalUrl) || !string.IsNullOrEmpty(Model.ContactInfo))
+            {
+                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-foreground mb-4">Contact</h3>
+                        <div class="space-y-3">
+                            @if (!string.IsNullOrEmpty(Model.ExternalUrl))
+                            {
+                                <a href="@Model.ExternalUrl" target="_blank" class="flex items-center gap-2 text-primary hover:text-primary/80 text-sm">
+                                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                                    External Link
+                                </a>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.ContactInfo))
+                            {
+                                <div class="text-sm text-muted-foreground">
+                                    @Model.ContactInfo
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Quick Actions -->
+            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-lg font-bold text-foreground mb-4">Quick Actions</h3>
+                    <div class="space-y-2">
+                        <button onclick="shareEvent()" class="w-full inline-flex items-center justify-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                            <i data-lucide="share-2" class="w-4 h-4"></i>
+                            Share Event
+                        </button>
+                        <button onclick="addToCalendar()" class="w-full inline-flex items-center justify-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                            <i data-lucide="calendar-plus" class="w-4 h-4"></i>
+                            Add to Calendar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function joinEvent(eventId) {
+    try {
+        const response = await fetch(`/events/${eventId}/join`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('joinBtn').classList.add('hidden');
+            document.getElementById('leaveBtn').classList.remove('hidden');
+            // Update attendee count
+            location.reload();
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        alert('An error occurred while joining the event.');
+    }
+}
+
+async function leaveEvent(eventId) {
+    try {
+        const response = await fetch(`/events/${eventId}/leave`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('leaveBtn').classList.add('hidden');
+            document.getElementById('joinBtn').classList.remove('hidden');
+            // Update attendee count
+            location.reload();
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        alert('An error occurred while leaving the event.');
+    }
+}
+
+function shareEvent() {
+    if (navigator.share) {
+        navigator.share({
+            title: '@Model.Title',
+            text: '@Model.Description',
+            url: window.location.href
+        });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Event link copied to clipboard!');
+    }
+}
+
+function addToCalendar() {
+    const startDate = new Date('@Model.StartTime.ToString("yyyy-MM-ddTHH:mm:ss")');
+    const endDate = new Date('@Model.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")');
+    
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('@Model.Title')}&dates=${startDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z/${endDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z&details=${encodeURIComponent('@Model.Description')}&location=${encodeURIComponent('@Model.Location')}`;
+    
+    window.open(googleCalendarUrl, '_blank');
+}
+</script>

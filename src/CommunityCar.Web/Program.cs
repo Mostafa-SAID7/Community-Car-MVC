@@ -38,12 +38,12 @@ var app = builder.Build();
 var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(locOptions.Value);
 
-// Seed Data
-using (var scope = app.Services.CreateScope())
-{
-    var seeder = scope.ServiceProvider.GetRequiredService<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>();
-    await seeder.SeedAsync();
-}
+// Seed Data - Temporarily disabled to fix database issues
+// using (var scope = app.Services.CreateScope())
+// {
+//     var seeder = scope.ServiceProvider.GetRequiredService<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>();
+//     await seeder.SeedAsync();
+// }
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -54,6 +54,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStatusCodePagesWithReExecute("/Error/{0}");
+app.UseMiddleware<CommunityCar.Web.Middleware.ErrorHandlingMiddleware>();
 app.UseMiddleware<CommunityCar.Web.Middleware.MaintenanceMiddleware>();
 
 app.UseHttpsRedirection();

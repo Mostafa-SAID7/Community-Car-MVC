@@ -1,0 +1,220 @@
+@model IEnumerable<CommunityCar.Application.Features.Events.ViewModels.EventVM>
+@{
+    ViewData["Title"] = "Upcoming Events";
+}
+
+<div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+            <h1 class="text-3xl font-black text-foreground tracking-tight">Upcoming Events</h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Don't miss these exciting car community events</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+                All Events
+            </a>
+            <a href="/events/create" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
+                <i data-lucide="plus-circle" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                Create Event
+            </a>
+        </div>
+    </div>
+
+    <!-- Upcoming Events List -->
+    @if (Model.Any())
+    {
+        <div class="space-y-6">
+            @foreach (var eventItem in Model)
+            {
+                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group">
+                    <div class="p-6">
+                        <div class="flex flex-col lg:flex-row gap-6">
+                            <!-- Date Badge -->
+                            <div class="flex-shrink-0">
+                                <div class="bg-primary/10 border border-primary/20 rounded-2xl p-4 text-center min-w-[120px]">
+                                    <div class="text-2xl font-black text-primary">@eventItem.StartTime.ToString("dd")</div>
+                                    <div class="text-sm font-bold text-primary uppercase">@eventItem.StartTime.ToString("MMM")</div>
+                                    <div class="text-xs text-muted-foreground">@eventItem.StartTime.ToString("yyyy")</div>
+                                    <div class="text-xs text-muted-foreground mt-1">@eventItem.StartTime.ToString("h:mm tt")</div>
+                                </div>
+                            </div>
+
+                            <!-- Event Content -->
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="flex-1">
+                                        <h3 class="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                                            <a href="/events/@eventItem.Id">@eventItem.Title</a>
+                                        </h3>
+                                        <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@eventItem.Description</p>
+                                    </div>
+                                    
+                                    <!-- Price Badge -->
+                                    @if (eventItem.IsFree)
+                                    {
+                                        <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium">FREE</span>
+                                    }
+                                    else if (eventItem.TicketPrice.HasValue)
+                                    {
+                                        <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium">$@eventItem.TicketPrice.Value</span>
+                                    }
+                                </div>
+
+                                <!-- Event Details -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="clock" class="w-4 h-4"></i>
+                                        <span>@eventItem.StartTime.ToString("h:mm tt") - @eventItem.EndTime.ToString("h:mm tt")</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                        <span>@eventItem.Location</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="users" class="w-4 h-4"></i>
+                                        <span>@eventItem.AttendeeCount attendees</span>
+                                        @if (eventItem.MaxAttendees.HasValue)
+                                        {
+                                            <span>/ @eventItem.MaxAttendees.Value max</span>
+                                            @if (!eventItem.HasAvailableSpots)
+                                            {
+                                                <span class="text-red-500 font-medium">(Full)</span>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm">
+                                        @{
+                                            var daysUntil = (eventItem.StartTime.Date - DateTime.Now.Date).Days;
+                                        }
+                                        @if (daysUntil == 0)
+                                        {
+                                            <span class="text-orange-600 dark:text-orange-400 font-medium">Today</span>
+                                        }
+                                        else if (daysUntil == 1)
+                                        {
+                                            <span class="text-green-600 dark:text-green-400 font-medium">Tomorrow</span>
+                                        }
+                                        else if (daysUntil <= 7)
+                                        {
+                                            <span class="text-blue-600 dark:text-blue-400 font-medium">In @daysUntil days</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted-foreground">In @daysUntil days</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Tags -->
+                                @if (eventItem.Tags.Any())
+                                {
+                                    <div class="flex flex-wrap gap-1 mb-4">
+                                        @foreach (var tag in eventItem.Tags.Take(4))
+                                        {
+                                            <span class="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">#@tag</span>
+                                        }
+                                        @if (eventItem.Tags.Count() > 4)
+                                        {
+                                            <span class="text-xs text-muted-foreground">+@(eventItem.Tags.Count() - 4) more</span>
+                                        }
+                                    </div>
+                                }
+
+                                <!-- Action Buttons -->
+                                <div class="flex flex-wrap gap-2">
+                                    <a href="/events/@eventItem.Id" class="inline-flex items-center gap-2.5 px-4 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
+                                        <i data-lucide="eye" class="w-4 h-4"></i>
+                                        View Details
+                                    </a>
+                                    
+                                    @if (eventItem.HasAvailableSpots)
+                                    {
+                                        <button onclick="joinEvent('@eventItem.Id')" class="inline-flex items-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                                            Join Event
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button disabled class="inline-flex items-center gap-2.5 px-4 py-2.5 bg-background border border-border rounded-xl text-xs font-black uppercase tracking-widest opacity-50 cursor-not-allowed">
+                                            <i data-lucide="users" class="w-4 h-4"></i>
+                                            Event Full
+                                        </button>
+                                    }
+                                    
+                                    <button onclick="shareEvent('@eventItem.Id', '@eventItem.Title')" class="inline-flex items-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                                        <i data-lucide="share-2" class="w-4 h-4"></i>
+                                        Share
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-8 text-center">
+            <div class="bg-primary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i data-lucide="calendar-x" class="w-8 h-8 text-primary"></i>
+            </div>
+            <h3 class="text-lg font-black text-foreground mb-2">No Upcoming Events</h3>
+            <p class="text-sm text-muted-foreground mb-4">
+                There are currently no upcoming events scheduled. Be the first to create one and bring the community together!
+            </p>
+            <div class="flex gap-2 justify-center">
+                <a href="/events/create" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    Create Event
+                </a>
+                <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    Browse All Events
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+async function joinEvent(eventId) {
+    try {
+        const response = await fetch(`/events/${eventId}/join`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Successfully joined the event!');
+            location.reload();
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        alert('An error occurred while joining the event.');
+    }
+}
+
+function shareEvent(eventId, title) {
+    const url = `${window.location.origin}/events/${eventId}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            url: url
+        });
+    } else {
+        navigator.clipboard.writeText(url);
+        alert('Event link copied to clipboard!');
+    }
+}
+</script>
