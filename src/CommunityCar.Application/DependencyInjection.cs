@@ -10,6 +10,8 @@ using CommunityCar.Application.Services.Localization;
 using CommunityCar.Application.Services.Profile;
 using CommunityCar.Application.Services.Dashboard;
 using CommunityCar.Application.Services.SEO;
+using CommunityCar.Application.Services.Maps.Routing;
+using CommunityCar.Application.Services.Maps.Pricing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CommunityCar.Application;
@@ -63,6 +65,11 @@ public static class DependencyInjection
 
         // Analytics services
         services.AddScoped<IUserAnalyticsService, CommunityCar.Application.Services.UserAnalyticsService>();
+
+        // Maps services
+        services.AddScoped<IRouteEngine, RouteEngine>();
+        services.AddScoped<IPricingStrategy, StandardPricingStrategy>();
+        services.AddScoped<IPricingStrategy, EcoPricingStrategy>();
 
         return services;
     }

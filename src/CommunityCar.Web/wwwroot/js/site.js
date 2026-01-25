@@ -7,7 +7,17 @@ const themeToggleButtons = [
 
 const html = document.documentElement;
 
-function updateIcons(theme) {
+function updateTheme(theme) {
+    // Update HTML class for Tailwind dark mode
+    if (theme === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light');
+    } else {
+        html.classList.remove('dark');
+        html.classList.add('light');
+    }
+
+    // Update all toggle button icons
     themeToggleButtons.forEach(({ sun, moon }) => {
         if (!sun || !moon) return;
         if (theme === 'dark') {
@@ -18,14 +28,6 @@ function updateIcons(theme) {
             moon.classList.add('hidden');
         }
     });
-    
-    if (theme === 'dark') {
-        html.classList.add('dark');
-        html.classList.remove('light');
-    } else {
-        html.classList.remove('dark');
-        html.classList.add('light');
-    }
 }
 
 // Initialize theme from localStorage or system preference
@@ -33,12 +35,20 @@ let currentTheme = localStorage.getItem('theme');
 if (!currentTheme) {
     // Check system preference
     currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    // Save the detected preference
+    localStorage.setItem('theme', currentTheme);
 }
 
-// Apply theme
+// Apply theme immediately
 html.classList.remove('light', 'dark');
 html.classList.add(currentTheme);
-updateIcons(currentTheme);
+
+// Wait for DOM to be ready before updating icons
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => updateTheme(currentTheme));
+} else {
+    updateTheme(currentTheme);
+}
 
 // Add event listeners to all theme toggle buttons
 themeToggleButtons.forEach(({ toggle }) => {
@@ -47,10 +57,11 @@ themeToggleButtons.forEach(({ toggle }) => {
             const isDark = html.classList.contains('dark');
             const newTheme = isDark ? 'light' : 'dark';
 
-            html.classList.remove('light', 'dark');
-            html.classList.add(newTheme);
+            // Update theme
+            updateTheme(newTheme);
+
+            // Save preference
             localStorage.setItem('theme', newTheme);
-            updateIcons(newTheme);
         });
     }
 });
