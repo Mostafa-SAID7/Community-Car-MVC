@@ -1,0 +1,38 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model CommunityCar.Application.Features.QA.ViewModels.QAStatsVM
+
+<!-- Metrics Radar -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-primary/20">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
+            <i data-lucide="help-circle" class="w-5 h-5"></i>
+        </div>
+        <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.TotalQuestions</div>
+        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalQuestions"]</div>
+    </div>
+    
+    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-green-500/10">
+        <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
+        </div>
+        <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.SolvedQuestions</div>
+        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Solved"]</div>
+    </div>
+    
+    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-amber-500/10">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
+            <i data-lucide="alert-circle" class="w-5 h-5"></i>
+        </div>
+        <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.OpenQuestions</div>
+        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Open"]</div>
+    </div>
+    
+    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-blue-500/10">
+        <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
+            <i data-lucide="message-square" class="w-5 h-5"></i>
+        </div>
+        <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.TotalAnswers</div>
+        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalAnswers"]</div>
+    </div>
+</div>
