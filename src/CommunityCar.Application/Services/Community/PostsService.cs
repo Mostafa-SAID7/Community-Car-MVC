@@ -63,6 +63,8 @@ public class PostsService : IPostsService
             request.Type,
             currentUserId);
 
+        post.UpdateArabicContent(request.TitleAr, request.ContentAr);
+
         await _unitOfWork.Posts.AddAsync(post);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -85,6 +87,7 @@ public class PostsService : IPostsService
         }
 
         post.UpdateContent(request.Content);
+        post.UpdateArabicContent(request.TitleAr, request.ContentAr);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

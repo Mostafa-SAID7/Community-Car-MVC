@@ -414,4 +414,112 @@
   <data name="ErrorSharingStory" xml:space="preserve">
     <value>Error sharing story</value>
   </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="MarkAllRead" xml:space="preserve">
+    <value>Mark all read</value>
+  </data>
+  <data name="LoadingNotifications" xml:space="preserve">
+    <value>Loading notifications...</value>
+  </data>
+  <data name="TrendingTopics" xml:space="preserve">
+    <value>Trending Topics</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>posts</value>
+  </data>
+  <data name="ViewAllTrending" xml:space="preserve">
+    <value>View All Trending</value>
+  </data>
+  <data name="NoTrendingTopics" xml:space="preserve">
+    <value>No trending topics right now</value>
+  </data>
+  <data name="PeopleYouMayKnow" xml:space="preserve">
+    <value>People You May Know</value>
+  </data>
+  <data name="MutualFriends" xml:space="preserve">
+    <value>mutual friends</value>
+  </data>
+  <data name="AddFriend" xml:space="preserve">
+    <value>Add Friend</value>
+  </data>
+  <data name="SeeAllSuggestions" xml:space="preserve">
+    <value>See All Suggestions</value>
+  </data>
+  <data name="YourInterests" xml:space="preserve">
+    <value>Your Interests</value>
+  </data>
+  <data name="CommunityStats" xml:space="preserve">
+    <value>Community Stats</value>
+  </data>
+  <data name="TotalPosts" xml:space="preserve">
+    <value>Total Posts</value>
+  </data>
+  <data name="ActiveStories" xml:space="preserve">
+    <value>Active Stories</value>
+  </data>
+  <data name="TotalEngagement" xml:space="preserve">
+    <value>Total Engagement</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="StatsUnavailable" xml:space="preserve">
+    <value>Stats unavailable</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>Activity</value>
+  </data>
+  <data name="NewMemberJoined" xml:space="preserve">
+    <value>New member joined</value>
+  </data>
+  <data name="ExpertAnswered" xml:space="preserve">
+    <value>Expert answered</value>
+  </data>
+  <data name="ViewAllInterests" xml:space="preserve">
+    <value>View All Interests</value>
+  </data>
+  <data name="LearningInterests" xml:space="preserve">
+    <value>We're learning about your interests</value>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Analytics" xml:space="preserve">
+    <value>Analytics</value>
+  </data>
+  <data name="AdminControl" xml:space="preserve">
+    <value>Admin Control</value>
+  </data>
+  <data name="ErrorLogs" xml:space="preserve">
+    <value>Error Logs</value>
+  </data>
+  <data name="ErrorReports" xml:space="preserve">
+    <value>Error Reports</value>
+  </data>
+  <data name="SystemReports" xml:space="preserve">
+    <value>System Reports</value>
+  </data>
+  <data name="Monitoring" xml:space="preserve">
+    <value>Monitoring</value>
+  </data>
+  <data name="GlobalSettings" xml:space="preserve">
+    <value>Global Settings</value>
+  </data>
+  <data name="SEOAudit" xml:space="preserve">
+    <value>SEO Audit</value>
+  </data>
+  <data name="Localization" xml:space="preserve">
+    <value>Localization</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="BackToSite" xml:space="preserve">
+    <value>Back to Site</value>
+  </data>
+  <data name="AdminProfile" xml:space="preserve">
+    <value>Admin Profile</value>
+  </data>
 </root>

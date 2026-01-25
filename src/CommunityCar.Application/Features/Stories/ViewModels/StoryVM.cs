@@ -14,6 +14,7 @@ public class StoryVM
     // Enhanced properties
     public string? Title { get; set; }
     public string? Caption { get; set; }
+    public string? CaptionAr { get; set; }
     public StoryType Type { get; set; }
     public string TypeName { get; set; } = string.Empty;
     public string? ThumbnailUrl { get; set; }

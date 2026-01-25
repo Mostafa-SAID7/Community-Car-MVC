@@ -15,6 +15,14 @@ public class NewsCreateVM
     [StringLength(500)]
     public string? Summary { get; set; }
 
+    [StringLength(200)]
+    public string? HeadlineAr { get; set; }
+
+    public string? BodyAr { get; set; }
+
+    [StringLength(500)]
+    public string? SummaryAr { get; set; }
+
     [Url]
     public string? ImageUrl { get; set; }
 

@@ -31,5 +31,12 @@ public class GuideConfiguration : IEntityTypeConfiguration<Guide>
                 v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null) ?? new List<string>())
             .HasColumnName("RequiredToolsJson")
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        // Arabic Localization fields (optional configuration for max length)
+        builder.Property(g => g.TitleAr)
+            .HasMaxLength(500);
+        
+        builder.Property(g => g.SummaryAr)
+            .HasMaxLength(1000);
     }
 }

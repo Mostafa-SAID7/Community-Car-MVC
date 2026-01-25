@@ -1,4 +1,6 @@
+@using Microsoft.Extensions.Localization
 @model CommunityCar.Application.Features.Stories.DTOs.StoriesSearchResponse
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Stories";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,8 +18,8 @@
                         <i data-lucide="camera" class="w-5 h-5 text-primary"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-foreground">Stories</h1>
-                        <p class="text-sm text-muted-foreground">Share your automotive moments</p>
+                        <h1 class="text-xl font-bold text-foreground">@Localizer["Stories"]</h1>
+                        <p class="text-sm text-muted-foreground">@Localizer["ShareMoments"]</p>
                     </div>
                 </div>
                 
@@ -26,7 +28,7 @@
                     <a href="/stories/create" 
                        class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium">
                         <i data-lucide="plus" class="w-4 h-4"></i>
-                        Create Story
+                        @Localizer["CreateStory"]
                     </a>
                 }
             </div>
@@ -43,7 +45,7 @@
                         <input type="text" 
                                id="searchInput"
                                value="@searchTerm"
-                               placeholder="Search stories..."
+                               placeholder="@Localizer["SearchPlaceholder"]"
                                class="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
                     </div>
                 </div>
@@ -231,14 +233,14 @@
                     <div class="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
                         <i data-lucide="camera" class="w-8 h-8 text-muted-foreground"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-foreground mb-2">No Stories Found</h3>
-                    <p class="text-muted-foreground mb-4">Be the first to share your automotive story!</p>
+                    <h3 class="text-lg font-semibold text-foreground mb-2">@Localizer["NoStoriesFound"]</h3>
+                    <p class="text-muted-foreground mb-4">@Localizer["NoStoriesMessage"]</p>
                     @if (currentUserId.HasValue)
                     {
                         <a href="/stories/create" 
                            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
                             <i data-lucide="plus" class="w-4 h-4"></i>
-                            Create Your First Story
+                            @Localizer["CreateYourFirst"]
                         </a>
                     }
                 </div>

@@ -8,6 +8,8 @@ public class UserBadge : BaseEntity
     public string BadgeId { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
+    public string? NameAr { get; private set; }
+    public string? DescriptionAr { get; private set; }
     public string IconUrl { get; private set; }
     public BadgeCategory Category { get; private set; }
     public BadgeRarity Rarity { get; private set; }
@@ -28,6 +30,13 @@ public class UserBadge : BaseEntity
         Points = points;
         EarnedAt = DateTime.UtcNow;
         IsDisplayed = true;
+    }
+
+    public void UpdateArabicContent(string? nameAr, string? descriptionAr)
+    {
+        NameAr = nameAr;
+        DescriptionAr = descriptionAr;
+        Audit(UpdatedBy);
     }
 
     // EF Core constructor

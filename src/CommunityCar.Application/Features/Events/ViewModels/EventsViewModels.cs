@@ -7,10 +7,13 @@ public class EventVM
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string? TitleAr { get; set; }
+    public string? DescriptionAr { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public string Location { get; set; } = string.Empty;
     public string? LocationDetails { get; set; }
+    public string? LocationDetailsAr { get; set; }
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
     public Guid OrganizerId { get; set; }

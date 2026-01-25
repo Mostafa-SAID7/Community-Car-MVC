@@ -1,6 +1,14 @@
-@model CommunityCar.Application.Features.Events.ViewModels.EventVM
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Model.Title;
+    // Get current culture for localization
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+
+    var displayTitle = isArabic && !string.IsNullOrEmpty(Model.TitleAr) ? Model.TitleAr : Model.Title;
+    var displayDescription = isArabic && !string.IsNullOrEmpty(Model.DescriptionAr) ? Model.DescriptionAr : Model.Description;
+    var displayLocationDetails = isArabic && !string.IsNullOrEmpty(Model.LocationDetailsAr) ? Model.LocationDetailsAr : Model.LocationDetails;
+
+    ViewData["Title"] = displayTitle;
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
@@ -8,7 +16,7 @@
     <div>
         <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
             <i data-lucide="arrow-left" class="w-4 h-4"></i>
-            Back to Events
+            @Localizer["BackToEvents"]
         </a>
     </div>
 
@@ -17,22 +25,22 @@
         <div class="p-6 md:p-8">
             <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
                 <div class="flex-1">
-                    <h1 class="text-3xl font-black text-foreground mb-4">@Model.Title</h1>
-                    <p class="text-muted-foreground mb-4">@Model.Description</p>
+                    <h1 class="text-3xl font-black text-foreground mb-4">@displayTitle</h1>
+                    <p class="text-muted-foreground mb-4">@displayDescription</p>
                     
                     <!-- Event Status -->
                     <div class="flex items-center gap-2 mb-4">
                         @if (Model.IsUpcoming)
                         {
-                            <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium">Upcoming</span>
+                            <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium">@Localizer["Upcoming"]</span>
                         }
                         else if (Model.IsActive)
                         {
-                            <span class="bg-orange-500/10 text-orange-600 dark:text-orange-400 px-3 py-1 rounded-full text-sm font-medium">Active Now</span>
+                            <span class="bg-orange-500/10 text-orange-600 dark:text-orange-400 px-3 py-1 rounded-full text-sm font-medium">@Localizer["ActiveNow"]</span>
                         }
                         else
                         {
-                            <span class="bg-gray-500/10 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full text-sm font-medium">Past Event</span>
+                            <span class="bg-gray-500/10 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full text-sm font-medium">@Localizer["PastEvent"]</span>
                         }
                         
                         @if (Model.IsFree)
@@ -52,11 +60,11 @@
                     {
                         <button onclick="joinEvent('@Model.Id')" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95" id="joinBtn">
                             <i data-lucide="user-plus" class="w-4 h-4"></i>
-                            Join Event
+                            @Localizer["JoinEvent"]
                         </button>
                         <button onclick="leaveEvent('@Model.Id')" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 hidden" id="leaveBtn">
                             <i data-lucide="user-minus" class="w-4 h-4"></i>
-                            Leave Event
+                            @Localizer["LeaveEvent"]
                         </button>
                     }
                     
@@ -67,7 +75,7 @@
                         {
                             <a href="/events/@Model.Id/edit" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
-                                Edit Event
+                                @Localizer["EditEvent"]
                             </a>
                         }
                     }
@@ -83,7 +91,7 @@
             <!-- Event Information -->
             <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-6">
-                    <h3 class="text-xl font-bold text-foreground mb-4">Event Details</h3>
+                    <h3 class="text-xl font-bold text-foreground mb-4">@Localizer["EventDetails"]</h3>
                     
                     <div class="space-y-4">
                         <div class="flex items-start gap-3">
@@ -91,7 +99,7 @@
                                 <i data-lucide="calendar" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <div class="font-medium text-foreground">Date & Time</div>
+                                <div class="font-medium text-foreground">@Localizer["DateTime"]</div>
                                 <div class="text-sm text-muted-foreground">
                                     <div>Starts: @Model.StartTime.ToString("dddd, MMMM dd, yyyy 'at' h:mm tt")</div>
                                     <div>Ends: @Model.EndTime.ToString("dddd, MMMM dd, yyyy 'at' h:mm tt")</div>
@@ -104,12 +112,12 @@
                                 <i data-lucide="map-pin" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <div class="font-medium text-foreground">Location</div>
+                                <div class="font-medium text-foreground">@Localizer["Location"]</div>
                                 <div class="text-sm text-muted-foreground">
                                     <div>@Model.Location</div>
-                                    @if (!string.IsNullOrEmpty(Model.LocationDetails))
+                                    @if (!string.IsNullOrEmpty(displayLocationDetails))
                                     {
-                                        <div class="mt-1">@Model.LocationDetails</div>
+                                        <div class="mt-1">@displayLocationDetails</div>
                                     }
                                 </div>
                             </div>
@@ -120,12 +128,12 @@
                                 <i data-lucide="users" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <div class="font-medium text-foreground">Attendance</div>
+                                <div class="font-medium text-foreground">@Localizer["Attendance"]</div>
                                 <div class="text-sm text-muted-foreground">
-                                    @Model.AttendeeCount attendees
+                                    @Model.AttendeeCount @Localizer["Attendees"]
                                     @if (Model.MaxAttendees.HasValue)
                                     {
-                                        <span>/ @Model.MaxAttendees.Value max</span>
+                                        <span>/ @Model.MaxAttendees.Value @Localizer["Max"]</span>
                                         @if (!Model.HasAvailableSpots)
                                         {
                                             <span class="text-red-500 font-medium">(Full)</span>
@@ -142,7 +150,7 @@
                                     <i data-lucide="credit-card" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <div class="font-medium text-foreground">Pricing</div>
+                                    <div class="font-medium text-foreground">@Localizer["Pricing"]</div>
                                     <div class="text-sm text-muted-foreground">
                                         @if (Model.TicketPrice.HasValue)
                                         {
@@ -198,7 +206,7 @@
             <!-- Organizer Info -->
             <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-6">
-                    <h3 class="text-lg font-bold text-foreground mb-4">Organizer</h3>
+                    <h3 class="text-lg font-bold text-foreground mb-4">@Localizer["Organizer"]</h3>
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
                             <i data-lucide="user" class="w-5 h-5 text-primary"></i>
@@ -222,7 +230,7 @@
                             {
                                 <a href="@Model.ExternalUrl" target="_blank" class="flex items-center gap-2 text-primary hover:text-primary/80 text-sm">
                                     <i data-lucide="external-link" class="w-4 h-4"></i>
-                                    External Link
+                                    @Localizer["ExternalLink"]
                                 </a>
                             }
                             @if (!string.IsNullOrEmpty(Model.ContactInfo))
@@ -239,15 +247,15 @@
             <!-- Quick Actions -->
             <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
                 <div class="p-6">
-                    <h3 class="text-lg font-bold text-foreground mb-4">Quick Actions</h3>
+                    <h3 class="text-lg font-bold text-foreground mb-4">@Localizer["QuickActions"]</h3>
                     <div class="space-y-2">
                         <button onclick="shareEvent()" class="w-full inline-flex items-center justify-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
                             <i data-lucide="share-2" class="w-4 h-4"></i>
-                            Share Event
+                            @Localizer["ShareEvent"]
                         </button>
                         <button onclick="addToCalendar()" class="w-full inline-flex items-center justify-center gap-2.5 px-4 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
                             <i data-lucide="calendar-plus" class="w-4 h-4"></i>
-                            Add to Calendar
+                            @Localizer["AddToCalendar"]
                         </button>
                     </div>
                 </div>

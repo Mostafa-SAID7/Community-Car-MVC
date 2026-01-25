@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="QARegistry" xml:space="preserve">
+    <value>Q&amp;A Registry</value>
+  </data>
+  <data name="TransmissionDetail" xml:space="preserve">
+    <value>Transmission Detail</value>
+  </data>
+  <data name="Solved" xml:space="preserve">
+    <value>Solved</value>
+  </data>
+  <data name="Protocol" xml:space="preserve">
+    <value>Protocol</value>
+  </data>
+  <data name="Posted" xml:space="preserve">
+    <value>Posted</value>
+  </data>
+  <data name="ScoreDelta" xml:space="preserve">
+    <value>Score Delta</value>
+  </data>
+  <data name="PulseHits" xml:space="preserve">
+    <value>Pulse Hits</value>
+  </data>
+  <data name="AssetIdentified" xml:space="preserve">
+    <value>Asset identified</value>
+  </data>
+  <data name="ReportProtocol" xml:space="preserve">
+    <value>Report Protocol</value>
+  </data>
+  <data name="SystemIntegrity" xml:space="preserve">
+    <value>System Integrity</value>
+  </data>
+  <data name="ResponseFrequency" xml:space="preserve">
+    <value>Response Frequency</value>
+  </data>
+  <data name="SortingPulse" xml:space="preserve">
+    <value>Sorting Pulse</value>
+  </data>
+  <data name="HighConfidence" xml:space="preserve">
+    <value>High Confidence</value>
+  </data>
+  <data name="Chronological" xml:space="preserve">
+    <value>Chronological</value>
+  </data>
+  <data name="VerifiedSolution" xml:space="preserve">
+    <value>Verified Solution</value>
+  </data>
+  <data name="ExpertVerified" xml:space="preserve">
+    <value>Expert Verified</value>
+  </data>
+  <data name="HelpfulProtocol" xml:space="preserve">
+    <value>Helpful Protocol</value>
+  </data>
+  <data name="CommentLayer" xml:space="preserve">
+    <value>Comment Layer</value>
+  </data>
+  <data name="NoFeedbackSignals" xml:space="preserve">
+    <value>No Feedback Signals</value>
+  </data>
+  <data name="InitializeFirstResponse" xml:space="preserve">
+    <value>Initialize the first response to the protocol above</value>
+  </data>
+  <data name="CommitResponse" xml:space="preserve">
+    <value>Commit Response</value>
+  </data>
+  <data name="InitializeDataPayload" xml:space="preserve">
+    <value>Initialize data payload... markdown formatting enabled.</value>
+  </data>
+  <data name="InitializeDataPayloadAr" xml:space="preserve">
+    <value>Initialize Arabic data payload... (Optional)</value>
+  </data>
+  <data name="PostResponse" xml:space="preserve">
+    <value>Post Response</value>
+  </data>
+  <data name="EncryptionLayer" xml:space="preserve">
+    <value>Encryption Layer</value>
+  </data>
+  <data name="ProtocolLocked" xml:space="preserve">
+    <value>Protocol Locked</value>
+  </data>
+  <data name="ArchivedProtocol" xml:space="preserve">
+    <value>This broadcast has been archived and is no longer accepting payloads.</value>
+  </data>
+</root>

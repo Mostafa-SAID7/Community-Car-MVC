@@ -8,6 +8,9 @@ public class UpdateStoryRequest
     [StringLength(500)]
     public string? Caption { get; set; }
 
+    [StringLength(500)]
+    public string? CaptionAr { get; set; }
+
     public string? ThumbnailUrl { get; set; }
 
     public double? Latitude { get; set; }

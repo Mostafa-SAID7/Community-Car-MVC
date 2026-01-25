@@ -13,10 +13,16 @@ public class ReviewEditVM
     [Required]
     [StringLength(200, ErrorMessage = "Title cannot exceed 200 characters")]
     public string Title { get; set; } = string.Empty;
+
+    [StringLength(200, ErrorMessage = "Arabic title cannot exceed 200 characters")]
+    public string? TitleAr { get; set; }
     
     [Required]
     [StringLength(2000, ErrorMessage = "Comment cannot exceed 2000 characters")]
     public string Comment { get; set; } = string.Empty;
+
+    [StringLength(2000, ErrorMessage = "Arabic comment cannot exceed 2000 characters")]
+    public string? CommentAr { get; set; }
     
     // Enhanced properties
     public bool IsRecommended { get; set; }

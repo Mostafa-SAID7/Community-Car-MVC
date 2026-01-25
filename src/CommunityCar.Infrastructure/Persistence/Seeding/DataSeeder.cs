@@ -179,7 +179,7 @@ public class DataSeeder
             var lastName = nameParts.Length > 1 ? nameParts[1] : "";
 
             var profile = new UserProfile(user.Id, firstName, lastName);
-            profile.UpdateInfo(user.Bio ?? "", user.City ?? "", user.Country ?? "");
+            profile.UpdateBasicInfo(user.Bio ?? "", user.City ?? "", user.Country ?? "");
             profiles.Add(profile);
         }
 
@@ -1974,10 +1974,10 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
             new {
                 Name = "Classic Mustang Enthusiasts",
                 Description = "Dedicated to Ford Mustang lovers from 1964-1973. Share your restoration projects, ask questions, and connect with fellow enthusiasts.",
-                Category = "Ford",
+                Category = (string?)"Ford",
                 Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
-                Location = "Detroit, MI",
-                Rules = "Be respectful. Share knowledge. No spam or commercial posts without permission.",
+                Location = (string?)"Detroit, MI",
+                Rules = (string?)"Be respectful. Share knowledge. No spam or commercial posts without permission.",
                 RequiresApproval = false,
                 IsOfficial = true,
                 Tags = new[] { "mustang", "ford", "muscle-car", "classic", "restoration" }
@@ -1985,10 +1985,10 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
             new {
                 Name = "Vintage Car Restoration",
                 Description = "Share tips, progress, and ask questions about restoring classic cars from all eras. From barn finds to concours restorations.",
-                Category = "General",
+                Category = (string?)"General",
                 Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
                 Location = (string?)null,
-                Rules = "Be respectful. Share knowledge. No spam. Post progress photos when possible.",
+                Rules = (string?)"Be respectful. Share knowledge. No spam. Post progress photos when possible.",
                 RequiresApproval = false,
                 IsOfficial = false,
                 Tags = new[] { "restoration", "diy", "classic-cars", "vintage", "bodywork" }
@@ -1996,10 +1996,10 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
             new {
                 Name = "Electric Vehicle Conversion",
                 Description = "Converting classic cars to electric power. Share your EV conversion projects, technical discussions, and troubleshooting.",
-                Category = "Modification",
+                Category = (string?)"Modification",
                 Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Private,
                 Location = (string?)null,
-                Rules = "Technical discussions only. Safety first. Share schematics and progress photos.",
+                Rules = (string?)"Technical discussions only. Safety first. Share schematics and progress photos.",
                 RequiresApproval = true,
                 IsOfficial = false,
                 Tags = new[] { "ev", "electric", "modification", "conversion", "battery" }
@@ -2139,12 +2139,18 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
         };
 
         // Create groups from sample data
-        foreach (var data in groupData)
+        foreach (dynamic data in groupData)
         {
             var randomOwner = users[random.Next(users.Count)];
             var group = new CommunityCar.Domain.Entities.Community.Groups.Group(
-                data.Name, data.Description, data.Privacy, randomOwner.Id, 
-                data.Category, data.Rules, data.RequiresApproval, data.Location);
+                name: data.Name, 
+                description: data.Description, 
+                privacy: data.Privacy, 
+                ownerId: randomOwner.Id, 
+                category: data.Category, 
+                rules: data.Rules, 
+                requiresApproval: data.RequiresApproval, 
+                location: data.Location);
 
             // Add tags
             foreach (var tag in data.Tags)

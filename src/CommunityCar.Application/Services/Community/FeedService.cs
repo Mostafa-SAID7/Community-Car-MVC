@@ -157,6 +157,7 @@ public class FeedService : IFeedService
                 ThumbnailUrl = story.ThumbnailUrl,
                 Type = story.Type,
                 Caption = story.Caption,
+                CaptionAr = story.CaptionAr,
                 AuthorId = story.AuthorId,
                 AuthorName = "User", // TODO: Get from user service
                 CreatedAt = story.CreatedAt,
@@ -423,8 +424,11 @@ public class FeedService : IFeedService
                 Id = item.Id,
                 ContentType = "News",
                 Title = item.Headline,
+                TitleAr = item.HeadlineAr,
                 Content = item.Body,
+                ContentAr = item.BodyAr,
                 Summary = item.Summary,
+                SummaryAr = item.SummaryAr,
                 ImageUrl = item.ImageUrl,
                 AuthorId = item.AuthorId,
                 AuthorName = "News Author", // TODO: Get from user service
@@ -465,7 +469,9 @@ public class FeedService : IFeedService
                 Id = item.Id,
                 ContentType = "Review",
                 Title = item.Title,
+                TitleAr = item.TitleAr,
                 Content = item.Comment,
+                ContentAr = item.CommentAr,
                 AuthorId = item.ReviewerId,
                 AuthorName = "Reviewer", // TODO: Get from user service
                 ViewCount = item.ViewCount,
@@ -502,7 +508,9 @@ public class FeedService : IFeedService
                 Id = item.Id,
                 ContentType = "QA",
                 Title = item.Title,
+                TitleAr = item.TitleAr,
                 Content = item.Body,
+                ContentAr = item.BodyAr,
                 AuthorId = item.AuthorId,
                 AuthorName = "Question Author", // TODO: Get from user service
                 ViewCount = item.ViewCount,
@@ -540,7 +548,9 @@ public class FeedService : IFeedService
                 Id = item.Id,
                 ContentType = "Story",
                 Title = item.Caption ?? "Story",
+                TitleAr = item.CaptionAr,
                 Content = item.Caption ?? "",
+                ContentAr = item.CaptionAr,
                 ImageUrl = item.MediaUrl,
                 AuthorId = item.AuthorId,
                 AuthorName = "Story Author", // TODO: Get from user service

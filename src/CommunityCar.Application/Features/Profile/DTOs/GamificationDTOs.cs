@@ -8,6 +8,8 @@ public class UserBadgeDTO
     public string BadgeId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string? NameAr { get; set; }
+    public string? DescriptionAr { get; set; }
     public string IconUrl { get; set; } = string.Empty;
     public BadgeCategory Category { get; set; }
     public BadgeRarity Rarity { get; set; }
@@ -24,6 +26,8 @@ public class UserAchievementDTO
     public string AchievementId { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string? TitleAr { get; set; }
+    public string? DescriptionAr { get; set; }
     public int CurrentProgress { get; set; }
     public int RequiredProgress { get; set; }
     public bool IsCompleted { get; set; }

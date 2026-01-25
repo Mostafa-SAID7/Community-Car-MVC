@@ -190,7 +190,10 @@ public class GuidesService : IGuidesService
                 dto.Summary,
                 dto.Category,
                 dto.Difficulty,
-                dto.EstimatedMinutes);
+                dto.EstimatedMinutes,
+                dto.TitleAr,
+                dto.ContentAr,
+                dto.SummaryAr);
 
             if (!string.IsNullOrWhiteSpace(dto.ThumbnailUrl))
                 guide.UpdateThumbnail(dto.ThumbnailUrl);
@@ -256,6 +259,7 @@ public class GuidesService : IGuidesService
             }
 
             guide.UpdateBasicInfo(dto.Title, dto.Content, dto.Summary);
+            guide.UpdateArabicContent(dto.TitleAr, dto.ContentAr, dto.SummaryAr);
             guide.UpdateCategory(dto.Category);
             guide.UpdateDifficulty(dto.Difficulty);
             guide.UpdateEstimatedTime(dto.EstimatedMinutes);
@@ -658,6 +662,9 @@ public class GuidesService : IGuidesService
             Title = guide.Title,
             Content = guide.Content,
             Summary = guide.Summary,
+            TitleAr = guide.TitleAr,
+            ContentAr = guide.ContentAr,
+            SummaryAr = guide.SummaryAr,
             AuthorId = guide.AuthorId,
             AuthorName = author?.UserName ?? "Unknown",
             AuthorAvatar = author?.ProfilePictureUrl,

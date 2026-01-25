@@ -8,10 +8,16 @@ public class Event : AggregateRoot
 {
     public string Title { get; private set; }
     public string Description { get; private set; }
+    
+    // Arabic Localization
+    public string? TitleAr { get; private set; }
+    public string? DescriptionAr { get; private set; }
+    public string? LocationDetailsAr { get; private set; }
+    
     public DateTime StartTime { get; private set; }
     public DateTime EndTime { get; private set; }
     public string Location { get; private set; }
-    public string? LocationDetails { get; private set; }
+    public  string? LocationDetails { get; private set; }
     public double? Latitude { get; private set; }
     public double? Longitude { get; private set; }
     public Guid OrganizerId { get; private set; }
@@ -71,6 +77,14 @@ public class Event : AggregateRoot
         LocationDetails = locationDetails;
         Latitude = latitude;
         Longitude = longitude;
+        Audit(UpdatedBy);
+    }
+
+    public void UpdateArabicContent(string? titleAr, string? descriptionAr, string? locationDetailsAr)
+    {
+        TitleAr = titleAr;
+        DescriptionAr = descriptionAr;
+        LocationDetailsAr = locationDetailsAr;
         Audit(UpdatedBy);
     }
 

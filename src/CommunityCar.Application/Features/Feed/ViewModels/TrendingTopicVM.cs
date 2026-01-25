@@ -4,6 +4,8 @@ public class TrendingTopicVM
 {
     public string Topic { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
+    public string? TopicAr { get; set; }
+    public string? CategoryAr { get; set; }
     public int PostCount { get; set; }
     public int EngagementCount { get; set; }
     public double TrendingScore { get; set; }

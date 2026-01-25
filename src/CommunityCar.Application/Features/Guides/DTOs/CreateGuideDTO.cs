@@ -7,6 +7,12 @@ public class CreateGuideDTO
     public string Title { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
     public string? Summary { get; set; }
+    
+    // Arabic Localization
+    public string? TitleAr { get; set; }
+    public string? ContentAr { get; set; }
+    public string? SummaryAr { get; set; }
+    
     public string? Category { get; set; }
     public GuideDifficulty Difficulty { get; set; } = GuideDifficulty.Beginner;
     public int EstimatedMinutes { get; set; } = 30;

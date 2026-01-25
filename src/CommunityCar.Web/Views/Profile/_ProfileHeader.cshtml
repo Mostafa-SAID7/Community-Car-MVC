@@ -1,3 +1,5 @@
+@using Microsoft.Extensions.Localization
+@inject IViewLocalizer Localizer
 @{
     // Get profile data from ViewBag or Model
     var profileData = ViewBag.ProfileData as CommunityCar.Web.Models.Profile.ProfileIndexVM;
@@ -21,7 +23,7 @@
         <div class="absolute top-6 right-6 flex gap-3">
             <a href="/profile/settings" class="bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-xl active:scale-95 flex items-center gap-2">
                 <i data-lucide="settings" class="w-3.5 h-3.5"></i>
-                Settings
+                @Localizer["Settings"]
             </a>
         </div>
     </div>
@@ -42,7 +44,7 @@
         <div class="flex-1 pb-4">
             <div class="flex items-center gap-3">
                 <h2 class="text-4xl font-black text-foreground tracking-tighter">@fullName</h2>
-                <span class="inline-flex px-3 py-1 rounded-2xl bg-primary/10 text-primary border border-primary/20 text-[10px] font-black uppercase tracking-widest">Enthusiast</span>
+                <span class="inline-flex px-3 py-1 rounded-2xl bg-primary/10 text-primary border border-primary/20 text-[10px] font-black uppercase tracking-widest">@Localizer["Enthusiast"]</span>
             </div>
             <div class="flex flex-wrap items-center gap-6 mt-3 text-muted-foreground font-bold text-sm">
                 <div class="flex items-center gap-2 transition-colors hover:text-primary cursor-default">
@@ -51,7 +53,7 @@
                 </div>
                 <div class="flex items-center gap-2 opacity-60">
                     <i data-lucide="calendar" class="w-4 h-4 opacity-50"></i>
-                    Joined @createdAt.ToString("MMM yyyy")
+                    @Localizer["Joined"] @createdAt.ToString("MMM yyyy")
                 </div>
             </div>
         </div>
@@ -60,17 +62,17 @@
         <div class="hidden lg:flex items-center gap-8 bg-card/60 backdrop-blur-2xl border border-white/5 p-6 px-10 rounded-3xl shadow-2xl mb-4">
             <div class="text-center group/stat cursor-pointer">
                 <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">@postsCount</div>
-                <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">Posts</div>
+                <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">@Localizer["Posts"]</div>
             </div>
             <div class="w-px h-8 bg-border/20"></div>
             <div class="text-center group/stat cursor-pointer">
                 <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">@commentsCount</div>
-                <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">Comments</div>
+                <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">@Localizer["Comments"]</div>
             </div>
             <div class="w-px h-8 bg-border/20"></div>
             <div class="text-center group/stat cursor-pointer">
                 <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">@likesReceived</div>
-                <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">Likes</div>
+                <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">@Localizer["Likes"]</div>
             </div>
         </div>
     </div>

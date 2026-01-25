@@ -18,6 +18,9 @@ public class CreateStoryRequest
     
     [StringLength(500)]
     public string? Caption { get; set; }
+
+    [StringLength(500)]
+    public string? CaptionAr { get; set; }
     
     public string? Title { get; set; }
     

@@ -4,7 +4,11 @@
 @inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = Model.Title;
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+    var displayTitle = isArabic && !string.IsNullOrEmpty(Model.TitleAr) ? Model.TitleAr : Model.Title;
+    var displayComment = isArabic && !string.IsNullOrEmpty(Model.CommentAr) ? Model.CommentAr : Model.Comment;
+    ViewData["Title"] = displayTitle;
 }
 
 <div class="container mx-auto px-4 py-8 max-w-4xl">
@@ -14,7 +18,7 @@
             <!-- Header -->
             <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
                 <div class="flex-1">
-                    <h1 class="text-3xl font-black text-foreground mb-4">@Model.Title</h1>
+                    <h1 class="text-3xl font-black text-foreground mb-4">@displayTitle</h1>
                     
                     @if (!string.IsNullOrEmpty(Model.CarDisplayName))
                     {
@@ -109,7 +113,7 @@
 
             <!-- Review Content -->
             <div class="prose prose-lg max-w-none mb-8">
-                <p class="text-foreground leading-relaxed">@Model.Comment</p>
+                <p class="text-foreground leading-relaxed">@displayComment</p>
             </div>
 
             <!-- Pros and Cons -->

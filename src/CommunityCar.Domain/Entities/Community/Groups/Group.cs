@@ -10,8 +10,12 @@ public class Group : AggregateRoot
     // Basic Information
     public string Name { get; private set; }
     public string Description { get; private set; }
+    public string? NameAr { get; private set; }
+    public string? DescriptionAr { get; private set; }
     public string? Category { get; private set; }
+    public string? CategoryAr { get; private set; }
     public string? Rules { get; private set; }
+    public string? RulesAr { get; private set; }
     
     // Privacy and Access
     public GroupPrivacy Privacy { get; private set; }
@@ -33,6 +37,7 @@ public class Group : AggregateRoot
     
     // Location (optional for local groups)
     public string? Location { get; private set; }
+    public string? LocationAr { get; private set; }
     
     // Tags for discoverability
     private readonly List<string> _tags = new();
@@ -71,6 +76,16 @@ public class Group : AggregateRoot
         Name = name;
         Description = description;
         Category = category;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void UpdateArabicContent(string? nameAr, string? descriptionAr, string? categoryAr = null, string? rulesAr = null, string? locationAr = null)
+    {
+        NameAr = nameAr;
+        DescriptionAr = descriptionAr;
+        CategoryAr = categoryAr;
+        RulesAr = rulesAr;
+        LocationAr = locationAr;
         Audit(UpdatedBy ?? "System");
     }
 

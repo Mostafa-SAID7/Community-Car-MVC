@@ -12,6 +12,9 @@ public class ProfileIndexVM
     public string? Bio { get; set; }
     public string? City { get; set; }
     public string? Country { get; set; }
+    public string? BioAr { get; set; }
+    public string? CityAr { get; set; }
+    public string? CountryAr { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? LastLoginAt { get; set; }
@@ -56,9 +59,20 @@ public class ProfileSettingsVM
     [Display(Name = "City")]
     public string? City { get; set; }
 
-    [StringLength(100)]
     [Display(Name = "Country")]
     public string? Country { get; set; }
+
+    [StringLength(500)]
+    [Display(Name = "Bio (Arabic)")]
+    public string? BioAr { get; set; }
+
+    [StringLength(100)]
+    [Display(Name = "City (Arabic)")]
+    public string? CityAr { get; set; }
+
+    [StringLength(100)]
+    [Display(Name = "Country (Arabic)")]
+    public string? CountryAr { get; set; }
 
     [Display(Name = "Profile Picture")]
     public IFormFile? ProfilePicture { get; set; }
@@ -105,9 +119,20 @@ public class UpdateProfileVM
     [Display(Name = "City")]
     public string? City { get; set; }
 
-    [StringLength(100)]
     [Display(Name = "Country")]
     public string? Country { get; set; }
+
+    [StringLength(500)]
+    [Display(Name = "Bio (Arabic)")]
+    public string? BioAr { get; set; }
+
+    [StringLength(100)]
+    [Display(Name = "City (Arabic)")]
+    public string? CityAr { get; set; }
+
+    [StringLength(100)]
+    [Display(Name = "Country (Arabic)")]
+    public string? CountryAr { get; set; }
 
     [Phone]
     [Display(Name = "Phone Number")]

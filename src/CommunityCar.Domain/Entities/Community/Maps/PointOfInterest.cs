@@ -9,6 +9,8 @@ public class PointOfInterest : BaseEntity
 {
     public string Name { get; private set; }
     public string Description { get; private set; }
+    public string? NameAr { get; private set; }
+    public string? DescriptionAr { get; private set; }
     public double Latitude { get; private set; }
     public double Longitude { get; private set; }
     public POIType Type { get; private set; }
@@ -17,6 +19,7 @@ public class PointOfInterest : BaseEntity
     
     // Contact and business information
     public string? Address { get; private set; }
+    public string? AddressAr { get; private set; }
     public string? PhoneNumber { get; private set; }
     public string? Website { get; private set; }
     public string? Email { get; private set; }
@@ -41,6 +44,7 @@ public class PointOfInterest : BaseEntity
     // Pricing information
     public decimal? PriceRange { get; private set; }
     public string? PricingInfo { get; private set; }
+    public string? PricingInfoAr { get; private set; }
     
     // Verification and quality
     public bool IsVerified { get; private set; }
@@ -95,6 +99,15 @@ public class PointOfInterest : BaseEntity
         Description = description;
         Type = type;
         Category = category;
+        Audit(UpdatedBy);
+    }
+
+    public void UpdateArabicContent(string? nameAr, string? descriptionAr, string? addressAr = null, string? pricingInfoAr = null)
+    {
+        NameAr = nameAr;
+        DescriptionAr = descriptionAr;
+        AddressAr = addressAr;
+        PricingInfoAr = pricingInfoAr;
         Audit(UpdatedBy);
     }
 

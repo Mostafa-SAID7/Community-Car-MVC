@@ -14,6 +14,9 @@ public class UserProfile : AggregateRoot
     // Address Value Object defined inline or separate
     public string? City { get; private set; }
     public string? Country { get; private set; }
+    public string? BioAr { get; private set; }
+    public string? CityAr { get; private set; }
+    public string? CountryAr { get; private set; }
 
     public UserProfile(Guid userId, string firstName, string lastName)
     {
@@ -25,11 +28,19 @@ public class UserProfile : AggregateRoot
     // EF Core constructor
     private UserProfile() { }
 
-    public void UpdateInfo(string bio, string city, string country)
+    public void UpdateBasicInfo(string? bio, string? city, string? country)
     {
         Bio = bio;
         City = city;
         Country = country;
-        Audit(UpdatedBy);
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void UpdateArabicContent(string? bioAr, string? cityAr, string? countryAr)
+    {
+        BioAr = bioAr;
+        CityAr = cityAr;
+        CountryAr = countryAr;
+        Audit(UpdatedBy ?? "System");
     }
 }

@@ -340,6 +340,10 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
+                    b.Property<string>("DescriptionAr")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -377,6 +381,10 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<string>("LocationDetailsAr")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
                     b.Property<decimal?>("Longitude")
                         .HasColumnType("decimal(11,8)");
 
@@ -408,6 +416,10 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("TitleAr")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -487,6 +499,9 @@ namespace CommunityCar.Infrastructure.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CategoryAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CoverImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -506,6 +521,9 @@ namespace CommunityCar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DescriptionAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -521,11 +539,17 @@ namespace CommunityCar.Infrastructure.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("LocationAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("MemberCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("OwnerId")
@@ -541,6 +565,9 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Rules")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RulesAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tags")
@@ -579,6 +606,9 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContentAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CoverImageUrl")
@@ -633,6 +663,10 @@ namespace CommunityCar.Infrastructure.Migrations
                     b.Property<string>("Summary")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SummaryAr")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
                     b.Property<string>("Tags")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -644,6 +678,10 @@ namespace CommunityCar.Infrastructure.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleAr")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -727,6 +765,9 @@ namespace CommunityCar.Infrastructure.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AddressAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("AllowCheckIns")
                         .HasColumnType("bit");
 
@@ -763,6 +804,9 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -810,6 +854,9 @@ namespace CommunityCar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NameAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OpeningHours")
                         .HasColumnType("nvarchar(max)");
 
@@ -825,6 +872,9 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PricingInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PricingInfoAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ReportCount")
@@ -879,6 +929,9 @@ namespace CommunityCar.Infrastructure.Migrations
                     b.Property<string>("BestTimeToVisit")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BestTimeToVisitAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -886,6 +939,9 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CurrentConditions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentConditionsAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -896,6 +952,9 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Difficulty")
@@ -931,13 +990,22 @@ namespace CommunityCar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NameAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ReviewCount")
                         .HasColumnType("int");
 
                     b.Property<string>("SafetyNotes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SafetyNotesAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SurfaceType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SurfaceTypeAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tags")
@@ -979,6 +1047,9 @@ namespace CommunityCar.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BodyAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CarMake")
                         .HasColumnType("nvarchar(max)");
 
@@ -1008,6 +1079,9 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Headline")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HeadlineAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
@@ -1058,6 +1132,9 @@ namespace CommunityCar.Infrastructure.Migrations
                     b.Property<string>("Summary")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SummaryAr")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Tags")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -1091,6 +1168,10 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasMaxLength(10000)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ContentAr")
+                        .HasMaxLength(10000)
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -1108,6 +1189,10 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("TitleAr")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -1146,6 +1231,9 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Body")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BodyAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -1224,6 +1312,11 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Body")
                         .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BodyAr")
+                        .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CarEngine")
@@ -1290,7 +1383,12 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("TitleAr")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -1329,7 +1427,12 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("CommentAr")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("Cons")
                         .IsRequired()
@@ -1425,7 +1528,12 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("TitleAr")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -1465,6 +1573,9 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Caption")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CaptionAr")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CarMake")

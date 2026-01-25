@@ -1,7 +1,17 @@
 @using Microsoft.Extensions.Localization
-@model IEnumerable<CommunityCar.Application.Features.News.ViewModels.NewsItemVM>
+@using CommunityCar.Application.Features.News.ViewModels
+@model IEnumerable<NewsItemVM>
 @inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
+@{
+    // Get current culture for localization
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+
+    // Helper functions for localized content selection
+    string GetLocalizedHeadline(NewsItemVM item) => isArabic && !string.IsNullOrEmpty(item.HeadlineAr) ? item.HeadlineAr : item.Headline;
+    string GetLocalizedSummary(NewsItemVM item) => isArabic && !string.IsNullOrEmpty(item.SummaryAr) ? item.SummaryAr : item.Summary;
+}
 
 @if (Model.Any())
 {
@@ -11,7 +21,7 @@
             @if (!string.IsNullOrEmpty(newsItem.ImageUrl))
             {
                 <div class="relative h-48 overflow-hidden">
-                    <img src="@newsItem.ImageUrl" alt="@newsItem.Headline" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                    <img src="@newsItem.ImageUrl" alt="@GetLocalizedHeadline(newsItem)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                     
                     <!-- Category Badge -->
@@ -47,13 +57,13 @@
                 
                 <!-- Title -->
                 <h3 class="text-lg font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                    <a href="/news/@newsItem.Id">@newsItem.Headline</a>
+                    <a href="/news/@newsItem.Id">@GetLocalizedHeadline(newsItem)</a>
                 </h3>
                 
                 <!-- Summary -->
-                @if (!string.IsNullOrEmpty(newsItem.Summary))
+                @if (!string.IsNullOrEmpty(GetLocalizedSummary(newsItem)))
                 {
-                    <p class="text-sm text-muted-foreground mb-3 line-clamp-3">@newsItem.Summary</p>
+                    <p class="text-sm text-muted-foreground mb-3 line-clamp-3">@GetLocalizedSummary(newsItem)</p>
                 }
                 
                 <!-- Car Info -->
@@ -104,7 +114,7 @@
                         <button onclick="quickBookmark('@newsItem.Id', this)" class="p-1 hover:text-yellow-500 transition-colors @(newsItem.IsBookmarkedByCurrentUser ? "text-yellow-500" : "")" title="Bookmark">
                             <i data-lucide="bookmark" class="w-3 h-3 @(newsItem.IsBookmarkedByCurrentUser ? "fill-current" : "")"></i>
                         </button>
-                        <button onclick="quickShare('@newsItem.Id', '@newsItem.Headline')" class="p-1 hover:text-primary transition-colors" title="Share">
+                        <button onclick="quickShare('@newsItem.Id', '@GetLocalizedHeadline(newsItem)')" class="p-1 hover:text-primary transition-colors" title="Share">
                             <i data-lucide="share-2" class="w-3 h-3"></i>
                         </button>
                     </div>

@@ -49,8 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         } else {
+            const isRtl = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl' || msgDiv.closest('[dir="rtl"]') !== null;
+            const marginClass = isRtl ? 'mr-12' : 'ml-12';
             innerHTML = `
-                <div class="flex-1 bg-primary text-primary-foreground rounded-lg p-3 shadow-sm ml-12">
+                <div class="flex-1 bg-primary text-primary-foreground rounded-lg p-3 shadow-sm ${marginClass}">
                      <p class="text-sm">${text}</p>
                 </div>
                 <div class="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground shrink-0 mt-1">
@@ -108,12 +110,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 addChatMessage(data.response, true);
             } else {
-                addChatMessage("Sorry, I encountered an error. Please try again.", true);
+                addChatMessage(window.aiLocalizer?.ServiceError || "Sorry, I encountered an error. Please try again.", true);
             }
         } catch (error) {
             const indicator = document.getElementById('chat-typing');
             if (indicator) indicator.remove();
-            addChatMessage("Connection error. Please check your network.", true);
+            addChatMessage(window.aiLocalizer?.ConnectionError || "Connection error. Please check your network.", true);
         }
     }
 

@@ -10,6 +10,11 @@ public class Post : AggregateRoot
 {
     public string Title { get; private set; }
     public string Content { get; private set; }
+    
+    // Arabic Localization
+    public string? TitleAr { get; private set; }
+    public string? ContentAr { get; private set; }
+    
     public PostType Type { get; private set; }
     public Guid AuthorId { get; private set; }
     
@@ -32,7 +37,14 @@ public class Post : AggregateRoot
     public void UpdateContent(string newContent)
     {
         Content = newContent;
-        Audit(UpdatedBy ?? "System"); // Simplification
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void UpdateArabicContent(string? titleAr, string? contentAr)
+    {
+        TitleAr = titleAr;
+        ContentAr = contentAr;
+        Audit(UpdatedBy ?? "System");
     }
 
     // public void AddComment(Comment comment)

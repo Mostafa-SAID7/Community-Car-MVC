@@ -8,6 +8,12 @@ public class NewsItem : BaseEntity
     public string Headline { get; private set; } = string.Empty;
     public string Body { get; private set; } = string.Empty;
     public string? Summary { get; private set; }
+    
+    // Arabic Localization
+    public string? HeadlineAr { get; private set; }
+    public string? BodyAr { get; private set; }
+    public string? SummaryAr { get; private set; }
+    
     public string? ImageUrl { get; private set; }
     public List<string> ImageUrls { get; private set; } = new();
     public NewsCategory Category { get; private set; }
@@ -63,6 +69,14 @@ public class NewsItem : BaseEntity
         Body = body;
         Summary = summary;
         Slug = GenerateSlug(headline);
+        Audit(AuthorId.ToString());
+    }
+
+    public void UpdateArabicContent(string? headlineAr, string? bodyAr, string? summaryAr)
+    {
+        HeadlineAr = headlineAr;
+        BodyAr = bodyAr;
+        SummaryAr = summaryAr;
         Audit(AuthorId.ToString());
     }
 

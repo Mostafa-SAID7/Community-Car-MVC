@@ -41,6 +41,9 @@ public class ProfileService : IProfileService
             Bio = user.Bio,
             City = user.City,
             Country = user.Country,
+            BioAr = user.BioAr,
+            CityAr = user.CityAr,
+            CountryAr = user.CountryAr,
             ProfilePictureUrl = user.ProfilePictureUrl,
             CreatedAt = user.CreatedAt,
             LastLoginAt = user.LastLoginAt,
@@ -70,6 +73,9 @@ public class ProfileService : IProfileService
             Bio = user.Bio,
             City = user.City,
             Country = user.Country,
+            BioAr = user.BioAr,
+            CityAr = user.CityAr,
+            CountryAr = user.CountryAr,
             ProfilePictureUrl = user.ProfilePictureUrl,
             IsEmailConfirmed = user.EmailConfirmed,
             IsPhoneNumberConfirmed = user.PhoneNumberConfirmed,
@@ -95,6 +101,9 @@ public class ProfileService : IProfileService
         user.Bio = request.Bio;
         user.City = request.City;
         user.Country = request.Country;
+        user.BioAr = request.BioAr;
+        user.CityAr = request.CityAr;
+        user.CountryAr = request.CountryAr;
         user.Audit(_currentUserService.UserId);
 
         var result = await _userManager.UpdateAsync(user);

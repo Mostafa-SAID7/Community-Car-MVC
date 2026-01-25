@@ -58,73 +58,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="RemovedLike" xml:space="preserve">
-    <value>تم إزالة الإعجاب</value>
+  <data name="ReviewBy" xml:space="preserve">
+    <value>مراجعة بواسطة</value>
   </data>
-  <data name="Liked" xml:space="preserve">
-    <value>أُعجب!</value>
+  <data name="VerifiedPurchase" xml:space="preserve">
+    <value>شراء مؤكد</value>
   </data>
-  <data name="FailedToUpdateLike" xml:space="preserve">
-    <value>فشل في تحديث الإعجاب</value>
+  <data name="Recommended" xml:space="preserve">
+    <value>موصى به</value>
   </data>
-  <data name="ErrorUpdatingLike" xml:space="preserve">
-    <value>خطأ في تحديث الإعجاب</value>
+  <data name="Views" xml:space="preserve">
+    <value>مشاهدة</value>
   </data>
-  <data name="FailedToShare" xml:space="preserve">
-    <value>فشل في مشاركة المحتوى</value>
+  <data name="OverallRating" xml:space="preserve">
+    <value>التقييم العام</value>
   </data>
-  <data name="ErrorSharingContent" xml:space="preserve">
-    <value>خطأ في مشاركة المحتوى</value>
+  <data name="DetailedRatings" xml:space="preserve">
+    <value>التقييمات التفصيلية</value>
   </data>
-  <data name="LinkCopiedToClipboard" xml:space="preserve">
-    <value>تم نسخ الرابط إلى الحافظة!</value>
+  <data name="Quality" xml:space="preserve">
+    <value>جودة التصنيع</value>
   </data>
-  <data name="UnableToCopyLink" xml:space="preserve">
-    <value>غير قادر على نسخ الرابط</value>
+  <data name="Value" xml:space="preserve">
+    <value>القيمة مقابل السعر</value>
   </data>
-  <data name="RemovedFromBookmarks" xml:space="preserve">
-    <value>تم إزالة من المفضلة</value>
+  <data name="Reliability" xml:space="preserve">
+    <value>الاعتمادية</value>
   </data>
-  <data name="AddedToBookmarks" xml:space="preserve">
-    <value>تم إضافة إلى المفضلة</value>
+  <data name="Performance" xml:space="preserve">
+    <value>الأداء</value>
   </data>
-  <data name="FailedToBookmark" xml:space="preserve">
-    <value>فشل في إضافة المحتوى للمفضلة</value>
+  <data name="Comfort" xml:space="preserve">
+    <value>الراحة</value>
   </data>
-  <data name="ErrorBookmarkingContent" xml:space="preserve">
-    <value>خطأ في إضافة المحتوى للمفضلة</value>
+  <data name="Pros" xml:space="preserve">
+    <value>المميزات</value>
   </data>
-  <data name="ContentHidden" xml:space="preserve">
-    <value>تم إخفاء المحتوى</value>
+  <data name="Cons" xml:space="preserve">
+    <value>العيوب</value>
   </data>
-  <data name="FailedToHideContent" xml:space="preserve">
-    <value>فشل في إخفاء المحتوى</value>
+  <data name="Photos" xml:space="preserve">
+    <value>الصور</value>
   </data>
-  <data name="ErrorHidingContent" xml:space="preserve">
-    <value>خطأ في إخفاء المحتوى</value>
+  <data name="VehicleDetails" xml:space="preserve">
+    <value>تفاصيل المركبة</value>
   </data>
-  <data name="ReportReason" xml:space="preserve">
-    <value>يرجى تقديم سبب للإبلاغ عن هذا المحتوى:</value>
+  <data name="Mileage" xml:space="preserve">
+    <value>المسافة المقطوعة</value>
   </data>
-  <data name="ContentReported" xml:space="preserve">
-    <value>تم الإبلاغ عن المحتوى. شكراً لمساعدتك في الحفاظ على أمان مجتمعنا.</value>
+  <data name="Miles" xml:space="preserve">
+    <value>ميل</value>
   </data>
-  <data name="FailedToReportContent" xml:space="preserve">
-    <value>فشل في الإبلاغ عن المحتوى</value>
+  <data name="OwnershipDuration" xml:space="preserve">
+    <value>مدة الملكية</value>
   </data>
-  <data name="ErrorReportingContent" xml:space="preserve">
-    <value>خطأ في الإبلاغ عن المحتوى</value>
+  <data name="PurchaseDate" xml:space="preserve">
+    <value>تاريخ الشراء</value>
   </data>
-  <data name="FriendRequestSent" xml:space="preserve">
-    <value>تم إرسال طلب الصداقة!</value>
+  <data name="Helpful" xml:space="preserve">
+    <value>مفيد</value>
   </data>
-  <data name="ErrorSendingFriendRequest" xml:space="preserve">
-    <value>خطأ في إرسال طلب الصداقة</value>
+  <data name="Flag" xml:space="preserve">
+    <value>إبلاغ</value>
   </data>
-  <data name="Loading" xml:space="preserve">
-    <value>جاري التحميل...</value>
+  <data name="Edit" xml:space="preserve">
+    <value>تعديل</value>
   </data>
-  <data name="LoadMorePosts" xml:space="preserve">
-    <value>تحميل المزيد من المنشورات</value>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="ConfirmDeleteReview" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد حذف هذه المراجعة؟</value>
+  </data>
+  <data name="BackToReviews" xml:space="preserve">
+    <value>العودة للمراجعات</value>
   </data>
 </root>

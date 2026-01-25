@@ -1,23 +1,28 @@
+@using Microsoft.Extensions.Localization
 @model IEnumerable<CommunityCar.Application.Features.Groups.DTOs.GroupSummaryVM>
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Community Groups";
+    ViewData["Title"] = Localizer["CommunityGroups"];
     var currentPage = ViewBag.CurrentPage ?? 1;
     var totalPages = ViewBag.TotalPages ?? 1;
     var totalCount = ViewBag.TotalCount ?? 0;
     var search = ViewBag.Search as string ?? "";
     var sortBy = ViewBag.SortBy as string ?? "newest";
     var filterPrivacy = ViewBag.FilterPrivacy as string ?? "all";
+    
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h1 class="text-3xl font-black text-foreground tracking-tight">Community Groups</h1>
-            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Join enthusiasts sharing your automotive interests</p>
+            <h1 class="text-3xl font-black text-foreground tracking-tight">@Localizer["CommunityGroups"]</h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@Localizer["GroupsSubtitle"]</p>
         </div>
         <a href="@Url.Action("Create", "Groups")" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
             <i data-lucide="plus-circle" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
-            Create Hub
+            @Localizer["CreateHub"]
         </a>
     </div>
 
@@ -26,25 +31,25 @@
         <form method="get" action="@Url.Action("Index", "Groups")" id="groupsFilterForm">
             <div class="flex flex-col lg:flex-row gap-4">
                 <div class="relative flex-1 group">
-                    <input type="text" name="search" class="w-full bg-background border border-border pl-12 pr-4 py-3 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="Search by name, tag, or topic..." value="@search">
+                    <input type="text" name="search" class="w-full bg-background border border-border pl-12 pr-4 py-3 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="@Localizer["SearchPlaceholder"]" value="@search">
                     <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors"></i>
                 </div>
                 
                 <div class="flex gap-3">
                     <div class="relative">
                         <select name="sortBy" class="bg-background border border-border px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-primary/10 transition-all appearance-none min-w-[160px]" onchange="this.form.submit()">
-                            <option value="newest" selected="@(sortBy == "newest")">Newest First</option>
-                            <option value="oldest" selected="@(sortBy == "oldest")">Oldest First</option>
-                            <option value="name" selected="@(sortBy == "name")">Alphabetical</option>
+                            <option value="newest" selected="@(sortBy == "newest")">@Localizer["NewestFirst"]</option>
+                            <option value="oldest" selected="@(sortBy == "oldest")">@Localizer["OldestFirst"]</option>
+                            <option value="name" selected="@(sortBy == "name")">@Localizer["Alphabetical"]</option>
                         </select>
                         <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground pointer-events-none"></i>
                     </div>
 
                     <div class="relative">
                         <select name="filterPrivacy" class="bg-background border border-border px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-primary/10 transition-all appearance-none min-w-[160px]" onchange="this.form.submit()">
-                            <option value="all" selected="@(filterPrivacy == "all")">All Access</option>
-                            <option value="public" selected="@(filterPrivacy == "public")">Public Hubs</option>
-                            <option value="private" selected="@(filterPrivacy == "private")">Private Hubs</option>
+                            <option value="all" selected="@(filterPrivacy == "all")">@Localizer["AllAccess"]</option>
+                            <option value="public" selected="@(filterPrivacy == "public")">@Localizer["PublicHubs"]</option>
+                            <option value="private" selected="@(filterPrivacy == "private")">@Localizer["PrivateHubs"]</option>
                         </select>
                         <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground pointer-events-none"></i>
                     </div>
@@ -54,11 +59,11 @@
 
         <div class="flex items-center justify-between pt-4 border-t border-border/40">
             <p class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">
-                Hub Discovery: <span class="text-foreground">@totalCount</span> groups available
+                @Localizer["HubDiscovery"]: <span class="text-foreground">@totalCount</span> @Localizer["GroupsAvailable"]
             </p>
             <div class="flex items-center gap-1.5 p-1 bg-muted rounded-lg border border-border/50">
-                <button class="p-1 px-2 text-[8px] font-black bg-background shadow-sm rounded border border-border">Grid View</button>
-                <button class="p-1 px-2 text-[8px] font-black text-muted-foreground opacity-50">List View</button>
+                <button class="p-1 px-2 text-[8px] font-black bg-background shadow-sm rounded border border-border">@Localizer["GridView"]</button>
+                <button class="p-1 px-2 text-[8px] font-black text-muted-foreground opacity-50">@Localizer["ListView"]</button>
             </div>
         </div>
     </div>
@@ -69,9 +74,9 @@
             <div class="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6 shadow-inner animate-pulse">
                 <i data-lucide="users" class="w-10 h-10 text-muted-foreground opacity-30"></i>
             </div>
-            <h3 class="text-2xl font-black text-foreground mb-3 tracking-tight">No Hubs Found</h3>
-            <p class="text-sm text-muted-foreground max-w-sm mx-auto font-medium opacity-80 mb-8">We couldn't find any groups matching your criteria. Try adjusting your filters or broadening your search.</p>
-            <a href="@Url.Action("Index", "Groups")" class="px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-primary/20 active:scale-95">Clear Filters</a>
+            <h3 class="text-2xl font-black text-foreground mb-3 tracking-tight">@Localizer["NoHubsFound"]</h3>
+            <p class="text-sm text-muted-foreground max-w-sm mx-auto font-medium opacity-80 mb-8">@Localizer["NoHubsMessage"]</p>
+            <a href="@Url.Action("Index", "Groups")" class="px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-primary/20 active:scale-95">@Localizer["ClearFilters"]</a>
         </div>
     }
     else
@@ -83,12 +88,18 @@
                     <div class="p-6 flex-1 flex flex-col">
                         <!-- Group Header -->
                         <div class="flex items-start gap-4 mb-6">
+                            @{
+                                var displayName = isArabic && !string.IsNullOrEmpty(group.NameAr) ? group.NameAr : group.Name;
+                                var displayDescription = isArabic && !string.IsNullOrEmpty(group.DescriptionAr) ? group.DescriptionAr : group.Description;
+                                var displayCategory = isArabic && !string.IsNullOrEmpty(group.CategoryAr) ? group.CategoryAr : group.Category;
+                                var displayLocation = isArabic && !string.IsNullOrEmpty(group.LocationAr) ? group.LocationAr : group.Location;
+                            }
                             <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center font-black text-xl text-primary-foreground shrink-0 shadow-lg shadow-primary/20 group-hover/card:scale-110 group-hover/card:rotate-6 transition-all duration-300">
-                                @group.Name.Substring(0, 1).ToUpper()
+                                @displayName.Substring(0, 1).ToUpper()
                             </div>
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center gap-2 mb-1.5">
-                                    <h3 class="text-base font-black text-foreground truncate group-hover/card:text-primary transition-colors">@group.Name</h3>
+                                    <h3 class="text-base font-black text-foreground truncate group-hover/card:text-primary transition-colors">@displayName</h3>
                                     @if (group.IsOfficial)
                                     {
                                         <i data-lucide="badge-check" class="w-4 h-4 text-red-500 fill-red-500/10" title="Official Hub"></i>
@@ -101,20 +112,20 @@
                                 <div class="flex items-center flex-wrap gap-2">
                                     <span class="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-tighter text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-md border border-border/30">
                                         <i data-lucide="tag" class="w-2.5 h-2.5"></i>
-                                        @group.Category
+                                        @displayCategory
                                     </span>
-                                    @if (!string.IsNullOrEmpty(group.Location))
+                                    @if (!string.IsNullOrEmpty(displayLocation))
                                     {
                                         <span class="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-tighter text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-md border border-border/30">
                                             <i data-lucide="map-pin" class="w-3 h-3 text-red-500/60"></i>
-                                            @group.Location
+                                            @displayLocation
                                         </span>
                                     }
                                 </div>
                             </div>
                         </div>
 
-                        <p class="text-[13px] text-muted-foreground leading-relaxed font-medium mb-6 line-clamp-2 opacity-80 group-hover/card:opacity-100 transition-opacity">@group.Description</p>
+                        <p class="text-[13px] text-muted-foreground leading-relaxed font-medium mb-6 line-clamp-2 opacity-80 group-hover/card:opacity-100 transition-opacity">@displayDescription</p>
                         
                         @if (group.Tags.Any())
                         {

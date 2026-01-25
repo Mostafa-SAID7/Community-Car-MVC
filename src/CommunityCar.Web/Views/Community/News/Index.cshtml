@@ -35,7 +35,7 @@
                 <i data-lucide="newspaper" class="w-5 h-5"></i>
             </div>
             <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.TotalCount</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Total Articles</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalArticles"]</div>
         </div>
         
         <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-green-500/10">
@@ -43,7 +43,7 @@
                 <i data-lucide="star" class="w-5 h-5"></i>
             </div>
             <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Items.Count(x => x.IsFeatured)</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Featured</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Featured"]</div>
         </div>
         
         <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-amber-500/10">
@@ -51,7 +51,7 @@
                 <i data-lucide="eye" class="w-5 h-5"></i>
             </div>
             <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Items.Sum(x => x.ViewCount)</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Total Views</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalViews"]</div>
         </div>
         
         <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-blue-500/10">
@@ -59,7 +59,7 @@
                 <i data-lucide="heart" class="w-5 h-5"></i>
             </div>
             <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Items.Sum(x => x.LikeCount)</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Total Likes</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalLikes"]</div>
         </div>
     </div>
 
@@ -173,6 +173,6 @@
 </div>
 
 @section Scripts {
-    @await Html.PartialAsync("~/Views/Community/News/_LocalizationScript.cshtml")
+
     <script src="~/js/news.js" asp-append-version="true"></script>
 }

@@ -28,8 +28,17 @@ public class CreatePointOfInterestRequest
     [Required]
     public POICategory Category { get; set; }
     
+    [StringLength(200)]
+    public string? NameAr { get; set; }
+    
+    [StringLength(1000)]
+    public string? DescriptionAr { get; set; }
+    
     [StringLength(500)]
     public string? Address { get; set; }
+    
+    [StringLength(500)]
+    public string? AddressAr { get; set; }
     
     [Phone]
     public string? PhoneNumber { get; set; }
@@ -48,6 +57,7 @@ public class CreatePointOfInterestRequest
     public List<string>? Amenities { get; set; }
     public decimal? PriceRange { get; set; }
     public string? PricingInfo { get; set; }
+    public string? PricingInfoAr { get; set; }
     public List<string>? ImageUrls { get; set; }
     
     // Event-specific
@@ -72,8 +82,17 @@ public class UpdatePointOfInterestRequest
     [Required]
     public POICategory Category { get; set; }
     
+    [StringLength(200)]
+    public string? NameAr { get; set; }
+    
+    [StringLength(1000)]
+    public string? DescriptionAr { get; set; }
+    
     [StringLength(500)]
     public string? Address { get; set; }
+    
+    [StringLength(500)]
+    public string? AddressAr { get; set; }
     
     [Phone]
     public string? PhoneNumber { get; set; }
@@ -93,6 +112,7 @@ public class UpdatePointOfInterestRequest
     public List<string>? Amenities { get; set; }
     public decimal? PriceRange { get; set; }
     public string? PricingInfo { get; set; }
+    public string? PricingInfoAr { get; set; }
     public List<string>? ImageUrls { get; set; }
     
     // Event-specific
@@ -127,6 +147,12 @@ public class CreateRouteRequest
     [Required]
     [StringLength(1000)]
     public string Description { get; set; } = string.Empty;
+
+    [StringLength(200)]
+    public string? NameAr { get; set; }
+    
+    [StringLength(1000)]
+    public string? DescriptionAr { get; set; }
     
     [Required]
     public RouteType Type { get; set; }
@@ -143,8 +169,11 @@ public class CreateRouteRequest
     public bool HasTolls { get; set; }
     public bool IsOffRoad { get; set; }
     public string? SurfaceType { get; set; }
+    public string? SurfaceTypeAr { get; set; }
     public string? BestTimeToVisit { get; set; }
+    public string? BestTimeToVisitAr { get; set; }
     public string? SafetyNotes { get; set; }
+    public string? SafetyNotesAr { get; set; }
     public List<string>? Tags { get; set; }
     public List<string>? ImageUrls { get; set; }
     public List<CreateRouteWaypointRequest>? Waypoints { get; set; }
@@ -159,6 +188,12 @@ public class UpdateRouteRequest
     [Required]
     [StringLength(1000)]
     public string Description { get; set; } = string.Empty;
+
+    [StringLength(200)]
+    public string? NameAr { get; set; }
+    
+    [StringLength(1000)]
+    public string? DescriptionAr { get; set; }
     
     [Required]
     public RouteType Type { get; set; }
@@ -175,9 +210,13 @@ public class UpdateRouteRequest
     public bool HasTolls { get; set; }
     public bool IsOffRoad { get; set; }
     public string? SurfaceType { get; set; }
+    public string? SurfaceTypeAr { get; set; }
     public string? BestTimeToVisit { get; set; }
+    public string? BestTimeToVisitAr { get; set; }
     public string? SafetyNotes { get; set; }
+    public string? SafetyNotesAr { get; set; }
     public string? CurrentConditions { get; set; }
+    public string? CurrentConditionsAr { get; set; }
     public List<string>? Tags { get; set; }
     public List<string>? ImageUrls { get; set; }
     public List<CreateRouteWaypointRequest>? Waypoints { get; set; }
@@ -198,6 +237,12 @@ public class CreateRouteWaypointRequest
     
     [StringLength(500)]
     public string? Description { get; set; }
+    
+    [StringLength(200)]
+    public string? NameAr { get; set; }
+    
+    [StringLength(500)]
+    public string? DescriptionAr { get; set; }
     
     public int Order { get; set; }
 }

@@ -9,6 +9,9 @@ public class ProfileVM
     public string? Bio { get; set; }
     public string? City { get; set; }
     public string? Country { get; set; }
+    public string? BioAr { get; set; }
+    public string? CityAr { get; set; }
+    public string? CountryAr { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? LastLoginAt { get; set; }
@@ -36,6 +39,9 @@ public class ProfileSettingsVM
     public string? Bio { get; set; }
     public string? City { get; set; }
     public string? Country { get; set; }
+    public string? BioAr { get; set; }
+    public string? CityAr { get; set; }
+    public string? CountryAr { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public bool IsEmailConfirmed { get; set; }
     public bool IsPhoneNumberConfirmed { get; set; }

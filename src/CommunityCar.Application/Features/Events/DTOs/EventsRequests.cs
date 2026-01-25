@@ -12,6 +12,12 @@ public class CreateEventRequest
     [StringLength(2000)]
     public string Description { get; set; } = string.Empty;
     
+    [StringLength(200)]
+    public string? TitleAr { get; set; }
+
+    [StringLength(2000)]
+    public string? DescriptionAr { get; set; }
+    
     [Required]
     public DateTime StartTime { get; set; }
     
@@ -24,6 +30,9 @@ public class CreateEventRequest
     
     [StringLength(1000)]
     public string? LocationDetails { get; set; }
+    
+    [StringLength(1000)]
+    public string? LocationDetailsAr { get; set; }
     
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
@@ -58,6 +67,12 @@ public class UpdateEventRequest
     [StringLength(2000)]
     public string Description { get; set; } = string.Empty;
     
+    [StringLength(200)]
+    public string? TitleAr { get; set; }
+
+    [StringLength(2000)]
+    public string? DescriptionAr { get; set; }
+    
     [Required]
     public DateTime StartTime { get; set; }
     
@@ -70,6 +85,9 @@ public class UpdateEventRequest
     
     [StringLength(1000)]
     public string? LocationDetails { get; set; }
+    
+    [StringLength(1000)]
+    public string? LocationDetailsAr { get; set; }
     
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
@@ -134,6 +152,8 @@ public class EventSummaryVM
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string? TitleAr { get; set; }
+    public string? DescriptionAr { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public string Location { get; set; } = string.Empty;

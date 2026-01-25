@@ -26,6 +26,21 @@ public class CreateGroupRequest
     [StringLength(200)]
     public string? Location { get; set; }
     
+    [StringLength(100)]
+    public string? NameAr { get; set; }
+    
+    [StringLength(1000)]
+    public string? DescriptionAr { get; set; }
+    
+    [StringLength(50)]
+    public string? CategoryAr { get; set; }
+    
+    [StringLength(2000)]
+    public string? RulesAr { get; set; }
+    
+    [StringLength(200)]
+    public string? LocationAr { get; set; }
+    
     public List<string>? Tags { get; set; }
     
     [Url]
@@ -59,6 +74,21 @@ public class UpdateGroupRequest
     
     [StringLength(200)]
     public string? Location { get; set; }
+    
+    [StringLength(100)]
+    public string? NameAr { get; set; }
+    
+    [StringLength(1000)]
+    public string? DescriptionAr { get; set; }
+    
+    [StringLength(50)]
+    public string? CategoryAr { get; set; }
+    
+    [StringLength(2000)]
+    public string? RulesAr { get; set; }
+    
+    [StringLength(200)]
+    public string? LocationAr { get; set; }
     
     public List<string>? Tags { get; set; }
     
@@ -99,8 +129,12 @@ public class GroupSummaryVM
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string? NameAr { get; set; }
+    public string? DescriptionAr { get; set; }
     public string? Category { get; set; }
+    public string? CategoryAr { get; set; }
     public string? Rules { get; set; }
+    public string? RulesAr { get; set; }
     public GroupPrivacy Privacy { get; set; }
     public bool RequiresApproval { get; set; }
     public Guid OwnerId { get; set; }
@@ -113,6 +147,7 @@ public class GroupSummaryVM
     public int PostCount { get; set; }
     public DateTime? LastActivityAt { get; set; }
     public string? Location { get; set; }
+    public string? LocationAr { get; set; }
     public List<string> Tags { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     

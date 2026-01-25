@@ -7,6 +7,7 @@ public class AnswerVM
 {
     public Guid Id { get; set; }
     public string Body { get; set; } = string.Empty;
+    public string? BodyAr { get; set; }
     public string AuthorName { get; set; } = "Anonymous";
     public Guid AuthorId { get; set; }
     public bool IsAccepted { get; set; }

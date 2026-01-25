@@ -1,17 +1,23 @@
-@model CommunityCar.Application.Features.Events.ViewModels.EventsIndexVM
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Events";
+    // Get current culture for localization
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+
+    ViewData["Title"] = Localizer["Events"];
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h1 class="text-3xl font-black text-foreground tracking-tight">Community Events</h1>
-            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Discover car meets, road trips, and racing events</p>
+            <h1 class="text-3xl font-black text-foreground tracking-tight">@Localizer["CommunityEvents"]</h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@Localizer["EventsSubtitle"]</p>
         </div>
         <a href="/events/create" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
             <i data-lucide="plus-circle" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
-            Create Event
+            @Localizer["CreateEvent"]
         </a>
     </div>
 
@@ -22,7 +28,7 @@
                 <i data-lucide="calendar" class="w-5 h-5"></i>
             </div>
             <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Stats.TotalEvents</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Total Events</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalEvents"]</div>
         </div>
         
         <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-green-500/10">
@@ -30,7 +36,7 @@
                 <i data-lucide="calendar-check" class="w-5 h-5"></i>
             </div>
             <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Stats.UpcomingEvents</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Upcoming</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Upcoming"]</div>
         </div>
         
         <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-orange-500/10">
@@ -38,7 +44,7 @@
                 <i data-lucide="calendar-clock" class="w-5 h-5"></i>
             </div>
             <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Stats.ActiveEvents</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Active Now</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["ActiveNow"]</div>
         </div>
         
         <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-blue-500/10">
@@ -46,7 +52,7 @@
                 <i data-lucide="users" class="w-5 h-5"></i>
             </div>
             <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Stats.TotalAttendees</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Total Attendees</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalAttendees"]</div>
         </div>
     </div>
 
@@ -101,10 +107,14 @@
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div class="flex-1">
+                                @{
+                                    var displayTitle = isArabic && !string.IsNullOrEmpty(eventItem.TitleAr) ? eventItem.TitleAr : eventItem.Title;
+                                    var displayDescription = isArabic && !string.IsNullOrEmpty(eventItem.DescriptionAr) ? eventItem.DescriptionAr : eventItem.Description;
+                                }
                                 <h3 class="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                                    <a href="/events/@eventItem.Id">@eventItem.Title</a>
+                                    <a href="/events/@eventItem.Id">@displayTitle</a>
                                 </h3>
-                                <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@eventItem.Description</p>
+                                <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@displayDescription</p>
                             </div>
                             @if (eventItem.IsFree)
                             {

@@ -8,6 +8,8 @@ public class UserAchievement : BaseEntity
     public string AchievementId { get; private set; }
     public string Title { get; private set; }
     public string Description { get; private set; }
+    public string? TitleAr { get; private set; }
+    public string? DescriptionAr { get; private set; }
     public int CurrentProgress { get; private set; }
     public int RequiredProgress { get; private set; }
     public bool IsCompleted { get; private set; }
@@ -27,6 +29,13 @@ public class UserAchievement : BaseEntity
         RewardBadgeId = rewardBadgeId;
         CurrentProgress = 0;
         IsCompleted = false;
+    }
+
+    public void UpdateArabicContent(string? titleAr, string? descriptionAr)
+    {
+        TitleAr = titleAr;
+        DescriptionAr = descriptionAr;
+        Audit(UpdatedBy);
     }
 
     // EF Core constructor

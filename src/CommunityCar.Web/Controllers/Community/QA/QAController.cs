@@ -91,6 +91,8 @@ public class QAController : Controller
             request.Title, 
             request.Body, 
             authorId, 
+            request.TitleAr,
+            request.BodyAr,
             request.Difficulty,
             request.CarMake,
             request.CarModel,
@@ -105,7 +107,7 @@ public class QAController : Controller
     [HttpPost("{id:guid}/answer")]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public async Task<IActionResult> Answer(Guid id, string body)
+    public async Task<IActionResult> Answer(Guid id, string body, string? bodyAr = null)
     {
         if (string.IsNullOrWhiteSpace(body))
         {
@@ -113,7 +115,7 @@ public class QAController : Controller
         }
 
         var authorId = Guid.Parse(_currentUserService.UserId!);
-        await _qaService.CreateAnswerAsync(id, body, authorId);
+        await _qaService.CreateAnswerAsync(id, body, authorId, bodyAr);
 
         return RedirectToAction(nameof(Details), new { id });
     }
@@ -299,6 +301,8 @@ public class CreateQuestionRequest
 {
     public string Title { get; set; } = string.Empty;
     public string Body { get; set; } = string.Empty;
+    public string? TitleAr { get; set; }
+    public string? BodyAr { get; set; }
     public DifficultyLevel Difficulty { get; set; } = DifficultyLevel.Beginner;
     public string? CarMake { get; set; }
     public string? CarModel { get; set; }

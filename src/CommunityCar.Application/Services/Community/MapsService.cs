@@ -77,6 +77,11 @@ public class MapsService : IMapsService
             request.Category,
             currentUserId);
 
+        if (!string.IsNullOrEmpty(request.NameAr) || !string.IsNullOrEmpty(request.DescriptionAr))
+        {
+            poi.UpdateArabicContent(request.NameAr, request.DescriptionAr, request.AddressAr, request.PricingInfoAr);
+        }
+
         // Set additional properties
         if (!string.IsNullOrWhiteSpace(request.Address) || 
             !string.IsNullOrWhiteSpace(request.PhoneNumber) || 
@@ -168,6 +173,11 @@ public class MapsService : IMapsService
         }
 
         poi.UpdateBasicInfo(request.Name, request.Description, request.Type, request.Category);
+        
+        if (!string.IsNullOrEmpty(request.NameAr) || !string.IsNullOrEmpty(request.DescriptionAr))
+        {
+            poi.UpdateArabicContent(request.NameAr, request.DescriptionAr, request.AddressAr, request.PricingInfoAr);
+        }
         poi.UpdateContactInfo(request.PhoneNumber, request.Website, request.Email);
         poi.UpdateOperatingHours(request.OpeningHours, request.IsOpen24Hours);
         poi.SetTemporarilyClosed(request.IsTemporarilyClosed);
@@ -302,6 +312,11 @@ public class MapsService : IMapsService
 
         var route = new Route(request.Name, request.Description, currentUserId, request.Type, request.Difficulty);
         
+        if (!string.IsNullOrEmpty(request.NameAr) || !string.IsNullOrEmpty(request.DescriptionAr))
+        {
+            route.UpdateArabicContent(request.NameAr, request.DescriptionAr, request.SurfaceTypeAr, request.BestTimeToVisitAr, request.SafetyNotesAr);
+        }
+        
         route.UpdateMetrics(request.DistanceKm, request.EstimatedDurationMinutes);
         route.UpdateCharacteristics(request.IsScenic, request.HasTolls, request.IsOffRoad, request.SurfaceType, request.BestTimeToVisit);
         
@@ -353,6 +368,11 @@ public class MapsService : IMapsService
         }
 
         route.UpdateBasicInfo(request.Name, request.Description, request.Type, request.Difficulty);
+        
+        if (!string.IsNullOrEmpty(request.NameAr) || !string.IsNullOrEmpty(request.DescriptionAr))
+        {
+            route.UpdateArabicContent(request.NameAr, request.DescriptionAr, request.SurfaceTypeAr, request.BestTimeToVisitAr, request.SafetyNotesAr, request.CurrentConditionsAr);
+        }
         route.UpdateMetrics(request.DistanceKm, request.EstimatedDurationMinutes);
         route.UpdateCharacteristics(request.IsScenic, request.HasTolls, request.IsOffRoad, request.SurfaceType, request.BestTimeToVisit);
         route.UpdateSafetyInfo(request.SafetyNotes, request.CurrentConditions);

@@ -36,6 +36,15 @@
                     <span asp-validation-for="Headline" class="text-red-500 text-sm"></span>
                 </div>
 
+                <!-- Arabic Headline -->
+                <div dir="rtl">
+                    <label asp-for="HeadlineAr" class="block text-sm font-medium text-foreground mb-2 text-right">
+                        @Localizer["HeadlineAr"]
+                    </label>
+                    <input asp-for="HeadlineAr" class="input w-full text-right font-arabic" placeholder="@Localizer["HeadlineArPlaceholder"]" />
+                    <span asp-validation-for="HeadlineAr" class="text-red-500 text-sm"></span>
+                </div>
+
                 <!-- Category and Car Info -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
@@ -89,6 +98,15 @@
                     <p class="text-xs text-muted-foreground mt-1">@Localizer["SummaryHint"]</p>
                 </div>
 
+                <!-- Arabic Summary -->
+                <div dir="rtl">
+                    <label asp-for="SummaryAr" class="block text-sm font-medium text-foreground mb-2 text-right">
+                        @Localizer["SummaryAr"]
+                    </label>
+                    <textarea asp-for="SummaryAr" rows="3" class="textarea w-full text-right font-arabic" placeholder="@Localizer["SummaryArPlaceholder"]"></textarea>
+                    <span asp-validation-for="SummaryAr" class="text-red-500 text-sm"></span>
+                </div>
+
                 <!-- Main Image -->
                 <div>
                     <label asp-for="ImageUrl" class="block text-sm font-medium text-foreground mb-2">
@@ -105,6 +123,15 @@
                     </label>
                     <textarea asp-for="Body" rows="15" class="textarea w-full" placeholder="@Localizer["ContentPlaceholder"]"></textarea>
                     <span asp-validation-for="Body" class="text-red-500 text-sm"></span>
+                </div>
+
+                <!-- Arabic Content -->
+                <div dir="rtl">
+                    <label asp-for="BodyAr" class="block text-sm font-medium text-foreground mb-2 text-right">
+                        @Localizer["ContentAr"]
+                    </label>
+                    <textarea asp-for="BodyAr" rows="15" class="textarea w-full text-right font-arabic" placeholder="@Localizer["ContentArPlaceholder"]"></textarea>
+                    <span asp-validation-for="BodyAr" class="text-red-500 text-sm"></span>
                 </div>
 
                 <!-- Tags -->

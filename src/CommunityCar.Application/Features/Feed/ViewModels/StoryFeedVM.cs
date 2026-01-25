@@ -9,6 +9,7 @@ public class StoryFeedVM
     public string? ThumbnailUrl { get; set; }
     public StoryType Type { get; set; }
     public string? Caption { get; set; }
+    public string? CaptionAr { get; set; }
     
     // Author information
     public Guid AuthorId { get; set; }

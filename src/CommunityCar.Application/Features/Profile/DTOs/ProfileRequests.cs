@@ -17,6 +17,15 @@ public class UpdateProfileRequest
     [StringLength(100)]
     public string? Country { get; set; }
 
+    [StringLength(500)]
+    public string? BioAr { get; set; }
+
+    [StringLength(100)]
+    public string? CityAr { get; set; }
+
+    [StringLength(100)]
+    public string? CountryAr { get; set; }
+
     [Phone]
     public string? PhoneNumber { get; set; }
 }

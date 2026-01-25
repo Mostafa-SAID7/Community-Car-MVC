@@ -13,6 +13,7 @@ public class Story : AggregateRoot
     
     // Enhanced properties
     public string? Caption { get; private set; }
+    public string? CaptionAr { get; private set; }
     public StoryType Type { get; private set; }
     public string? ThumbnailUrl { get; private set; }
     public int Duration { get; private set; } // in seconds
@@ -80,6 +81,12 @@ public class Story : AggregateRoot
     public void UpdateCaption(string? caption)
     {
         Caption = caption;
+        Audit(UpdatedBy);
+    }
+
+    public void UpdateArabicContent(string? captionAr)
+    {
+        CaptionAr = captionAr;
         Audit(UpdatedBy);
     }
 

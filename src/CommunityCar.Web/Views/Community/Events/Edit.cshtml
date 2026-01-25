@@ -8,7 +8,7 @@
     <div>
         <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
             <i data-lucide="arrow-left" class="w-4 h-4"></i>
-            Back to Events
+            @SharedLocalizer["BackToEvents"]
         </a>
     </div>
 
@@ -30,22 +30,40 @@
                 
                 <!-- Basic Information -->
                 <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-foreground">Basic Information</h3>
+                    <h3 class="text-lg font-bold text-foreground">@SharedLocalizer["BasicInformation"]</h3>
                     
-                    <div>
-                        <label for="Title" class="block text-sm font-medium text-foreground mb-2">Event Title *</label>
-                        <input type="text" id="Title" name="Title" value="@Model.Title" required
-                               class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
-                               placeholder="e.g., Weekend Car Meet at Central Park">
-                        <span asp-validation-for="Title" class="text-red-500 text-sm"></span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="Title" class="block text-sm font-medium text-foreground mb-2">@SharedLocalizer["EventTitle"] (English) *</label>
+                            <input type="text" id="Title" name="Title" value="@Model.Title" required
+                                   class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="e.g., Weekend Car Meet">
+                            <span asp-validation-for="Title" class="text-red-500 text-sm"></span>
+                        </div>
+                        <div>
+                            <label for="TitleAr" class="block text-sm font-medium text-foreground mb-2">@SharedLocalizer["EventTitle"] (@SharedLocalizer["Arabic"]) *</label>
+                            <input type="text" id="TitleAr" name="TitleAr" value="@Model.TitleAr" dir="rtl"
+                                   class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="مثال: تجمع سيارات عطلة نهاية الأسبوع">
+                            <span asp-validation-for="TitleAr" class="text-red-500 text-sm"></span>
+                        </div>
                     </div>
 
-                    <div>
-                        <label for="Description" class="block text-sm font-medium text-foreground mb-2">Description *</label>
-                        <textarea id="Description" name="Description" required rows="4"
-                                  class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
-                                  placeholder="Describe your event, what to expect, what to bring...">@Model.Description</textarea>
-                        <span asp-validation-for="Description" class="text-red-500 text-sm"></span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="Description" class="block text-sm font-medium text-foreground mb-2">@SharedLocalizer["Description"] (English) *</label>
+                            <textarea id="Description" name="Description" required rows="4"
+                                      class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                      placeholder="Describe your event...">@Model.Description</textarea>
+                            <span asp-validation-for="Description" class="text-red-500 text-sm"></span>
+                        </div>
+                        <div>
+                            <label for="DescriptionAr" class="block text-sm font-medium text-foreground mb-2">@SharedLocalizer["Description"] (@SharedLocalizer["Arabic"]) *</label>
+                            <textarea id="DescriptionAr" name="DescriptionAr" rows="4" dir="rtl"
+                                      class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                      placeholder="صف الفعالية باللغة العربية...">@Model.DescriptionAr</textarea>
+                            <span asp-validation-for="DescriptionAr" class="text-red-500 text-sm"></span>
+                        </div>
                     </div>
                 </div>
 
@@ -84,12 +102,21 @@
                         <span asp-validation-for="Location" class="text-red-500 text-sm"></span>
                     </div>
 
-                    <div>
-                        <label for="LocationDetails" class="block text-sm font-medium text-foreground mb-2">Location Details</label>
-                        <textarea id="LocationDetails" name="LocationDetails" rows="2"
-                                  class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
-                                  placeholder="Additional location details, parking info, meeting point...">@Model.LocationDetails</textarea>
-                        <span asp-validation-for="LocationDetails" class="text-red-500 text-sm"></span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="LocationDetails" class="block text-sm font-medium text-foreground mb-2">@SharedLocalizer["LocationDetails"] (English)</label>
+                            <textarea id="LocationDetails" name="LocationDetails" rows="2"
+                                      class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                      placeholder="Parking info, meeting point...">@Model.LocationDetails</textarea>
+                            <span asp-validation-for="LocationDetails" class="text-red-500 text-sm"></span>
+                        </div>
+                        <div>
+                            <label for="LocationDetailsAr" class="block text-sm font-medium text-foreground mb-2">@SharedLocalizer["LocationDetails"] (@SharedLocalizer["Arabic"])</label>
+                            <textarea id="LocationDetailsAr" name="LocationDetailsAr" rows="2" dir="rtl"
+                                      class="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
+                                      placeholder="معلومات ركن السيارات، نقطة التجمع...">@Model.LocationDetailsAr</textarea>
+                            <span asp-validation-for="LocationDetailsAr" class="text-red-500 text-sm"></span>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -14,8 +14,14 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
             .IsRequired()
             .HasMaxLength(200);
 
+        builder.Property(p => p.TitleAr)
+            .HasMaxLength(200);
+
         builder.Property(p => p.Content)
             .IsRequired()
+            .HasMaxLength(10000);
+
+        builder.Property(p => p.ContentAr)
             .HasMaxLength(10000);
 
         builder.Property(p => p.Type)

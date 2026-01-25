@@ -10,6 +10,11 @@ public class Question : AggregateRoot
 {
     public string Title { get; private set; }
     public string Body { get; private set; }
+    
+    // Arabic Localization
+    public string? TitleAr { get; private set; }
+    public string? BodyAr { get; private set; }
+    
     public Guid AuthorId { get; private set; }
     public bool IsSolved { get; private set; }
     public Guid? AcceptedAnswerId { get; private set; }
@@ -145,6 +150,13 @@ public class Question : AggregateRoot
     {
         LastActivityAt = DateTime.UtcNow;
         LastActivityBy = activityBy;
+    }
+
+    public void UpdateArabicContent(string? titleAr, string? bodyAr)
+    {
+        TitleAr = titleAr;
+        BodyAr = bodyAr;
+        Audit(UpdatedBy);
     }
 
     public string CarDisplayName => 

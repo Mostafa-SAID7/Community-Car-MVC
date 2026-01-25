@@ -22,6 +22,12 @@ public class CreateReviewRequest
     [StringLength(2000)]
     public string Comment { get; set; } = string.Empty;
     
+    [StringLength(200)]
+    public string? TitleAr { get; set; }
+    
+    [StringLength(2000)]
+    public string? CommentAr { get; set; }
+    
     [Required]
     public Guid ReviewerId { get; set; }
     

@@ -1,10 +1,19 @@
 @using Microsoft.Extensions.Localization
 @using CommunityCar.Domain.Enums
+@using CommunityCar.Application.Features.Guides.ViewModels
 @model CommunityCar.Application.Features.Guides.ViewModels.GuideListVM
 @inject IViewLocalizer Localizer
 @inject IStringLocalizer<SharedResource> SharedLocalizer
 @{
     ViewData["Title"] = SharedLocalizer["MyGuides"];
+    
+    // Get current culture for localization
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+    
+    // Helper function to get localized title
+    string GetLocalizedTitle(GuideVM guide) => isArabic && !string.IsNullOrEmpty(guide.TitleAr) ? guide.TitleAr : guide.Title;
+    string GetLocalizedSummary(GuideVM guide) => isArabic && !string.IsNullOrEmpty(guide.SummaryAr) ? guide.SummaryAr : guide.Summary;
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
@@ -153,13 +162,13 @@
                                 </div>
 
                                 <h3 class="text-xl font-black text-foreground mb-2 group-hover:text-primary transition-colors">
-                                    <a href="/guides/@guide.Id">@guide.Title</a>
+                                    <a href="/guides/@guide.Id">@GetLocalizedTitle(guide)</a>
                                 </h3>
 
-                                @if (!string.IsNullOrEmpty(guide.Summary))
+                                @if (!string.IsNullOrEmpty(GetLocalizedSummary(guide)))
                                 {
                                     <p class="text-sm text-muted-foreground font-medium line-clamp-2 mb-4">
-                                        @guide.Summary
+                                        @GetLocalizedSummary(guide)
                                     </p>
                                 }
 
@@ -314,7 +323,7 @@
 }
 
 @section Scripts {
-    @await Html.PartialAsync("~/Views/Community/Guides/_LocalizationScript.cshtml")
+
     <script src="~/js/guides.js"></script>
     <script>
         function confirmDelete(guideId) {

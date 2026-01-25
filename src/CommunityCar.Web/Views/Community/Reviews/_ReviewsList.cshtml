@@ -2,6 +2,10 @@
 @model CommunityCar.Application.Features.Reviews.DTOs.ReviewsSearchResponse
 @inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
+@{
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+}
 
 @if (Model.Reviews.Any())
 {
@@ -15,7 +19,10 @@
                     <div class="flex justify-between items-start mb-4">
                         <div class="min-w-0 flex-1">
                             <h4 class="text-lg font-black text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                                <a href="/reviews/@review.Id">@review.Title</a>
+                                @{
+                                    var displayTitle = isArabic && !string.IsNullOrEmpty(review.TitleAr) ? review.TitleAr : review.Title;
+                                }
+                                <a href="/reviews/@review.Id">@displayTitle</a>
                             </h4>
                             @if (!string.IsNullOrEmpty(review.CarDisplayName))
                             {
@@ -46,7 +53,10 @@
 
                     <!-- Comment Preview -->
                     <p class="text-sm text-muted-foreground line-clamp-3 leading-relaxed mb-4">
-                        "@review.Comment"
+                        @{
+                            var displayComment = isArabic && !string.IsNullOrEmpty(review.CommentAr) ? review.CommentAr : review.Comment;
+                        }
+                        "@displayComment"
                     </p>
 
                     <!-- Pros/Cons Preview -->

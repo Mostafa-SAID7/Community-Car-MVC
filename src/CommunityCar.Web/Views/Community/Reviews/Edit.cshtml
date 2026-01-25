@@ -3,6 +3,8 @@
 @inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
 @{
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
     ViewData["Title"] = Localizer["EditReview"];
 }
 
@@ -28,12 +30,21 @@
             <div class="p-8 space-y-6">
                 <!-- Title and Rating -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="md:col-span-2">
-                        <label asp-for="Title" class="block text-sm font-medium text-foreground mb-2">
-                            @Localizer["ReviewTitle"] <span class="text-red-500">*</span>
-                        </label>
-                        <input asp-for="Title" class="input w-full" placeholder="@Localizer["ReviewTitlePlaceholder"]" />
-                        <span asp-validation-for="Title" class="text-red-500 text-sm"></span>
+                    <div class="md:col-span-2 space-y-4">
+                        <div>
+                            <label asp-for="Title" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["ReviewTitle"] (English) <span class="text-red-500">*</span>
+                            </label>
+                            <input asp-for="Title" class="input w-full" placeholder="@Localizer["ReviewTitlePlaceholder"]" />
+                            <span asp-validation-for="Title" class="text-red-500 text-sm"></span>
+                        </div>
+                        <div>
+                            <label asp-for="TitleAr" class="block text-sm font-medium text-foreground mb-2">
+                                @Localizer["ReviewTitle"] (@SharedLocalizer["Arabic"])
+                            </label>
+                            <input asp-for="TitleAr" class="input w-full text-right" dir="rtl" placeholder="@Localizer["ReviewTitlePlaceholderAr"]" />
+                            <span asp-validation-for="TitleAr" class="text-red-500 text-sm"></span>
+                        </div>
                     </div>
 
                     <div>
@@ -82,13 +93,21 @@
                     </div>
                 </div>
 
-                <!-- Review Content -->
-                <div>
-                    <label asp-for="Comment" class="block text-sm font-medium text-foreground mb-2">
-                        @Localizer["ReviewContent"] <span class="text-red-500">*</span>
-                    </label>
-                    <textarea asp-for="Comment" rows="8" class="textarea w-full" placeholder="@Localizer["ReviewContentPlaceholder"]"></textarea>
-                    <span asp-validation-for="Comment" class="text-red-500 text-sm"></span>
+                <div class="space-y-4">
+                    <div>
+                        <label asp-for="Comment" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["ReviewContent"] (English) <span class="text-red-500">*</span>
+                        </label>
+                        <textarea asp-for="Comment" rows="8" class="textarea w-full" placeholder="@Localizer["ReviewContentPlaceholder"]"></textarea>
+                        <span asp-validation-for="Comment" class="text-red-500 text-sm"></span>
+                    </div>
+                    <div>
+                        <label asp-for="CommentAr" class="block text-sm font-medium text-foreground mb-2">
+                            @Localizer["ReviewContent"] (@SharedLocalizer["Arabic"])
+                        </label>
+                        <textarea asp-for="CommentAr" rows="8" class="textarea w-full text-right" dir="rtl" placeholder="@Localizer["ReviewContentPlaceholderAr"]"></textarea>
+                        <span asp-validation-for="CommentAr" class="text-red-500 text-sm"></span>
+                    </div>
                 </div>
 
                 <!-- Detailed Ratings -->

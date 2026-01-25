@@ -3,8 +3,17 @@
 @inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Model.Headline;
-    ViewData["MetaDescription"] = Model.MetaDescription ?? Model.Summary ?? Model.Headline;
+    // Get current culture for localization
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+
+    // Select localized content with fallback
+    var displayHeadline = isArabic && !string.IsNullOrEmpty(Model.HeadlineAr) ? Model.HeadlineAr : Model.Headline;
+    var displaySummary = isArabic && !string.IsNullOrEmpty(Model.SummaryAr) ? Model.SummaryAr : Model.Summary;
+    var displayBody = isArabic && !string.IsNullOrEmpty(Model.BodyAr) ? Model.BodyAr : Model.Body;
+
+    ViewData["Title"] = displayHeadline;
+    ViewData["MetaDescription"] = Model.MetaDescription ?? displaySummary ?? displayHeadline;
 }
 
 <!-- Loading Skeleton -->
@@ -118,7 +127,7 @@
         <i data-lucide="chevron-right" class="w-4 h-4"></i>
         <a href="/news/category/@Model.Category" class="hover:text-primary transition-colors">@Model.Category</a>
         <i data-lucide="chevron-right" class="w-4 h-4"></i>
-        <span class="text-foreground">@Model.Headline</span>
+        <span class="text-foreground">@displayHeadline</span>
     </nav>
 
     <!-- Article Header -->
@@ -126,7 +135,7 @@
         @if (!string.IsNullOrEmpty(Model.ImageUrl))
         {
             <div class="relative h-64 md:h-80 overflow-hidden">
-                <img src="@Model.ImageUrl" alt="@Model.Headline" class="w-full h-full object-cover" loading="lazy" />
+                <img src="@Model.ImageUrl" alt="@displayHeadline" class="w-full h-full object-cover" loading="lazy" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 
                 <!-- Badges -->
@@ -186,12 +195,12 @@
             </div>
 
             <!-- Article Title -->
-            <h1 class="text-3xl md:text-4xl font-black text-foreground mb-4" id="articleTitle">@Model.Headline</h1>
+            <h1 class="text-3xl md:text-4xl font-black text-foreground mb-4" id="articleTitle">@displayHeadline</h1>
 
             <!-- Article Summary -->
-            @if (!string.IsNullOrEmpty(Model.Summary))
+            @if (!string.IsNullOrEmpty(displaySummary))
             {
-                <p class="text-lg text-muted-foreground mb-6 leading-relaxed" id="articleSummary">@Model.Summary</p>
+                <p class="text-lg text-muted-foreground mb-6 leading-relaxed" id="articleSummary">@displaySummary</p>
             }
 
             <!-- Author Info -->
@@ -214,7 +223,7 @@
 
             <!-- Article Content -->
             <div class="prose prose-lg max-w-none mb-8" id="articleMainContent">
-                @Html.Raw(Model.Body)
+                @Html.Raw(displayBody)
             </div>
 
             <!-- Tags -->
@@ -671,8 +680,8 @@
         }
 
         function shareNews() {
-            const title = '@Model.Headline';
-            const text = '@Model.Summary';
+            const title = '@displayHeadline';
+            const text = '@displaySummary';
             const url = window.location.href;
             
             if (navigator.share) {

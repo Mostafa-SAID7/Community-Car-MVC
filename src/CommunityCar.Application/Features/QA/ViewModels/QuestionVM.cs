@@ -9,6 +9,8 @@ public class QuestionVM
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Body { get; set; } = string.Empty;
+    public string? TitleAr { get; set; }
+    public string? BodyAr { get; set; }
     public string AuthorName { get; set; } = "Anonymous";
     public Guid AuthorId { get; set; }
     public bool IsSolved { get; set; }

@@ -1,6 +1,11 @@
+@using Microsoft.Extensions.Localization
 @model CommunityCar.Application.Features.Maps.ViewModels.RouteVM
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Model.Name;
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+    var displayName = isArabic && !string.IsNullOrEmpty(Model.NameAr) ? Model.NameAr : Model.Name;
+    ViewData["Title"] = displayName;
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
@@ -10,7 +15,7 @@
             <div class="flex items-center gap-3 mb-4">
                 <a href="/maps" class="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    Back to Maps
+                    @Localizer["BackToMaps"]
                 </a>
             </div>
             
@@ -19,8 +24,15 @@
                     <i data-lucide="route" class="w-8 h-8"></i>
                 </div>
                 <div class="flex-1">
-                    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">@Model.Name</h1>
-                    <p class="text-muted-foreground font-medium mb-3">@Model.Description</p>
+                    @{
+                        var displayDescription = isArabic && !string.IsNullOrEmpty(Model.DescriptionAr) ? Model.DescriptionAr : Model.Description;
+                        var displaySurfaceType = isArabic && !string.IsNullOrEmpty(Model.SurfaceTypeAr) ? Model.SurfaceTypeAr : Model.SurfaceType;
+                        var displayBestTimeToVisit = isArabic && !string.IsNullOrEmpty(Model.BestTimeToVisitAr) ? Model.BestTimeToVisitAr : Model.BestTimeToVisit;
+                        var displaySafetyNotes = isArabic && !string.IsNullOrEmpty(Model.SafetyNotesAr) ? Model.SafetyNotesAr : Model.SafetyNotes;
+                        var displayCurrentConditions = isArabic && !string.IsNullOrEmpty(Model.CurrentConditionsAr) ? Model.CurrentConditionsAr : Model.CurrentConditions;
+                    }
+                    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">@displayName</h1>
+                    <p class="text-muted-foreground font-medium mb-3">@displayDescription</p>
                     
                     <div class="flex flex-wrap items-center gap-4">
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-xs font-bold uppercase tracking-wider border border-green-500/20">
@@ -64,7 +76,7 @@
         <div class="flex items-center gap-3">
             <button type="button" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95" onclick="completeRoute('@Model.Id')">
                 <i data-lucide="check-circle" class="w-4 h-4"></i>
-                Mark Complete
+                @Localizer["MarkComplete"]
             </button>
             
             <button type="button" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
@@ -88,7 +100,7 @@
                             <i data-lucide="map-pin" class="w-6 h-6"></i>
                         </div>
                         <p class="text-2xl font-black text-foreground">@Model.DistanceKm.ToString("F1")</p>
-                        <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Kilometers</p>
+                        <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground">@Localizer["Kilometers"]</p>
                     </div>
                     
                     <div class="text-center">
@@ -143,18 +155,18 @@
                     <div>
                         <h4 class="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Details</h4>
                         <div class="space-y-2">
-                            @if (!string.IsNullOrEmpty(Model.SurfaceType))
+                            @if (!string.IsNullOrEmpty(displaySurfaceType))
                             {
                                 <div class="flex items-center gap-3">
                                     <i data-lucide="layers" class="w-4 h-4 text-muted-foreground"></i>
-                                    <span class="text-sm text-foreground">@Model.SurfaceType</span>
+                                    <span class="text-sm text-foreground">@displaySurfaceType</span>
                                 </div>
                             }
-                            @if (!string.IsNullOrEmpty(Model.BestTimeToVisit))
+                            @if (!string.IsNullOrEmpty(displayBestTimeToVisit))
                             {
                                 <div class="flex items-center gap-3">
                                     <i data-lucide="calendar" class="w-4 h-4 text-muted-foreground"></i>
-                                    <span class="text-sm text-foreground">@Model.BestTimeToVisit</span>
+                                    <span class="text-sm text-foreground">@displayBestTimeToVisit</span>
                                 </div>
                             }
                             <div class="flex items-center gap-3">
@@ -172,30 +184,30 @@
                 <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
                     <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Safety & Conditions</h3>
                     
-                    @if (!string.IsNullOrEmpty(Model.SafetyNotes))
+                    @if (!string.IsNullOrEmpty(displaySafetyNotes))
                     {
                         <div class="mb-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
                             <div class="flex items-start gap-3">
                                 <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 mt-0.5 shrink-0"></i>
                                 <div>
-                                    <h4 class="font-bold text-amber-600 mb-1">Safety Notes</h4>
-                                    <p class="text-sm text-foreground">@Model.SafetyNotes</p>
+                                    <h4 class="font-bold text-amber-600 mb-1">@Localizer["SafetyNotes"]</h4>
+                                    <p class="text-sm text-foreground">@displaySafetyNotes</p>
                                 </div>
                             </div>
                         </div>
                     }
                     
-                    @if (!string.IsNullOrEmpty(Model.CurrentConditions))
+                    @if (!string.IsNullOrEmpty(displayCurrentConditions))
                     {
                         <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
                             <div class="flex items-start gap-3">
                                 <i data-lucide="info" class="w-5 h-5 text-blue-600 mt-0.5 shrink-0"></i>
                                 <div>
-                                    <h4 class="font-bold text-blue-600 mb-1">Current Conditions</h4>
-                                    <p class="text-sm text-foreground">@Model.CurrentConditions</p>
+                                    <h4 class="font-bold text-blue-600 mb-1">@Localizer["CurrentConditions"]</h4>
+                                    <p class="text-sm text-foreground">@displayCurrentConditions</p>
                                     @if (Model.LastConditionUpdate.HasValue)
                                     {
-                                        <p class="text-xs text-muted-foreground mt-1">Updated @Model.LastConditionUpdate.Value.ToString("MMM dd, yyyy")</p>
+                                        <p class="text-xs text-muted-foreground mt-1">@Localizer["Updated"] @Model.LastConditionUpdate.Value.ToString("MMM dd, yyyy")</p>
                                     }
                                 </div>
                             </div>
@@ -218,13 +230,17 @@
                                     @waypoint.Order
                                 </div>
                                 <div class="flex-1">
-                                    @if (!string.IsNullOrEmpty(waypoint.Name))
-                                    {
-                                        <h4 class="font-bold text-foreground mb-1">@waypoint.Name</h4>
+                                    @{
+                                        var waypointName = isArabic && !string.IsNullOrEmpty(waypoint.NameAr) ? waypoint.NameAr : waypoint.Name;
+                                        var waypointDesc = isArabic && !string.IsNullOrEmpty(waypoint.DescriptionAr) ? waypoint.DescriptionAr : waypoint.Description;
                                     }
-                                    @if (!string.IsNullOrEmpty(waypoint.Description))
+                                    @if (!string.IsNullOrEmpty(waypointName))
                                     {
-                                        <p class="text-sm text-muted-foreground mb-2">@waypoint.Description</p>
+                                        <h4 class="font-bold text-foreground mb-1">@waypointName</h4>
+                                    }
+                                    @if (!string.IsNullOrEmpty(waypointDesc))
+                                    {
+                                        <p class="text-sm text-muted-foreground mb-2">@waypointDesc</p>
                                     }
                                     <p class="text-xs text-muted-foreground">@waypoint.Latitude.ToString("F4"), @waypoint.Longitude.ToString("F4")</p>
                                 </div>

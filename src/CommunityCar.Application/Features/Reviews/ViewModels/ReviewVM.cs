@@ -8,6 +8,8 @@ public class ReviewVM
     public int Rating { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Comment { get; set; } = string.Empty;
+    public string? TitleAr { get; set; }
+    public string? CommentAr { get; set; }
     public Guid ReviewerId { get; set; }
     public string ReviewerName { get; set; } = string.Empty;
     

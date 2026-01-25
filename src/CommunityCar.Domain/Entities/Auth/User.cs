@@ -24,6 +24,9 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     public string? Bio { get; set; }
     public string? City { get; set; }
     public string? Country { get; set; }
+    public string? BioAr { get; set; }
+    public string? CityAr { get; set; }
+    public string? CountryAr { get; set; }
     public bool IsActive { get; private set; }
 
     // OAuth properties

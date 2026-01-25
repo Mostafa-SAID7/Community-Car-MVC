@@ -2,6 +2,16 @@
 @model CommunityCar.Application.Features.News.ViewModels.NewsSearchResponse
 @inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
+@using CommunityCar.Application.Features.News.ViewModels
+@{
+    // Get current culture for localization
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+
+    // Helper functions for localized content selection
+    string GetLocalizedHeadline(NewsItemVM item) => isArabic && !string.IsNullOrEmpty(item.HeadlineAr) ? item.HeadlineAr : item.Headline;
+    string GetLocalizedSummary(NewsItemVM item) => isArabic && !string.IsNullOrEmpty(item.SummaryAr) ? item.SummaryAr : item.Summary;
+}
 
 @if (Model.Items.Any())
 {
@@ -20,7 +30,7 @@
                         @if (!string.IsNullOrEmpty(featuredItem.ImageUrl))
                         {
                             <div class="relative h-48 overflow-hidden">
-                                <img src="@featuredItem.ImageUrl" alt="@featuredItem.Headline" 
+                                <img src="@featuredItem.ImageUrl" alt="@GetLocalizedHeadline(featuredItem)" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                 <div class="absolute top-4 left-4">
                                     <span class="badge badge-default bg-yellow-500 text-yellow-50">
@@ -50,12 +60,12 @@
                             </div>
                             
                             <h4 class="text-xl font-black text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors">
-                                <a href="/news/@featuredItem.Id">@featuredItem.Headline</a>
+                                <a href="/news/@featuredItem.Id">@GetLocalizedHeadline(featuredItem)</a>
                             </h4>
                             
-                            @if (!string.IsNullOrEmpty(featuredItem.Summary))
+                            @if (!string.IsNullOrEmpty(GetLocalizedSummary(featuredItem)))
                             {
-                                <p class="text-muted-foreground mb-4 line-clamp-3">@featuredItem.Summary</p>
+                                <p class="text-muted-foreground mb-4 line-clamp-3">@GetLocalizedSummary(featuredItem)</p>
                             }
                             
                             <div class="flex items-center justify-between text-sm text-muted-foreground">
@@ -90,7 +100,7 @@
                 @if (!string.IsNullOrEmpty(item.ImageUrl))
                 {
                     <div class="relative h-48 overflow-hidden">
-                        <img src="@item.ImageUrl" alt="@item.Headline" 
+                        <img src="@item.ImageUrl" alt="@GetLocalizedHeadline(item)" 
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         @if (item.IsPinned)
                         {
@@ -114,12 +124,12 @@
                     </div>
                     
                     <h4 class="text-lg font-black text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors">
-                        <a href="/news/@item.Id">@item.Headline</a>
+                        <a href="/news/@item.Id">@GetLocalizedHeadline(item)</a>
                     </h4>
                     
-                    @if (!string.IsNullOrEmpty(item.Summary))
+                    @if (!string.IsNullOrEmpty(GetLocalizedSummary(item)))
                     {
-                        <p class="text-muted-foreground mb-4 line-clamp-3">@item.Summary</p>
+                        <p class="text-muted-foreground mb-4 line-clamp-3">@GetLocalizedSummary(item)</p>
                     }
                     
                     <!-- Tags -->

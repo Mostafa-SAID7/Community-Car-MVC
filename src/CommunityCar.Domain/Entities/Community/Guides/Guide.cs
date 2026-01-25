@@ -13,6 +13,11 @@ public class Guide : AggregateRoot
     public string? Summary { get; private set; }
     public Guid AuthorId { get; private set; }
     
+    // Arabic Localization
+    public string? TitleAr { get; private set; }
+    public string? ContentAr { get; private set; }
+    public string? SummaryAr { get; private set; }
+    
     // Publication Status
     public bool IsPublished { get; private set; }
     public DateTime? PublishedAt { get; private set; }
@@ -54,7 +59,10 @@ public class Guide : AggregateRoot
         string? summary = null,
         string? category = null,
         GuideDifficulty difficulty = GuideDifficulty.Beginner,
-        int estimatedMinutes = 30)
+        int estimatedMinutes = 30,
+        string? titleAr = null,
+        string? contentAr = null,
+        string? summaryAr = null)
     {
         Title = title;
         Content = content;
@@ -63,6 +71,9 @@ public class Guide : AggregateRoot
         Category = category;
         Difficulty = difficulty;
         EstimatedMinutes = estimatedMinutes;
+        TitleAr = titleAr;
+        ContentAr = contentAr;
+        SummaryAr = summaryAr;
         IsPublished = false;
         IsVerified = false;
         IsFeatured = false;
@@ -114,6 +125,14 @@ public class Guide : AggregateRoot
         Title = title;
         Content = content;
         Summary = summary;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void UpdateArabicContent(string? titleAr, string? contentAr, string? summaryAr)
+    {
+        TitleAr = titleAr;
+        ContentAr = contentAr;
+        SummaryAr = summaryAr;
         Audit(UpdatedBy ?? "System");
     }
 

@@ -70,6 +70,8 @@ public class EventsService : IEventsService
             request.Location,
             currentUserId);
 
+        eventEntity.UpdateArabicContent(request.TitleAr, request.DescriptionAr, request.LocationDetailsAr);
+
         // Set additional properties
         if (!string.IsNullOrWhiteSpace(request.LocationDetails) || 
             request.Latitude.HasValue || request.Longitude.HasValue)
@@ -137,6 +139,8 @@ public class EventsService : IEventsService
         eventEntity.UpdatePricing(request.TicketPrice, request.TicketInfo);
         eventEntity.UpdateVisibility(request.IsPublic);
         eventEntity.UpdateContactInfo(request.ExternalUrl, request.ContactInfo);
+        
+        eventEntity.UpdateArabicContent(request.TitleAr, request.DescriptionAr, request.LocationDetailsAr);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

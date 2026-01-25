@@ -9,6 +9,8 @@ public class PointOfInterestVM
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string? NameAr { get; set; }
+    public string? DescriptionAr { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public POIType Type { get; set; }
@@ -18,6 +20,7 @@ public class PointOfInterestVM
     
     // Contact and business information
     public string? Address { get; set; }
+    public string? AddressAr { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Website { get; set; }
     public string? Email { get; set; }
@@ -42,6 +45,7 @@ public class PointOfInterestVM
     // Pricing information
     public decimal? PriceRange { get; set; }
     public string? PricingInfo { get; set; }
+    public string? PricingInfoAr { get; set; }
     
     // Verification and quality
     public bool IsVerified { get; set; }
@@ -120,6 +124,8 @@ public class RouteVM
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string? NameAr { get; set; }
+    public string? DescriptionAr { get; set; }
     public Guid CreatedBy { get; set; }
     public string CreatedByName { get; set; } = string.Empty;
     public RouteType Type { get; set; }
@@ -137,11 +143,15 @@ public class RouteVM
     public bool HasTolls { get; set; }
     public bool IsOffRoad { get; set; }
     public string? SurfaceType { get; set; }
+    public string? SurfaceTypeAr { get; set; }
     public string? BestTimeToVisit { get; set; }
+    public string? BestTimeToVisitAr { get; set; }
     
     // Safety and conditions
     public string? SafetyNotes { get; set; }
+    public string? SafetyNotesAr { get; set; }
     public string? CurrentConditions { get; set; }
+    public string? CurrentConditionsAr { get; set; }
     public DateTime? LastConditionUpdate { get; set; }
     
     // Waypoints and path
@@ -163,7 +173,9 @@ public class RouteWaypointVM
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public string? Name { get; set; }
+    public string? NameAr { get; set; }
     public string? Description { get; set; }
+    public string? DescriptionAr { get; set; }
     public int Order { get; set; }
 }
 

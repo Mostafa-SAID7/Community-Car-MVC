@@ -13,8 +13,8 @@ public interface IQAService
     Task<IEnumerable<AnswerVM>> GetAnswersByQuestionIdAsync(Guid questionId);
     
     // Question management
-    Task<QuestionVM> CreateQuestionAsync(string title, string body, Guid authorId, DifficultyLevel difficulty = DifficultyLevel.Beginner, string? carMake = null, string? carModel = null, int? carYear = null, string? carEngine = null, List<string>? tags = null);
-    Task<AnswerVM> CreateAnswerAsync(Guid questionId, string body, Guid authorId);
+    Task<QuestionVM> CreateQuestionAsync(string title, string body, Guid authorId, string? titleAr = null, string? bodyAr = null, DifficultyLevel difficulty = DifficultyLevel.Beginner, string? carMake = null, string? carModel = null, int? carYear = null, string? carEngine = null, List<string>? tags = null);
+    Task<AnswerVM> CreateAnswerAsync(Guid questionId, string body, Guid authorId, string? bodyAr = null);
     Task MarkAsSolvedAsync(Guid questionId, Guid acceptedAnswerId);
     Task AcceptAnswerAsync(Guid answerId);
     

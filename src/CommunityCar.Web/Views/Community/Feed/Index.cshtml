@@ -6,6 +6,10 @@
     ViewData["Title"] = Localizer["PageTitle"];
     var feedType = ViewBag.FeedType as string ?? "personalized";
     var currentUserId = ViewBag.CurrentUserId as Guid?;
+    
+    // Get current culture for localization
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
 }
 
 <div class="space-y-10 animate-in fade-in duration-700">
@@ -168,16 +172,22 @@
                 <!-- Post Content -->
                 <div class="p-5 pt-0">
                     <div class="space-y-3 mb-5">
-                        @if (!string.IsNullOrEmpty(item.Title))
+                        @{
+                            var displayTitle = isArabic && !string.IsNullOrEmpty(item.TitleAr) ? item.TitleAr : item.Title;
+                            var displayContent = isArabic && !string.IsNullOrEmpty(item.ContentAr) ? item.ContentAr : item.Content;
+                            var displaySummary = isArabic && !string.IsNullOrEmpty(item.SummaryAr) ? item.SummaryAr : item.Summary;
+                        }
+
+                        @if (!string.IsNullOrEmpty(displayTitle))
                         {
-                            <h5 class="text-xl font-black text-foreground tracking-tight leading-tight">@item.Title</h5>
+                            <h5 class="text-xl font-black text-foreground tracking-tight leading-tight">@displayTitle</h5>
                         }
                         
-                        @if (!string.IsNullOrEmpty(item.Summary) || !string.IsNullOrEmpty(item.Content))
+                        @if (!string.IsNullOrEmpty(displaySummary) || !string.IsNullOrEmpty(displayContent))
                         {
                             <p class="text-[15px] text-foreground/90 leading-relaxed font-medium">
-                                @(string.IsNullOrEmpty(item.Summary) ? (item.Content.Length > 280 ? item.Content.Substring(0, 280) + "..." : item.Content) : item.Summary)
-                                @if (item.Content?.Length > 280)
+                                @(string.IsNullOrEmpty(displaySummary) ? (displayContent.Length > 280 ? displayContent.Substring(0, 280) + "..." : displayContent) : displaySummary)
+                                @if (displayContent?.Length > 280)
                                 {
                                     <button class="text-primary font-black ml-1 hover:underline text-xs" onclick="window.location.href='/posts/@item.Id'">@Localizer["ReadMore"]</button>
                                 }
@@ -361,7 +371,7 @@
 <!-- I will omit the heavy Bootstrap HTML for modals and use Tailwind analogs -->
 
 @section Scripts {
-    @await Html.PartialAsync("~/Views/Community/Feed/_LocalizationScript.cshtml")
+
     <script src="~/js/feed.js"></script>
     <script src="~/js/stories.js"></script>
     <script>

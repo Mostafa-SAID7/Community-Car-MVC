@@ -6,6 +6,10 @@ namespace CommunityCar.Domain.Entities.Community.QA;
 public class Answer : BaseEntity
 {
     public string Body { get; private set; }
+    
+    // Arabic Localization
+    public string? BodyAr { get; private set; }
+    
     public Guid QuestionId { get; private set; }
     public Guid AuthorId { get; private set; }
     public bool IsAccepted { get; private set; }
@@ -58,6 +62,12 @@ public class Answer : BaseEntity
         IsEdited = true;
         LastEditedAt = DateTime.UtcNow;
         EditReason = editReason;
+        Audit(UpdatedBy);
+    }
+
+    public void UpdateArabicContent(string? bodyAr)
+    {
+        BodyAr = bodyAr;
         Audit(UpdatedBy);
     }
 

@@ -3,9 +3,11 @@
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["PageTitle"];
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
 }
 
-<div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-2xl flex h-[calc(100vh-10rem)] overflow-hidden mb-8 group/chat-main">
+<div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-2xl flex h-[calc(100vh-10rem)] overflow-hidden mb-8 group/chat-main" dir="@(isArabic ? "rtl" : "ltr")">
     <!-- Chat Sidebar -->
     <div class="w-80 border-r border-border/50 flex flex-col bg-muted/5 backdrop-blur-sm shrink-0">
         <div class="p-5 border-b border-border/50 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent">
@@ -127,7 +129,7 @@
 </div>
 
 @section Scripts {
-    @await Html.PartialAsync("~/Views/Chats/_LocalizationScript.cshtml")
+
     <script src="~/lib/signalr/signalr.min.js"></script>
     <script src="~/js/chat.js"></script>
     <!-- Preservation of original script logic with Tailwind updates -->

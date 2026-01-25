@@ -296,4 +296,287 @@
   <data name="MoreFromAuthor" xml:space="preserve">
     <value>المزيد من هذا المؤلف</value>
   </data>
+  
+  <!-- News Section -->
+  <data name="AllNews" xml:space="preserve">
+    <value>الأخبار</value>
+  </data>
+  <data name="CreateNews" xml:space="preserve">
+    <value>إنشاء خبر</value>
+  </data>
+  <data name="EditNews" xml:space="preserve">
+    <value>تعديل الخبر</value>
+  </data>
+  <data name="NewsDetail" xml:space="preserve">
+    <value>تفاصيل الخبر</value>
+  </data>
+  <data name="Headline" xml:space="preserve">
+    <value>العنوان (إنجليزي)</value>
+  </data>
+  <data name="HeadlineAr" xml:space="preserve">
+    <value>العنوان (عربي)</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>الملخص (إنجليزي)</value>
+  </data>
+  <data name="SummaryAr" xml:space="preserve">
+    <value>الملخص (عربي)</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>المحتوى (إنجليزي)</value>
+  </data>
+  <data name="ContentAr" xml:space="preserve">
+    <value>المحتوى (عربي)</value>
+  </data>
+  <data name="ArticlesFound" xml:space="preserve">
+    <value>مقالات تم العثور عليها</value>
+  </data>
+  <data name="GeneralDescription" xml:space="preserve">
+    <value>ابق على اطلاع بآخر أخبار السيارات وتطورات الصناعة</value>
+  </data>
+  <data name="CarReviewsDescription" xml:space="preserve">
+    <value>مراجعات وتحليلات مفصلة لأحدث موديلات وميزات السيارات</value>
+  </data>
+  <data name="IndustryDescription" xml:space="preserve">
+    <value>أخبار عاجلة ورؤى من صناعة السيارات</value>
+  </data>
+  <data name="TechnologyDescription" xml:space="preserve">
+    <value>أحدث ابتكارات وتطورات تكنولوجيا السيارات</value>
+  </data>
+  <data name="EventsDescription" xml:space="preserve">
+    <value>تغطية لفعاليات وعروض ومعارض السيارات</value>
+  </data>
+  <data name="TipsDescription" xml:space="preserve">
+    <value>نصائح وإرشادات مفيدة لمالكي ومحبي السيارات</value>
+  </data>
+  <data name="DefaultDescription" xml:space="preserve">
+    <value>اكتشف أحدث أخبار وتحديثات السيارات من مجتمعنا</value>
+  </data>
+  <data name="HeadlinePlaceholder" xml:space="preserve">
+    <value>أدخل عنوان الخبر بالإنجليزية</value>
+  </data>
+  <data name="HeadlineArPlaceholder" xml:space="preserve">
+    <value>أدخل عنوان الخبر بالعربية</value>
+  </data>
+  <data name="SummaryPlaceholder" xml:space="preserve">
+    <value>أدخل ملخصاً قصيراً بالإنجليزية</value>
+  </data>
+  <data name="SummaryArPlaceholder" xml:space="preserve">
+    <value>أدخل ملخصاً قصيراً بالعربية</value>
+  </data>
+  <data name="ContentPlaceholder" xml:space="preserve">
+    <value>أدخل المحتوى الكامل بالإنجليزية</value>
+  </data>
+  <data name="ContentArPlaceholder" xml:space="preserve">
+    <value>أدخل المحتوى الكامل بالعربية</value>
+  </data>
+
+  <!-- Events Section -->
+  <data name="CommunityEvents" xml:space="preserve">
+    <value>فعاليات المجتمع</value>
+  </data>
+  <data name="EventsSubtitle" xml:space="preserve">
+    <value>اكتشف تجمعات السيارات، الرحلات البرية، وفعاليات السباق</value>
+  </data>
+  <data name="UpcomingEvents" xml:space="preserve">
+    <value>الفعاليات القادمة</value>
+  </data>
+  <data name="UpcomingSubtitle" xml:space="preserve">
+    <value>لا تفوت هذه الفعاليات المثيرة لمجتمع السيارات</value>
+  </data>
+  <data name="TotalEvents" xml:space="preserve">
+    <value>إجمالي الفعاليات</value>
+  </data>
+  <data name="ActiveNow" xml:space="preserve">
+    <value>نشط الآن</value>
+  </data>
+  <data name="TotalAttendees" xml:space="preserve">
+    <value>إجمالي الحضور</value>
+  </data>
+  <data name="BackToEvents" xml:space="preserve">
+    <value>العودة إلى الفعاليات</value>
+  </data>
+  <data name="JoinEvent" xml:space="preserve">
+    <value>انضم للفعالية</value>
+  </data>
+  <data name="LeaveEvent" xml:space="preserve">
+    <value>غادر الفعالية</value>
+  </data>
+  <data name="EditEvent" xml:space="preserve">
+    <value>تعديل الفعالية</value>
+  </data>
+  <data name="EventDetails" xml:space="preserve">
+    <value>تفاصيل الفعالية</value>
+  </data>
+  <data name="DateTime" xml:space="preserve">
+    <value>التاريخ والوقت</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>الموقع</value>
+  </data>
+  <data name="LocationDetails" xml:space="preserve">
+    <value>تفاصيل الموقع</value>
+  </data>
+  <data name="Attendance" xml:space="preserve">
+    <value>الحضور</value>
+  </data>
+  <data name="Attendees" xml:space="preserve">
+    <value>حاضر</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>أقصى عدد</value>
+  </data>
+  <data name="Pricing" xml:space="preserve">
+    <value>الأسعار</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>الصور</value>
+  </data>
+  <data name="Organizer" xml:space="preserve">
+    <value>المنظم</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>الاتصال</value>
+  </data>
+  <data name="ExternalLink" xml:space="preserve">
+    <value>رابط خارجي</value>
+  </data>
+  <data name="QuickActions" xml:space="preserve">
+    <value>إجراءات سريعة</value>
+  </data>
+  <data name="ShareEvent" xml:space="preserve">
+    <value>مشاركة الفعالية</value>
+  </data>
+  <data name="AddToCalendar" xml:space="preserve">
+    <value>إضافة إلى التقويم</value>
+  </data>
+  <data name="AllEvents" xml:space="preserve">
+    <value>كل الفعاليات</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>عرض التفاصيل</value>
+  </data>
+  <data name="EventTitle" xml:space="preserve">
+    <value>عنوان الفعالية</value>
+  </data>
+  <data name="BasicInformation" xml:space="preserve">
+    <value>المعلومات الأساسية</value>
+  </data>
+  <data name="Arabic" xml:space="preserve">
+    <value>العربية</value>
+  </data>
+  <data name="PastEvent" xml:space="preserve">
+    <value>فعالية سابقة</value>
+  </data>
+  <data name="Upcoming" xml:space="preserve">
+    <value>قادمة</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>تنبيهات</value>
+  </data>
+  <data name="MarkAllRead" xml:space="preserve">
+    <value>تمييز الكل كمقروء</value>
+  </data>
+  <data name="LoadingNotifications" xml:space="preserve">
+    <value>جاري تحميل التنبيهات...</value>
+  </data>
+  <data name="TrendingTopics" xml:space="preserve">
+    <value>المواضيع الرائجة</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>منشورات</value>
+  </data>
+  <data name="ViewAllTrending" xml:space="preserve">
+    <value>عرض كل الرائج</value>
+  </data>
+  <data name="NoTrendingTopics" xml:space="preserve">
+    <value>لا توجد مواضيع رائجة حالياً</value>
+  </data>
+  <data name="PeopleYouMayKnow" xml:space="preserve">
+    <value>أشخاص قد تعرفهم</value>
+  </data>
+  <data name="MutualFriends" xml:space="preserve">
+    <value>أصدقاء مشتركين</value>
+  </data>
+  <data name="AddFriend" xml:space="preserve">
+    <value>إضافة صديق</value>
+  </data>
+  <data name="SeeAllSuggestions" xml:space="preserve">
+    <value>عرض كل الاقتراحات</value>
+  </data>
+  <data name="YourInterests" xml:space="preserve">
+    <value>اهتماماتك</value>
+  </data>
+  <data name="CommunityStats" xml:space="preserve">
+    <value>إحصائيات المجتمع</value>
+  </data>
+  <data name="TotalPosts" xml:space="preserve">
+    <value>إجمالي المنشورات</value>
+  </data>
+  <data name="ActiveStories" xml:space="preserve">
+    <value>القصص النشطة</value>
+  </data>
+  <data name="TotalEngagement" xml:space="preserve">
+    <value>إجمالي التفاعل</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>آخر تحديث</value>
+  </data>
+  <data name="StatsUnavailable" xml:space="preserve">
+    <value>الإحصائيات غير متوفرة</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>النشاط</value>
+  </data>
+  <data name="NewMemberJoined" xml:space="preserve">
+    <value>عضو جديد انضم</value>
+  </data>
+  <data name="ExpertAnswered" xml:space="preserve">
+    <value>خبير أجاب</value>
+  </data>
+  <data name="ViewAllInterests" xml:space="preserve">
+    <value>عرض كل الاهتمامات</value>
+  </data>
+  <data name="LearningInterests" xml:space="preserve">
+    <value>نحن نتعرف على اهتماماتك</value>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>نظرة عامة</value>
+  </data>
+  <data name="Analytics" xml:space="preserve">
+    <value>التحليلات</value>
+  </data>
+  <data name="AdminControl" xml:space="preserve">
+    <value>تحكم المسؤول</value>
+  </data>
+  <data name="ErrorLogs" xml:space="preserve">
+    <value>سجلات الأخطاء</value>
+  </data>
+  <data name="ErrorReports" xml:space="preserve">
+    <value>تقارير الأخطاء</value>
+  </data>
+  <data name="SystemReports" xml:space="preserve">
+    <value>تقارير النظام</value>
+  </data>
+  <data name="Monitoring" xml:space="preserve">
+    <value>المراقبة</value>
+  </data>
+  <data name="GlobalSettings" xml:space="preserve">
+    <value>الإعدادات العامة</value>
+  </data>
+  <data name="SEOAudit" xml:space="preserve">
+    <value>تدقيق SEO</value>
+  </data>
+  <data name="Localization" xml:space="preserve">
+    <value>الترجمة</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>تسجيل الخروج</value>
+  </data>
+  <data name="BackToSite" xml:space="preserve">
+    <value>العودة للموقع</value>
+  </data>
+  <data name="AdminProfile" xml:space="preserve">
+    <value>ملف المسؤول</value>
+  </data>
 </root>

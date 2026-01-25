@@ -8,6 +8,9 @@ public class NewsItemVM
     public string Headline { get; set; } = string.Empty;
     public string Body { get; set; } = string.Empty;
     public string? Summary { get; set; }
+    public string? HeadlineAr { get; set; }
+    public string? BodyAr { get; set; }
+    public string? SummaryAr { get; set; }
     public string? ImageUrl { get; set; }
     public List<string> ImageUrls { get; set; } = new();
     public NewsCategory Category { get; set; }

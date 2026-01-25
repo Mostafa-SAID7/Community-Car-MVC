@@ -46,7 +46,9 @@ public class RouteSummaryVM
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
+    public string? NameAr { get; set; }
     public string Description { get; set; } = string.Empty;
+    public string? DescriptionAr { get; set; }
     public RouteType Type { get; set; }
     public DifficultyLevel Difficulty { get; set; }
     public double DistanceKm { get; set; }

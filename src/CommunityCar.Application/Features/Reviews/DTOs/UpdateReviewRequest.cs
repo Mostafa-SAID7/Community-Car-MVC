@@ -16,6 +16,12 @@ public class UpdateReviewRequest
     [StringLength(2000)]
     public string Comment { get; set; } = string.Empty;
     
+    [StringLength(200)]
+    public string? TitleAr { get; set; }
+    
+    [StringLength(2000)]
+    public string? CommentAr { get; set; }
+    
     // Enhanced properties
     public bool IsRecommended { get; set; }
     

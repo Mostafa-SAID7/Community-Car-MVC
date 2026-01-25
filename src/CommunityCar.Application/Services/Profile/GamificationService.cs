@@ -43,6 +43,8 @@ public class GamificationService : IGamificationService
                 Points = 50,
                 EarnedAt = DateTime.UtcNow.AddDays(-10),
                 IsDisplayed = true,
+                NameAr = "الخطوات الأولى",
+                DescriptionAr = "قمت بنشر محتواك الأول",
                 RarityColor = "text-gray-500",
                 CategoryName = "Content Creator"
             },
@@ -99,6 +101,8 @@ public class GamificationService : IGamificationService
                 IsCompleted = false,
                 RewardPoints = 200,
                 RewardBadgeId = "social_master",
+                TitleAr = "الفراشة الاجتماعية",
+                DescriptionAr = "تكوين 50 صديقًا في المجتمع",
                 ProgressPercentage = 46
             },
             new()

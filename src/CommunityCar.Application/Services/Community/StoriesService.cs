@@ -179,6 +179,10 @@ public class StoriesService : IStoriesService
         var story = new Story(request.MediaUrl, request.AuthorId, request.Type, request.Duration);
         
         story.UpdateCaption(request.Caption);
+        if (!string.IsNullOrEmpty(request.CaptionAr))
+        {
+            story.UpdateArabicContent(request.CaptionAr);
+        }
         story.SetThumbnail(request.ThumbnailUrl);
         story.SetLocation(request.Latitude, request.Longitude, request.LocationName);
         story.SetCarInfo(request.CarMake, request.CarModel, request.CarYear, request.EventType);
@@ -209,6 +213,10 @@ public class StoriesService : IStoriesService
             throw new ArgumentException("Story not found");
 
         story.UpdateCaption(request.Caption);
+        if (!string.IsNullOrEmpty(request.CaptionAr))
+        {
+            story.UpdateArabicContent(request.CaptionAr);
+        }
         story.SetThumbnail(request.ThumbnailUrl);
         story.SetLocation(request.Latitude, request.Longitude, request.LocationName);
         story.SetCarInfo(request.CarMake, request.CarModel, request.CarYear, request.EventType);

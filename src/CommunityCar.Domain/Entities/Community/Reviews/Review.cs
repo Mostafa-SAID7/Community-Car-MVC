@@ -12,6 +12,11 @@ public class Review : AggregateRoot
     public int Rating { get; private set; } // 1-5
     public string Title { get; private set; }
     public string Comment { get; private set; }
+    
+    // Arabic Localization
+    public string? TitleAr { get; private set; }
+    public string? CommentAr { get; private set; }
+    
     public Guid ReviewerId { get; private set; }
     
     // Enhanced properties
@@ -81,6 +86,15 @@ public class Review : AggregateRoot
     {
         Title = title;
         Comment = comment;
+        IsEdited = true;
+        EditedAt = DateTime.UtcNow;
+        Audit(UpdatedBy);
+    }
+
+    public void UpdateArabicContent(string? titleAr, string? commentAr)
+    {
+        TitleAr = titleAr;
+        CommentAr = commentAr;
         IsEdited = true;
         EditedAt = DateTime.UtcNow;
         Audit(UpdatedBy);

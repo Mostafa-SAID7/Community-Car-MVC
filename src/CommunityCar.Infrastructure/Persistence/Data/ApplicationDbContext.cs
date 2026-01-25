@@ -102,14 +102,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
         builder.ConfigureSoftDeleteFilter();
 
         // Basic configurations
-        builder.Entity<User>().ToTable("Users");
-        builder.Entity<UserProfile>().ToTable("UserProfiles");
-        builder.Entity<UserGallery>().ToTable("UserGalleries");
-        builder.Entity<UserBadge>().ToTable("UserBadges");
-        builder.Entity<UserAchievement>().ToTable("UserAchievements");
-        builder.Entity<UserActivity>().ToTable("UserActivities");
-        builder.Entity<UserInterest>().ToTable("UserInterests");
-        builder.Entity<UserFollowing>().ToTable("UserFollowings");
+
         
         // Configure decimal properties to fix EF warnings
         builder.Entity<PointOfInterest>()

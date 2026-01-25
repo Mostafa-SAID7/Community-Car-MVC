@@ -72,9 +72,21 @@
                     <label class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">City</label>
                     <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground font-bold focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" asp-for="City" placeholder="Enter your city" />
                 </div>
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Country (Arabic)</label>
+                    <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground font-bold focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" asp-for="CountryAr" placeholder="أدخل الدولة بالعربية" dir="rtl" />
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">City (Arabic)</label>
+                    <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground font-bold focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" asp-for="CityAr" placeholder="أدخل المدينة بالعربية" dir="rtl" />
+                </div>
                 <div class="md:col-span-2 space-y-2">
                     <label class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Bio</label>
                     <textarea class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground font-bold focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none" asp-for="Bio" rows="4" placeholder="Tell us about yourself..."></textarea>
+                </div>
+                <div class="md:col-span-2 space-y-2">
+                    <label class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Bio (Arabic)</label>
+                    <textarea class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground font-bold focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none" asp-for="BioAr" rows="4" placeholder="أخبرنا عن نفسك..." dir="rtl"></textarea>
                 </div>
             </div>
 

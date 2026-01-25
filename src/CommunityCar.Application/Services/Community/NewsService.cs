@@ -211,6 +211,8 @@ public class NewsService : INewsService
     {
         var newsItem = new NewsItem(model.Headline, model.Body, authorId, model.Category);
         
+        newsItem.UpdateArabicContent(model.HeadlineAr, model.BodyAr, model.SummaryAr);
+        
         if (!string.IsNullOrWhiteSpace(model.Summary))
             newsItem.UpdateContent(model.Headline, model.Body, model.Summary);
         
@@ -261,6 +263,7 @@ public class NewsService : INewsService
             throw new UnauthorizedAccessException("You can only edit your own news items");
 
         newsItem.UpdateContent(model.Headline, model.Body, model.Summary);
+        newsItem.UpdateArabicContent(model.HeadlineAr, model.BodyAr, model.SummaryAr);
         newsItem.UpdateCategory(model.Category);
         newsItem.SetSource(model.Source, model.SourceUrl);
         newsItem.UpdateSeoData(model.MetaTitle, model.MetaDescription);

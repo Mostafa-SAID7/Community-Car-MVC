@@ -10,7 +10,7 @@ let storyAutoAdvanceTimeout = null;
 function initializeStories() {
     loadStoriesData();
     setupStoryViewer();
-    
+
     // Auto-refresh stories every 5 minutes
     setInterval(refreshStories, 300000);
 }
@@ -35,15 +35,15 @@ function loadStoriesData() {
 function updateStoriesDisplay(stories) {
     const container = document.getElementById('storiesContainer');
     if (!container) return;
-    
+
     // Keep the "Add Story" button
     const addStoryBtn = container.querySelector('.group\\/add-story');
     container.innerHTML = '';
-    
+
     if (addStoryBtn) {
         container.appendChild(addStoryBtn);
     }
-    
+
     stories.forEach(story => {
         const storyElement = createStoryElement(story);
         container.appendChild(storyElement);
@@ -56,10 +56,10 @@ function createStoryElement(story) {
     storyDiv.className = 'flex-shrink-0 flex flex-col items-center gap-2 cursor-pointer group/story snap-start';
     storyDiv.setAttribute('data-story-id', story.id);
     storyDiv.onclick = () => openStoryViewer(story.id);
-    
+
     const timeRemaining = calculateTimeRemaining(story.expiresAt);
     const isViewed = story.viewCount > 0; // Simple check, in real app you'd track per user
-    
+
     storyDiv.innerHTML = `
         <div class="w-16 h-16 rounded-full p-0.5 relative transition-all group-hover/story:scale-105 active:scale-95 shadow-md">
             ${!isViewed ? `
@@ -88,7 +88,7 @@ function createStoryElement(story) {
             ${timeRemaining}
         </div>
     `;
-    
+
     return storyDiv;
 }
 
@@ -97,12 +97,12 @@ function calculateTimeRemaining(expiresAt) {
     const now = new Date();
     const expires = new Date(expiresAt);
     const diff = expires - now;
-    
+
     if (diff <= 0) return 'Expired';
-    
+
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
+
     if (hours > 0) {
         return `${hours}h`;
     } else if (minutes > 0) {
@@ -183,13 +183,13 @@ function setupStoryViewer() {
                 </div>
             </div>
         `;
-        
+
         document.body.insertAdjacentHTML('beforeend', modalHTML);
         storyViewerModal = document.getElementById('storyViewerModal');
-        
+
         // Add keyboard navigation
         document.addEventListener('keydown', handleStoryKeyboard);
-        
+
         // Add touch/click navigation
         const mediaContainer = document.getElementById('storyMediaContainer');
         mediaContainer.addEventListener('click', handleStoryClick);
@@ -206,7 +206,7 @@ function openStoryViewer(storyId) {
                 currentStorySet = data.data;
                 currentStoryIndex = currentStorySet.findIndex(s => s.id === storyId);
                 if (currentStoryIndex === -1) currentStoryIndex = 0;
-                
+
                 showStoryViewer();
                 displayCurrentStory();
             }
@@ -229,7 +229,7 @@ function closeStoryViewer() {
     if (storyViewerModal) {
         storyViewerModal.classList.add('hidden');
         document.body.style.overflow = '';
-        
+
         // Clear intervals and timeouts
         if (storyProgressInterval) {
             clearInterval(storyProgressInterval);
@@ -248,21 +248,21 @@ function displayCurrentStory() {
         closeStoryViewer();
         return;
     }
-    
+
     const story = currentStorySet[currentStoryIndex];
-    
+
     // Update progress bars
     updateProgressBars();
-    
+
     // Update header
     document.getElementById('storyAuthorAvatar').src = story.authorAvatar || '/images/default-avatar.png';
     document.getElementById('storyAuthorName').textContent = story.authorName;
     document.getElementById('storyTimeAgo').textContent = story.timeAgo;
-    
+
     // Update media
     const imageEl = document.getElementById('storyImage');
     const videoEl = document.getElementById('storyVideo');
-    
+
     if (story.type === 'Video') {
         imageEl.classList.add('hidden');
         videoEl.classList.remove('hidden');
@@ -274,20 +274,24 @@ function displayCurrentStory() {
         imageEl.classList.remove('hidden');
         imageEl.src = story.mediaUrl;
     }
-    
+
     // Update caption
     const captionEl = document.getElementById('storyCaption');
-    if (story.caption) {
-        captionEl.textContent = story.caption;
+    const isArabic = window.feedLocalizer && window.feedLocalizer.isArabic;
+    const displayCaption = isArabic && story.captionAr ? story.captionAr : story.caption;
+
+    if (displayCaption) {
+        captionEl.textContent = displayCaption;
+        captionEl.dir = isArabic && story.captionAr ? 'rtl' : 'ltr';
         captionEl.classList.remove('hidden');
     } else {
         captionEl.classList.add('hidden');
     }
-    
+
     // Update stats
     document.getElementById('storyViews').innerHTML = `<i class="fas fa-eye mr-1"></i>${story.viewCount}`;
     document.getElementById('storyLikes').innerHTML = `<i class="fas fa-heart mr-1"></i>${story.likeCount}`;
-    
+
     // Update location
     const locationEl = document.getElementById('storyLocation');
     if (story.locationName) {
@@ -296,14 +300,14 @@ function displayCurrentStory() {
     } else {
         locationEl.classList.add('hidden');
     }
-    
+
     // Update like button
     const likeBtn = document.getElementById('storyLikeBtn');
     likeBtn.classList.toggle('text-red-500', story.isLikedByUser);
-    
+
     // Mark as viewed
     markStoryAsViewed(story.id);
-    
+
     // Start progress and auto-advance
     startStoryProgress();
 }
@@ -312,15 +316,15 @@ function displayCurrentStory() {
 function updateProgressBars() {
     const progressContainer = document.getElementById('storyProgressBars');
     progressContainer.innerHTML = '';
-    
+
     currentStorySet.forEach((_, index) => {
         const bar = document.createElement('div');
         bar.className = 'flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden';
-        
+
         const progress = document.createElement('div');
         progress.className = 'h-full bg-white transition-all duration-100';
         progress.style.width = index < currentStoryIndex ? '100%' : index === currentStoryIndex ? '0%' : '0%';
-        
+
         bar.appendChild(progress);
         progressContainer.appendChild(bar);
     });
@@ -331,18 +335,18 @@ function startStoryProgress() {
     // Clear existing intervals
     if (storyProgressInterval) clearInterval(storyProgressInterval);
     if (storyAutoAdvanceTimeout) clearTimeout(storyAutoAdvanceTimeout);
-    
+
     const progressBar = document.getElementById('storyProgressBars').children[currentStoryIndex]?.querySelector('div');
     if (!progressBar) return;
-    
+
     const duration = currentStorySet[currentStoryIndex].type === 'Video' ? 15000 : 5000; // 15s for video, 5s for image
     const startTime = Date.now();
-    
+
     storyProgressInterval = setInterval(() => {
         const elapsed = Date.now() - startTime;
         const progress = Math.min((elapsed / duration) * 100, 100);
         progressBar.style.width = `${progress}%`;
-        
+
         if (progress >= 100) {
             clearInterval(storyProgressInterval);
             nextStory();
@@ -373,7 +377,7 @@ function nextStory() {
 // Handle keyboard navigation
 function handleStoryKeyboard(event) {
     if (!storyViewerModal || storyViewerModal.classList.contains('hidden')) return;
-    
+
     switch (event.key) {
         case 'Escape':
             closeStoryViewer();
@@ -394,7 +398,7 @@ function handleStoryClick(event) {
     const rect = event.currentTarget.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
     const width = rect.width;
-    
+
     if (clickX < width / 2) {
         previousStory();
     } else {
@@ -406,74 +410,74 @@ function handleStoryClick(event) {
 function toggleStoryLike() {
     const story = currentStorySet[currentStoryIndex];
     if (!story) return;
-    
+
     const isLiked = story.isLikedByUser;
     const endpoint = isLiked ? 'DELETE' : 'POST';
-    
+
     fetch(`/api/stories/${story.id}/like`, {
         method: endpoint,
         headers: {
             'Content-Type': 'application/json',
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            story.isLikedByUser = !isLiked;
-            story.likeCount += isLiked ? -1 : 1;
-            
-            // Update UI
-            const likeBtn = document.getElementById('storyLikeBtn');
-            likeBtn.classList.toggle('text-red-500', story.isLikedByUser);
-            document.getElementById('storyLikes').innerHTML = `<i class="fas fa-heart mr-1"></i>${story.likeCount}`;
-            
-            showNotification(
-                isLiked ? (window.storiesLocalizer?.RemovedLike || 'Removed like') : (window.storiesLocalizer?.Liked || 'Liked!'),
-                'success'
-            );
-        }
-    })
-    .catch(error => {
-        console.error('Error toggling story like:', error);
-        showNotification(window.storiesLocalizer?.ErrorUpdatingLike || 'Error updating like', 'error');
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                story.isLikedByUser = !isLiked;
+                story.likeCount += isLiked ? -1 : 1;
+
+                // Update UI
+                const likeBtn = document.getElementById('storyLikeBtn');
+                likeBtn.classList.toggle('text-red-500', story.isLikedByUser);
+                document.getElementById('storyLikes').innerHTML = `<i class="fas fa-heart mr-1"></i>${story.likeCount}`;
+
+                showNotification(
+                    isLiked ? (window.storiesLocalizer?.RemovedLike || 'Removed like') : (window.storiesLocalizer?.Liked || 'Liked!'),
+                    'success'
+                );
+            }
+        })
+        .catch(error => {
+            console.error('Error toggling story like:', error);
+            showNotification(window.storiesLocalizer?.ErrorUpdatingLike || 'Error updating like', 'error');
+        });
 }
 
 // Share story
 function shareStory() {
     const story = currentStorySet[currentStoryIndex];
     if (!story) return;
-    
+
     fetch(`/api/stories/${story.id}/share`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            if (navigator.share) {
-                navigator.share({
-                    title: `${story.authorName}'s Story`,
-                    text: story.caption || 'Check out this story!',
-                    url: data.shareUrl
-                });
-            } else {
-                navigator.clipboard.writeText(data.shareUrl)
-                    .then(() => {
-                        showNotification(window.storiesLocalizer?.LinkCopiedToClipboard || 'Link copied to clipboard!', 'success');
-                    })
-                    .catch(() => {
-                        showNotification(window.storiesLocalizer?.UnableToCopyLink || 'Unable to copy link', 'error');
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (navigator.share) {
+                    navigator.share({
+                        title: `${story.authorName}'s Story`,
+                        text: story.caption || 'Check out this story!',
+                        url: data.shareUrl
                     });
+                } else {
+                    navigator.clipboard.writeText(data.shareUrl)
+                        .then(() => {
+                            showNotification(window.storiesLocalizer?.LinkCopiedToClipboard || 'Link copied to clipboard!', 'success');
+                        })
+                        .catch(() => {
+                            showNotification(window.storiesLocalizer?.UnableToCopyLink || 'Unable to copy link', 'error');
+                        });
+                }
             }
-        }
-    })
-    .catch(error => {
-        console.error('Error sharing story:', error);
-        showNotification(window.storiesLocalizer?.ErrorSharingStory || 'Error sharing story', 'error');
-    });
+        })
+        .catch(error => {
+            console.error('Error sharing story:', error);
+            showNotification(window.storiesLocalizer?.ErrorSharingStory || 'Error sharing story', 'error');
+        });
 }
 
 // Mark story as viewed
@@ -484,9 +488,9 @@ function markStoryAsViewed(storyId) {
             'Content-Type': 'application/json',
         }
     })
-    .catch(error => {
-        console.error('Error marking story as viewed:', error);
-    });
+        .catch(error => {
+            console.error('Error marking story as viewed:', error);
+        });
 }
 
 // Open create story modal
@@ -525,6 +529,6 @@ window.storiesFunctions = {
 Object.assign(window, window.storiesFunctions);
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeStories();
 });

@@ -13,6 +13,11 @@ public class CreatePostRequest
     [StringLength(10000)]
     public string Content { get; set; } = string.Empty;
     
+    [StringLength(200)]
+    public string? TitleAr { get; set; }
+
+    public string? ContentAr { get; set; }
+    
     public PostType Type { get; set; } = PostType.Text;
     
     public Guid? GroupId { get; set; }
@@ -33,6 +38,11 @@ public class UpdatePostRequest
     [Required]
     [StringLength(10000)]
     public string Content { get; set; } = string.Empty;
+    
+    [StringLength(200)]
+    public string? TitleAr { get; set; }
+
+    public string? ContentAr { get; set; }
     
     public PostType Type { get; set; } = PostType.Text;
     
@@ -78,6 +88,8 @@ public class PostSummaryVM
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
+    public string? TitleAr { get; set; }
+    public string? ContentAr { get; set; }
     public PostType Type { get; set; }
     public Guid AuthorId { get; set; }
     public string AuthorName { get; set; } = string.Empty;

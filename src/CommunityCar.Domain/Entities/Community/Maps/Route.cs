@@ -9,6 +9,8 @@ public class Route : BaseEntity
 {
     public string Name { get; private set; }
     public string Description { get; private set; }
+    public string? NameAr { get; private set; }
+    public string? DescriptionAr { get; private set; }
     public new Guid CreatedBy { get; private set; }
     public RouteType Type { get; private set; }
     public DifficultyLevel Difficulty { get; private set; }
@@ -25,11 +27,15 @@ public class Route : BaseEntity
     public bool HasTolls { get; private set; }
     public bool IsOffRoad { get; private set; }
     public string? SurfaceType { get; private set; }
+    public string? SurfaceTypeAr { get; private set; }
     public string? BestTimeToVisit { get; private set; }
+    public string? BestTimeToVisitAr { get; private set; }
     
     // Safety and conditions
     public string? SafetyNotes { get; private set; }
+    public string? SafetyNotesAr { get; private set; }
     public string? CurrentConditions { get; private set; }
+    public string? CurrentConditionsAr { get; private set; }
     public DateTime? LastConditionUpdate { get; private set; }
     
     // Waypoints as JSON string for simplicity
@@ -85,6 +91,17 @@ public class Route : BaseEntity
         Description = description;
         Type = type;
         Difficulty = difficulty;
+        Audit(UpdatedBy);
+    }
+
+    public void UpdateArabicContent(string? nameAr, string? descriptionAr, string? surfaceTypeAr = null, string? bestTimeToVisitAr = null, string? safetyNotesAr = null, string? currentConditionsAr = null)
+    {
+        NameAr = nameAr;
+        DescriptionAr = descriptionAr;
+        SurfaceTypeAr = surfaceTypeAr;
+        BestTimeToVisitAr = bestTimeToVisitAr;
+        SafetyNotesAr = safetyNotesAr;
+        CurrentConditionsAr = currentConditionsAr;
         Audit(UpdatedBy);
     }
 
@@ -205,7 +222,9 @@ public class RouteWaypoint
     public double Latitude { get; private set; }
     public double Longitude { get; private set; }
     public string? Name { get; private set; }
+    public string? NameAr { get; private set; }
     public string? Description { get; private set; }
+    public string? DescriptionAr { get; private set; }
     public int Order { get; private set; }
 
     public RouteWaypoint(double latitude, double longitude, string? name = null, 
@@ -223,6 +242,12 @@ public class RouteWaypoint
         Name = name;
         Description = description;
         Order = order;
+    }
+
+    public void UpdateArabicContent(string? nameAr, string? descriptionAr)
+    {
+        NameAr = nameAr;
+        DescriptionAr = descriptionAr;
     }
 }
 

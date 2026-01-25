@@ -163,6 +163,11 @@ public class ReviewsService : IReviewsService
     {
         var review = new Review(request.TargetId, request.TargetType, request.Rating, request.Title, request.Comment, request.ReviewerId);
         
+        if (!string.IsNullOrEmpty(request.TitleAr) || !string.IsNullOrEmpty(request.CommentAr))
+        {
+            review.UpdateArabicContent(request.TitleAr, request.CommentAr);
+        }
+        
         review.SetPurchaseInfo(request.IsVerifiedPurchase, request.PurchaseDate, request.PurchasePrice);
         review.SetRecommendation(request.IsRecommended);
         review.SetCarInfo(request.CarMake, request.CarModel, request.CarYear, request.Mileage, request.OwnershipDuration);
@@ -190,6 +195,11 @@ public class ReviewsService : IReviewsService
             throw new ArgumentException("Review not found");
 
         review.UpdateContent(request.Title, request.Comment);
+        
+        if (!string.IsNullOrEmpty(request.TitleAr) || !string.IsNullOrEmpty(request.CommentAr))
+        {
+            review.UpdateArabicContent(request.TitleAr, request.CommentAr);
+        }
         review.UpdateRating(request.Rating);
         review.SetRecommendation(request.IsRecommended);
         review.SetCarInfo(request.CarMake, request.CarModel, request.CarYear, request.Mileage, request.OwnershipDuration);

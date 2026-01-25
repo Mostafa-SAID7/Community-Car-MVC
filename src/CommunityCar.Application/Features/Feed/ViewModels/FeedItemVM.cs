@@ -9,6 +9,9 @@ public class FeedItemVM
     public string Title { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
     public string? Summary { get; set; }
+    public string? TitleAr { get; set; }
+    public string? ContentAr { get; set; }
+    public string? SummaryAr { get; set; }
     public string? ImageUrl { get; set; }
     public List<string> ImageUrls { get; set; } = new();
     

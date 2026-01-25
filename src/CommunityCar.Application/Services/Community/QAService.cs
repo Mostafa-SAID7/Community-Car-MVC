@@ -299,9 +299,14 @@ public class QAService : IQAService
         return vms;
     }
 
-    public async Task<QuestionVM> CreateQuestionAsync(string title, string body, Guid authorId, DifficultyLevel difficulty = DifficultyLevel.Beginner, string? carMake = null, string? carModel = null, int? carYear = null, string? carEngine = null, List<string>? tags = null)
+    public async Task<QuestionVM> CreateQuestionAsync(string title, string body, Guid authorId, string? titleAr = null, string? bodyAr = null, DifficultyLevel difficulty = DifficultyLevel.Beginner, string? carMake = null, string? carModel = null, int? carYear = null, string? carEngine = null, List<string>? tags = null)
     {
         var question = new Question(title, body, authorId, difficulty);
+        
+        if (!string.IsNullOrEmpty(titleAr) || !string.IsNullOrEmpty(bodyAr))
+        {
+            question.UpdateArabicContent(titleAr, bodyAr);
+        }
         
         if (!string.IsNullOrWhiteSpace(carMake) || !string.IsNullOrWhiteSpace(carModel) || carYear.HasValue || !string.IsNullOrWhiteSpace(carEngine))
         {
@@ -322,9 +327,14 @@ public class QAService : IQAService
         return _mapper.Map<QuestionVM>(question);
     }
 
-    public async Task<AnswerVM> CreateAnswerAsync(Guid questionId, string body, Guid authorId)
+    public async Task<AnswerVM> CreateAnswerAsync(Guid questionId, string body, Guid authorId, string? bodyAr = null)
     {
         var answer = new Answer(body, questionId, authorId);
+        
+        if (!string.IsNullOrEmpty(bodyAr))
+        {
+            answer.UpdateArabicContent(bodyAr);
+        }
         await _unitOfWork.QA.AddAnswerAsync(answer);
         
         // Update question answer count and activity

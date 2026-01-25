@@ -11,6 +11,20 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
     {
         builder.ToTable("Questions");
 
+        builder.Property(q => q.Title)
+            .IsRequired()
+            .HasMaxLength(500);
+
+        builder.Property(q => q.Body)
+            .IsRequired()
+            .HasMaxLength(5000);
+
+        builder.Property(q => q.TitleAr)
+            .HasMaxLength(500);
+
+        builder.Property(q => q.BodyAr)
+            .HasMaxLength(5000);
+
         builder.Property(q => q.Tags)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),

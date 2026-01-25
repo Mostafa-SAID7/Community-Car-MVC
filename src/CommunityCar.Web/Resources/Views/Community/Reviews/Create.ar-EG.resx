@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateReview" xml:space="preserve">
+    <value>إضافة مراجعة</value>
+  </data>
+  <data name="CreateReviewDescription" xml:space="preserve">
+    <value>شارك تجربتك في عالم السيارات مع المجتمع.</value>
+  </data>
+  <data name="ReviewingSpecificItem" xml:space="preserve">
+    <value>مراجعة</value>
+  </data>
+  <data name="ReviewTitle" xml:space="preserve">
+    <value>عنوان المراجعة</value>
+  </data>
+  <data name="ReviewTitlePlaceholder" xml:space="preserve">
+    <value>مثال: تجربتي مع هذه السيارة</value>
+  </data>
+  <data name="ReviewTitlePlaceholderAr" xml:space="preserve">
+    <value>مثال: تجربتي مع هذه السيارة</value>
+  </data>
+  <data name="OverallRating" xml:space="preserve">
+    <value>التقييم العام</value>
+  </data>
+  <data name="SelectRating" xml:space="preserve">
+    <value>اختر التقييم</value>
+  </data>
+  <data name="Excellent" xml:space="preserve">
+    <value>ممتاز</value>
+  </data>
+  <data name="VeryGood" xml:space="preserve">
+    <value>جيد جداً</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>جيد</value>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>مقبول</value>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>سيئ</value>
+  </data>
+  <data name="VehicleInformation" xml:space="preserve">
+    <value>معلومات المركبة</value>
+  </data>
+  <data name="CarMake" xml:space="preserve">
+    <value>الماركة</value>
+  </data>
+  <data name="CarMakePlaceholder" xml:space="preserve">
+    <value>مثل: تويوتا</value>
+  </data>
+  <data name="CarModel" xml:space="preserve">
+    <value>الموديل</value>
+  </data>
+  <data name="CarModelPlaceholder" xml:space="preserve">
+    <value>مثل: كامري</value>
+  </data>
+  <data name="CarYear" xml:space="preserve">
+    <value>السنة</value>
+  </data>
+  <data name="ReviewContent" xml:space="preserve">
+    <value>المراجعة التفصيلية</value>
+  </data>
+  <data name="ReviewContentPlaceholder" xml:space="preserve">
+    <value>اكتب تجربتك بالتفصيل هنا...</value>
+  </data>
+  <data name="ReviewContentPlaceholderAr" xml:space="preserve">
+    <value>اكتب تجربتك بالتفصيل هنا...</value>
+  </data>
+  <data name="DetailedRatings" xml:space="preserve">
+    <value>التقييمات التفصيلية</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>اختياري</value>
+  </data>
+  <data name="Quality" xml:space="preserve">
+    <value>جودة التصنيع</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>القيمة مقابل السعر</value>
+  </data>
+  <data name="Reliability" xml:space="preserve">
+    <value>الاعتمادية</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>الأداء</value>
+  </data>
+  <data name="Comfort" xml:space="preserve">
+    <value>الراحة</value>
+  </data>
+  <data name="NotRated" xml:space="preserve">
+    <value>غير مقيم</value>
+  </data>
+  <data name="Pros" xml:space="preserve">
+    <value>المميزات</value>
+  </data>
+  <data name="ProsPlaceholder" xml:space="preserve">
+    <value>ما الذي أعجبك؟</value>
+  </data>
+  <data name="ProsHint" xml:space="preserve">
+    <value>افصل بين كل عنصر بفاصلة.</value>
+  </data>
+  <data name="Cons" xml:space="preserve">
+    <value>العيوب</value>
+  </data>
+  <data name="ConsPlaceholder" xml:space="preserve">
+    <value>ما الذي لم يعجبك؟</value>
+  </data>
+  <data name="ConsHint" xml:space="preserve">
+    <value>افصل بين كل عنصر بفاصلة.</value>
+  </data>
+  <data name="AdditionalInformation" xml:space="preserve">
+    <value>معلومات إضافية</value>
+  </data>
+  <data name="Mileage" xml:space="preserve">
+    <value>المسافة المقطوعة</value>
+  </data>
+  <data name="MileagePlaceholder" xml:space="preserve">
+    <value>المسافة الحالية</value>
+  </data>
+  <data name="OwnershipDuration" xml:space="preserve">
+    <value>مدة الملكية</value>
+  </data>
+  <data name="OwnershipDurationPlaceholder" xml:space="preserve">
+    <value>مثال: سنتين</value>
+  </data>
+  <data name="PurchaseDate" xml:space="preserve">
+    <value>تاريخ الشراء</value>
+  </data>
+  <data name="PurchasePrice" xml:space="preserve">
+    <value>سعر الشراء</value>
+  </data>
+  <data name="PurchasePricePlaceholder" xml:space="preserve">
+    <value>السعر (اختياري)</value>
+  </data>
+  <data name="Images" xml:space="preserve">
+    <value>الصور (روابط)</value>
+  </data>
+  <data name="ImageUrlsPlaceholder" xml:space="preserve">
+    <value>أدخل روابط الصور مفصولة بفاصلة</value>
+  </data>
+  <data name="ImageUrlsHint" xml:space="preserve">
+    <value>روابط خارجية لصور سيارتك.</value>
+  </data>
+  <data name="ReviewOptions" xml:space="preserve">
+    <value>خيارات المراجعة</value>
+  </data>
+  <data name="VerifiedPurchase" xml:space="preserve">
+    <value>شراء مؤكد</value>
+  </data>
+  <data name="RecommendToOthers" xml:space="preserve">
+    <value>أوصي بهذا للآخرين</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+</root>

@@ -11,6 +11,20 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
     {
         builder.ToTable("Reviews");
 
+        builder.Property(r => r.Title)
+            .IsRequired()
+            .HasMaxLength(200);
+
+        builder.Property(r => r.Comment)
+            .IsRequired()
+            .HasMaxLength(2000);
+
+        builder.Property(r => r.TitleAr)
+            .HasMaxLength(200);
+
+        builder.Property(r => r.CommentAr)
+            .HasMaxLength(2000);
+
         builder.Property(r => r.ImageUrls)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),

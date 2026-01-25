@@ -66,6 +66,11 @@ public class GroupsService : IGroupsService
             request.RequiresApproval,
             request.Location);
 
+        if (!string.IsNullOrEmpty(request.NameAr) || !string.IsNullOrEmpty(request.DescriptionAr))
+        {
+            group.UpdateArabicContent(request.NameAr, request.DescriptionAr, request.CategoryAr, request.RulesAr, request.LocationAr);
+        }
+
         if (!string.IsNullOrWhiteSpace(request.CoverImageUrl))
         {
             group.UpdateCoverImage(request.CoverImageUrl);
@@ -108,6 +113,11 @@ public class GroupsService : IGroupsService
         group.UpdateBasicInfo(request.Name, request.Description, request.Category);
         group.UpdatePrivacy(request.Privacy, request.RequiresApproval);
         group.UpdateLocation(request.Location);
+
+        if (!string.IsNullOrEmpty(request.NameAr) || !string.IsNullOrEmpty(request.DescriptionAr))
+        {
+            group.UpdateArabicContent(request.NameAr, request.DescriptionAr, request.CategoryAr, request.RulesAr, request.LocationAr);
+        }
 
         if (!string.IsNullOrWhiteSpace(request.Rules))
         {
