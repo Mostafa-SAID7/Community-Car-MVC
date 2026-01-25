@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="resheader">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EditPost" xml:space="preserve">
+    <value>تعديل المنشور</value>
+  </data>
+  <data name="BackToPost" xml:space="preserve">
+    <value>العودة للمنشور</value>
+  </data>
+  <data name="UpdateSubtitle" xml:space="preserve">
+    <value>تحديث منشورك في المجتمع</value>
+  </data>
+  <data name="PostTitle" xml:space="preserve">
+    <value>عنوان المنشور *</value>
+  </data>
+  <data name="TitlePlaceholder" xml:space="preserve">
+    <value>أدخل عنوان المنشور</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>المحتوى *</value>
+  </data>
+  <data name="ContentPlaceholder" xml:space="preserve">
+    <value>شارك أفكارك أو تجاربك أو أسئلتك مع المجتمع</value>
+  </data>
+  <data name="PostType" xml:space="preserve">
+    <value>نوع المنشور</value>
+  </data>
+  <data name="Discussion" xml:space="preserve">
+    <value>مناقشة</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>سؤال</value>
+  </data>
+  <data name="Showcase" xml:space="preserve">
+    <value>عرض</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>أخبار</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>فعالية</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>الفئة</value>
+  </data>
+  <data name="CategoryPlaceholder" xml:space="preserve">
+    <value>مثال: صيانة، تعديلات، فعاليات</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>الوسوم</value>
+  </data>
+  <data name="TagsPlaceholder" xml:space="preserve">
+    <value>أدخل الوسوم مفصولة بفواصل (مثال: بي إم دبليو، صيانة، افعلها بنفسك)</value>
+  </data>
+  <data name="TagsHelp" xml:space="preserve">
+    <value>افصل بين الوسوم بفاصلة لمساعدة الآخرين في العثور على منشورك</value>
+  </data>
+  <data name="PinThisPost" xml:space="preserve">
+    <value>تثبيت هذا المنشور</value>
+  </data>
+  <data name="AllowComments" xml:space="preserve">
+    <value>السماح بالتعليقات</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="UpdatePost" xml:space="preserve">
+    <value>تحديث المنشور</value>
+  </data>
+</root>

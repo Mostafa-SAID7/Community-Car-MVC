@@ -295,10 +295,13 @@ function showLocationDetails(poiId) {
         .then(poi => {
             // Create or update details panel
             let detailsPanel = document.getElementById('locationDetailsPanel');
+            const isRtl = document.documentElement.dir === 'rtl';
+            
             if (!detailsPanel) {
                 detailsPanel = document.createElement('div');
                 detailsPanel.id = 'locationDetailsPanel';
-                detailsPanel.className = 'fixed top-4 right-4 w-80 bg-card border border-border rounded-2xl shadow-2xl p-6 z-50 max-h-[80vh] overflow-auto';
+                detailsPanel.className = `fixed top-4 ${isRtl ? 'left-4' : 'right-4'} w-80 bg-card border border-border rounded-2xl shadow-2xl p-6 z-50 max-h-[80vh] overflow-auto`;
+                detailsPanel.dir = isRtl ? 'rtl' : 'ltr';
                 document.body.appendChild(detailsPanel);
             }
             
@@ -552,26 +555,45 @@ function submitRoute() {
 
 // Show toast notification
 function showToast(message, type = 'info') {
-    // Use the global showToast function from custom-bootstrap.js
-    if (window.showToast) {
+    // Use the global notification system if available
+    if (window.notify && typeof window.notify[type] === 'function') {
+        window.notify[type](message);
+    } else if (window.showToast) {
+        // Use the global showToast function from custom-bootstrap.js
         window.showToast(message, type);
     } else {
         // Fallback to console if custom toast not available
         console.log(`${type.toUpperCase()}: ${message}`);
         
-        // Simple fallback toast
+        // Simple fallback toast with RTL support
         const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium ${
+        const isRtl = document.documentElement.dir === 'rtl';
+        
+        toast.className = `fixed top-4 ${isRtl ? 'left-4' : 'right-4'} z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transition-all ${
             type === 'success' ? 'bg-green-600' :
             type === 'error' ? 'bg-red-600' :
             type === 'warning' ? 'bg-amber-600' :
             'bg-blue-600'
         }`;
         toast.textContent = message;
+        toast.dir = isRtl ? 'rtl' : 'ltr';
         document.body.appendChild(toast);
         
+        // Animate in
         setTimeout(() => {
-            toast.remove();
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+        }, 10);
+        
+        // Remove after delay
+        setTimeout(() => {
+            toast.style.transform = 'translateY(-100%)';
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 300);
         }, 5000);
     }
 }

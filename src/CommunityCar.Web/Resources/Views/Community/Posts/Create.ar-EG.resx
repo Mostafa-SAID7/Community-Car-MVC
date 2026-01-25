@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="resheader">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateNewPost" xml:space="preserve">
+    <value>إنشاء منشور جديد</value>
+  </data>
+  <data name="InteractionFeed" xml:space="preserve">
+    <value>خلاصة التفاعل</value>
+  </data>
+  <data name="NewBroadcast" xml:space="preserve">
+    <value>بث جديد</value>
+  </data>
+  <data name="CreateSubtitle" xml:space="preserve">
+    <value>شارك معرفتك بالسيارات أو تجاربك أو أسئلتك مع المجتمع. صوتك مهم في رحلتنا الجماعية.</value>
+  </data>
+  <data name="BroadcastType" xml:space="preserve">
+    <value>نوع البث</value>
+  </data>
+  <data name="TextPost" xml:space="preserve">
+    <value>منشور نصي</value>
+  </data>
+  <data name="TextPostDesc" xml:space="preserve">
+    <value>شارك الأفكار أو الأسئلة أو المناقشات</value>
+  </data>
+  <data name="PhotoPost" xml:space="preserve">
+    <value>منشور صور</value>
+  </data>
+  <data name="PhotoPostDesc" xml:space="preserve">
+    <value>شارك الصور مع الأوصاف</value>
+  </data>
+  <data name="LinkShare" xml:space="preserve">
+    <value>مشاركة رابط</value>
+  </data>
+  <data name="LinkShareDesc" xml:space="preserve">
+    <value>شارك مقالات أو موارد مثيرة للاهتمام</value>
+  </data>
+  <data name="Poll" xml:space="preserve">
+    <value>استطلاع رأي</value>
+  </data>
+  <data name="PollDesc" xml:space="preserve">
+    <value>اسأل المجتمع عن آرائهم</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>المحتوى</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>العنوان *</value>
+  </data>
+  <data name="TitlePlaceholder" xml:space="preserve">
+    <value>أعط منشورك عنواناً جذاباً...</value>
+  </data>
+  <data name="TitleHelp" xml:space="preserve">
+    <value>اجعله واضحاً وجذاباً لجذب القراء</value>
+  </data>
+  <data name="ContentLabel" xml:space="preserve">
+    <value>المحتوى *</value>
+  </data>
+  <data name="ContentPlaceholder" xml:space="preserve">
+    <value>شارك أفكارك أو تجاربك أو أسئلتك مع المجتمع...</value>
+  </data>
+  <data name="ContentHelp" xml:space="preserve">
+    <value>استخدم markdown للتنسيق. كن مفصلاً ومفيداً.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>خيارات</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>الوسوم</value>
+  </data>
+  <data name="TagsPlaceholder" xml:space="preserve">
+    <value>مثال: موستانج، ترميم، افعلها بنفسك</value>
+  </data>
+  <data name="TagsHelp" xml:space="preserve">
+    <value>افصل بين الوسوم بفاصلة لمساعدة الآخرين في العثور على منشورك</value>
+  </data>
+  <data name="PostToGroup" xml:space="preserve">
+    <value>نشر في مجموعة</value>
+  </data>
+  <data name="GeneralFeed" xml:space="preserve">
+    <value>الخلاصة العامة</value>
+  </data>
+  <data name="GroupHelp" xml:space="preserve">
+    <value>اختياري: شارك مع مجتمع محدد</value>
+  </data>
+  <data name="BroadcastPost" xml:space="preserve">
+    <value>بث المنشور</value>
+  </data>
+  <data name="SaveDraft" xml:space="preserve">
+    <value>حفظ مسودة</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="CommunityGuidelines" xml:space="preserve">
+    <value>قواعد المجتمع</value>
+  </data>
+  <data name="BeHelpful" xml:space="preserve">
+    <value>كن مفيداً:</value>
+  </data>
+  <data name="BeHelpfulDesc" xml:space="preserve">
+    <value>شارك المعرفة والخبرات التي تفيد الآخرين</value>
+  </data>
+  <data name="StayOnTopic" xml:space="preserve">
+    <value>ابق في صلب الموضوع:</value>
+  </data>
+  <data name="StayOnTopicDesc" xml:space="preserve">
+    <value>اجعل المنشورات متعلقة بالسيارات وذات صلة</value>
+  </data>
+  <data name="BeRespectful" xml:space="preserve">
+    <value>كن محترماً:</value>
+  </data>
+  <data name="BeRespectfulDesc" xml:space="preserve">
+    <value>عامل جميع أعضاء المجتمع بلباقة</value>
+  </data>
+  <data name="UseClearTitles" xml:space="preserve">
+    <value>استخدم عناوين واضحة:</value>
+  </data>
+  <data name="UseClearTitlesDesc" xml:space="preserve">
+    <value>ساعد الآخرين على فهم منشورك من لمحة سريعة</value>
+  </data>
+  <data name="ImageTitlePlaceholder" xml:space="preserve">
+    <value>صف ما تشاركه...</value>
+  </data>
+  <data name="ImageContentPlaceholder" xml:space="preserve">
+    <value>أخبرنا عن هذه الصور. ما هي القصة وراءها؟</value>
+  </data>
+  <data name="LinkTitlePlaceholder" xml:space="preserve">
+    <value>عن ماذا يتحدث هذا الرابط؟</value>
+  </data>
+  <data name="LinkContentPlaceholder" xml:space="preserve">
+    <value>الصق الرابط وأخبرنا لماذا يستحق المشاركة...</value>
+  </data>
+  <data name="PollTitlePlaceholder" xml:space="preserve">
+    <value>ما هو السؤال الذي تريد طرحه؟</value>
+  </data>
+  <data name="PollContentPlaceholder" xml:space="preserve">
+    <value>قدم سياقاً لاستطلاعك واذكر الخيارات...</value>
+  </data>
+</root>

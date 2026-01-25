@@ -413,6 +413,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach (var relatedGuide in Model.RelatedGuides)
                 {
+                    var relatedTitle = isArabic && !string.IsNullOrEmpty(relatedGuide.TitleAr) ? relatedGuide.TitleAr : relatedGuide.Title;
+                    var relatedSummary = isArabic && !string.IsNullOrEmpty(relatedGuide.SummaryAr) ? relatedGuide.SummaryAr : relatedGuide.Summary;
                     <div class="bg-background border border-border rounded-xl p-4 hover:border-primary/20 transition-all group">
                         <div class="flex items-center gap-2 mb-2">
                             @if (!string.IsNullOrEmpty(relatedGuide.Category))
@@ -426,11 +428,11 @@
                             </span>
                         </div>
                         <h4 class="font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                            <a href="/guides/@relatedGuide.Id">@relatedGuide.Title</a>
+                            <a href="/guides/@relatedGuide.Id">@relatedTitle</a>
                         </h4>
-                        @if (!string.IsNullOrEmpty(relatedGuide.Summary))
+                        @if (!string.IsNullOrEmpty(relatedSummary))
                         {
-                            <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@relatedGuide.Summary</p>
+                            <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@relatedSummary</p>
                         }
                         <div class="flex items-center justify-between text-xs text-muted-foreground">
                             <span>@relatedGuide.EstimatedTimeText</span>
@@ -459,6 +461,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach (var authorGuide in Model.AuthorOtherGuides)
                 {
+                    var authorGTitle = isArabic && !string.IsNullOrEmpty(authorGuide.TitleAr) ? authorGuide.TitleAr : authorGuide.Title;
+                    var authorGSummary = isArabic && !string.IsNullOrEmpty(authorGuide.SummaryAr) ? authorGuide.SummaryAr : authorGuide.Summary;
                     <div class="bg-background border border-border rounded-xl p-4 hover:border-primary/20 transition-all group">
                         <div class="flex items-center gap-2 mb-2">
                             @if (!string.IsNullOrEmpty(authorGuide.Category))
@@ -472,11 +476,11 @@
                             </span>
                         </div>
                         <h4 class="font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                            <a href="/guides/@authorGuide.Id">@authorGuide.Title</a>
+                            <a href="/guides/@authorGuide.Id">@authorGTitle</a>
                         </h4>
-                        @if (!string.IsNullOrEmpty(authorGuide.Summary))
+                        @if (!string.IsNullOrEmpty(authorGSummary))
                         {
-                            <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@authorGuide.Summary</p>
+                            <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@authorGSummary</p>
                         }
                         <div class="flex items-center justify-between text-xs text-muted-foreground">
                             <span>@authorGuide.EstimatedTimeText</span>

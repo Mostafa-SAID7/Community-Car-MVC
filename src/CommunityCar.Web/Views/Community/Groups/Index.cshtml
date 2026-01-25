@@ -102,11 +102,11 @@
                                     <h3 class="text-base font-black text-foreground truncate group-hover/card:text-primary transition-colors">@displayName</h3>
                                     @if (group.IsOfficial)
                                     {
-                                        <i data-lucide="badge-check" class="w-4 h-4 text-red-500 fill-red-500/10" title="Official Hub"></i>
+                                        <i data-lucide="badge-check" class="w-4 h-4 text-red-500 fill-red-500/10" title="@Localizer["OfficialHub"]"></i>
                                     }
                                     else if (group.IsVerified)
                                     {
-                                        <i data-lucide="shield-check" class="w-4 h-4 text-green-500 fill-green-500/10" title="Verified Community"></i>
+                                        <i data-lucide="shield-check" class="w-4 h-4 text-green-500 fill-green-500/10" title="@Localizer["VerifiedCommunity"]"></i>
                                     }
                                 </div>
                                 <div class="flex items-center flex-wrap gap-2">
@@ -141,18 +141,18 @@
                     <div class="px-6 py-4 bg-muted/20 border-t border-border/30 mt-auto">
                         <div class="flex items-center justify-between w-full">
                             <div class="flex gap-4">
-                                <div class="flex items-center gap-1.5" title="Members">
+                                <div class="flex items-center gap-1.5" title="@Localizer["Members"]">
                                     <i data-lucide="users" class="w-3.5 h-3.5 text-muted-foreground"></i>
                                     <span class="text-xs font-black text-foreground tabular-nums">@(group.MemberCount >= 1000 ? $"{group.MemberCount / 1000.0:F1}k" : group.MemberCount.ToString())</span>
                                 </div>
-                                <div class="flex items-center gap-1.5" title="Activity">
+                                <div class="flex items-center gap-1.5" title="@Localizer["Activity"]">
                                     <i data-lucide="message-square" class="w-3.5 h-3.5 text-muted-foreground"></i>
                                     <span class="text-xs font-black text-foreground tabular-nums">@(group.PostCount >= 1000 ? $"{group.PostCount / 1000.0:F1}k" : group.PostCount.ToString())</span>
                                 </div>
                             </div>
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-background/50 border border-border text-[8px] font-black uppercase tracking-widest text-muted-foreground shadow-sm">
                                 <i data-lucide="@(group.Privacy.ToString() == "Public" ? "globe" : "lock")" class="w-2.5 h-2.5"></i>
-                                @group.Privacy.ToString()
+                                @Localizer[group.Privacy.ToString()]
                             </span>
                         </div>
                     </div>
@@ -193,7 +193,7 @@
                     </a>
                 </nav>
                 <div class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50">
-                    Showing @Model.Count() groups from page @currentPage
+                    @Localizer["Showing"] @Model.Count() @Localizer["Hubs"] @Localizer["FromPage"] @currentPage
                 </div>
             </div>
         }

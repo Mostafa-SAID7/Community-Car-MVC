@@ -70,6 +70,15 @@
   <data name="AskQuestion" xml:space="preserve">
     <value>Ask Question</value>
   </data>
+  <data name="QARegistry" xml:space="preserve">
+    <value>QA Registry</value>
+  </data>
+  <data name="QASubtitle" xml:space="preserve">
+    <value>Search the community knowledge base for solutions.</value>
+  </data>
+  <data name="InitializeBroadcast" xml:space="preserve">
+    <value>Initialize Broadcast</value>
+  </data>
   <data name="TotalQuestions" xml:space="preserve">
     <value>Total Questions</value>
   </data>
@@ -147,5 +156,20 @@
   </data>
   <data name="PopularMakes" xml:space="preserve">
     <value>Popular Car Makes</value>
+  </data>
+  <data name="AdvancedFilters" xml:space="preserve">
+    <value>Advanced Filters</value>
+  </data>
+  <data name="ResetProtocol" xml:space="preserve">
+    <value>Reset Protocol</value>
+  </data>
+  <data name="ProtocolID" xml:space="preserve">
+    <value>Protocol ID</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Asked" xml:space="preserve">
+    <value>Asked</value>
   </data>
 </root>

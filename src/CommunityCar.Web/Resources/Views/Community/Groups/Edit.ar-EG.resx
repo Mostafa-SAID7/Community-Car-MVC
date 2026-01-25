@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EditGroup" xml:space="preserve">
+    <value>تعديل المجموعة</value>
+  </data>
+  <data name="BackToGroup" xml:space="preserve">
+    <value>الرجوع للمجموعة</value>
+  </data>
+  <data name="UpdateSettingsSubtitle" xml:space="preserve">
+    <value>تحديث إعدادات مجموعة المجتمع الخاصة بك</value>
+  </data>
+  <data name="GroupName" xml:space="preserve">
+    <value>اسم المجموعة</value>
+  </data>
+  <data name="GroupNamePlaceholder" xml:space="preserve">
+    <value>أدخل اسم المجموعة</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>الوصف</value>
+  </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>صف غرض المجموعة وأنشطتها</value>
+  </data>
+  <data name="PrivacySetting" xml:space="preserve">
+    <value>إعداد الخصوصية</value>
+  </data>
+  <data name="PublicAccess" xml:space="preserve">
+    <value>عام - يمكن لأي شخص الانضمام</value>
+  </data>
+  <data name="PrivateAccess" xml:space="preserve">
+    <value>خاص - يتطلب موافقة</value>
+  </data>
+  <data name="SecretAccess" xml:space="preserve">
+    <value>سري - بدعوة فقط</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>الفئة</value>
+  </data>
+  <data name="CategoryPlaceholder" xml:space="preserve">
+    <value>مثلاً: سيارات رياضية، طرق وعرة، سيارات كلاسيكية</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>الموقع</value>
+  </data>
+  <data name="LocationPlaceholder" xml:space="preserve">
+    <value>المدينة، الولاية أو المنطقة</value>
+  </data>
+  <data name="GroupRules" xml:space="preserve">
+    <value>قواعد المجموعة</value>
+  </data>
+  <data name="RulesPlaceholder" xml:space="preserve">
+    <value>ضع إرشادات لأعضاء مجتمعك</value>
+  </data>
+  <data name="RequireApprovalLabel" xml:space="preserve">
+    <value>تتطلب موافقة للأعضاء الجدد</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="UpdateGroup" xml:space="preserve">
+    <value>تحديث المجموعة</value>
+  </data>
+</root>

@@ -137,6 +137,18 @@
     <value>Protocol Locked</value>
   </data>
   <data name="ArchivedProtocol" xml:space="preserve">
-    <value>This broadcast has been archived and is no longer accepting payloads.</value>
+    <value>This broadcast has been archived and no longer accepts data payloads.</value>
+  </data>
+  <data name="ProtocolDetailsSuffix" xml:space="preserve">
+    <value>Protocol Details</value>
+  </data>
+  <data name="ActiveEnthusiast" xml:space="preserve">
+    <value>Active Enthusiast</value>
+  </data>
+  <data name="AESVerified" xml:space="preserve">
+    <value>AES-256 Verified</value>
+  </data>
+  <data name="SystemIntegrityLabel" xml:space="preserve">
+    <value>System Integrity</value>
   </data>
 </root>

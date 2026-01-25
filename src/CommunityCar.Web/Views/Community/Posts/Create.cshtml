@@ -1,21 +1,22 @@
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Create New Post";
+    ViewData["Title"] = Localizer["CreateNewPost"];
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
         <a href="@Url.Action("Index", "Posts")" class="hover:text-primary transition-colors flex items-center gap-2">
-            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Interaction Feed
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> @Localizer["InteractionFeed"]
         </a>
         <i data-lucide="chevron-right" class="w-3 h-3 opacity-30"></i>
-        <span class="text-foreground">New Broadcast</span>
+        <span class="text-foreground">@Localizer["NewBroadcast"]</span>
     </nav>
 
     <!-- Header -->
     <div class="text-center">
-        <h1 class="text-3xl font-black text-foreground tracking-tight mb-3">Create New Post</h1>
-        <p class="text-muted-foreground font-medium opacity-80 max-w-2xl mx-auto">Share your automotive knowledge, experiences, or questions with the community. Your voice matters in our collective journey.</p>
+        <h1 class="text-3xl font-black text-foreground tracking-tight mb-3">@Localizer["CreateNewPost"]</h1>
+        <p class="text-muted-foreground font-medium opacity-80 max-w-2xl mx-auto">@Localizer["CreateSubtitle"]</p>
     </div>
 
     <!-- Create Form -->
@@ -27,7 +28,7 @@
             <div class="space-y-6">
                 <h2 class="text-xl font-black text-foreground flex items-center gap-3">
                     <i data-lucide="radio" class="w-5 h-5"></i>
-                    Broadcast Type
+                    @Localizer["BroadcastType"]
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -36,9 +37,9 @@
                         <div class="flex-1">
                             <label for="type-text" class="block text-sm font-black text-foreground mb-1 cursor-pointer">
                                 <i data-lucide="type" class="w-4 h-4 inline mr-2"></i>
-                                Text Post
+                                @Localizer["TextPost"]
                             </label>
-                            <p class="text-xs text-muted-foreground opacity-80">Share thoughts, questions, or discussions</p>
+                            <p class="text-xs text-muted-foreground opacity-80">@Localizer["TextPostDesc"]</p>
                         </div>
                     </div>
 
@@ -47,9 +48,9 @@
                         <div class="flex-1">
                             <label for="type-image" class="block text-sm font-black text-foreground mb-1 cursor-pointer">
                                 <i data-lucide="image" class="w-4 h-4 inline mr-2"></i>
-                                Photo Post
+                                @Localizer["PhotoPost"]
                             </label>
-                            <p class="text-xs text-muted-foreground opacity-80">Share photos with descriptions</p>
+                            <p class="text-xs text-muted-foreground opacity-80">@Localizer["PhotoPostDesc"]</p>
                         </div>
                     </div>
 
@@ -58,9 +59,9 @@
                         <div class="flex-1">
                             <label for="type-link" class="block text-sm font-black text-foreground mb-1 cursor-pointer">
                                 <i data-lucide="link" class="w-4 h-4 inline mr-2"></i>
-                                Link Share
+                                @Localizer["LinkShare"]
                             </label>
-                            <p class="text-xs text-muted-foreground opacity-80">Share interesting articles or resources</p>
+                            <p class="text-xs text-muted-foreground opacity-80">@Localizer["LinkShareDesc"]</p>
                         </div>
                     </div>
 
@@ -69,9 +70,9 @@
                         <div class="flex-1">
                             <label for="type-poll" class="block text-sm font-black text-foreground mb-1 cursor-pointer">
                                 <i data-lucide="bar-chart-3" class="w-4 h-4 inline mr-2"></i>
-                                Poll
+                                @Localizer["Poll"]
                             </label>
-                            <p class="text-xs text-muted-foreground opacity-80">Ask the community for opinions</p>
+                            <p class="text-xs text-muted-foreground opacity-80">@Localizer["PollDesc"]</p>
                         </div>
                     </div>
                 </div>
@@ -81,25 +82,25 @@
             <div class="space-y-6 pt-6 border-t border-border/20">
                 <h2 class="text-xl font-black text-foreground flex items-center gap-3">
                     <i data-lucide="edit-3" class="w-5 h-5"></i>
-                    Content
+                    @Localizer["Content"]
                 </h2>
 
                 <div class="space-y-6">
                     <div>
-                        <label for="title" class="block text-sm font-black text-foreground mb-2">Title *</label>
+                        <label for="title" class="block text-sm font-black text-foreground mb-2">@Localizer["Title"]</label>
                         <input type="text" id="title" name="title" required maxlength="200" 
                                class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
-                               placeholder="Give your post a compelling title...">
-                        <p class="text-xs text-muted-foreground mt-1 opacity-60">Make it clear and engaging to attract readers</p>
+                               placeholder="@Localizer["TitlePlaceholder"]">
+                        <p class="text-xs text-muted-foreground mt-1 opacity-60">@Localizer["TitleHelp"]</p>
                     </div>
 
                     <div>
-                        <label for="content" class="block text-sm font-black text-foreground mb-2">Content *</label>
+                        <label for="content" class="block text-sm font-black text-foreground mb-2">@Localizer["ContentLabel"]</label>
                         <textarea id="content" name="content" required maxlength="5000" rows="8"
                                   class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none"
-                                  placeholder="Share your thoughts, experiences, or questions with the community..."></textarea>
+                                  placeholder="@Localizer["ContentPlaceholder"]"></textarea>
                         <div class="flex justify-between items-center mt-2">
-                            <p class="text-xs text-muted-foreground opacity-60">Use markdown for formatting. Be detailed and helpful.</p>
+                            <p class="text-xs text-muted-foreground opacity-60">@Localizer["ContentHelp"]</p>
                             <span class="text-xs text-muted-foreground opacity-60" id="contentCounter">0 / 5000</span>
                         </div>
                     </div>
@@ -110,29 +111,29 @@
             <div class="space-y-6 pt-6 border-t border-border/20">
                 <h2 class="text-xl font-black text-foreground flex items-center gap-3">
                     <i data-lucide="settings" class="w-5 h-5"></i>
-                    Options
+                    @Localizer["Options"]
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="tags" class="block text-sm font-black text-foreground mb-2">Tags</label>
+                        <label for="tags" class="block text-sm font-black text-foreground mb-2">@Localizer["Tags"]</label>
                         <input type="text" id="tags" name="tags" maxlength="200"
                                class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
-                               placeholder="e.g., mustang, restoration, diy">
-                        <p class="text-xs text-muted-foreground mt-1 opacity-60">Separate tags with commas to help others find your post</p>
+                               placeholder="@Localizer["TagsPlaceholder"]">
+                        <p class="text-xs text-muted-foreground mt-1 opacity-60">@Localizer["TagsHelp"]</p>
                     </div>
 
                     <div>
-                        <label for="group" class="block text-sm font-black text-foreground mb-2">Post to Group</label>
+                        <label for="group" class="block text-sm font-black text-foreground mb-2">@Localizer["PostToGroup"]</label>
                         <select id="group" name="groupId" 
                                 class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none">
-                            <option value="">General Feed</option>
+                            <option value="">@Localizer["GeneralFeed"]</option>
                             <option value="group1">Classic Mustang Enthusiasts</option>
                             <option value="group2">Vintage Car Restoration</option>
                             <option value="group3">American Muscle</option>
                             <option value="group4">European Classics</option>
                         </select>
-                        <p class="text-xs text-muted-foreground mt-1 opacity-60">Optional: Share with a specific community</p>
+                        <p class="text-xs text-muted-foreground mt-1 opacity-60">@Localizer["GroupHelp"]</p>
                     </div>
                 </div>
             </div>
@@ -141,15 +142,15 @@
             <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border/20">
                 <button type="submit" class="flex-1 px-8 py-4 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 flex items-center justify-center gap-3">
                     <i data-lucide="send" class="w-5 h-5"></i>
-                    Broadcast Post
+                    @Localizer["BroadcastPost"]
                 </button>
                 <button type="button" class="flex-1 px-8 py-4 bg-muted/20 border border-border hover:border-primary hover:text-primary rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3">
                     <i data-lucide="save" class="w-5 h-5"></i>
-                    Save Draft
+                    @Localizer["SaveDraft"]
                 </button>
                 <a href="@Url.Action("Index", "Posts")" class="flex-1 px-8 py-4 bg-background border border-border hover:border-primary hover:text-primary rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3">
                     <i data-lucide="x" class="w-5 h-5"></i>
-                    Cancel
+                    @Localizer["Cancel"]
                 </a>
             </div>
         </form>
@@ -159,31 +160,31 @@
     <div class="max-w-4xl mx-auto bg-muted/10 border border-border/30 rounded-2xl p-6">
         <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
             <i data-lucide="shield-check" class="w-5 h-5 text-green-500"></i>
-            Community Guidelines
+            @Localizer["CommunityGuidelines"]
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
             <div class="flex items-start gap-3">
                 <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 shrink-0"></i>
                 <div>
-                    <strong class="text-foreground">Be Helpful:</strong> Share knowledge and experiences that benefit others
+                    <strong class="text-foreground">@Localizer["BeHelpful"]</strong> @Localizer["BeHelpfulDesc"]
                 </div>
             </div>
             <div class="flex items-start gap-3">
                 <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 shrink-0"></i>
                 <div>
-                    <strong class="text-foreground">Stay On Topic:</strong> Keep posts automotive-related and relevant
+                    <strong class="text-foreground">@Localizer["StayOnTopic"]</strong> @Localizer["StayOnTopicDesc"]
                 </div>
             </div>
             <div class="flex items-start gap-3">
                 <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 shrink-0"></i>
                 <div>
-                    <strong class="text-foreground">Be Respectful:</strong> Treat all community members with courtesy
+                    <strong class="text-foreground">@Localizer["BeRespectful"]</strong> @Localizer["BeRespectfulDesc"]
                 </div>
             </div>
             <div class="flex items-start gap-3">
                 <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 shrink-0"></i>
                 <div>
-                    <strong class="text-foreground">Use Clear Titles:</strong> Help others understand your post at a glance
+                    <strong class="text-foreground">@Localizer["UseClearTitles"]</strong> @Localizer["UseClearTitlesDesc"]
                 </div>
             </div>
         </div>
@@ -208,20 +209,20 @@ function selectPostType(type, element) {
     
     switch(type) {
         case 'Text':
-            titleInput.placeholder = "Give your post a compelling title...";
-            contentTextarea.placeholder = "Share your thoughts, experiences, or questions with the community...";
+            titleInput.placeholder = "@Localizer["TitlePlaceholder"]";
+            contentTextarea.placeholder = "@Localizer["ContentPlaceholder"]";
             break;
         case 'Image':
-            titleInput.placeholder = "Describe what you're sharing...";
-            contentTextarea.placeholder = "Tell us about these photos. What's the story behind them?";
+            titleInput.placeholder = "@Localizer["ImageTitlePlaceholder"]";
+            contentTextarea.placeholder = "@Localizer["ImageContentPlaceholder"]";
             break;
         case 'Link':
-            titleInput.placeholder = "What's this link about?";
-            contentTextarea.placeholder = "Paste the URL and tell us why it's worth sharing...";
+            titleInput.placeholder = "@Localizer["LinkTitlePlaceholder"]";
+            contentTextarea.placeholder = "@Localizer["LinkContentPlaceholder"]";
             break;
         case 'Poll':
-            titleInput.placeholder = "What question do you want to ask?";
-            contentTextarea.placeholder = "Provide context for your poll and list the options...";
+            titleInput.placeholder = "@Localizer["PollTitlePlaceholder"]";
+            contentTextarea.placeholder = "@Localizer["PollContentPlaceholder"]";
             break;
     }
 }

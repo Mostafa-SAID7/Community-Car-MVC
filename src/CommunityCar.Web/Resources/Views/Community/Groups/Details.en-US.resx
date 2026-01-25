@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommunityHub" xml:space="preserve">
+    <value>Community Hub</value>
+  </data>
+  <data name="HubDirectory" xml:space="preserve">
+    <value>Hub Directory</value>
+  </data>
+  <data name="OfficialHub" xml:space="preserve">
+    <value>Official Hub</value>
+  </data>
+  <data name="VerifiedCommunity" xml:space="preserve">
+    <value>Verified Community</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>Posts</value>
+  </data>
+  <data name="JoinHub" xml:space="preserve">
+    <value>Join Hub</value>
+  </data>
+  <data name="LeaveHub" xml:space="preserve">
+    <value>Leave Hub</value>
+  </data>
+  <data name="EditHub" xml:space="preserve">
+    <value>Edit Hub</value>
+  </data>
+  <data name="HubDetails" xml:space="preserve">
+    <value>Hub Details</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="CommunityGuidelines" xml:space="preserve">
+    <value>Community Guidelines</value>
+  </data>
+  <data name="PrivacyAccess" xml:space="preserve">
+    <value>Privacy &amp; Access</value>
+  </data>
+  <data name="Public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="RequiresApproval" xml:space="preserve">
+    <value>Requires Approval</value>
+  </data>
+  <data name="ActiveSince" xml:space="preserve">
+    <value>Active Since</value>
+  </data>
+  <data name="RecentActivity" xml:space="preserve">
+    <value>Recent Activity</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>No recent activity</value>
+  </data>
+  <data name="HubStatistics" xml:space="preserve">
+    <value>Hub Statistics</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="ViewPosts" xml:space="preserve">
+    <value>View Posts</value>
+  </data>
+  <data name="ViewMembers" xml:space="preserve">
+    <value>View Members</value>
+  </data>
+  <data name="ShareHub" xml:space="preserve">
+    <value>Share Hub</value>
+  </data>
+  <data name="NoActivityToDisplay" xml:space="preserve">
+    <value>No recent activity to display</value>
+  </data>
+  <data name="StartConversation" xml:space="preserve">
+    <value>Be the first to start a conversation!</value>
+  </data>
+  <data name="Hub" xml:space="preserve">
+    <value>Hub</value>
+  </data>
+</root>

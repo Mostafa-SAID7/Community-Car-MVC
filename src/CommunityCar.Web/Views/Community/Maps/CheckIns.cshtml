@@ -1,6 +1,6 @@
-@model IEnumerable<CommunityCar.Application.Features.Maps.ViewModels.CheckInVM>
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Check-ins";
+    ViewData["Title"] = Localizer["CheckInsTitle"];
     var poiName = ViewBag.POIName as string ?? "Location";
     var poiId = ViewBag.POIId as string ?? "";
 }
@@ -12,7 +12,7 @@
             <div class="flex items-center gap-3 mb-4">
                 <a href="/maps" class="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    Back to Maps
+                    @Localizer["BackToMaps"]
                 </a>
                 @if (!string.IsNullOrEmpty(poiId))
                 {
@@ -24,8 +24,8 @@
                 }
             </div>
             
-            <h1 class="text-3xl font-black text-foreground tracking-tight">Check-ins</h1>
-            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">Recent check-ins at @poiName</p>
+            <h1 class="text-3xl font-black text-foreground tracking-tight">@Localizer["CheckInsTitle"]</h1>
+            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@string.Format(Localizer["RecentCheckInsAt"].Value, poiName)</p>
         </div>
         
         @if (!string.IsNullOrEmpty(poiId))
@@ -33,7 +33,7 @@
             <div class="flex items-center gap-3">
                 <button type="button" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95" onclick="checkInToLocation('@poiId')">
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
-                    Check In Here
+                    @Localizer["CheckInHere"]
                 </button>
             </div>
         }
@@ -45,7 +45,7 @@
         {
             <div class="p-6 border-b border-border/50 bg-muted/20">
                 <h3 class="text-lg font-black text-foreground tracking-tight">
-                    @Model.Count() Recent Check-ins
+                    @string.Format(Localizer["RecentCheckInsCount"].Value, Model.Count())
                 </h3>
             </div>
             
@@ -61,9 +61,9 @@
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between gap-4 mb-2">
                                     <div class="flex-1">
-                                        <h4 class="font-bold text-foreground">@(checkIn.UserName ?? "Anonymous User")</h4>
+                                        <h4 class="font-bold text-foreground">@(checkIn.UserName ?? Localizer["AnonymousUser"].Value)</h4>
                                         <p class="text-sm text-muted-foreground">
-                                            Checked in @checkIn.CheckInTime.ToString("MMM dd, yyyy 'at' h:mm tt")
+                                            @string.Format(Localizer["CheckedInAtFormat"].Value, checkIn.CheckInTime.ToString("MMM dd, yyyy 'at' h:mm tt"))
                                         </p>
                                     </div>
                                     
@@ -91,7 +91,7 @@
                                     {
                                         <div class="flex items-center gap-1">
                                             <i data-lucide="map-pin" class="w-3 h-3"></i>
-                                            <span>@checkIn.DistanceFromPOI.Value.ToString("F1") km from location</span>
+                                            <span>@string.Format(Localizer["KmFromLocation"].Value, checkIn.DistanceFromPOI.Value.ToString("F1"))</span>
                                         </div>
                                     }
                                     
@@ -99,14 +99,14 @@
                                     {
                                         <div class="flex items-center gap-1">
                                             <i data-lucide="lock" class="w-3 h-3"></i>
-                                            <span>Private check-in</span>
+                                            <span>@Localizer["PrivateCheckIn"]</span>
                                         </div>
                                     }
                                     else
                                     {
                                         <div class="flex items-center gap-1">
                                             <i data-lucide="globe" class="w-3 h-3"></i>
-                                            <span>Public check-in</span>
+                                            <span>@Localizer["PublicCheckIn"]</span>
                                         </div>
                                     }
                                 </div>
@@ -122,13 +122,13 @@
                 <div class="w-16 h-16 rounded-full bg-muted/20 flex items-center justify-center mx-auto mb-4">
                     <i data-lucide="check-circle" class="w-8 h-8 text-muted-foreground/50"></i>
                 </div>
-                <h3 class="text-lg font-bold text-foreground mb-2">No check-ins yet</h3>
-                <p class="text-muted-foreground mb-6">Be the first to check in at this location!</p>
+                <h3 class="text-lg font-bold text-foreground mb-2">@Localizer["NoCheckInsYet"]</h3>
+                <p class="text-muted-foreground mb-6">@Localizer["BeTheFirstToCheckIn"]</p>
                 @if (!string.IsNullOrEmpty(poiId))
                 {
                     <button type="button" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-bold transition-all" onclick="checkInToLocation('@poiId')">
                         <i data-lucide="check-circle" class="w-4 h-4"></i>
-                        Check In Now
+                        @Localizer["CheckInNow"]
                     </button>
                 }
             </div>

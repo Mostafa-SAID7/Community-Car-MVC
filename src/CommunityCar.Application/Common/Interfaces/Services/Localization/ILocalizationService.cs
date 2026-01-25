@@ -15,6 +15,8 @@ public interface ILocalizationService
     Task<string?> GetResourceValueAsync(string key, string culture, string? resourceGroup = null);
     Task<Dictionary<string, string>> GetResourcesByCultureAsync(string culture, string? resourceGroup = null);
     Task<List<LocalizationResource>> GetAllResourcesAsync(string? culture = null, string? resourceGroup = null);
+    Task<(List<LocalizationResource> Items, int TotalCount)> GetPaginatedResourcesAsync(string? culture = null, string? resourceGroup = null, string? search = null, int page = 1, int pageSize = 20);
+    Task<List<string>> GetResourceGroupsAsync();
     Task SetResourceValueAsync(string key, string value, string culture, string? resourceGroup = null);
     Task DeleteResourceAsync(Guid id);
 

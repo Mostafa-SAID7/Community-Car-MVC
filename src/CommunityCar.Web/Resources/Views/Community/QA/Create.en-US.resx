@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="InitializeBroadcast" xml:space="preserve">
+    <value>Initialize Broadcast</value>
+  </data>
+  <data name="ActiveInquiryPayload" xml:space="preserve">
+    <value>Active Inquiry Payload</value>
+  </data>
+  <data name="AssembleProtocol" xml:space="preserve">
+    <value>Assemble Protocol</value>
+  </data>
+  <data name="ProtocolSubtitle" xml:space="preserve">
+    <value>Queue your inquiry into the community intelligence network.</value>
+  </data>
+  <data name="ReturnToRegistry" xml:space="preserve">
+    <value>Return to Registry</value>
+  </data>
+  <data name="InquiryHeader" xml:space="preserve">
+    <value>Inquiry Header</value>
+  </data>
+  <data name="EssentialPayload" xml:space="preserve">
+    <value>Essential Payload</value>
+  </data>
+  <data name="TitlePlaceholder" xml:space="preserve">
+    <value>Define the primary focus of your inquiry...</value>
+  </data>
+  <data name="TitleArPlaceholder" xml:space="preserve">
+    <value>حدد التركيز الأساسي لاستفسارك بالعربية...</value>
+  </data>
+  <data name="TitleNote" xml:space="preserve">
+    <value>Note: Providing an Arabic title increases visibility in RTL regions.</value>
+  </data>
+  <data name="TechnicalBlueprint" xml:space="preserve">
+    <value>Technical Blueprint</value>
+  </data>
+  <data name="TelemetryData" xml:space="preserve">
+    <value>Telemetry Data</value>
+  </data>
+  <data name="BodyPlaceholder" xml:space="preserve">
+    <value>Provide detailed telemetry regarding the issue or question...</value>
+  </data>
+  <data name="BodyArPlaceholder" xml:space="preserve">
+    <value>قدم بيانات تفصيلية بخصوص المشكلة أو السؤال بالعربية...</value>
+  </data>
+  <data name="DeployProtocol" xml:space="preserve">
+    <value>Deploy Protocol</value>
+  </data>
+  <data name="SecureBroadcastInterface" xml:space="preserve">
+    <value>Secure Broadcast Interface</value>
+  </data>
+  <data name="Phase1Title" xml:space="preserve">
+    <value>Phase 1: Target Focus</value>
+  </data>
+  <data name="Phase1Item1" xml:space="preserve">
+    <value>Precision model identifer</value>
+  </data>
+  <data name="Phase1Item2" xml:space="preserve">
+    <value>Chassis/Engine iteration</value>
+  </data>
+  <data name="Phase2Title" xml:space="preserve">
+    <value>Phase 2: Diagnostics</value>
+  </data>
+  <data name="Phase2Item1" xml:space="preserve">
+    <value>OBD-II Telemetry codes</value>
+  </data>
+  <data name="Phase2Item2" xml:space="preserve">
+    <value>Environmental conditions</value>
+  </data>
+  <data name="Phase3Title" xml:space="preserve">
+    <value>Phase 3: Taxonomy</value>
+  </data>
+  <data name="Phase3Item1" xml:space="preserve">
+    <value>Component categorisation</value>
+  </data>
+  <data name="Phase3Item2" xml:space="preserve">
+    <value>Discovery optimization</value>
+  </data>
+</root>

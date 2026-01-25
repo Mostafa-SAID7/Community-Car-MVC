@@ -250,15 +250,3 @@ public class RouteWaypoint
         DescriptionAr = descriptionAr;
     }
 }
-
-public enum RouteType
-{
-    Scenic = 1,
-    Performance = 2,
-    OffRoad = 3,
-    Touring = 4,
-    Commute = 5,
-    Track = 6,
-    Rally = 7,
-    Cruise = 8
-}

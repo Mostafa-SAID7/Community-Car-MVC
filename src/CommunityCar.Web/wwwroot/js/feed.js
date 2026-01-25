@@ -549,7 +549,6 @@ window.feedFunctions = {
     openCreatePostModal,
     sendFriendRequest,
     openImageModal,
-    openStoryViewer,
     loadMoreContent
 };
 

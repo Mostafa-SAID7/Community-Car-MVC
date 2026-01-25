@@ -1,4 +1,4 @@
-namespace CommunityCar.Web.Resources;
+namespace CommunityCar.Web;
 
 public class SharedResource
 {

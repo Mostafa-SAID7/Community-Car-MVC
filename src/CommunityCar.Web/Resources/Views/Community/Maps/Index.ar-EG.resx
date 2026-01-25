@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommunityExplore" xml:space="preserve">
+    <value>استكشاف المجتمع</value>
+  </data>
+  <data name="ExploreSubtitle" xml:space="preserve">
+    <value>اكتشف الخدمات القريبة، الطرق الخلابة، ومواقع المجتمع.</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>ابحث عن المواقع، الطرق، أو الخدمات...</value>
+  </data>
+  <data name="PointsOfInterest" xml:space="preserve">
+    <value>نقاط الاهتمام</value>
+  </data>
+  <data name="ScenicRoutes" xml:space="preserve">
+    <value>الطرق الخلابة</value>
+  </data>
+  <data name="CheckIns" xml:space="preserve">
+    <value>تسجيلات الوصول</value>
+  </data>
+  <data name="InteractiveMaps" xml:space="preserve">
+    <value>خرائط تفاعلية</value>
+  </data>
+  <data name="MapsSubtitle" xml:space="preserve">
+    <value>اكتشف مواقع السيارات، طرق الأداء، ونقاط المجتمع</value>
+  </data>
+  <data name="AddRoute" xml:space="preserve">
+    <value>إضافة طريق</value>
+  </data>
+  <data name="Locations" xml:space="preserve">
+    <value>مواقع</value>
+  </data>
+  <data name="Routes" xml:space="preserve">
+    <value>طرق</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>معتمد</value>
+  </data>
+  <data name="SearchPlaceholderSpots" xml:space="preserve">
+    <value>ابحث عن نقاط...</value>
+  </data>
+  <data name="AllTypes" xml:space="preserve">
+    <value>جميع الأنواع</value>
+  </data>
+  <data name="AutoRepair" xml:space="preserve">
+    <value>إصلاح سيارات</value>
+  </data>
+  <data name="Dealership" xml:space="preserve">
+    <value>وكالة سيارات</value>
+  </data>
+  <data name="MeetupPoint" xml:space="preserve">
+    <value>نقطة التقاء</value>
+  </data>
+  <data name="RaceTrack" xml:space="preserve">
+    <value>حلبة سباق</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>نصف القطر</value>
+  </data>
+  <data name="KM" xml:space="preserve">
+    <value>كم</value>
+  </data>
+  <data name="VerifiedOnly" xml:space="preserve">
+    <value>المعتمدة فقط</value>
+  </data>
+  <data name="PerformanceRoutes" xml:space="preserve">
+    <value>طرق الأداء</value>
+  </data>
+  <data name="MapExplorerTitle" xml:space="preserve">
+    <value>مستكشف الخرائط التفاعلي</value>
+  </data>
+  <data name="MapExplorerSubtitle" xml:space="preserve">
+    <value>امنح حق الوصول إلى الموقع لرؤية ورش الإصلاح وحلبات السباق والطرق الخلابة القريبة منك.</value>
+  </data>
+  <data name="GetMyLocation" xml:space="preserve">
+    <value>احصل على موقعي</value>
+  </data>
+  <data name="Hotspots" xml:space="preserve">
+    <value>نقاط ساخنة</value>
+  </data>
+  <data name="TopRoutes" xml:space="preserve">
+    <value>أبرز الطرق</value>
+  </data>
+</root>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="resheader">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EditPost" xml:space="preserve">
+    <value>Edit Post</value>
+  </data>
+  <data name="BackToPost" xml:space="preserve">
+    <value>Back to Post</value>
+  </data>
+  <data name="UpdateSubtitle" xml:space="preserve">
+    <value>Update your community post</value>
+  </data>
+  <data name="PostTitle" xml:space="preserve">
+    <value>Post Title *</value>
+  </data>
+  <data name="TitlePlaceholder" xml:space="preserve">
+    <value>Enter post title</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Content *</value>
+  </data>
+  <data name="ContentPlaceholder" xml:space="preserve">
+    <value>Share your thoughts, experiences, or questions with the community</value>
+  </data>
+  <data name="PostType" xml:space="preserve">
+    <value>Post Type</value>
+  </data>
+  <data name="Discussion" xml:space="preserve">
+    <value>Discussion</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Showcase" xml:space="preserve">
+    <value>Showcase</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>News</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="CategoryPlaceholder" xml:space="preserve">
+    <value>e.g., Maintenance, Modifications, Events</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagsPlaceholder" xml:space="preserve">
+    <value>Enter tags separated by commas (e.g., bmw, maintenance, diy)</value>
+  </data>
+  <data name="TagsHelp" xml:space="preserve">
+    <value>Separate tags with commas to help others find your post</value>
+  </data>
+  <data name="PinThisPost" xml:space="preserve">
+    <value>Pin this post</value>
+  </data>
+  <data name="AllowComments" xml:space="preserve">
+    <value>Allow comments</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="UpdatePost" xml:space="preserve">
+    <value>Update Post</value>
+  </data>
+</root>

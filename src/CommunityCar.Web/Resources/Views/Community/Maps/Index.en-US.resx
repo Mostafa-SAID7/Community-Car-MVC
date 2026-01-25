@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommunityExplore" xml:space="preserve">
+    <value>Community Explore</value>
+  </data>
+  <data name="ExploreSubtitle" xml:space="preserve">
+    <value>Discover nearby services, scenic routes, and community locations.</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Search locations, routes, or services...</value>
+  </data>
+  <data name="PointsOfInterest" xml:space="preserve">
+    <value>Points of Interest</value>
+  </data>
+  <data name="ScenicRoutes" xml:space="preserve">
+    <value>Scenic Routes</value>
+  </data>
+  <data name="CheckIns" xml:space="preserve">
+    <value>Check-ins</value>
+  </data>
+  <data name="InteractiveMaps" xml:space="preserve">
+    <value>Interactive Maps</value>
+  </data>
+  <data name="MapsSubtitle" xml:space="preserve">
+    <value>Discover automotive locations, performance routes, and community spots</value>
+  </data>
+  <data name="AddRoute" xml:space="preserve">
+    <value>Add Route</value>
+  </data>
+  <data name="Locations" xml:space="preserve">
+    <value>Locations</value>
+  </data>
+  <data name="Routes" xml:space="preserve">
+    <value>Routes</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>Verified</value>
+  </data>
+  <data name="SearchPlaceholderSpots" xml:space="preserve">
+    <value>Search for spots...</value>
+  </data>
+  <data name="AllTypes" xml:space="preserve">
+    <value>All Types</value>
+  </data>
+  <data name="AutoRepair" xml:space="preserve">
+    <value>Auto Repair</value>
+  </data>
+  <data name="Dealership" xml:space="preserve">
+    <value>Dealership</value>
+  </data>
+  <data name="MeetupPoint" xml:space="preserve">
+    <value>Meetup Point</value>
+  </data>
+  <data name="RaceTrack" xml:space="preserve">
+    <value>Race Track</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="KM" xml:space="preserve">
+    <value>KM</value>
+  </data>
+  <data name="VerifiedOnly" xml:space="preserve">
+    <value>Verified Only</value>
+  </data>
+  <data name="PerformanceRoutes" xml:space="preserve">
+    <value>Performance Routes</value>
+  </data>
+  <data name="MapExplorerTitle" xml:space="preserve">
+    <value>Interactive Map Explorer</value>
+  </data>
+  <data name="MapExplorerSubtitle" xml:space="preserve">
+    <value>Grant location access to see repair shops, race tracks, and scenic routes near you.</value>
+  </data>
+  <data name="GetMyLocation" xml:space="preserve">
+    <value>Get My Location</value>
+  </data>
+  <data name="Hotspots" xml:space="preserve">
+    <value>Hotspots</value>
+  </data>
+  <data name="TopRoutes" xml:space="preserve">
+    <value>Top Routes</value>
+  </data>
+</root>

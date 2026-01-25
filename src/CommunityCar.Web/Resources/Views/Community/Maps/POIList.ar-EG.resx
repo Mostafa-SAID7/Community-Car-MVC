@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="resheader">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PointsOfInterest" xml:space="preserve">
+    <value>نقاط الاهتمام</value>
+  </data>
+  <data name="DiscoverLocations" xml:space="preserve">
+    <value>اكتشف مراكز المجتمع وورش الإصلاح ونقاط الالتقاء القريبة منك.</value>
+  </data>
+  <data name="MapView" xml:space="preserve">
+    <value>عرض الخريطة</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>إضافة موقع</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>ابحث عن مواقع...</value>
+  </data>
+  <data name="AllTypes" xml:space="preserve">
+    <value>جميع الأنواع</value>
+  </data>
+  <data name="AutoRepairShop" xml:space="preserve">
+    <value>ورشة إصلاح سيارات</value>
+  </data>
+  <data name="CarDealership" xml:space="preserve">
+    <value>وكالة سيارات</value>
+  </data>
+  <data name="GasStation" xml:space="preserve">
+    <value>محطة وقود</value>
+  </data>
+  <data name="ChargingStation" xml:space="preserve">
+    <value>محطة شحن</value>
+  </data>
+  <data name="CarWash" xml:space="preserve">
+    <value>مغسلة سيارات</value>
+  </data>
+  <data name="TireShop" xml:space="preserve">
+    <value>محل إطارات</value>
+  </data>
+  <data name="AutoPartsStore" xml:space="preserve">
+    <value>محل قطع غيار</value>
+  </data>
+  <data name="MeetupPoint" xml:space="preserve">
+    <value>نقطة التقاء</value>
+  </data>
+  <data name="RaceTrack" xml:space="preserve">
+    <value>حلبة سباق</value>
+  </data>
+  <data name="AllCategories" xml:space="preserve">
+    <value>جميع الفئات</value>
+  </data>
+  <data name="Automotive" xml:space="preserve">
+    <value>سيارات</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>مجتمع</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>فعالية</value>
+  </data>
+  <data name="Recreation" xml:space="preserve">
+    <value>ترفيه</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>تصفية</value>
+  </data>
+  <data name="VerifiedOnly" xml:space="preserve">
+    <value>المعتمدة فقط</value>
+  </data>
+  <data name="Open24Hours" xml:space="preserve">
+    <value>مفتوح 24/7</value>
+  </data>
+  <data name="LocationsFound" xml:space="preserve">
+    <value>تم العثور على {0} مواقع</value>
+  </data>
+  <data name="SortByDistance" xml:space="preserve">
+    <value>رتب حسب المسافة</value>
+  </data>
+  <data name="SortByRating" xml:space="preserve">
+    <value>رتب حسب التقييم</value>
+  </data>
+  <data name="SortByName" xml:space="preserve">
+    <value>رتب حسب الاسم</value>
+  </data>
+  <data name="SortByNewest" xml:space="preserve">
+    <value>رتب حسب الأحدث</value>
+  </data>
+  <data name="KmAway" xml:space="preserve">
+    <value>على بعد {0} كم</value>
+  </data>
+  <data name="Views" xml:space="preserve">
+    <value>{0} مشاهدات</value>
+  </data>
+  <data name="CheckInsCount" xml:space="preserve">
+    <value>{0} تسجيل وصول</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>معتمد</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>مغلق</value>
+  </data>
+  <data name="NoLocationsFound" xml:space="preserve">
+    <value>لم يتم العثور على مواقع</value>
+  </data>
+  <data name="NoLocationsSubtitle" xml:space="preserve">
+    <value>حاول تعديل معايير البحث أو أضف موقعاً جديداً.</value>
+  </data>
+  <data name="AddNewLocation" xml:space="preserve">
+    <value>إضافة موقع جديد</value>
+  </data>
+</root>

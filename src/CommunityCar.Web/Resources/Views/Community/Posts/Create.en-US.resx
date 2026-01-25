@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="resheader">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateNewPost" xml:space="preserve">
+    <value>Create New Post</value>
+  </data>
+  <data name="InteractionFeed" xml:space="preserve">
+    <value>Interaction Feed</value>
+  </data>
+  <data name="NewBroadcast" xml:space="preserve">
+    <value>New Broadcast</value>
+  </data>
+  <data name="CreateSubtitle" xml:space="preserve">
+    <value>Share your automotive knowledge, experiences, or questions with the community. Your voice matters in our collective journey.</value>
+  </data>
+  <data name="BroadcastType" xml:space="preserve">
+    <value>Broadcast Type</value>
+  </data>
+  <data name="TextPost" xml:space="preserve">
+    <value>Text Post</value>
+  </data>
+  <data name="TextPostDesc" xml:space="preserve">
+    <value>Share thoughts, questions, or discussions</value>
+  </data>
+  <data name="PhotoPost" xml:space="preserve">
+    <value>Photo Post</value>
+  </data>
+  <data name="PhotoPostDesc" xml:space="preserve">
+    <value>Share photos with descriptions</value>
+  </data>
+  <data name="LinkShare" xml:space="preserve">
+    <value>Link Share</value>
+  </data>
+  <data name="LinkShareDesc" xml:space="preserve">
+    <value>Share interesting articles or resources</value>
+  </data>
+  <data name="Poll" xml:space="preserve">
+    <value>Poll</value>
+  </data>
+  <data name="PollDesc" xml:space="preserve">
+    <value>Ask the community for opinions</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title *</value>
+  </data>
+  <data name="TitlePlaceholder" xml:space="preserve">
+    <value>Give your post a compelling title...</value>
+  </data>
+  <data name="TitleHelp" xml:space="preserve">
+    <value>Make it clear and engaging to attract readers</value>
+  </data>
+  <data name="ContentLabel" xml:space="preserve">
+    <value>Content *</value>
+  </data>
+  <data name="ContentPlaceholder" xml:space="preserve">
+    <value>Share your thoughts, experiences, or questions with the community...</value>
+  </data>
+  <data name="ContentHelp" xml:space="preserve">
+    <value>Use markdown for formatting. Be detailed and helpful.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagsPlaceholder" xml:space="preserve">
+    <value>e.g., mustang, restoration, diy</value>
+  </data>
+  <data name="TagsHelp" xml:space="preserve">
+    <value>Separate tags with commas to help others find your post</value>
+  </data>
+  <data name="PostToGroup" xml:space="preserve">
+    <value>Post to Group</value>
+  </data>
+  <data name="GeneralFeed" xml:space="preserve">
+    <value>General Feed</value>
+  </data>
+  <data name="GroupHelp" xml:space="preserve">
+    <value>Optional: Share with a specific community</value>
+  </data>
+  <data name="BroadcastPost" xml:space="preserve">
+    <value>Broadcast Post</value>
+  </data>
+  <data name="SaveDraft" xml:space="preserve">
+    <value>Save Draft</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CommunityGuidelines" xml:space="preserve">
+    <value>Community Guidelines</value>
+  </data>
+  <data name="BeHelpful" xml:space="preserve">
+    <value>Be Helpful:</value>
+  </data>
+  <data name="BeHelpfulDesc" xml:space="preserve">
+    <value>Share knowledge and experiences that benefit others</value>
+  </data>
+  <data name="StayOnTopic" xml:space="preserve">
+    <value>Stay On Topic:</value>
+  </data>
+  <data name="StayOnTopicDesc" xml:space="preserve">
+    <value>Keep posts automotive-related and relevant</value>
+  </data>
+  <data name="BeRespectful" xml:space="preserve">
+    <value>Be Respectful:</value>
+  </data>
+  <data name="BeRespectfulDesc" xml:space="preserve">
+    <value>Treat all community members with courtesy</value>
+  </data>
+  <data name="UseClearTitles" xml:space="preserve">
+    <value>Use Clear Titles:</value>
+  </data>
+  <data name="UseClearTitlesDesc" xml:space="preserve">
+    <value>Help others understand your post at a glance</value>
+  </data>
+  <data name="ImageTitlePlaceholder" xml:space="preserve">
+    <value>Describe what you're sharing...</value>
+  </data>
+  <data name="ImageContentPlaceholder" xml:space="preserve">
+    <value>Tell us about these photos. What's the story behind them?</value>
+  </data>
+  <data name="LinkTitlePlaceholder" xml:space="preserve">
+    <value>What's this link about?</value>
+  </data>
+  <data name="LinkContentPlaceholder" xml:space="preserve">
+    <value>Paste the URL and tell us why it's worth sharing...</value>
+  </data>
+  <data name="PollTitlePlaceholder" xml:space="preserve">
+    <value>What question do you want to ask?</value>
+  </data>
+  <data name="PollContentPlaceholder" xml:space="preserve">
+    <value>Provide context for your poll and list the options...</value>
+  </data>
+</root>

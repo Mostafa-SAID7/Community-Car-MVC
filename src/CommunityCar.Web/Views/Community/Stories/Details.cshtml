@@ -1,6 +1,11 @@
 @model CommunityCar.Application.Features.Stories.ViewModels.StoryVM
 @{
-    ViewData["Title"] = Model?.Title ?? "Story";
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+    var displayTitle = Model?.Title ?? "Story";
+    var displayCaption = isArabic && !string.IsNullOrEmpty(Model?.CaptionAr) ? Model.CaptionAr : Model?.Caption;
+    
+    ViewData["Title"] = displayTitle;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var currentUserId = ViewBag.CurrentUserId as Guid?;
 }
@@ -15,7 +20,7 @@
                         <i data-lucide="arrow-left" class="w-5 h-5 text-foreground"></i>
                     </a>
                     <div>
-                        <h1 class="text-xl font-bold text-foreground">@(Model?.Title ?? "Story")</h1>
+                        <h1 class="text-xl font-bold text-foreground">@displayTitle</h1>
                         <p class="text-sm text-muted-foreground">by @Model?.AuthorName</p>
                     </div>
                 </div>
@@ -106,10 +111,10 @@
                         }
 
                         <!-- Story Caption -->
-                        @if (!string.IsNullOrEmpty(Model.Caption))
+                        @if (!string.IsNullOrEmpty(displayCaption))
                         {
                             <div class="prose prose-sm max-w-none text-foreground mb-4">
-                                @Html.Raw(Model.Caption.Replace("\n", "<br>"))
+                                @Html.Raw(displayCaption.Replace("\n", "<br>"))
                             </div>
                         }
 

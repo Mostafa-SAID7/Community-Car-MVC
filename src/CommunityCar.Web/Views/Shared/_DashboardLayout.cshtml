@@ -9,6 +9,15 @@
         content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
     <title>@ViewData["Title"] - Dashboard - CommunityCar</title>
 
+    <!-- Theme initialization script (must be before any content) -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.classList.remove('light', 'dark');
+            document.documentElement.classList.add(theme);
+        })();
+    </script>
+
     <performance-optimizations url="@Context.Request.Path" />
     <seo-meta page-type="@(ViewData["PageType"] ?? "Dashboard")" entity-id="@(ViewData["EntityId"] as Guid?)" />
 
@@ -37,7 +46,7 @@
         <partial name="_DashboardSidebarLeft" />
 
         <!-- Main Content Area positioned for dashboard layout -->
-        <main class="flex-1 transition-all duration-300 px-2 sm:px-3 md:px-4 mt-24 md:ml-20 xl:ml-60" id="main-content">
+        <main class="flex-1 transition-all duration-300 px-2 sm:px-3 md:px-4 mt-24 md:ml-20 xl:ml-60 rtl:md:ml-0 rtl:md:mr-20 rtl:xl:ml-0 rtl:xl:mr-60" id="main-content">
             <div class="max-w-none w-full overflow-x-hidden">
                 <div class="bg-card/30 backdrop-blur-xl border border-border rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 w-full">
                     <!-- Header with mobile navigation -->
@@ -160,45 +169,6 @@
             setMobileViewportHeight();
             window.addEventListener('resize', setMobileViewportHeight);
             window.addEventListener('orientationchange', setMobileViewportHeight);
-            
-            // Dashboard mobile theme toggle functionality
-            const dashboardThemeToggle = document.getElementById('dashboard-theme-toggle');
-            const dashboardSunIcon = document.getElementById('dashboard-sun-icon');
-            const dashboardMoonIcon = document.getElementById('dashboard-moon-icon');
-            const desktopThemeToggle = document.getElementById('theme-toggle');
-            
-            if (dashboardThemeToggle && desktopThemeToggle) {
-                dashboardThemeToggle.addEventListener('click', function() {
-                    // Trigger the desktop theme toggle
-                    desktopThemeToggle.click();
-                });
-                
-                // Sync dashboard icons with desktop theme state
-                const observer = new MutationObserver(function(mutations) {
-                    mutations.forEach(function(mutation) {
-                        if (mutation.target.id === 'sun-icon' || mutation.target.id === 'moon-icon') {
-                            const desktopSunHidden = document.getElementById('sun-icon').classList.contains('hidden');
-                            const desktopMoonHidden = document.getElementById('moon-icon').classList.contains('hidden');
-                            
-                            if (desktopSunHidden) {
-                                dashboardSunIcon.classList.add('hidden');
-                                dashboardMoonIcon.classList.remove('hidden');
-                            } else {
-                                dashboardSunIcon.classList.remove('hidden');
-                                dashboardMoonIcon.classList.add('hidden');
-                            }
-                        }
-                    });
-                });
-                
-                // Observe changes to desktop theme icons
-                const desktopSunIcon = document.getElementById('sun-icon');
-                const desktopMoonIcon = document.getElementById('moon-icon');
-                if (desktopSunIcon && desktopMoonIcon) {
-                    observer.observe(desktopSunIcon, { attributes: true, attributeFilter: ['class'] });
-                    observer.observe(desktopMoonIcon, { attributes: true, attributeFilter: ['class'] });
-                }
-            }
             
             // Dashboard mobile language toggle functionality
             const dashboardLangToggle = document.getElementById('dashboard-lang-toggle');

@@ -70,6 +70,15 @@
   <data name="AskQuestion" xml:space="preserve">
     <value>اسأل سؤالاً</value>
   </data>
+  <data name="QARegistry" xml:space="preserve">
+    <value>سجل الأسئلة والأجوبة</value>
+  </data>
+  <data name="QASubtitle" xml:space="preserve">
+    <value>ابحث في قاعدة معرفة المجتمع عن حلول.</value>
+  </data>
+  <data name="InitializeBroadcast" xml:space="preserve">
+    <value>بدء البث</value>
+  </data>
   <data name="TotalQuestions" xml:space="preserve">
     <value>إجمالي الأسئلة</value>
   </data>
@@ -147,5 +156,20 @@
   </data>
   <data name="PopularMakes" xml:space="preserve">
     <value>ماركات السيارات الشائعة</value>
+  </data>
+  <data name="AdvancedFilters" xml:space="preserve">
+    <value>مرشحات متقدمة</value>
+  </data>
+  <data name="ResetProtocol" xml:space="preserve">
+    <value>إعادة تعيين البروتوكول</value>
+  </data>
+  <data name="ProtocolID" xml:space="preserve">
+    <value>معرف البروتوكول</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>نشط</value>
+  </data>
+  <data name="Asked" xml:space="preserve">
+    <value>سُئل</value>
   </data>
 </root>

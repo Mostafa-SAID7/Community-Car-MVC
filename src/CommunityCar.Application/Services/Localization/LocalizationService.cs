@@ -107,6 +107,45 @@ public class LocalizationService : ILocalizationService
         return await query.ToListAsync();
     }
 
+    public async Task<(List<LocalizationResource> Items, int TotalCount)> GetPaginatedResourcesAsync(string? culture = null, string? resourceGroup = null, string? search = null, int page = 1, int pageSize = 20)
+    {
+        var query = _context.LocalizationResources.AsQueryable();
+
+        if (!string.IsNullOrEmpty(culture))
+        {
+            query = query.Where(r => r.Culture == culture);
+        }
+
+        if (!string.IsNullOrEmpty(resourceGroup))
+        {
+            query = query.Where(r => r.ResourceGroup == resourceGroup);
+        }
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(r => r.Key.Contains(search) || r.Value.Contains(search));
+        }
+
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .OrderBy(r => r.ResourceGroup)
+            .ThenBy(r => r.Key)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
+
+    public async Task<List<string>> GetResourceGroupsAsync()
+    {
+        return await _context.LocalizationResources
+            .Select(r => r.ResourceGroup ?? "Global")
+            .Distinct()
+            .OrderBy(g => g)
+            .ToListAsync();
+    }
+
     public async Task SetResourceValueAsync(string key, string value, string culture, string? resourceGroup = null)
     {
         var resource = await _context.LocalizationResources

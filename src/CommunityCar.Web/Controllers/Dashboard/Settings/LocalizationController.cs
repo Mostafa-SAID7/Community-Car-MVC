@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Localization;
 using CommunityCar.Domain.Entities.Localization;
+using CommunityCar.Web.Models.Dashboard.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
@@ -19,24 +20,44 @@ public class LocalizationController : Controller
     public async Task<IActionResult> Index()
     {
         var cultures = await _localizationService.GetSupportedCulturesAsync();
-        return View(cultures);
+        return View("~/Views/Dashboard/Localization/Index.cshtml", cultures);
     }
 
     [HttpGet("resources")]
-    public async Task<IActionResult> Resources(string? culture, string? group)
+    public async Task<IActionResult> Resources(string? culture, string? group, string? search, int page = 1, int pageSize = 20)
     {
-        var resources = await _localizationService.GetAllResourcesAsync(culture, group);
-        ViewBag.Cultures = await _localizationService.GetSupportedCulturesAsync();
-        ViewBag.SelectedCulture = culture;
-        ViewBag.SelectedGroup = group;
-        return View("Resources", resources);
+        var (resources, totalCount) = await _localizationService.GetPaginatedResourcesAsync(culture, group, search, page, pageSize);
+        
+        var viewModel = new ResourcesVM
+        {
+            Resources = resources,
+            Cultures = await _localizationService.GetSupportedCulturesAsync(),
+            ResourceGroups = await _localizationService.GetResourceGroupsAsync(),
+            SelectedCulture = culture,
+            SelectedGroup = group,
+            SearchTerm = search,
+            Pagination = new CommunityCar.Application.Common.Models.PaginationInfo
+            {
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+                HasPreviousPage = page > 1,
+                HasNextPage = page < (int)Math.Ceiling(totalCount / (double)pageSize),
+                StartItem = ((page - 1) * pageSize) + 1,
+                EndItem = Math.Min(page * pageSize, totalCount)
+            }
+        };
+
+        return View("~/Views/Dashboard/Localization/Resources.cshtml", viewModel);
     }
 
     [HttpGet("resources/add")]
     public async Task<IActionResult> AddResource()
     {
         ViewBag.Cultures = await _localizationService.GetSupportedCulturesAsync();
-        return View("EditResource", new LocalizationResource());
+        ViewBag.ResourceGroups = await _localizationService.GetResourceGroupsAsync();
+        return View("~/Views/Dashboard/Localization/EditResource.cshtml", new LocalizationResource());
     }
 
     [HttpGet("resources/edit/{id:guid}")]
@@ -46,7 +67,8 @@ public class LocalizationController : Controller
         if (resource == null) return NotFound();
 
         ViewBag.Cultures = await _localizationService.GetSupportedCulturesAsync();
-        return View("EditResource", resource);
+        ViewBag.ResourceGroups = await _localizationService.GetResourceGroupsAsync();
+        return View("~/Views/Dashboard/Localization/EditResource.cshtml", resource);
     }
 
     [HttpPost("resources/save")]
@@ -56,7 +78,7 @@ public class LocalizationController : Controller
         if (!ModelState.IsValid)
         {
             ViewBag.Cultures = await _localizationService.GetSupportedCulturesAsync();
-            return View("EditResource", resource);
+            return View("~/Views/Dashboard/Localization/EditResource.cshtml", resource);
         }
 
         await _localizationService.SetResourceValueAsync(resource.Key, resource.Value, resource.Culture, resource.ResourceGroup);
@@ -74,7 +96,7 @@ public class LocalizationController : Controller
     [HttpGet("cultures/add")]
     public IActionResult AddCulture()
     {
-        return View("EditCulture", new LocalizationCulture());
+        return View("~/Views/Dashboard/Localization/EditCulture.cshtml", new LocalizationCulture());
     }
 
     [HttpPost("cultures/save")]
@@ -83,7 +105,7 @@ public class LocalizationController : Controller
     {
         if (!ModelState.IsValid)
         {
-            return View("EditCulture", culture);
+            return View("~/Views/Dashboard/Localization/EditCulture.cshtml", culture);
         }
 
         if (culture.Id == Guid.Empty)
@@ -134,9 +156,11 @@ public class LocalizationController : Controller
 
             var doc = XDocument.Load(file);
             var resources = doc.Root?.Elements("data")
+                .GroupBy(e => e.Attribute("name")?.Value ?? "")
+                .Where(g => !string.IsNullOrEmpty(g.Key))
                 .ToDictionary(
-                    e => e.Attribute("name")?.Value ?? "",
-                    e => e.Element("value")?.Value ?? ""
+                    g => g.Key,
+                    g => g.Last().Element("value")?.Value ?? ""
                 ) ?? new();
 
             if (resources.Any())

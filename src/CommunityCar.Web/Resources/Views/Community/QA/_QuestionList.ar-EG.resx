@@ -100,4 +100,7 @@
   <data name="Open" xml:space="preserve">
     <value>مفتوح</value>
   </data>
+  <data name="Questions" xml:space="preserve">
+    <value>أسئلة</value>
+  </data>
 </root>

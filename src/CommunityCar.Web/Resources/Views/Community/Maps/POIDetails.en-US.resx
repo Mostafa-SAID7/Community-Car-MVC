@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="resheader">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BackToMaps" xml:space="preserve">
+    <value>Back to Maps</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>Verified</value>
+  </data>
+  <data name="TemporarilyClosed" xml:space="preserve">
+    <value>Temporarily Closed</value>
+  </data>
+  <data name="CheckIn" xml:space="preserve">
+    <value>Check In</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="LocationContact" xml:space="preserve">
+    <value>Location &amp; Contact</value>
+  </data>
+  <data name="VisitWebsite" xml:space="preserve">
+    <value>Visit Website</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="ServicesFeatures" xml:space="preserve">
+    <value>Services &amp; Features</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>Services</value>
+  </data>
+  <data name="PaymentMethods" xml:space="preserve">
+    <value>Payment Methods</value>
+  </data>
+  <data name="Amenities" xml:space="preserve">
+    <value>Amenities</value>
+  </data>
+  <data name="EventDetails" xml:space="preserve">
+    <value>Event Details</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Start Time</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>End Time</value>
+  </data>
+  <data name="Capacity" xml:space="preserve">
+    <value>Capacity</value>
+  </data>
+  <data name="AttendeesFormat" xml:space="preserve">
+    <value>{0} / {1} attendees</value>
+  </data>
+  <data name="EventActive" xml:space="preserve">
+    <value>🔴 Event is currently active!</value>
+  </data>
+  <data name="UpcomingEvent" xml:space="preserve">
+    <value>📅 Upcoming event</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Photos</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="NoRatings" xml:space="preserve">
+    <value>No ratings yet</value>
+  </data>
+  <data name="Views" xml:space="preserve">
+    <value>Views</value>
+  </data>
+  <data name="CheckIns" xml:space="preserve">
+    <value>Check-ins</value>
+  </data>
+  <data name="Added" xml:space="preserve">
+    <value>Added</value>
+  </data>
+  <data name="QuickActions" xml:space="preserve">
+    <value>Quick Actions</value>
+  </data>
+  <data name="CheckInHere" xml:space="preserve">
+    <value>Check In Here</value>
+  </data>
+  <data name="ViewCheckIns" xml:space="preserve">
+    <value>View Check-ins</value>
+  </data>
+  <data name="GetDirections" xml:space="preserve">
+    <value>Get Directions</value>
+  </data>
+  <data name="SaveLocation" xml:space="preserve">
+    <value>Save Location</value>
+  </data>
+  <data name="ReportIssue" xml:space="preserve">
+    <value>Report Issue</value>
+  </data>
+</root>

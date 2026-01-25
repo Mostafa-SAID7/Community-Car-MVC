@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CommunityHubs" xml:space="preserve">
+    <value>مراكز المجتمع</value>
+  </data>
+  <data name="CommunityGroups" xml:space="preserve">
+    <value>مراكز المجتمع</value>
+  </data>
+  <data name="GroupsSubtitle" xml:space="preserve">
+    <value>اكتشف وانضم إلى المجتمعات بناءً على ماركات السيارات المفضلة لديك واهتماماتك.</value>
+  </data>
+  <data name="CreateHub" xml:space="preserve">
+    <value>إنشاء مركز</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>ابحث عن المراكز حسب الاسم أو الماركة أو الاهتمام...</value>
+  </data>
+  <data name="NewestFirst" xml:space="preserve">
+    <value>الأحدث أولاً</value>
+  </data>
+  <data name="OldestFirst" xml:space="preserve">
+    <value>الأقدم أولاً</value>
+  </data>
+  <data name="Alphabetical" xml:space="preserve">
+    <value>أبجدي</value>
+  </data>
+  <data name="AllAccess" xml:space="preserve">
+    <value>كل الوصول</value>
+  </data>
+  <data name="PublicOnly" xml:space="preserve">
+    <value>عام فقط</value>
+  </data>
+  <data name="PublicHubs" xml:space="preserve">
+    <value>المراكز العامة</value>
+  </data>
+  <data name="PrivateOnly" xml:space="preserve">
+    <value>خاص فقط</value>
+  </data>
+  <data name="PrivateHubs" xml:space="preserve">
+    <value>المراكز الخاصة</value>
+  </data>
+  <data name="HubDiscovery" xml:space="preserve">
+    <value>اكتشاف المراكز</value>
+  </data>
+  <data name="GroupsAvailable" xml:space="preserve">
+    <value>المجموعات المتاحة</value>
+  </data>
+  <data name="GridView" xml:space="preserve">
+    <value>عرض الشبكة</value>
+  </data>
+  <data name="ListView" xml:space="preserve">
+    <value>عرض القائمة</value>
+  </data>
+  <data name="NoHubsMessage" xml:space="preserve">
+    <value>جرّب تعديل معايير البحث أو أنشئ مركزك الخاص.</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>الأعضاء</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>المنشورات</value>
+  </data>
+  <data name="OfficialHub" xml:space="preserve">
+    <value>مركز رسمي</value>
+  </data>
+  <data name="VerifiedCommunity" xml:space="preserve">
+    <value>مجتمع موثق</value>
+  </data>
+  <data name="JoinHub" xml:space="preserve">
+    <value>انضم للمركز</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>عرض التفاصيل</value>
+  </data>
+  <data name="NoHubsFound" xml:space="preserve">
+    <value>لم يتم العثور على مراكز تطابق معاييرك.</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>مسح الفلاتر</value>
+  </data>
+  <data name="Showing" xml:space="preserve">
+    <value>عرض</value>
+  </data>
+  <data name="Of" xml:space="preserve">
+    <value>من</value>
+  </data>
+  <data name="Hubs" xml:space="preserve">
+    <value>مراكز</value>
+  </data>
+  <data name="FromPage" xml:space="preserve">
+    <value>من صفحة</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>النشاط</value>
+  </data>
+  <data name="Public" xml:space="preserve">
+    <value>عام</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>خاص</value>
+  </data>
+</root>

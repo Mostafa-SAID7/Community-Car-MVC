@@ -4,7 +4,7 @@
 @inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Vehicle Reviews";
+    ViewData["Title"] = Localizer["VehicleReviews"];
     var searchRequest = ViewBag.SearchRequest as CommunityCar.Application.Features.Reviews.DTOs.ReviewsSearchRequest;
 }
 
@@ -134,7 +134,7 @@
                 </div>
             </div>
             <div class="mt-6 flex justify-end">
-                <button class="px-6 py-2 bg-muted text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-muted/80 transition-all" onclick="resetFilters()">Reset Protocol</button>
+                <button class="px-6 py-2 bg-muted text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-muted/80 transition-all" onclick="resetFilters()">@Localizer["ResetProtocol"]</button>
             </div>
         </div>
     </div>

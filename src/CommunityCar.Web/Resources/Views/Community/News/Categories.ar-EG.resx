@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BrowseByCategories" xml:space="preserve">
+    <value>تصفح حسب الفئات</value>
+  </data>
+  <data name="HeaderTitle" xml:space="preserve">
+    <value>أقسام الأخبار</value>
+  </data>
+  <data name="HeaderSubtitle" xml:space="preserve">
+    <value>استكشف محتوى السيارات المنسق خصيصاً حسب الموضوع. من الرؤى التقنية إلى فعاليات المجتمع.</value>
+  </data>
+  <data name="ViewArticles" xml:space="preserve">
+    <value>عرض المقالات</value>
+  </data>
+  <data name="BackToNewsFeed" xml:space="preserve">
+    <value>العودة لآخر الأخبار</value>
+  </data>
+  <data name="GeneralDescription" xml:space="preserve">
+    <value>أخبار السيارات العالمية، تحديثات يومية، وقصص تهم الجميع.</value>
+  </data>
+  <data name="CarReviewsDescription" xml:space="preserve">
+    <value>تحليلات معمقة ومراجعات عملية لأحدث الموديلات في السوق.</value>
+  </data>
+  <data name="IndustryDescription" xml:space="preserve">
+    <value>واكب أخبار الشركات المصنعة، اتجاهات السوق، وأخبار أعمال السيارات.</value>
+  </data>
+  <data name="TechnologyDescription" xml:space="preserve">
+    <value>السيارات الكهربائية، القيادة الذاتية، ومستقبل التنقل.</value>
+  </data>
+  <data name="EventsDescription" xml:space="preserve">
+    <value>تغطية مباشرة من معارض السيارات، تجمعات المجتمع، والسباقات الدولية.</value>
+  </data>
+  <data name="TipsDescription" xml:space="preserve">
+    <value>نصائح الصيانة، أدلة الشراء، ومشورة الخبراء لكل سائق.</value>
+  </data>
+  <data name="DefaultDescription" xml:space="preserve">
+    <value>استكشف مجموعتنا من مقالات السيارات وأخبار المجتمع.</value>
+  </data>
+</root>

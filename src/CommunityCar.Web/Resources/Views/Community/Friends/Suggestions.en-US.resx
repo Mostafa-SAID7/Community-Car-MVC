@@ -97,4 +97,7 @@
   <data name="AndOthers" xml:space="preserve">
     <value>and {0} others</value>
   </data>
+  <data name="OneMutualFriend" xml:space="preserve">
+    <value>1 mutual friend</value>
+  </data>
 </root>

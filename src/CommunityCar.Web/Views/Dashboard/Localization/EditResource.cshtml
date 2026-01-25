@@ -49,9 +49,15 @@
             <div class="space-y-2">
                 <label asp-for="ResourceGroup" class="text-[10px] font-black uppercase tracking-widest text-primary">Domain Namespace</label>
                 <div class="relative group/input">
-                    <input asp-for="ResourceGroup" class="w-full bg-background/50 border border-border px-4 py-3.5 rounded-2xl text-sm font-medium outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-inner" placeholder="e.g. Components_Dashboard_Telemetry" />
+                    <input asp-for="ResourceGroup" class="w-full bg-background/50 border border-border px-4 py-3.5 rounded-2xl text-sm font-medium outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-inner" placeholder="e.g. Components_Dashboard_Telemetry" list="group-list" />
                     <i data-lucide="layers" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground opacity-30 group-focus-within/input:opacity-100 transition-all"></i>
                 </div>
+                <datalist id="group-list">
+                    @foreach (var g in (ViewBag.ResourceGroups as List<string>) ?? new())
+                    {
+                        <option value="@g"></option>
+                    }
+                </datalist>
             </div>
 
             <div class="space-y-2">

@@ -120,8 +120,8 @@ public class AuthenticationService : IAuthenticationService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during login for {Email}", request.Email);
-            return AuthResult.Failure("An error occurred during login.");
+            _logger.LogError(ex, "CRITICAL ERROR: Exception during login for {Email}. Message: {ErrorMessage}", request.Email, ex.Message);
+            return AuthResult.Failure("An error occurred during login. Please try again later or contact support if the issue persists.");
         }
     }
 

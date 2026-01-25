@@ -1,3 +1,4 @@
+@model CommunityCar.Application.Features.Events.ViewModels.EventsIndexVM
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
@@ -62,35 +63,35 @@
         <div class="flex flex-col lg:flex-row gap-4 items-center">
             <div class="relative flex-1 w-full group">
                 <input type="text" name="SearchTerm" value="@Model.SearchRequest.SearchTerm" 
-                       placeholder="Search events..." 
+                       placeholder="@Localizer["SearchTerm"]" 
                        class="w-full bg-background border border-border pl-12 pr-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none">
                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors"></i>
             </div>
             
             <div class="flex gap-2 w-full lg:w-auto">
                 <input type="text" name="Location" value="@Model.SearchRequest.Location" 
-                       placeholder="Location..." 
+                       placeholder="@Localizer["Location"]" 
                        class="flex-1 lg:w-48 bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none">
                 <button type="submit" class="h-[42px] px-6 py-2 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95">
                     <i data-lucide="search" class="w-4 h-4"></i>
-                    Search
+                    @Localizer["Search"]
                 </button>
-                <a href="/events" class="h-[42px] px-6 py-2 rounded-xl bg-background border border-border hover:border-primary hover:text-primary text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/5 transition-all flex items-center justify-center gap-2 active:scale-95">Clear</a>
+                <a href="/events" class="h-[42px] px-6 py-2 rounded-xl bg-background border border-border hover:border-primary hover:text-primary text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/5 transition-all flex items-center justify-center gap-2 active:scale-95">@Localizer["Clear"]</a>
             </div>
         </div>
         
         <div class="flex flex-wrap gap-4">
             <label class="flex items-center gap-2 text-sm font-medium">
                 <input type="checkbox" name="IsUpcomingOnly" value="true" @(Model.SearchRequest.IsUpcomingOnly ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
-                Upcoming Only
+                @Localizer["UpcomingOnly"]
             </label>
             <label class="flex items-center gap-2 text-sm font-medium">
                 <input type="checkbox" name="IsFreeOnly" value="true" @(Model.SearchRequest.IsFreeOnly ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
-                Free Events
+                @Localizer["FreeEvents"]
             </label>
             <label class="flex items-center gap-2 text-sm font-medium">
                 <input type="checkbox" name="HasAvailableSpots" value="true" @(Model.SearchRequest.HasAvailableSpots ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
-                Available Spots
+                @Localizer["AvailableSpots"]
             </label>
         </div>
     </form>
@@ -118,7 +119,7 @@
                             </div>
                             @if (eventItem.IsFree)
                             {
-                                <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-xs font-medium">FREE</span>
+                                <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-xs font-medium">@Localizer["Free"]</span>
                             }
                             else if (eventItem.TicketPrice.HasValue)
                             {
@@ -137,10 +138,10 @@
                             </div>
                             <div class="flex items-center gap-2 text-sm text-muted-foreground">
                                 <i data-lucide="users" class="w-4 h-4"></i>
-                                <span>@eventItem.AttendeeCount attendees</span>
+                                <span>@string.Format(Localizer["AttendeesFormat"].Value, eventItem.AttendeeCount)</span>
                                 @if (eventItem.MaxAttendees.HasValue)
                                 {
-                                    <span>/ @eventItem.MaxAttendees.Value max</span>
+                                    <span>@string.Format(Localizer["MaxAttendeesFormat"].Value, eventItem.MaxAttendees.Value)</span>
                                 }
                             </div>
                         </div>
@@ -154,7 +155,7 @@
                                 }
                                 @if (eventItem.Tags.Count() > 3)
                                 {
-                                    <span class="text-xs text-muted-foreground">+@(eventItem.Tags.Count() - 3) more</span>
+                                    <span class="text-xs text-muted-foreground">@string.Format(Localizer["MoreTagsFormat"].Value, (eventItem.Tags.Count() - 3))</span>
                                 }
                             </div>
                         }
@@ -163,18 +164,18 @@
                             <div class="flex items-center gap-2">
                                 @if (eventItem.IsUpcoming)
                                 {
-                                    <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-xs font-medium">Upcoming</span>
+                                    <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-xs font-medium">@Localizer["Upcoming"]</span>
                                 }
                                 else if (eventItem.IsActive)
                                 {
-                                    <span class="bg-orange-500/10 text-orange-600 dark:text-orange-400 px-2 py-1 rounded-full text-xs font-medium">Active</span>
+                                    <span class="bg-orange-500/10 text-orange-600 dark:text-orange-400 px-2 py-1 rounded-full text-xs font-medium">@Localizer["Active"]</span>
                                 }
                                 else
                                 {
-                                    <span class="bg-gray-500/10 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-full text-xs font-medium">Past</span>
+                                    <span class="bg-gray-500/10 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-full text-xs font-medium">@Localizer["Past"]</span>
                                 }
                             </div>
-                            <a href="/events/@eventItem.Id" class="btn btn-sm btn-outline">View Details</a>
+                                <a href="/events/@eventItem.Id" class="btn btn-sm btn-outline">@Localizer["ViewDetails"]</a>
                         </div>
                     </div>
                 </div>
@@ -194,17 +195,17 @@
                     @if (currentPage > 1)
                     {
                         <a href="?page=@(currentPage - 1)&pageSize=@Model.SearchRequest.PageSize&searchTerm=@Model.SearchRequest.SearchTerm&location=@Model.SearchRequest.Location" 
-                           class="btn btn-outline btn-sm">Previous</a>
+                           class="btn btn-outline btn-sm">@Localizer["Previous"]</a>
                     }
                     
                     <span class="text-sm text-muted-foreground px-4">
-                        Page @currentPage of @totalPages (@Model.SearchResponse.TotalCount total events)
+                        @string.Format(Localizer["PaginationInfoFormat"].Value, currentPage, totalPages, Model.SearchResponse.TotalCount)
                     </span>
                     
                     @if (currentPage < totalPages)
                     {
                         <a href="?page=@(currentPage + 1)&pageSize=@Model.SearchRequest.PageSize&searchTerm=@Model.SearchRequest.SearchTerm&location=@Model.SearchRequest.Location" 
-                           class="btn btn-outline btn-sm">Next</a>
+                           class="btn btn-outline btn-sm">@Localizer["Next"]</a>
                     }
                 </div>
             </div>
@@ -216,25 +217,25 @@
             <div class="bg-primary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <i data-lucide="calendar-x" class="w-8 h-8 text-primary"></i>
             </div>
-            <h3 class="text-lg font-black text-foreground mb-2">No Events Found</h3>
+            <h3 class="text-lg font-black text-foreground mb-2">@Localizer["NoEventsFound"]</h3>
             <p class="text-sm text-muted-foreground mb-4">
                 @if (!string.IsNullOrEmpty(Model.SearchRequest.SearchTerm) || !string.IsNullOrEmpty(Model.SearchRequest.Location))
                 {
-                    <span>No events match your search criteria. Try adjusting your filters.</span>
+                    <span>@Localizer["NoEventsMatch"]</span>
                 }
                 else
                 {
-                    <span>There are currently no events scheduled. Be the first to create one!</span>
+                    <span>@Localizer["NoEventsScheduled"]</span>
                 }
             </p>
             <div class="flex gap-2 justify-center">
                 <a href="/events/create" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
                     <i data-lucide="plus" class="w-4 h-4"></i>
-                    Create Event
+                    @Localizer["CreateEvent"]
                 </a>
                 @if (!string.IsNullOrEmpty(Model.SearchRequest.SearchTerm) || !string.IsNullOrEmpty(Model.SearchRequest.Location))
                 {
-                    <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">Clear Filters</a>
+                    <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">@Localizer["ClearFilters"]</a>
                 }
             </div>
         </div>

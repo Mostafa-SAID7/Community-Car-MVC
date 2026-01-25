@@ -36,6 +36,13 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
     {
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        // Suppress the warning for pending model changes in EF Core 9.0
+        optionsBuilder.ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+    }
+
     public new DbSet<User> Users => Set<User>();
     public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
     public DbSet<UserGallery> UserGalleries => Set<UserGallery>();

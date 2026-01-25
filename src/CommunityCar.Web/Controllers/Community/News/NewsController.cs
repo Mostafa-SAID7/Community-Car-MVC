@@ -29,6 +29,12 @@ public class NewsController : Controller
         _logger = logger;
     }
 
+    [HttpGet("categories")]
+    public IActionResult Categories()
+    {
+        return View("~/Views/Community/News/Categories.cshtml");
+    }
+
     [HttpGet("")]
     public async Task<IActionResult> Index(
         string? search = null,

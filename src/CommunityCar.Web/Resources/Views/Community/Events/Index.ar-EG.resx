@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Events" xml:space="preserve">
+    <value>الفعاليات</value>
+  </data>
+  <data name="CommunityEvents" xml:space="preserve">
+    <value>فعاليات المجتمع</value>
+  </data>
+  <data name="EventsSubtitle" xml:space="preserve">
+    <value>انضم إلى تجمعات السيارات والسباقات واللقاءات المجتمعية بالقرب منك.</value>
+  </data>
+  <data name="CreateEvent" xml:space="preserve">
+    <value>إنشاء فعالية</value>
+  </data>
+  <data name="TotalEvents" xml:space="preserve">
+    <value>إجمالي الفعاليات</value>
+  </data>
+  <data name="Upcoming" xml:space="preserve">
+    <value>القادمة</value>
+  </data>
+  <data name="ActiveNow" xml:space="preserve">
+    <value>نشط الآن</value>
+  </data>
+  <data name="TotalAttendees" xml:space="preserve">
+    <value>إجمالي الحضور</value>
+  </data>
+  <data name="SearchTerm" xml:space="preserve">
+    <value>ابحث في الفعاليات...</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>الموقع...</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>مسح</value>
+  </data>
+  <data name="UpcomingOnly" xml:space="preserve">
+    <value>القادمة فقط</value>
+  </data>
+  <data name="FreeEvents" xml:space="preserve">
+    <value>فعاليات مجانية</value>
+  </data>
+  <data name="AvailableSpots" xml:space="preserve">
+    <value>أماكن متاحة</value>
+  </data>
+  <data name="Newest" xml:space="preserve">
+    <value>الأحدث</value>
+  </data>
+  <data name="MostPopular" xml:space="preserve">
+    <value>الأكثر شعبية</value>
+  </data>
+  <data name="UpcomingSoon" xml:space="preserve">
+    <value>قادم قريباً</value>
+  </data>
+  <data name="Free" xml:space="preserve">
+    <value>مجاني</value>
+  </data>
+  <data name="AttendeesFormat" xml:space="preserve">
+    <value>{0} حضور</value>
+  </data>
+  <data name="MaxAttendeesFormat" xml:space="preserve">
+    <value>/ {0} كحد أقصى</value>
+  </data>
+  <data name="MoreTagsFormat" xml:space="preserve">
+    <value>+{0} إضافي</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>نشط</value>
+  </data>
+  <data name="Past" xml:space="preserve">
+    <value>سابق</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>عرض التفاصيل</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>السابق</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>التالي</value>
+  </data>
+  <data name="PaginationInfoFormat" xml:space="preserve">
+    <value>صفحة {0} من {1} (إجمالي {2} فعالية)</value>
+  </data>
+  <data name="NoEventsFound" xml:space="preserve">
+    <value>لم يتم العثور على فعاليات</value>
+  </data>
+  <data name="NoEventsMatch" xml:space="preserve">
+    <value>لا توجد فعاليات تطابق معايير البحث الخاصة بك. حاول تعديل الفلاتر.</value>
+  </data>
+  <data name="NoEventsScheduled" xml:space="preserve">
+    <value>لا توجد فعاليات مجدولة حالياً. كن أول من ينشئ فعالية!</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>مسح الفلاتر</value>
+  </data>
+</root>

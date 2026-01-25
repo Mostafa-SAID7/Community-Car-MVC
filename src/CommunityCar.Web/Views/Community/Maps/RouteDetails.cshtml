@@ -49,7 +49,7 @@
                         {
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 text-amber-600 rounded-full text-xs font-bold uppercase tracking-wider border border-amber-500/20">
                                 <i data-lucide="camera" class="w-3 h-3"></i>
-                                Scenic
+                                @Localizer["Scenic"]
                             </span>
                         }
                         
@@ -57,7 +57,7 @@
                         {
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-orange-500/10 text-orange-600 rounded-full text-xs font-bold uppercase tracking-wider border border-orange-500/20">
                                 <i data-lucide="mountain" class="w-3 h-3"></i>
-                                Off-Road
+                                @Localizer["OffRoad"]
                             </span>
                         }
                         
@@ -65,7 +65,7 @@
                         {
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-500/10 text-red-600 rounded-full text-xs font-bold uppercase tracking-wider border border-red-500/20">
                                 <i data-lucide="dollar-sign" class="w-3 h-3"></i>
-                                Tolls
+                                @Localizer["Tolls"]
                             </span>
                         }
                     </div>
@@ -81,7 +81,7 @@
             
             <button type="button" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
                 <i data-lucide="share-2" class="w-4 h-4"></i>
-                Share
+                @Localizer["Share"]
             </button>
         </div>
     </div>
@@ -92,7 +92,7 @@
         <div class="lg:col-span-2 space-y-6">
             <!-- Route Metrics -->
             <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Route Details</h3>
+                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">@Localizer["RouteDetailsTitle"]</h3>
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div class="text-center">
@@ -107,8 +107,8 @@
                         <div class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center text-green-600 mx-auto mb-2">
                             <i data-lucide="clock" class="w-6 h-6"></i>
                         </div>
-                        <p class="text-2xl font-black text-foreground">@(Model.EstimatedDurationMinutes / 60)h @(Model.EstimatedDurationMinutes % 60)m</p>
-                        <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Duration</p>
+                        <p class="text-2xl font-black text-foreground">@string.Format(Localizer["HoursMinutesFormat"].Value, (Model.EstimatedDurationMinutes / 60), (Model.EstimatedDurationMinutes % 60))</p>
+                        <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground">@Localizer["Duration"]</p>
                     </div>
                     
                     <div class="text-center">
@@ -116,7 +116,7 @@
                             <i data-lucide="star" class="w-6 h-6"></i>
                         </div>
                         <p class="text-2xl font-black text-foreground">@(Model.AverageRating > 0 ? Model.AverageRating.ToString("F1") : "N/A")</p>
-                        <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Rating</p>
+                        <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground">@Localizer["Rating"]</p>
                     </div>
                     
                     <div class="text-center">
@@ -124,36 +124,36 @@
                             <i data-lucide="users" class="w-6 h-6"></i>
                         </div>
                         <p class="text-2xl font-black text-foreground">@Model.TimesCompleted</p>
-                        <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground">Completed</p>
+                        <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground">@Localizer["Completed"]</p>
                     </div>
                 </div>
             </div>
 
             <!-- Route Characteristics -->
             <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Route Characteristics</h3>
+                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">@Localizer["RouteCharacteristics"]</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <h4 class="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Features</h4>
+                        <h4 class="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">@Localizer["Features"]</h4>
                         <div class="space-y-2">
                             <div class="flex items-center gap-3">
                                 <i data-lucide="@(Model.IsScenic ? "check" : "x")" class="w-4 h-4 @(Model.IsScenic ? "text-green-600" : "text-muted-foreground")"></i>
-                                <span class="text-sm @(Model.IsScenic ? "text-foreground" : "text-muted-foreground")">Scenic Views</span>
+                                <span class="text-sm @(Model.IsScenic ? "text-foreground" : "text-muted-foreground")">@Localizer["ScenicViews"]</span>
                             </div>
                             <div class="flex items-center gap-3">
                                 <i data-lucide="@(Model.HasTolls ? "check" : "x")" class="w-4 h-4 @(Model.HasTolls ? "text-red-600" : "text-green-600")"></i>
-                                <span class="text-sm @(Model.HasTolls ? "text-foreground" : "text-muted-foreground")">@(Model.HasTolls ? "Has Tolls" : "No Tolls")</span>
+                                <span class="text-sm @(Model.HasTolls ? "text-foreground" : "text-muted-foreground")">@(Model.HasTolls ? Localizer["HasTolls"].Value : Localizer["NoTolls"].Value)</span>
                             </div>
                             <div class="flex items-center gap-3">
                                 <i data-lucide="@(Model.IsOffRoad ? "check" : "x")" class="w-4 h-4 @(Model.IsOffRoad ? "text-orange-600" : "text-muted-foreground")"></i>
-                                <span class="text-sm @(Model.IsOffRoad ? "text-foreground" : "text-muted-foreground")">@(Model.IsOffRoad ? "Off-Road Sections" : "Paved Roads")</span>
+                                <span class="text-sm @(Model.IsOffRoad ? "text-foreground" : "text-muted-foreground")">@(Model.IsOffRoad ? Localizer["OffRoadSections"].Value : Localizer["PavedRoads"].Value)</span>
                             </div>
                         </div>
                     </div>
                     
                     <div>
-                        <h4 class="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">Details</h4>
+                        <h4 class="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">@Localizer["Details"]</h4>
                         <div class="space-y-2">
                             @if (!string.IsNullOrEmpty(displaySurfaceType))
                             {
@@ -171,7 +171,7 @@
                             }
                             <div class="flex items-center gap-3">
                                 <i data-lucide="trending-up" class="w-4 h-4 text-muted-foreground"></i>
-                                <span class="text-sm text-foreground">@Model.Difficulty Level</span>
+                                <span class="text-sm text-foreground">@string.Format(Localizer["Level"].Value, Model.Difficulty.ToString())</span>
                             </div>
                         </div>
                     </div>
@@ -182,7 +182,7 @@
             @if (!string.IsNullOrEmpty(Model.SafetyNotes) || !string.IsNullOrEmpty(Model.CurrentConditions))
             {
                 <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Safety & Conditions</h3>
+                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">@Localizer["SafetyConditions"]</h3>
                     
                     @if (!string.IsNullOrEmpty(displaySafetyNotes))
                     {
@@ -220,7 +220,7 @@
             @if (Model.Waypoints.Any())
             {
                 <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Route Waypoints</h3>
+                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">@Localizer["RouteWaypoints"]</h3>
                     
                     <div class="space-y-4">
                         @foreach (var waypoint in Model.Waypoints.OrderBy(w => w.Order))
@@ -254,7 +254,7 @@
             @if (Model.Tags.Any())
             {
                 <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Tags</h3>
+                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">@Localizer["Tags"]</h3>
                     
                     <div class="flex flex-wrap gap-2">
                         @foreach (var tag in Model.Tags)
@@ -269,7 +269,7 @@
             @if (Model.ImageUrls.Any())
             {
                 <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Route Photos</h3>
+                    <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">@Localizer["RoutePhotos"]</h3>
                     
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                         @foreach (var imageUrl in Model.ImageUrls)
@@ -287,11 +287,11 @@
         <div class="space-y-6">
             <!-- Stats -->
             <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Statistics</h3>
+                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">@Localizer["Statistics"]</h3>
                 
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="text-muted-foreground">Rating</span>
+                        <span class="text-muted-foreground">@Localizer["Rating"]</span>
                         <div class="flex items-center gap-2">
                             @if (Model.AverageRating > 0)
                             {
@@ -306,28 +306,28 @@
                             }
                             else
                             {
-                                <span class="text-sm text-muted-foreground">No ratings yet</span>
+                                <span class="text-sm text-muted-foreground">@Localizer["NoRatings"]</span>
                             }
                         </div>
                     </div>
                     
                     <div class="flex items-center justify-between">
-                        <span class="text-muted-foreground">Completed</span>
+                        <span class="text-muted-foreground">@Localizer["Completed"]</span>
                         <span class="font-medium">@Model.TimesCompleted.ToString("N0")</span>
                     </div>
                     
                     <div class="flex items-center justify-between">
-                        <span class="text-muted-foreground">Distance</span>
-                        <span class="font-medium">@Model.DistanceKm.ToString("F1") km</span>
+                        <span class="text-muted-foreground">@Localizer["Distance"]</span>
+                        <span class="font-medium">@Model.DistanceKm.ToString("F1") @Localizer["Kilometers"]</span>
                     </div>
                     
                     <div class="flex items-center justify-between">
-                        <span class="text-muted-foreground">Duration</span>
-                        <span class="font-medium">@(Model.EstimatedDurationMinutes / 60)h @(Model.EstimatedDurationMinutes % 60)m</span>
+                        <span class="text-muted-foreground">@Localizer["Duration"]</span>
+                        <span class="font-medium">@string.Format(Localizer["HoursMinutesFormat"].Value, (Model.EstimatedDurationMinutes / 60), (Model.EstimatedDurationMinutes % 60))</span>
                     </div>
                     
                     <div class="flex items-center justify-between">
-                        <span class="text-muted-foreground">Created</span>
+                        <span class="text-muted-foreground">@Localizer["Added"]</span>
                         <span class="text-sm text-muted-foreground">@Model.CreatedAt.ToString("MMM dd, yyyy")</span>
                     </div>
                 </div>
@@ -335,42 +335,42 @@
 
             <!-- Quick Actions -->
             <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Quick Actions</h3>
+                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">@Localizer["QuickActions"]</h3>
                 
                 <div class="space-y-3">
                     <button type="button" class="w-full flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary hover:bg-primary/20 rounded-xl transition-all border border-primary/20" onclick="completeRoute('@Model.Id')">
                         <i data-lucide="check-circle" class="w-5 h-5"></i>
-                        <span class="font-medium">Mark as Completed</span>
+                        <span class="font-medium">@Localizer["MarkAsCompleted"]</span>
                     </button>
                     
                     <button type="button" class="w-full flex items-center gap-3 px-4 py-3 bg-muted/20 text-foreground hover:bg-muted/30 rounded-xl transition-all border border-border">
                         <i data-lucide="navigation" class="w-5 h-5"></i>
-                        <span class="font-medium">Start Navigation</span>
+                        <span class="font-medium">@Localizer["StartNavigation"]</span>
                     </button>
                     
                     <button type="button" class="w-full flex items-center gap-3 px-4 py-3 bg-muted/20 text-foreground hover:bg-muted/30 rounded-xl transition-all border border-border">
                         <i data-lucide="download" class="w-5 h-5"></i>
-                        <span class="font-medium">Download GPX</span>
+                        <span class="font-medium">@Localizer["DownloadGPX"]</span>
                     </button>
                     
                     <button type="button" class="w-full flex items-center gap-3 px-4 py-3 bg-muted/20 text-foreground hover:bg-muted/30 rounded-xl transition-all border border-border">
                         <i data-lucide="bookmark" class="w-5 h-5"></i>
-                        <span class="font-medium">Save Route</span>
+                        <span class="font-medium">@Localizer["SaveRoute"]</span>
                     </button>
                 </div>
             </div>
 
             <!-- Creator Info -->
             <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">Route Creator</h3>
+                <h3 class="text-lg font-black text-foreground mb-4 tracking-tight">@Localizer["RouteCreator"]</h3>
                 
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
                         @(Model.CreatedByName?.FirstOrDefault() ?? 'U')
                     </div>
                     <div>
-                        <p class="font-medium text-foreground">@(Model.CreatedByName ?? "Unknown User")</p>
-                        <p class="text-sm text-muted-foreground">Route Creator</p>
+                        <p class="font-medium text-foreground">@(Model.CreatedByName ?? Localizer["UnknownUser"].Value)</p>
+                        <p class="text-sm text-muted-foreground">@Localizer["RouteCreator"]</p>
                     </div>
                 </div>
             </div>

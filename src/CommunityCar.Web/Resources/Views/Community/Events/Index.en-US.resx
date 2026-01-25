@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Events" xml:space="preserve">
+    <value>Events</value>
+  </data>
+  <data name="CommunityEvents" xml:space="preserve">
+    <value>Community Events</value>
+  </data>
+  <data name="EventsSubtitle" xml:space="preserve">
+    <value>Join car meets, races, and community gatherings near you.</value>
+  </data>
+  <data name="CreateEvent" xml:space="preserve">
+    <value>Create Event</value>
+  </data>
+  <data name="TotalEvents" xml:space="preserve">
+    <value>Total Events</value>
+  </data>
+  <data name="Upcoming" xml:space="preserve">
+    <value>Upcoming</value>
+  </data>
+  <data name="ActiveNow" xml:space="preserve">
+    <value>Active Now</value>
+  </data>
+  <data name="TotalAttendees" xml:space="preserve">
+    <value>Total Attendees</value>
+  </data>
+  <data name="SearchTerm" xml:space="preserve">
+    <value>Search events...</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location...</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="UpcomingOnly" xml:space="preserve">
+    <value>Upcoming Only</value>
+  </data>
+  <data name="FreeEvents" xml:space="preserve">
+    <value>Free Events</value>
+  </data>
+  <data name="AvailableSpots" xml:space="preserve">
+    <value>Available Spots</value>
+  </data>
+  <data name="Newest" xml:space="preserve">
+    <value>Newest</value>
+  </data>
+  <data name="MostPopular" xml:space="preserve">
+    <value>Most Popular</value>
+  </data>
+  <data name="UpcomingSoon" xml:space="preserve">
+    <value>Upcoming Soon</value>
+  </data>
+  <data name="Free" xml:space="preserve">
+    <value>FREE</value>
+  </data>
+  <data name="AttendeesFormat" xml:space="preserve">
+    <value>{0} attendees</value>
+  </data>
+  <data name="MaxAttendeesFormat" xml:space="preserve">
+    <value>/ {0} max</value>
+  </data>
+  <data name="MoreTagsFormat" xml:space="preserve">
+    <value>+{0} more</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Past" xml:space="preserve">
+    <value>Past</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>View Details</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="PaginationInfoFormat" xml:space="preserve">
+    <value>Page {0} of {1} ({2} total events)</value>
+  </data>
+  <data name="NoEventsFound" xml:space="preserve">
+    <value>No Events Found</value>
+  </data>
+  <data name="NoEventsMatch" xml:space="preserve">
+    <value>No events match your search criteria. Try adjusting your filters.</value>
+  </data>
+  <data name="NoEventsScheduled" xml:space="preserve">
+    <value>There are currently no events scheduled. Be the first to create one!</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Clear Filters</value>
+  </data>
+</root>

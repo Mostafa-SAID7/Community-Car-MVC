@@ -106,4 +106,28 @@
   <data name="Sent" xml:space="preserve">
     <value>أُرسل في {0}</value>
   </data>
+  <data name="SentDate" xml:space="preserve">
+    <value>أُرسل في {0}</value>
+  </data>
+  <data name="ManageRequestsSubtitle" xml:space="preserve">
+    <value>إدارة طلبات الصداقة والاتصالات الخاصة بك</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>لا توجد طلبات معلقة</value>
+  </data>
+  <data name="NoPendingRequestsDescription" xml:space="preserve">
+    <value>ليس لديك أي طلبات صداقة في الوقت الحالي.</value>
+  </data>
+  <data name="NoSentRequests" xml:space="preserve">
+    <value>لا توجد طلبات مرسلة</value>
+  </data>
+  <data name="NoSentRequestsDescription" xml:space="preserve">
+    <value>لم تقم بإرسال أي طلبات صداقة مؤخراً.</value>
+  </data>
+  <data name="MutualFriendsCount" xml:space="preserve">
+    <value>{0} أصدقاء مشتركون</value>
+  </data>
+  <data name="OneMutualFriend" xml:space="preserve">
+    <value>صديق مشترك واحد</value>
+  </data>
 </root>

@@ -101,8 +101,8 @@
                             <div>
                                 <div class="font-medium text-foreground">@Localizer["DateTime"]</div>
                                 <div class="text-sm text-muted-foreground">
-                                    <div>Starts: @Model.StartTime.ToString("dddd, MMMM dd, yyyy 'at' h:mm tt")</div>
-                                    <div>Ends: @Model.EndTime.ToString("dddd, MMMM dd, yyyy 'at' h:mm tt")</div>
+                                    <div>@Model.StartTime.ToString("dddd, MMMM dd, yyyy 'at' h:mm tt")</div>
+                                    <div>@Model.EndTime.ToString("dddd, MMMM dd, yyyy 'at' h:mm tt")</div>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                                         <span>/ @Model.MaxAttendees.Value @Localizer["Max"]</span>
                                         @if (!Model.HasAvailableSpots)
                                         {
-                                            <span class="text-red-500 font-medium">(Full)</span>
+                                            <span class="text-red-500 font-medium">(@Localizer["Full"])</span>
                                         }
                                     }
                                 </div>
@@ -154,7 +154,7 @@
                                     <div class="text-sm text-muted-foreground">
                                         @if (Model.TicketPrice.HasValue)
                                         {
-                                            <div>${@Model.TicketPrice.Value}</div>
+                                            <div>$@Model.TicketPrice.Value</div>
                                         }
                                         @if (!string.IsNullOrEmpty(Model.TicketInfo))
                                         {

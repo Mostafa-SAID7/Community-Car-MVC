@@ -1,4 +1,6 @@
 @using System.Globalization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> SharedLocalizer
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")" class="light">
 
@@ -20,11 +22,17 @@
 </head>
 
 <body class="font-sans antialiased auth-body">
-    <!-- Clean authentication layout without header and sidebars -->
-    <div class="auth-container-clean">
-        <div class="auth-content-clean">
-            @RenderBody()
-        </div>
+    <partial name="_Header" />
+
+    <!-- Main container aligned with header -->
+    <div class="flex pb-4 sm:pb-6 md:pb-8 min-h-screen w-full overflow-x-hidden pt-24" id="main-container">
+        <main class="flex-1 transition-all duration-300 px-4 flex items-center justify-center" id="main-content">
+            <div class="w-full max-w-lg">
+                <div class="bg-card/30 backdrop-blur-xl border border-border rounded-2xl shadow-2xl p-6 sm:p-8">
+                    @RenderBody()
+                </div>
+            </div>
+        </main>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

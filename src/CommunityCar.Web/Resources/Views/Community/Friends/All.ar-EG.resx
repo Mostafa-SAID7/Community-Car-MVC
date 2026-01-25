@@ -94,4 +94,13 @@
   <data name="MutualFriendsCount" xml:space="preserve">
     <value>{0} أصدقاء مشتركون</value>
   </data>
+  <data name="OneMutualFriend" xml:space="preserve">
+    <value>صديق مشترك واحد</value>
+  </data>
+  <data name="ManageConnectionsSubtitle" xml:space="preserve">
+    <value>إدارة اتصالاتك وصداقاتك</value>
+  </data>
+  <data name="NoFriendsYetDescription" xml:space="preserve">
+    <value>ابدأ في التواصل مع عشاق السيارات الآخرين وابنِ مجتمعك!</value>
+  </data>
 </root>

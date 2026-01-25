@@ -97,4 +97,7 @@
   <data name="AndOthers" xml:space="preserve">
     <value>و {0} آخرون</value>
   </data>
+  <data name="OneMutualFriend" xml:space="preserve">
+    <value>صديق مشترك واحد</value>
+  </data>
 </root>

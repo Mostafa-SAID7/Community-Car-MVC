@@ -4,14 +4,14 @@
 
 @layer base {
     :root {
-        --background: 210 20% 98%;
+        --background: 0 0% 100%;
         --foreground: 222.2 84% 4.9%;
         --card: 0 0% 100%;
         --card-foreground: 222.2 84% 4.9%;
         --popover: 0 0% 100%;
         --popover-foreground: 222.2 84% 4.9%;
-        --primary: 357 97% 58%;
-        --primary-foreground: 0 0% 100%;
+        --primary: 345 82% 51%; /* Your custom red-500: #e11d48 */
+        --primary-foreground: 210 40% 98%;
         --secondary: 210 40% 96.1%;
         --secondary-foreground: 222.2 47.4% 11.2%;
         --muted: 210 40% 96.1%;
@@ -22,20 +22,20 @@
         --destructive-foreground: 210 40% 98%;
         --border: 214.3 31.8% 91.4%;
         --input: 214.3 31.8% 91.4%;
-        --ring: 357 97% 58%;
+        --ring: 345 82% 51%; /* Your custom red-500: #e11d48 */
         --radius: 0.5rem;
         --vh: 1vh;
     }
 
     .dark {
-        --background: 0 0% 8%;
+        --background: 222.2 84% 4.9%;
         --foreground: 210 40% 98%;
-        --card: 0 0% 12%;
+        --card: 222.2 84% 4.9%;
         --card-foreground: 210 40% 98%;
         --popover: 222.2 84% 4.9%;
         --popover-foreground: 210 40% 98%;
-        --primary: 357 97% 58%;
-        --primary-foreground: 0 0% 100%;
+        --primary: 345 82% 51%; /* Your custom red-500: #e11d48 */
+        --primary-foreground: 222.2 84% 4.9%;
         --secondary: 217.2 32.6% 17.5%;
         --secondary-foreground: 210 40% 98%;
         --muted: 217.2 32.6% 17.5%;
@@ -44,9 +44,9 @@
         --accent-foreground: 210 40% 98%;
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 210 40% 98%;
-        --border: 217.2 32.6% 25%;
+        --border: 217.2 32.6% 17.5%;
         --input: 217.2 32.6% 17.5%;
-        --ring: 357 97% 58%;
+        --ring: 345 82% 51%; /* Your custom red-500: #e11d48 */
     }
 }
 
@@ -56,7 +56,15 @@
     }
 
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground transition-colors duration-300;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    html {
+        max-width: 100%;
+        overflow-x: hidden;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* Custom Scrollbar */
@@ -159,6 +167,45 @@
         display: block;
     }
 
+    /* Ensure main content has consistent width in both LTR and RTL */
+    #main-content {
+        max-width: none;
+        width: auto; /* Let margins control the width */
+    }
+
+    /* Ensure content wrapper maintains consistent behavior */
+    #main-content > div {
+        max-width: none;
+        width: 100%;
+    }
+
+    /* RTL-specific fixes for consistent layout */
+    .rtl #main-content {
+        /* Ensure RTL content doesn't expand to full width */
+        width: auto;
+        max-width: none;
+    }
+
+    /* Additional RTL content width control */
+    @media (min-width: 1280px) {
+        /* Force RTL main content to have same effective width as LTR */
+        .rtl #main-content {
+            /* Calculate: viewport - left sidebar (15rem) - right sidebar (21rem) - padding */
+            width: calc(100vw - 36rem) !important;
+            max-width: calc(100vw - 36rem) !important;
+            margin-left: 21rem !important;
+            margin-right: 15rem !important;
+        }
+        
+        /* When right sidebar is hidden in RTL */
+        .rtl #main-content.xl\:mr-0 {
+            width: calc(100vw - 15rem) !important;
+            max-width: calc(100vw - 15rem) !important;
+            margin-left: 0 !important;
+            margin-right: 15rem !important;
+        }
+    }
+
     /* Mobile-specific improvements */
     @media (max-width: 640px) {
 
@@ -185,8 +232,9 @@
             /* Prevents zoom on iOS */
         }
 
-        /* Ensure main content is full width on mobile */
-        #main-content {
+        /* Ensure main content is full width on mobile for both LTR and RTL */
+        #main-content,
+        .rtl #main-content {
             margin-left: 0 !important;
             margin-right: 0 !important;
             width: 100%;
@@ -209,6 +257,14 @@
             width: 280px;
         }
 
+        /* RTL mobile navigation positioning */
+        .rtl .mobile-notification-dropdown,
+        .rtl .dashboard-notification-dropdown {
+            left: -50px;
+            right: auto;
+            width: 280px;
+        }
+
         /* Ensure mobile icons are properly sized */
         .md\:hidden .h-8 {
             height: 2rem;
@@ -218,6 +274,12 @@
         /* Better spacing for mobile navigation */
         .md\:hidden .gap-2>*+* {
             margin-left: 0.5rem;
+        }
+
+        /* RTL mobile navigation spacing */
+        .rtl .md\:hidden .gap-2>*+* {
+            margin-left: 0;
+            margin-right: 0.5rem;
         }
 
         /* Mobile header navigation improvements */
@@ -237,6 +299,12 @@
         /* Dashboard mobile navigation improvements */
         .dashboard-notification-dropdown {
             right: -20px;
+            width: 300px;
+        }
+
+        .rtl .dashboard-notification-dropdown {
+            left: -20px;
+            right: auto;
             width: 300px;
         }
 
@@ -352,27 +420,103 @@
         transform: translateX(0);
     }
 
-    /* RTL main content margins */
+    /* RTL main content margins - maintain same width as LTR */
     .rtl #main-content {
         margin-left: 0;
-        margin-right: 1rem;
+        margin-right: 0.5rem; /* Same as LTR px-2 */
+    }
+
+    @media (min-width: 640px) {
+        .rtl #main-content {
+            margin-right: 0.75rem; /* Same as LTR sm:px-3 */
+        }
     }
 
     @media (min-width: 768px) {
         .rtl #main-content {
-            margin-right: 5rem;
+            margin-right: 5rem; /* Same as LTR md:ml-20 */
+            margin-left: 0;
         }
     }
 
     @media (min-width: 1280px) {
         .rtl #main-content {
-            margin-right: 14rem;
+            margin-right: 15rem; /* Same as LTR xl:ml-60 */
+            margin-left: 0;
         }
 
+        /* RTL right sidebar spacing - maintain same content width */
         .rtl .xl\:mr-84 {
             margin-right: 0;
-            margin-left: 21rem;
+            margin-left: 21rem; /* Same spacing as LTR but on left side */
         }
+        
+        /* Ensure RTL main content with right sidebar has same width as LTR */
+        .rtl main[class*="xl:mr-[21rem]"] {
+            margin-left: 21rem !important;
+            margin-right: 15rem !important;
+        }
+        
+        /* Handle the dynamic class for RTL with right sidebar */
+        .rtl main.rtl\:xl\:ml-\[21rem\] {
+            margin-left: 21rem !important;
+            margin-right: 15rem !important;
+        }
+    }
+
+    /* Dashboard-specific RTL fixes */
+    .rtl .dashboard-body #main-content {
+        /* Ensure dashboard content maintains same width in RTL */
+        width: auto;
+        max-width: none;
+    }
+
+    @media (min-width: 768px) {
+        .rtl .dashboard-body #main-content {
+            margin-right: 5rem; /* Same as LTR md:ml-20 */
+            margin-left: 0;
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .rtl .dashboard-body #main-content {
+            margin-right: 15rem; /* Same as LTR xl:ml-60 */
+            margin-left: 0;
+            /* Force consistent width calculation for dashboard */
+            width: calc(100vw - 15rem - 2rem) !important; /* Account for padding */
+            max-width: calc(100vw - 15rem - 2rem) !important;
+        }
+    }
+
+    /* Dashboard sidebar RTL positioning */
+    .rtl .dashboard-body .sidebar {
+        left: auto;
+        right: 1rem;
+    }
+
+    @media (max-width: 767px) {
+        .rtl .dashboard-body .sidebar {
+            transform: translateX(calc(100% + 2rem));
+        }
+        
+        .rtl .dashboard-body .sidebar.translate-x-0 {
+            transform: translateX(0);
+        }
+    }
+
+    /* Ensure dashboard container behaves consistently */
+    .rtl .dashboard-body #dashboard-container {
+        direction: rtl;
+    }
+
+    .rtl .dashboard-body #dashboard-container #main-content {
+        direction: ltr; /* Keep content direction normal */
+    }
+
+    /* Fix dashboard content wrapper */
+    .rtl .dashboard-body #main-content > div {
+        width: 100%;
+        max-width: none;
     }
 
     /* RTL text alignment */
@@ -556,6 +700,41 @@
 }
 
 @layer utilities {
+    /* RTL-specific utilities to maintain consistent content width */
+    .rtl\:xl\:ml-60 {
+        @media (min-width: 1280px) {
+            margin-left: 15rem;
+        }
+    }
+    
+    .rtl\:xl\:mr-60 {
+        @media (min-width: 1280px) {
+            margin-right: 15rem;
+        }
+    }
+    
+    .rtl\:xl\:ml-\[21rem\] {
+        @media (min-width: 1280px) {
+            margin-left: 21rem;
+        }
+    }
+    
+    .rtl\:xl\:mr-\[21rem\] {
+        @media (min-width: 1280px) {
+            margin-right: 21rem;
+        }
+    }
+
+    /* Force consistent main content width in RTL */
+    .rtl\:force-content-width {
+        @media (min-width: 1280px) {
+            margin-left: 21rem !important;
+            margin-right: 15rem !important;
+            width: auto !important;
+            max-width: none !important;
+        }
+    }
+
     /* Custom Animations for Premium UI */
 
     /* Shimmer animation for featured badges */
@@ -785,156 +964,158 @@
         }
     }
 }
+
 /* News Article Enhancements */
 @layer components {
+
     /* Article Controls */
     .article-controls {
         @apply fixed top-20 right-4 z-40 flex flex-col gap-2;
     }
-    
+
     .article-controls button {
         @apply transition-all duration-200 hover:scale-105 active:scale-95;
     }
-    
+
     /* Table of Contents */
     .toc-container {
         @apply fixed top-20 left-4 z-40 bg-card/95 backdrop-blur-md border border-border rounded-2xl shadow-xl p-4 max-w-xs;
         max-height: calc(100vh - 120px);
         overflow-y: auto;
     }
-    
+
     .toc-nav a {
         @apply block py-1 px-2 text-muted-foreground hover:text-primary transition-colors rounded text-xs;
     }
-    
+
     .toc-nav a.active {
         @apply text-primary bg-primary/10;
     }
-    
+
     /* Full Screen Mode */
     .article-fullscreen {
         @apply fixed inset-0 z-50 overflow-y-auto bg-background;
     }
-    
+
     .article-fullscreen .article-controls {
         @apply fixed top-4 right-4 z-50;
     }
-    
+
     /* Font Size Controls */
     .font-size-small {
         font-size: 85%;
     }
-    
+
     .font-size-normal {
         font-size: 100%;
     }
-    
+
     .font-size-large {
         font-size: 115%;
     }
-    
+
     .font-size-xl {
         font-size: 130%;
     }
-    
+
     .font-size-xxl {
         font-size: 150%;
     }
-    
+
     /* Loading Skeletons */
     .skeleton {
         @apply animate-pulse bg-muted rounded;
     }
-    
+
     .skeleton-text {
         @apply h-4 bg-muted rounded;
     }
-    
+
     .skeleton-title {
         @apply h-6 bg-muted rounded;
     }
-    
+
     .skeleton-image {
         @apply bg-muted rounded;
     }
-    
+
     /* Related News Cards */
     .related-news-card {
         @apply bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group;
     }
-    
+
     .related-news-card img {
         @apply group-hover:scale-105 transition-transform duration-300;
     }
-    
+
     /* Enhanced Buttons */
     .btn-floating {
         @apply fixed z-40 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95;
     }
-    
+
     /* Validation Styles */
     .field-error {
         @apply text-red-500 text-sm mt-1;
     }
-    
+
     .input-error {
         @apply border-red-500 focus:border-red-500 focus:ring-red-500/20;
     }
-    
+
     .input-success {
         @apply border-green-500 focus:border-green-500 focus:ring-green-500/20;
     }
-    
+
     /* Share Modal */
     .share-modal {
         @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4;
     }
-    
+
     .share-modal-content {
         @apply bg-card border border-border rounded-2xl p-6 max-w-md w-full animate-in zoom-in-95 duration-300;
     }
-    
+
     /* Toast Notifications */
     .toast {
         @apply fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white max-w-sm;
     }
-    
+
     .toast-success {
         @apply bg-green-500;
     }
-    
+
     .toast-error {
         @apply bg-red-500;
     }
-    
+
     .toast-warning {
         @apply bg-yellow-500;
     }
-    
+
     .toast-info {
         @apply bg-blue-500;
     }
-    
+
     /* Responsive Adjustments */
     @media (max-width: 768px) {
         .article-controls {
             @apply top-16 right-2 scale-90;
         }
-        
+
         .toc-container {
             @apply top-16 left-2 max-w-[280px];
         }
-        
+
         .article-fullscreen .article-controls {
             @apply top-2 right-2;
         }
     }
-    
+
     /* Smooth Scrolling for TOC */
     html {
         scroll-behavior: smooth;
     }
-    
+
     /* Line Clamp Utilities */
     .line-clamp-2 {
         display: -webkit-box;
@@ -942,59 +1123,66 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-    
+
     .line-clamp-3 {
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-    
+
     /* Enhanced Prose Styling */
     .prose {
         @apply text-foreground;
     }
-    
-    .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+
+    .prose h1,
+    .prose h2,
+    .prose h3,
+    .prose h4,
+    .prose h5,
+    .prose h6 {
         @apply text-foreground font-bold;
     }
-    
+
     .prose p {
         @apply text-foreground/90 leading-relaxed;
     }
-    
+
     .prose a {
         @apply text-primary hover:text-primary/80 transition-colors;
     }
-    
+
     .prose blockquote {
         @apply border-l-4 border-primary/30 pl-4 italic text-muted-foreground;
     }
-    
+
     .prose code {
         @apply bg-muted px-2 py-1 rounded text-sm font-mono;
     }
-    
+
     .prose pre {
         @apply bg-muted p-4 rounded-lg overflow-x-auto;
     }
-    
+
     .prose img {
         @apply rounded-lg shadow-md;
     }
-    
-    .prose ul, .prose ol {
+
+    .prose ul,
+    .prose ol {
         @apply text-foreground/90;
     }
-    
+
     .prose table {
         @apply border-collapse border border-border;
     }
-    
-    .prose th, .prose td {
+
+    .prose th,
+    .prose td {
         @apply border border-border px-4 py-2;
     }
-    
+
     .prose th {
         @apply bg-muted font-semibold;
     }
@@ -1002,18 +1190,39 @@
 
 /* Animation Keyframes */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideInFromLeft {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 @keyframes zoomIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Utility Classes */
@@ -1031,12 +1240,13 @@
 
 /* Print Styles */
 @media print {
+
     .article-controls,
     .toc-container,
     .btn-floating {
         display: none !important;
     }
-    
+
     .article-content {
         box-shadow: none !important;
         border: none !important;
@@ -1125,11 +1335,11 @@
     border-radius: 50%;
 }
 
-input:checked + .toggle-slider {
+input:checked+.toggle-slider {
     background-color: rgb(var(--primary));
 }
 
-input:checked + .toggle-slider:before {
+input:checked+.toggle-slider:before {
     transform: translateX(20px);
 }
 
@@ -1143,6 +1353,7 @@ input:checked + .toggle-slider:before {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1159,7 +1370,7 @@ input:checked + .toggle-slider:before {
     .gallery-item.list-view {
         flex-direction: column !important;
     }
-    
+
     .gallery-item.list-view .aspect-square {
         width: 100% !important;
         height: 200px !important;
@@ -1187,6 +1398,7 @@ input:checked + .toggle-slider:before {
     0% {
         left: -100%;
     }
+
     100% {
         left: 100%;
     }
@@ -1216,207 +1428,166 @@ input:checked + .toggle-slider:before {
     background-color: rgb(239 68 68 / 0.1);
     color: rgb(239 68 68);
 }
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
-  }
-}
-
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 217.2 91.2% 59.8%;
-  --primary-foreground: 222.2 84% 4.9%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 224.3 76.3% 94.1%;
-}
 
 /* Modal Animations */
 .modal-enter {
-  animation: modalEnter 0.3s ease-out;
+    animation: modalEnter 0.3s ease-out;
 }
 
 .modal-exit {
-  animation: modalExit 0.3s ease-in;
+    animation: modalExit 0.3s ease-in;
 }
 
 @keyframes modalEnter {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 @keyframes modalExit {
-  from {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.9) translateY(-10px);
-  }
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.9) translateY(-10px);
+    }
 }
 
 /* Error Page Specific Styles */
 .error-page {
-  transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .error-card {
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
 }
 
 .error-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .dark .error-card:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
 
 /* Form Styling */
 .form-input {
-  transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .form-input:focus {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
 .dark .form-input:focus {
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
 /* Button Hover Effects */
 .btn-hover {
-  transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .btn-hover:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-hover:active {
-  transform: translateY(0);
+    transform: translateY(0);
 }
 
 /* Dark Mode Toggle Button */
 .dark-mode-toggle {
-  transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .dark-mode-toggle:hover {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }
 
 /* Responsive Modal */
 @media (max-width: 640px) {
-  .modal-content {
-    margin: 1rem;
-    max-height: calc(100vh - 2rem);
-  }
+    .modal-content {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
 }
 
 /* Loading States */
 .loading {
-  position: relative;
-  overflow: hidden;
+    position: relative;
+    overflow: hidden;
 }
 
 .loading::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: loading 1.5s infinite;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: loading 1.5s infinite;
 }
 
 @keyframes loading {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
 }
 
 /* Success Animation */
 .success-checkmark {
-  animation: checkmark 0.6s ease-in-out;
+    animation: checkmark 0.6s ease-in-out;
 }
 
 @keyframes checkmark {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* Priority Badge Colors */
 .priority-low {
-  @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400;
+    @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400;
 }
 
 .priority-medium {
-  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400;
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400;
 }
 
 .priority-high {
-  @apply bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400;
+    @apply bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400;
 }
 
 .priority-critical {
-  @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400;
+    @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400;
 }

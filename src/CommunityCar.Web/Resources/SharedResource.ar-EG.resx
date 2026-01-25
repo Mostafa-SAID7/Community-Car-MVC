@@ -579,4 +579,26 @@
   <data name="AdminProfile" xml:space="preserve">
     <value>ملف المسؤول</value>
   </data>
+  <data name="AppName" xml:space="preserve">
+    <value>مجتمع السيارات</value>
+  </data>
+  <data name="AppTagline" xml:space="preserve">
+    <value>تغذية الثقافة</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>لوحة التحكم</value>
+  </data>
+  <data name="ToggleTheme" xml:space="preserve">
+    <value>تبديل المظهر</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>السابق</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>التالي</value>
+  </data>
+  <data name="StartTypingToSearch" xml:space="preserve">
+    <value>ابدأ الكتابة للبحث...</value>
+  </data>
 </root>
+

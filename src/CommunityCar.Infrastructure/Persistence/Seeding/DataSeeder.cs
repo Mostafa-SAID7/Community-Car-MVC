@@ -1717,7 +1717,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
             new {
                 Name = "Hill Country Loop",
                 Description = "Scenic drive through Texas Hill Country with beautiful views and winding roads perfect for sports cars.",
-                Type = CommunityCar.Domain.Entities.Community.Maps.RouteType.Scenic,
+                Type = RouteType.Scenic,
                 Difficulty = DifficultyLevel.Intermediate,
                 DistanceKm = 85.3,
                 DurationMinutes = 120,
@@ -1729,7 +1729,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
             new {
                 Name = "Austin Track Day Route",
                 Description = "Performance route from downtown Austin to Circuit of The Americas with highway and back road sections.",
-                Type = CommunityCar.Domain.Entities.Community.Maps.RouteType.Performance,
+                Type = RouteType.Performance,
                 Difficulty = DifficultyLevel.Advanced,
                 DistanceKm = 45.7,
                 DurationMinutes = 60,
@@ -1741,7 +1741,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
             new {
                 Name = "Bluebonnet Trail",
                 Description = "Spring wildflower viewing route through rural Texas roads, best visited in March-April.",
-                Type = CommunityCar.Domain.Entities.Community.Maps.RouteType.Touring,
+                Type = RouteType.Touring,
                 Difficulty = DifficultyLevel.Beginner,
                 DistanceKm = 67.2,
                 DurationMinutes = 90,
@@ -1753,7 +1753,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
             new {
                 Name = "Off-Road Adventure Trail",
                 Description = "Challenging off-road route through Texas backcountry. 4WD vehicle recommended.",
-                Type = CommunityCar.Domain.Entities.Community.Maps.RouteType.OffRoad,
+                Type = RouteType.OffRoad,
                 Difficulty = DifficultyLevel.Expert,
                 DistanceKm = 32.1,
                 DurationMinutes = 180,
@@ -1765,7 +1765,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
             new {
                 Name = "Austin Coffee Shop Cruise",
                 Description = "Urban route connecting Austin's best coffee shops and car-friendly hangout spots.",
-                Type = CommunityCar.Domain.Entities.Community.Maps.RouteType.Cruise,
+                Type = RouteType.Cruise,
                 Difficulty = DifficultyLevel.Beginner,
                 DistanceKm = 28.5,
                 DurationMinutes = 45,

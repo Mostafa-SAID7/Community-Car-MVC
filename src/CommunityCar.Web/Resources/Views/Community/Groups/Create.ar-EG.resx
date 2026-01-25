@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateCommunityHub" xml:space="preserve">
+    <value>إنشاء مركز مجتمعي</value>
+  </data>
+  <data name="HubDirectory" xml:space="preserve">
+    <value>سجل المراكز</value>
+  </data>
+  <data name="CreateHub" xml:space="preserve">
+    <value>إنشاء مركز</value>
+  </data>
+  <data name="CreateHubSubtitle" xml:space="preserve">
+    <value>قم ببناء مساحة مخصصة للعشاق الذين يشاركونك شغفك بالسيارات. تواصل وشارك المعرفة وقم بتنمية مجتمعك.</value>
+  </data>
+  <data name="BasicInformation" xml:space="preserve">
+    <value>معلومات أساسية</value>
+  </data>
+  <data name="HubName" xml:space="preserve">
+    <value>اسم المركز</value>
+  </data>
+  <data name="HubNamePlaceholder" xml:space="preserve">
+    <value>مثلاً: عشاق موستانج الكلاسيكية</value>
+  </data>
+  <data name="HubNameSubtitle" xml:space="preserve">
+    <value>اختر اسماً واضحاً ووصفاً لمجتمعك</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>الفئة</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>اختر الفئة</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>الموقع</value>
+  </data>
+  <data name="LocationPlaceholder" xml:space="preserve">
+    <value>مثلاً: القاهرة، مصر (اختياري)</value>
+  </data>
+  <data name="LocationSubtitle" xml:space="preserve">
+    <value>اختياري: حدد تركيزاً جغرافياً</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>الوصف</value>
+  </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>صف غرض مجتمعك واهتماماته وما يمكن للأعضاء توقعه...</value>
+  </data>
+  <data name="DescriptionSubtitle" xml:space="preserve">
+    <value>ساعد الأعضاء المحتملين على فهم ماهية مركزك</value>
+  </data>
+  <data name="PrivacyAccess" xml:space="preserve">
+    <value>الخصوصية والوصول</value>
+  </data>
+  <data name="PublicHub" xml:space="preserve">
+    <value>مركز عام</value>
+  </data>
+  <data name="PublicHubSubtitle" xml:space="preserve">
+    <value>يمكن لأي شخص العثور على هذا المركز والانضمام إليه. المنشورات مرئية لجميع الأعضاء.</value>
+  </data>
+  <data name="PrivateHub" xml:space="preserve">
+    <value>مركز خاص</value>
+  </data>
+  <data name="PrivateHubSubtitle" xml:space="preserve">
+    <value>يمكن للأعضاء فقط رؤية المنشورات. يجب الموافقة على الأعضاء الجدد من قبل المشرفين.</value>
+  </data>
+  <data name="CommunityGuidelines" xml:space="preserve">
+    <value>إرشادات المجتمع</value>
+  </data>
+  <data name="RulesGuidelines" xml:space="preserve">
+    <value>القواعد والإرشادات</value>
+  </data>
+  <data name="RulesPlaceholder" xml:space="preserve">
+    <value>ضع توقعات واضحة لأعضاء مجتمعك...</value>
+  </data>
+  <data name="RulesSubtitle" xml:space="preserve">
+    <value>اختياري: حدد القواعد للحفاظ على بيئة مجتمعية إيجابية</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="TipsTitle" xml:space="preserve">
+    <value>نصائح للنجاح</value>
+  </data>
+  <data name="Tip1Title" xml:space="preserve">
+    <value>كن محدداً</value>
+  </data>
+  <data name="Tip1Desc" xml:space="preserve">
+    <value>الأسماء والأوصاف الواضحة تجذب الأعضاء المناسبين</value>
+  </data>
+  <data name="Tip2Title" xml:space="preserve">
+    <value>ضع إرشادات</value>
+  </data>
+  <data name="Tip2Desc" xml:space="preserve">
+    <value>قواعد واضحة تساعد في الحفاظ على مجتمع إيجابي</value>
+  </data>
+  <data name="Tip3Title" xml:space="preserve">
+    <value>ابق نشطاً</value>
+  </data>
+  <data name="Tip3Desc" xml:space="preserve">
+    <value>المنشورات والتفاعل المنتظم يبقي المجتمعات مزدهرة</value>
+  </data>
+  <data name="Tip4Title" xml:space="preserve">
+    <value>رحب بالأعضاء</value>
+  </data>
+  <data name="Tip4Desc" xml:space="preserve">
+    <value>رحب بالأعضاء الجدد وشجعهم على المشاركة</value>
+  </data>
+</root>

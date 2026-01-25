@@ -139,4 +139,16 @@
   <data name="ArchivedProtocol" xml:space="preserve">
     <value>تمت أرشفة هذا البث ولم يعد يقبل المزيد من البيانات.</value>
   </data>
+  <data name="ProtocolDetailsSuffix" xml:space="preserve">
+    <value>تفاصيل البروتوكول</value>
+  </data>
+  <data name="ActiveEnthusiast" xml:space="preserve">
+    <value>متحمس نشط</value>
+  </data>
+  <data name="AESVerified" xml:space="preserve">
+    <value>AES-256 معتمد</value>
+  </data>
+  <data name="SystemIntegrityLabel" xml:space="preserve">
+    <value>سلامة النظام</value>
+  </data>
 </root>

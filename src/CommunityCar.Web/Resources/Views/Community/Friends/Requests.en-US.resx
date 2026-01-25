@@ -106,4 +106,28 @@
   <data name="Sent" xml:space="preserve">
     <value>Sent {0}</value>
   </data>
+  <data name="SentDate" xml:space="preserve">
+    <value>Sent {0}</value>
+  </data>
+  <data name="ManageRequestsSubtitle" xml:space="preserve">
+    <value>Manage your friend requests and connections</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No Pending Requests</value>
+  </data>
+  <data name="NoPendingRequestsDescription" xml:space="preserve">
+    <value>You don't have any friend requests at the moment.</value>
+  </data>
+  <data name="NoSentRequests" xml:space="preserve">
+    <value>No Sent Requests</value>
+  </data>
+  <data name="NoSentRequestsDescription" xml:space="preserve">
+    <value>You haven't sent any friend requests recently.</value>
+  </data>
+  <data name="MutualFriendsCount" xml:space="preserve">
+    <value>{0} mutual friends</value>
+  </data>
+  <data name="OneMutualFriend" xml:space="preserve">
+    <value>1 mutual friend</value>
+  </data>
 </root>

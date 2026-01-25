@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="resheader">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Routes" xml:space="preserve">
+    <value>طرق القيادة</value>
+  </data>
+  <data name="DrivingRoutes" xml:space="preserve">
+    <value>طرق القيادة</value>
+  </data>
+  <data name="DiscoverRoutes" xml:space="preserve">
+    <value>اكتشف طرقاً منسقة للأداء، المناظر الخلابة، ورحلات الهواة.</value>
+  </data>
+  <data name="MapView" xml:space="preserve">
+    <value>عرض الخريطة</value>
+  </data>
+  <data name="AddRoute" xml:space="preserve">
+    <value>إضافة طريق</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>ابحث عن طرق...</value>
+  </data>
+  <data name="AllTypes" xml:space="preserve">
+    <value>جميع الأنواع</value>
+  </data>
+  <data name="Scenic" xml:space="preserve">
+    <value>خلاب</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>أداء</value>
+  </data>
+  <data name="OffRoad" xml:space="preserve">
+    <value>طرق وعرة</value>
+  </data>
+  <data name="Touring" xml:space="preserve">
+    <value>سياحي</value>
+  </data>
+  <data name="Commute" xml:space="preserve">
+    <value>تنقل</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>حلبة</value>
+  </data>
+  <data name="Rally" xml:space="preserve">
+    <value>رالي</value>
+  </data>
+  <data name="Cruise" xml:space="preserve">
+    <value>تجوال</value>
+  </data>
+  <data name="AllLevels" xml:space="preserve">
+    <value>جميع المستويات</value>
+  </data>
+  <data name="Beginner" xml:space="preserve">
+    <value>مبتدئ</value>
+  </data>
+  <data name="Intermediate" xml:space="preserve">
+    <value>متوسط</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>متقدم</value>
+  </data>
+  <data name="Expert" xml:space="preserve">
+    <value>خبير</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>تصفية</value>
+  </data>
+  <data name="ScenicOnly" xml:space="preserve">
+    <value>خلاب فقط</value>
+  </data>
+  <data name="NoTolls" xml:space="preserve">
+    <value>بدون رسوم</value>
+  </data>
+  <data name="RoutesFound" xml:space="preserve">
+    <value>تم العثور على {0} طرق</value>
+  </data>
+  <data name="SortByDistance" xml:space="preserve">
+    <value>رتب حسب المسافة</value>
+  </data>
+  <data name="SortByRating" xml:space="preserve">
+    <value>رتب حسب التقييم</value>
+  </data>
+  <data name="SortByPopularity" xml:space="preserve">
+    <value>رتب حسب الشعبية</value>
+  </data>
+  <data name="SortByDifficulty" xml:space="preserve">
+    <value>رتب حسب الصعوبة</value>
+  </data>
+  <data name="SortByNewest" xml:space="preserve">
+    <value>رتب حسب الأحدث</value>
+  </data>
+  <data name="CompletedCount" xml:space="preserve">
+    <value>اكتمل {0} مرات</value>
+  </data>
+  <data name="KM" xml:space="preserve">
+    <value>كم</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>س</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>د</value>
+  </data>
+  <data name="NoRoutesFound" xml:space="preserve">
+    <value>لم يتم العثور على طرق</value>
+  </data>
+  <data name="NoRoutesSubtitle" xml:space="preserve">
+    <value>حاول تعديل معايير البحث أو أضف طريقاً جديداً.</value>
+  </data>
+  <data name="AddNewRoute" xml:space="preserve">
+    <value>إضافة طريق جديد</value>
+  </data>
+</root>

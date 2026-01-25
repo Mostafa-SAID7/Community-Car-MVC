@@ -6,6 +6,7 @@ using CommunityCar.Application.Features.Maps.DTOs;
 using CommunityCar.Application.Features.Maps.ViewModels;
 using CommunityCar.Domain.Entities.Community.Maps;
 using CommunityCar.Domain.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Application.Services.Community;
 
@@ -14,52 +15,81 @@ public class MapsService : IMapsService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILogger<MapsService> _logger;
 
-    public MapsService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUserService)
+    public MapsService(
+        IUnitOfWork unitOfWork, 
+        IMapper mapper, 
+        ICurrentUserService currentUserService,
+        ILogger<MapsService> logger)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _currentUserService = currentUserService;
+        _logger = logger;
     }
 
     public async Task<PointOfInterestVM?> GetPointOfInterestByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var poi = await _unitOfWork.PointsOfInterest.GetByIdAsync(id);
-        if (poi == null) return null;
+        try
+        {
+            var poi = await _unitOfWork.PointsOfInterest.GetByIdAsync(id);
+            if (poi == null) 
+            {
+                _logger.LogWarning("Point of Interest with ID {PoiId} not found", id);
+                return null;
+            }
 
-        // Increment view count
-        poi.IncrementViewCount();
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // Increment view count
+            poi.IncrementViewCount();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<PointOfInterestVM>(poi);
+            return _mapper.Map<PointOfInterestVM>(poi);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving Point of Interest with ID {PoiId}", id);
+            throw;
+        }
     }
 
     public async Task<MapsSearchResponse> SearchPointsOfInterestAsync(MapsSearchRequest request, CancellationToken cancellationToken = default)
     {
-        var (items, totalCount) = await _unitOfWork.PointsOfInterest.SearchAsync(request, cancellationToken);
-        
-        var summaryItems = items.Select(poi => 
+        try
         {
-            var summary = _mapper.Map<PointOfInterestSummaryVM>(poi);
-            
-            // Calculate distance if location provided
-            if (request.Latitude.HasValue && request.Longitude.HasValue)
-            {
-                summary.DistanceKm = CalculateDistance(
-                    request.Latitude.Value, request.Longitude.Value,
-                    poi.Latitude, poi.Longitude);
-            }
-            
-            return summary;
-        });
+            _logger.LogInformation("Searching Points of Interest with term: {SearchTerm}, Type: {Type}", 
+                request.SearchTerm, request.Type);
 
-        return new MapsSearchResponse
+            var (items, totalCount) = await _unitOfWork.PointsOfInterest.SearchAsync(request, cancellationToken);
+            
+            var summaryItems = items.Select(poi => 
+            {
+                var summary = _mapper.Map<PointOfInterestSummaryVM>(poi);
+                
+                // Calculate distance if location provided
+                if (request.Latitude.HasValue && request.Longitude.HasValue)
+                {
+                    summary.DistanceKm = CalculateDistance(
+                        request.Latitude.Value, request.Longitude.Value,
+                        poi.Latitude, poi.Longitude);
+                }
+                
+                return summary;
+            });
+
+            return new MapsSearchResponse
+            {
+                Items = summaryItems,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+        catch (Exception ex)
         {
-            Items = summaryItems,
-            TotalCount = totalCount,
-            Page = request.Page,
-            PageSize = request.PageSize
-        };
+            _logger.LogError(ex, "Error searching Points of Interest");
+            throw;
+        }
     }
 
     public async Task<PointOfInterestVM> CreatePointOfInterestAsync(CreatePointOfInterestRequest request, CancellationToken cancellationToken = default)
@@ -238,37 +268,52 @@ public class MapsService : IMapsService
 
     public async Task<CheckInVM> CheckInAsync(Guid pointOfInterestId, CreateCheckInRequest request, CancellationToken cancellationToken = default)
     {
-        var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
-        if (!Guid.TryParse(currentUserIdString, out var currentUserId))
-            throw new UnauthorizedAccessException("Invalid user ID");
-
-        var poi = await _unitOfWork.PointsOfInterest.GetByIdAsync(pointOfInterestId);
-        if (poi == null) throw new ArgumentException("Point of interest not found");
-
-        if (!poi.AllowCheckIns)
+        try
         {
-            throw new InvalidOperationException("Check-ins are not allowed for this location");
-        }
+            var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
+            if (!Guid.TryParse(currentUserIdString, out var currentUserId))
+                throw new UnauthorizedAccessException("Invalid user ID");
 
-        var checkIn = new CheckIn(pointOfInterestId, currentUserId, request.Comment, request.Rating, request.IsPrivate);
+            var poi = await _unitOfWork.PointsOfInterest.GetByIdAsync(pointOfInterestId);
+            if (poi == null) 
+            {
+                _logger.LogWarning("Attempted check-in to non-existent POI {PoiId}", pointOfInterestId);
+                throw new ArgumentException("Point of interest not found");
+            }
 
-        if (request.CheckInLatitude.HasValue && request.CheckInLongitude.HasValue)
-        {
-            var distance = CalculateDistance(
-                request.CheckInLatitude.Value, request.CheckInLongitude.Value,
-                poi.Latitude, poi.Longitude);
+            if (!poi.AllowCheckIns)
+            {
+                _logger.LogWarning("Check-in attempted at POI {PoiId} where check-ins are not allowed", pointOfInterestId);
+                throw new InvalidOperationException("Check-ins are not allowed for this location");
+            }
+
+            var checkIn = new CheckIn(pointOfInterestId, currentUserId, request.Comment, request.Rating, request.IsPrivate);
+
+            if (request.CheckInLatitude.HasValue && request.CheckInLongitude.HasValue)
+            {
+                var distance = CalculateDistance(
+                    request.CheckInLatitude.Value, request.CheckInLongitude.Value,
+                    poi.Latitude, poi.Longitude);
+                
+                checkIn.SetLocation(request.CheckInLatitude.Value, request.CheckInLongitude.Value, distance);
+            }
+
+            await _unitOfWork.CheckIns.AddAsync(checkIn);
             
-            checkIn.SetLocation(request.CheckInLatitude.Value, request.CheckInLongitude.Value, distance);
+            // Update POI check-in count
+            poi.IncrementCheckInCount();
+            
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation("User {UserId} checked in to POI {PoiId}", currentUserId, pointOfInterestId);
+
+            return _mapper.Map<CheckInVM>(checkIn);
         }
-
-        await _unitOfWork.CheckIns.AddAsync(checkIn);
-        
-        // Update POI check-in count
-        poi.IncrementCheckInCount();
-        
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        return _mapper.Map<CheckInVM>(checkIn);
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during check-in to POI {PoiId}", pointOfInterestId);
+            throw;
+        }
     }
 
     public async Task<IEnumerable<CheckInVM>> GetCheckInsAsync(Guid pointOfInterestId, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)

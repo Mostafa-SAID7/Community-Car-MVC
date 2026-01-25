@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="resheader">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Routes" xml:space="preserve">
+    <value>Driving Routes</value>
+  </data>
+  <data name="DrivingRoutes" xml:space="preserve">
+    <value>Driving Routes</value>
+  </data>
+  <data name="DiscoverRoutes" xml:space="preserve">
+    <value>Discover curated routes for performance, scenery, and enthusiast drives.</value>
+  </data>
+  <data name="MapView" xml:space="preserve">
+    <value>Map View</value>
+  </data>
+  <data name="AddRoute" xml:space="preserve">
+    <value>Add Route</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Search routes...</value>
+  </data>
+  <data name="AllTypes" xml:space="preserve">
+    <value>All Types</value>
+  </data>
+  <data name="Scenic" xml:space="preserve">
+    <value>Scenic</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>Performance</value>
+  </data>
+  <data name="OffRoad" xml:space="preserve">
+    <value>Off-Road</value>
+  </data>
+  <data name="Touring" xml:space="preserve">
+    <value>Touring</value>
+  </data>
+  <data name="Commute" xml:space="preserve">
+    <value>Commute</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>Track</value>
+  </data>
+  <data name="Rally" xml:space="preserve">
+    <value>Rally</value>
+  </data>
+  <data name="Cruise" xml:space="preserve">
+    <value>Cruise</value>
+  </data>
+  <data name="AllLevels" xml:space="preserve">
+    <value>All Levels</value>
+  </data>
+  <data name="Beginner" xml:space="preserve">
+    <value>Beginner</value>
+  </data>
+  <data name="Intermediate" xml:space="preserve">
+    <value>Intermediate</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="Expert" xml:space="preserve">
+    <value>Expert</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="ScenicOnly" xml:space="preserve">
+    <value>Scenic Only</value>
+  </data>
+  <data name="NoTolls" xml:space="preserve">
+    <value>No Tolls</value>
+  </data>
+  <data name="RoutesFound" xml:space="preserve">
+    <value>{0} Routes Found</value>
+  </data>
+  <data name="SortByDistance" xml:space="preserve">
+    <value>Sort by Distance</value>
+  </data>
+  <data name="SortByRating" xml:space="preserve">
+    <value>Sort by Rating</value>
+  </data>
+  <data name="SortByPopularity" xml:space="preserve">
+    <value>Sort by Popularity</value>
+  </data>
+  <data name="SortByDifficulty" xml:space="preserve">
+    <value>Sort by Difficulty</value>
+  </data>
+  <data name="SortByNewest" xml:space="preserve">
+    <value>Sort by Newest</value>
+  </data>
+  <data name="CompletedCount" xml:space="preserve">
+    <value>{0} completed</value>
+  </data>
+  <data name="KM" xml:space="preserve">
+    <value>km</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="NoRoutesFound" xml:space="preserve">
+    <value>No routes found</value>
+  </data>
+  <data name="NoRoutesSubtitle" xml:space="preserve">
+    <value>Try adjusting your search criteria or add a new route.</value>
+  </data>
+  <data name="AddNewRoute" xml:space="preserve">
+    <value>Add New Route</value>
+  </data>
+</root>
