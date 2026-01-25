@@ -1,0 +1,424 @@
+@model CommunityCar.Web.Models.Stories.CreateStoryVM
+@{
+    ViewData["Title"] = "Create Story";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUserId = ViewBag.CurrentUserId as Guid?;
+}
+
+<div class="min-h-screen bg-background">
+    <!-- Header -->
+    <div class="bg-card/40 backdrop-blur-xl border-b border-border sticky top-16 z-30">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between py-4">
+                <div class="flex items-center gap-3">
+                    <a href="/stories" class="flex items-center justify-center w-10 h-10 rounded-xl bg-muted hover:bg-accent transition-colors">
+                        <i data-lucide="arrow-left" class="w-5 h-5 text-foreground"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-xl font-bold text-foreground">Create Story</h1>
+                        <p class="text-sm text-muted-foreground">Share your automotive moment</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <button type="button" id="saveDraftBtn" 
+                            class="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors">
+                        Save Draft
+                    </button>
+                    <button type="submit" form="createStoryForm"
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        Publish Story
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <form id="createStoryForm" asp-action="Create" method="post" enctype="multipart/form-data" class="space-y-6">
+            @Html.AntiForgeryToken()
+            
+            <!-- Media Upload Section -->
+            <div class="bg-card rounded-xl border border-border p-6">
+                <h3 class="text-lg font-semibold text-foreground mb-4">Story Media</h3>
+                
+                <div id="mediaUploadArea" class="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer">
+                    <div id="uploadPlaceholder" class="space-y-4">
+                        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                            <i data-lucide="upload" class="w-8 h-8 text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-lg font-medium text-foreground">Upload your story media</p>
+                            <p class="text-muted-foreground">Drag and drop or click to select photos or videos</p>
+                            <p class="text-sm text-muted-foreground mt-2">Supports: JPG, PNG, MP4, MOV (Max 50MB)</p>
+                        </div>
+                    </div>
+                    
+                    <div id="mediaPreview" class="hidden">
+                        <div class="relative inline-block">
+                            <img id="imagePreview" class="hidden max-w-full h-64 object-cover rounded-lg" />
+                            <video id="videoPreview" class="hidden max-w-full h-64 object-cover rounded-lg" controls></video>
+                            <button type="button" id="removeMedia" 
+                                    class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <input type="file" id="mediaInput" name="MediaFile" accept="image/*,video/*" class="hidden">
+                <span asp-validation-for="MediaFile" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Story Details -->
+            <div class="bg-card rounded-xl border border-border p-6">
+                <h3 class="text-lg font-semibold text-foreground mb-4">Story Details</h3>
+                
+                <div class="space-y-4">
+                    <!-- Title -->
+                    <div>
+                        <label asp-for="Title" class="block text-sm font-medium text-foreground mb-2">Title (Optional)</label>
+                        <input asp-for="Title" type="text" 
+                               class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                               placeholder="Give your story a title...">
+                        <span asp-validation-for="Title" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <!-- Caption -->
+                    <div>
+                        <label asp-for="Caption" class="block text-sm font-medium text-foreground mb-2">Caption</label>
+                        <textarea asp-for="Caption" rows="3"
+                                  class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
+                                  placeholder="Share what's happening..."></textarea>
+                        <span asp-validation-for="Caption" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <!-- Story Type -->
+                    <div>
+                        <label asp-for="Type" class="block text-sm font-medium text-foreground mb-2">Story Type</label>
+                        <select asp-for="Type" 
+                                class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                            <option value="Photo">Photo</option>
+                            <option value="Video">Video</option>
+                            <option value="Text">Text Only</option>
+                        </select>
+                        <span asp-validation-for="Type" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <!-- Visibility -->
+                    <div>
+                        <label asp-for="Visibility" class="block text-sm font-medium text-foreground mb-2">Visibility</label>
+                        <select asp-for="Visibility" 
+                                class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                            <option value="Public">Public - Everyone can see</option>
+                            <option value="Friends">Friends Only</option>
+                            <option value="Private">Private - Only me</option>
+                        </select>
+                        <span asp-validation-for="Visibility" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Information -->
+            <div class="bg-card rounded-xl border border-border p-6">
+                <h3 class="text-lg font-semibold text-foreground mb-4">Car Information (Optional)</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label asp-for="CarMake" class="block text-sm font-medium text-foreground mb-2">Make</label>
+                        <select asp-for="CarMake" 
+                                class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                            <option value="">Select Make</option>
+                            <option value="BMW">BMW</option>
+                            <option value="Mercedes">Mercedes-Benz</option>
+                            <option value="Audi">Audi</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Honda">Honda</option>
+                            <option value="Ford">Ford</option>
+                            <option value="Chevrolet">Chevrolet</option>
+                            <option value="Nissan">Nissan</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                            <option value="Hyundai">Hyundai</option>
+                        </select>
+                        <span asp-validation-for="CarMake" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="CarModel" class="block text-sm font-medium text-foreground mb-2">Model</label>
+                        <input asp-for="CarModel" type="text" 
+                               class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                               placeholder="e.g., M3, C-Class">
+                        <span asp-validation-for="CarModel" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="CarYear" class="block text-sm font-medium text-foreground mb-2">Year</label>
+                        <input asp-for="CarYear" type="number" min="1900" max="2030"
+                               class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                               placeholder="e.g., 2023">
+                        <span asp-validation-for="CarYear" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div class="bg-card rounded-xl border border-border p-6">
+                <h3 class="text-lg font-semibold text-foreground mb-4">Location (Optional)</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="addLocation" class="rounded border-border">
+                        <label for="addLocation" class="text-sm font-medium text-foreground">Add location to story</label>
+                    </div>
+                    
+                    <div id="locationFields" class="hidden space-y-4">
+                        <div>
+                            <label asp-for="LocationName" class="block text-sm font-medium text-foreground mb-2">Location Name</label>
+                            <input asp-for="LocationName" type="text" 
+                                   class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                   placeholder="e.g., Downtown Garage, Race Track">
+                            <span asp-validation-for="LocationName" class="text-red-500 text-sm"></span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label asp-for="Latitude" class="block text-sm font-medium text-foreground mb-2">Latitude</label>
+                                <input asp-for="Latitude" type="number" step="any"
+                                       class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                       placeholder="0.000000">
+                                <span asp-validation-for="Latitude" class="text-red-500 text-sm"></span>
+                            </div>
+                            
+                            <div>
+                                <label asp-for="Longitude" class="block text-sm font-medium text-foreground mb-2">Longitude</label>
+                                <input asp-for="Longitude" type="number" step="any"
+                                       class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                       placeholder="0.000000">
+                                <span asp-validation-for="Longitude" class="text-red-500 text-sm"></span>
+                            </div>
+                        </div>
+                        
+                        <button type="button" id="getCurrentLocation" 
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-accent transition-colors">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            Use Current Location
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="bg-card rounded-xl border border-border p-6">
+                <h3 class="text-lg font-semibold text-foreground mb-4">Tags</h3>
+                
+                <div>
+                    <input type="text" id="tagsInput" 
+                           class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                           placeholder="Add tags separated by commas (e.g., bmw, tuning, weekend)">
+                    <input type="hidden" asp-for="Tags" id="tagsHidden">
+                    <div id="tagsList" class="flex flex-wrap gap-2 mt-3"></div>
+                </div>
+            </div>
+
+            <!-- Story Settings -->
+            <div class="bg-card rounded-xl border border-border p-6">
+                <h3 class="text-lg font-semibold text-foreground mb-4">Story Settings</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-sm font-medium text-foreground">Allow Comments</label>
+                            <p class="text-xs text-muted-foreground">Let others comment on your story</p>
+                        </div>
+                        <input type="checkbox" asp-for="AllowComments" checked class="rounded border-border">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-sm font-medium text-foreground">Allow Likes</label>
+                            <p class="text-xs text-muted-foreground">Let others like your story</p>
+                        </div>
+                        <input type="checkbox" asp-for="AllowLikes" checked class="rounded border-border">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-sm font-medium text-foreground">Allow Shares</label>
+                            <p class="text-xs text-muted-foreground">Let others share your story</p>
+                        </div>
+                        <input type="checkbox" asp-for="AllowShares" checked class="rounded border-border">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCreateStory();
+        });
+
+        function initializeCreateStory() {
+            const mediaUploadArea = document.getElementById('mediaUploadArea');
+            const mediaInput = document.getElementById('mediaInput');
+            const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+            const mediaPreview = document.getElementById('mediaPreview');
+            const imagePreview = document.getElementById('imagePreview');
+            const videoPreview = document.getElementById('videoPreview');
+            const removeMedia = document.getElementById('removeMedia');
+            const addLocation = document.getElementById('addLocation');
+            const locationFields = document.getElementById('locationFields');
+            const getCurrentLocation = document.getElementById('getCurrentLocation');
+            const tagsInput = document.getElementById('tagsInput');
+            const tagsHidden = document.getElementById('tagsHidden');
+            const tagsList = document.getElementById('tagsList');
+
+            // Media upload functionality
+            mediaUploadArea?.addEventListener('click', () => mediaInput?.click());
+            mediaUploadArea?.addEventListener('dragover', handleDragOver);
+            mediaUploadArea?.addEventListener('drop', handleDrop);
+            mediaInput?.addEventListener('change', handleFileSelect);
+            removeMedia?.addEventListener('click', clearMedia);
+
+            // Location functionality
+            addLocation?.addEventListener('change', function() {
+                if (this.checked) {
+                    locationFields?.classList.remove('hidden');
+                } else {
+                    locationFields?.classList.add('hidden');
+                }
+            });
+
+            getCurrentLocation?.addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        document.querySelector('input[name="Latitude"]').value = position.coords.latitude;
+                        document.querySelector('input[name="Longitude"]').value = position.coords.longitude;
+                    });
+                }
+            });
+
+            // Tags functionality
+            tagsInput?.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    addTag(this.value.trim());
+                    this.value = '';
+                }
+            });
+
+            tagsInput?.addEventListener('blur', function() {
+                if (this.value.trim()) {
+                    addTag(this.value.trim());
+                    this.value = '';
+                }
+            });
+
+            let tags = [];
+
+            function addTag(tagText) {
+                if (tagText && !tags.includes(tagText)) {
+                    tags.push(tagText);
+                    updateTagsDisplay();
+                    updateTagsHidden();
+                }
+            }
+
+            function removeTag(tagText) {
+                tags = tags.filter(tag => tag !== tagText);
+                updateTagsDisplay();
+                updateTagsHidden();
+            }
+
+            function updateTagsDisplay() {
+                tagsList.innerHTML = '';
+                tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm';
+                    tagElement.innerHTML = `
+                        #${tag}
+                        <button type="button" onclick="removeTag('${tag}')" class="w-4 h-4 hover:bg-primary/20 rounded-full flex items-center justify-center">
+                            <i data-lucide="x" class="w-3 h-3"></i>
+                        </button>
+                    `;
+                    tagsList.appendChild(tagElement);
+                });
+            }
+
+            function updateTagsHidden() {
+                tagsHidden.value = tags.join(',');
+            }
+
+            // Make removeTag globally accessible
+            window.removeTag = removeTag;
+
+            function handleDragOver(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                mediaUploadArea.classList.add('border-primary');
+            }
+
+            function handleDrop(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                mediaUploadArea.classList.remove('border-primary');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFile(files[0]);
+                }
+            }
+
+            function handleFileSelect(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleFile(file);
+                }
+            }
+
+            function handleFile(file) {
+                if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+                    alert('Please select an image or video file.');
+                    return;
+                }
+
+                if (file.size > 50 * 1024 * 1024) { // 50MB limit
+                    alert('File size must be less than 50MB.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadPlaceholder.classList.add('hidden');
+                    mediaPreview.classList.remove('hidden');
+
+                    if (file.type.startsWith('image/')) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                        videoPreview.classList.add('hidden');
+                        document.querySelector('select[name="Type"]').value = 'Photo';
+                    } else if (file.type.startsWith('video/')) {
+                        videoPreview.src = e.target.result;
+                        videoPreview.classList.remove('hidden');
+                        imagePreview.classList.add('hidden');
+                        document.querySelector('select[name="Type"]').value = 'Video';
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function clearMedia() {
+                mediaInput.value = '';
+                uploadPlaceholder.classList.remove('hidden');
+                mediaPreview.classList.add('hidden');
+                imagePreview.classList.add('hidden');
+                videoPreview.classList.add('hidden');
+                imagePreview.src = '';
+                videoPreview.src = '';
+            }
+        }
+    </script>
+}

@@ -69,12 +69,8 @@ public class ErrorHandlingMiddleware
             _logger.LogError(logEx, "Failed to log error to database");
         }
 
-        var response = context.Response;
-        response.ContentType = "application/json";
-
         var (statusCode, message) = GetErrorResponse(exception);
-        response.StatusCode = (int)statusCode;
-
+        
         var errorResponse = new ErrorResponse
         {
             ErrorId = errorId,
@@ -92,12 +88,37 @@ public class ErrorHandlingMiddleware
             errorResponse.StackTrace = exception.StackTrace;
         }
 
-        var jsonResponse = JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        // Check if this is an API request or browser request
+        var isApiRequest = context.Request.Path.StartsWithSegments("/api") || 
+                          context.Request.Headers.Accept.Any(h => h?.Contains("application/json") == true);
 
-        await response.WriteAsync(jsonResponse);
+        if (isApiRequest)
+        {
+            // Return JSON response for API requests
+            var response = context.Response;
+            response.ContentType = "application/json";
+            response.StatusCode = (int)statusCode;
+
+            var jsonResponse = JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+
+            await response.WriteAsync(jsonResponse);
+        }
+        else
+        {
+            // Redirect to styled error page for browser requests
+            var errorDataJson = JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+            
+            var encodedErrorData = Uri.EscapeDataString(errorDataJson);
+            var redirectUrl = $"/Error/Details/{errorId}?data={encodedErrorData}";
+            
+            context.Response.Redirect(redirectUrl);
+        }
     }
 
     private static (HttpStatusCode statusCode, string message) GetErrorResponse(Exception exception)

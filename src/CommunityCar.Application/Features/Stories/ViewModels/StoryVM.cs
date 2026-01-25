@@ -8,9 +8,11 @@ public class StoryVM
     public string MediaUrl { get; set; } = string.Empty;
     public Guid AuthorId { get; set; }
     public string AuthorName { get; set; } = string.Empty;
-    public DateTime ExpiresAt { get; set; }
+    public string? AuthorAvatar { get; set; }
+    public DateTime? ExpiresAt { get; set; }
     
     // Enhanced properties
+    public string? Title { get; set; }
     public string? Caption { get; set; }
     public StoryType Type { get; set; }
     public string TypeName { get; set; } = string.Empty;
@@ -22,6 +24,7 @@ public class StoryVM
     public int LikeCount { get; set; }
     public int ReplyCount { get; set; }
     public int ShareCount { get; set; }
+    public int CommentCount { get; set; }
     
     // Story status
     public bool IsActive { get; set; }
@@ -29,6 +32,8 @@ public class StoryVM
     public bool IsFeatured { get; set; }
     public bool IsHighlighted { get; set; }
     public bool IsExpired { get; set; }
+    public bool IsViewed { get; set; }
+    public bool IsLikedByUser { get; set; }
     
     // Location and context
     public double? Latitude { get; set; }
@@ -47,6 +52,9 @@ public class StoryVM
     public string VisibilityName { get; set; } = string.Empty;
     public bool AllowReplies { get; set; }
     public bool AllowSharing { get; set; }
+    public bool AllowComments { get; set; }
+    public bool AllowLikes { get; set; }
+    public bool AllowShares { get; set; }
     
     // Tags and mentions
     public IEnumerable<string> Tags { get; set; } = new List<string>();

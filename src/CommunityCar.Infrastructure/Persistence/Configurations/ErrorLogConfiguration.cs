@@ -27,10 +27,10 @@ public class ErrorLogConfiguration : IEntityTypeConfiguration<ErrorLog>
             .HasMaxLength(2000);
 
         builder.Property(e => e.StackTrace)
-            .HasColumnType("text");
+            .HasColumnType("nvarchar(max)");
 
         builder.Property(e => e.InnerException)
-            .HasColumnType("text");
+            .HasColumnType("nvarchar(max)");
 
         builder.Property(e => e.Source)
             .IsRequired()
@@ -62,13 +62,13 @@ public class ErrorLogConfiguration : IEntityTypeConfiguration<ErrorLog>
             .HasMaxLength(10);
 
         builder.Property(e => e.RequestHeaders)
-            .HasColumnType("text");
+            .HasColumnType("nvarchar(max)");
 
         builder.Property(e => e.RequestBody)
-            .HasColumnType("text");
+            .HasColumnType("nvarchar(max)");
 
         builder.Property(e => e.AdditionalData)
-            .HasColumnType("text");
+            .HasColumnType("nvarchar(max)");
 
         builder.Property(e => e.IsResolved)
             .HasDefaultValue(false);
@@ -136,7 +136,7 @@ public class ErrorOccurrenceConfiguration : IEntityTypeConfiguration<ErrorOccurr
             .HasMaxLength(2000);
 
         builder.Property(e => e.AdditionalContext)
-            .HasColumnType("text");
+            .HasColumnType("nvarchar(max)");
 
         builder.Property(e => e.OccurredAt)
             .IsRequired();

@@ -5,6 +5,7 @@ using CommunityCar.Application.Features.Stories.DTOs;
 using CommunityCar.Application.Features.Stories.ViewModels;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Community.Stories;
+using StoriesSearchResponse = CommunityCar.Application.Features.Stories.DTOs.StoriesSearchResponse;
 
 namespace CommunityCar.Application.Services.Community;
 
@@ -186,7 +187,7 @@ public class StoriesService : IStoriesService
         story.SetFeatured(request.IsFeatured);
         story.SetHighlighted(request.IsHighlighted);
 
-        foreach (var tag in request.Tags)
+        foreach (var tag in request.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()))
             story.AddTag(tag);
 
         foreach (var userId in request.MentionedUsers)

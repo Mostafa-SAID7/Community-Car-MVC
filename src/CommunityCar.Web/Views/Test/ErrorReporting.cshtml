@@ -1,0 +1,164 @@
+@{
+    ViewData["Title"] = "Error Reporting Test";
+    Layout = "_Layout";
+}
+
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-3xl font-black text-foreground mb-4">Error Reporting System Test</h1>
+        <p class="text-muted-foreground">Test the error reporting functionality with different types of errors</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Test Error Card -->
+        <div class="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="alert-triangle" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Server Error (500)</h3>
+            <p class="text-sm text-muted-foreground mb-4">Trigger a server error to test the error reporting system</p>
+            <a href="/test/test-error" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all">
+                <i data-lucide="zap" class="w-4 h-4 mr-2"></i>
+                Trigger Error
+            </a>
+        </div>
+
+        <!-- Test Not Found Card -->
+        <div class="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="search-x" class="w-6 h-6 text-orange-600 dark:text-orange-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Not Found (404)</h3>
+            <p class="text-sm text-muted-foreground mb-4">Trigger a not found error to test the error reporting system</p>
+            <a href="/test/test-not-found" class="inline-flex items-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-all">
+                <i data-lucide="search" class="w-4 h-4 mr-2"></i>
+                Trigger 404
+            </a>
+        </div>
+
+        <!-- Test Unauthorized Card -->
+        <div class="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="shield-x" class="w-6 h-6 text-yellow-600 dark:text-yellow-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Unauthorized (401)</h3>
+            <p class="text-sm text-muted-foreground mb-4">Trigger an unauthorized error to test the error reporting system</p>
+            <a href="/test/test-unauthorized" class="inline-flex items-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-lg transition-all">
+                <i data-lucide="lock" class="w-4 h-4 mr-2"></i>
+                Trigger 401
+            </a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="mt-16">
+        <h2 class="text-2xl font-bold text-foreground mb-8 text-center">Error Reporting Features</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-6">
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="flag" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-foreground mb-1">User-Friendly Error Reporting</h3>
+                        <p class="text-sm text-muted-foreground">Users can easily report errors with detailed forms including priority levels and descriptions.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="moon" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-foreground mb-1">Dark Mode Support</h3>
+                        <p class="text-sm text-muted-foreground">Full dark mode support with smooth transitions and proper contrast ratios.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="mail" class="w-4 h-4 text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-foreground mb-1">Email Notifications</h3>
+                        <p class="text-sm text-muted-foreground">Automatic email notifications to administrators with detailed error information.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="ticket" class="w-4 h-4 text-red-600 dark:text-red-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-foreground mb-1">Ticket System</h3>
+                        <p class="text-sm text-muted-foreground">Each error report gets a unique ticket ID for tracking and follow-up.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-foreground mb-1">Admin Dashboard</h3>
+                        <p class="text-sm text-muted-foreground">Comprehensive admin dashboard to manage and track all error reports.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center shrink-0">
+                        <i data-lucide="smartphone" class="w-4 h-4 text-orange-600 dark:text-orange-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-foreground mb-1">Mobile Responsive</h3>
+                        <p class="text-sm text-muted-foreground">Fully responsive design that works perfectly on all devices and screen sizes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="mt-16 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-8">
+        <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-4 flex items-center gap-2">
+            <i data-lucide="info" class="w-5 h-5"></i>
+            How to Test
+        </h3>
+        <ol class="space-y-3 text-blue-800 dark:text-blue-200">
+            <li class="flex items-start gap-3">
+                <span class="inline-flex items-center justify-center w-6 h-6 bg-blue-600 text-white text-sm font-bold rounded-full shrink-0">1</span>
+                <span>Click on any of the error trigger buttons above to simulate different types of errors.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="inline-flex items-center justify-center w-6 h-6 bg-blue-600 text-white text-sm font-bold rounded-full shrink-0">2</span>
+                <span>You'll be redirected to a styled error page with detailed error information.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="inline-flex items-center justify-center w-6 h-6 bg-blue-600 text-white text-sm font-bold rounded-full shrink-0">3</span>
+                <span>Click the "Report Issue" button to open the error reporting modal.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="inline-flex items-center justify-center w-6 h-6 bg-blue-600 text-white text-sm font-bold rounded-full shrink-0">4</span>
+                <span>Fill out the form with your details and submit the report.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="inline-flex items-center justify-center w-6 h-6 bg-blue-600 text-white text-sm font-bold rounded-full shrink-0">5</span>
+                <span>You'll receive a ticket ID for tracking your report.</span>
+            </li>
+        </ol>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+}

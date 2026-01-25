@@ -19,6 +19,6 @@ public interface ISoftDeletable
     bool IsDeleted { get; }
     DateTime? DeletedAt { get; }
     string? DeletedBy { get; }
-    void SoftDelete(string deletedBy);
-    void Restore(string restoredBy);
+    void SoftDelete(string? deletedBy);
+    void Restore(string? restoredBy);
 }

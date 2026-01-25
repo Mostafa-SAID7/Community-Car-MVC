@@ -26,6 +26,12 @@ public interface IApplicationDbContext
 {
     DbSet<User> Users { get; }
     DbSet<UserProfile> UserProfiles { get; }
+    DbSet<UserGallery> UserGalleries { get; }
+    DbSet<UserBadge> UserBadges { get; }
+    DbSet<UserAchievement> UserAchievements { get; }
+    DbSet<UserActivity> UserActivities { get; }
+    DbSet<UserInterest> UserInterests { get; }
+    DbSet<UserFollowing> UserFollowings { get; }
     
     // Shared
     DbSet<Comment> Comments { get; }
@@ -36,6 +42,7 @@ public interface IApplicationDbContext
     DbSet<Tag> Tags { get; }
     DbSet<Category> Categories { get; }
     DbSet<View> Views { get; }
+    DbSet<Share> Shares { get; }
     
     // Error Management
     DbSet<ErrorLog> ErrorLogs { get; }

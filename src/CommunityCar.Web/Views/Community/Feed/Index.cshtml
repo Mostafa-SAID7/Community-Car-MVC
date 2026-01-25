@@ -111,8 +111,8 @@
     }
 
     <!-- Feed Items -->
-    <div class="flex flex-col gap-12">
-        @foreach (var item in Model.FeedItems)
+    <div class="flex flex-col gap-12" id="feed-container">
+        @foreach (var item in Model.FeedItems.Take(20))
         {
             <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden transition-all hover:shadow-2xl hover:border-primary/10 group/feed-item" data-content-id="@item.Id" data-content-type="@item.ContentType">
                 <!-- Post Header -->
@@ -322,12 +322,39 @@
     @if (Model.HasMoreContent)
     {
         <div class="py-12 text-center">
-            <button class="inline-flex items-center gap-3 bg-card border border-border px-8 py-3 rounded-2xl text-sm font-black text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all shadow-xl shadow-black/5 group" onclick="loadMoreContent()">
+            <button class="inline-flex items-center gap-3 bg-card border border-border px-8 py-3 rounded-2xl text-sm font-black text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all shadow-xl shadow-black/5 group" onclick="loadMoreFeedContent()">
                 <i data-lucide="plus-circle" class="w-5 h-5 group-hover:rotate-90 transition-transform duration-500"></i>
                 @Localizer["LoadMorePosts"]
             </button>
         </div>
     }
+
+    <!-- Skeleton Loading Template (Hidden by default) -->
+    <div id="skeleton-template" class="hidden">
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden animate-pulse">
+            <div class="p-5 pb-3 flex items-start gap-4">
+                <div class="w-11 h-11 rounded-full bg-muted"></div>
+                <div class="flex-1 space-y-2">
+                    <div class="h-4 bg-muted rounded w-1/4"></div>
+                    <div class="h-3 bg-muted rounded w-1/6"></div>
+                </div>
+            </div>
+            <div class="p-5 pt-0 space-y-4">
+                <div class="h-6 bg-muted rounded w-3/4"></div>
+                <div class="space-y-2">
+                    <div class="h-4 bg-muted rounded"></div>
+                    <div class="h-4 bg-muted rounded w-5/6"></div>
+                </div>
+                <div class="h-48 bg-muted rounded-xl"></div>
+            </div>
+            <div class="flex p-2 bg-muted/10 border-t border-border/40 gap-1">
+                <div class="flex-1 h-12 bg-muted/50 rounded-xl"></div>
+                <div class="flex-1 h-12 bg-muted/50 rounded-xl"></div>
+                <div class="flex-1 h-12 bg-muted/50 rounded-xl"></div>
+                <div class="w-12 h-12 bg-muted/50 rounded-xl"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Conversion of Modals should happen in layout or partials if they are shared, but here is the content -->
@@ -340,11 +367,82 @@
     <script>
         $(document).ready(function() {
             initializeFeed();
-            loadStoriesData();
+            initializeStories();
             
             setInterval(function() {
                 refreshFeedStats();
+                refreshStories();
             }, 300000);
         });
+
+        function loadMoreFeedContent() {
+            if (isLoading) return;
+            
+            isLoading = true;
+            const loadButton = event.target.closest('button');
+            const originalContent = loadButton.innerHTML;
+            
+            // Show loading state
+            loadButton.innerHTML = `<i class="fas fa-spinner fa-spin w-5 h-5"></i> ${window.feedLocalizer?.Loading || 'Loading...'}`;
+            loadButton.disabled = true;
+            
+            // Show skeleton loading
+            showSkeletonLoading(10);
+            
+            currentPage++;
+            
+            fetch(`/feed?feedType=${feedType}&page=${currentPage}&pageSize=10`)
+                .then(response => response.text())
+                .then(html => {
+                    // Parse the HTML to extract feed items
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newItems = doc.querySelectorAll('[data-content-id]');
+                    
+                    // Remove skeleton loading
+                    removeSkeletonLoading();
+                    
+                    // Append new items
+                    const container = document.getElementById('feed-container');
+                    newItems.forEach(item => {
+                        container.appendChild(item.cloneNode(true));
+                    });
+                    
+                    // Check if there are more items
+                    const hasMore = doc.querySelector('.py-12.text-center button');
+                    if (!hasMore) {
+                        loadButton.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading more content:', error);
+                    currentPage--; // Revert page increment on error
+                    removeSkeletonLoading();
+                })
+                .finally(() => {
+                    isLoading = false;
+                    loadButton.innerHTML = originalContent;
+                    loadButton.disabled = false;
+                });
+        }
+
+        function showSkeletonLoading(count) {
+            const container = document.getElementById('feed-container');
+            const template = document.getElementById('skeleton-template');
+            
+            for (let i = 0; i < count; i++) {
+                const skeleton = template.cloneNode(true);
+                skeleton.id = `skeleton-${i}`;
+                skeleton.classList.remove('hidden');
+                skeleton.classList.add('skeleton-item');
+                container.appendChild(skeleton);
+            }
+        }
+
+        function removeSkeletonLoading() {
+            document.querySelectorAll('.skeleton-item').forEach(skeleton => {
+                skeleton.remove();
+            });
+        }
     </script>
 }

@@ -16,36 +16,37 @@ public abstract class BaseEntity : IBaseEntity, ISoftDeletable
     public DateTime? DeletedAt { get; private set; }
     public string? DeletedBy { get; private set; }
 
-    public void Audit(string user)
+    public void Audit(string? user)
     {
+        var auditUser = user ?? "System";
         if (CreatedBy == null)
-            CreatedBy = user;
+            CreatedBy = auditUser;
         else
         {
-            UpdatedBy = user;
+            UpdatedBy = auditUser;
             UpdatedAt = DateTime.UtcNow;
         }
     }
 
-    public virtual void SoftDelete(string deletedBy)
+    public virtual void SoftDelete(string? deletedBy)
     {
         if (IsDeleted) return;
         
         IsDeleted = true;
         DeletedAt = DateTime.UtcNow;
-        DeletedBy = deletedBy;
-        UpdatedBy = deletedBy;
+        DeletedBy = deletedBy ?? "System";
+        UpdatedBy = deletedBy ?? "System";
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public virtual void Restore(string restoredBy)
+    public virtual void Restore(string? restoredBy)
     {
         if (!IsDeleted) return;
         
         IsDeleted = false;
         DeletedAt = null;
         DeletedBy = null;
-        UpdatedBy = restoredBy;
+        UpdatedBy = restoredBy ?? "System";
         UpdatedAt = DateTime.UtcNow;
     }
 }

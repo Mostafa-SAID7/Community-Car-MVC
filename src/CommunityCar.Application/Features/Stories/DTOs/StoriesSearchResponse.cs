@@ -10,4 +10,11 @@ public class StoriesSearchResponse
     public StoriesStatsVM Stats { get; set; } = new StoriesStatsVM();
     public IEnumerable<string> AvailableTags { get; set; } = new List<string>();
     public IEnumerable<string> AvailableCarMakes { get; set; } = new List<string>();
+    
+    // Calculated properties
+    public int CurrentPage => Pagination.CurrentPage;
+    public int TotalPages => Pagination.TotalPages;
+    public int TotalItems => Pagination.TotalItems;
+    public bool HasNextPage => Pagination.HasNextPage;
+    public bool HasPreviousPage => Pagination.HasPreviousPage;
 }

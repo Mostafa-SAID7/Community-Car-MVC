@@ -40,16 +40,7 @@ public class PostsController : Controller
             var response = await _postsService.SearchPostsAsync(request);
 
             // Convert ViewModels to simple models for the view
-            var posts = response.Items.Select(vm => new
-            {
-                vm.Id,
-                vm.Title,
-                vm.Content,
-                vm.Type,
-                vm.AuthorId,
-                vm.CreatedAt,
-                vm.UpdatedAt
-            }).ToList();
+            var posts = response.Items.ToList();
 
             return View("~/Views/Community/Posts/Index.cshtml", posts);
         }
@@ -72,16 +63,7 @@ public class PostsController : Controller
             }
 
             // Convert ViewModel to simple model for the view
-            var post = new
-            {
-                postVM.Id,
-                postVM.Title,
-                postVM.Content,
-                postVM.Type,
-                postVM.AuthorId,
-                postVM.CreatedAt,
-                postVM.UpdatedAt
-            };
+            var post = postVM;
 
             return View("~/Views/Community/Posts/Details.cshtml", post);
         }
@@ -215,20 +197,7 @@ public class PostsController : Controller
             }
 
             // Convert ViewModel to simple model for the view
-            var post = new
-            {
-                postVM.Id,
-                postVM.Title,
-                postVM.Content,
-                postVM.Type,
-                postVM.Category,
-                Tags = postVM.Tags?.ToList() ?? new List<string>(),
-                postVM.IsPinned,
-                postVM.AllowComments,
-                postVM.AuthorId,
-                postVM.CreatedAt,
-                postVM.UpdatedAt
-            };
+            var post = postVM;
 
             return View("~/Views/Community/Posts/Edit.cshtml", post);
         }

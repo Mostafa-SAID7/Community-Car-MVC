@@ -235,7 +235,7 @@ public class MapsController : Controller
         }
     }
 
-    [HttpGet("poi/{id}/checkins")]
+    [HttpGet("poi/{id}/checkins/api")]
     public async Task<IActionResult> GetCheckIns(Guid id, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
         var checkIns = await _mapsService.GetCheckInsAsync(id, page, pageSize);

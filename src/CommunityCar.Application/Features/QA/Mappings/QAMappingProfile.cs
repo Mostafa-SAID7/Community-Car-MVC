@@ -9,10 +9,11 @@ public class QAMappingProfile : AutoMapper.Profile
     public QAMappingProfile()
     {
         CreateMap<Question, QuestionVM>()
-            .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => "Anonymous")) // TODO: Map actual user name
-            .ForMember(dest => dest.AnswerCount, opt => opt.Ignore());
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.ToList()))
+            .ForMember(dest => dest.AuthorName, opt => opt.Ignore()) // Will be populated by service
+            .ForMember(dest => dest.AnswerCount, opt => opt.MapFrom(src => src.AnswerCount));
 
         CreateMap<Answer, AnswerVM>()
-            .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => "Anonymous")); // TODO: Map actual user name
+            .ForMember(dest => dest.AuthorName, opt => opt.Ignore()); // Will be populated by service
     }
 }

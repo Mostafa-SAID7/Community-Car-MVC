@@ -1,0 +1,227 @@
+@{
+    ViewData["Title"] = "AutoMapper Test";
+    Layout = "_Layout";
+}
+
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-3xl font-black text-foreground mb-4">AutoMapper Configuration Test</h1>
+        <p class="text-muted-foreground">Test AutoMapper mappings for all community features</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Events Test -->
+        <div class="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="calendar" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Events Mapping</h3>
+            <p class="text-sm text-muted-foreground mb-4">Test Event to EventSummaryVM mapping</p>
+            <button onclick="testEventsMapping()" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all">
+                <i data-lucide="play" class="w-4 h-4 mr-2"></i>
+                Test Events
+            </button>
+            <div id="eventsResult" class="mt-4 text-sm"></div>
+        </div>
+
+        <!-- Stories Test -->
+        <div class="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="image" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Stories Mapping</h3>
+            <p class="text-sm text-muted-foreground mb-4">Test Story to StoryVM mapping</p>
+            <button onclick="testStoriesMapping()" class="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-all">
+                <i data-lucide="play" class="w-4 h-4 mr-2"></i>
+                Test Stories
+            </button>
+            <div id="storiesResult" class="mt-4 text-sm"></div>
+        </div>
+
+        <!-- Posts Test -->
+        <div class="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="file-text" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Posts Mapping</h3>
+            <p class="text-sm text-muted-foreground mb-4">Test Post to PostSummaryVM mapping</p>
+            <button onclick="testPostsMapping()" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-all">
+                <i data-lucide="play" class="w-4 h-4 mr-2"></i>
+                Test Posts
+            </button>
+            <div id="postsResult" class="mt-4 text-sm"></div>
+        </div>
+
+        <!-- Reviews Test -->
+        <div class="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="star" class="w-6 h-6 text-yellow-600 dark:text-yellow-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Reviews Mapping</h3>
+            <p class="text-sm text-muted-foreground mb-4">Test Review to ReviewVM mapping</p>
+            <button onclick="testReviewsMapping()" class="inline-flex items-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-lg transition-all">
+                <i data-lucide="play" class="w-4 h-4 mr-2"></i>
+                Test Reviews
+            </button>
+            <div id="reviewsResult" class="mt-4 text-sm"></div>
+        </div>
+
+        <!-- News Test -->
+        <div class="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="newspaper" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">News Mapping</h3>
+            <p class="text-sm text-muted-foreground mb-4">Test NewsItem to NewsItemVM mapping</p>
+            <button onclick="testNewsMapping()" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all">
+                <i data-lucide="play" class="w-4 h-4 mr-2"></i>
+                Test News
+            </button>
+            <div id="newsResult" class="mt-4 text-sm"></div>
+        </div>
+
+        <!-- Groups Test -->
+        <div class="bg-background border border-border rounded-2xl p-6 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="users" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"></i>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Groups Mapping</h3>
+            <p class="text-sm text-muted-foreground mb-4">Test Group to GroupSummaryVM mapping</p>
+            <button onclick="testGroupsMapping()" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-all">
+                <i data-lucide="play" class="w-4 h-4 mr-2"></i>
+                Test Groups
+            </button>
+            <div id="groupsResult" class="mt-4 text-sm"></div>
+        </div>
+    </div>
+
+    <!-- Results Summary -->
+    <div class="mt-16 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-8">
+        <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-4 flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
+            AutoMapper Status
+        </h3>
+        <div id="overallStatus" class="text-blue-800 dark:text-blue-200">
+            Click the test buttons above to verify AutoMapper configurations.
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+
+        async function testEventsMapping() {
+            const resultDiv = document.getElementById('eventsResult');
+            resultDiv.innerHTML = '<span class="text-blue-600">Testing...</span>';
+            
+            try {
+                const response = await fetch('/api/test/events-mapping');
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = '<span class="text-green-600">✓ Events mapping working</span>';
+                } else {
+                    resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${result.message}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testStoriesMapping() {
+            const resultDiv = document.getElementById('storiesResult');
+            resultDiv.innerHTML = '<span class="text-purple-600">Testing...</span>';
+            
+            try {
+                const response = await fetch('/api/test/stories-mapping');
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = '<span class="text-green-600">✓ Stories mapping working</span>';
+                } else {
+                    resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${result.message}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testPostsMapping() {
+            const resultDiv = document.getElementById('postsResult');
+            resultDiv.innerHTML = '<span class="text-green-600">Testing...</span>';
+            
+            try {
+                const response = await fetch('/api/test/posts-mapping');
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = '<span class="text-green-600">✓ Posts mapping working</span>';
+                } else {
+                    resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${result.message}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testReviewsMapping() {
+            const resultDiv = document.getElementById('reviewsResult');
+            resultDiv.innerHTML = '<span class="text-yellow-600">Testing...</span>';
+            
+            try {
+                const response = await fetch('/api/test/reviews-mapping');
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = '<span class="text-green-600">✓ Reviews mapping working</span>';
+                } else {
+                    resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${result.message}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testNewsMapping() {
+            const resultDiv = document.getElementById('newsResult');
+            resultDiv.innerHTML = '<span class="text-red-600">Testing...</span>';
+            
+            try {
+                const response = await fetch('/api/test/news-mapping');
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = '<span class="text-green-600">✓ News mapping working</span>';
+                } else {
+                    resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${result.message}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testGroupsMapping() {
+            const resultDiv = document.getElementById('groupsResult');
+            resultDiv.innerHTML = '<span class="text-indigo-600">Testing...</span>';
+            
+            try {
+                const response = await fetch('/api/test/groups-mapping');
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = '<span class="text-green-600">✓ Groups mapping working</span>';
+                } else {
+                    resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${result.message}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">✗ Error: ${error.message}</span>`;
+            }
+        }
+    </script>
+}

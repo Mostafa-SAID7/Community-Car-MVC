@@ -296,4 +296,122 @@
   <data name="MoreFromAuthor" xml:space="preserve">
     <value>More from this author</value>
   </data>
+  
+  <!-- Feed Section -->
+  <data name="TrendingTitle" xml:space="preserve">
+    <value>Trending</value>
+  </data>
+  <data name="TrendingSubtitle" xml:space="preserve">
+    <value>What's hot in the community right now</value>
+  </data>
+  <data name="HotTopics" xml:space="preserve">
+    <value>Hot Topics</value>
+  </data>
+  <data name="MostDiscussedTopics" xml:space="preserve">
+    <value>Most discussed topics in the community</value>
+  </data>
+  <data name="Trending" xml:space="preserve">
+    <value>Trending</value>
+  </data>
+  <data name="ForYou" xml:space="preserve">
+    <value>For You</value>
+  </data>
+  <data name="CreatePost" xml:space="preserve">
+    <value>Create Post</value>
+  </data>
+  <data name="WhatsOnYourMind" xml:space="preserve">
+    <value>What's on your mind?</value>
+  </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+  <data name="Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="Ask" xml:space="preserve">
+    <value>Ask</value>
+  </data>
+  <data name="LoadMorePosts" xml:space="preserve">
+    <value>Load More Posts</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading</value>
+  </data>
+  <data name="Like" xml:space="preserve">
+    <value>Like</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="SavePost" xml:space="preserve">
+    <value>Save Post</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="WriteComment" xml:space="preserve">
+    <value>Write a comment...</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>Read More</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Shares" xml:space="preserve">
+    <value>Shares</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>More</value>
+  </data>
+  
+  <!-- Stories Section -->
+  <data name="Stories" xml:space="preserve">
+    <value>Stories</value>
+  </data>
+  <data name="Live" xml:space="preserve">
+    <value>Live</value>
+  </data>
+  <data name="ShareYourCarMoments" xml:space="preserve">
+    <value>Share Your Car Moments</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="CreateStory" xml:space="preserve">
+    <value>Create Story</value>
+  </data>
+  <data name="ViewStory" xml:space="preserve">
+    <value>View Story</value>
+  </data>
+  <data name="StoryExpired" xml:space="preserve">
+    <value>Story Expired</value>
+  </data>
+  <data name="TimeRemaining" xml:space="preserve">
+    <value>Time Remaining</value>
+  </data>
+  <data name="Liked" xml:space="preserve">
+    <value>Liked!</value>
+  </data>
+  <data name="RemovedLike" xml:space="preserve">
+    <value>Removed like</value>
+  </data>
+  <data name="LinkCopiedToClipboard" xml:space="preserve">
+    <value>Link copied to clipboard!</value>
+  </data>
+  <data name="UnableToCopyLink" xml:space="preserve">
+    <value>Unable to copy link</value>
+  </data>
+  <data name="ErrorUpdatingLike" xml:space="preserve">
+    <value>Error updating like</value>
+  </data>
+  <data name="ErrorSharingStory" xml:space="preserve">
+    <value>Error sharing story</value>
+  </data>
 </root>

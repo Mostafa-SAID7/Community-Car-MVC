@@ -140,7 +140,7 @@
                 @if (Model.Pagination.CurrentPage > 1)
                 {
                     <a href="?page=@(Model.Pagination.CurrentPage - 1)@Html.Raw(additionalParams)" 
-                       class="btn-secondary btn-sm">
+                       class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
                         <i data-lucide="chevron-left" class="w-4 h-4"></i>
                         @Localizer["Previous"]
                     </a>
@@ -150,19 +150,19 @@
                 {
                     @if (i == Model.Pagination.CurrentPage)
                     {
-                        <span class="btn-primary btn-sm">@i</span>
+                        <span class="inline-flex items-center justify-center w-10 h-10 bg-primary text-primary-foreground rounded-xl text-[10px] font-black shadow-lg shadow-primary/20">@i</span>
                     }
                     else
                     {
                         <a href="?page=@i@Html.Raw(additionalParams)" 
-                           class="btn-secondary btn-sm">@i</a>
+                           class="inline-flex items-center justify-center w-10 h-10 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black transition-all shadow-lg shadow-black/5 active:scale-95">@i</a>
                     }
                 }
 
                 @if (Model.Pagination.CurrentPage < Model.Pagination.TotalPages)
                 {
                     <a href="?page=@(Model.Pagination.CurrentPage + 1)@Html.Raw(additionalParams)" 
-                       class="btn-secondary btn-sm">
+                       class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
                         @Localizer["Next"]
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
                     </a>

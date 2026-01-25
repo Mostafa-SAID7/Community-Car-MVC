@@ -128,4 +128,35 @@ public class TestController : Controller
             return Json(new { Error = ex.Message, Success = false });
         }
     }
+
+    [HttpGet("test-error")]
+    public IActionResult TestError()
+    {
+        // This will trigger an error for testing the error reporting system
+        throw new InvalidOperationException("This is a test error for demonstrating the error reporting system. The profile badges view could not be found.");
+    }
+
+    [HttpGet("test-not-found")]
+    public IActionResult TestNotFound()
+    {
+        return NotFound("This is a test 404 error for testing the error reporting system.");
+    }
+
+    [HttpGet("test-unauthorized")]
+    public IActionResult TestUnauthorized()
+    {
+        throw new UnauthorizedAccessException("This is a test unauthorized access error.");
+    }
+    
+    [HttpGet("error-reporting")]
+    public IActionResult ErrorReporting()
+    {
+        return View();
+    }
+    
+    [HttpGet("automapper-test")]
+    public IActionResult AutoMapperTest()
+    {
+        return View();
+    }
 }

@@ -1,0 +1,460 @@
+@model CommunityCar.Web.Models.ErrorDetailsViewModel
+@{
+    ViewData["Title"] = "Error Details";
+    Layout = "_Layout";
+}
+
+<!-- Dark Mode Toggle -->
+<div class="fixed top-4 right-4 z-50">
+    <button onclick="toggleDarkMode()" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full p-3 shadow-lg hover:shadow-xl transition-all">
+        <i data-lucide="sun" class="w-5 h-5 text-yellow-500 dark:hidden"></i>
+        <i data-lucide="moon" class="w-5 h-5 text-blue-400 hidden dark:block"></i>
+    </button>
+</div>
+
+<div class="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 py-12 transition-colors duration-300">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full mb-4">
+                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
+            </div>
+            <h1 class="text-3xl font-black text-gray-900 dark:text-white mb-2">Application Error</h1>
+            <p class="text-gray-600 dark:text-gray-400">Something went wrong while processing your request</p>
+        </div>
+
+        <!-- Error Summary Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 mb-8">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i data-lucide="info" class="w-5 h-5 text-blue-500"></i>
+                        Error Summary
+                    </h2>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+                        Status: <span id="errorStatus">Unknown</span>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Error ID</label>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 font-mono text-sm text-gray-900 dark:text-gray-100" id="errorId">
+                            @Model?.ErrorId ?? "Not available"
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Request ID</label>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 font-mono text-sm text-gray-900 dark:text-gray-100">
+                            @Model?.RequestId ?? "Not available"
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Timestamp</label>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm text-gray-900 dark:text-gray-100" id="errorTimestamp">
+                            Loading...
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Request Path</label>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 font-mono text-sm text-gray-900 dark:text-gray-100" id="errorPath">
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 mb-8">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i data-lucide="message-square" class="w-5 h-5 text-orange-500"></i>
+                    Error Message
+                </h2>
+            </div>
+            
+            <div class="p-6">
+                <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                    <p class="text-red-800 dark:text-red-200 font-medium" id="errorMessage">
+                        Loading error message...
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Details Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 mb-8">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i data-lucide="code" class="w-5 h-5 text-purple-500"></i>
+                        Technical Details
+                    </h2>
+                    <button onclick="toggleDetails()" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+                        <span id="toggleText">Show Details</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 inline ml-1" id="toggleIcon"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6 hidden" id="technicalDetails">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Error Details</label>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 max-h-40 overflow-y-auto">
+                            <pre class="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap" id="errorDetails">Loading...</pre>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Stack Trace</label>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 max-h-60 overflow-y-auto">
+                            <pre class="text-xs text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-mono" id="stackTrace">Loading...</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+            <button onclick="history.back()" class="inline-flex items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-bold rounded-xl transition-all">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                Go Back
+            </button>
+            <a href="/" class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all">
+                <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+                Go Home
+            </a>
+            <button onclick="showReportModal()" class="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all">
+                <i data-lucide="flag" class="w-4 h-4 mr-2"></i>
+                Report Issue
+            </button>
+        </div>
+
+        <!-- Error Reporting Modal -->
+        <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="flag" class="w-5 h-5 text-red-500"></i>
+                            Report Error Issue
+                        </h3>
+                        <button onclick="hideReportModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <form id="errorReportForm" class="p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
+                            <input type="text" id="userName" name="userName" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Your Email</label>
+                            <input type="email" id="userEmail" name="userEmail" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Priority Level</label>
+                        <select id="priority" name="priority" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                            <option value="Low">Low - Minor inconvenience</option>
+                            <option value="Medium" selected>Medium - Affects functionality</option>
+                            <option value="High">High - Blocks important features</option>
+                            <option value="Critical">Critical - System unusable</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Describe the Problem</label>
+                        <textarea id="description" name="description" rows="3" required placeholder="Please describe what went wrong..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Steps to Reproduce</label>
+                        <textarea id="stepsToReproduce" name="stepsToReproduce" rows="3" placeholder="1. Go to...\n2. Click on...\n3. See error..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Expected Behavior</label>
+                            <textarea id="expectedBehavior" name="expectedBehavior" rows="2" placeholder="What should have happened?" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Actual Behavior</label>
+                            <textarea id="actualBehavior" name="actualBehavior" rows="2" placeholder="What actually happened?" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <button type="button" onclick="hideReportModal()" class="px-6 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium">
+                            Cancel
+                        </button>
+                        <button type="submit" class="inline-flex items-center px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all">
+                            <i data-lucide="send" class="w-4 h-4 mr-2"></i>
+                            Submit Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="check-circle" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Report Submitted!</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Your error report has been submitted successfully.</p>
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
+                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                            <strong>Ticket ID:</strong> <span id="ticketId" class="font-mono"></span>
+                        </p>
+                    </div>
+                    <button onclick="hideSuccessModal()" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-all">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="mt-12 text-center">
+            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
+                <h3 class="text-lg font-bold text-blue-900 dark:text-blue-100 mb-2">Need Help?</h3>
+                <p class="text-blue-700 dark:text-blue-300 mb-4">If this error persists, please contact our support team with the error ID above.</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="mailto:support@communitycar.com" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+                        <i data-lucide="mail" class="w-4 h-4 mr-2"></i>
+                        Email Support
+                    </a>
+                    <a href="/help" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+                        <i data-lucide="help-circle" class="w-4 h-4 mr-2"></i>
+                        Help Center
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let errorData = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Initialize dark mode
+            initializeDarkMode();
+            
+            // Try to get error data from URL parameters or localStorage
+            loadErrorData();
+        });
+
+        function initializeDarkMode() {
+            // Check for saved theme preference or default to light mode
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            if (isDark) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            
+            // Reinitialize icons after theme change
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function loadErrorData() {
+            // Check if error data is passed via URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorJson = urlParams.get('data');
+            
+            if (errorJson) {
+                try {
+                    errorData = JSON.parse(decodeURIComponent(errorJson));
+                    displayErrorData(errorData);
+                } catch (e) {
+                    console.error('Failed to parse error data:', e);
+                    loadMockData();
+                }
+            } else {
+                // Try to get from localStorage (if set by error handler)
+                const storedError = localStorage.getItem('lastError');
+                if (storedError) {
+                    try {
+                        errorData = JSON.parse(storedError);
+                        displayErrorData(errorData);
+                        localStorage.removeItem('lastError'); // Clean up
+                    } catch (e) {
+                        loadMockData();
+                    }
+                } else {
+                    loadMockData();
+                }
+            }
+        }
+
+        function displayErrorData(data) {
+            document.getElementById('errorStatus').textContent = data.statusCode || 'Unknown';
+            document.getElementById('errorTimestamp').textContent = data.timestamp ? new Date(data.timestamp).toLocaleString() : 'Unknown';
+            document.getElementById('errorPath').textContent = data.path || 'Unknown';
+            document.getElementById('errorMessage').textContent = data.message || 'No message available';
+            document.getElementById('errorDetails').textContent = data.details || 'No details available';
+            document.getElementById('stackTrace').textContent = data.stackTrace || 'No stack trace available';
+        }
+
+        function loadMockData() {
+            // Fallback mock data
+            const mockData = {
+                statusCode: 409,
+                timestamp: new Date().toISOString(),
+                path: '/profile/badges',
+                message: 'The view \'Badges\' was not found.',
+                details: 'The requested view could not be located in the expected directories.',
+                stackTrace: 'Mock stack trace for demonstration purposes...'
+            };
+            displayErrorData(mockData);
+        }
+
+        function toggleDetails() {
+            const details = document.getElementById('technicalDetails');
+            const toggleText = document.getElementById('toggleText');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                toggleText.textContent = 'Hide Details';
+                toggleIcon.style.transform = 'rotate(180deg)';
+            } else {
+                details.classList.add('hidden');
+                toggleText.textContent = 'Show Details';
+                toggleIcon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function showReportModal() {
+            document.getElementById('reportModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Pre-fill error ID if available
+            if (errorData && errorData.errorId) {
+                // Store error ID for form submission
+                document.getElementById('errorReportForm').dataset.errorId = errorData.errorId;
+            }
+        }
+
+        function hideReportModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function showSuccessModal(ticketId) {
+            document.getElementById('ticketId').textContent = ticketId;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function hideSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Handle error report form submission
+        document.getElementById('errorReportForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const reportData = {
+                errorId: e.target.dataset.errorId || (errorData ? errorData.errorId : ''),
+                userName: formData.get('userName'),
+                userEmail: formData.get('userEmail'),
+                priority: formData.get('priority'),
+                description: formData.get('description'),
+                stepsToReproduce: formData.get('stepsToReproduce'),
+                expectedBehavior: formData.get('expectedBehavior'),
+                actualBehavior: formData.get('actualBehavior')
+            };
+
+            try {
+                const response = await fetch('/api/error-reporting/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reportData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    hideReportModal();
+                    showSuccessModal(result.ticketId);
+                    
+                    // Reset form
+                    e.target.reset();
+                } else {
+                    alert('Failed to submit error report: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error submitting report:', error);
+                alert('Failed to submit error report. Please try again later.');
+            }
+        });
+
+        // Legacy function for backward compatibility
+        function reportError() {
+            showReportModal();
+        }
+
+        // Function to be called by error handlers to store error data
+        window.setErrorData = function(data) {
+            localStorage.setItem('lastError', JSON.stringify(data));
+        };
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.id === 'reportModal') {
+                hideReportModal();
+            }
+            if (e.target.id === 'successModal') {
+                hideSuccessModal();
+            }
+        });
+
+        // Handle escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideReportModal();
+                hideSuccessModal();
+            }
+        });
+    </script>
+}

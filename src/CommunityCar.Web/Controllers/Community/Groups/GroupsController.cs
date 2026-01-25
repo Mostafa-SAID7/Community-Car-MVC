@@ -50,24 +50,7 @@ public class GroupsController : Controller
             ViewBag.FilterPrivacy = filterPrivacy;
 
             // Convert ViewModels to a simple model for the view
-            var groups = response.Items.Select(vm => new
-            {
-                vm.Id,
-                vm.Name,
-                vm.Description,
-                vm.Privacy,
-                vm.OwnerId,
-                vm.Category,
-                Rules = vm.Rules ?? string.Empty,
-                vm.RequiresApproval,
-                vm.Location,
-                vm.MemberCount,
-                vm.PostCount,
-                vm.IsOfficial,
-                vm.IsVerified,
-                Tags = vm.Tags?.ToList() ?? new List<string>(),
-                vm.CreatedAt
-            }).ToList();
+            var groups = response.Items.ToList();
 
             return View("~/Views/Community/Groups/Index.cshtml", groups);
         }
@@ -90,24 +73,7 @@ public class GroupsController : Controller
             }
 
             // Convert ViewModel to a simple model for the view
-            var group = new
-            {
-                groupVM.Id,
-                groupVM.Name,
-                groupVM.Description,
-                groupVM.Privacy,
-                groupVM.OwnerId,
-                groupVM.Category,
-                groupVM.Rules,
-                groupVM.RequiresApproval,
-                groupVM.Location,
-                groupVM.MemberCount,
-                groupVM.PostCount,
-                groupVM.IsOfficial,
-                groupVM.IsVerified,
-                Tags = groupVM.Tags?.ToList() ?? new List<string>(),
-                groupVM.CreatedAt
-            };
+            var group = groupVM;
 
             return View("~/Views/Community/Groups/Details.cshtml", group);
         }
@@ -224,19 +190,7 @@ public class GroupsController : Controller
             }
 
             // Convert ViewModel to simple model for the view
-            var group = new
-            {
-                groupVM.Id,
-                groupVM.Name,
-                groupVM.Description,
-                groupVM.Privacy,
-                groupVM.Category,
-                groupVM.Location,
-                groupVM.Rules,
-                groupVM.RequiresApproval,
-                groupVM.OwnerId,
-                groupVM.CreatedAt
-            };
+            var group = groupVM;
 
             return View("~/Views/Community/Groups/Edit.cshtml", group);
         }

@@ -42,6 +42,8 @@ public static class DependencyInjection
         services.AddScoped<IProfileEmailService, ProfileEmailService>();
         services.AddScoped<IProfileAccountService, ProfileAccountService>();
         services.AddScoped<IAccountManagementService, AccountManagementService>();
+        services.AddScoped<IUserGalleryService, UserGalleryService>();
+        services.AddScoped<IGamificationService, GamificationService>();
 
         // Dashboard services
         services.AddScoped<IOverviewService, OverviewService>();
@@ -51,12 +53,16 @@ public static class DependencyInjection
         
         // Error Management
         services.AddScoped<IErrorService, CommunityCar.Application.Services.Dashboard.ErrorService>();
+        services.AddScoped<IErrorReportingService, CommunityCar.Application.Services.ErrorReportingService>();
         services.AddScoped<IManagementService, ManagementService>();
         services.AddScoped<ISettingsService, SettingsService>();
 
         // SEO and Performance services
         services.AddScoped<ISEOService, SEOService>();
         services.AddScoped<IPerformanceService, PerformanceService>();
+
+        // Analytics services
+        services.AddScoped<IUserAnalyticsService, CommunityCar.Application.Services.UserAnalyticsService>();
 
         return services;
     }

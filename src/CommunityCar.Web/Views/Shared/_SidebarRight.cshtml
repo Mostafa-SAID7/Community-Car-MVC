@@ -1,5 +1,6 @@
 @{
     var feedData = ViewData["FeedSidebarData"] as FeedResponse;
+    var currentUserId = ViewBag.CurrentUserId as Guid?;
 }
 
 <!-- Right Sidebar -->
@@ -21,7 +22,7 @@
                 <div class="space-y-3">
                     @if (feedData.TrendingTopics?.Any() == true)
                     {
-                        @foreach (var topic in feedData.TrendingTopics.Take(5))
+                        @foreach (var topic in feedData.TrendingTopics.Take(3))
                         {
                             <div class="p-3 rounded-md hover:bg-accent transition-colors cursor-pointer">
                                 <div class="text-sm font-medium text-primary">#@topic.Topic</div>
@@ -30,7 +31,7 @@
                                     @topic.TrendingReason</div>
                             </div>
                         }
-                        <a href="/trending"
+                        <a href="/feed/trending"
                             class="block text-sm text-primary hover:text-primary/80 transition-colors mt-3 font-medium">View All
                             Trending</a>
                     }
@@ -78,6 +79,23 @@
                         <a href="/friends/suggestions"
                             class="block text-sm text-primary hover:text-primary/80 transition-colors mt-3 font-medium">See All
                             Suggestions</a>
+                    </div>
+                </div>
+            }
+
+            <!-- Your Interests (if user is logged in) -->
+            @if (currentUserId.HasValue)
+            {
+                <div class="p-4 border-b border-border">
+                    <h3 class="flex items-center gap-2 text-sm font-semibold mb-3">
+                        <i data-lucide="heart" class="w-4 h-4 text-primary"></i>
+                        Your Interests
+                    </h3>
+                    <div id="userInterests" class="space-y-2">
+                        <!-- Will be populated by JavaScript -->
+                        <div class="flex items-center justify-center py-4">
+                            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                        </div>
                     </div>
                 </div>
             }
@@ -150,3 +168,64 @@
         }
     </div>
 </aside>
+
+@if (currentUserId.HasValue)
+{
+    <script>
+        // Load user interests
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInterests('@currentUserId');
+        });
+
+        function loadUserInterests(userId) {
+            fetch(`/api/analytics/interests/${userId}?limit=5`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.data.length > 0) {
+                        updateUserInterestsDisplay(data.data);
+                    } else {
+                        showEmptyInterests();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading user interests:', error);
+                    showEmptyInterests();
+                });
+        }
+
+        function updateUserInterestsDisplay(interests) {
+            const container = document.getElementById('userInterests');
+            container.innerHTML = '';
+            
+            interests.forEach(interest => {
+                const interestEl = document.createElement('div');
+                interestEl.className = 'flex items-center justify-between p-2 rounded-md bg-accent/30 hover:bg-accent/50 transition-colors';
+                interestEl.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-primary"></div>
+                        <span class="text-xs font-medium text-foreground">${interest.displayName}</span>
+                    </div>
+                    <div class="text-xs text-muted-foreground">${Math.round(interest.score)}</div>
+                `;
+                container.appendChild(interestEl);
+            });
+            
+            // Add view all link
+            const viewAllEl = document.createElement('a');
+            viewAllEl.href = '/profile/interests';
+            viewAllEl.className = 'block text-sm text-primary hover:text-primary/80 transition-colors mt-3 font-medium';
+            viewAllEl.textContent = 'View All Interests';
+            container.appendChild(viewAllEl);
+        }
+
+        function showEmptyInterests() {
+            const container = document.getElementById('userInterests');
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-4 text-center">
+                    <i data-lucide="heart" class="w-6 h-6 text-muted-foreground mb-2"></i>
+                    <p class="text-xs text-muted-foreground">We're learning about your interests</p>
+                </div>
+            `;
+        }
+    </script>
+}

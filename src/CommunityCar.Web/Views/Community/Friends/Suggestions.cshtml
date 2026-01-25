@@ -17,7 +17,7 @@
                     </div>
                     @Localizer["PeopleYouMayKnow"]
                 </h2>
-                <a href="/friends" class="btn-secondary">
+                <a href="/friends" class="inline-flex items-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     @Localizer["BackToFriends"]
                 </a>
@@ -82,15 +82,15 @@
                             </div>
                             
                             <div class="flex gap-2 justify-center">
-                                <button class="btn-sm btn-primary flex-1" onclick="sendFriendRequest('@suggestion.UserId', '@suggestion.FullName')">
+                                <button class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-bold transition-all active:scale-95 flex-1 justify-center" onclick="sendFriendRequest('@suggestion.UserId', '@suggestion.FullName')">
                                     <i data-lucide="user-plus" class="w-4 h-4"></i>
                                     Add Friend
                                 </button>
-                                <button class="btn-sm btn-secondary" onclick="viewProfile('@suggestion.UserId')">
+                                <button class="inline-flex items-center justify-center w-10 h-10 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs transition-all active:scale-95" onclick="viewProfile('@suggestion.UserId')">
                                     <i data-lucide="user" class="w-4 h-4"></i>
                                 </button>
                                 <div class="relative">
-                                    <button class="btn-sm btn-secondary" onclick="toggleSuggestionMenu('@suggestion.UserId')">
+                                    <button class="inline-flex items-center justify-center w-10 h-10 bg-background border border-border hover:border-muted-foreground hover:text-muted-foreground rounded-xl text-xs transition-all active:scale-95" onclick="toggleSuggestionMenu('@suggestion.UserId')">
                                         <i data-lucide="more-horizontal" class="w-4 h-4"></i>
                                     </button>
                                     <div id="suggestion-menu-@suggestion.UserId" class="absolute right-0 top-full mt-2 w-48 bg-card border border-border rounded-xl shadow-lg hidden z-10">
@@ -124,7 +124,7 @@
                     <i data-lucide="user-search" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
                     <h3 class="text-lg font-black text-foreground mb-2">No Suggestions Available</h3>
                     <p class="text-muted-foreground mb-6">We couldn't find any friend suggestions for you right now. Check back later!</p>
-                    <a href="/friends" class="btn-primary">
+                    <a href="/friends" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
                         <i data-lucide="users" class="w-4 h-4"></i>
                         Back to Friends
                     </a>

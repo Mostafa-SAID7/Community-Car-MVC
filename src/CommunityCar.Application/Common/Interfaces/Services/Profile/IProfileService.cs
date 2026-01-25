@@ -12,6 +12,10 @@ public interface IProfileService
     Task<bool> UpdateProfilePictureAsync(Guid userId, Stream imageStream, string fileName);
     Task<bool> DeleteProfilePictureAsync(Guid userId);
     
+    // Privacy settings
+    Task<bool> UpdatePrivacySettingsAsync(Guid userId, UpdatePrivacySettingsRequest request);
+    Task<bool> UpdateNotificationSettingsAsync(Guid userId, UpdateNotificationSettingsRequest request);
+    
     // Statistics and activity
     Task<ProfileStatsVM> GetProfileStatsAsync(Guid userId);
 }

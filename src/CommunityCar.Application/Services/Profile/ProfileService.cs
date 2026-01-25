@@ -150,6 +150,22 @@ public class ProfileService : IProfileService
         return true;
     }
 
+    public async Task<bool> UpdatePrivacySettingsAsync(Guid userId, UpdatePrivacySettingsRequest request)
+    {
+        // In a real implementation, this would update user privacy settings in the database
+        // For now, we'll just return true as a placeholder
+        await Task.Delay(1);
+        return true;
+    }
+
+    public async Task<bool> UpdateNotificationSettingsAsync(Guid userId, UpdateNotificationSettingsRequest request)
+    {
+        // In a real implementation, this would update user notification preferences in the database
+        // For now, we'll just return true as a placeholder
+        await Task.Delay(1);
+        return true;
+    }
+
     public async Task<ProfileStatsVM> GetProfileStatsAsync(Guid userId)
     {
         // Placeholder implementation - in real app, query actual statistics

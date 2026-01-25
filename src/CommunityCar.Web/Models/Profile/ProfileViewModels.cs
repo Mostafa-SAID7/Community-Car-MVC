@@ -180,7 +180,7 @@ public class SecurityLogItemVM
 public class PrivacySettingsVM
 {
     [Display(Name = "Profile Visible to Public")]
-    public bool ProfileVisible { get; set; }
+    public bool ProfileVisible { get; set; } = true;
     
     [Display(Name = "Email Visible to Others")]
     public bool EmailVisible { get; set; }
@@ -189,10 +189,10 @@ public class PrivacySettingsVM
     public bool PhoneVisible { get; set; }
     
     [Display(Name = "Allow Direct Messages")]
-    public bool AllowMessages { get; set; }
+    public bool AllowMessages { get; set; } = true;
     
     [Display(Name = "Allow Friend Requests")]
-    public bool AllowFriendRequests { get; set; }
+    public bool AllowFriendRequests { get; set; } = true;
 }
 
 public class DeleteAccountVM

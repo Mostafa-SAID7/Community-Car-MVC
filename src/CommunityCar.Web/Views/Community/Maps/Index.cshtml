@@ -198,65 +198,80 @@
 <!-- Add POI Modal -->
 <div class="modal fade" id="addPOIModal" tabindex="-1" aria-labelledby="addPOIModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addPOIModalLabel">Add New Location</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content bg-card border border-border rounded-2xl shadow-2xl">
+            <div class="modal-header border-b border-border/30 p-6">
+                <h5 class="modal-title text-xl font-black text-foreground tracking-tight" id="addPOIModalLabel">Add New Location</h5>
+                <button type="button" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all" data-bs-dismiss="modal" aria-label="Close">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
             </div>
             <form id="addPOIForm">
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="poiName" class="form-label">Name *</label>
-                            <input type="text" class="form-control" id="poiName" name="name" required>
+                <div class="modal-body p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="poiName" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Name *</label>
+                            <input type="text" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiName" name="name" required>
                         </div>
-                        <div class="col-md-6">
-                            <label for="poiType" class="form-label">Type *</label>
-                            <select class="form-select" id="poiType" name="type" required>
-                                <option value="">Select Type</option>
-                                <option value="1">Auto Repair</option>
-                                <option value="2">Dealership</option>
-                                <option value="3">Gas Station</option>
-                                <option value="4">Auto Parts</option>
-                                <option value="5">Tire Shop</option>
-                                <option value="6">Service Center</option>
-                                <option value="7">Car Wash</option>
-                                <option value="8">Charging Station</option>
-                                <option value="9">Parking</option>
-                                <option value="10">Meetup Point</option>
-                                <option value="11">Scenic Spot</option>
-                                <option value="12">Race Track</option>
-                            </select>
+                        <div>
+                            <label for="poiTypeModal" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Type *</label>
+                            <div class="relative">
+                                <select class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none" id="poiTypeModal" name="type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="1">Auto Repair</option>
+                                    <option value="2">Dealership</option>
+                                    <option value="3">Gas Station</option>
+                                    <option value="4">Auto Parts</option>
+                                    <option value="5">Tire Shop</option>
+                                    <option value="6">Service Center</option>
+                                    <option value="7">Car Wash</option>
+                                    <option value="8">Charging Station</option>
+                                    <option value="9">Parking</option>
+                                    <option value="10">Meetup Point</option>
+                                    <option value="11">Scenic Spot</option>
+                                    <option value="12">Race Track</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+                            </div>
                         </div>
-                        <div class="col-12">
-                            <label for="poiDescription" class="form-label">Description *</label>
-                            <textarea class="form-control" id="poiDescription" name="description" rows="3" required></textarea>
+                    </div>
+                    <div>
+                        <label for="poiDescription" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Description *</label>
+                        <textarea class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" id="poiDescription" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="poiLatitude" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Latitude *</label>
+                            <input type="number" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiLatitude" name="latitude" step="any" required>
                         </div>
-                        <div class="col-md-6">
-                            <label for="poiLatitude" class="form-label">Latitude *</label>
-                            <input type="number" class="form-control" id="poiLatitude" name="latitude" step="any" required>
+                        <div>
+                            <label for="poiLongitude" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Longitude *</label>
+                            <input type="number" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiLongitude" name="longitude" step="any" required>
                         </div>
-                        <div class="col-md-6">
-                            <label for="poiLongitude" class="form-label">Longitude *</label>
-                            <input type="number" class="form-control" id="poiLongitude" name="longitude" step="any" required>
+                    </div>
+                    <div>
+                        <label for="poiAddress" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Address</label>
+                        <input type="text" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiAddress" name="address">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="poiPhone" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Phone Number</label>
+                            <input type="tel" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiPhone" name="phoneNumber">
                         </div>
-                        <div class="col-12">
-                            <label for="poiAddress" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="poiAddress" name="address">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="poiPhone" class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control" id="poiPhone" name="phoneNumber">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="poiWebsite" class="form-label">Website</label>
-                            <input type="url" class="form-control" id="poiWebsite" name="website">
+                        <div>
+                            <label for="poiWebsite" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Website</label>
+                            <input type="url" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiWebsite" name="website">
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="submitPOI()">Add Location</button>
+                <div class="modal-footer border-t border-border/30 p-6 flex gap-4 justify-end">
+                    <button type="button" class="inline-flex items-center gap-2 px-6 py-3 bg-background border border-border hover:border-muted-foreground hover:text-muted-foreground rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95" data-bs-dismiss="modal">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                        Cancel
+                    </button>
+                    <button type="button" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95" onclick="submitPOI()">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                        Add Location
+                    </button>
                 </div>
             </form>
         </div>
@@ -266,74 +281,91 @@
 <!-- Add Route Modal -->
 <div class="modal fade" id="addRouteModal" tabindex="-1" aria-labelledby="addRouteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addRouteModalLabel">Add New Route</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content bg-card border border-border rounded-2xl shadow-2xl">
+            <div class="modal-header border-b border-border/30 p-6">
+                <h5 class="modal-title text-xl font-black text-foreground tracking-tight" id="addRouteModalLabel">Add New Route</h5>
+                <button type="button" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all" data-bs-dismiss="modal" aria-label="Close">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
             </div>
             <form id="addRouteForm">
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="routeName" class="form-label">Name *</label>
-                            <input type="text" class="form-control" id="routeName" name="name" required>
+                <div class="modal-body p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="routeName" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Name *</label>
+                            <input type="text" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="routeName" name="name" required>
                         </div>
-                        <div class="col-md-6">
-                            <label for="routeType" class="form-label">Type *</label>
-                            <select class="form-select" id="routeType" name="type" required>
-                                <option value="">Select Type</option>
-                                <option value="1">Scenic</option>
-                                <option value="2">Performance</option>
-                                <option value="3">Off-Road</option>
-                                <option value="4">Touring</option>
-                                <option value="5">Commute</option>
-                                <option value="6">Track</option>
-                                <option value="7">Rally</option>
-                                <option value="8">Cruise</option>
-                            </select>
-                        </div>
-                        <div class="col-12">
-                            <label for="routeDescription" class="form-label">Description *</label>
-                            <textarea class="form-control" id="routeDescription" name="description" rows="3" required></textarea>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="routeDifficulty" class="form-label">Difficulty</label>
-                            <select class="form-select" id="routeDifficulty" name="difficulty">
-                                <option value="1">Beginner</option>
-                                <option value="2">Intermediate</option>
-                                <option value="3">Advanced</option>
-                                <option value="4">Expert</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="routeDistance" class="form-label">Distance (km)</label>
-                            <input type="number" class="form-control" id="routeDistance" name="distanceKm" step="0.1" min="0">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="routeDuration" class="form-label">Duration (minutes)</label>
-                            <input type="number" class="form-control" id="routeDuration" name="estimatedDurationMinutes" min="0">
-                        </div>
-                        <div class="col-12">
-                            <div class="form-check-group d-flex gap-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="routeScenic" name="isScenic">
-                                    <label class="form-check-label" for="routeScenic">Scenic Route</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="routeTolls" name="hasTolls">
-                                    <label class="form-check-label" for="routeTolls">Has Tolls</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="routeOffRoad" name="isOffRoad">
-                                    <label class="form-check-label" for="routeOffRoad">Off-Road</label>
-                                </div>
+                        <div>
+                            <label for="routeTypeModal" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Type *</label>
+                            <div class="relative">
+                                <select class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none" id="routeTypeModal" name="type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="1">Scenic</option>
+                                    <option value="2">Performance</option>
+                                    <option value="3">Off-Road</option>
+                                    <option value="4">Touring</option>
+                                    <option value="5">Commute</option>
+                                    <option value="6">Track</option>
+                                    <option value="7">Rally</option>
+                                    <option value="8">Cruise</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
                             </div>
                         </div>
                     </div>
+                    <div>
+                        <label for="routeDescription" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Description *</label>
+                        <textarea class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" id="routeDescription" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="routeDifficulty" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Difficulty</label>
+                            <div class="relative">
+                                <select class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none" id="routeDifficulty" name="difficulty">
+                                    <option value="1">Beginner</option>
+                                    <option value="2">Intermediate</option>
+                                    <option value="3">Advanced</option>
+                                    <option value="4">Expert</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="routeDistance" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Distance (km)</label>
+                            <input type="number" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="routeDistance" name="distanceKm" step="0.1" min="0">
+                        </div>
+                        <div>
+                            <label for="routeDuration" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">Duration (min)</label>
+                            <input type="number" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="routeDuration" name="estimatedDurationMinutes" min="0">
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="block text-sm font-black uppercase tracking-widest text-foreground mb-3">Route Options</label>
+                        <div class="flex flex-wrap gap-6">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20" type="checkbox" id="routeScenic" name="isScenic">
+                                <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Scenic Route</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20" type="checkbox" id="routeTolls" name="hasTolls">
+                                <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Has Tolls</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20" type="checkbox" id="routeOffRoad" name="isOffRoad">
+                                <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Off-Road</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="submitRoute()">Add Route</button>
+                <div class="modal-footer border-t border-border/30 p-6 flex gap-4 justify-end">
+                    <button type="button" class="inline-flex items-center gap-2 px-6 py-3 bg-background border border-border hover:border-muted-foreground hover:text-muted-foreground rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95" data-bs-dismiss="modal">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                        Cancel
+                    </button>
+                    <button type="button" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95" onclick="submitRoute()">
+                        <i data-lucide="route" class="w-4 h-4"></i>
+                        Add Route
+                    </button>
                 </div>
             </form>
         </div>

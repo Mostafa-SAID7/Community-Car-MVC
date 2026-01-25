@@ -18,63 +18,11 @@ function initializeFeed() {
     initializeInfiniteScroll();
 }
 
-// Story functionality
-function loadStoriesData() {
-    fetch('/api/feed/stories')
-        .then(response => response.json())
-        .then(stories => {
-            updateStoriesDisplay(stories);
-        })
-        .catch(error => {
-            console.error('Error loading stories:', error);
-        });
-}
-
-function updateStoriesDisplay(stories) {
-    const container = document.querySelector('.stories-container');
-    if (!container) return;
-    
-    // Keep the "Add Story" button and update the rest
-    const addStoryBtn = container.querySelector('.add-story');
-    container.innerHTML = '';
-    if (addStoryBtn) {
-        container.appendChild(addStoryBtn);
-    }
-    
-    stories.forEach(story => {
-        const storyElement = createStoryElement(story);
-        container.appendChild(storyElement);
-    });
-}
-
-function createStoryElement(story) {
-    const storyDiv = document.createElement('div');
-    storyDiv.className = 'story-item';
-    storyDiv.setAttribute('data-story-id', story.id);
-    storyDiv.onclick = () => openStoryViewer(story.id);
-    
-    storyDiv.innerHTML = `
-        <div class="story-avatar ${story.isViewed ? 'viewed' : ''}">
-            <img src="${story.thumbnailUrl || story.mediaUrl}" alt="${story.authorName}" />
-            ${!story.isViewed ? '<div class="story-ring"></div>' : ''}
-        </div>
-        <span class="story-label">${story.authorName}</span>
-        <div class="story-time">${story.timeRemaining}</div>
-    `;
-    
-    return storyDiv;
-}
-
-function openStoryViewer(storyId) {
-    // TODO: Implement story viewer modal
-    console.log('Opening story:', storyId);
-    
-    // Mark story as viewed
-    markContentAsSeen(storyId, 'Story');
-}
-
+// Story functionality (now handled by stories.js)
 function refreshStories() {
-    loadStoriesData();
+    if (window.storiesFunctions && window.storiesFunctions.refreshStories) {
+        window.storiesFunctions.refreshStories();
+    }
 }
 
 // Content interaction functions
@@ -380,34 +328,72 @@ function loadMoreContent() {
     if (isLoading) return;
     
     isLoading = true;
-    const loadButton = document.querySelector('.btn:contains("Load More Posts")');
+    const loadButton = document.querySelector('button[onclick="loadMoreContent()"]');
     if (loadButton) {
-        loadButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${window.feedLocalizer?.Loading || 'Loading...'}`;
-    }
-    
-    currentPage++;
-    
-    fetch(`/feed/api/feed?feedType=${feedType}&page=${currentPage}&pageSize=10`)
-        .then(response => response.json())
-        .then(data => {
-            appendFeedItems(data.feedItems);
-            
-            if (!data.hasMoreContent) {
-                if (loadButton) {
+        const originalContent = loadButton.innerHTML;
+        loadButton.innerHTML = `<i class="fas fa-spinner fa-spin w-5 h-5"></i> ${window.feedLocalizer?.Loading || 'Loading...'}`;
+        loadButton.disabled = true;
+        
+        // Show skeleton loading
+        showSkeletonLoading(10);
+        
+        currentPage++;
+        
+        fetch(`/feed?feedType=${feedType}&page=${currentPage}&pageSize=10`)
+            .then(response => response.text())
+            .then(html => {
+                // Parse the HTML to extract feed items
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newItems = doc.querySelectorAll('[data-content-id]');
+                
+                // Remove skeleton loading
+                removeSkeletonLoading();
+                
+                // Append new items
+                const container = document.getElementById('feed-container') || document.querySelector('.flex.flex-col.gap-12');
+                newItems.forEach(item => {
+                    container.appendChild(item.cloneNode(true));
+                });
+                
+                // Check if there are more items
+                const hasMore = doc.querySelector('.py-12.text-center button');
+                if (!hasMore) {
                     loadButton.style.display = 'none';
                 }
-            }
-        })
-        .catch(error => {
-            console.error('Error loading more content:', error);
-            currentPage--; // Revert page increment on error
-        })
-        .finally(() => {
-            isLoading = false;
-            if (loadButton) {
-                loadButton.innerHTML = window.feedLocalizer?.LoadMorePosts || 'Load More Posts';
-            }
-        });
+            })
+            .catch(error => {
+                console.error('Error loading more content:', error);
+                currentPage--; // Revert page increment on error
+                removeSkeletonLoading();
+            })
+            .finally(() => {
+                isLoading = false;
+                loadButton.innerHTML = originalContent;
+                loadButton.disabled = false;
+            });
+    }
+}
+
+function showSkeletonLoading(count) {
+    const container = document.getElementById('feed-container') || document.querySelector('.flex.flex-col.gap-12');
+    const template = document.getElementById('skeleton-template');
+    
+    if (template && container) {
+        for (let i = 0; i < count; i++) {
+            const skeleton = template.cloneNode(true);
+            skeleton.id = `skeleton-${i}`;
+            skeleton.classList.remove('hidden');
+            skeleton.classList.add('skeleton-item');
+            container.appendChild(skeleton);
+        }
+    }
+}
+
+function removeSkeletonLoading() {
+    document.querySelectorAll('.skeleton-item').forEach(skeleton => {
+        skeleton.remove();
+    });
 }
 
 function appendFeedItems(feedItems) {

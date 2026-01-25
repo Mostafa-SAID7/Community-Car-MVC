@@ -38,6 +38,12 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
 
     public new DbSet<User> Users => Set<User>();
     public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
+    public DbSet<UserGallery> UserGalleries => Set<UserGallery>();
+    public DbSet<UserBadge> UserBadges => Set<UserBadge>();
+    public DbSet<UserAchievement> UserAchievements => Set<UserAchievement>();
+    public DbSet<UserActivity> UserActivities => Set<UserActivity>();
+    public DbSet<UserInterest> UserInterests => Set<UserInterest>();
+    public DbSet<UserFollowing> UserFollowings => Set<UserFollowing>();
     
     // Shared
     public DbSet<Comment> Comments => Set<Comment>();
@@ -98,6 +104,12 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
         // Basic configurations
         builder.Entity<User>().ToTable("Users");
         builder.Entity<UserProfile>().ToTable("UserProfiles");
+        builder.Entity<UserGallery>().ToTable("UserGalleries");
+        builder.Entity<UserBadge>().ToTable("UserBadges");
+        builder.Entity<UserAchievement>().ToTable("UserAchievements");
+        builder.Entity<UserActivity>().ToTable("UserActivities");
+        builder.Entity<UserInterest>().ToTable("UserInterests");
+        builder.Entity<UserFollowing>().ToTable("UserFollowings");
         
         // Configure decimal properties to fix EF warnings
         builder.Entity<PointOfInterest>()
