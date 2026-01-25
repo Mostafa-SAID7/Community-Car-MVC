@@ -46,7 +46,7 @@
         <partial name="_DashboardSidebarLeft" />
 
         <!-- Main Content Area positioned for dashboard layout -->
-        <main class="flex-1 transition-all duration-300 px-2 sm:px-3 md:px-4 mt-24 md:ml-20 xl:ml-60 rtl:md:ml-0 rtl:md:mr-20 rtl:xl:ml-0 rtl:xl:mr-60" id="main-content">
+        <main class="flex-1 transition-all duration-300 px-2 sm:px-3 md:px-4 mt-24 md:ml-20 xl:ml-60 rtl:md:ml-0 rtl:md:mr-20 rtl:xl:mr-60" id="main-content">
             <div class="max-w-none w-full overflow-x-hidden">
                 <div class="bg-card/30 backdrop-blur-xl border border-border rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 w-full">
                     <!-- Header with mobile navigation -->
@@ -90,21 +90,21 @@
                                 
                                 <div class="absolute right-0 top-12 w-80 bg-card border border-border rounded-2xl shadow-lg hidden dashboard-notification-dropdown">
                                     <div class="flex items-center justify-between p-4 border-b border-border">
-                                        <h3 class="text-sm font-semibold">Notifications</h3>
+                                        <h3 class="text-sm font-semibold">@SharedLocalizer["Notifications"]</h3>
                                         <div class="flex items-center gap-2">
-                                            <button class="text-xs text-primary hover:text-primary/80 transition-colors dashboard-mark-all-read-btn">Mark all read</button>
+                                            <button class="text-xs text-primary hover:text-primary/80 transition-colors dashboard-mark-all-read-btn">@SharedLocalizer["MarkAllRead"]</button>
                                         </div>
                                     </div>
                                     <div class="max-h-96 overflow-y-auto dashboard-notification-list">
                                         <div class="flex flex-col items-center justify-center py-8 dashboard-notification-loading">
                                             <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-muted-foreground"></i>
-                                            <p class="text-sm text-muted-foreground mt-2">Loading notifications...</p>
+                                            <p class="text-sm text-muted-foreground mt-2">@SharedLocalizer["LoadingNotifications"]</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors text-xs font-bold" id="dashboard-lang-toggle">AR</button>
+                            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors text-xs font-bold" id="dashboard-lang-toggle">@(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper() == "AR" ? "EN" : "AR")</button>
                         </div>
                         
                         <!-- Desktop title section -->

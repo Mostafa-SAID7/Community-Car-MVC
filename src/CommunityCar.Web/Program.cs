@@ -15,10 +15,10 @@ var mvcBuilder = builder.Services.AddControllersWithViews()
 
 // Add hot reload in development
 // Note: AddRazorRuntimeCompilation requires Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation package
-// if (builder.Environment.IsDevelopment())
-// {
-//     mvcBuilder.AddRazorRuntimeCompilation();
-// }
+if (builder.Environment.IsDevelopment())
+{
+    mvcBuilder.AddRazorRuntimeCompilation();
+}
 
 // Add SignalR
 builder.Services.AddSignalR(options =>

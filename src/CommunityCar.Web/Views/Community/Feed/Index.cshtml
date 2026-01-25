@@ -189,7 +189,7 @@
                         <button class="p-2 text-muted-foreground hover:bg-muted/50 rounded-full transition-all focus:outline-none">
                             <i data-lucide="more-horizontal" class="w-5 h-5"></i>
                         </button>
-                        <div class="absolute right-0 mt-1 w-48 bg-popover/90 backdrop-blur-lg border border-border rounded-xl shadow-2xl z-50 py-2 hidden group-focus-within/menu:block transform origin-top-right transition-all">
+                        <div class="absolute right-0 rtl:left-0 rtl:right-auto mt-1 w-48 bg-popover/90 backdrop-blur-lg border border-border rounded-xl shadow-2xl z-50 py-2 hidden group-focus-within/menu:block transform origin-top-right rtl:origin-top-left transition-all">
                             <a class="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-foreground hover:bg-primary hover:text-primary-foreground transition-all mx-1 rounded-lg" href="#" onclick="bookmarkContent('@item.Id', '@item.ContentType')">
                                 <i data-lucide="bookmark" class="w-4 h-4"></i> @Localizer["SavePost"]
                             </a>

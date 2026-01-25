@@ -9,6 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CommunityCar</title>
 
+    <!-- Theme initialization script (must be before any content) -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.classList.remove('light', 'dark');
+            document.documentElement.classList.add(theme);
+        })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
@@ -19,27 +28,83 @@
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Gradient Mesh Background */
+        .auth-gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark .auth-gradient-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #1a1a2e 100%);
+            background-size: 400% 400%;
+        }
+
+        @@keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Mesh overlay effect */
+        .auth-gradient-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.2) 0%, transparent 50%);
+            animation: mesh-float 20s ease-in-out infinite;
+        }
+
+        @@keyframes mesh-float {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Glassmorphism card effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        .dark .glass-card {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Button glow effect */
+        .btn-glow {
+            box-shadow: 0 0 20px rgba(225, 29, 72, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 30px rgba(225, 29, 72, 0.6);
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 
-<body class="font-sans antialiased auth-body">
-    <partial name="_Header" />
-
-    <!-- Main container aligned with header -->
-    <div class="flex pb-4 sm:pb-6 md:pb-8 min-h-screen w-full overflow-x-hidden pt-24" id="main-container">
-        <main class="flex-1 transition-all duration-300 px-4 flex items-center justify-center" id="main-content">
-            <div class="w-full max-w-lg">
-                <div class="bg-card/30 backdrop-blur-xl border border-border rounded-2xl shadow-2xl p-6 sm:p-8">
-                    @RenderBody()
-                </div>
+<body class="font-sans antialiased auth-gradient-bg">
+    <!-- Main container -->
+    <div class="flex items-center justify-center min-h-screen w-full px-4 py-8">
+        <main class="w-full max-w-md">
+            <div class="glass-card rounded-3xl shadow-2xl p-8 sm:p-10">
+                @RenderBody()
             </div>
         </main>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/validation.js" asp-append-version="true"></script>
