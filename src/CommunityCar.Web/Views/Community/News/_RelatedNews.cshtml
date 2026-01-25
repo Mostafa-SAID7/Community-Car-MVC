@@ -41,7 +41,7 @@
                         <span class="badge badge-outline">@newsItem.Category</span>
                     }
                     <div class="text-xs text-muted-foreground">
-                        @newsItem.PublishedAt?.ToString("MMM dd") ?? newsItem.CreatedAt.ToString("MMM dd")
+                        @newsItem.PublishedAt?.ToString("MMM dd", System.Globalization.CultureInfo.InvariantCulture) ?? newsItem.CreatedAt.ToString("MMM dd", System.Globalization.CultureInfo.InvariantCulture)
                     </div>
                 </div>
                 

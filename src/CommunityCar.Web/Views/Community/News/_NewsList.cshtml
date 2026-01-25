@@ -73,7 +73,7 @@
                                         @featuredItem.CommentCount
                                     </span>
                                 </div>
-                                <span>@(featuredItem.PublishedAt?.ToString("MMM dd, yyyy") ?? featuredItem.CreatedAt.ToString("MMM dd, yyyy"))</span>
+                                <span>@(featuredItem.PublishedAt?.ToString("MMM dd, yyyy", System.Globalization.CultureInfo.InvariantCulture) ?? featuredItem.CreatedAt.ToString("MMM dd, yyyy", System.Globalization.CultureInfo.InvariantCulture))</span>
                             </div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                                 @item.CommentCount
                             </span>
                         </div>
-                        <span>@(item.PublishedAt?.ToString("MMM dd") ?? item.CreatedAt.ToString("MMM dd"))</span>
+                        <span>@(item.PublishedAt?.ToString("MMM dd", System.Globalization.CultureInfo.InvariantCulture) ?? item.CreatedAt.ToString("MMM dd", System.Globalization.CultureInfo.InvariantCulture))</span>
                     </div>
                 </div>
             </div>
