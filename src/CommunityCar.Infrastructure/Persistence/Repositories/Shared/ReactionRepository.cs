@@ -15,15 +15,15 @@ public class ReactionRepository : BaseRepository<Reaction>, IReactionRepository
 
     public async Task<Reaction?> GetUserReactionAsync(Guid entityId, EntityType entityType, Guid userId)
     {
-        return await Context.Set<Reaction>()
+        return await DbSet
             .FirstOrDefaultAsync(r => r.EntityId == entityId && 
                                     r.EntityType == entityType && 
                                     r.UserId == userId);
     }
 
-    public async Task<List<Reaction>> GetEntityReactionsAsync(Guid entityId, EntityType entityType)
+    public async Task<IEnumerable<Reaction>> GetEntityReactionsAsync(Guid entityId, EntityType entityType)
     {
-        return await Context.Set<Reaction>()
+        return await DbSet
             .Where(r => r.EntityId == entityId && r.EntityType == entityType)
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync();
@@ -31,42 +31,35 @@ public class ReactionRepository : BaseRepository<Reaction>, IReactionRepository
 
     public async Task<Dictionary<ReactionType, int>> GetReactionCountsAsync(Guid entityId, EntityType entityType)
     {
-        return await Context.Set<Reaction>()
+        return await DbSet
             .Where(r => r.EntityId == entityId && r.EntityType == entityType)
             .GroupBy(r => r.Type)
             .ToDictionaryAsync(g => g.Key, g => g.Count());
     }
 
-    public async Task<int> GetTotalReactionCountAsync(Guid entityId, EntityType entityType)
+    public async Task<IEnumerable<Reaction>> GetUserReactionsAsync(Guid userId, EntityType? entityType = null)
     {
-        return await Context.Set<Reaction>()
-            .CountAsync(r => r.EntityId == entityId && r.EntityType == entityType);
-    }
-
-    public async Task<List<Reaction>> GetUserReactionsAsync(Guid userId, int page = 1, int pageSize = 20)
-    {
-        return await Context.Set<Reaction>()
-            .Where(r => r.UserId == userId)
-            .OrderByDescending(r => r.CreatedAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+        var query = DbSet.Where(r => r.UserId == userId);
+        
+        if (entityType.HasValue)
+        {
+            query = query.Where(r => r.EntityType == entityType.Value);
+        }
+        
+        return await query.OrderByDescending(r => r.CreatedAt).ToListAsync();
     }
 
     public async Task RemoveUserReactionAsync(Guid entityId, EntityType entityType, Guid userId)
     {
-        var reaction = await GetUserReactionAsync(entityId, entityType, userId);
+        var reaction = await DbSet.FirstOrDefaultAsync(r => 
+            r.EntityId == entityId && 
+            r.EntityType == entityType && 
+            r.UserId == userId);
+            
         if (reaction != null)
         {
-            Context.Set<Reaction>().Remove(reaction);
+            DbSet.Remove(reaction);
+            await Context.SaveChangesAsync();
         }
-    }
-
-    public async Task<bool> HasUserReactedAsync(Guid entityId, EntityType entityType, Guid userId)
-    {
-        return await Context.Set<Reaction>()
-            .AnyAsync(r => r.EntityId == entityId && 
-                          r.EntityType == entityType && 
-                          r.UserId == userId);
     }
 }

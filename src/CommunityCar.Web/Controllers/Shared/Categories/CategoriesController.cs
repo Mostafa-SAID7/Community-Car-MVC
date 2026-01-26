@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityCar.Web.Controllers.Shared.Categories;
 
-[Route("api/[controller]")]
+[Route("api/shared/categories")]
 [ApiController]
 public class CategoriesController : ControllerBase
 {
@@ -107,9 +107,9 @@ public class CategoriesController : ControllerBase
                 return BadRequest(new { success = false, message = "Category slug already exists" });
 
             var category = new Category(request.Name, request.Slug, request.Description, request.ParentCategoryId);
-            var createdCategory = await _categoryRepository.AddAsync(category);
+            await _categoryRepository.AddAsync(category);
             
-            return CreatedAtAction(nameof(GetById), new { id = createdCategory.Id }, createdCategory);
+            return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
         catch (Exception ex)
         {
@@ -131,8 +131,8 @@ public class CategoriesController : ControllerBase
                 return BadRequest(new { success = false, message = "Category slug already exists" });
 
             // Note: Category entity would need update methods
-            var updatedCategory = await _categoryRepository.UpdateAsync(category);
-            return Ok(updatedCategory);
+            await _categoryRepository.UpdateAsync(category);
+            return Ok(category);
         }
         catch (Exception ex)
         {

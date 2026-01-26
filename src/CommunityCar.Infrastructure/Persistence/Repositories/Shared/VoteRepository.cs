@@ -36,6 +36,14 @@ public class VoteRepository : BaseRepository<Vote>, IVoteRepository
         return upVotes - downVotes;
     }
 
+    public async Task<int> GetVoteCountAsync(Guid entityId, EntityType entityType, VoteType voteType)
+    {
+        return await Context.Votes
+            .CountAsync(v => v.EntityId == entityId && 
+                           v.EntityType == entityType && 
+                           v.Type == voteType);
+    }
+
     public async Task<int> GetVoteScoreAsync(Guid entityId, EntityType entityType)
     {
         var upVotes = await Context.Votes

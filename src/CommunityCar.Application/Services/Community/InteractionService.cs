@@ -220,7 +220,7 @@ public partial class InteractionService : IInteractionService
 
     public async Task<List<CommentVM>> GetEntityCommentsAsync(Guid entityId, EntityType entityType, int page = 1, int pageSize = 20)
     {
-        var comments = await _unitOfWork.Comments.GetTopLevelCommentsAsync(entityId, entityType, page, pageSize);
+        var comments = await _unitOfWork.Comments.GetTopLevelCommentsAsync(entityId, entityType);
         var result = new List<CommentVM>();
 
         foreach (var comment in comments)

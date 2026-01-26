@@ -9,8 +9,10 @@ using CommunityCar.Domain.Entities.Chats;
 using CommunityCar.Domain.Entities.Profile;
 using CommunityCar.Domain.Enums;
 using CommunityCar.Infrastructure.Persistence.Data;
+using CommunityCar.Infrastructure.Persistence.Seeding.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Infrastructure.Persistence.Seeding;
@@ -20,20 +22,30 @@ public class DataSeeder
     private readonly ApplicationDbContext _context;
     private readonly UserManager<User> _userManager;
     private readonly ILogger<DataSeeder> _logger;
+    private readonly IServiceProvider _serviceProvider;
 
-    public DataSeeder(ApplicationDbContext context, UserManager<User> userManager, ILogger<DataSeeder> logger)
+    public DataSeeder(ApplicationDbContext context, UserManager<User> userManager, ILogger<DataSeeder> logger, IServiceProvider serviceProvider)
     {
         _context = context;
         _userManager = userManager;
         _logger = logger;
+        _serviceProvider = serviceProvider;
     }
 
     public async Task SeedAsync()
     {
         try
         {
+            _logger.LogInformation("Starting database seeding...");
+
+            // Seed core data first
             await SeedUsersAsync();
             await SeedUserProfilesAsync();
+            
+            // Seed shared entities (categories, tags)
+            await SeedSharedEntitiesAsync();
+            
+            // Seed community content
             await SeedFriendshipsAsync();
             await SeedConversationsAsync();
             await SeedQAAsync();
@@ -44,10 +56,57 @@ public class DataSeeder
             await SeedEventsAsync();
             await SeedGroupsAsync();
             await SeedPostsAsync();
+            
+            // Seed shared interactions (reactions, comments, etc.)
+            await SeedSharedInteractionsAsync();
+
+            _logger.LogInformation("Database seeding completed successfully");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while seeding the database.");
+            throw;
+        }
+    }
+
+    private async Task SeedSharedEntitiesAsync()
+    {
+        try
+        {
+            _logger.LogInformation("Seeding shared entities...");
+
+            // Seed categories
+            var categorySeeder = new CategorySeeder(_context, _serviceProvider.GetRequiredService<ILogger<CategorySeeder>>());
+            await categorySeeder.SeedAsync();
+
+            // Seed tags
+            var tagSeeder = new TagSeeder(_context, _serviceProvider.GetRequiredService<ILogger<TagSeeder>>());
+            await tagSeeder.SeedAsync();
+
+            _logger.LogInformation("Shared entities seeding completed");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error seeding shared entities");
+            throw;
+        }
+    }
+
+    private async Task SeedSharedInteractionsAsync()
+    {
+        try
+        {
+            _logger.LogInformation("Seeding shared interactions...");
+
+            var interactionSeeder = new SharedInteractionSeeder(_context, _serviceProvider.GetRequiredService<ILogger<SharedInteractionSeeder>>());
+            await interactionSeeder.SeedAsync();
+
+            _logger.LogInformation("Shared interactions seeding completed");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error seeding shared interactions");
+            throw;
         }
     }
 

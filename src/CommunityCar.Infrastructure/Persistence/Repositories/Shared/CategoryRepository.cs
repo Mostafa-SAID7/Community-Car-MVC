@@ -14,13 +14,13 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
 
     public async Task<Category?> GetBySlugAsync(string slug)
     {
-        return await _context.Set<Category>()
+        return await Context.Set<Category>()
             .FirstOrDefaultAsync(c => c.Slug == slug);
     }
 
     public async Task<IEnumerable<Category>> GetByParentIdAsync(Guid? parentId)
     {
-        return await _context.Set<Category>()
+        return await Context.Set<Category>()
             .Where(c => c.ParentCategoryId == parentId)
             .OrderBy(c => c.Name)
             .ToListAsync();
@@ -28,7 +28,7 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
 
     public async Task<IEnumerable<Category>> GetRootCategoriesAsync()
     {
-        return await _context.Set<Category>()
+        return await Context.Set<Category>()
             .Where(c => c.ParentCategoryId == null)
             .OrderBy(c => c.Name)
             .ToListAsync();
@@ -36,7 +36,7 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
 
     public async Task<bool> SlugExistsAsync(string slug, Guid? excludeId = null)
     {
-        var query = _context.Set<Category>().Where(c => c.Slug == slug);
+        var query = Context.Set<Category>().Where(c => c.Slug == slug);
         
         if (excludeId.HasValue)
             query = query.Where(c => c.Id != excludeId.Value);

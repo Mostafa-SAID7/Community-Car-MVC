@@ -11,5 +11,14 @@ public enum EntityType
     Story,
     Review,
     Group,
-    User
+    User,
+    News,
+    Bookmark,
+    Category,
+    Tag,
+    Reaction,
+    Share,
+    Rating,
+    Vote,
+    View
 }

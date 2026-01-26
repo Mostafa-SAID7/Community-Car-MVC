@@ -1,0 +1,282 @@
+@{
+    ViewData["Title"] = "Search";
+    Layout = "_Layout";
+}
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Search Header -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                @SharedLocalizer["Search"]
+            </h1>
+            
+            <!-- Search Form -->
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <input type="text" 
+                       id="searchInput" 
+                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
+                       placeholder="@SharedLocalizer["Search for posts, questions, guides, and more..."]"
+                       autocomplete="off">
+                
+                <!-- Search Suggestions Dropdown -->
+                <div id="searchSuggestions" class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg hidden">
+                    <!-- Suggestions will be populated here -->
+                </div>
+            </div>
+
+            <!-- Search Filters -->
+            <div class="mt-4 flex flex-wrap gap-2">
+                <button class="search-filter active" data-filter="all">
+                    @SharedLocalizer["All"]
+                </button>
+                <button class="search-filter" data-filter="posts">
+                    @SharedLocalizer["Posts"]
+                </button>
+                <button class="search-filter" data-filter="questions">
+                    @SharedLocalizer["Questions"]
+                </button>
+                <button class="search-filter" data-filter="guides">
+                    @SharedLocalizer["Guides"]
+                </button>
+                <button class="search-filter" data-filter="news">
+                    @SharedLocalizer["News"]
+                </button>
+                <button class="search-filter" data-filter="reviews">
+                    @SharedLocalizer["Reviews"]
+                </button>
+                <button class="search-filter" data-filter="stories">
+                    @SharedLocalizer["Stories"]
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Search Filters Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 sticky top-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                        @SharedLocalizer["Filters"]
+                    </h3>
+
+                    <!-- Content Type Filter -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            @SharedLocalizer["Content Type"]
+                        </h4>
+                        <div class="space-y-2" id="contentTypeFilters">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Date Range Filter -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            @SharedLocalizer["Date Range"]
+                        </h4>
+                        <select id="dateRangeFilter" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="">@SharedLocalizer["Any time"]</option>
+                            <option value="today">@SharedLocalizer["Today"]</option>
+                            <option value="week">@SharedLocalizer["This week"]</option>
+                            <option value="month">@SharedLocalizer["This month"]</option>
+                            <option value="year">@SharedLocalizer["This year"]</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort Options -->
+                    <div class="mb-6">
+                        <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            @SharedLocalizer["Sort by"]
+                        </h4>
+                        <select id="sortFilter" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="relevance">@SharedLocalizer["Relevance"]</option>
+                            <option value="date">@SharedLocalizer["Date"]</option>
+                            <option value="popularity">@SharedLocalizer["Popularity"]</option>
+                        </select>
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <button id="clearFilters" class="w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700">
+                        @SharedLocalizer["Clear all filters"]
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Results -->
+            <div class="lg:col-span-3">
+                <!-- Search Stats -->
+                <div id="searchStats" class="mb-4 text-sm text-gray-600 dark:text-gray-400 hidden">
+                    <!-- Will show search results count and time -->
+                </div>
+
+                <!-- Loading State -->
+                <div id="searchLoading" class="hidden">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 text-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500 mx-auto mb-4"></div>
+                        <p class="text-gray-600 dark:text-gray-400">@SharedLocalizer["Searching..."]</p>
+                    </div>
+                </div>
+
+                <!-- No Results -->
+                <div id="noResults" class="hidden">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 text-center">
+                        <svg class="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                            @SharedLocalizer["No results found"]
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            @SharedLocalizer["Try adjusting your search terms or filters"]
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Search Results Container -->
+                <div id="searchResults" class="space-y-4">
+                    <!-- Results will be populated here -->
+                </div>
+
+                <!-- Pagination -->
+                <div id="searchPagination" class="mt-8 hidden">
+                    <!-- Pagination will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Trending Section -->
+        <div class="mt-12">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    @SharedLocalizer["Trending Now"]
+                </h2>
+                <div id="trendingItems" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Trending items will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/search.js"></script>
+}
+
+@section Styles {
+    <style>
+        .search-filter {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: rgb(75 85 99);
+            background-color: rgb(243 244 246);
+            border-radius: 9999px;
+            transition: all 0.2s;
+        }
+        
+        .dark .search-filter {
+            color: rgb(156 163 175);
+            background-color: rgb(55 65 81);
+        }
+        
+        .search-filter:hover {
+            background-color: rgb(229 231 235);
+        }
+        
+        .dark .search-filter:hover {
+            background-color: rgb(75 85 99);
+        }
+        
+        .search-filter.active {
+            background-color: rgb(239 68 68);
+            color: white;
+        }
+        
+        .search-filter.active:hover {
+            background-color: rgb(220 38 38);
+        }
+        
+        .search-result-item {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            padding: 1.5rem;
+            transition: box-shadow 0.2s;
+        }
+        
+        .dark .search-result-item {
+            background-color: rgb(31 41 55);
+        }
+        
+        .search-result-item:hover {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        .search-result-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: rgb(17 24 39);
+            transition: color 0.2s;
+        }
+        
+        .dark .search-result-title {
+            color: white;
+        }
+        
+        .search-result-title:hover {
+            color: rgb(239 68 68);
+        }
+        
+        .dark .search-result-title:hover {
+            color: rgb(248 113 113);
+        }
+        
+        .search-result-meta {
+            font-size: 0.875rem;
+            color: rgb(107 114 128);
+            margin-top: 0.25rem;
+        }
+        
+        .dark .search-result-meta {
+            color: rgb(156 163 175);
+        }
+        
+        .search-result-description {
+            color: rgb(55 65 81);
+            margin-top: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .dark .search-result-description {
+            color: rgb(209 213 219);
+        }
+        
+        .search-result-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .search-result-tag {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            background-color: rgb(243 244 246);
+            color: rgb(75 85 99);
+            border-radius: 0.25rem;
+        }
+        
+        .dark .search-result-tag {
+            background-color: rgb(55 65 81);
+            color: rgb(156 163 175);
+        }
+    </style>
+}

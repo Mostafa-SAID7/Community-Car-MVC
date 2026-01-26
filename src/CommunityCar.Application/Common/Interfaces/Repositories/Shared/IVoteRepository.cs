@@ -8,6 +8,7 @@ public interface IVoteRepository : IBaseRepository<Vote>
 {
     Task<Vote?> GetUserVoteAsync(Guid entityId, EntityType entityType, Guid userId);
     Task<int> GetVoteCountAsync(Guid entityId, EntityType entityType);
+    Task<int> GetVoteCountAsync(Guid entityId, EntityType entityType, VoteType voteType);
     Task<int> GetVoteScoreAsync(Guid entityId, EntityType entityType);
     Task<IEnumerable<Vote>> GetVotesByEntityAsync(Guid entityId, EntityType entityType);
     Task<IEnumerable<Vote>> GetUserVotesAsync(Guid userId, EntityType? entityType = null);

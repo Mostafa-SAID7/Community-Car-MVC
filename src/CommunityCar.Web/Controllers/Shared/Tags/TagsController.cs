@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityCar.Web.Controllers.Shared.Tags;
 
-[Route("api/[controller]")]
+[Route("api/shared/tags")]
 [ApiController]
 public class TagsController : ControllerBase
 {
@@ -130,9 +130,9 @@ public class TagsController : ControllerBase
                 return BadRequest(new { success = false, message = "Tag slug already exists" });
 
             var tag = new Tag(request.Name, request.Slug);
-            var createdTag = await _tagRepository.AddAsync(tag);
+            await _tagRepository.AddAsync(tag);
             
-            return CreatedAtAction(nameof(GetById), new { id = createdTag.Id }, createdTag);
+            return CreatedAtAction(nameof(GetById), new { id = tag.Id }, tag);
         }
         catch (Exception ex)
         {
@@ -157,8 +157,8 @@ public class TagsController : ControllerBase
                 return BadRequest(new { success = false, message = "Tag slug already exists" });
 
             // Note: Tag entity would need update methods
-            var updatedTag = await _tagRepository.UpdateAsync(tag);
-            return Ok(updatedTag);
+            await _tagRepository.UpdateAsync(tag);
+            return Ok(tag);
         }
         catch (Exception ex)
         {

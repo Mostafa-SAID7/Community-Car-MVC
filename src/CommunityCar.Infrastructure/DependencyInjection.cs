@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories;
@@ -8,6 +9,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
+using CommunityCar.Application.Services.Shared;
 using CommunityCar.Domain.Entities.Auth;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
@@ -29,6 +31,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -112,6 +115,7 @@ public static class DependencyInjection
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IGuidesNotificationService, GuidesNotificationService>();
         services.AddScoped<INewsNotificationService, NewsNotificationService>();
+        services.AddScoped<ISharedSearchService, SharedSearchService>();
 
         // Storage services
         services.AddScoped<IFileStorageService, FileStorageService>();
@@ -137,7 +141,12 @@ public static class DependencyInjection
         });
 
         // Seeding
-        services.AddScoped<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>();
+        services.AddScoped<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>(provider =>
+            new CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder(
+                provider.GetRequiredService<ApplicationDbContext>(),
+                provider.GetRequiredService<UserManager<User>>(),
+                provider.GetRequiredService<ILogger<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>>(),
+                provider));
 
         return services;
     }

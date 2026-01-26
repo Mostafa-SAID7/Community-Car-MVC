@@ -6,10 +6,9 @@ namespace CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 
 public interface IShareRepository : IBaseRepository<Share>
 {
-    Task<List<Share>> GetEntitySharesAsync(Guid entityId, EntityType entityType);
-    Task<int> GetEntityShareCountAsync(Guid entityId, EntityType entityType);
-    Task<List<Share>> GetUserSharesAsync(Guid userId, int page = 1, int pageSize = 20);
+    Task<IEnumerable<Share>> GetEntitySharesAsync(Guid entityId, EntityType entityType);
+    Task<int> GetShareCountAsync(Guid entityId, EntityType entityType);
+    Task<IEnumerable<Share>> GetUserSharesAsync(Guid userId, EntityType? entityType = null);
+    Task<IEnumerable<Share>> GetRecentSharesAsync(int count);
     Task<Dictionary<ShareType, int>> GetShareTypeCountsAsync(Guid entityId, EntityType entityType);
-    Task<List<Share>> GetRecentSharesAsync(int count = 10);
-    Task<bool> HasUserSharedAsync(Guid entityId, EntityType entityType, Guid userId);
 }

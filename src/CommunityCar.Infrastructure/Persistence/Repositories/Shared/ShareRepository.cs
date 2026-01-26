@@ -13,51 +13,46 @@ public class ShareRepository : BaseRepository<Share>, IShareRepository
     {
     }
 
-    public async Task<List<Share>> GetEntitySharesAsync(Guid entityId, EntityType entityType)
+    public async Task<IEnumerable<Share>> GetEntitySharesAsync(Guid entityId, EntityType entityType)
     {
-        return await Context.Set<Share>()
+        return await DbSet
             .Where(s => s.EntityId == entityId && s.EntityType == entityType)
             .OrderByDescending(s => s.CreatedAt)
             .ToListAsync();
     }
 
-    public async Task<int> GetEntityShareCountAsync(Guid entityId, EntityType entityType)
+    public async Task<int> GetShareCountAsync(Guid entityId, EntityType entityType)
     {
-        return await Context.Set<Share>()
-            .CountAsync(s => s.EntityId == entityId && s.EntityType == entityType);
+        return await DbSet.CountAsync(s => s.EntityId == entityId && s.EntityType == entityType);
     }
 
-    public async Task<List<Share>> GetUserSharesAsync(Guid userId, int page = 1, int pageSize = 20)
+    public async Task<IEnumerable<Share>> GetUserSharesAsync(Guid userId, EntityType? entityType = null)
     {
-        return await Context.Set<Share>()
-            .Where(s => s.UserId == userId)
-            .OrderByDescending(s => s.CreatedAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+        var query = DbSet.Where(s => s.UserId == userId);
+        
+        if (entityType.HasValue)
+        {
+            query = query.Where(s => s.EntityType == entityType.Value);
+        }
+        
+        return await query.OrderByDescending(s => s.CreatedAt).ToListAsync();
     }
 
-    public async Task<Dictionary<ShareType, int>> GetShareTypeCountsAsync(Guid entityId, EntityType entityType)
+    public async Task<IEnumerable<Share>> GetRecentSharesAsync(int count)
     {
-        return await Context.Set<Share>()
-            .Where(s => s.EntityId == entityId && s.EntityType == entityType)
-            .GroupBy(s => s.ShareType)
-            .ToDictionaryAsync(g => g.Key, g => g.Count());
-    }
-
-    public async Task<List<Share>> GetRecentSharesAsync(int count = 10)
-    {
-        return await Context.Set<Share>()
+        return await DbSet
             .OrderByDescending(s => s.CreatedAt)
             .Take(count)
             .ToListAsync();
     }
 
-    public async Task<bool> HasUserSharedAsync(Guid entityId, EntityType entityType, Guid userId)
+    public async Task<Dictionary<ShareType, int>> GetShareTypeCountsAsync(Guid entityId, EntityType entityType)
     {
-        return await Context.Set<Share>()
-            .AnyAsync(s => s.EntityId == entityId && 
-                          s.EntityType == entityType && 
-                          s.UserId == userId);
+        var shares = await DbSet.Where(s => s.EntityId == entityId && s.EntityType == entityType)
+            .GroupBy(s => s.ShareType)
+            .Select(g => new { Type = g.Key, Count = g.Count() })
+            .ToListAsync();
+
+        return shares.ToDictionary(s => s.Type, s => s.Count);
     }
 }

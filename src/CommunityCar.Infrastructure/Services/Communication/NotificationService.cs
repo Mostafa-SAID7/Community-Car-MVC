@@ -193,6 +193,71 @@ public class NotificationService : INotificationService
         });
     }
 
+    // Additional notification management methods
+    public async Task<IEnumerable<object>> GetUserNotificationsAsync(Guid userId, int page = 1, int pageSize = 20)
+    {
+        // TODO: Implement with actual database storage
+        await Task.CompletedTask;
+        return new List<object>();
+    }
+
+    public async Task<object?> GetNotificationByIdAsync(Guid notificationId)
+    {
+        // TODO: Implement with actual database storage
+        await Task.CompletedTask;
+        return null;
+    }
+
+    public async Task MarkAsReadAsync(Guid notificationId, Guid userId)
+    {
+        // TODO: Implement with actual database storage
+        await Task.CompletedTask;
+    }
+
+    public async Task MarkAllAsReadAsync(Guid userId)
+    {
+        // TODO: Implement with actual database storage
+        await Task.CompletedTask;
+    }
+
+    public async Task DeleteNotificationAsync(Guid notificationId, Guid userId)
+    {
+        // TODO: Implement with actual database storage
+        await Task.CompletedTask;
+    }
+
+    public async Task<int> GetUnreadCountAsync(Guid userId)
+    {
+        // TODO: Implement with actual database storage
+        await Task.CompletedTask;
+        return 0;
+    }
+
+    public async Task<object> GetUserPreferencesAsync(Guid userId)
+    {
+        // TODO: Implement with actual database storage
+        await Task.CompletedTask;
+        return new { };
+    }
+
+    public async Task UpdateUserPreferencesAsync(Guid userId, object preferences)
+    {
+        // TODO: Implement with actual database storage
+        await Task.CompletedTask;
+    }
+
+    public async Task SendTestNotificationAsync(Guid userId, string message)
+    {
+        await SendNotificationAsync(new NotificationRequest
+        {
+            UserId = userId,
+            Title = "Test Notification",
+            Message = message,
+            Type = NotificationType.Info,
+            IconClass = "bell"
+        });
+    }
+
     private static string GetDefaultIcon(NotificationType type)
     {
         return type switch
