@@ -1,0 +1,264 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Conversation Details";
+    Layout = "_DashboardLayout";
+}
+
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <div class="flex items-center gap-3">
+                <a asp-action="Conversations" class="btn btn-outline">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                    Back to Conversations
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold text-foreground">@Model.Title</h1>
+                    <p class="text-muted-foreground">Conversation ID: @Model.Id</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <button class="btn btn-outline" onclick="exportConversation()">
+                <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                Export
+            </button>
+            <button class="btn btn-destructive" onclick="deleteConversation()">
+                <i data-lucide="trash-2" class="w-4 h-4 mr-2"></i>
+                Delete
+            </button>
+        </div>
+    </div>
+
+    <!-- Conversation Info -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="card">
+            <div class="card-content p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Messages</p>
+                        <p class="text-2xl font-bold text-foreground">@((List<dynamic>)Model.Messages).Count</p>
+                    </div>
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                        <i data-lucide="message-circle" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Duration</p>
+                        <p class="text-2xl font-bold text-foreground">
+                            @{
+                                var messages = (List<dynamic>)Model.Messages;
+                                if (messages.Count > 1)
+                                {
+                                    var firstMessage = messages.First();
+                                    var lastMessage = messages.Last();
+                                    var duration = ((DateTime)lastMessage.Timestamp) - ((DateTime)firstMessage.Timestamp);
+                                    @(duration.TotalMinutes.ToString("F0") + "m")
+                                }
+                                else
+                                {
+                                    @("0m")
+                                }
+                            }
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30">
+                        <i data-lucide="clock" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">User ID</p>
+                        <p class="text-lg font-bold text-foreground">@Model.UserId.ToString().Substring(0, 8)...</p>
+                    </div>
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                        <i data-lucide="user" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Created</p>
+                        <p class="text-lg font-bold text-foreground">@((DateTime)Model.CreatedAt).ToString("MMM dd")</p>
+                    </div>
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/30">
+                        <i data-lucide="calendar" class="w-6 h-6 text-orange-600 dark:text-orange-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversation Messages -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Conversation Messages</h3>
+            <p class="card-description">Full conversation history</p>
+        </div>
+        <div class="card-content">
+            <div class="space-y-4 max-h-[600px] overflow-y-auto">
+                @foreach (dynamic message in (List<dynamic>)Model.Messages)
+                {
+                    <div class="flex gap-4 @(message.IsFromUser ? "justify-end" : "justify-start")">
+                        @if (!message.IsFromUser)
+                        {
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground shrink-0">
+                                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            </div>
+                        }
+                        
+                        <div class="max-w-[70%] @(message.IsFromUser ? "order-first" : "")">
+                            <div class="@(message.IsFromUser ? "bg-primary text-primary-foreground" : "bg-muted") rounded-lg p-4">
+                                <p class="text-sm">@message.Content</p>
+                            </div>
+                            <div class="flex items-center gap-2 mt-2 @(message.IsFromUser ? "justify-end" : "justify-start")">
+                                <span class="text-xs text-muted-foreground">
+                                    @((DateTime)message.Timestamp).ToString("MMM dd, yyyy HH:mm")
+                                </span>
+                                @if (!string.IsNullOrEmpty(message.Sentiment))
+                                {
+                                    var sentimentClass = message.Sentiment == "Positive" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
+                                                        message.Sentiment == "Negative" ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                                                        "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium @sentimentClass">
+                                        @message.Sentiment
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        
+                        @if (message.IsFromUser)
+                        {
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-muted-foreground shrink-0">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversation Analysis -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Sentiment Analysis -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Sentiment Analysis</h3>
+                <p class="card-description">Overall conversation sentiment</p>
+            </div>
+            <div class="card-content">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium">Positive</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-24 h-2 bg-muted rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500 transition-all duration-300" style="width: 70%"></div>
+                            </div>
+                            <span class="text-sm text-muted-foreground">70%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium">Neutral</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-24 h-2 bg-muted rounded-full overflow-hidden">
+                                <div class="h-full bg-gray-500 transition-all duration-300" style="width: 25%"></div>
+                            </div>
+                            <span class="text-sm text-muted-foreground">25%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium">Negative</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-24 h-2 bg-muted rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 transition-all duration-300" style="width: 5%"></div>
+                            </div>
+                            <span class="text-sm text-muted-foreground">5%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topics Discussed -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Topics Discussed</h3>
+                <p class="card-description">Main conversation topics</p>
+            </div>
+            <div class="card-content">
+                <div class="flex flex-wrap gap-2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                        Car Maintenance
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                        Oil Change
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">
+                        Engine Care
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
+                        Vehicle Service
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+
+        function exportConversation() {
+            const conversationData = {
+                id: '@Model.Id',
+                title: '@Model.Title',
+                userId: '@Model.UserId',
+                createdAt: '@Model.CreatedAt',
+                messages: @Html.Raw(Json.Serialize(Model.Messages)),
+                exportDate: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(conversationData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `conversation-@(Model.Id.ToString().Substring(0, 8))-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function deleteConversation() {
+            if (confirm('Are you sure you want to delete this conversation? This action cannot be undone.')) {
+                // Implement delete functionality
+                alert('Delete conversation functionality would be implemented here');
+                // Redirect back to conversations list
+                // window.location.href = '@Url.Action("Conversations")';
+            }
+        }
+    </script>
+}

@@ -1,7 +1,6 @@
 using System.Net.Http;
 using CommunityCar.AI.Configuration;
 using CommunityCar.AI.Services;
-using CommunityCar.Application.Common.Interfaces.Services.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,16 +18,15 @@ public static class DependencyInjection
         services.AddHttpClient<GeminiChatService>();
         services.AddHttpClient<HuggingFaceChatService>();
 
-        // Register the appropriate service based on default provider
-        if (aiSettings.DefaultProvider.Equals("HuggingFace", System.StringComparison.OrdinalIgnoreCase))
-        {
-            services.AddScoped<IAIChatService, HuggingFaceChatService>();
-        }
-        else
-        {
-            // Default to Gemini
-            services.AddScoped<IAIChatService, GeminiChatService>();
-        }
+        // Register individual AI services
+        services.AddScoped<IGeminiChatService, GeminiChatService>();
+        services.AddScoped<IHuggingFaceChatService, HuggingFaceChatService>();
+        
+        // Register ML.NET services
+        services.AddSingleton<ISentimentAnalysisService, SentimentAnalysisService>();
+        services.AddSingleton<IPredictionService, PredictionService>();
+        services.AddScoped<IIntelligentChatService, IntelligentChatService>();
+        services.AddSingleton<IMLPipelineService, MLPipelineService>();
 
         return services;
     }

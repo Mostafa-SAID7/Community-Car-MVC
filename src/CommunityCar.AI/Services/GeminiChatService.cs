@@ -6,11 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityCar.Application.Common.Interfaces.Services.AI;
 using CommunityCar.AI.Configuration;
+using CommunityCar.AI.Models;
 using Microsoft.Extensions.Options;
 
 namespace CommunityCar.AI.Services;
 
-public class GeminiChatService : IAIChatService
+public class GeminiChatService : IAIChatService, IGeminiChatService
 {
     private readonly HttpClient _httpClient;
     private readonly AISettings _settings;
@@ -95,5 +96,60 @@ public class GeminiChatService : IAIChatService
     {
         // For Gemini, we don't need to do anything special to end a conversation
         return Task.CompletedTask;
+    }
+
+    // IGeminiChatService implementation
+    public async Task<ChatResponse> GenerateChatResponseAsync(string message, string? context = null)
+    {
+        var response = await GenerateResponseAsync(message, context);
+        return new ChatResponse
+        {
+            Message = response,
+            IsSuccessful = !response.StartsWith("Error") && !response.StartsWith("Exception"),
+            Timestamp = DateTime.UtcNow,
+            Source = "Gemini"
+        };
+    }
+
+    public async Task<ChatResponse> GenerateContextualResponseAsync(string message, List<ChatMessage> conversationHistory)
+    {
+        var contextBuilder = new StringBuilder();
+        foreach (var msg in conversationHistory.TakeLast(5)) // Use last 5 messages for context
+        {
+            contextBuilder.AppendLine($"{msg.Role}: {msg.Content}");
+        }
+        contextBuilder.AppendLine($"User: {message}");
+
+        var response = await GenerateResponseAsync(contextBuilder.ToString());
+        return new ChatResponse
+        {
+            Message = response,
+            IsSuccessful = !response.StartsWith("Error") && !response.StartsWith("Exception"),
+            Timestamp = DateTime.UtcNow,
+            Source = "Gemini"
+        };
+    }
+
+    public async Task<bool> IsServiceAvailableAsync()
+    {
+        return !string.IsNullOrEmpty(_settings.Gemini.ApiKey);
+    }
+
+    public async Task<string> SummarizeConversationAsync(List<ChatMessage> messages)
+    {
+        var conversationText = string.Join("\n", messages.Select(m => $"{m.Role}: {m.Content}"));
+        var summaryPrompt = $"Please summarize this conversation:\n{conversationText}";
+        return await GenerateResponseAsync(summaryPrompt);
+    }
+
+    public async Task<List<string>> GenerateSuggestionsAsync(string context)
+    {
+        var prompt = $"Based on this context: {context}\nGenerate 3 helpful suggestions or follow-up questions. Return them as a simple list.";
+        var response = await GenerateResponseAsync(prompt);
+        
+        // Simple parsing - split by lines and take first 3 non-empty lines
+        return response.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            .Take(3)
+            .ToList();
     }
 }

@@ -7,11 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityCar.Application.Common.Interfaces.Services.AI;
 using CommunityCar.AI.Configuration;
+using CommunityCar.AI.Models;
 using Microsoft.Extensions.Options;
 
 namespace CommunityCar.AI.Services;
 
-public class HuggingFaceChatService : IAIChatService
+public class HuggingFaceChatService : IAIChatService, IHuggingFaceChatService
 {
     private readonly HttpClient _httpClient;
     private readonly AISettings _settings;
@@ -68,5 +69,59 @@ public class HuggingFaceChatService : IAIChatService
     {
         // For HuggingFace, we don't need to do anything special to end a conversation
         return Task.CompletedTask;
+    }
+
+    // IHuggingFaceChatService implementation
+    public async Task<ChatResponse> GenerateChatResponseAsync(string message, string? context = null)
+    {
+        var response = await GenerateResponseAsync(message, context);
+        return new ChatResponse
+        {
+            Message = response,
+            IsSuccessful = !response.StartsWith("Error"),
+            Timestamp = DateTime.UtcNow,
+            Source = "HuggingFace"
+        };
+    }
+
+    public async Task<ChatResponse> GenerateContextualResponseAsync(string message, List<ChatMessage> conversationHistory)
+    {
+        var contextBuilder = new StringBuilder();
+        foreach (var msg in conversationHistory.TakeLast(5))
+        {
+            contextBuilder.AppendLine($"{msg.Role}: {msg.Content}");
+        }
+        contextBuilder.AppendLine($"User: {message}");
+
+        var response = await GenerateResponseAsync(contextBuilder.ToString());
+        return new ChatResponse
+        {
+            Message = response,
+            IsSuccessful = !response.StartsWith("Error"),
+            Timestamp = DateTime.UtcNow,
+            Source = "HuggingFace"
+        };
+    }
+
+    public async Task<bool> IsServiceAvailableAsync()
+    {
+        return !string.IsNullOrEmpty(_settings.HuggingFace.ApiKey);
+    }
+
+    public async Task<string> SummarizeConversationAsync(List<ChatMessage> messages)
+    {
+        var conversationText = string.Join("\n", messages.Select(m => $"{m.Role}: {m.Content}"));
+        var summaryPrompt = $"Summarize: {conversationText}";
+        return await GenerateResponseAsync(summaryPrompt);
+    }
+
+    public async Task<List<string>> GenerateSuggestionsAsync(string context)
+    {
+        var prompt = $"Context: {context}\nSuggest 3 follow-up questions:";
+        var response = await GenerateResponseAsync(prompt);
+        
+        return response.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            .Take(3)
+            .ToList();
     }
 }

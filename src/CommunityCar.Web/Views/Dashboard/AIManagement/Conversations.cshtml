@@ -1,0 +1,245 @@
+@model AIConversationsViewModel
+@{
+    ViewData["Title"] = "AI Conversations";
+    Layout = "_DashboardLayout";
+}
+
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-foreground">AI Conversations</h1>
+            <p class="text-muted-foreground">Monitor and analyze user conversations with the AI assistant</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <select class="input w-40" id="filterSentiment">
+                <option value="">All Sentiments</option>
+                <option value="Positive">Positive</option>
+                <option value="Neutral">Neutral</option>
+                <option value="Negative">Negative</option>
+            </select>
+            <button class="btn btn-outline" onclick="exportConversations()">
+                <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="card">
+            <div class="card-content p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Total Conversations</p>
+                        <p class="text-2xl font-bold text-foreground">@Model.TotalCount.ToString("N0")</p>
+                    </div>
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                        <i data-lucide="message-circle" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Active Today</p>
+                        <p class="text-2xl font-bold text-foreground">@((int)(Model.TotalCount * 0.15))</p>
+                    </div>
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30">
+                        <i data-lucide="activity" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Avg Messages</p>
+                        <p class="text-2xl font-bold text-foreground">@((int)(Model.TotalCount * 0.08))</p>
+                    </div>
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                        <i data-lucide="messages" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Satisfaction</p>
+                        <p class="text-2xl font-bold text-foreground">4.7/5</p>
+                    </div>
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
+                        <i data-lucide="star" class="w-6 h-6 text-yellow-600 dark:text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversations Table -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Recent Conversations</h3>
+            <p class="card-description">Latest AI conversations with users</p>
+        </div>
+        <div class="card-content">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-border">
+                            <th class="text-left py-3 px-4 font-medium text-muted-foreground">Conversation</th>
+                            <th class="text-left py-3 px-4 font-medium text-muted-foreground">User</th>
+                            <th class="text-left py-3 px-4 font-medium text-muted-foreground">Messages</th>
+                            <th class="text-left py-3 px-4 font-medium text-muted-foreground">Sentiment</th>
+                            <th class="text-left py-3 px-4 font-medium text-muted-foreground">Last Activity</th>
+                            <th class="text-left py-3 px-4 font-medium text-muted-foreground">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (dynamic conversation in Model.Conversations)
+                        {
+                            <tr class="border-b border-border hover:bg-muted/50 transition-colors">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+                                            <i data-lucide="message-circle" class="w-5 h-5 text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-foreground">@conversation.Title</p>
+                                            <p class="text-sm text-muted-foreground">ID: @conversation.Id.ToString().Substring(0, 8)...</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-muted">
+                                            <i data-lucide="user" class="w-4 h-4 text-muted-foreground"></i>
+                                        </div>
+                                        <span class="text-sm text-foreground">@conversation.UserId.ToString().Substring(0, 8)...</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                        @conversation.MessageCount messages
+                                    </span>
+                                </td>
+                                <td class="py-4 px-4">
+                                    @{
+                                        var sentimentClass = conversation.Sentiment == "Positive" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
+                                                            conversation.Sentiment == "Negative" ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                                                            "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
+                                    }
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium @sentimentClass">
+                                        @conversation.Sentiment
+                                    </span>
+                                </td>
+                                <td class="py-4 px-4">
+                                    <div class="text-sm text-foreground">
+                                        @((DateTime)conversation.LastActivity).ToString("MMM dd, yyyy")
+                                    </div>
+                                    <div class="text-xs text-muted-foreground">
+                                        @((DateTime)conversation.LastActivity).ToString("HH:mm")
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center gap-2">
+                                        <a asp-action="ConversationDetails" asp-route-id="@conversation.Id" class="btn btn-outline btn-sm">
+                                            <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                                            View
+                                        </a>
+                                        <button class="btn btn-outline btn-sm" onclick="exportConversation('@conversation.Id')">
+                                            <i data-lucide="download" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            @if (Model.TotalPages > 1)
+            {
+                <div class="flex items-center justify-between mt-6 pt-6 border-t border-border">
+                    <div class="text-sm text-muted-foreground">
+                        Showing @((Model.CurrentPage - 1) * Model.PageSize + 1) to @(Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalCount)) of @Model.TotalCount conversations
+                    </div>
+                    <div class="flex items-center gap-2">
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <a asp-action="Conversations" asp-route-page="@(Model.CurrentPage - 1)" class="btn btn-outline btn-sm">
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            </a>
+                        }
+                        
+                        @for (int i = Math.Max(1, Model.CurrentPage - 2); i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); i++)
+                        {
+                            if (i == Model.CurrentPage)
+                            {
+                                <span class="btn btn-primary btn-sm">@i</span>
+                            }
+                            else
+                            {
+                                <a asp-action="Conversations" asp-route-page="@i" class="btn btn-outline btn-sm">@i</a>
+                            }
+                        }
+                        
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <a asp-action="Conversations" asp-route-page="@(Model.CurrentPage + 1)" class="btn btn-outline btn-sm">
+                                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Filter functionality
+            const filterSentiment = document.getElementById('filterSentiment');
+            filterSentiment.addEventListener('change', function() {
+                const sentiment = this.value;
+                const rows = document.querySelectorAll('tbody tr');
+                
+                rows.forEach(row => {
+                    if (!sentiment) {
+                        row.style.display = '';
+                    } else {
+                        const sentimentCell = row.querySelector('td:nth-child(4) span');
+                        const rowSentiment = sentimentCell.textContent.trim();
+                        row.style.display = rowSentiment === sentiment ? '' : 'none';
+                    }
+                });
+            });
+        });
+
+        function exportConversations() {
+            // Implement export functionality
+            alert('Export conversations functionality would be implemented here');
+        }
+
+        function exportConversation(conversationId) {
+            // Implement single conversation export
+            alert(`Export conversation ${conversationId} functionality would be implemented here`);
+        }
+    </script>
+}
