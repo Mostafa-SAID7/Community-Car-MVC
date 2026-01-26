@@ -89,7 +89,7 @@ public class PredictionService : IPredictionService
             return new UserBehaviorPrediction
             {
                 UserId = userData.UserId,
-                Segment = UserSegment.NewUser
+                Segment = UserSegmentType.NewUser
             };
         }
     }
@@ -400,15 +400,15 @@ public class PredictionService : IPredictionService
         return await Task.FromResult(Math.Min(1.0f, toxicityRisk));
     }
 
-    private async Task<UserSegment> DetermineUserSegmentAsync(UserBehaviorData userData, UserBehaviorPrediction prediction)
+    private async Task<UserSegmentType> DetermineUserSegmentAsync(UserBehaviorData userData, UserBehaviorPrediction prediction)
     {
-        if (prediction.ToxicityRisk > 0.8f) return UserSegment.ToxicUser;
-        if (prediction.ChurnProbability > 0.8f) return UserSegment.ChurnedUser;
-        if (prediction.ChurnProbability > 0.6f) return UserSegment.AtRiskUser;
-        if (userData.DaysActive < 7) return UserSegment.NewUser;
-        if (prediction.EngagementScore > 0.8f) return UserSegment.PowerUser;
+        if (prediction.ToxicityRisk > 0.8f) return UserSegmentType.ToxicUser;
+        if (prediction.ChurnProbability > 0.8f) return UserSegmentType.ChurnedUser;
+        if (prediction.ChurnProbability > 0.6f) return UserSegmentType.AtRiskUser;
+        if (userData.DaysActive < 7) return UserSegmentType.NewUser;
+        if (prediction.EngagementScore > 0.8f) return UserSegmentType.PowerUser;
         
-        return await Task.FromResult(UserSegment.ActiveUser);
+        return await Task.FromResult(UserSegmentType.ActiveUser);
     }
 
     private async Task<List<string>> GenerateRecommendedActionsAsync(UserBehaviorData userData, UserBehaviorPrediction prediction)
@@ -417,25 +417,25 @@ public class PredictionService : IPredictionService
 
         switch (prediction.Segment)
         {
-            case UserSegment.NewUser:
+            case UserSegmentType.NewUser:
                 actions.Add("Complete profile setup");
                 actions.Add("Join relevant groups");
                 actions.Add("Follow community guidelines tutorial");
                 break;
 
-            case UserSegment.AtRiskUser:
+            case UserSegmentType.AtRiskUser:
                 actions.Add("Send personalized content recommendations");
                 actions.Add("Invite to participate in discussions");
                 actions.Add("Offer community challenges");
                 break;
 
-            case UserSegment.PowerUser:
+            case UserSegmentType.PowerUser:
                 actions.Add("Invite to become community moderator");
                 actions.Add("Feature their content");
                 actions.Add("Provide early access to new features");
                 break;
 
-            case UserSegment.ToxicUser:
+            case UserSegmentType.ToxicUser:
                 actions.Add("Review recent activity");
                 actions.Add("Send community guidelines reminder");
                 actions.Add("Consider temporary restrictions");
@@ -473,7 +473,8 @@ public class PredictionService : IPredictionService
             DaysActive = 30,
             AverageSentiment = 0.7f,
             ReportsReceived = 0,
-            IsActive = true
+            IsActive = true,
+            UserSegment = UserSegmentType.ActiveUser.ToString()
         });
     }
 }

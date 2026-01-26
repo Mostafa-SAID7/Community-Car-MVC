@@ -1,6 +1,6 @@
-using CommunityCar.AI;
 using CommunityCar.Infrastructure;
 using CommunityCar.Application;
+using CommunityCar.AI;
 using CommunityCar.Web.Extensions;
 using CommunityCar.Infrastructure.Hubs;
 using Microsoft.AspNetCore.Localization;

@@ -72,10 +72,10 @@ public class HuggingFaceChatService : IAIChatService, IHuggingFaceChatService
     }
 
     // IHuggingFaceChatService implementation
-    public async Task<ChatResponse> GenerateChatResponseAsync(string message, string? context = null)
+    public async Task<SimpleChatResponse> GenerateChatResponseAsync(string message, string? context = null)
     {
         var response = await GenerateResponseAsync(message, context);
-        return new ChatResponse
+        return new SimpleChatResponse
         {
             Message = response,
             IsSuccessful = !response.StartsWith("Error"),
@@ -84,7 +84,7 @@ public class HuggingFaceChatService : IAIChatService, IHuggingFaceChatService
         };
     }
 
-    public async Task<ChatResponse> GenerateContextualResponseAsync(string message, List<ChatMessage> conversationHistory)
+    public async Task<SimpleChatResponse> GenerateContextualResponseAsync(string message, List<ChatMessage> conversationHistory)
     {
         var contextBuilder = new StringBuilder();
         foreach (var msg in conversationHistory.TakeLast(5))
@@ -94,7 +94,7 @@ public class HuggingFaceChatService : IAIChatService, IHuggingFaceChatService
         contextBuilder.AppendLine($"User: {message}");
 
         var response = await GenerateResponseAsync(contextBuilder.ToString());
-        return new ChatResponse
+        return new SimpleChatResponse
         {
             Message = response,
             IsSuccessful = !response.StartsWith("Error"),

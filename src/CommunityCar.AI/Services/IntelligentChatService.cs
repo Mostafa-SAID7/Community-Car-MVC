@@ -71,7 +71,15 @@ public class IntelligentChatService : IIntelligentChatService
 
             // Analyze sentiment
             var sentimentAnalysis = await _sentimentService.AnalyzeSentimentAsync(request.Message);
-            response.SentimentAnalysis = sentimentAnalysis;
+            response.SentimentAnalysis = new EnhancedSentimentPrediction
+            {
+                Label = sentimentAnalysis.Label,
+                Score = sentimentAnalysis.Score,
+                Confidence = sentimentAnalysis.Confidence,
+                Emotions = sentimentAnalysis.Emotions,
+                Keywords = new List<string>(), // Will be populated by sentiment service
+                Context = "Car Community"
+            };
 
             // Moderate content
             var moderationResult = await ModerateChatAsync(request.Message, request.UserId);
@@ -200,7 +208,7 @@ public class IntelligentChatService : IIntelligentChatService
 
             // Check toxicity
             var toxicityScore = await _sentimentService.GetToxicityScoreAsync(message);
-            result.ToxicityScore = toxicityScore;
+            result.ToxicityScore = (float)toxicityScore;
 
             // Check for spam
             result.IsSpam = await _sentimentService.IsSpamAsync(message);
@@ -592,6 +600,17 @@ public class IntelligentChatService : IIntelligentChatService
     {
         var models = new[] { "camry", "accord", "civic", "corolla", "f150", "mustang", "prius", "altima", "elantra" };
         return models.Contains(word.ToLower());
+    }
+
+    private List<string> ExtractKeywords(string text)
+    {
+        return text.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Where(w => w.Length > 3)
+            .Select(w => w.Trim('.', ',', '!', '?', ';', ':').ToLowerInvariant())
+            .Where(w => !string.IsNullOrEmpty(w))
+            .Distinct()
+            .Take(5)
+            .ToList();
     }
 
     // Additional methods for controller compatibility

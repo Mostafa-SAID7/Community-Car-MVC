@@ -279,7 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
         historyContainer.innerHTML = '';
         chatHistory.forEach((conversation, index) => {
             const conversationDiv = document.createElement('div');
-            conversationDiv.className = 'p-4 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer';
+            conversationDiv.className = 'p-4 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer conversation-item';
+            conversationDiv.setAttribute('data-conversation-title', conversation.title.toLowerCase());
             
             const messageCount = conversation.messages.length;
             const lastMessage = conversation.messages[conversation.messages.length - 1];
@@ -332,6 +333,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+
+        // Add search functionality
+        const searchInput = document.getElementById('history-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const conversationItems = document.querySelectorAll('.conversation-item');
+                
+                conversationItems.forEach(item => {
+                    const title = item.getAttribute('data-conversation-title');
+                    if (title.includes(searchTerm)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }

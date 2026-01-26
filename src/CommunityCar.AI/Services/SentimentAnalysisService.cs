@@ -13,7 +13,7 @@ public interface ISentimentAnalysisService
     Task<EnhancedSentimentPrediction> AnalyzeSentimentEnhancedAsync(string text);
     Task<List<SentimentPrediction>> BatchPredictAsync(IEnumerable<string> texts);
     Task<bool> TrainModelAsync(IEnumerable<SentimentData> trainingData);
-    Task<TrainingMetrics> GetModelMetricsAsync();
+    Task<Models.TrainingMetrics> GetModelMetricsAsync();
     Task<Dictionary<string, double>> GetEmotionScoresAsync(string text);
     Task<double> GetToxicityScoreAsync(string text);
     Task<bool> IsSpamAsync(string text);
@@ -47,7 +47,7 @@ public class SentimentAnalysisService : ISentimentAnalysisService
             return new SentimentPrediction 
             { 
                 Label = "Neutral", 
-                Score = 0.5, 
+                Score = 0.5f, 
                 Confidence = 0.5,
                 Emotions = new Dictionary<string, double>()
             };
@@ -73,7 +73,7 @@ public class SentimentAnalysisService : ISentimentAnalysisService
             return new SentimentPrediction 
             { 
                 Label = "Neutral", 
-                Score = 0.5, 
+                Score = 0.5f, 
                 Confidence = 0.5,
                 Emotions = new Dictionary<string, double>()
             };
@@ -140,10 +140,10 @@ public class SentimentAnalysisService : ISentimentAnalysisService
         }
     }
 
-    public async Task<TrainingMetrics> GetModelMetricsAsync()
+    public async Task<Models.TrainingMetrics> GetModelMetricsAsync()
     {
         await Task.CompletedTask;
-        return new TrainingMetrics
+        return new Models.TrainingMetrics
         {
             Accuracy = 0.85,
             Precision = 0.83,
@@ -266,8 +266,8 @@ public class SentimentAnalysisService : ISentimentAnalysisService
         return new SentimentPrediction
         {
             Label = isPositive ? "Positive" : (negativeCount > 0 ? "Negative" : "Neutral"),
-            Score = isPositive ? 0.5 + confidence * 0.5 : 0.5 - confidence * 0.5,
-            Confidence = confidence,
+            Score = (float)(isPositive ? 0.5 + confidence * 0.5 : 0.5 - confidence * 0.5),
+            Confidence = (float)confidence,
             Emotions = await GetEmotionScoresAsync(text)
         };
     }

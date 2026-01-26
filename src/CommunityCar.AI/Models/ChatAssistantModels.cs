@@ -112,6 +112,16 @@ public class ContentRecommendationPrediction
 public class UserBehaviorData
 {
     public string UserId { get; set; } = string.Empty;
+    public int PostsCount { get; set; }
+    public int CommentsCount { get; set; }
+    public int LikesGiven { get; set; }
+    public int LikesReceived { get; set; }
+    public int SharesCount { get; set; }
+    public float EngagementRate { get; set; }
+    public int DaysActive { get; set; }
+    public float AverageSentiment { get; set; }
+    public int ReportsReceived { get; set; }
+    public bool IsActive { get; set; }
     public Dictionary<string, float> ActivityMetrics { get; set; } = new();
     public List<string> Interests { get; set; } = new();
     public Dictionary<string, int> InteractionCounts { get; set; } = new();
@@ -142,6 +152,7 @@ public class AIAssistantResponse
 /// </summary>
 public class TrainingMetrics
 {
+    public string ModelType { get; set; } = string.Empty;
     public double Accuracy { get; set; }
     public double Precision { get; set; }
     public double Recall { get; set; }
@@ -150,6 +161,8 @@ public class TrainingMetrics
     public DateTime TrainingDate { get; set; }
     public int DatasetSize { get; set; }
     public string ModelVersion { get; set; } = string.Empty;
+    public TimeSpan TrainingTime { get; set; }
+    public DateTime LastTrained { get; set; }
 }
 
 /// <summary>
@@ -166,18 +179,34 @@ public class EnhancedSentimentPrediction
 }
 
 /// <summary>
-/// User behavior prediction data
+/// User behavior prediction result
 /// </summary>
 public class UserBehaviorPrediction
 {
-    public Guid UserId { get; set; }
-    public double EngagementScore { get; set; }
-    public double ChurnRisk { get; set; }
+    public string UserId { get; set; } = string.Empty;
+    public float EngagementScore { get; set; }
+    public float ChurnProbability { get; set; }
+    public float ToxicityRisk { get; set; }
+    public UserSegmentType Segment { get; set; }
+    public List<string> RecommendedActions { get; set; } = new();
     public double ActivityLevel { get; set; }
     public List<string> PredictedInterests { get; set; } = new();
     public List<string> RecommendedContent { get; set; } = new();
     public DateTime PredictionDate { get; set; }
     public double Confidence { get; set; }
+}
+
+/// <summary>
+/// User segment enumeration for predictions
+/// </summary>
+public enum UserSegmentType
+{
+    NewUser,
+    ActiveUser,
+    PowerUser,
+    AtRiskUser,
+    ChurnedUser,
+    ToxicUser
 }
 
 /// <summary>
@@ -193,9 +222,9 @@ public class UserSegment
 }
 
 /// <summary>
-/// Chat response model
+/// Simple chat response model for basic AI services
 /// </summary>
-public class ChatResponse
+public class SimpleChatResponse
 {
     public string Message { get; set; } = string.Empty;
     public bool IsSuccessful { get; set; }

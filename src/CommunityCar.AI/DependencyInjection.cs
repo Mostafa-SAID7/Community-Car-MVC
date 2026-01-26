@@ -18,7 +18,7 @@ public static class DependencyInjection
         services.AddHttpClient<GeminiChatService>();
         services.AddHttpClient<HuggingFaceChatService>();
 
-        // Register individual AI services
+        // Register individual AI services (scoped because they use HttpClient)
         services.AddScoped<IGeminiChatService, GeminiChatService>();
         services.AddScoped<IHuggingFaceChatService, HuggingFaceChatService>();
         
@@ -26,7 +26,7 @@ public static class DependencyInjection
         services.AddSingleton<ISentimentAnalysisService, SentimentAnalysisService>();
         services.AddSingleton<IPredictionService, PredictionService>();
         services.AddScoped<IIntelligentChatService, IntelligentChatService>();
-        services.AddSingleton<IMLPipelineService, MLPipelineService>();
+        services.AddScoped<IMLPipelineService, MLPipelineService>();
 
         return services;
     }

@@ -175,6 +175,10 @@ public class MLPipelineService : IMLPipelineService, IHostedService
             Precision = 0.82,
             Recall = 0.88,
             F1Score = 0.85,
+            LogLoss = 0.45,
+            TrainingDate = DateTime.UtcNow.AddDays(-1),
+            DatasetSize = 10000,
+            ModelVersion = "1.0.0",
             TrainingTime = TimeSpan.FromMinutes(5),
             LastTrained = DateTime.UtcNow.AddHours(-1)
         };
@@ -325,15 +329,4 @@ public class ContentRecommendationData
     public string UserId { get; set; } = string.Empty;
     public string ContentId { get; set; } = string.Empty;
     public float Rating { get; set; }
-}
-
-public class TrainingMetrics
-{
-    public string ModelType { get; set; } = string.Empty;
-    public double Accuracy { get; set; }
-    public double Precision { get; set; }
-    public double Recall { get; set; }
-    public double F1Score { get; set; }
-    public TimeSpan TrainingTime { get; set; }
-    public DateTime LastTrained { get; set; }
 }

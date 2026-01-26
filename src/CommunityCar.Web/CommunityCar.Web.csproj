@@ -4,6 +4,7 @@
 
     <ProjectReference Include="..\CommunityCar.Infrastructure\CommunityCar.Infrastructure.csproj" />
     <ProjectReference Include="..\CommunityCar.Application\CommunityCar.Application.csproj" />
+    <ProjectReference Include="..\CommunityCar.AI\CommunityCar.AI.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
