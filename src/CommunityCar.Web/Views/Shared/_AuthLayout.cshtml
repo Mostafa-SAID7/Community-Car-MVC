@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CommunityCar</title>
+    <title>@ViewData["Title"] - @SharedLocalizer["AppName"]</title>
 
     <!-- Theme initialization script (must be before any content) -->
     <script>
@@ -87,18 +87,57 @@
             transition: all 0.3s ease;
         }
 
-        .btn-glow:hover {
-            box-shadow: 0 0 30px rgba(225, 29, 72, 0.6);
-            transform: translateY(-2px);
+        /* Custom smoke particle styles */
+        /* Global Page Transitions */
+        .auth-view-transition {
+            animation: view-entrance 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @@keyframes view-entrance {
+            0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Responsive container height adjustment */
+        .auth-container {
+            min-height: calc(100vh - 4rem);
+        }
+
+        @@media (max-width: 640px) {
+            .auth-container {
+                padding-top: 6rem;
+                padding-bottom: 0;
+            }
+        }
+
+        .dark input {
+            background-color: rgba(30, 41, 59, 0.6) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dark input:focus {
+            background-color: rgba(30, 41, 59, 0.8) !important;
+        }
+
+        .fade-in {
+            animation: fade-in-scale 0.4s ease-out forwards;
+        }
+
+        @@keyframes fade-in-scale {
+            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
     </style>
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 
 <body class="font-sans antialiased auth-gradient-bg">
+    <partial name="_Header" />
+    
     <!-- Main container -->
-    <div class="flex items-center justify-center min-h-screen w-full px-4 py-8">
-        <main class="w-full max-w-md">
-            <div class="glass-card rounded-3xl shadow-2xl p-8 sm:p-10">
+    <div class="flex items-start justify-center w-full auth-container px-0 sm:px-4 pt-24 sm:pt-32 pb-10">
+        <main class="w-full @(ViewData["FullWidth"] != null ? "max-w-6xl" : "max-w-md") auth-view-transition">
+            <div class="glass-card rounded-b-3xl sm:rounded-3xl shadow-2xl overflow-hidden shadow-primary/10 border-white/20">
                 @RenderBody()
             </div>
         </main>
@@ -107,6 +146,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/notifications.js" asp-append-version="true"></script>
+    <script src="~/js/toaster.js" asp-append-version="true"></script>
     <script src="~/js/validation.js" asp-append-version="true"></script>
     <script>
         lucide.createIcons();

@@ -1,8 +1,11 @@
 <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-4 py-3 bg-background/80 backdrop-blur-md border-b border-border">
     <div class="flex items-center gap-3 bg-card/50 backdrop-blur-sm rounded-full px-4 py-2 border border-border shadow-sm">
-        <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors md:hidden" id="sidebar-toggle" aria-label="@SharedLocalizer["ToggleSidebar"]">
-            <i data-lucide="menu" class="w-[18px] h-[18px]"></i>
-        </button>
+        @if (ViewData["FullWidth"] == null) 
+        {
+            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors md:hidden" id="sidebar-toggle" aria-label="@SharedLocalizer["ToggleSidebar"]">
+                <i data-lucide="menu" class="w-[18px] h-[18px]"></i>
+            </button>
+        }
         <a href="/" class="flex items-center gap-2 text-inherit no-underline">
             <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 shadow-md">
                 <span class="text-xs font-bold text-primary-foreground">@SharedLocalizer["AppInitials"]</span>
@@ -27,26 +30,39 @@
             </a>
             <a href="/chats" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Chat"]" title="@SharedLocalizer["Chat"]">
                 <i data-lucide="message-circle" class="w-[18px] h-[18px]"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["Chat"]</span>
-            </a>
-            <a href="/friends" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Friends"]" title="@SharedLocalizer["Friends"]">
-                <i data-lucide="users" class="w-[18px] h-[18px]"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["Friends"]</span>
-            </a>
-        </nav>
+        @if (ViewData["FullWidth"] == null)
+        {
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="/" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Home"]" title="@SharedLocalizer["Home"]">
+                    <i data-lucide="home" class="w-[18px] h-[18px]"></i>
+                    <span class="hidden xl:inline">@SharedLocalizer["Home"]</span>
+                </a>
+                <a href="/chats" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Chat"]" title="@SharedLocalizer["Chat"]">
+                    <i data-lucide="message-circle" class="w-[18px] h-[18px]"></i>
+                    <span class="hidden xl:inline">@SharedLocalizer["Chat"]</span>
+                </a>
+                <a href="/friends" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Friends"]" title="@SharedLocalizer["Friends"]">
+                    <i data-lucide="users" class="w-[18px] h-[18px]"></i>
+                    <span class="hidden xl:inline">@SharedLocalizer["Friends"]</span>
+                </a>
+            </nav>
+        }
         
-        <!-- Mobile navigation icons (shown only on mobile) -->
-        <nav class="flex md:hidden items-center justify-evenly flex-1 gap-2">
-            <a href="/" class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground flex-1" aria-label="@SharedLocalizer["Home"]" title="@SharedLocalizer["Home"]">
-                <i data-lucide="home" class="w-[20px] h-[20px]"></i>
-            </a>
-            <a href="/chats" class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground flex-1" aria-label="@SharedLocalizer["Chat"]" title="@SharedLocalizer["Chat"]">
-                <i data-lucide="message-circle" class="w-[20px] h-[20px]"></i>
-            </a>
-            <a href="/friends" class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground flex-1" aria-label="@SharedLocalizer["Friends"]" title="@SharedLocalizer["Friends"]">
-                <i data-lucide="users" class="w-[20px] h-[20px]"></i>
-            </a>
-        </nav>
+        @if (ViewData["FullWidth"] == null)
+        {
+            <!-- Mobile navigation icons (shown only on mobile) -->
+            <nav class="flex md:hidden items-center justify-evenly flex-1 gap-2">
+                <a href="/" class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground flex-1" aria-label="@SharedLocalizer["Home"]" title="@SharedLocalizer["Home"]">
+                    <i data-lucide="home" class="w-[20px] h-[20px]"></i>
+                </a>
+                <a href="/chats" class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground flex-1" aria-label="@SharedLocalizer["Chat"]" title="@SharedLocalizer["Chat"]">
+                    <i data-lucide="message-circle" class="w-[20px] h-[20px]"></i>
+                </a>
+                <a href="/friends" class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground flex-1" aria-label="@SharedLocalizer["Friends"]" title="@SharedLocalizer["Friends"]">
+                    <i data-lucide="users" class="w-[20px] h-[20px]"></i>
+                </a>
+            </nav>
+        }
     </div>
     
     <div class="hidden md:flex items-center gap-2 bg-card/50 backdrop-blur-sm rounded-full px-3 py-2 border border-border shadow-sm">

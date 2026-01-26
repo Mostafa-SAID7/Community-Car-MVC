@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using CommunityCar.Web;
 
 namespace CommunityCar.Web.Models.Account;
 
 public class ForgotPasswordVM
 {
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress(ErrorMessage = "Invalid email format")]
-    [Display(Name = "Email Address")]
+    [Required(ErrorMessageResourceName = "EmailRequired", ErrorMessageResourceType = typeof(AccountResource))]
+    [EmailAddress(ErrorMessageResourceName = "InvalidEmailFormat", ErrorMessageResourceType = typeof(AccountResource))]
+    [Display(Name = "Email", ResourceType = typeof(AccountResource))]
     public string Email { get; set; } = string.Empty;
 }

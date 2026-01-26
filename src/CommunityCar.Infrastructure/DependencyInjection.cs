@@ -87,6 +87,8 @@ public static class DependencyInjection
         services.AddScoped<IReactionRepository, ReactionRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<IShareRepository, ShareRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IPointOfInterestRepository, PointOfInterestRepository>();
         services.AddScoped<ICheckInRepository, CheckInRepository>();
         services.AddScoped<IRouteRepository, RouteRepository>();

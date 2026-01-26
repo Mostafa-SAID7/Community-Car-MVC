@@ -1,19 +1,20 @@
 using System.ComponentModel.DataAnnotations;
+using CommunityCar.Web;
 
 namespace CommunityCar.Web.Models.Account;
 
 public class LoginVM
 {
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress(ErrorMessage = "Invalid email format")]
-    [Display(Name = "Email Address")]
+    [Required(ErrorMessageResourceName = "EmailRequired", ErrorMessageResourceType = typeof(AccountResource))]
+    [EmailAddress(ErrorMessageResourceName = "InvalidEmailFormat", ErrorMessageResourceType = typeof(AccountResource))]
+    [Display(Name = "Email", ResourceType = typeof(AccountResource))]
     public string Email { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Password is required")]
+    [Required(ErrorMessageResourceName = "PasswordRequired", ErrorMessageResourceType = typeof(AccountResource))]
     [DataType(DataType.Password)]
-    [Display(Name = "Password")]
+    [Display(Name = "Password", ResourceType = typeof(AccountResource))]
     public string Password { get; set; } = string.Empty;
 
-    [Display(Name = "Remember me?")]
+    [Display(Name = "RememberMe", ResourceType = typeof(AccountResource))]
     public bool RememberMe { get; set; }
 }

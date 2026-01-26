@@ -1,25 +1,26 @@
 using System.ComponentModel.DataAnnotations;
+using CommunityCar.Web;
 
 namespace CommunityCar.Web.Models.Account;
 
 public class ResetPasswordVM
 {
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress(ErrorMessage = "Invalid email format")]
-    [Display(Name = "Email Address")]
+    [Required(ErrorMessageResourceName = "EmailRequired", ErrorMessageResourceType = typeof(AccountResource))]
+    [EmailAddress(ErrorMessageResourceName = "InvalidEmailFormat", ErrorMessageResourceType = typeof(AccountResource))]
+    [Display(Name = "Email", ResourceType = typeof(AccountResource))]
     public string Email { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Password is required")]
-    [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 8)]
+    [Required(ErrorMessageResourceName = "PasswordRequired", ErrorMessageResourceType = typeof(AccountResource))]
+    [StringLength(100, ErrorMessageResourceName = "LengthRequirement", ErrorMessageResourceType = typeof(AccountResource), MinimumLength = 8)]
     [DataType(DataType.Password)]
-    [Display(Name = "New Password")]
-    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]", 
-        ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character")]
+    [Display(Name = "Password", ResourceType = typeof(AccountResource))]
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", 
+        ErrorMessageResourceName = "PasswordFormat", ErrorMessageResourceType = typeof(AccountResource))]
     public string Password { get; set; } = string.Empty;
 
     [DataType(DataType.Password)]
-    [Display(Name = "Confirm password")]
-    [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+    [Display(Name = "ConfirmPassword", ResourceType = typeof(AccountResource))]
+    [Compare("Password", ErrorMessageResourceName = "PasswordsDoNotMatch", ErrorMessageResourceType = typeof(AccountResource))]
     public string ConfirmPassword { get; set; } = string.Empty;
 
     [Required]

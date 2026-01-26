@@ -16,6 +16,8 @@ public interface IUnitOfWork : IDisposable
     IReactionRepository Reactions { get; }
     ICommentRepository Comments { get; }
     IShareRepository Shares { get; }
+    ICategoryRepository Categories { get; }
+    ITagRepository Tags { get; }
     IPointOfInterestRepository PointsOfInterest { get; }
     ICheckInRepository CheckIns { get; }
     IRouteRepository Routes { get; }

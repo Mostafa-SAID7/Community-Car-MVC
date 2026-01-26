@@ -21,6 +21,8 @@ public class UnitOfWork : IUnitOfWork
         IReactionRepository reactionRepository,
         ICommentRepository commentRepository,
         IShareRepository shareRepository,
+        ICategoryRepository categoryRepository,
+        ITagRepository tagRepository,
         IPointOfInterestRepository pointOfInterestRepository,
         ICheckInRepository checkInRepository,
         IRouteRepository routeRepository,
@@ -43,6 +45,8 @@ public class UnitOfWork : IUnitOfWork
         Reactions = reactionRepository;
         Comments = commentRepository;
         Shares = shareRepository;
+        Categories = categoryRepository;
+        Tags = tagRepository;
         PointsOfInterest = pointOfInterestRepository;
         CheckIns = checkInRepository;
         Routes = routeRepository;
@@ -65,6 +69,8 @@ public class UnitOfWork : IUnitOfWork
     public IReactionRepository Reactions { get; }
     public ICommentRepository Comments { get; }
     public IShareRepository Shares { get; }
+    public ICategoryRepository Categories { get; }
+    public ITagRepository Tags { get; }
     public IPointOfInterestRepository PointsOfInterest { get; }
     public ICheckInRepository CheckIns { get; }
     public IRouteRepository Routes { get; }
