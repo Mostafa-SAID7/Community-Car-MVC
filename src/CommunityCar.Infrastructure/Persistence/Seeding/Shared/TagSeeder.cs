@@ -20,9 +20,10 @@ public class TagSeeder
     {
         try
         {
-            if (await _context.Tags.AnyAsync())
+            var existingTagCount = await _context.Tags.CountAsync();
+            if (existingTagCount > 0)
             {
-                _logger.LogInformation("Tags already exist, skipping seeding");
+                _logger.LogInformation("Tags already exist ({Count} tags), skipping seeding", existingTagCount);
                 return;
             }
 

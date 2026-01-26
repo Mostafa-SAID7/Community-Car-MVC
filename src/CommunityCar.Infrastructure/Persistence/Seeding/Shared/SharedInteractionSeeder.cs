@@ -22,12 +22,6 @@ public class SharedInteractionSeeder
     {
         try
         {
-            if (await _context.Reactions.AnyAsync() || await _context.Comments.AnyAsync())
-            {
-                _logger.LogInformation("Shared interactions already exist, skipping seeding");
-                return;
-            }
-
             _logger.LogInformation("Seeding shared interactions...");
 
             var users = await _context.Users.Take(50).ToListAsync();
@@ -45,103 +39,22 @@ public class SharedInteractionSeeder
             }
 
             var random = new Random();
-            var reactions = new List<Reaction>();
-            var comments = new List<Comment>();
-            var votes = new List<Vote>();
-            var shares = new List<Share>();
-            var ratings = new List<Rating>();
-            var bookmarks = new List<Bookmark>();
-            var views = new List<View>();
 
-            // Seed reactions for different entity types
-            await SeedReactionsAsync(users, posts, EntityType.Post, reactions, random);
-            await SeedReactionsAsync(users, questions, EntityType.Question, reactions, random);
-            await SeedReactionsAsync(users, stories, EntityType.Story, reactions, random);
-            await SeedReactionsAsync(users, reviews, EntityType.Review, reactions, random);
-            await SeedReactionsAsync(users, guides, EntityType.Guide, reactions, random);
-            await SeedReactionsAsync(users, news, EntityType.News, reactions, random);
-
-            // Seed comments for different entity types
-            await SeedCommentsAsync(users, posts, EntityType.Post, comments, random);
-            await SeedCommentsAsync(users, questions, EntityType.Question, comments, random);
-            await SeedCommentsAsync(users, stories, EntityType.Story, comments, random);
-            await SeedCommentsAsync(users, reviews, EntityType.Review, comments, random);
-            await SeedCommentsAsync(users, guides, EntityType.Guide, comments, random);
-            await SeedCommentsAsync(users, news, EntityType.News, comments, random);
-
-            // Seed votes (mainly for Q&A)
-            await SeedVotesAsync(users, questions, EntityType.Question, votes, random);
-            if (await _context.Answers.AnyAsync())
-            {
-                var answers = await _context.Answers.Take(30).ToListAsync();
-                await SeedVotesAsync(users, answers, EntityType.Answer, votes, random);
-            }
-
-            // Seed shares
-            await SeedSharesAsync(users, posts, EntityType.Post, shares, random);
-            await SeedSharesAsync(users, stories, EntityType.Story, shares, random);
-            await SeedSharesAsync(users, news, EntityType.News, shares, random);
-
-            // Seed ratings (for reviews, guides, etc.)
-            await SeedRatingsAsync(users, reviews, EntityType.Review, ratings, random);
-            await SeedRatingsAsync(users, guides, EntityType.Guide, ratings, random);
-
-            // Seed bookmarks
-            await SeedBookmarksAsync(users, posts, EntityType.Post, bookmarks, random);
-            await SeedBookmarksAsync(users, questions, EntityType.Question, bookmarks, random);
-            await SeedBookmarksAsync(users, guides, EntityType.Guide, bookmarks, random);
-            await SeedBookmarksAsync(users, reviews, EntityType.Review, bookmarks, random);
-
-            // Seed views
-            await SeedViewsAsync(users, posts, EntityType.Post, views, random);
-            await SeedViewsAsync(users, questions, EntityType.Question, views, random);
-            await SeedViewsAsync(users, stories, EntityType.Story, views, random);
-            await SeedViewsAsync(users, news, EntityType.News, views, random);
-
-            // Save all interactions
-            if (reactions.Any())
-            {
-                await _context.Reactions.AddRangeAsync(reactions);
-                _logger.LogInformation("Added {Count} reactions", reactions.Count);
-            }
-
-            if (comments.Any())
-            {
-                await _context.Comments.AddRangeAsync(comments);
-                _logger.LogInformation("Added {Count} comments", comments.Count);
-            }
-
-            if (votes.Any())
-            {
-                await _context.Votes.AddRangeAsync(votes);
-                _logger.LogInformation("Added {Count} votes", votes.Count);
-            }
-
-            if (shares.Any())
-            {
-                await _context.Shares.AddRangeAsync(shares);
-                _logger.LogInformation("Added {Count} shares", shares.Count);
-            }
-
-            if (ratings.Any())
-            {
-                await _context.Ratings.AddRangeAsync(ratings);
-                _logger.LogInformation("Added {Count} ratings", ratings.Count);
-            }
-
-            if (bookmarks.Any())
-            {
-                await _context.Bookmarks.AddRangeAsync(bookmarks);
-                _logger.LogInformation("Added {Count} bookmarks", bookmarks.Count);
-            }
-
-            if (views.Any())
-            {
-                await _context.Views.AddRangeAsync(views);
-                _logger.LogInformation("Added {Count} views", views.Count);
-            }
-
-            await _context.SaveChangesAsync();
+            // Seed each interaction type independently
+            await SeedReactionsIfNeededAsync(users, posts.Cast<object>().ToList(), questions.Cast<object>().ToList(), 
+                stories.Cast<object>().ToList(), reviews.Cast<object>().ToList(), guides.Cast<object>().ToList(), 
+                news.Cast<object>().ToList(), random);
+            await SeedCommentsIfNeededAsync(users, posts.Cast<object>().ToList(), questions.Cast<object>().ToList(), 
+                stories.Cast<object>().ToList(), reviews.Cast<object>().ToList(), guides.Cast<object>().ToList(), 
+                news.Cast<object>().ToList(), random);
+            await SeedVotesIfNeededAsync(users, questions.Cast<object>().ToList(), random);
+            await SeedSharesIfNeededAsync(users, posts.Cast<object>().ToList(), stories.Cast<object>().ToList(), 
+                news.Cast<object>().ToList(), random);
+            await SeedRatingsIfNeededAsync(users, reviews.Cast<object>().ToList(), guides.Cast<object>().ToList(), random);
+            await SeedBookmarksIfNeededAsync(users, posts.Cast<object>().ToList(), questions.Cast<object>().ToList(), 
+                guides.Cast<object>().ToList(), reviews.Cast<object>().ToList(), random);
+            await SeedViewsIfNeededAsync(users, posts.Cast<object>().ToList(), questions.Cast<object>().ToList(), 
+                stories.Cast<object>().ToList(), news.Cast<object>().ToList(), random);
 
             _logger.LogInformation("Successfully seeded shared interactions");
         }
@@ -149,6 +62,181 @@ public class SharedInteractionSeeder
         {
             _logger.LogError(ex, "Error seeding shared interactions");
             throw;
+        }
+    }
+
+    private async Task SeedReactionsIfNeededAsync(List<User> users, List<object> posts, List<object> questions, 
+        List<object> stories, List<object> reviews, List<object> guides, List<object> news, Random random)
+    {
+        if (await _context.Reactions.AnyAsync())
+        {
+            _logger.LogInformation("Reactions already exist, skipping reactions seeding");
+            return;
+        }
+
+        var reactions = new List<Reaction>();
+
+        // Seed reactions for different entity types
+        await SeedReactionsAsync(users, posts, EntityType.Post, reactions, random);
+        await SeedReactionsAsync(users, questions, EntityType.Question, reactions, random);
+        await SeedReactionsAsync(users, stories, EntityType.Story, reactions, random);
+        await SeedReactionsAsync(users, reviews, EntityType.Review, reactions, random);
+        await SeedReactionsAsync(users, guides, EntityType.Guide, reactions, random);
+        await SeedReactionsAsync(users, news, EntityType.News, reactions, random);
+
+        if (reactions.Any())
+        {
+            await _context.Reactions.AddRangeAsync(reactions);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Added {Count} reactions", reactions.Count);
+        }
+    }
+
+    private async Task SeedCommentsIfNeededAsync(List<User> users, List<object> posts, List<object> questions, 
+        List<object> stories, List<object> reviews, List<object> guides, List<object> news, Random random)
+    {
+        if (await _context.Comments.AnyAsync())
+        {
+            _logger.LogInformation("Comments already exist, skipping comments seeding");
+            return;
+        }
+
+        var comments = new List<Comment>();
+
+        // Seed comments for different entity types
+        await SeedCommentsAsync(users, posts, EntityType.Post, comments, random);
+        await SeedCommentsAsync(users, questions, EntityType.Question, comments, random);
+        await SeedCommentsAsync(users, stories, EntityType.Story, comments, random);
+        await SeedCommentsAsync(users, reviews, EntityType.Review, comments, random);
+        await SeedCommentsAsync(users, guides, EntityType.Guide, comments, random);
+        await SeedCommentsAsync(users, news, EntityType.News, comments, random);
+
+        if (comments.Any())
+        {
+            await _context.Comments.AddRangeAsync(comments);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Added {Count} comments", comments.Count);
+        }
+    }
+
+    private async Task SeedVotesIfNeededAsync(List<User> users, List<object> questions, Random random)
+    {
+        if (await _context.Votes.AnyAsync())
+        {
+            _logger.LogInformation("Votes already exist, skipping votes seeding");
+            return;
+        }
+
+        var votes = new List<Vote>();
+
+        // Seed votes (mainly for Q&A)
+        await SeedVotesAsync(users, questions, EntityType.Question, votes, random);
+        if (await _context.Answers.AnyAsync())
+        {
+            var answers = await _context.Answers.Take(30).ToListAsync();
+            await SeedVotesAsync(users, answers.Cast<object>().ToList(), EntityType.Answer, votes, random);
+        }
+
+        if (votes.Any())
+        {
+            await _context.Votes.AddRangeAsync(votes);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Added {Count} votes", votes.Count);
+        }
+    }
+
+    private async Task SeedSharesIfNeededAsync(List<User> users, List<object> posts, List<object> stories, List<object> news, Random random)
+    {
+        if (await _context.Shares.AnyAsync())
+        {
+            _logger.LogInformation("Shares already exist, skipping shares seeding");
+            return;
+        }
+
+        var shares = new List<Share>();
+
+        // Seed shares
+        await SeedSharesAsync(users, posts, EntityType.Post, shares, random);
+        await SeedSharesAsync(users, stories, EntityType.Story, shares, random);
+        await SeedSharesAsync(users, news, EntityType.News, shares, random);
+
+        if (shares.Any())
+        {
+            await _context.Shares.AddRangeAsync(shares);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Added {Count} shares", shares.Count);
+        }
+    }
+
+    private async Task SeedRatingsIfNeededAsync(List<User> users, List<object> reviews, List<object> guides, Random random)
+    {
+        if (await _context.Ratings.AnyAsync())
+        {
+            _logger.LogInformation("Ratings already exist, skipping ratings seeding");
+            return;
+        }
+
+        var ratings = new List<Rating>();
+
+        // Seed ratings (for reviews, guides, etc.)
+        await SeedRatingsAsync(users, reviews, EntityType.Review, ratings, random);
+        await SeedRatingsAsync(users, guides, EntityType.Guide, ratings, random);
+
+        if (ratings.Any())
+        {
+            await _context.Ratings.AddRangeAsync(ratings);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Added {Count} ratings", ratings.Count);
+        }
+    }
+
+    private async Task SeedBookmarksIfNeededAsync(List<User> users, List<object> posts, List<object> questions, 
+        List<object> guides, List<object> reviews, Random random)
+    {
+        if (await _context.Bookmarks.AnyAsync())
+        {
+            _logger.LogInformation("Bookmarks already exist, skipping bookmarks seeding");
+            return;
+        }
+
+        var bookmarks = new List<Bookmark>();
+
+        // Seed bookmarks
+        await SeedBookmarksAsync(users, posts, EntityType.Post, bookmarks, random);
+        await SeedBookmarksAsync(users, questions, EntityType.Question, bookmarks, random);
+        await SeedBookmarksAsync(users, guides, EntityType.Guide, bookmarks, random);
+        await SeedBookmarksAsync(users, reviews, EntityType.Review, bookmarks, random);
+
+        if (bookmarks.Any())
+        {
+            await _context.Bookmarks.AddRangeAsync(bookmarks);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Added {Count} bookmarks", bookmarks.Count);
+        }
+    }
+
+    private async Task SeedViewsIfNeededAsync(List<User> users, List<object> posts, List<object> questions, 
+        List<object> stories, List<object> news, Random random)
+    {
+        if (await _context.Views.AnyAsync())
+        {
+            _logger.LogInformation("Views already exist, skipping views seeding");
+            return;
+        }
+
+        var views = new List<View>();
+
+        // Seed views
+        await SeedViewsAsync(users, posts, EntityType.Post, views, random);
+        await SeedViewsAsync(users, questions, EntityType.Question, views, random);
+        await SeedViewsAsync(users, stories, EntityType.Story, views, random);
+        await SeedViewsAsync(users, news, EntityType.News, views, random);
+
+        if (views.Any())
+        {
+            await _context.Views.AddRangeAsync(views);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Added {Count} views", views.Count);
         }
     }
 

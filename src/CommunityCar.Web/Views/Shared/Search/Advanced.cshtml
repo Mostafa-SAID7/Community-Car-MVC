@@ -1,0 +1,169 @@
+@{
+    ViewData["Title"] = "Advanced Search";
+    Layout = "_Layout";
+}
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Search Header -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Advanced Search</h1>
+                <button id="clearFilters" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                    Clear All Filters
+                </button>
+            </div>
+            
+            <!-- Main Search Input -->
+            <div class="relative">
+                <input type="text" id="searchQuery" placeholder="Search across all content..." 
+                       class="w-full pl-12 pr-4 py-3 text-lg border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Search Filters</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Content Type Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Content Type</label>
+                    <select id="entityType" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <option value="">All Types</option>
+                        <option value="Post">Posts</option>
+                        <option value="Comment">Comments</option>
+                        <option value="Story">Stories</option>
+                        <option value="Guide">Guides</option>
+                        <option value="Review">Reviews</option>
+                        <option value="Question">Questions</option>
+                        <option value="Answer">Answers</option>
+                        <option value="Event">Events</option>
+                        <option value="Group">Groups</option>
+                        <option value="NewsItem">News</option>
+                        <option value="PointOfInterest">Places</option>
+                        <option value="Route">Routes</option>
+                    </select>
+                </div>
+
+                <!-- Category Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
+                    <select id="categoryId" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <option value="">All Categories</option>
+                        <!-- Categories will be loaded dynamically -->
+                    </select>
+                </div>
+
+                <!-- Date Range Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date Range</label>
+                    <select id="dateRange" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <option value="">Any Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+
+                <!-- Sort By Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sort By</label>
+                    <select id="sortBy" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <option value="relevance">Relevance</option>
+                        <option value="date">Date</option>
+                        <option value="popularity">Popularity</option>
+                        <option value="rating">Rating</option>
+                        <option value="views">Views</option>
+                    </select>
+                </div>
+
+                <!-- Author Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Author</label>
+                    <input type="text" id="authorName" placeholder="Search by author..." 
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                </div>
+
+                <!-- Tags Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tags</label>
+                    <input type="text" id="tags" placeholder="Enter tags separated by commas..." 
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <!-- Custom Date Range (Hidden by default) -->
+            <div id="customDateRange" class="hidden mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">From Date</label>
+                    <input type="date" id="fromDate" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">To Date</label>
+                    <input type="date" id="toDate" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="mt-6">
+                <button id="searchButton" class="w-full md:w-auto px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+                    Search
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div id="searchResults" class="space-y-6">
+            <!-- Results will be loaded here -->
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden text-center py-12">
+            <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-primary-500 transition ease-in-out duration-150">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Searching...
+            </div>
+        </div>
+
+        <!-- No Results State -->
+        <div id="noResults" class="hidden text-center py-12">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">No results found</h3>
+                <p class="mt-2 text-gray-500 dark:text-gray-400">Try adjusting your search criteria or filters.</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="hidden mt-8 flex justify-center">
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <!-- Pagination buttons will be generated here -->
+            </nav>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/search.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize advanced search
+            if (typeof window.SharedSearch !== 'undefined') {
+                window.SharedSearch.initAdvancedSearch();
+            }
+        });
+    </script>
+}
