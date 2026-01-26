@@ -1,0 +1,252 @@
+<!-- Alert Modal -->
+<div id="alertModal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div id="alertBackdrop" class="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 opacity-0"></div>
+    
+    <!-- Modal Container -->
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div id="alertModalContent" class="bg-background rounded-lg shadow-xl max-w-md w-full transform transition-all duration-300 scale-95 opacity-0">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-border">
+                <div class="flex items-center gap-3">
+                    <div id="alertIcon" class="flex items-center justify-center w-10 h-10 rounded-full">
+                        <!-- Icon will be inserted here -->
+                    </div>
+                    <h3 id="alertTitle" class="text-lg font-semibold text-foreground">Alert</h3>
+                </div>
+                <button id="alertCloseBtn" class="text-muted-foreground hover:text-foreground transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6">
+                <p id="alertMessage" class="text-foreground leading-relaxed">Alert message will appear here.</p>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="flex items-center justify-end gap-3 p-6 border-t border-border">
+                <button id="alertCancelBtn" class="btn btn-outline hidden">Cancel</button>
+                <button id="alertConfirmBtn" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Alert Modal System
+    window.AlertModal = (function() {
+        let modal, backdrop, content, icon, title, message, confirmBtn, cancelBtn, closeBtn;
+        let currentCallback = null;
+        let isOpen = false;
+
+        function init() {
+            modal = document.getElementById('alertModal');
+            backdrop = document.getElementById('alertBackdrop');
+            content = document.getElementById('alertModalContent');
+            icon = document.getElementById('alertIcon');
+            title = document.getElementById('alertTitle');
+            message = document.getElementById('alertMessage');
+            confirmBtn = document.getElementById('alertConfirmBtn');
+            cancelBtn = document.getElementById('alertCancelBtn');
+            closeBtn = document.getElementById('alertCloseBtn');
+
+            // Event listeners
+            confirmBtn.addEventListener('click', handleConfirm);
+            cancelBtn.addEventListener('click', handleCancel);
+            closeBtn.addEventListener('click', handleClose);
+            backdrop.addEventListener('click', handleClose);
+
+            // Escape key handler
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && isOpen) {
+                    handleClose();
+                }
+            });
+        }
+
+        function show(options) {
+            if (!modal) init();
+
+            const {
+                type = 'info',
+                title: alertTitle = 'Alert',
+                message: alertMessage = '',
+                showCancel = false,
+                confirmText = 'OK',
+                cancelText = 'Cancel',
+                callback = null
+            } = options;
+
+            // Set content
+            title.textContent = alertTitle;
+            
+            // Check if message contains HTML
+            if (alertMessage.includes('<') && alertMessage.includes('>')) {
+                message.innerHTML = alertMessage;
+            } else {
+                message.textContent = alertMessage;
+            }
+            
+            confirmBtn.textContent = confirmText;
+            cancelBtn.textContent = cancelText;
+            currentCallback = callback;
+
+            // Set icon and colors based on type
+            setAlertType(type);
+
+            // Show/hide cancel button
+            if (showCancel) {
+                cancelBtn.classList.remove('hidden');
+            } else {
+                cancelBtn.classList.add('hidden');
+            }
+
+            // Show modal with animation
+            modal.classList.remove('hidden');
+            isOpen = true;
+
+            // Trigger animations
+            requestAnimationFrame(() => {
+                backdrop.classList.add('opacity-100');
+                content.classList.add('scale-100', 'opacity-100');
+                content.classList.remove('scale-95', 'opacity-0');
+            });
+
+            // Initialize icons if lucide is available
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function setAlertType(type) {
+            // Clear previous classes
+            icon.className = 'flex items-center justify-center w-10 h-10 rounded-full';
+            
+            let iconHtml = '';
+            let bgClass = '';
+
+            switch (type) {
+                case 'success':
+                    iconHtml = '<i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>';
+                    bgClass = 'bg-green-100 dark:bg-green-900/30';
+                    break;
+                case 'error':
+                    iconHtml = '<i data-lucide="x-circle" class="w-6 h-6 text-red-600"></i>';
+                    bgClass = 'bg-red-100 dark:bg-red-900/30';
+                    break;
+                case 'warning':
+                    iconHtml = '<i data-lucide="alert-triangle" class="w-6 h-6 text-yellow-600"></i>';
+                    bgClass = 'bg-yellow-100 dark:bg-yellow-900/30';
+                    break;
+                case 'info':
+                default:
+                    iconHtml = '<i data-lucide="info" class="w-6 h-6 text-blue-600"></i>';
+                    bgClass = 'bg-blue-100 dark:bg-blue-900/30';
+                    break;
+            }
+
+            icon.innerHTML = iconHtml;
+            icon.classList.add(bgClass);
+        }
+
+        function hide() {
+            if (!isOpen) return;
+
+            // Animate out
+            backdrop.classList.remove('opacity-100');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+
+            // Hide modal after animation
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                isOpen = false;
+                currentCallback = null;
+            }, 300);
+        }
+
+        function handleConfirm() {
+            if (currentCallback) {
+                currentCallback(true);
+            }
+            hide();
+        }
+
+        function handleCancel() {
+            if (currentCallback) {
+                currentCallback(false);
+            }
+            hide();
+        }
+
+        function handleClose() {
+            if (currentCallback) {
+                currentCallback(false);
+            }
+            hide();
+        }
+
+        // Public API
+        return {
+            show: show,
+            hide: hide,
+            
+            // Convenience methods
+            success: function(message, title = 'Success', callback = null) {
+                show({
+                    type: 'success',
+                    title: title,
+                    message: message,
+                    callback: callback
+                });
+            },
+            
+            error: function(message, title = 'Error', callback = null) {
+                show({
+                    type: 'error',
+                    title: title,
+                    message: message,
+                    callback: callback
+                });
+            },
+            
+            warning: function(message, title = 'Warning', callback = null) {
+                show({
+                    type: 'warning',
+                    title: title,
+                    message: message,
+                    callback: callback
+                });
+            },
+            
+            info: function(message, title = 'Information', callback = null) {
+                show({
+                    type: 'info',
+                    title: title,
+                    message: message,
+                    callback: callback
+                });
+            },
+            
+            confirm: function(message, title = 'Confirm', callback = null) {
+                show({
+                    type: 'warning',
+                    title: title,
+                    message: message,
+                    showCancel: true,
+                    confirmText: 'Yes',
+                    cancelText: 'No',
+                    callback: callback
+                });
+            }
+        };
+    })();
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.AlertModal && typeof window.AlertModal.init === 'function') {
+            window.AlertModal.init();
+        }
+    });
+</script>

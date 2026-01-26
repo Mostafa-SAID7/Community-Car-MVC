@@ -1,0 +1,163 @@
+@{
+    var entityId = ViewBag.EntityId?.ToString() ?? "";
+    var entityType = ViewBag.EntityType?.ToString() ?? "";
+    var shareCount = ViewBag.ShareCount ?? 0;
+}
+
+<div class="share-button-container">
+    <div class="dropdown">
+        <button class="share-btn flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground" 
+                type="button" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false">
+            <i data-lucide="share-2" class="w-4 h-4"></i>
+            <span class="share-count">@shareCount</span>
+        </button>
+        
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item share-link" href="#" 
+                   data-platform="facebook" 
+                   data-entity-id="@entityId" 
+                   data-entity-type="@entityType">
+                    <i data-lucide="facebook" class="w-4 h-4 mr-2"></i>
+                    Facebook
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item share-link" href="#" 
+                   data-platform="twitter" 
+                   data-entity-id="@entityId" 
+                   data-entity-type="@entityType">
+                    <i data-lucide="twitter" class="w-4 h-4 mr-2"></i>
+                    Twitter
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item share-link" href="#" 
+                   data-platform="linkedin" 
+                   data-entity-id="@entityId" 
+                   data-entity-type="@entityType">
+                    <i data-lucide="linkedin" class="w-4 h-4 mr-2"></i>
+                    LinkedIn
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item share-link" href="#" 
+                   data-platform="whatsapp" 
+                   data-entity-id="@entityId" 
+                   data-entity-type="@entityType">
+                    <i data-lucide="message-circle" class="w-4 h-4 mr-2"></i>
+                    WhatsApp
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item copy-link" href="#" 
+                   data-entity-id="@entityId" 
+                   data-entity-type="@entityType">
+                    <i data-lucide="copy" class="w-4 h-4 mr-2"></i>
+                    Copy Link
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    // Handle share links
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.share-link')) {
+            e.preventDefault();
+            
+            const link = e.target.closest('.share-link');
+            const platform = link.dataset.platform;
+            const entityId = link.dataset.entityId;
+            const entityType = link.dataset.entityType;
+            const currentUrl = window.location.href;
+            const title = document.title;
+            
+            let shareUrl = '';
+            
+            switch (platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(title)}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(title + ' ' + currentUrl)}`;
+                    break;
+            }
+            
+            if (shareUrl) {
+                // Track the share
+                trackShare(entityId, entityType, platform);
+                
+                // Open share window
+                window.open(shareUrl, 'share', 'width=600,height=400,scrollbars=yes,resizable=yes');
+            }
+        }
+        
+        if (e.target.closest('.copy-link')) {
+            e.preventDefault();
+            
+            const link = e.target.closest('.copy-link');
+            const entityId = link.dataset.entityId;
+            const entityType = link.dataset.entityType;
+            const currentUrl = window.location.href;
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(currentUrl).then(() => {
+                // Track the share
+                trackShare(entityId, entityType, 'copy');
+                
+                // Show success message (you can implement a toast here)
+                alert('Link copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy link:', err);
+                alert('Failed to copy link');
+            });
+        }
+    });
+    
+    function trackShare(entityId, entityType, platform) {
+        const form = new FormData();
+        form.append('entityId', entityId);
+        form.append('entityType', entityType);
+        form.append('platform', platform);
+        form.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+        
+        fetch('@Url.Action("Track", "Shares")', {
+            method: 'POST',
+            body: form,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update share count if provided
+                const countSpan = document.querySelector('.share-count');
+                if (countSpan && data.newCount) {
+                    countSpan.textContent = data.newCount;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error tracking share:', error);
+        });
+    }
+});
+</script>

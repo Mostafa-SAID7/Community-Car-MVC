@@ -1,0 +1,65 @@
+@model IEnumerable<CommunityCar.Application.Features.Interactions.ViewModels.CommentVM>
+
+<div class="comments-list space-y-4">
+    @if (Model?.Any() == true)
+    {
+        @foreach (var comment in Model)
+        {
+            <div class="comment-item flex gap-3 p-4 bg-muted/30 rounded-lg" data-comment-id="@comment.Id">
+                <div class="flex-shrink-0">
+                    <img src="@(comment.AuthorAvatar ?? "/images/default-avatar.png")" 
+                         alt="@comment.AuthorName" 
+                         class="w-10 h-10 rounded-full object-cover" />
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="font-medium text-foreground">@comment.AuthorName</span>
+                        <span class="text-sm text-muted-foreground">@comment.CreatedAt.ToString("MMM dd, yyyy 'at' HH:mm")</span>
+                    </div>
+                    <div class="text-foreground mb-2">
+                        @comment.Content
+                    </div>
+                    <div class="flex items-center gap-4 text-sm">
+                        <button class="text-muted-foreground hover:text-primary transition-colors reply-btn" 
+                                data-comment-id="@comment.Id">
+                            <i data-lucide="reply" class="w-4 h-4 inline mr-1"></i>
+                            Reply
+                        </button>
+                        @if (comment.CanEdit)
+                        {
+                            <button class="text-muted-foreground hover:text-primary transition-colors edit-btn" 
+                                    data-comment-id="@comment.Id">
+                                <i data-lucide="edit" class="w-4 h-4 inline mr-1"></i>
+                                Edit
+                            </button>
+                        }
+                        @if (comment.CanDelete)
+                        {
+                            <button class="text-muted-foreground hover:text-red-600 transition-colors delete-btn" 
+                                    data-comment-id="@comment.Id">
+                                <i data-lucide="trash-2" class="w-4 h-4 inline mr-1"></i>
+                                Delete
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center py-8 text-muted-foreground">
+            <i data-lucide="message-circle" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+            <p>No comments yet. Be the first to comment!</p>
+        </div>
+    }
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+});
+</script>

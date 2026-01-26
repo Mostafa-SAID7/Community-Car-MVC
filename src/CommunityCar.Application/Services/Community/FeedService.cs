@@ -419,6 +419,19 @@ public class FeedService : IFeedService
         {
             var relevanceScore = CalculateRelevanceScore(item.Tags.ToList(), item.CarMake, userInterests);
             
+            // Get user interaction status
+            var isLikedByUser = false;
+            var isBookmarkedByUser = false;
+            
+            if (request.UserId.HasValue)
+            {
+                var userReaction = await _unitOfWork.Reactions.GetUserReactionAsync(item.Id, EntityType.News, request.UserId.Value);
+                isLikedByUser = userReaction != null && userReaction.Type == ReactionType.Like;
+                
+                var userBookmark = await _unitOfWork.Bookmarks.GetUserBookmarkAsync(item.Id, EntityType.News, request.UserId.Value);
+                isBookmarkedByUser = userBookmark != null;
+            }
+            
             feedItems.Add(new FeedItemVM
             {
                 Id = item.Id,
@@ -436,6 +449,8 @@ public class FeedService : IFeedService
                 LikeCount = item.LikeCount,
                 CommentCount = item.CommentCount,
                 ShareCount = item.ShareCount,
+                IsLikedByUser = isLikedByUser,
+                IsBookmarkedByUser = isBookmarkedByUser,
                 Tags = item.Tags.ToList(),
                 Category = item.Category.ToString(),
                 CarMake = item.CarMake,
@@ -464,6 +479,19 @@ public class FeedService : IFeedService
         {
             var relevanceScore = CalculateRelevanceScore(new List<string>(), item.CarMake, userInterests);
             
+            // Get user interaction status
+            var isLikedByUser = false;
+            var isBookmarkedByUser = false;
+            
+            if (request.UserId.HasValue)
+            {
+                var userReaction = await _unitOfWork.Reactions.GetUserReactionAsync(item.Id, EntityType.Review, request.UserId.Value);
+                isLikedByUser = userReaction != null && userReaction.Type == ReactionType.Like;
+                
+                var userBookmark = await _unitOfWork.Bookmarks.GetUserBookmarkAsync(item.Id, EntityType.Review, request.UserId.Value);
+                isBookmarkedByUser = userBookmark != null;
+            }
+            
             feedItems.Add(new FeedItemVM
             {
                 Id = item.Id,
@@ -477,6 +505,8 @@ public class FeedService : IFeedService
                 ViewCount = item.ViewCount,
                 LikeCount = item.HelpfulCount,
                 CommentCount = item.ReplyCount,
+                IsLikedByUser = isLikedByUser,
+                IsBookmarkedByUser = isBookmarkedByUser,
                 Rating = item.Rating,
                 CarMake = item.CarMake,
                 CarModel = item.CarModel,
@@ -503,6 +533,19 @@ public class FeedService : IFeedService
         {
             var relevanceScore = CalculateRelevanceScore(item.Tags.ToList(), item.CarMake, userInterests);
             
+            // Get user interaction status
+            var isLikedByUser = false;
+            var isBookmarkedByUser = false;
+            
+            if (request.UserId.HasValue)
+            {
+                var userReaction = await _unitOfWork.Reactions.GetUserReactionAsync(item.Id, EntityType.Question, request.UserId.Value);
+                isLikedByUser = userReaction != null && userReaction.Type == ReactionType.Like;
+                
+                var userBookmark = await _unitOfWork.Bookmarks.GetUserBookmarkAsync(item.Id, EntityType.Question, request.UserId.Value);
+                isBookmarkedByUser = userBookmark != null;
+            }
+            
             feedItems.Add(new FeedItemVM
             {
                 Id = item.Id,
@@ -516,6 +559,8 @@ public class FeedService : IFeedService
                 ViewCount = item.ViewCount,
                 LikeCount = item.VoteScore,
                 CommentCount = item.AnswerCount,
+                IsLikedByUser = isLikedByUser,
+                IsBookmarkedByUser = isBookmarkedByUser,
                 Tags = item.Tags.ToList(),
                 CarMake = item.CarMake,
                 CarModel = item.CarModel,
@@ -543,6 +588,19 @@ public class FeedService : IFeedService
         {
             var relevanceScore = CalculateRelevanceScore(item.Tags.ToList(), item.CarMake, userInterests);
             
+            // Get user interaction status
+            var isLikedByUser = false;
+            var isBookmarkedByUser = false;
+            
+            if (request.UserId.HasValue)
+            {
+                var userReaction = await _unitOfWork.Reactions.GetUserReactionAsync(item.Id, EntityType.Story, request.UserId.Value);
+                isLikedByUser = userReaction != null && userReaction.Type == ReactionType.Like;
+                
+                var userBookmark = await _unitOfWork.Bookmarks.GetUserBookmarkAsync(item.Id, EntityType.Story, request.UserId.Value);
+                isBookmarkedByUser = userBookmark != null;
+            }
+            
             feedItems.Add(new FeedItemVM
             {
                 Id = item.Id,
@@ -556,6 +614,8 @@ public class FeedService : IFeedService
                 AuthorName = "Story Author", // TODO: Get from user service
                 ViewCount = item.ViewCount,
                 LikeCount = item.LikeCount,
+                IsLikedByUser = isLikedByUser,
+                IsBookmarkedByUser = isBookmarkedByUser,
                 Tags = item.Tags.ToList(),
                 CarMake = item.CarMake,
                 CarModel = item.CarModel,

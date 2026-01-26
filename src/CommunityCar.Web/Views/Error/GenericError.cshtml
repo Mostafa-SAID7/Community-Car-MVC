@@ -1,0 +1,55 @@
+@model CommunityCar.Web.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+    Layout = "_Layout";
+}
+
+<div class="min-h-screen flex items-center justify-center bg-background">
+    <div class="max-w-md w-full mx-auto">
+        <div class="text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30">
+                <i data-lucide="alert-circle" class="h-6 w-6 text-red-600 dark:text-red-400"></i>
+            </div>
+            <div class="mt-3 text-center sm:mt-5">
+                <h3 class="text-lg leading-6 font-medium text-foreground">
+                    Something went wrong
+                </h3>
+                <div class="mt-2">
+                    <p class="text-sm text-muted-foreground">
+                        An unexpected error occurred. Please try again later.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-5 sm:mt-6 flex gap-3">
+            <button onclick="history.back()" class="btn btn-outline flex-1">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                Go Back
+            </button>
+            <a href="/" class="btn btn-primary flex-1">
+                <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+                Home
+            </a>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model?.RequestId))
+        {
+            <div class="mt-4 text-center">
+                <p class="text-xs text-muted-foreground">
+                    Request ID: @Model.RequestId
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+}

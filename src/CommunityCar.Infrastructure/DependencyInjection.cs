@@ -10,12 +10,14 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Services.Shared;
+using CommunityCar.Application.Services.AI;
 using CommunityCar.Domain.Entities.Auth;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using CommunityCar.Infrastructure.Persistence.Repositories.Community;
 using CommunityCar.Infrastructure.Persistence.Repositories.Identity;
 using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
+using CommunityCar.Infrastructure.Persistence.Repositories.AI;
 using CommunityCar.Infrastructure.Persistence.UnitOfWork;
 using CommunityCar.Infrastructure.Services.Authentication;
 using CommunityCar.Infrastructure.Services.Communication;
@@ -104,6 +106,14 @@ public static class DependencyInjection
         services.AddScoped<IPostsRepository, PostsRepository>();
         services.AddScoped<IFriendsRepository, FriendsRepository>();
         services.AddScoped<IGuidesRepository, GuidesRepository>();
+
+        // AI Repositories
+        services.AddScoped<IAIModelRepository, AIModelRepository>();
+        services.AddScoped<ITrainingJobRepository, TrainingJobRepository>();
+        services.AddScoped<ITrainingHistoryRepository, TrainingHistoryRepository>();
+
+        // AI Services
+        services.AddScoped<IAIManagementService, AIManagementService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Authentication & Authorization services

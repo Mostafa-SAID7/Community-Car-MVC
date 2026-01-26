@@ -8,9 +8,7 @@ using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Web.Controllers.Shared.Shares;
 
-[Route("api/shared/shares")]
-[ApiController]
-public class SharesController : ControllerBase
+public class SharesController : Controller
 {
     private readonly IInteractionService _interactionService;
     private readonly ICurrentUserService _currentUserService;
@@ -27,158 +25,98 @@ public class SharesController : ControllerBase
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Track(string entityId, string entityType, string platform = "native")
+    {
+        try
+        {
+            if (!Guid.TryParse(entityId, out var parsedEntityId))
+                return Json(new { success = false, message = "Invalid entity ID" });
+
+            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+                return Json(new { success = false, message = "Invalid entity type" });
+
+            Guid? userId = null;
+            if (Guid.TryParse(_currentUserService.UserId, out var parsedUserId))
+                userId = parsedUserId;
+
+            var request = new ShareEntityRequest
+            {
+                EntityId = parsedEntityId,
+                EntityType = parsedEntityType,
+                UserId = userId ?? Guid.Empty,
+                Platform = platform,
+                ShareType = ShareType.External
+            };
+
+            var result = await _interactionService.ShareEntityAsync(request);
+            return Json(result);
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost]
     [Authorize]
-    public async Task<IActionResult> ShareContent([FromBody] ShareEntityRequest request)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Share(ShareEntityRequest request)
     {
         try
         {
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Json(new { success = false, message = "User must be authenticated" });
+                
+                return RedirectToAction("Login", "Account");
+            }
 
             request.UserId = userId;
             var result = await _interactionService.ShareEntityAsync(request);
-            return Ok(result);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return Json(result);
+
+            TempData["SuccessMessage"] = "Content shared successfully";
+            return Redirect(Request.Headers["Referer"].ToString());
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return Json(new { success = false, message = ex.Message });
+
+            TempData["ErrorMessage"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 
-    [HttpGet("{entityType}/{entityId}")]
-    public async Task<IActionResult> GetShares(EntityType entityType, Guid entityId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
-    {
-        try
-        {
-            var shares = await _interactionService.GetEntitySharesAsync(entityId, entityType);
-            return Ok(shares);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpGet("{entityType}/{entityId}/summary")]
-    public async Task<IActionResult> GetShareSummary(EntityType entityType, Guid entityId)
+    [HttpGet]
+    public async Task<IActionResult> GetSummary(EntityType entityType, Guid entityId)
     {
         try
         {
             var summary = await _interactionService.GetShareSummaryAsync(entityId, entityType);
-            return Ok(summary);
+            return Json(summary);
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 
-    [HttpGet("{entityType}/{entityId}/metadata")]
-    public async Task<IActionResult> GetShareMetadata(EntityType entityType, Guid entityId)
+    [HttpGet]
+    public async Task<IActionResult> GetMetadata(EntityType entityType, Guid entityId)
     {
         try
         {
             var metadata = await _interactionService.GetShareMetadataAsync(entityId, entityType);
-            return Ok(metadata);
+            return Json(metadata);
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpGet("{entityType}/{entityId}/url")]
-    public async Task<IActionResult> GenerateShareUrl(EntityType entityType, Guid entityId)
-    {
-        try
-        {
-            var shareUrl = await _interactionService.GenerateShareUrlAsync(entityId, entityType);
-            return Ok(new { shareUrl });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpGet("{entityType}/{entityId}/count")]
-    public async Task<IActionResult> GetShareCount(EntityType entityType, Guid entityId)
-    {
-        try
-        {
-            var count = await _shareRepository.GetShareCountAsync(entityId, entityType);
-            return Ok(new { count });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpGet("user")]
-    [Authorize]
-    public async Task<IActionResult> GetUserShares([FromQuery] EntityType? entityType = null, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
-    {
-        try
-        {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
-
-            var shares = await _shareRepository.GetUserSharesAsync(userId, entityType);
-            return Ok(shares);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpGet("platforms")]
-    public async Task<IActionResult> GetSupportedPlatforms()
-    {
-        try
-        {
-            var platforms = new[]
-            {
-                new { name = "Facebook", icon = "fab fa-facebook", color = "#1877F2" },
-                new { name = "Twitter", icon = "fab fa-twitter", color = "#1DA1F2" },
-                new { name = "LinkedIn", icon = "fab fa-linkedin", color = "#0A66C2" },
-                new { name = "WhatsApp", icon = "fab fa-whatsapp", color = "#25D366" },
-                new { name = "Telegram", icon = "fab fa-telegram", color = "#0088CC" },
-                new { name = "Email", icon = "fas fa-envelope", color = "#EA4335" },
-                new { name = "Copy Link", icon = "fas fa-link", color = "#6B7280" }
-            };
-            
-            return Ok(platforms);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpDelete("{id}")]
-    [Authorize]
-    public async Task<IActionResult> DeleteShare(Guid id)
-    {
-        try
-        {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
-
-            var share = await _shareRepository.GetByIdAsync(id);
-            if (share == null)
-                return NotFound(new { success = false, message = "Share not found" });
-
-            if (share.UserId != userId)
-                return Forbid("You can only delete your own shares");
-
-            await _shareRepository.DeleteAsync(share);
-            return Ok(new { success = true, message = "Share deleted successfully" });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 }

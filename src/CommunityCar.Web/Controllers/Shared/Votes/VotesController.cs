@@ -8,9 +8,7 @@ using CommunityCar.Domain.Entities.Shared;
 
 namespace CommunityCar.Web.Controllers.Shared.Votes;
 
-[Route("api/shared/votes")]
-[ApiController]
-public class VotesController : ControllerBase
+public class VotesController : Controller
 {
     private readonly IInteractionService _interactionService;
     private readonly ICurrentUserService _currentUserService;
@@ -28,74 +26,103 @@ public class VotesController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CastVote([FromBody] CreateVoteRequest request)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CastVote([FromForm] string entityId, [FromForm] string entityType, [FromForm] string voteType)
     {
         try
         {
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
+                return Json(new { success = false, message = "User must be authenticated" });
 
-            var vote = new Vote(request.EntityId, request.EntityType, userId, request.VoteType);
+            if (!Guid.TryParse(entityId, out var parsedEntityId))
+                return Json(new { success = false, message = "Invalid entity ID" });
+
+            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+                return Json(new { success = false, message = "Invalid entity type" });
+
+            if (!Enum.TryParse<VoteType>(voteType, out var parsedVoteType))
+                return Json(new { success = false, message = "Invalid vote type" });
+
+            var vote = new Vote(parsedEntityId, parsedEntityType, userId, parsedVoteType);
             await _voteRepository.AddAsync(vote);
             
-            return Ok(new { success = true, vote });
+            return Json(new { success = true, vote });
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut]
     [Authorize]
-    public async Task<IActionResult> UpdateVote(Guid id, [FromBody] UpdateVoteRequest request)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateVote([FromForm] string id, [FromForm] string voteType)
     {
         try
         {
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
+                return Json(new { success = false, message = "User must be authenticated" });
 
-            var vote = await _voteRepository.GetByIdAsync(id);
+            if (!Guid.TryParse(id, out var parsedId))
+                return Json(new { success = false, message = "Invalid vote ID" });
+
+            if (!Enum.TryParse<VoteType>(voteType, out var parsedVoteType))
+                return Json(new { success = false, message = "Invalid vote type" });
+
+            var vote = await _voteRepository.GetByIdAsync(parsedId);
             if (vote == null)
-                return NotFound(new { success = false, message = "Vote not found" });
+                return Json(new { success = false, message = "Vote not found" });
 
             if (vote.UserId != userId)
-                return Forbid("You can only update your own votes");
+                return Json(new { success = false, message = "You can only update your own votes" });
 
             // Note: Vote entity would need update methods
             await _voteRepository.UpdateAsync(vote);
-            return Ok(new { success = true, vote });
+            return Json(new { success = true, vote });
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 
-    [HttpGet("{entityType}/{entityId}")]
-    public async Task<IActionResult> GetEntityVotes(EntityType entityType, Guid entityId)
+    [HttpGet]
+    public async Task<IActionResult> GetEntityVotes(string entityType, string entityId)
     {
         try
         {
-            var votes = await _voteRepository.GetVotesByEntityAsync(entityId, entityType);
-            return Ok(votes);
+            if (!Guid.TryParse(entityId, out var parsedEntityId))
+                return Json(new { success = false, message = "Invalid entity ID" });
+
+            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+                return Json(new { success = false, message = "Invalid entity type" });
+
+            var votes = await _voteRepository.GetVotesByEntityAsync(parsedEntityId, parsedEntityType);
+            return Json(votes);
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 
-    [HttpGet("{entityType}/{entityId}/summary")]
-    public async Task<IActionResult> GetVoteSummary(EntityType entityType, Guid entityId)
+    [HttpGet]
+    public async Task<IActionResult> GetVoteSummary(string entityType, string entityId)
     {
         try
         {
-            var upVotes = await _voteRepository.GetVoteCountAsync(entityId, entityType, VoteType.Upvote);
-            var downVotes = await _voteRepository.GetVoteCountAsync(entityId, entityType, VoteType.Downvote);
+            if (!Guid.TryParse(entityId, out var parsedEntityId))
+                return Json(new { success = false, message = "Invalid entity ID" });
+
+            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+                return Json(new { success = false, message = "Invalid entity type" });
+
+            var upVotes = await _voteRepository.GetVoteCountAsync(parsedEntityId, parsedEntityType, VoteType.Upvote);
+            var downVotes = await _voteRepository.GetVoteCountAsync(parsedEntityId, parsedEntityType, VoteType.Downvote);
             var score = upVotes - downVotes;
             
-            return Ok(new { 
+            return Json(new { 
                 upVotes, 
                 downVotes, 
                 score,
@@ -104,21 +131,27 @@ public class VotesController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 
-    [HttpGet("{entityType}/{entityId}/check")]
+    [HttpGet]
     [Authorize]
-    public async Task<IActionResult> CheckUserVote(EntityType entityType, Guid entityId)
+    public async Task<IActionResult> CheckUserVote(string entityType, string entityId)
     {
         try
         {
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
+                return Json(new { success = false, message = "User must be authenticated" });
 
-            var vote = await _voteRepository.GetUserVoteAsync(entityId, entityType, userId);
-            return Ok(new { 
+            if (!Guid.TryParse(entityId, out var parsedEntityId))
+                return Json(new { success = false, message = "Invalid entity ID" });
+
+            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+                return Json(new { success = false, message = "Invalid entity type" });
+
+            var vote = await _voteRepository.GetUserVoteAsync(parsedEntityId, parsedEntityType, userId);
+            return Json(new { 
                 hasVoted = vote != null, 
                 voteType = vote?.Type,
                 voteId = vote?.Id 
@@ -126,76 +159,78 @@ public class VotesController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpPost]
     [Authorize]
-    public async Task<IActionResult> RemoveVote(Guid id)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RemoveVote([FromForm] string id)
     {
         try
         {
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
+                return Json(new { success = false, message = "User must be authenticated" });
 
-            var vote = await _voteRepository.GetByIdAsync(id);
+            if (!Guid.TryParse(id, out var parsedId))
+                return Json(new { success = false, message = "Invalid vote ID" });
+
+            var vote = await _voteRepository.GetByIdAsync(parsedId);
             if (vote == null)
-                return NotFound(new { success = false, message = "Vote not found" });
+                return Json(new { success = false, message = "Vote not found" });
 
             if (vote.UserId != userId)
-                return Forbid("You can only remove your own votes");
+                return Json(new { success = false, message = "You can only remove your own votes" });
 
             await _voteRepository.DeleteAsync(vote);
-            return Ok(new { success = true, message = "Vote removed successfully" });
+            return Json(new { success = true, message = "Vote removed successfully" });
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 
-    [HttpGet("user")]
+    [HttpGet]
     [Authorize]
-    public async Task<IActionResult> GetUserVotes([FromQuery] EntityType? entityType = null, [FromQuery] VoteType? voteType = null, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    public async Task<IActionResult> GetUserVotes(string? entityType = null, string? voteType = null, int page = 1, int pageSize = 20)
     {
         try
         {
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
+                return Json(new { success = false, message = "User must be authenticated" });
 
-            var votes = await _voteRepository.GetUserVotesAsync(userId, entityType);
-            return Ok(votes);
+            EntityType? parsedEntityType = null;
+            if (!string.IsNullOrEmpty(entityType) && Enum.TryParse<EntityType>(entityType, out var et))
+                parsedEntityType = et;
+
+            var votes = await _voteRepository.GetUserVotesAsync(userId, parsedEntityType);
+            return Json(votes);
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 
-    [HttpGet("{entityType}/{entityId}/reactions")]
-    public async Task<IActionResult> GetEntityReactions(EntityType entityType, Guid entityId)
+    [HttpGet]
+    public async Task<IActionResult> GetEntityReactions(string entityType, string entityId)
     {
         try
         {
-            var reactions = await _interactionService.GetEntityReactionsAsync(entityId, entityType);
-            return Ok(reactions);
+            if (!Guid.TryParse(entityId, out var parsedEntityId))
+                return Json(new { success = false, message = "Invalid entity ID" });
+
+            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+                return Json(new { success = false, message = "Invalid entity type" });
+
+            var reactions = await _interactionService.GetEntityReactionsAsync(parsedEntityId, parsedEntityType);
+            return Json(reactions);
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
-}
-
-public class CreateVoteRequest
-{
-    public Guid EntityId { get; set; }
-    public EntityType EntityType { get; set; }
-    public VoteType VoteType { get; set; }
-}
-
-public class UpdateVoteRequest
-{
-    public VoteType VoteType { get; set; }
 }

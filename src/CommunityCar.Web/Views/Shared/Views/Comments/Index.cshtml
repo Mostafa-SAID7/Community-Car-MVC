@@ -1,0 +1,116 @@
+@model IEnumerable<CommunityCar.Application.Features.Interactions.ViewModels.CommentVM>
+@{
+    ViewData["Title"] = "Comments";
+    var entityId = ViewBag.EntityId?.ToString() ?? "";
+    var entityType = ViewBag.EntityType?.ToString() ?? "";
+}
+
+<div class="comments-section space-y-6">
+    <!-- Comments Header -->
+    <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-foreground">
+            Comments (@(Model?.Count() ?? 0))
+        </h3>
+    </div>
+
+    <!-- Comment Form -->
+    @await Html.PartialAsync("Views/Comments/_CommentForm")
+
+    <!-- Comments List -->
+    <div id="comments-container">
+        @await Html.PartialAsync("Views/Comments/_CommentsList", Model)
+    </div>
+
+    <!-- Load More Button (if needed) -->
+    @if (ViewBag.HasMore == true)
+    {
+        <div class="text-center">
+            <button class="btn btn-outline" id="load-more-btn" 
+                    data-entity-id="@entityId" 
+                    data-entity-type="@entityType"
+                    data-page="@(ViewBag.Page + 1)">
+                <i data-lucide="chevron-down" class="w-4 h-4 mr-2"></i>
+                Load More Comments
+            </button>
+        </div>
+    }
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    // Handle delete comment
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.delete-btn')) {
+            const btn = e.target.closest('.delete-btn');
+            const commentId = btn.dataset.commentId;
+            
+            if (confirm('Are you sure you want to delete this comment?')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '@Url.Action("Delete", "Comments")';
+                
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'id';
+                idInput.value = commentId;
+                
+                const returnUrlInput = document.createElement('input');
+                returnUrlInput.type = 'hidden';
+                returnUrlInput.name = 'returnUrl';
+                returnUrlInput.value = window.location.href;
+                
+                form.appendChild(tokenInput);
+                form.appendChild(idInput);
+                form.appendChild(returnUrlInput);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    });
+
+    // Handle load more
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function() {
+            const entityId = this.dataset.entityId;
+            const entityType = this.dataset.entityType;
+            const page = this.dataset.page;
+            
+            fetch(`@Url.Action("GetPartial", "Comments")?entityId=${entityId}&entityType=${entityType}&page=${page}`)
+                .then(response => response.text())
+                .then(html => {
+                    const container = document.getElementById('comments-container');
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    
+                    // Append new comments
+                    while (tempDiv.firstChild) {
+                        container.appendChild(tempDiv.firstChild);
+                    }
+                    
+                    // Update page number
+                    this.dataset.page = parseInt(page) + 1;
+                    
+                    // Re-initialize icons
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading more comments:', error);
+                });
+        });
+    }
+});
+</script>

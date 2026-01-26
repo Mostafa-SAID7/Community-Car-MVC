@@ -1,0 +1,121 @@
+@{
+    ViewData["Title"] = "Font Demo";
+    Layout = "_Layout";
+}
+
+<div class="space-y-8 p-6">
+    <!-- English/Arabic Font Demonstration -->
+    <div class="card">
+        <div class="card-header">
+            @Html.CultureHeading(2, "Typography Demonstration", new { @class = "card-title" })
+            @Html.CultureParagraph("This page demonstrates the automatic font switching between English and Arabic", new { @class = "card-description" })
+        </div>
+        <div class="card-content space-y-6">
+            
+            <!-- Headings Demo -->
+            <div>
+                @Html.CultureHeading(3, "Heading Examples", new { @class = "mb-4" })
+                
+                @Html.CultureHeading(1, Html.IsArabicCulture() ? "عنوان رئيسي كبير" : "Large Main Heading", new { @class = "mb-2" })
+                @Html.CultureHeading(2, Html.IsArabicCulture() ? "عنوان فرعي متوسط" : "Medium Sub Heading", new { @class = "mb-2" })
+                @Html.CultureHeading(3, Html.IsArabicCulture() ? "عنوان صغير" : "Small Section Heading", new { @class = "mb-2" })
+                @Html.CultureHeading(4, Html.IsArabicCulture() ? "عنوان فرعي صغير" : "Small Sub Heading", new { @class = "mb-2" })
+            </div>
+
+            <!-- Paragraph Demo -->
+            <div>
+                @Html.CultureHeading(3, "Paragraph Examples", new { @class = "mb-4" })
+                
+                @if (Html.IsArabicCulture())
+                {
+                    @Html.CultureParagraph("هذا نص تجريبي باللغة العربية لإظهار كيفية عرض الخط العربي بشكل صحيح. يستخدم هذا النص خط Noto Sans Arabic للنصوص العادية وخط Lemonada للعناوين.", new { @class = "mb-4" })
+                    @Html.CultureParagraph("يمكن للمستخدمين قراءة النص بوضوح وسهولة، مع مراعاة المسافات المناسبة بين الأسطر والحروف لضمان تجربة قراءة مريحة.", new { @class = "mb-4" })
+                }
+                else
+                {
+                    @Html.CultureParagraph("This is a sample text in English to demonstrate how the font system automatically switches between languages. The system uses Inter font for English content and provides optimal readability.", new { @class = "mb-4" })
+                    @Html.CultureParagraph("Users can read the text clearly and easily, with appropriate spacing between lines and letters to ensure a comfortable reading experience.", new { @class = "mb-4" })
+                }
+            </div>
+
+            <!-- Button Demo -->
+            <div>
+                @Html.CultureHeading(3, "Button Examples", new { @class = "mb-4" })
+                
+                <div class="flex flex-wrap gap-3">
+                    @Html.CultureButton(Html.IsArabicCulture() ? "زر أساسي" : "Primary Button", new { @class = "btn btn-primary" })
+                    @Html.CultureButton(Html.IsArabicCulture() ? "زر ثانوي" : "Secondary Button", new { @class = "btn btn-outline" })
+                    @Html.CultureButton(Html.IsArabicCulture() ? "زر صغير" : "Small Button", new { @class = "btn btn-sm btn-outline" })
+                </div>
+            </div>
+
+            <!-- Form Demo -->
+            <div>
+                @Html.CultureHeading(3, "Form Examples", new { @class = "mb-4" })
+                
+                <div class="space-y-4 max-w-md">
+                    <div>
+                        @Html.CultureLabel(Html.IsArabicCulture() ? "الاسم الكامل" : "Full Name", new { @class = "block text-sm font-medium mb-2" })
+                        <input type="text" class="input @Html.GetCultureFontClasses("input")" placeholder="@(Html.IsArabicCulture() ? "أدخل اسمك الكامل" : "Enter your full name")" />
+                    </div>
+                    
+                    <div>
+                        @Html.CultureLabel(Html.IsArabicCulture() ? "البريد الإلكتروني" : "Email Address", new { @class = "block text-sm font-medium mb-2" })
+                        <input type="email" class="input @Html.GetCultureFontClasses("input")" placeholder="@(Html.IsArabicCulture() ? "أدخل بريدك الإلكتروني" : "Enter your email")" />
+                    </div>
+                    
+                    <div>
+                        @Html.CultureLabel(Html.IsArabicCulture() ? "رسالة" : "Message", new { @class = "block text-sm font-medium mb-2" })
+                        <textarea class="textarea @Html.GetCultureFontClasses("input")" rows="4" placeholder="@(Html.IsArabicCulture() ? "اكتب رسالتك هنا..." : "Write your message here...")"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Demo -->
+            <div>
+                @Html.CultureHeading(3, "Card Examples", new { @class = "mb-4" })
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="card">
+                        <div class="card-header">
+                            @Html.CultureHeading(4, Html.IsArabicCulture() ? "بطاقة تجريبية" : "Sample Card", new { @class = "card-title" })
+                            @Html.CultureParagraph(Html.IsArabicCulture() ? "وصف البطاقة" : "Card description", new { @class = "card-description" })
+                        </div>
+                        <div class="card-content">
+                            @Html.CultureParagraph(Html.IsArabicCulture() ? "محتوى البطاقة يظهر هنا مع الخط المناسب للغة المحددة." : "Card content appears here with the appropriate font for the selected language.", new { @class = "text-sm" })
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            @Html.CultureHeading(4, Html.IsArabicCulture() ? "بطاقة أخرى" : "Another Card", new { @class = "card-title" })
+                            @Html.CultureParagraph(Html.IsArabicCulture() ? "وصف آخر" : "Another description", new { @class = "card-description" })
+                        </div>
+                        <div class="card-content">
+                            @Html.CultureParagraph(Html.IsArabicCulture() ? "هذا مثال آخر على كيفية عرض النص في البطاقات." : "This is another example of how text appears in cards.", new { @class = "text-sm" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Font Information -->
+            <div class="bg-muted/50 rounded-lg p-4">
+                @Html.CultureHeading(4, "Font Information", new { @class = "mb-2" })
+                <div class="text-sm space-y-1">
+                    <p class="@Html.GetCultureFontClasses("p")">
+                        <strong>Current Language:</strong> @(Html.IsArabicCulture() ? "Arabic (العربية)" : "English")
+                    </p>
+                    <p class="@Html.GetCultureFontClasses("p")">
+                        <strong>Heading Font:</strong> @(Html.IsArabicCulture() ? "Lemonada" : "Inter")
+                    </p>
+                    <p class="@Html.GetCultureFontClasses("p")">
+                        <strong>Body Font:</strong> @(Html.IsArabicCulture() ? "Noto Sans Arabic" : "Inter")
+                    </p>
+                    <p class="@Html.GetCultureFontClasses("p")">
+                        <strong>Direction:</strong> @(Html.IsArabicCulture() ? "Right-to-Left (RTL)" : "Left-to-Right (LTR)")
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

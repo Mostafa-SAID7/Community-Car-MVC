@@ -7,6 +7,7 @@ namespace CommunityCar.Web.Controllers.Api;
 
 [ApiController]
 [Route("api/ai/chat")]
+[IgnoreAntiforgeryToken]
 public class AIChatAssistantController : ControllerBase
 {
     private readonly IIntelligentChatService _intelligentChatService;
@@ -23,18 +24,20 @@ public class AIChatAssistantController : ControllerBase
     [HttpPost("message")]
     public async Task<IActionResult> SendMessage([FromBody] ChatMessageRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Message))
-        {
-            return Ok(new
-            {
-                success = false,
-                message = "Message cannot be empty."
-            });
-        }
-
         try
         {
+            if (string.IsNullOrWhiteSpace(request?.Message))
+            {
+                return Ok(new
+                {
+                    success = false,
+                    message = "Message cannot be empty."
+                });
+            }
+
             var userId = GetCurrentUserId();
+            _logger.LogInformation("Processing chat message for user {UserId}: {Message}", userId, request.Message);
+            
             var response = await _intelligentChatService.GetResponseAsync(request.Message, userId, request.Context);
             
             return Ok(new
@@ -56,11 +59,12 @@ public class AIChatAssistantController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error processing chat message for user {UserId}", GetCurrentUserId());
+            _logger.LogError(ex, "Error processing chat message: {Message}", ex.Message);
             return Ok(new
             {
                 success = false,
-                message = "I'm sorry, I encountered an error processing your message. Please try again."
+                message = "I'm sorry, I encountered an error processing your message. Please try again.",
+                error = ex.Message // Include error details for debugging
             });
         }
     }
@@ -229,6 +233,33 @@ public class AIChatAssistantController : ControllerBase
         }
     }
 
+    [HttpGet("test")]
+    public async Task<IActionResult> TestConnection()
+    {
+        try
+        {
+            _logger.LogInformation("AI Chat test endpoint called");
+            
+            return Ok(new
+            {
+                success = true,
+                message = "AI Chat service is working",
+                timestamp = DateTime.UtcNow,
+                userId = GetCurrentUserId()
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in test endpoint: {Message}", ex.Message);
+            return Ok(new
+            {
+                success = false,
+                message = "Test failed",
+                error = ex.Message
+            });
+        }
+    }
+
     [HttpGet("stats")]
     public async Task<IActionResult> GetUserStats()
     {
@@ -262,17 +293,9 @@ public class AIChatAssistantController : ControllerBase
             return userId;
         }
         
-        // Fallback for development/testing - generate a consistent ID based on session
-        var sessionId = HttpContext.Session.Id;
-        if (!string.IsNullOrEmpty(sessionId))
-        {
-            // Create a deterministic GUID from session ID
-            var hash = System.Security.Cryptography.MD5.HashData(System.Text.Encoding.UTF8.GetBytes(sessionId));
-            return new Guid(hash);
-        }
-        
-        // Final fallback
-        return Guid.NewGuid();
+        // Fallback for development/testing - use a consistent test user ID
+        // In production, this should be replaced with proper authentication
+        return new Guid("12345678-1234-1234-1234-123456789012");
     }
 }
 

@@ -29,6 +29,13 @@ public interface IInteractionService
     Task<string> GenerateShareUrlAsync(Guid entityId, EntityType entityType);
     Task<ShareMetadataVM> GetShareMetadataAsync(Guid entityId, EntityType entityType);
 
+    // Bookmark methods
+    Task<bool> BookmarkEntityAsync(Guid entityId, EntityType entityType, Guid userId);
+    Task<bool> RemoveBookmarkAsync(Guid entityId, EntityType entityType, Guid userId);
+
+    // View tracking methods
+    Task TrackViewAsync(Guid entityId, EntityType entityType, Guid? userId = null);
+
     // Combined interaction summary
     Task<InteractionSummaryVM> GetInteractionSummaryAsync(Guid entityId, EntityType entityType, Guid? userId = null);
 }

@@ -10,6 +10,7 @@ using CommunityCar.Domain.Entities.Profile;
 using CommunityCar.Domain.Enums;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Seeding.Shared;
+using CommunityCar.Infrastructure.Persistence.Seeding.AI;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -106,6 +107,21 @@ public class DataSeeder
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error seeding shared interactions");
+            throw;
+        }
+
+        // Seed AI models
+        try
+        {
+            _logger.LogInformation("Starting AI models seeding...");
+            
+            await AIModelSeeder.SeedAsync(_context);
+            
+            _logger.LogInformation("AI models seeding completed");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error seeding AI models");
             throw;
         }
     }

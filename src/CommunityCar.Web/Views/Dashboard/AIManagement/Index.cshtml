@@ -1,0 +1,258 @@
+@model dynamic
+@{
+    ViewData["Title"] = "AI Management Dashboard";
+    Layout = "_DashboardLayout";
+}
+
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            @Html.CultureHeading(1, ViewData["Title"]?.ToString() ?? "AI Management Dashboard", new { @class = "text-2xl text-foreground" })
+            @Html.CultureParagraph("Monitor and manage AI services and models", new { @class = "text-muted-foreground" })
+        </div>
+        <div class="flex items-center gap-3">
+            <a asp-action="Training" class="btn btn-primary">
+                <i data-lucide="brain" class="w-4 h-4 mr-2"></i>
+                Training Center
+            </a>
+            <a asp-action="Test" class="btn btn-outline">
+                <i data-lucide="flask" class="w-4 h-4 mr-2"></i>
+                Test Console
+            </a>
+        </div>
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="card">
+            <div class="card-content">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Total Conversations</p>
+                        <p class="text-2xl font-bold text-foreground">@(Model?.TotalConversations ?? 0)</p>
+                    </div>
+                    <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                        <i data-lucide="message-circle" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                </div>
+                <div class="mt-2 flex items-center text-sm">
+                    <span class="text-green-600 font-medium">+@(Model?.WeeklyGrowth ?? 0)%</span>
+                    <span class="text-muted-foreground ml-1">from last week</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Active Users</p>
+                        <p class="text-2xl font-bold text-foreground">@(Model?.ActiveUsers ?? 0)</p>
+                    </div>
+                    <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                        <i data-lucide="users" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                    </div>
+                </div>
+                <div class="mt-2 flex items-center text-sm">
+                    <span class="text-muted-foreground">Currently online</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Response Time</p>
+                        <p class="text-2xl font-bold text-foreground">@(Model?.ResponseTime ?? "N/A")</p>
+                    </div>
+                    <div class="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
+                        <i data-lucide="zap" class="w-6 h-6 text-yellow-600 dark:text-yellow-400"></i>
+                    </div>
+                </div>
+                <div class="mt-2 flex items-center text-sm">
+                    <span class="text-muted-foreground">Average response</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-muted-foreground">Satisfaction Rate</p>
+                        <p class="text-2xl font-bold text-foreground">@(Model?.SatisfactionRate ?? 0)%</p>
+                    </div>
+                    <div class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                        <i data-lucide="heart" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                </div>
+                <div class="mt-2 flex items-center text-sm">
+                    <span class="text-green-600 font-medium">Excellent</span>
+                    <span class="text-muted-foreground ml-1">rating</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Models Status -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">AI Models Status</h3>
+                <p class="card-description">Current status of AI models</p>
+            </div>
+            <div class="card-content">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span class="font-medium">Active Models</span>
+                        </div>
+                        <span class="text-2xl font-bold">@(Model?.ActiveModels ?? 0)</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <span class="font-medium">Training Jobs</span>
+                        </div>
+                        <span class="text-2xl font-bold">@(Model?.TrainingJobs ?? 0)</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                            <span class="font-medium">Recent Training</span>
+                        </div>
+                        <span class="text-2xl font-bold">@(Model?.RecentTrainingCount ?? 0)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Top Intents</h3>
+                <p class="card-description">Most common user intents</p>
+            </div>
+            <div class="card-content">
+                <div class="space-y-3">
+                    @try
+                    {
+                        @if (Model?.TopIntents != null)
+                        {
+                            @foreach (var intent in Model.TopIntents)
+                            {
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-foreground">@intent</span>
+                                    <div class="w-16 h-2 bg-muted rounded-full">
+                                        <div class="h-2 bg-primary rounded-full" style="width: @(new Random().Next(40, 90))%"></div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted-foreground text-sm">No intent data available</p>
+                        }
+                    }
+                    catch
+                    {
+                        <p class="text-red-500 text-sm">Error loading intent data</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Recent Activity</h3>
+            <p class="card-description">Latest AI interactions and events</p>
+        </div>
+        <div class="card-content">
+            <div class="space-y-4">
+                @try
+                {
+                    @if (Model?.RecentActivity != null)
+                    {
+                        @foreach (var activity in Model.RecentActivity)
+                        {
+                            <div class="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+                                <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                                    <i data-lucide="user" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-medium text-foreground">@activity.User</span>
+                                        <span class="text-xs text-muted-foreground">@activity.Time</span>
+                                    </div>
+                                    <p class="text-sm text-muted-foreground mt-1">@activity.Message</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-8">
+                            <i data-lucide="activity" class="w-12 h-12 text-muted-foreground mx-auto mb-4"></i>
+                            <p class="text-muted-foreground">No recent activity</p>
+                        </div>
+                    }
+                }
+                catch
+                {
+                    <div class="text-center py-8">
+                        <i data-lucide="alert-circle" class="w-12 h-12 text-red-500 mx-auto mb-4"></i>
+                        <p class="text-red-500">Error loading activity data</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a asp-action="Training" class="card hover:shadow-lg transition-shadow">
+            <div class="card-content text-center">
+                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <i data-lucide="brain" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="font-semibold text-foreground mb-2">Training Center</h3>
+                <p class="text-sm text-muted-foreground">Manage AI model training and performance</p>
+            </div>
+        </a>
+
+        <a asp-action="Analytics" class="card hover:shadow-lg transition-shadow">
+            <div class="card-content text-center">
+                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <i data-lucide="bar-chart-3" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="font-semibold text-foreground mb-2">Analytics</h3>
+                <p class="text-sm text-muted-foreground">View detailed AI performance metrics</p>
+            </div>
+        </a>
+
+        <a asp-action="Settings" class="card hover:shadow-lg transition-shadow">
+            <div class="card-content text-center">
+                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <i data-lucide="settings" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="font-semibold text-foreground mb-2">Settings</h3>
+                <p class="text-sm text-muted-foreground">Configure AI models and parameters</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+}

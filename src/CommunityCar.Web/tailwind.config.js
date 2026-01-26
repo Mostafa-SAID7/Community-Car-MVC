@@ -89,6 +89,9 @@ module.exports = {
             },
             fontFamily: {
                 sans: ["Alexandria", "ui-sans-serif", "system-ui"],
+                'arabic-heading': ["Lemonada", "Alexandria", "cursive"],
+                'arabic-body': ["Noto Sans Arabic", "Alexandria", "sans-serif"],
+                'inter': ["Inter", "Alexandria", "system-ui", "-apple-system", "sans-serif"],
             },
             keyframes: {
                 "accordion-down": {

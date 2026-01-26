@@ -1,0 +1,57 @@
+@model CommunityCar.Application.Features.Shared.ViewModels.StatsOverlayVM
+
+<!-- Stats Numbers Overlaying Half Inside/Half Outside Card -->
+<div class="absolute -top-4 right-3 rtl:left-3 rtl:right-auto flex items-center gap-2 z-10">
+    <!-- Comments Box (Always Show) -->
+    @await Html.PartialAsync("Components/_StatsBox", new CommunityCar.Application.Features.Shared.ViewModels.StatsBoxVM
+    {
+        Type = "comments",
+        Count = Model.CommentCount,
+        EntityId = Model.EntityId,
+        EntityType = Model.EntityType,
+        AlwaysShow = true,
+        IsActive = false
+    })
+    
+    <!-- Likes Box -->
+    @if (Model.LikeCount > 0)
+    {
+        @await Html.PartialAsync("Components/_StatsBox", new CommunityCar.Application.Features.Shared.ViewModels.StatsBoxVM
+        {
+            Type = "likes",
+            Count = Model.LikeCount,
+            EntityId = Model.EntityId,
+            EntityType = Model.EntityType,
+            AlwaysShow = false,
+            IsActive = Model.IsLikedByUser
+        })
+    }
+    
+    <!-- Views Box -->
+    @if (Model.ViewCount > 0)
+    {
+        @await Html.PartialAsync("Components/_StatsBox", new CommunityCar.Application.Features.Shared.ViewModels.StatsBoxVM
+        {
+            Type = "views",
+            Count = Model.ViewCount,
+            EntityId = Model.EntityId,
+            EntityType = Model.EntityType,
+            AlwaysShow = false,
+            IsActive = false
+        })
+    }
+    
+    <!-- Shares Box -->
+    @if (Model.ShareCount > 0)
+    {
+        @await Html.PartialAsync("Components/_StatsBox", new CommunityCar.Application.Features.Shared.ViewModels.StatsBoxVM
+        {
+            Type = "shares",
+            Count = Model.ShareCount,
+            EntityId = Model.EntityId,
+            EntityType = Model.EntityType,
+            AlwaysShow = false,
+            IsActive = false
+        })
+    }
+</div>

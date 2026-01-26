@@ -1,0 +1,239 @@
+@model dynamic
+@{
+    ViewData["Title"] = "AI Analytics";
+    Layout = "_DashboardLayout";
+}
+
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-foreground">AI Analytics</h1>
+            <p class="text-muted-foreground">Detailed insights and performance metrics</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <a asp-action="Index" class="btn btn-outline">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    @if (Model.Error != null)
+    {
+        <!-- Error State -->
+        <div class="card">
+            <div class="card-content p-6">
+                <div class="text-center">
+                    <i data-lucide="alert-triangle" class="w-12 h-12 text-yellow-500 mx-auto mb-4"></i>
+                    <h3 class="text-lg font-semibold text-foreground mb-2">Unable to Load Analytics</h3>
+                    <p class="text-muted-foreground mb-4">@Model.Error</p>
+                    <button onclick="location.reload()" class="btn btn-primary">
+                        <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                        Retry
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Metrics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Total Conversations -->
+            <div class="card">
+                <div class="card-content p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-muted-foreground">Total Conversations</p>
+                            <p class="text-2xl font-bold text-foreground">@Model.ConversationMetrics.Total.ToString("N0")</p>
+                        </div>
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                            <i data-lucide="message-circle" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="text-sm text-green-600">+@Model.ConversationMetrics.ThisWeek this week</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Average Length -->
+            <div class="card">
+                <div class="card-content p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-muted-foreground">Avg Conversation Length</p>
+                            <p class="text-2xl font-bold text-foreground">@Model.ConversationMetrics.AvgLength.ToString("F1")</p>
+                        </div>
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30">
+                            <i data-lucide="clock" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="text-sm text-muted-foreground">messages per conversation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completion Rate -->
+            <div class="card">
+                <div class="card-content p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-muted-foreground">Completion Rate</p>
+                            <p class="text-2xl font-bold text-foreground">@Model.ConversationMetrics.CompletionRate.ToString("F1")%</p>
+                        </div>
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="text-sm text-muted-foreground">successfully resolved</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Users -->
+            <div class="card">
+                <div class="card-content p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-muted-foreground">Active Users</p>
+                            <p class="text-2xl font-bold text-foreground">@Model.UserEngagement.ActiveUsers.ToString("N0")</p>
+                        </div>
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/30">
+                            <i data-lucide="users" class="w-6 h-6 text-orange-600 dark:text-orange-400"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="text-sm text-green-600">@Model.UserEngagement.ReturnRate.ToString("F1")% return rate</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Sentiment Analysis -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Sentiment Analysis</h3>
+                    <p class="card-description">Overall user sentiment distribution</p>
+                </div>
+                <div class="card-content">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-4 h-4 rounded-full bg-green-500"></div>
+                                <span class="font-medium">Positive</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-32 h-2 bg-background rounded-full overflow-hidden">
+                                    <div class="h-full bg-green-500 transition-all duration-300" style="width: @Model.SentimentAnalysis.Positive.ToString("F1")%"></div>
+                                </div>
+                                <span class="text-sm text-muted-foreground w-12">@Model.SentimentAnalysis.Positive.ToString("F1")%</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-4 h-4 rounded-full bg-yellow-500"></div>
+                                <span class="font-medium">Neutral</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-32 h-2 bg-background rounded-full overflow-hidden">
+                                    <div class="h-full bg-yellow-500 transition-all duration-300" style="width: @Model.SentimentAnalysis.Neutral.ToString("F1")%"></div>
+                                </div>
+                                <span class="text-sm text-muted-foreground w-12">@Model.SentimentAnalysis.Neutral.ToString("F1")%</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-4 h-4 rounded-full bg-red-500"></div>
+                                <span class="font-medium">Negative</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-32 h-2 bg-background rounded-full overflow-hidden">
+                                    <div class="h-full bg-red-500 transition-all duration-300" style="width: @Model.SentimentAnalysis.Negative.ToString("F1")%"></div>
+                                </div>
+                                <span class="text-sm text-muted-foreground w-12">@Model.SentimentAnalysis.Negative.ToString("F1")%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Topics -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Popular Topics</h3>
+                    <p class="card-description">Most discussed automotive topics</p>
+                </div>
+                <div class="card-content">
+                    @if (Model.TopTopics.Length > 0)
+                    {
+                        <div class="space-y-3">
+                            @foreach (var topic in Model.TopTopics)
+                            {
+                                <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-medium">@topic.Topic</span>
+                                        <span class="text-sm text-muted-foreground">(@topic.Count.ToString("N0") discussions)</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-16 h-2 bg-background rounded-full overflow-hidden">
+                                            <div class="h-full bg-primary transition-all duration-300" style="width: @topic.Percentage.ToString("F1")%"></div>
+                                        </div>
+                                        <span class="text-sm text-muted-foreground">@topic.Percentage.ToString("F1")%</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-8">
+                            <i data-lucide="message-square" class="w-12 h-12 text-muted-foreground mx-auto mb-4"></i>
+                            <p class="text-muted-foreground">No topic data available</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- User Engagement -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">User Engagement Metrics</h3>
+                <p class="card-description">How users interact with the AI assistant</p>
+            </div>
+            <div class="card-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary">@Model.UserEngagement.ActiveUsers.ToString("N0")</div>
+                        <div class="text-sm text-muted-foreground">Active Users</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary">@Model.UserEngagement.ReturnRate.ToString("F1")%</div>
+                        <div class="text-sm text-muted-foreground">Return Rate</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary">@Model.UserEngagement.AvgSessionTime</div>
+                        <div class="text-sm text-muted-foreground">Avg Session Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+}

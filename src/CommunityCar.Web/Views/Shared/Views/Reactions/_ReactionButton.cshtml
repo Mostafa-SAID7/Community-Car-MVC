@@ -1,0 +1,83 @@
+@{
+    var entityId = ViewBag.EntityId?.ToString() ?? "";
+    var entityType = ViewBag.EntityType?.ToString() ?? "";
+    var likeCount = ViewBag.LikeCount ?? 0;
+    var isLiked = ViewBag.IsLiked ?? false;
+}
+
+<div class="reaction-button-container">
+    <form asp-controller="Reactions" asp-action="Toggle" method="post" class="reaction-form" data-entity-id="@entityId" data-entity-type="@entityType">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="entityId" value="@entityId" />
+        <input type="hidden" name="entityType" value="@entityType" />
+        <input type="hidden" name="reactionType" value="Like" />
+        
+        <button type="submit" class="reaction-btn flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 @(isLiked ? "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400" : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground")">
+            @if (isLiked)
+            {
+                <i data-lucide="heart" class="w-4 h-4 fill-current"></i>
+            }
+            else
+            {
+                <i data-lucide="heart" class="w-4 h-4"></i>
+            }
+            <span class="like-count">@likeCount</span>
+        </button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    // Handle reaction form submission
+    document.addEventListener('submit', function(e) {
+        if (e.target.classList.contains('reaction-form')) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const btn = form.querySelector('.reaction-btn');
+            const icon = btn.querySelector('i[data-lucide="heart"]');
+            const countSpan = btn.querySelector('.like-count');
+            
+            // Optimistic UI update
+            const isCurrentlyLiked = btn.classList.contains('text-red-600') || btn.classList.contains('dark:text-red-400');
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const newCount = data.data.likeCount;
+                    const isLiked = data.data.isLikedByUser;
+                    
+                    // Update count
+                    countSpan.textContent = newCount;
+                    
+                    // Update button appearance
+                    if (isLiked) {
+                        btn.className = 'reaction-btn flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400';
+                        icon.classList.add('fill-current');
+                    } else {
+                        btn.className = 'reaction-btn flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground';
+                        icon.classList.remove('fill-current');
+                    }
+                } else {
+                    console.error('Failed to toggle reaction:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error toggling reaction:', error);
+            });
+        }
+    });
+});
+</script>

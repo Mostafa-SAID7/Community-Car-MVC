@@ -3,14 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
-using CommunityCar.Application.Features.Interactions.DTOs;
 using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Web.Controllers.Shared.Reactions;
 
-[Route("api/shared/reactions")]
-[ApiController]
-public class ReactionsController : ControllerBase
+public class ReactionsController : Controller
 {
     private readonly IInteractionService _interactionService;
     private readonly ICurrentUserService _currentUserService;
@@ -28,171 +25,84 @@ public class ReactionsController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddReaction([FromBody] ReactionRequest request)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Toggle([FromForm] string entityId, [FromForm] string entityType, [FromForm] string reactionType = "Like")
     {
         try
         {
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
+                return Json(new { success = false, message = "User must be authenticated" });
 
-            var result = await _interactionService.AddReactionAsync(
-                request.EntityId, 
-                request.EntityType, 
-                userId,
-                request.ReactionType);
+            if (!Guid.TryParse(entityId, out var parsedEntityId))
+                return Json(new { success = false, message = "Invalid entity ID" });
 
-            return Ok(result);
+            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+                return Json(new { success = false, message = "Invalid entity type" });
+
+            if (!Enum.TryParse<ReactionType>(reactionType, out var parsedReactionType))
+                return Json(new { success = false, message = "Invalid reaction type" });
+
+            // Get current reaction summary to check if user already reacted
+            var currentSummary = await _interactionService.GetReactionSummaryAsync(parsedEntityId, parsedEntityType, userId);
+            
+            if (currentSummary.HasUserReacted)
+            {
+                // Remove existing reaction (toggle off)
+                var removeResult = await _interactionService.RemoveReactionAsync(parsedEntityId, parsedEntityType, userId);
+                
+                return Json(new { 
+                    success = removeResult.Success, 
+                    isLiked = false,
+                    data = new { 
+                        likeCount = removeResult.Summary?.ReactionCounts?.GetValueOrDefault(ReactionType.Like, 0) ?? 0,
+                        isLikedByUser = false
+                    },
+                    message = removeResult.Message
+                });
+            }
+            else
+            {
+                // Add new reaction
+                var addResult = await _interactionService.AddReactionAsync(parsedEntityId, parsedEntityType, userId, parsedReactionType);
+                
+                return Json(new { 
+                    success = addResult.Success, 
+                    isLiked = true,
+                    data = new { 
+                        likeCount = addResult.Summary?.ReactionCounts?.GetValueOrDefault(ReactionType.Like, 0) ?? 1,
+                        isLikedByUser = true
+                    },
+                    message = addResult.Message
+                });
+            }
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
     }
 
-    [HttpPut]
-    [Authorize]
-    public async Task<IActionResult> UpdateReaction([FromBody] ReactionRequest request)
+    [HttpGet]
+    public async Task<IActionResult> GetSummary(string entityId, string entityType)
     {
         try
         {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
+            if (!Guid.TryParse(entityId, out var parsedEntityId))
+                return Json(new { success = false, message = "Invalid entity ID" });
 
-            var result = await _interactionService.UpdateReactionAsync(
-                request.EntityId, 
-                request.EntityType, 
-                userId,
-                request.ReactionType);
+            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+                return Json(new { success = false, message = "Invalid entity type" });
 
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpGet("{entityType}/{entityId}")]
-    public async Task<IActionResult> GetReactions(EntityType entityType, Guid entityId)
-    {
-        try
-        {
-            var reactions = await _interactionService.GetEntityReactionsAsync(entityId, entityType);
-            return Ok(reactions);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpGet("{entityType}/{entityId}/summary")]
-    public async Task<IActionResult> GetReactionSummary(EntityType entityType, Guid entityId)
-    {
-        try
-        {
             Guid? userId = null;
             if (Guid.TryParse(_currentUserService.UserId, out var parsedUserId))
                 userId = parsedUserId;
 
-            var summary = await _interactionService.GetReactionSummaryAsync(entityId, entityType, userId);
-            return Ok(summary);
+            var summary = await _interactionService.GetReactionSummaryAsync(parsedEntityId, parsedEntityType, userId);
+            return Json(summary);
         }
         catch (Exception ex)
         {
-            return BadRequest(new { success = false, message = ex.Message });
+            return Json(new { success = false, message = ex.Message });
         }
-    }
-
-    [HttpGet("{entityType}/{entityId}/check")]
-    [Authorize]
-    public async Task<IActionResult> CheckUserReaction(EntityType entityType, Guid entityId)
-    {
-        try
-        {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
-
-            var reaction = await _reactionRepository.GetUserReactionAsync(entityId, entityType, userId);
-            return Ok(new { 
-                hasReacted = reaction != null, 
-                reactionType = reaction?.Type,
-                reactionId = reaction?.Id 
-            });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpDelete("{entityId}")]
-    [Authorize]
-    public async Task<IActionResult> RemoveReaction(Guid entityId, [FromQuery] EntityType entityType)
-    {
-        try
-        {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
-
-            var result = await _interactionService.RemoveReactionAsync(entityId, entityType, userId);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpGet("user")]
-    [Authorize]
-    public async Task<IActionResult> GetUserReactions([FromQuery] EntityType? entityType = null, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
-    {
-        try
-        {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-                return Unauthorized(new { success = false, message = "User must be authenticated" });
-
-            var reactions = await _reactionRepository.GetUserReactionsAsync(userId, entityType);
-            return Ok(reactions);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    [HttpGet("types")]
-    public async Task<IActionResult> GetReactionTypes()
-    {
-        try
-        {
-            var reactionTypes = Enum.GetValues<ReactionType>()
-                .Select(rt => new { 
-                    type = rt, 
-                    name = rt.ToString(),
-                    emoji = GetReactionEmoji(rt)
-                });
-            
-            return Ok(reactionTypes);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    private static string GetReactionEmoji(ReactionType reactionType)
-    {
-        return reactionType switch
-        {
-            ReactionType.Like => "👍",
-            ReactionType.Love => "❤️",
-            ReactionType.Haha => "😂",
-            ReactionType.Wow => "😮",
-            ReactionType.Sad => "😢",
-            ReactionType.Angry => "😡",
-            _ => "👍"
-        };
     }
 }

@@ -1,0 +1,308 @@
+@model dynamic
+@{
+    ViewData["Title"] = "AI Settings";
+    Layout = "_DashboardLayout";
+}
+
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-foreground">AI Settings</h1>
+            <p class="text-muted-foreground">Configure AI assistant behavior and providers</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <a asp-action="Index" class="btn btn-outline">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Settings Form -->
+    <form id="aiSettingsForm" class="card">
+        <div class="card-header">
+            <h3 class="card-title">AI Configuration</h3>
+            <p class="card-description">Configure AI service providers and settings</p>
+        </div>
+        <div class="card-content space-y-6">
+            <div class="space-y-2">
+                <label for="defaultProvider" class="text-sm font-medium text-foreground">Default Provider</label>
+                <select id="defaultProvider" name="defaultProvider" class="input">
+                    @if (Model.Configuration.DefaultProvider == "Gemini")
+                    {
+                        <option value="Gemini" selected>Google Gemini</option>
+                        <option value="HuggingFace">HuggingFace</option>
+                    }
+                    else
+                    {
+                        <option value="Gemini">Google Gemini</option>
+                        <option value="HuggingFace" selected>HuggingFace</option>
+                    }
+                </select>
+            </div>
+
+            <div class="space-y-2">
+                <label for="maxResponseLength" class="text-sm font-medium text-foreground">Max Response Length</label>
+                <input type="number" id="maxResponseLength" name="maxResponseLength" class="input" 
+                       value="@Model.Configuration.MaxResponseLength" min="100" max="2000">
+                <p class="text-xs text-muted-foreground">Maximum length of AI responses (100-2000 characters)</p>
+            </div>
+
+            <div class="space-y-2">
+                <label for="responseTimeout" class="text-sm font-medium text-foreground">Response Timeout</label>
+                <input type="number" id="responseTimeout" name="responseTimeout" class="input" 
+                       value="@Model.Configuration.ResponseTimeout" min="5" max="120">
+                <p class="text-xs text-muted-foreground">Maximum time to wait for AI response (5-120 seconds)</p>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="font-medium text-foreground">Enable Sentiment Analysis</h4>
+                    <p class="text-sm text-muted-foreground">Analyze user emotions and sentiment</p>
+                </div>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="enableSentiment" name="sentimentAnalysis" 
+                           @(Model.Configuration.SentimentAnalysis ? "checked" : "")>
+                    <label for="enableSentiment" class="toggle-slider"></label>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="font-medium text-foreground">Enable Content Moderation</h4>
+                    <p class="text-sm text-muted-foreground">Filter inappropriate content</p>
+                </div>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="enableModeration" name="moderationEnabled" 
+                           @(Model.Configuration.ModerationEnabled ? "checked" : "")>
+                    <label for="enableModeration" class="toggle-slider"></label>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3">
+                <button type="button" id="resetBtn" class="btn btn-outline">
+                    <i data-lucide="refresh-ccw" class="w-4 h-4 mr-2"></i>
+                    Reset to Defaults
+                </button>
+                <button type="submit" id="saveBtn" class="btn btn-primary">
+                    <i data-lucide="save" class="w-4 h-4 mr-2"></i>
+                    Save Settings
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Provider Status -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Provider Status</h3>
+            <p class="card-description">Current status of AI service providers</p>
+        </div>
+        <div class="card-content">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @foreach (var provider in Model.Providers)
+                {
+                    <div class="flex items-center justify-between p-4 rounded-lg bg-muted/50">
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+                                <i data-lucide="cpu" class="w-5 h-5 text-primary"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-foreground">@provider.Name</div>
+                                <div class="text-sm text-muted-foreground">Response: @provider.ResponseTime</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            @{
+                                var statusClass = provider.Status == "Active" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
+                            }
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium @statusClass">
+                                @provider.Status
+                            </span>
+                            <div class="text-sm text-muted-foreground mt-1">@provider.Accuracy% accuracy</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-background rounded-lg p-6 flex items-center gap-3">
+        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+        <span class="text-foreground">Saving settings...</span>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            const form = document.getElementById('aiSettingsForm');
+            const saveBtn = document.getElementById('saveBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const sentimentToggle = document.getElementById('enableSentiment');
+            const moderationToggle = document.getElementById('enableModeration');
+
+            // Handle form submission
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                const settings = {
+                    defaultProvider: formData.get('defaultProvider'),
+                    maxResponseLength: parseInt(formData.get('maxResponseLength')),
+                    responseTimeout: parseInt(formData.get('responseTimeout')),
+                    sentimentAnalysis: sentimentToggle.checked,
+                    moderationEnabled: moderationToggle.checked
+                };
+
+                try {
+                    showLoading(true);
+                    saveBtn.disabled = true;
+
+                    const response = await fetch('/Dashboard/AIManagement/Settings/Save', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                        },
+                        body: JSON.stringify(settings)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        showNotification('Settings saved successfully!', 'success');
+                    } else {
+                        showNotification(result.message || 'Failed to save settings', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error saving settings:', error);
+                    showNotification('An error occurred while saving settings', 'error');
+                } finally {
+                    showLoading(false);
+                    saveBtn.disabled = false;
+                }
+            });
+
+            // Handle reset button
+            resetBtn.addEventListener('click', async function() {
+                // Use the modal confirm dialog
+                if (window.AlertModal) {
+                    window.AlertModal.confirm(
+                        'Are you sure you want to reset all settings to defaults? This action cannot be undone.',
+                        'Reset Settings',
+                        async function(confirmed) {
+                            if (!confirmed) return;
+                            
+                            try {
+                                showLoading(true);
+                                resetBtn.disabled = true;
+
+                                const response = await fetch('/Dashboard/AIManagement/Settings/Reset', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                                    }
+                                });
+
+                                const result = await response.json();
+
+                                if (result.success) {
+                                    // Update form with default values
+                                    if (result.settings) {
+                                        document.getElementById('defaultProvider').value = result.settings.defaultProvider;
+                                        document.getElementById('maxResponseLength').value = result.settings.maxResponseLength;
+                                        document.getElementById('responseTimeout').value = result.settings.responseTimeout;
+                                        sentimentToggle.checked = result.settings.sentimentAnalysis;
+                                        moderationToggle.checked = result.settings.moderationEnabled;
+                                    }
+                                    showNotification('Settings reset to defaults successfully!', 'success');
+                                } else {
+                                    showNotification(result.message || 'Failed to reset settings', 'error');
+                                }
+                            } catch (error) {
+                                console.error('Error resetting settings:', error);
+                                showNotification('An error occurred while resetting settings', 'error');
+                            } finally {
+                                showLoading(false);
+                                resetBtn.disabled = false;
+                            }
+                        }
+                    );
+                } else {
+                    // Fallback to browser confirm
+                    if (!confirm('Are you sure you want to reset all settings to defaults?')) {
+                        return;
+                    }
+                    
+                    // ... rest of the reset logic
+                }
+            });
+
+            // Handle toggle switches
+            [sentimentToggle, moderationToggle].forEach(toggle => {
+                toggle.addEventListener('change', async function() {
+                    const settingName = this.name === 'sentimentAnalysis' ? 'SentimentAnalysis' : 'ModerationEnabled';
+                    
+                    try {
+                        const response = await fetch('/Dashboard/AIManagement/Settings/Toggle', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                            },
+                            body: JSON.stringify({
+                                settingName: settingName,
+                                enabled: this.checked
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            showNotification(result.message, 'success');
+                        } else {
+                            // Revert toggle if failed
+                            this.checked = !this.checked;
+                            showNotification(result.message || 'Failed to toggle setting', 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error toggling setting:', error);
+                        // Revert toggle if failed
+                        this.checked = !this.checked;
+                        showNotification('An error occurred while toggling setting', 'error');
+                    }
+                });
+            });
+
+            function showLoading(show) {
+                loadingOverlay.style.display = show ? 'flex' : 'none';
+            }
+
+            function showNotification(message, type) {
+                // Use the new modal alert system
+                if (window.AlertModal) {
+                    if (type === 'success') {
+                        window.AlertModal.success(message);
+                    } else {
+                        window.AlertModal.error(message);
+                    }
+                } else {
+                    // Fallback to console if modal not available
+                    console.log(`${type.toUpperCase()}: ${message}`);
+                }
+            }
+        });
+    </script>
+}

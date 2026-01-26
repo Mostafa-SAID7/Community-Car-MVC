@@ -25,6 +25,11 @@
         --ring: 345 82% 51%; /* Your custom red-500: #e11d48 */
         --radius: 0.5rem;
         --vh: 1vh;
+        
+        /* Font families */
+        --font-sans: 'Inter', 'Alexandria', system-ui, -apple-system, sans-serif;
+        --font-arabic-heading: 'Lemonada', 'Alexandria', cursive;
+        --font-arabic-body: 'Noto Sans Arabic', 'Alexandria', sans-serif;
     }
 
     .dark {
@@ -59,12 +64,79 @@
         @apply bg-background text-foreground transition-colors duration-300;
         max-width: 100%;
         overflow-x: hidden;
+        font-family: var(--font-sans);
     }
 
     html {
         max-width: 100%;
         overflow-x: hidden;
         transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Arabic Font Support */
+    html[lang="ar"] body {
+        font-family: var(--font-arabic-body);
+    }
+
+    html[lang="ar"] h1,
+    html[lang="ar"] h2,
+    html[lang="ar"] h3,
+    html[lang="ar"] h4,
+    html[lang="ar"] h5,
+    html[lang="ar"] h6,
+    html[lang="ar"] .card-title,
+    html[lang="ar"] .text-xl,
+    html[lang="ar"] .text-2xl,
+    html[lang="ar"] .text-3xl,
+    html[lang="ar"] .text-4xl,
+    html[lang="ar"] .text-5xl,
+    html[lang="ar"] .text-6xl,
+    html[lang="ar"] .font-bold,
+    html[lang="ar"] .font-semibold,
+    html[lang="ar"] .font-black {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+    html[lang="ar"] p,
+    html[lang="ar"] span,
+    html[lang="ar"] div,
+    html[lang="ar"] .text-sm,
+    html[lang="ar"] .text-xs,
+    html[lang="ar"] .text-base,
+    html[lang="ar"] .text-lg,
+    html[lang="ar"] input,
+    html[lang="ar"] textarea,
+    html[lang="ar"] button,
+    html[lang="ar"] .btn {
+        font-family: var(--font-arabic-body);
+    }
+
+    /* Arabic text improvements */
+    html[lang="ar"] {
+        line-height: 1.8;
+    }
+
+    html[lang="ar"] h1,
+    html[lang="ar"] h2,
+    html[lang="ar"] h3,
+    html[lang="ar"] h4,
+    html[lang="ar"] h5,
+    html[lang="ar"] h6 {
+        line-height: 1.6;
+        letter-spacing: 0.02em;
+    }
+
+    html[lang="ar"] p {
+        line-height: 1.9;
+    }
+
+    html[lang="ar"] .text-sm {
+        line-height: 1.7;
+    }
+
+    html[lang="ar"] .text-xs {
+        line-height: 1.6;
     }
 
     /* Custom Scrollbar */

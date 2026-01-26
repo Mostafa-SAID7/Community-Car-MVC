@@ -376,6 +376,61 @@ public partial class InteractionService : IInteractionService
 
     #endregion
 
+    #region Bookmarks
+
+    public async Task<bool> BookmarkEntityAsync(Guid entityId, EntityType entityType, Guid userId)
+    {
+        try
+        {
+            var bookmark = new Bookmark(entityId, entityType, userId);
+            await _unitOfWork.Bookmarks.AddAsync(bookmark);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> RemoveBookmarkAsync(Guid entityId, EntityType entityType, Guid userId)
+    {
+        try
+        {
+            var bookmark = await _unitOfWork.Bookmarks.GetUserBookmarkAsync(entityId, entityType, userId);
+            if (bookmark != null)
+            {
+                await _unitOfWork.Bookmarks.DeleteAsync(bookmark);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    #endregion
+
+    #region Views
+
+    public async Task TrackViewAsync(Guid entityId, EntityType entityType, Guid? userId = null)
+    {
+        try
+        {
+            var view = new View(entityId, entityType, "127.0.0.1", "Web Browser", userId);
+            await _unitOfWork.Views.AddAsync(view);
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch
+        {
+            // Silently fail for view tracking
+        }
+    }
+
+    #endregion
+
     #region Combined Summary
 
     public async Task<InteractionSummaryVM> GetInteractionSummaryAsync(Guid entityId, EntityType entityType, Guid? userId = null)

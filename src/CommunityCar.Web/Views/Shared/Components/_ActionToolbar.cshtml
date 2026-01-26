@@ -1,0 +1,47 @@
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Application.Features.Shared.ViewModels.ActionToolbarVM
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+
+<!-- Action Toolbar -->
+<div class="flex p-2 bg-muted/10 border-t border-border/40 gap-1 mt-auto">
+    <!-- Like Button -->
+    @await Html.PartialAsync("Components/_ActionButton", new CommunityCar.Application.Features.Shared.ViewModels.ActionButtonVM
+    {
+        Type = "like",
+        Action = "toggle-like",
+        Label = SharedLocalizer["Like"],
+        EntityId = Model.EntityId,
+        EntityType = Model.EntityType,
+        IsActive = Model.IsLikedByUser
+    })
+    
+    <!-- Comment Button -->
+    @await Html.PartialAsync("Components/_ActionButton", new CommunityCar.Application.Features.Shared.ViewModels.ActionButtonVM
+    {
+        Type = "comment",
+        Action = "toggle-comments",
+        Label = SharedLocalizer["Comment"],
+        EntityId = Model.EntityId,
+        EntityType = Model.EntityType,
+        IsActive = false
+    })
+    
+    <!-- Share Button -->
+    @await Html.PartialAsync("Components/_ActionButton", new CommunityCar.Application.Features.Shared.ViewModels.ActionButtonVM
+    {
+        Type = "share",
+        Action = "share-content",
+        Label = SharedLocalizer["Share"],
+        EntityId = Model.EntityId,
+        EntityType = Model.EntityType,
+        IsActive = false
+    })
+    
+    <!-- Bookmark Button -->
+    <button class="w-12 h-12 flex items-center justify-center text-muted-foreground hover:text-yellow-500 hover:bg-yellow-500/5 rounded-xl transition-all group/bookmark @(Model.IsBookmarkedByUser ? "text-yellow-500 bg-yellow-500/5 shadow-inner" : "")" 
+            data-action="bookmark-content"
+            data-entity-id="@Model.EntityId" 
+            data-entity-type="@Model.EntityType">
+        <i data-lucide="bookmark" class="w-5 h-5 group-hover/bookmark:scale-125 transition-all @(Model.IsBookmarkedByUser ? "fill-current" : "")"></i>
+    </button>
+</div>

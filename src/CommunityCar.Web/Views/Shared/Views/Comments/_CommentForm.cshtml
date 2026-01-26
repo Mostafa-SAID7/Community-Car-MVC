@@ -1,0 +1,148 @@
+@{
+    var entityId = ViewBag.EntityId?.ToString() ?? "";
+    var entityType = ViewBag.EntityType?.ToString() ?? "";
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
+}
+
+@if (isAuthenticated)
+{
+    <div class="comment-form bg-card rounded-lg p-4 border">
+        <form asp-controller="Comments" asp-action="Add" method="post" class="space-y-4" id="comment-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="entityId" value="@entityId" />
+            <input type="hidden" name="entityType" value="@entityType" />
+            <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+            
+            <div class="flex gap-3">
+                <div class="flex-shrink-0">
+                    <img src="/images/default-avatar.png" 
+                         alt="Your avatar" 
+                         class="w-10 h-10 rounded-full object-cover" />
+                </div>
+                <div class="flex-1">
+                    <textarea name="content" 
+                              placeholder="Write a comment..." 
+                              class="w-full p-3 border border-border rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                              rows="3"
+                              required></textarea>
+                    <div class="flex items-center justify-between mt-3">
+                        <div class="text-sm text-muted-foreground">
+                            <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
+                            Be respectful and constructive in your comments
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" 
+                                    class="btn btn-outline btn-sm cancel-btn" 
+                                    style="display: none;">
+                                Cancel
+                            </button>
+                            <button type="submit" 
+                                    class="btn btn-primary btn-sm">
+                                <i data-lucide="send" class="w-4 h-4 mr-2"></i>
+                                Post Comment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+else
+{
+    <div class="comment-form bg-card rounded-lg p-4 border">
+        <div class="text-center py-6">
+            <div class="mb-4">
+                <i data-lucide="message-circle" class="w-12 h-12 mx-auto text-muted-foreground opacity-50"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-foreground mb-2">Join the conversation</h3>
+            <p class="text-muted-foreground mb-4">Sign in to share your thoughts and connect with the community.</p>
+            <div class="flex items-center justify-center gap-3">
+                <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path + Context.Request.QueryString })" 
+                   class="btn btn-primary">
+                    <i data-lucide="log-in" class="w-4 h-4 mr-2"></i>
+                    Sign In
+                </a>
+                <a href="@Url.Action("Register", "Account", new { returnUrl = Context.Request.Path + Context.Request.QueryString })" 
+                   class="btn btn-outline">
+                    <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i>
+                    Sign Up
+                </a>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    const form = document.getElementById('comment-form');
+    if (!form) return; // Exit if form doesn't exist (user not authenticated)
+    
+    const textarea = form.querySelector('textarea[name="content"]');
+    const cancelBtn = form.querySelector('.cancel-btn');
+
+    // Show/hide cancel button based on content
+    textarea.addEventListener('input', function() {
+        if (this.value.trim()) {
+            cancelBtn.style.display = 'inline-flex';
+        } else {
+            cancelBtn.style.display = 'none';
+        }
+    });
+
+    // Clear form on cancel
+    cancelBtn.addEventListener('click', function() {
+        textarea.value = '';
+        cancelBtn.style.display = 'none';
+        textarea.blur();
+    });
+
+    // Handle form submission via AJAX
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="w-4 h-4 mr-2 animate-spin">⟳</i>Posting...';
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Clear form
+                textarea.value = '';
+                cancelBtn.style.display = 'none';
+                
+                // Reload comments section
+                location.reload();
+            } else {
+                alert(data.message || 'Failed to post comment');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while posting your comment');
+        })
+        .finally(() => {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        });
+    });
+});
+</script>

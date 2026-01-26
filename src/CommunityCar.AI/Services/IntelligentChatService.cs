@@ -3,6 +3,9 @@ using Microsoft.Extensions.Options;
 using CommunityCar.AI.Configuration;
 using CommunityCar.AI.Models;
 using System.Text.Json;
+using static CommunityCar.AI.Models.SentimentData;
+using CommunityCar.Application.Services.Community;
+using CommunityCar.Application.Features.News.DTOs;
 
 namespace CommunityCar.AI.Services;
 
@@ -126,64 +129,117 @@ public class IntelligentChatService : IIntelligentChatService
         try
         {
             var suggestions = new List<string>();
-
-            // Get user interests for personalized suggestions
-            var userInterests = await _predictionService.GetUserInterestScoresAsync(userId);
-            var topInterests = userInterests.OrderByDescending(x => x.Value).Take(3).Select(x => x.Key).ToList();
-
-            // Context-aware suggestions based on partial message
             var lowerMessage = partialMessage.ToLower();
 
-            if (lowerMessage.Contains("car") || lowerMessage.Contains("vehicle"))
+            // Context-aware suggestions based on partial message
+            if (lowerMessage.Contains("price") || lowerMessage.Contains("cost") || lowerMessage.Contains("expensive") || lowerMessage.Contains("budget"))
             {
                 suggestions.AddRange(new[]
                 {
-                    "What's the best maintenance schedule for my car?",
-                    "How can I improve my car's fuel efficiency?",
-                    "What are the signs of engine problems?",
-                    "Which car insurance is recommended?",
-                    "How often should I change my oil?"
+                    "What are typical oil change costs in my area?",
+                    "Compare tire prices from community members",
+                    "Find budget-friendly brake service options",
+                    "Get insurance cost comparisons and recommendations",
+                    "Explore group buying opportunities for parts"
                 });
             }
-            else if (lowerMessage.Contains("problem") || lowerMessage.Contains("issue"))
+            else if (lowerMessage.Contains("maintenance") || lowerMessage.Contains("service") || lowerMessage.Contains("schedule"))
             {
                 suggestions.AddRange(new[]
                 {
-                    "Can you help me diagnose this issue?",
-                    "What could be causing this problem?",
-                    "Is this something I can fix myself?",
-                    "Should I take it to a mechanic?",
-                    "How urgent is this repair?"
+                    "Show me maintenance schedules for my vehicle",
+                    "Find community-recommended service providers",
+                    "Get seasonal maintenance checklists and tips",
+                    "Learn about DIY maintenance from community guides",
+                    "Track my vehicle's service history and reminders"
                 });
             }
-            else if (lowerMessage.Contains("buy") || lowerMessage.Contains("purchase"))
+            else if (lowerMessage.Contains("part") || lowerMessage.Contains("parts") || lowerMessage.Contains("buy") || lowerMessage.Contains("sell"))
             {
                 suggestions.AddRange(new[]
                 {
-                    "What should I look for when buying a used car?",
-                    "Which car model is best for my needs?",
-                    "How do I negotiate the best price?",
-                    "What documents do I need for purchase?",
-                    "Should I get a pre-purchase inspection?"
+                    "Browse community marketplace for quality parts",
+                    "Find OEM vs aftermarket part recommendations",
+                    "Get part numbers and compatibility information",
+                    "Connect with members selling specific parts",
+                    "Join group purchases for better part pricing"
+                });
+            }
+            else if (lowerMessage.Contains("map") || lowerMessage.Contains("near") || lowerMessage.Contains("location") || lowerMessage.Contains("find"))
+            {
+                suggestions.AddRange(new[]
+                {
+                    "Find highly-rated mechanics near me",
+                    "Locate auto parts stores with community reviews",
+                    "Discover gas stations with current fuel prices",
+                    "Map electric vehicle charging stations",
+                    "Find car washes and detailing services nearby"
+                });
+            }
+            else if (lowerMessage.Contains("problem") || lowerMessage.Contains("issue") || lowerMessage.Contains("broken") || lowerMessage.Contains("fix"))
+            {
+                suggestions.AddRange(new[]
+                {
+                    "Diagnose my car's starting problems",
+                    "Get help with unusual engine noises",
+                    "Find solutions for brake issues",
+                    "Troubleshoot electrical problems with community help",
+                    "Connect with members who solved similar issues"
+                });
+            }
+            else if (lowerMessage.Contains("car") || lowerMessage.Contains("vehicle") || lowerMessage.Contains("auto"))
+            {
+                suggestions.AddRange(new[]
+                {
+                    "Get maintenance tips for my specific car model",
+                    "Find community discussions about my vehicle",
+                    "Compare service costs for my car type",
+                    "Discover performance upgrades and modifications",
+                    "Join model-specific community groups"
+                });
+            }
+            else if (lowerMessage.Contains("community") || lowerMessage.Contains("member") || lowerMessage.Contains("forum"))
+            {
+                suggestions.AddRange(new[]
+                {
+                    "Explore community forums and discussions",
+                    "Connect with local automotive enthusiasts",
+                    "Share my automotive experiences and reviews",
+                    "Find community events and meetups",
+                    "Join specialized automotive interest groups"
                 });
             }
             else
             {
-                // General automotive suggestions
+                // General automotive community suggestions
                 suggestions.AddRange(new[]
                 {
-                    "Tell me about electric vehicles",
-                    "How can I improve my driving skills?",
-                    "What are the latest automotive technologies?",
-                    "Share some car maintenance tips",
-                    "Help me understand car insurance options"
+                    "Find trusted mechanics with community reviews",
+                    "Get maintenance schedules and cost estimates",
+                    "Browse community marketplace for parts deals",
+                    "Explore local automotive services on our maps",
+                    "Connect with experienced community members",
+                    "Learn DIY maintenance from community guides",
+                    "Compare service pricing from member experiences",
+                    "Join discussions about your vehicle model"
                 });
             }
 
-            // Add personalized suggestions based on user interests
-            foreach (var interest in topInterests)
+            // Get user interests for personalized suggestions
+            try
             {
-                suggestions.Add($"Tell me more about {interest.ToLower()}");
+                var userInterests = await _predictionService.GetUserInterestScoresAsync(userId);
+                var topInterests = userInterests.OrderByDescending(x => x.Value).Take(2).Select(x => x.Key).ToList();
+
+                // Add personalized suggestions based on user interests
+                foreach (var interest in topInterests)
+                {
+                    suggestions.Add($"Explore {interest.ToLower()} resources in our community");
+                }
+            }
+            catch
+            {
+                // If user interest prediction fails, continue with general suggestions
             }
 
             return suggestions.Distinct().Take(8).ToList();
@@ -191,7 +247,14 @@ public class IntelligentChatService : IIntelligentChatService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting smart suggestions for user {UserId}", userId);
-            return new List<string>();
+            return new List<string>
+            {
+                "Find trusted automotive services near you",
+                "Get maintenance guidance for your vehicle",
+                "Explore community marketplace for parts",
+                "Connect with automotive enthusiasts",
+                "Learn from community repair guides"
+            };
         }
     }
 
@@ -476,46 +539,130 @@ public class IntelligentChatService : IIntelligentChatService
 
     private async Task<string> GenerateAnswerAsync(string question)
     {
-        // This would use AI to generate contextual answers
-        // For now, return template responses based on keywords
         var lowerQuestion = question.ToLower();
         
+        // Pricing-related questions
+        if (lowerQuestion.Contains("price") || lowerQuestion.Contains("cost") || lowerQuestion.Contains("expensive") || 
+            lowerQuestion.Contains("cheap") || lowerQuestion.Contains("budget") || lowerQuestion.Contains("afford"))
+        {
+            if (lowerQuestion.Contains("oil change"))
+                return "Oil change prices typically range from $25-$80 depending on oil type and location. Conventional oil is cheapest ($25-40), while full synthetic runs $50-80. Many community members recommend checking local shops for deals and reading reviews in our community before choosing a service provider.";
+            
+            if (lowerQuestion.Contains("tire") || lowerQuestion.Contains("tires"))
+                return "Tire prices vary widely based on size, brand, and type. Budget tires start around $50-80 each, mid-range $80-150, and premium $150-300+. Check our community marketplace for member recommendations and potential group buying opportunities for better deals.";
+            
+            if (lowerQuestion.Contains("brake") || lowerQuestion.Contains("brakes"))
+                return "Brake service costs depend on what needs replacement. Brake pads typically cost $100-300 per axle, rotors $200-400 per axle. Our community members often share trusted mechanic recommendations and fair pricing experiences in the reviews section.";
+            
+            if (lowerQuestion.Contains("insurance"))
+                return "Car insurance costs vary by location, driving record, and coverage. Average monthly costs range from $100-200. Many community members discuss their insurance experiences and recommendations in our forums. Consider getting quotes from multiple providers.";
+            
+            return "Automotive costs can vary significantly by location and service provider. I'd recommend checking our community reviews and marketplace for member experiences and recommendations. What specific service or part are you looking to price?";
+        }
+        
+        // Maintenance-related questions
+        if (lowerQuestion.Contains("maintenance") || lowerQuestion.Contains("service") || lowerQuestion.Contains("schedule") ||
+            lowerQuestion.Contains("when to") || lowerQuestion.Contains("how often"))
+        {
+            if (lowerQuestion.Contains("oil"))
+                return "Oil change intervals depend on your vehicle and oil type:\n• Conventional oil: Every 3,000-5,000 miles\n• Synthetic blend: Every 5,000-7,500 miles\n• Full synthetic: Every 7,500-10,000 miles\n\nCheck your owner's manual for specific recommendations. Many community members track their maintenance in our service logs feature.";
+            
+            if (lowerQuestion.Contains("tire"))
+                return "Tire maintenance schedule:\n• Pressure check: Monthly\n• Rotation: Every 5,000-8,000 miles\n• Alignment check: Annually or if you notice uneven wear\n• Replacement: When tread depth reaches 2/32\"\n\nOur community has a tire maintenance tracker where members share their experiences and tips.";
+            
+            if (lowerQuestion.Contains("brake"))
+                return "Brake maintenance guidelines:\n• Inspection: Every 12,000 miles or annually\n• Pad replacement: Every 25,000-70,000 miles (varies by driving)\n• Fluid change: Every 2-3 years\n• Listen for squealing or grinding sounds\n\nCheck our maintenance guides section for detailed brake care tips from experienced community members.";
+            
+            if (lowerQuestion.Contains("battery"))
+                return "Battery maintenance tips:\n• Test annually after 3 years\n• Clean terminals regularly\n• Check voltage monthly in extreme weather\n• Replace every 3-5 years typically\n\nMany community members share battery testing tips and replacement experiences in our DIY section.";
+            
+            return "Regular maintenance is key to vehicle longevity! Our community maintenance section has detailed schedules and member experiences for various services. What specific maintenance item are you asking about?";
+        }
+        
+        // Parts-related questions
+        if (lowerQuestion.Contains("part") || lowerQuestion.Contains("parts") || lowerQuestion.Contains("replace") ||
+            lowerQuestion.Contains("buy") || lowerQuestion.Contains("where to get"))
+        {
+            if (lowerQuestion.Contains("brake"))
+                return "For brake parts, consider:\n• OEM parts for best fit and performance\n• Quality aftermarket brands like Bosch, Wagner, or Akebono\n• Check our community marketplace for member recommendations\n• Many members share part numbers and supplier experiences in our parts forum\n\nWhat specific brake component do you need?";
+            
+            if (lowerQuestion.Contains("filter"))
+                return "Filter replacement options:\n• Air filters: K&N, Fram, or OEM every 12,000-15,000 miles\n• Oil filters: Use manufacturer-recommended specs\n• Cabin filters: Replace every 12,000-15,000 miles\n\nOur community parts section has member reviews and part number databases to help you find the right filters for your vehicle.";
+            
+            if (lowerQuestion.Contains("battery"))
+                return "Battery replacement considerations:\n• Check CCA (Cold Cranking Amps) requirements\n• Popular brands: Interstate, DieHard, Optima\n• Group size must match your vehicle\n• Many auto parts stores offer free installation\n\nCommunity members often share battery experiences and local store recommendations in our reviews section.";
+            
+            return "Finding the right parts is crucial for proper repairs. Our community has an extensive parts database with member reviews, part numbers, and supplier recommendations. What specific part are you looking for? I can help you connect with community members who have experience with similar repairs.";
+        }
+        
+        // Maps and location-related questions
+        if (lowerQuestion.Contains("map") || lowerQuestion.Contains("location") || lowerQuestion.Contains("where") ||
+            lowerQuestion.Contains("near me") || lowerQuestion.Contains("directions") || lowerQuestion.Contains("route"))
+        {
+            if (lowerQuestion.Contains("mechanic") || lowerQuestion.Contains("shop") || lowerQuestion.Contains("garage"))
+                return "Finding trusted mechanics near you:\n• Check our interactive map for community-recommended shops\n• Filter by services offered and member ratings\n• Read detailed reviews from community members\n• Many shops offer special discounts to community members\n\nUse our maps feature to find highly-rated automotive services in your area with real member experiences.";
+            
+            if (lowerQuestion.Contains("gas") || lowerQuestion.Contains("fuel") || lowerQuestion.Contains("station"))
+                return "Finding fuel stations:\n• Use our maps to locate gas stations with current prices\n• Community members report fuel prices and station conditions\n• Filter by fuel type (regular, premium, diesel, electric charging)\n• Find stations with amenities like car washes or convenience stores\n\nOur fuel finder helps you locate the best prices and cleanest stations based on community feedback.";
+            
+            if (lowerQuestion.Contains("parts store") || lowerQuestion.Contains("auto parts"))
+                return "Locating auto parts stores:\n• Our maps show nearby parts retailers with community ratings\n• Compare prices and inventory from member experiences\n• Find stores that offer tool lending or installation services\n• Many stores provide special pricing for community members\n\nUse our parts store locator to find the best suppliers in your area with verified community reviews.";
+            
+            return "Our interactive maps feature helps you find automotive services, parts stores, fuel stations, and more in your area. All locations include community reviews and ratings. What type of automotive service or location are you trying to find?";
+        }
+        
+        // General automotive questions
         if (lowerQuestion.Contains("oil change"))
-            return "Most vehicles need an oil change every 3,000-5,000 miles, but check your owner's manual for specific recommendations. Synthetic oil can often go longer between changes.";
+            return "Oil change essentials:\n• Frequency: Every 3,000-10,000 miles depending on oil type\n• Cost: $25-80 depending on oil and location\n• DIY vs Professional: Community members share both experiences\n• Oil types: Conventional, synthetic blend, full synthetic\n\nCheck our maintenance section for member guides and local shop recommendations with pricing comparisons.";
             
         if (lowerQuestion.Contains("tire pressure"))
-            return "Check your tire pressure monthly when tires are cold. The recommended pressure is usually found on a sticker inside the driver's door or in your owner's manual.";
+            return "Tire pressure management:\n• Check monthly when tires are cold\n• Find recommended PSI on door jamb sticker or manual\n• Under-inflation reduces fuel economy and tire life\n• Over-inflation causes uneven wear\n\nOur community tire care section has pressure monitoring tips and recommended gauge brands from experienced members.";
             
         if (lowerQuestion.Contains("battery"))
-            return "Car batteries typically last 3-5 years. Signs of a failing battery include slow engine cranking, dim headlights, and the battery warning light on your dashboard.";
-            
-        return await Task.FromResult("That's a great question! Let me help you find the information you need. Could you provide more specific details about your situation?");
+            return "Car battery guidance:\n• Lifespan: Typically 3-5 years\n• Warning signs: Slow cranking, dim lights, dashboard warning\n• Testing: Free at most auto parts stores\n• Replacement: $100-200 for most vehicles\n\nCommunity members share battery testing tips, brand recommendations, and installation experiences in our electrical section.";
+        
+        // Default response for questions
+        return "That's a great automotive question! Our community has extensive resources including:\n• Detailed guides and tutorials\n• Member experiences and reviews\n• Parts recommendations and pricing\n• Local service provider ratings\n• Interactive maps for finding services\n\nCould you be more specific about what you're looking for? I can direct you to the most relevant community resources and connect you with members who have similar experiences.";
     }
 
     private async Task<string> GenerateProblemSolutionAsync(string problem)
     {
         var lowerProblem = problem.ToLower();
         
-        if (lowerProblem.Contains("won't start"))
-            return "If your car won't start, check: 1) Battery connections, 2) Fuel level, 3) Listen for clicking sounds when turning the key. If you hear clicking, it's likely the battery.";
+        if (lowerProblem.Contains("won't start") || lowerProblem.Contains("not starting"))
+            return "Car won't start? Here's a systematic approach:\n\n**Immediate checks:**\n• Battery connections (clean and tight)\n• Fuel level (ensure adequate fuel)\n• Listen for clicking sounds when turning key\n\n**If clicking sounds:** Likely battery issue - jump start or replacement needed\n**If no sound:** Could be starter, ignition, or fuel system\n\nOur community troubleshooting section has detailed diagnostic guides, and many members share their starting problem experiences. Would you like me to connect you with members who've solved similar issues?";
             
-        if (lowerProblem.Contains("overheating"))
-            return "If your car is overheating: 1) Pull over safely, 2) Turn off the engine, 3) Wait for it to cool down, 4) Check coolant levels when cool. Don't remove the radiator cap when hot!";
+        if (lowerProblem.Contains("overheating") || lowerProblem.Contains("hot") || lowerProblem.Contains("temperature"))
+            return "Overheating requires immediate attention:\n\n**Immediate actions:**\n1. Pull over safely and turn off engine\n2. Wait 30+ minutes for cooling\n3. Check coolant level when completely cool\n4. Look for visible leaks under the vehicle\n\n**Never remove radiator cap when hot!**\n\n**Common causes:** Low coolant, thermostat failure, water pump issues, radiator problems\n\nOur community has extensive overheating guides and member experiences with different solutions. Many members can recommend trusted cooling system specialists in your area.";
             
-        if (lowerProblem.Contains("strange noise"))
-            return "Strange noises can indicate various issues. Can you describe the noise? Is it squealing, grinding, clicking, or knocking? Also, when does it occur - when starting, braking, or driving?";
+        if (lowerProblem.Contains("noise") || lowerProblem.Contains("sound") || lowerProblem.Contains("squealing") || 
+            lowerProblem.Contains("grinding") || lowerProblem.Contains("clicking"))
+            return "Strange noises can indicate various issues. Help me narrow it down:\n\n**Squealing:** Often belt-related or brake pads\n**Grinding:** Usually brakes or transmission\n**Clicking:** Could be CV joints or engine timing\n**Knocking:** Potentially serious engine issue\n\n**When does it occur?**\n• Starting up?\n• While driving?\n• When braking?\n• During turns?\n\nOur community diagnostic section has audio samples and member experiences with different automotive noises. I can connect you with members who've dealt with similar sounds.";
             
-        return await Task.FromResult("I understand you're experiencing an issue. For safety reasons, I recommend having a qualified mechanic diagnose the problem. Can you describe the symptoms in more detail?");
+        if (lowerProblem.Contains("brake") || lowerProblem.Contains("brakes") || lowerProblem.Contains("stopping"))
+            return "Brake problems require immediate professional attention for safety!\n\n**Warning signs:**\n• Squealing or grinding sounds\n• Soft or spongy pedal feel\n• Vehicle pulling to one side\n• Longer stopping distances\n• Brake warning light\n\n**Immediate action:** Have brakes inspected by a qualified technician\n\nOur community brake section has member experiences with brake repairs, trusted shop recommendations, and typical repair costs. Safety first - don't delay brake service!";
+            
+        if (lowerProblem.Contains("transmission") || lowerProblem.Contains("shifting") || lowerProblem.Contains("gear"))
+            return "Transmission issues can be complex and costly:\n\n**Common symptoms:**\n• Hard or delayed shifting\n• Slipping gears\n• Unusual noises during shifting\n• Fluid leaks (red/brown fluid)\n• Burning smell\n\n**First steps:**\n• Check transmission fluid level and condition\n• Note when problems occur (cold start, highway, city driving)\n\nOur community transmission section has member experiences with repairs, rebuilds, and replacements. Many members can recommend trusted transmission specialists and share cost experiences.";
+            
+        if (lowerProblem.Contains("electrical") || lowerProblem.Contains("lights") || lowerProblem.Contains("battery") || 
+            lowerProblem.Contains("alternator") || lowerProblem.Contains("charging"))
+            return "Electrical problems can be tricky to diagnose:\n\n**Common issues:**\n• Battery not holding charge\n• Lights dimming while driving\n• Electrical accessories not working\n• Dashboard warning lights\n\n**Basic checks:**\n• Battery terminals (clean and tight)\n• Belt condition (alternator belt)\n• Fuse box for blown fuses\n\nOur community electrical section has diagnostic guides and member experiences with electrical repairs. Many members can help with troubleshooting steps and recommend qualified auto electricians.";
+            
+        return "I understand you're experiencing a vehicle issue. For safety and proper diagnosis, I recommend:\n\n1. **Document symptoms:** When, where, and how the problem occurs\n2. **Safety first:** Don't drive if it's unsafe\n3. **Community help:** Our troubleshooting section has guides for many common problems\n4. **Professional diagnosis:** Some issues require expert evaluation\n\nOur community has experienced members who've dealt with similar problems. Can you describe the specific symptoms you're experiencing? I can connect you with relevant community resources and member experiences.";
     }
 
     private async Task<string> GenerateGreetingResponseAsync(string userId)
     {
         var greetings = new[]
         {
-            "Hello! Welcome to the Community Car platform. How can I assist you with your automotive needs today?",
-            "Hi there! I'm here to help with any car-related questions or issues you might have.",
-            "Welcome! Whether you need maintenance tips, troubleshooting help, or general automotive advice, I'm here to help.",
-            "Hello! Ready to help you with anything car-related. What's on your mind today?"
+            "Hello and welcome to the Community Car platform! 🚗 I'm your AI automotive assistant, ready to help with:\n\n• **Maintenance guidance** and service schedules\n• **Pricing information** and cost comparisons\n• **Local service recommendations** from community members\n• **Parts sourcing** and marketplace connections\n• **Technical support** and troubleshooting\n\nWhat automotive topic can I help you explore today?",
+            
+            "Hi there! Great to see you in our automotive community! 🔧 I'm here to assist with:\n\n• Finding **trusted mechanics** and service providers near you\n• **Maintenance tips** and scheduling guidance\n• **Parts recommendations** and pricing information\n• Connecting you with **community members** who share similar automotive interests\n• **DIY guides** and technical support\n\nHow can I help with your automotive needs today?",
+            
+            "Welcome to Community Car! 👋 I'm your dedicated automotive AI assistant. Our community offers:\n\n• **Expert advice** from experienced car enthusiasts\n• **Local service maps** with member reviews and ratings\n• **Marketplace** for buying/selling automotive parts\n• **Comprehensive guides** for maintenance and repairs\n• **Cost-saving tips** and budget-friendly solutions\n\nWhat would you like to know about cars, maintenance, or our community services?",
+            
+            "Hello! Welcome to the ultimate automotive community platform! 🚙 I'm here to help you with:\n\n• **Service scheduling** and maintenance planning\n• **Price comparisons** for parts and services\n• **Community recommendations** for trusted providers\n• **Technical troubleshooting** and repair guidance\n• **Local automotive maps** and service locators\n\nWhether you're a DIY enthusiast or prefer professional services, I can guide you to the right resources!"
         };
         
         var random = new Random();
@@ -529,7 +676,52 @@ public class IntelligentChatService : IIntelligentChatService
 
     private async Task<string> GenerateGeneralResponseAsync(string message)
     {
-        return await Task.FromResult("Thanks for sharing! I'm here to help with any automotive questions or concerns you might have. Is there something specific I can assist you with?");
+        var lowerMessage = message.ToLower();
+        
+        // Community-specific responses
+        if (lowerMessage.Contains("community") || lowerMessage.Contains("member") || lowerMessage.Contains("forum"))
+        {
+            return "Welcome to our automotive community! Here's what you can explore:\n• Share experiences and get advice from fellow car enthusiasts\n• Find trusted local mechanics and service providers\n• Buy/sell parts in our marketplace\n• Join discussions about specific car models\n• Access maintenance guides and tutorials\n\nWhat aspect of our community interests you most?";
+        }
+        
+        // Pricing inquiries
+        if (lowerMessage.Contains("price") || lowerMessage.Contains("cost") || lowerMessage.Contains("expensive") || lowerMessage.Contains("budget"))
+        {
+            return "Looking for automotive pricing information? Our community offers:\n• Real member experiences with service costs\n• Price comparisons from different providers\n• Group buying opportunities for parts\n• Budget-friendly maintenance tips\n• Cost-saving recommendations from experienced members\n\nWhat specific pricing information are you looking for?";
+        }
+        
+        // Service-related inquiries
+        if (lowerMessage.Contains("service") || lowerMessage.Contains("repair") || lowerMessage.Contains("fix") || lowerMessage.Contains("mechanic"))
+        {
+            return "Need automotive services? Our community can help:\n• Find highly-rated local mechanics and shops\n• Read detailed reviews from community members\n• Get service recommendations for your specific vehicle\n• Compare pricing and quality across providers\n• Access DIY guides for simple repairs\n\nWhat type of service or repair are you considering?";
+        }
+        
+        // Parts-related inquiries
+        if (lowerMessage.Contains("part") || lowerMessage.Contains("parts") || lowerMessage.Contains("buy") || lowerMessage.Contains("sell"))
+        {
+            return "Looking for automotive parts? Our community marketplace offers:\n• Quality parts from trusted community members\n• OEM and aftermarket options with reviews\n• Part number databases and compatibility guides\n• Group purchasing for better deals\n• Installation tips and tutorials\n\nWhat parts are you looking for, or do you have parts to sell?";
+        }
+        
+        // Maps and location services
+        if (lowerMessage.Contains("map") || lowerMessage.Contains("location") || lowerMessage.Contains("near") || lowerMessage.Contains("find"))
+        {
+            return "Our interactive maps can help you locate:\n• Trusted mechanics and auto shops with community ratings\n• Auto parts stores with current inventory and pricing\n• Gas stations with real-time fuel prices\n• Car washes and detailing services\n• Electric vehicle charging stations\n\nWhat type of automotive service are you trying to locate?";
+        }
+        
+        // Maintenance inquiries
+        if (lowerMessage.Contains("maintenance") || lowerMessage.Contains("care") || lowerMessage.Contains("keep") || lowerMessage.Contains("maintain"))
+        {
+            return "Vehicle maintenance is key to longevity! Our community provides:\n• Comprehensive maintenance schedules and checklists\n• Member experiences with different service intervals\n• DIY maintenance guides with step-by-step instructions\n• Seasonal maintenance tips and reminders\n• Cost-effective maintenance strategies\n\nWhat maintenance topics are you interested in learning about?";
+        }
+        
+        // General automotive topics
+        if (lowerMessage.Contains("car") || lowerMessage.Contains("vehicle") || lowerMessage.Contains("auto"))
+        {
+            return "Great to see your interest in automotive topics! Our community covers:\n• Vehicle maintenance and repair guidance\n• Parts sourcing and installation help\n• Local service provider recommendations\n• Buying and selling advice\n• Technical discussions and troubleshooting\n\nWhat specific automotive area would you like to explore?";
+        }
+        
+        // Default community-focused response
+        return "Welcome to our automotive community! I'm here to help you with:\n\n🔧 **Maintenance & Repairs**: Schedules, guides, and member experiences\n💰 **Pricing & Costs**: Real pricing data and budget-friendly options\n🗺️ **Local Services**: Find trusted mechanics, parts stores, and services near you\n🛒 **Parts & Marketplace**: Buy/sell parts with community members\n👥 **Community Support**: Connect with experienced car enthusiasts\n\nWhat automotive topic can I help you with today? Feel free to ask about specific services, parts, pricing, or maintenance needs!";
     }
 
     private async Task<bool> CheckInappropriateContentAsync(string message)

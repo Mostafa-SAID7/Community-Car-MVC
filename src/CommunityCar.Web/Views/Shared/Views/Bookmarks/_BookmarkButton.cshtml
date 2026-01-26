@@ -1,0 +1,84 @@
+@{
+    var entityId = ViewBag.EntityId?.ToString() ?? "";
+    var entityType = ViewBag.EntityType?.ToString() ?? "";
+    var isBookmarked = ViewBag.IsBookmarked ?? false;
+}
+
+<div class="bookmark-button-container">
+    <form asp-controller="Bookmarks" asp-action="Toggle" method="post" class="bookmark-form" data-entity-id="@entityId" data-entity-type="@entityType">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="entityId" value="@entityId" />
+        <input type="hidden" name="entityType" value="@entityType" />
+        
+        <button type="submit" class="bookmark-btn flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 @(isBookmarked ? "bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400" : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground")" title="@(isBookmarked ? "Remove bookmark" : "Add bookmark")">
+            @if (isBookmarked)
+            {
+                <i data-lucide="bookmark" class="w-4 h-4 fill-current"></i>
+            }
+            else
+            {
+                <i data-lucide="bookmark" class="w-4 h-4"></i>
+            }
+            <span class="bookmark-text">@(isBookmarked ? "Bookmarked" : "Bookmark")</span>
+        </button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    // Handle bookmark form submission
+    document.addEventListener('submit', function(e) {
+        if (e.target.classList.contains('bookmark-form')) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const btn = form.querySelector('.bookmark-btn');
+            const icon = btn.querySelector('i[data-lucide="bookmark"]');
+            const textSpan = btn.querySelector('.bookmark-text');
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const isBookmarked = data.data.isBookmarked;
+                    
+                    // Update button appearance
+                    if (isBookmarked) {
+                        btn.className = 'bookmark-btn flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400';
+                        btn.title = 'Remove bookmark';
+                        icon.classList.add('fill-current');
+                        textSpan.textContent = 'Bookmarked';
+                    } else {
+                        btn.className = 'bookmark-btn flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground';
+                        btn.title = 'Add bookmark';
+                        icon.classList.remove('fill-current');
+                        textSpan.textContent = 'Bookmark';
+                    }
+                    
+                    // Show success message
+                    if (data.message) {
+                        // You can implement a toast notification here
+                        console.log(data.message);
+                    }
+                } else {
+                    console.error('Failed to toggle bookmark:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error toggling bookmark:', error);
+            });
+        }
+    });
+});
+</script>

@@ -36,9 +36,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lemonada:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
+
+    <!-- Dynamic Font Styles -->
+    <partial name="_FontStyles" />
 
     @await RenderSectionAsync("Styles", required: false)
 
@@ -47,6 +53,7 @@
 </head>
 
 <body class="font-sans antialiased">
+    @Html.AntiForgeryToken()
     <partial name="_Header" />
 
     <!-- Main container aligned with sidebar positioning -->
@@ -156,6 +163,7 @@
     </div>
 
     <partial name="_AIAssistant" />
+    <partial name="_AlertModal" />
 
     <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
 

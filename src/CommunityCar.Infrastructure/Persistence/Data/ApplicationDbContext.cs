@@ -23,6 +23,7 @@ using CommunityCar.Domain.Entities.Dashboard.Settings;
 using CommunityCar.Domain.Entities.Localization;
 using CommunityCar.Domain.Entities.Profile;
 using CommunityCar.Domain.Entities.Shared;
+using CommunityCar.Domain.Entities.AI;
 using CommunityCar.Domain.Base;
 using CommunityCar.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -97,6 +98,11 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
     // Localization
     public DbSet<LocalizationCulture> LocalizationCultures => Set<LocalizationCulture>();
     public DbSet<LocalizationResource> LocalizationResources => Set<LocalizationResource>();
+
+    // AI
+    public DbSet<AIModel> AIModels => Set<AIModel>();
+    public DbSet<TrainingJob> TrainingJobs => Set<TrainingJob>();
+    public DbSet<TrainingHistory> TrainingHistories => Set<TrainingHistory>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

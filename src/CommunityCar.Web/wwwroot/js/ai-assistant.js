@@ -456,28 +456,34 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof lucide !== 'undefined') lucide.createIcons();
 
         try {
+            console.log('Sending message to AI:', text);
             const response = await fetch('/api/ai/chat/message', {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
                     message: text,
-                    conversationId: currentConversationId
+                    conversationId: currentConversationId,
+                    context: ''
                 })
             });
 
+            console.log('Response status:', response.status);
             const data = await response.json();
+            console.log('Response data:', data);
+            
             const indicator = document.getElementById('chat-typing');
             if (indicator) indicator.remove();
 
             if (response.ok && data.success) {
                 addChatMessage(data.data.response, true);
             } else {
-                addChatMessage(data.message || window.aiLocalizer?.ServiceError || "Sorry, I encountered an error. Please try again.", true);
+                console.error('AI service error:', data);
+                addChatMessage(data.message || data.error || window.aiLocalizer?.ServiceError || "Sorry, I encountered an error. Please try again.", true);
             }
         } catch (error) {
+            console.error('Network error:', error);
             const indicator = document.getElementById('chat-typing');
             if (indicator) indicator.remove();
             addChatMessage(window.aiLocalizer?.ConnectionError || "Connection error. Please check your network.", true);

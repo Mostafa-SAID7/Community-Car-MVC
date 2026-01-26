@@ -1,0 +1,26 @@
+@model CommunityCar.Application.Features.Shared.ViewModels.ActionButtonVM
+
+@{
+    var activeClass = Model.IsActive ? "text-primary bg-primary/5" : "text-muted-foreground hover:bg-muted/30 hover:text-foreground";
+    var iconFillClass = Model.IsActive && (Model.Type == "like" || Model.Type == "bookmark") ? "fill-current" : "";
+    
+    var iconName = Model.Type switch
+    {
+        "like" => "heart",
+        "comment" => "message-circle",
+        "share" => "share-2",
+        "bookmark" => "bookmark",
+        "view" => "eye",
+        _ => "circle"
+    };
+}
+
+<button class="flex-1 py-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 group/btn @activeClass" 
+        data-action="@Model.Action" 
+        data-entity-id="@Model.EntityId" 
+        data-entity-type="@Model.EntityType"
+        data-button-type="@Model.Type"
+        onclick="@Model.OnClick">
+    <i data-lucide="@iconName" class="w-5 h-5 group-hover/btn:scale-125 transition-all @iconFillClass"></i> 
+    @Model.Label
+</button>

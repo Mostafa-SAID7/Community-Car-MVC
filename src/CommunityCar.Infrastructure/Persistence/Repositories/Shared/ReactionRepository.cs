@@ -59,7 +59,7 @@ public class ReactionRepository : BaseRepository<Reaction>, IReactionRepository
         if (reaction != null)
         {
             DbSet.Remove(reaction);
-            await Context.SaveChangesAsync();
+            // Don't call SaveChangesAsync here - let UnitOfWork handle it
         }
     }
 }
