@@ -25,3 +25,5 @@ public interface IStoriesService
     Task<IEnumerable<StoryVM>> GetStoriesByAuthorAsync(Guid authorId);
     Task CleanupExpiredStoriesAsync();
 }
+
+

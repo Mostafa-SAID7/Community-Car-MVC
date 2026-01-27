@@ -12,20 +12,20 @@
             <p class="text-muted-foreground">Configure AI assistant behavior and providers</p>
         </div>
         <div class="flex items-center gap-3">
-            <a asp-action="Index" class="btn btn-outline">
-                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+            <a asp-action="Index" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
                 Back to Dashboard
             </a>
         </div>
     </div>
 
     <!-- Settings Form -->
-    <form id="aiSettingsForm" class="card">
-        <div class="card-header">
-            <h3 class="card-title">AI Configuration</h3>
-            <p class="card-description">Configure AI service providers and settings</p>
+    <form id="aiSettingsForm" class="eng-card">
+        <div class="eng-card-header">
+            <h3 class="eng-card-title">AI Configuration</h3>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Configure AI service providers and settings</p>
         </div>
-        <div class="card-content space-y-6">
+        <div class="p-6 space-y-6">
             <div class="space-y-2">
                 <label for="defaultProvider" class="text-sm font-medium text-foreground">Default Provider</label>
                 <select id="defaultProvider" name="defaultProvider" class="input">
@@ -81,12 +81,12 @@
             </div>
 
             <div class="flex items-center justify-end gap-3">
-                <button type="button" id="resetBtn" class="btn btn-outline">
-                    <i data-lucide="refresh-ccw" class="w-4 h-4 mr-2"></i>
+                <button type="button" id="resetBtn" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/reset">
+                    <i data-lucide="refresh-ccw" class="w-4 h-4 group-hover/reset:rotate-180 transition-transform duration-700"></i>
                     Reset to Defaults
                 </button>
-                <button type="submit" id="saveBtn" class="btn btn-primary">
-                    <i data-lucide="save" class="w-4 h-4 mr-2"></i>
+                <button type="submit" id="saveBtn" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95 group/save">
+                    <i data-lucide="save" class="w-4 h-4 group-hover/save:scale-110 transition-transform"></i>
                     Save Settings
                 </button>
             </div>
@@ -94,12 +94,12 @@
     </form>
 
     <!-- Provider Status -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Provider Status</h3>
-            <p class="card-description">Current status of AI service providers</p>
+    <div class="eng-card">
+        <div class="eng-card-header">
+            <h3 class="eng-card-title">Provider Status</h3>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Current status of AI service providers</p>
         </div>
-        <div class="card-content">
+        <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach (var provider in Model.Providers)
                 {
@@ -138,171 +138,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-
-            const form = document.getElementById('aiSettingsForm');
-            const saveBtn = document.getElementById('saveBtn');
-            const resetBtn = document.getElementById('resetBtn');
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const sentimentToggle = document.getElementById('enableSentiment');
-            const moderationToggle = document.getElementById('enableModeration');
-
-            // Handle form submission
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const formData = new FormData(form);
-                const settings = {
-                    defaultProvider: formData.get('defaultProvider'),
-                    maxResponseLength: parseInt(formData.get('maxResponseLength')),
-                    responseTimeout: parseInt(formData.get('responseTimeout')),
-                    sentimentAnalysis: sentimentToggle.checked,
-                    moderationEnabled: moderationToggle.checked
-                };
-
-                try {
-                    showLoading(true);
-                    saveBtn.disabled = true;
-
-                    const response = await fetch('/Dashboard/AIManagement/Settings/Save', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-                        },
-                        body: JSON.stringify(settings)
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        showNotification('Settings saved successfully!', 'success');
-                    } else {
-                        showNotification(result.message || 'Failed to save settings', 'error');
-                    }
-                } catch (error) {
-                    console.error('Error saving settings:', error);
-                    showNotification('An error occurred while saving settings', 'error');
-                } finally {
-                    showLoading(false);
-                    saveBtn.disabled = false;
-                }
-            });
-
-            // Handle reset button
-            resetBtn.addEventListener('click', async function() {
-                // Use the modal confirm dialog
-                if (window.AlertModal) {
-                    window.AlertModal.confirm(
-                        'Are you sure you want to reset all settings to defaults? This action cannot be undone.',
-                        'Reset Settings',
-                        async function(confirmed) {
-                            if (!confirmed) return;
-                            
-                            try {
-                                showLoading(true);
-                                resetBtn.disabled = true;
-
-                                const response = await fetch('/Dashboard/AIManagement/Settings/Reset', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-                                    }
-                                });
-
-                                const result = await response.json();
-
-                                if (result.success) {
-                                    // Update form with default values
-                                    if (result.settings) {
-                                        document.getElementById('defaultProvider').value = result.settings.defaultProvider;
-                                        document.getElementById('maxResponseLength').value = result.settings.maxResponseLength;
-                                        document.getElementById('responseTimeout').value = result.settings.responseTimeout;
-                                        sentimentToggle.checked = result.settings.sentimentAnalysis;
-                                        moderationToggle.checked = result.settings.moderationEnabled;
-                                    }
-                                    showNotification('Settings reset to defaults successfully!', 'success');
-                                } else {
-                                    showNotification(result.message || 'Failed to reset settings', 'error');
-                                }
-                            } catch (error) {
-                                console.error('Error resetting settings:', error);
-                                showNotification('An error occurred while resetting settings', 'error');
-                            } finally {
-                                showLoading(false);
-                                resetBtn.disabled = false;
-                            }
-                        }
-                    );
-                } else {
-                    // Fallback to browser confirm
-                    if (!confirm('Are you sure you want to reset all settings to defaults?')) {
-                        return;
-                    }
-                    
-                    // ... rest of the reset logic
-                }
-            });
-
-            // Handle toggle switches
-            [sentimentToggle, moderationToggle].forEach(toggle => {
-                toggle.addEventListener('change', async function() {
-                    const settingName = this.name === 'sentimentAnalysis' ? 'SentimentAnalysis' : 'ModerationEnabled';
-                    
-                    try {
-                        const response = await fetch('/Dashboard/AIManagement/Settings/Toggle', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-                            },
-                            body: JSON.stringify({
-                                settingName: settingName,
-                                enabled: this.checked
-                            })
-                        });
-
-                        const result = await response.json();
-
-                        if (result.success) {
-                            showNotification(result.message, 'success');
-                        } else {
-                            // Revert toggle if failed
-                            this.checked = !this.checked;
-                            showNotification(result.message || 'Failed to toggle setting', 'error');
-                        }
-                    } catch (error) {
-                        console.error('Error toggling setting:', error);
-                        // Revert toggle if failed
-                        this.checked = !this.checked;
-                        showNotification('An error occurred while toggling setting', 'error');
-                    }
-                });
-            });
-
-            function showLoading(show) {
-                loadingOverlay.style.display = show ? 'flex' : 'none';
-            }
-
-            function showNotification(message, type) {
-                // Use the new modal alert system
-                if (window.AlertModal) {
-                    if (type === 'success') {
-                        window.AlertModal.success(message);
-                    } else {
-                        window.AlertModal.error(message);
-                    }
-                } else {
-                    // Fallback to console if modal not available
-                    console.log(`${type.toUpperCase()}: ${message}`);
-                }
-            }
-        });
-    </script>
+    <script src="~/js/ai-settings.js" asp-append-version="true"></script>
 }

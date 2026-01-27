@@ -21,3 +21,5 @@ public interface IMonitoringService
     Task<bool> ModerateContentAsync(Guid id, string action, string? reason);
     Task<bool> ModeratContentAsync(Guid id, string action, string? reason); // Matching the typo in controller for now to avoid multiple file edits if risky, but I'll fix the controller too if possible.
 }
+
+

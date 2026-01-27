@@ -15,3 +15,5 @@ public interface IPostsService
     Task<IEnumerable<PostVM>> GetRecentPostsAsync(int count = 10, CancellationToken cancellationToken = default);
     Task<PostsStatsVM> GetPostsStatsAsync(CancellationToken cancellationToken = default);
 }
+
+

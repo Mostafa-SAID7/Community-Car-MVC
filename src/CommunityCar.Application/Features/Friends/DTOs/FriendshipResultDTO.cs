@@ -15,3 +15,5 @@ public class FriendshipStatusDTO
     public bool IsBlocked { get; set; }
     public Guid? FriendshipId { get; set; }
 }
+
+

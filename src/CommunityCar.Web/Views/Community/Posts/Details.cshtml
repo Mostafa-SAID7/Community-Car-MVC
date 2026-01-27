@@ -17,14 +17,21 @@
 
     <!-- Main Content -->
     <div id="main-content">
-        <!-- Breadcrumb Layer -->
-    <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
-        <a href="@Url.Action("Index", "Posts")" class="hover:text-primary transition-colors flex items-center gap-2">
-            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> @Localizer["FeedRegistry"]
+    <!-- Navigation & Signal Strategy -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2">
+        <div class="space-y-4">
+            <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">
+                <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i> @Localizer["SignalBroadcast"]
+            </nav>
+            <h1 class="text-5xl font-black text-foreground tracking-tighter leading-none">@Model.Title</h1>
+            <p class="text-sm font-medium text-muted-foreground opacity-70 mt-4 border-l-4 border-primary/20 pl-4 py-1 max-w-2xl">@Localizer["TransmissionLog"]</p>
+        </div>
+        
+        <a href="@Url.Action("Index", "Posts")" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+            <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
+            @Localizer["FeedRegistry"]
         </a>
-        <span class="opacity-20">/</span>
-        <span class="text-foreground/40">@Localizer["TransmissionLog"]</span>
-    </nav>
+    </div>
 
     <div class="relative group">
         <!-- Structural Glow -->
@@ -36,11 +43,10 @@
                 <div class="space-y-6">
                     <div class="flex items-center gap-3">
                          <span class="px-4 py-1.5 rounded-2xl bg-primary/10 text-primary border border-primary/20 text-[9px] font-black uppercase tracking-widest">
-                            @Model.Type Payload
+                            @Model.Type PAYLOAD
                          </span>
                          <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@string.Format(Localizer["Frequency"].Value, Model.CreatedAt.ToString("MMM dd, yyyy"))</span>
                     </div>
-                    <h1 class="text-4xl md:text-5xl font-black text-foreground tracking-tighter leading-tight">@Model.Title</h1>
                 </div>
 
                 <div class="flex items-center justify-between pt-6 border-t border-border/20">

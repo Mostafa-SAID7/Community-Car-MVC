@@ -29,3 +29,5 @@ public interface ISharedSearchService
     Task<List<RelatedContentVM>> GetRelatedContentAsync(Guid entityId, EntityType entityType, int maxResults = 10);
     Task<List<PopularContentVM>> GetPopularContentAsync(EntityType? entityType = null, TimeSpan? timeRange = null, int maxResults = 20);
 }
+
+

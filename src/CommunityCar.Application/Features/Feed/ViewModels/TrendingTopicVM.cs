@@ -15,3 +15,5 @@ public class TrendingTopicVM
     public DateTime LastActivityAt { get; set; }
     public string TimeAgo { get; set; } = string.Empty;
 }
+
+

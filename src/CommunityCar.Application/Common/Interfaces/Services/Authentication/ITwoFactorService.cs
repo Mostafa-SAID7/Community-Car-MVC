@@ -5,17 +5,17 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Authentication;
 
 public interface ITwoFactorService
 {
-    Task<AuthResult> EnableTwoFactorAsync(EnableTwoFactorRequest request);
-    Task<AuthResult> DisableTwoFactorAsync(DisableTwoFactorRequest request);
-    Task<AuthResult> GenerateQrCodeAsync(string userId);
-    Task<AuthResult> VerifyTwoFactorTokenAsync(VerifyTwoFactorTokenRequest request);
-    Task<AuthResult> GenerateRecoveryCodesAsync(GenerateRecoveryCodesRequest request);
-    Task<AuthResult> VerifyRecoveryCodeAsync(VerifyRecoveryCodeRequest request);
+    Task<Result> EnableTwoFactorAsync(EnableTwoFactorRequest request);
+    Task<Result> DisableTwoFactorAsync(DisableTwoFactorRequest request);
+    Task<Result> GenerateQrCodeAsync(string userId);
+    Task<Result> VerifyTwoFactorTokenAsync(VerifyTwoFactorTokenRequest request);
+    Task<Result> GenerateRecoveryCodesAsync(GenerateRecoveryCodesRequest request);
+    Task<Result> VerifyRecoveryCodeAsync(VerifyRecoveryCodeRequest request);
     Task<bool> IsTwoFactorEnabledAsync(string userId);
-    Task<AuthResult> SendSmsTokenAsync(SendSmsTokenRequest request);
-    Task<AuthResult> VerifySmsTokenAsync(VerifyTwoFactorTokenRequest request);
-    Task<AuthResult> SendEmailTokenAsync(string userId);
-    Task<AuthResult> VerifyEmailTokenAsync(VerifyTwoFactorTokenRequest request);
+    Task<Result> SendSmsTokenAsync(SendSmsTokenRequest request);
+    Task<Result> VerifySmsTokenAsync(VerifyTwoFactorTokenRequest request);
+    Task<Result> SendEmailTokenAsync(string userId);
+    Task<Result> VerifyEmailTokenAsync(VerifyTwoFactorTokenRequest request);
 }
 
 public class TwoFactorSetupInfo
@@ -31,3 +31,5 @@ public class TwoFactorChallengeResult
     public string[] AvailableProviders { get; set; } = Array.Empty<string>();
     public string ChallengeToken { get; set; } = string.Empty;
 }
+
+

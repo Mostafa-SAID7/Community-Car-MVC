@@ -76,3 +76,5 @@ public class StoryVM
     public int TotalMediaCount { get; set; }
     public bool HasLocation { get; set; }
 }
+
+

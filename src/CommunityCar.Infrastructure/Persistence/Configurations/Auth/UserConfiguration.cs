@@ -19,3 +19,4 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.CountryAr).HasMaxLength(100);
     }
 }
+

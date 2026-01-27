@@ -102,67 +102,40 @@ public static class FontHelper
     }
 
     /// <summary>
-    /// Gets font preload links for the current culture
+    /// Gets font preload links for performance optimization
     /// </summary>
     /// <returns>HTML string with font preload links</returns>
     public static string GetFontPreloadLinks()
     {
-        var links = new List<string>
-        {
-            "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">",
-            "<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>",
-            "<link href=\"https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap\" rel=\"stylesheet\">",
-            "<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap\" rel=\"stylesheet\">"
-        };
-
         if (IsArabicCulture())
         {
-            links.AddRange(new[]
-            {
-                "<link href=\"https://fonts.googleapis.com/css2?family=Lemonada:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">",
-                "<link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap\" rel=\"stylesheet\">"
-            });
+            return @"
+                <link rel=""preload"" href=""/fonts/NotoSansArabic-Regular.woff2"" as=""font"" type=""font/woff2"" crossorigin>
+                <link rel=""preload"" href=""/fonts/Lemonada-Regular.woff2"" as=""font"" type=""font/woff2"" crossorigin>";
         }
-
-        return string.Join("\n    ", links);
+        else
+        {
+            return @"
+                <link rel=""preload"" href=""/fonts/Inter-Regular.woff2"" as=""font"" type=""font/woff2"" crossorigin>
+                <link rel=""preload"" href=""/fonts/Inter-Bold.woff2"" as=""font"" type=""font/woff2"" crossorigin>";
+        }
     }
 
     /// <summary>
-    /// Gets inline CSS for font optimization
+    /// Gets font optimization CSS for performance
     /// </summary>
     /// <returns>CSS string for font optimization</returns>
     public static string GetFontOptimizationCSS()
     {
-        var isArabic = IsArabicCulture();
-        
-        if (isArabic)
-        {
-            return @"
-                <style>
-                    /* Font display optimization for Arabic fonts */
-                    @font-face {
-                        font-family: 'Lemonada';
-                        font-display: swap;
-                    }
-                    @font-face {
-                        font-family: 'Noto Sans Arabic';
-                        font-display: swap;
-                    }
-                    /* Prevent layout shift during font load */
-                    body { font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif; }
-                    h1, h2, h3, h4, h5, h6 { font-family: 'Lemonada', 'Alexandria', cursive; }
-                </style>";
-        }
-        
         return @"
-            <style>
-                /* Font display optimization for Latin fonts */
-                @font-face {
-                    font-family: 'Inter';
-                    font-display: swap;
-                }
-                /* Prevent layout shift during font load */
-                body { font-family: 'Inter', 'Alexandria', system-ui, -apple-system, sans-serif; }
-            </style>";
+            .font-arabic-heading, .font-arabic-body {
+                font-display: swap;
+            }
+            .font-sans {
+                font-display: swap;
+            }";
     }
 }
+
+
+

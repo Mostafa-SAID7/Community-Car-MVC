@@ -35,3 +35,5 @@ public interface ITrainingHistoryRepository
     Task<TrainingHistory> UpdateHistoryAsync(TrainingHistory history);
     Task<bool> DeleteHistoryAsync(Guid id);
 }
+
+

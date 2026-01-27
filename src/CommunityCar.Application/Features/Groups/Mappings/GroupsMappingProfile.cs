@@ -46,3 +46,5 @@ public class GroupsMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.IsOfficial, opt => opt.Ignore());
     }
 }
+
+

@@ -1,4 +1,4 @@
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Users;
 
 namespace CommunityCar.Application.Common.Models.Notifications;
 
@@ -23,3 +23,5 @@ public class BulkNotificationRequest
     public string? IconClass { get; set; }
     public Dictionary<string, object>? Data { get; set; }
 }
+
+

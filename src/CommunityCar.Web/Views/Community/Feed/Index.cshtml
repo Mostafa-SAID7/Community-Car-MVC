@@ -355,88 +355,12 @@
                     if (typeof Skeleton !== 'undefined') Skeleton.initPageLoad('feed-skeleton', 'feed-container');
                     if (typeof initializeFeed === 'function') initializeFeed();
                     if (typeof initializeStories === 'function') initializeStories();
-                    
-                    setInterval(function() {
-                        if (typeof refreshFeedStats === 'function') refreshFeedStats();
-                        if (typeof refreshStories === 'function') refreshStories();
-                    }, 300000);
                 });
+            } else {
+                if (typeof Skeleton !== 'undefined') Skeleton.initPageLoad('feed-skeleton', 'feed-container');
+                if (typeof initializeFeed === 'function') initializeFeed();
+                if (typeof initializeStories === 'function') initializeStories();
             }
         });
-
-        function loadMoreFeedContent() {
-            if (isLoading) return;
-            
-            isLoading = true;
-            const loadButton = event.target.closest('button');
-            const originalContent = loadButton.innerHTML;
-            
-            // Show loading state
-            loadButton.innerHTML = `<i class="fas fa-spinner fa-spin w-5 h-5"></i> ${window.feedLocalizer?.Loading || 'Loading...'}`;
-            loadButton.disabled = true;
-            
-            // Show skeleton loading
-            showSkeletonLoading(10);
-            
-            currentPage++;
-            
-            fetch(`/feed?feedType=${feedType}&page=${currentPage}&pageSize=10`)
-                .then(response => response.text())
-                .then(html => {
-                    // Parse the HTML to extract feed items
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const newItems = doc.querySelectorAll('[data-content-id]');
-                    
-                    // Remove skeleton loading
-                    removeSkeletonLoading();
-                    
-                    // Append new items
-                    const container = document.getElementById('feed-container');
-                    newItems.forEach(item => {
-                        container.appendChild(item.cloneNode(true));
-                    });
-                    
-                    // Reinitialize shared interactions for new items
-                    if (window.sharedInteractions) {
-                        window.sharedInteractions.initializeCounters();
-                    }
-                    
-                    // Check if there are more items
-                    const hasMore = doc.querySelector('.py-12.text-center button');
-                    if (!hasMore) {
-                        loadButton.style.display = 'none';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading more content:', error);
-                    currentPage--; // Revert page increment on error
-                    removeSkeletonLoading();
-                })
-                .finally(() => {
-                    isLoading = false;
-                    loadButton.innerHTML = originalContent;
-                    loadButton.disabled = false;
-                });
-        }
-
-        function showSkeletonLoading(count) {
-            const container = document.getElementById('feed-container');
-            const template = document.getElementById('skeleton-template').firstElementChild;
-            
-            for (let i = 0; i < count; i++) {
-                const skeleton = template.cloneNode(true);
-                skeleton.id = `skeleton-${i}`;
-                skeleton.classList.remove('hidden');
-                skeleton.classList.add('skeleton-item');
-                container.appendChild(skeleton);
-            }
-        }
-
-        function removeSkeletonLoading() {
-            document.querySelectorAll('.skeleton-item').forEach(skeleton => {
-                skeleton.remove();
-            });
-        }
     </script>
 }

@@ -22,3 +22,5 @@ public interface ISettingsService
     Task<bool> ResetToDefaultAsync(Guid userId, string key);
     Task<bool> ResetAllToDefaultAsync(Guid userId);
 }
+
+

@@ -89,6 +89,10 @@
                     <div>
                         <label for="title" class="block text-sm font-black text-foreground mb-2">@Localizer["Title"]</label>
                         <input type="text" id="title" name="title" required maxlength="200" 
+                               data-placeholder-text="@Localizer["TitlePlaceholder"]"
+                               data-placeholder-image="@Localizer["ImageTitlePlaceholder"]"
+                               data-placeholder-link="@Localizer["LinkTitlePlaceholder"]"
+                               data-placeholder-poll="@Localizer["PollTitlePlaceholder"]"
                                class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none"
                                placeholder="@Localizer["TitlePlaceholder"]">
                         <p class="text-xs text-muted-foreground mt-1 opacity-60">@Localizer["TitleHelp"]</p>
@@ -97,6 +101,10 @@
                     <div>
                         <label for="content" class="block text-sm font-black text-foreground mb-2">@Localizer["ContentLabel"]</label>
                         <textarea id="content" name="content" required maxlength="5000" rows="8"
+                                  data-placeholder-text="@Localizer["ContentPlaceholder"]"
+                                  data-placeholder-image="@Localizer["ImageContentPlaceholder"]"
+                                  data-placeholder-link="@Localizer["LinkContentPlaceholder"]"
+                                  data-placeholder-poll="@Localizer["PollContentPlaceholder"]"
                                   class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none"
                                   placeholder="@Localizer["ContentPlaceholder"]"></textarea>
                         <div class="flex justify-between items-center mt-2">
@@ -191,53 +199,6 @@
     </div>
 </div>
 
-<script>
-function selectPostType(type, element) {
-    // Remove active state from all options
-    document.querySelectorAll('[onclick*="selectPostType"]').forEach(el => {
-        el.classList.remove('border-primary', 'bg-primary/5');
-        el.classList.add('border-border/30');
-    });
-    
-    // Add active state to selected option
-    element.classList.remove('border-border/30');
-    element.classList.add('border-primary', 'bg-primary/5');
-    
-    // Update placeholder text based on type
-    const contentTextarea = document.getElementById('content');
-    const titleInput = document.getElementById('title');
-    
-    switch(type) {
-        case 'Text':
-            titleInput.placeholder = "@Localizer["TitlePlaceholder"]";
-            contentTextarea.placeholder = "@Localizer["ContentPlaceholder"]";
-            break;
-        case 'Image':
-            titleInput.placeholder = "@Localizer["ImageTitlePlaceholder"]";
-            contentTextarea.placeholder = "@Localizer["ImageContentPlaceholder"]";
-            break;
-        case 'Link':
-            titleInput.placeholder = "@Localizer["LinkTitlePlaceholder"]";
-            contentTextarea.placeholder = "@Localizer["LinkContentPlaceholder"]";
-            break;
-        case 'Poll':
-            titleInput.placeholder = "@Localizer["PollTitlePlaceholder"]";
-            contentTextarea.placeholder = "@Localizer["PollContentPlaceholder"]";
-            break;
-    }
+@section Scripts {
+    <script src="~/js/posts-create.js" asp-append-version="true"></script>
 }
-
-// Character counter
-document.getElementById('content').addEventListener('input', function() {
-    const counter = document.getElementById('contentCounter');
-    const current = this.value.length;
-    const max = 5000;
-    counter.textContent = `${current} / ${max}`;
-    
-    if (current > max * 0.9) {
-        counter.classList.add('text-red-500');
-    } else {
-        counter.classList.remove('text-red-500');
-    }
-});
-</script>

@@ -17,3 +17,5 @@ public interface IGroupsService
     Task<bool> JoinGroupAsync(Guid groupId, CancellationToken cancellationToken = default);
     Task<bool> LeaveGroupAsync(Guid groupId, CancellationToken cancellationToken = default);
 }
+
+

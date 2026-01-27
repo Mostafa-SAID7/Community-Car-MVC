@@ -92,10 +92,10 @@
             </select>
         </div>
         <div class="flex items-center gap-2">
-            <button onclick="toggleView('grid')" id="gridViewBtn" class="p-2 bg-primary text-primary-foreground rounded-lg transition-all">
+            <button data-action="toggle-view" data-view="grid" id="gridViewBtn" class="p-2 bg-primary text-primary-foreground rounded-lg transition-all">
                 <i data-lucide="grid-3x3" class="w-4 h-4"></i>
             </button>
-            <button onclick="toggleView('list')" id="listViewBtn" class="p-2 bg-background border border-border text-muted-foreground hover:text-foreground rounded-lg transition-all">
+            <button data-action="toggle-view" data-view="list" id="listViewBtn" class="p-2 bg-background border border-border text-muted-foreground hover:text-foreground rounded-lg transition-all">
                 <i data-lucide="list" class="w-4 h-4"></i>
             </button>
         </div>
@@ -126,20 +126,20 @@
                         @if (item.MediaType == MediaType.Image)
                         {
                             <img src="@(item.ThumbnailUrl ?? item.MediaUrl)" alt="@item.Title" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                                 onclick="openMediaModal('@item.Id')" />
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 cursor-pointer" 
+                                 data-action="open-media" data-item-id="@item.Id" />
                         }
                         else if (item.MediaType == MediaType.Video)
                         {
                             <div class="w-full h-full bg-gradient-to-br from-red-500/20 to-red-600/20 flex items-center justify-center cursor-pointer" 
-                                 onclick="openMediaModal('@item.Id')">
+                                 data-action="open-media" data-item-id="@item.Id">
                                 <i data-lucide="play-circle" class="w-16 h-16 text-red-500"></i>
                             </div>
                         }
                         else if (item.MediaType == MediaType.Audio)
                         {
                             <div class="w-full h-full bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center cursor-pointer" 
-                                 onclick="openMediaModal('@item.Id')">
+                                 data-action="open-media" data-item-id="@item.Id">
                                 <i data-lucide="music" class="w-16 h-16 text-purple-500"></i>
                             </div>
                         }
@@ -206,7 +206,7 @@
                         <div class="flex items-center justify-between">
                             <span class="text-xs text-muted-foreground">@item.TimeAgo</span>
                             <div class="flex items-center gap-2">
-                                <button onclick="toggleItemVisibility('@item.Id')" class="text-muted-foreground hover:text-foreground transition-colors">
+                                <button data-action="toggle-visibility" data-item-id="@item.Id" class="text-muted-foreground hover:text-foreground transition-colors">
                                     @if (item.IsPublic)
                                     {
                                         <i data-lucide="eye" class="w-4 h-4"></i>
@@ -216,10 +216,10 @@
                                         <i data-lucide="eye-off" class="w-4 h-4"></i>
                                     }
                                 </button>
-                                <button onclick="editItem('@item.Id')" class="text-muted-foreground hover:text-primary transition-colors">
+                                <button data-action="edit-item" data-item-id="@item.Id" class="text-muted-foreground hover:text-primary transition-colors">
                                     <i data-lucide="edit" class="w-4 h-4"></i>
                                 </button>
-                                <button onclick="deleteItem('@item.Id')" class="text-muted-foreground hover:text-red-500 transition-colors">
+                                <button data-action="delete-item" data-item-id="@item.Id" class="text-muted-foreground hover:text-red-500 transition-colors">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -235,7 +235,7 @@
                     <i data-lucide="image-off" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
                     <h3 class="text-xl font-bold text-foreground mb-2">No Gallery Items Yet</h3>
                     <p class="text-muted-foreground mb-6">Start building your automotive gallery by uploading your first photo or video.</p>
-                    <button onclick="openUploadModal()" class="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-sm py-3 px-6 rounded-xl transition-all">
+                    <button data-action="open-upload" class="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-sm py-3 px-6 rounded-xl transition-all">
                         <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
                         Upload Your First Item
                     </button>
@@ -251,7 +251,7 @@
         <div class="p-6 border-b border-border">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-foreground">Upload Media</h2>
-                <button onclick="closeUploadModal()" class="text-muted-foreground hover:text-foreground transition-colors">
+                <button data-action="close-upload" class="text-muted-foreground hover:text-foreground transition-colors">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
@@ -262,8 +262,8 @@
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-foreground">Media File</label>
                 <div class="border-2 border-dashed border-border rounded-xl p-8 text-center hover:border-primary transition-colors">
-                    <input type="file" name="mediaFile" id="mediaFile" accept="image/*,video/*,audio/*" class="hidden" onchange="handleFileSelect(this)" required />
-                    <div id="uploadArea" class="cursor-pointer" onclick="document.getElementById('mediaFile').click()">
+                    <input type="file" name="mediaFile" id="mediaFile" accept="image/*,video/*,audio/*" class="hidden" required />
+                    <div id="uploadArea" class="cursor-pointer">
                         <i data-lucide="upload" class="w-12 h-12 text-muted-foreground mx-auto mb-4"></i>
                         <p class="text-foreground font-medium mb-2">Click to upload or drag and drop</p>
                         <p class="text-sm text-muted-foreground">Images, videos, and audio files supported</p>
@@ -311,7 +311,7 @@
             
             <!-- Actions -->
             <div class="flex items-center justify-end gap-4 pt-4 border-t border-border">
-                <button type="button" onclick="closeUploadModal()" class="px-6 py-3 text-muted-foreground hover:text-foreground font-medium transition-colors">
+                <button type="button" data-action="close-upload" class="px-6 py-3 text-muted-foreground hover:text-foreground font-medium transition-colors">
                     Cancel
                 </button>
                 <button type="submit" class="bg-primary text-primary-foreground hover:bg-primary/90 font-bold px-6 py-3 rounded-xl transition-all">

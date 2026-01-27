@@ -31,3 +31,6 @@ public class SkeletonTagHelper : TagHelper
         output.Content.SetHtmlContent(content);
     }
 }
+
+
+

@@ -60,11 +60,13 @@ function toggleLike(contentId, contentType, event) {
 
 function toggleComments(contentId) {
     const commentsSection = document.getElementById(`comments-${contentId}`);
-    if (commentsSection.style.display === 'none') {
-        commentsSection.style.display = 'block';
+    if (commentsSection.classList.contains('hidden')) {
+        commentsSection.classList.remove('hidden');
+        commentsSection.classList.add('block');
         loadComments(contentId);
     } else {
-        commentsSection.style.display = 'none';
+        commentsSection.classList.add('hidden');
+        commentsSection.classList.remove('block');
     }
 }
 
@@ -435,11 +437,24 @@ function loadMoreContent() {
                     container.appendChild(item.cloneNode(true));
                 });
 
+                // Reinitialize shared interactions for new items
+                if (window.sharedInteractions) {
+                    window.sharedInteractions.initializeCounters();
+                }
+
                 // Check if there are more items
                 const hasMore = doc.querySelector('.py-12.text-center button');
                 if (!hasMore) {
-                    loadButton.style.display = 'none';
+                    loadButton.classList.add('hidden');
                 }
+
+                // Re-initialize icons
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+
+                // Re-observe for visibility
+                observePostVisibility();
             })
             .catch(error => {
                 console.error('Error loading more content:', error);
@@ -452,6 +467,10 @@ function loadMoreContent() {
                 loadButton.disabled = false;
             });
     }
+}
+
+function loadMoreFeedContent() {
+    loadMoreContent();
 }
 
 function showSkeletonLoading(count) {

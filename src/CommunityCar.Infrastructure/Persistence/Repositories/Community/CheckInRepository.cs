@@ -70,3 +70,4 @@ public class CheckInRepository : BaseRepository<CheckIn>, ICheckInRepository
             .ToListAsync(cancellationToken);
     }
 }
+

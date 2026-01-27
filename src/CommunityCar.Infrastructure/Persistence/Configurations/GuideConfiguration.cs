@@ -40,3 +40,4 @@ public class GuideConfiguration : IEntityTypeConfiguration<Guide>
             .HasMaxLength(1000);
     }
 }
+

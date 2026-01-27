@@ -26,3 +26,4 @@ public class StoryConfiguration : IEntityTypeConfiguration<Story>
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }
+

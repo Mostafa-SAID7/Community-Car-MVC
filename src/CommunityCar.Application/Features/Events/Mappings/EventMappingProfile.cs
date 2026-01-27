@@ -46,3 +46,5 @@ public class EventMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.IsCancelled, opt => opt.Ignore());
     }
 }
+
+

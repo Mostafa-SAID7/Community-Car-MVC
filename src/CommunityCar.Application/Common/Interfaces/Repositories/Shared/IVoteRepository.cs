@@ -13,3 +13,5 @@ public interface IVoteRepository : IBaseRepository<Vote>
     Task<IEnumerable<Vote>> GetVotesByEntityAsync(Guid entityId, EntityType entityType);
     Task<IEnumerable<Vote>> GetUserVotesAsync(Guid userId, EntityType? entityType = null);
 }
+
+

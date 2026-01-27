@@ -6,13 +6,15 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Authentication;
 
 public interface IAuthenticationService
 {
-    Task<AuthResult> RegisterAsync(RegisterRequest request);
-    Task<AuthResult> LoginAsync(LoginRequest request);
-    Task<AuthResult> ConfirmEmailAsync(string userId, string token);
-    Task<AuthResult> ForgotPasswordAsync(string email);
-    Task<AuthResult> ResetPasswordAsync(ResetPasswordRequest request);
-    Task<AuthResult> ChangePasswordAsync(ChangePasswordRequest request);
-    Task<AuthResult> ResendEmailConfirmationAsync(string email);
+    Task<Result> RegisterAsync(RegisterRequest request);
+    Task<Result> LoginAsync(LoginRequest request);
+    Task<Result> ConfirmEmailAsync(string userId, string token);
+    Task<Result> ForgotPasswordAsync(string email);
+    Task<Result> ResetPasswordAsync(ResetPasswordRequest request);
+    Task<Result> ChangePasswordAsync(ChangePasswordRequest request);
+    Task<Result> ResendEmailConfirmationAsync(string email);
     Task<User?> GetCurrentUserAsync();
     Task LogoutAsync();
 }
+
+

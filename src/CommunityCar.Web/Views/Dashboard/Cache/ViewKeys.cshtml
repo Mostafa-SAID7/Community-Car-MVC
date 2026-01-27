@@ -1,0 +1,308 @@
+@model CacheKeysViewModel
+@{
+    ViewData["Title"] = "Cache Registry - Key Explorer";
+    ViewData["PageHeader"] = "Cache Registry";
+    ViewData["PageDescription"] = "Browse and manage cache key infrastructure";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-700">
+    <!-- Breadcrumb Protocol -->
+    <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
+        <a href="@Url.Action("Index")" class="hover:text-primary transition-colors flex items-center gap-2">
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Cache Management
+        </a>
+        <span class="opacity-20">/</span>
+        <span class="text-foreground/40">Key Registry Explorer</span>
+    </nav>
+
+    <!-- Search Protocol Interface -->
+    <div class="eng-card overflow-hidden">
+        <div class="flex flex-col lg:flex-row border-b border-border/30">
+            <div class="flex-1 p-8 md:p-12 space-y-6">
+                <div class="space-y-4">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-2xl text-[9px] font-black uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 flex items-center gap-1.5 shadow-sm">
+                            <i data-lucide="search" class="w-3.5 h-3.5"></i> Pattern Search
+                        </span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-black text-foreground tracking-tighter leading-[1.1]">Cache Key Registry</h1>
+                </div>
+
+                <form method="get" asp-action="ViewKeys" class="space-y-6">
+                    <div class="relative group/field">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-3xl blur opacity-0 group-focus-within/field:opacity-100 transition duration-500"></div>
+                        <div class="relative bg-background/50 border border-border/50 rounded-[2rem] overflow-hidden focus-within:border-primary/50 transition-all shadow-inner">
+                            <div class="flex">
+                                <input type="text" name="pattern" value="@Model.Pattern" class="flex-1 p-6 bg-transparent border-none focus:ring-0 text-foreground font-medium placeholder:text-muted-foreground/40" placeholder="Initialize pattern search protocol (e.g., user:*, feed:*, *)">
+                                <button type="submit" class="px-8 py-6 bg-primary text-primary-foreground font-black text-xs uppercase tracking-[0.2em] hover:bg-primary/90 transition-all flex items-center gap-3">
+                                    <i data-lucide="search" class="w-4 h-4"></i> Execute Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="px-4">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Pattern Examples:</span>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <code class="px-2 py-1 bg-muted/40 rounded text-[10px] font-black uppercase tracking-widest text-primary">user:*</code>
+                            <code class="px-2 py-1 bg-muted/40 rounded text-[10px] font-black uppercase tracking-widest text-primary">feed:trending:*</code>
+                            <code class="px-2 py-1 bg-muted/40 rounded text-[10px] font-black uppercase tracking-widest text-primary">gamification:leaderboard:*</code>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stats Panel -->
+            <div class="lg:w-72 bg-muted/20 border-l border-border/30 p-8 flex flex-col justify-center gap-8">
+                <div class="space-y-1">
+                    <span class="eng-stat-value text-[32px] leading-none tracking-tighter">@Model.TotalCount.ToString("D2")</span>
+                    <span class="eng-stat-label tracking-[0.2em] opacity-50">Keys Located</span>
+                </div>
+                <div class="space-y-1">
+                    <span class="eng-stat-value text-[32px] leading-none tracking-tighter">@Model.Pattern</span>
+                    <span class="eng-stat-label tracking-[0.2em] opacity-50">Active Pattern</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Registry Data Stream -->
+    <div class="eng-card overflow-hidden">
+        <div class="border-b border-border/30 p-8 md:p-12">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-black text-foreground tracking-tighter flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-2xl bg-primary text-primary-foreground text-xs leading-none">@Model.TotalCount</span>
+                    Registry Entries
+                </h3>
+                <div class="flex items-center gap-4">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Pattern Filter:</span>
+                    <span class="px-3 py-1 rounded-2xl text-[9px] font-black uppercase tracking-widest bg-muted/40 text-foreground border border-border/50">@Model.Pattern</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-8 md:p-12">
+            @if (Model.Keys.Any())
+            {
+                <div class="space-y-4">
+                    @for (int i = 0; i < Model.Keys.Count; i++)
+                    {
+                        var key = Model.Keys[i];
+                        var category = key.Split(':').FirstOrDefault() ?? "Unknown";
+                        
+                        <div class="relative group/key animate-in fade-in slide-in-from-bottom-4 transition-all hover:-translate-y-1">
+                            <div class="eng-card p-6 md:p-8 bg-muted/10 border border-border/30">
+                                <div class="flex flex-col md:flex-row gap-6">
+                                    <!-- Key Index -->
+                                    <div class="md:w-16 flex flex-col items-center gap-2 pt-2">
+                                        <span class="eng-stat-value text-lg">@(i + 1).ToString("D2")</span>
+                                        <span class="w-8 h-px bg-border/40"></span>
+                                    </div>
+
+                                    <div class="flex-1 space-y-4">
+                                        <!-- Key Identity -->
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 rounded-2xl bg-@GetCategoryColor(category)/10 border border-@GetCategoryColor(category)/20 flex items-center justify-center text-@GetCategoryColor(category)">
+                                                    <i data-lucide="@GetCategoryIcon(category)" class="w-4 h-4"></i>
+                                                </div>
+                                                <div>
+                                                    <span class="block text-xs font-black text-foreground">@category.ToUpper() NAMESPACE</span>
+                                                    <span class="block text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Cache Registry Entry</span>
+                                                </div>
+                                            </div>
+                                            <span class="px-3 py-1 rounded-2xl text-[9px] font-black uppercase tracking-widest bg-@GetCategoryColor(category)/10 text-@GetCategoryColor(category) border border-@GetCategoryColor(category)/20 shadow-sm">
+                                                @category.ToUpper()
+                                            </span>
+                                        </div>
+
+                                        <!-- Key Value -->
+                                        <div class="bg-background/50 border border-border/30 rounded-2xl p-4 font-mono text-sm text-foreground/80 break-all">
+                                            @key
+                                        </div>
+
+                                        <!-- Interaction Bar -->
+                                        <div class="flex items-center gap-6 pt-4 border-t border-border/20">
+                                            <button onclick="inspectKey('@key')" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors group/tool">
+                                                <i data-lucide="eye" class="w-4 h-4 group-hover/tool:scale-110 transition-transform"></i>
+                                                Inspect Protocol
+                                            </button>
+                                            <button onclick="deleteKey('@key')" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-destructive transition-colors group/tool ml-auto">
+                                                <i data-lucide="trash-2" class="w-4 h-4 group-hover/tool:scale-110 transition-transform"></i>
+                                                Purge Entry
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                @if (Model.TotalCount > 100)
+                {
+                    <div class="mt-8 p-6 bg-primary/[0.03] border border-primary/10 rounded-2xl shadow-inner">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                <i data-lucide="info" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="block text-[9px] font-black uppercase tracking-widest text-primary/60 mb-0.5">Registry Limit Reached</span>
+                                <span class="block text-sm font-black text-foreground">Displaying first 100 entries. Refine pattern for targeted results.</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="py-20 flex flex-col items-center justify-center text-center bg-muted/10 border-2 border-dashed border-border/40 rounded-[2.5rem] animate-pulse">
+                    <div class="w-16 h-16 bg-muted/40 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="search-x" class="w-8 h-8 text-muted-foreground opacity-20"></i>
+                    </div>
+                    <h4 class="text-xl font-black text-foreground tracking-tight underline decoration-primary/40 decoration-4 underline-offset-8 mb-3">No Registry Entries Located</h4>
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-widest opacity-60">Pattern "@Model.Pattern" returned zero matches. Adjust search parameters.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Key Inspector Modal -->
+<div class="modal fade" id="keyInspectorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-background border border-border/50 rounded-[2rem] shadow-2xl">
+            <div class="modal-header border-b border-border/30 p-8">
+                <h5 class="modal-title text-xl font-black text-foreground tracking-tighter flex items-center gap-3">
+                    <div class="w-8 h-8 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                    </div>
+                    Registry Inspector Protocol
+                </h5>
+                <button type="button" class="close text-muted-foreground hover:text-foreground transition-colors" data-dismiss="modal">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="modal-body p-8 space-y-6">
+                <div class="space-y-2">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Registry Key:</span>
+                    <div class="bg-muted/20 border border-border/30 rounded-2xl p-4 font-mono text-sm text-foreground break-all">
+                        <span id="inspected-key"></span>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Cached Payload:</span>
+                    <div class="bg-muted/20 border border-border/30 rounded-2xl p-4 font-mono text-sm text-foreground/80 max-h-80 overflow-y-auto">
+                        <pre id="inspected-value" class="whitespace-pre-wrap"></pre>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">TTL Status:</span>
+                    <div class="bg-muted/20 border border-border/30 rounded-2xl p-4 font-mono text-sm text-foreground">
+                        <span id="inspected-ttl"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-t border-border/30 p-8 flex items-center gap-4">
+                <button type="button" class="px-6 py-3 bg-muted/40 text-foreground font-black text-xs uppercase tracking-[0.2em] rounded-2xl border border-border/50 hover:bg-muted/60 transition-all" data-dismiss="modal">
+                    Close Inspector
+                </button>
+                <button type="button" class="px-6 py-3 bg-destructive text-destructive-foreground font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-destructive/30 hover:shadow-destructive/50 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center gap-2" onclick="deleteInspectedKey()">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i> Purge Entry
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function inspectKey(key) {
+            $('#inspected-key').text(key);
+            $('#inspected-value').text('Loading cache payload...');
+            $('#inspected-ttl').text('Analyzing TTL status...');
+            $('#keyInspectorModal').modal('show');
+            
+            // Get key value and TTL from API
+            $.get('@Url.Action("GetKeyValue")/' + encodeURIComponent(key))
+                .done(function(data) {
+                    if (data.error) {
+                        $('#inspected-value').text('Error: ' + data.error);
+                        $('#inspected-ttl').text('N/A');
+                    } else {
+                        $('#inspected-value').text(JSON.stringify(data.value, null, 2));
+                        $('#inspected-ttl').text(data.ttl ? data.ttl + ' seconds remaining' : 'No expiration configured');
+                    }
+                })
+                .fail(function() {
+                    $('#inspected-value').text('Failed to retrieve cache payload');
+                    $('#inspected-ttl').text('N/A');
+                });
+        }
+        
+        function deleteKey(key) {
+            if (!confirm('Confirm purge operation for registry key "' + key + '"? This action is irreversible.')) {
+                return;
+            }
+            
+            $.ajax({
+                url: '@Url.Action("DeleteKey")/' + encodeURIComponent(key),
+                type: 'DELETE',
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(data) {
+                    if (data.success) {
+                        toastr.success('Registry entry purged successfully');
+                        location.reload();
+                    } else {
+                        toastr.error(data.error || 'Failed to purge registry entry');
+                    }
+                },
+                error: function() {
+                    toastr.error('Purge operation failed');
+                }
+            });
+        }
+        
+        function deleteInspectedKey() {
+            var key = $('#inspected-key').text();
+            $('#keyInspectorModal').modal('hide');
+            deleteKey(key);
+        }
+    </script>
+}
+
+@functions {
+    private string GetCategoryColor(string category)
+    {
+        return category.ToLower() switch
+        {
+            "user" => "primary",
+            "profile" => "blue-500",
+            "feed" => "green-500",
+            "community" => "amber-500",
+            "gamification" => "purple-500",
+            "content" => "slate-500",
+            "reference" => "gray-500",
+            _ => "muted-foreground"
+        };
+    }
+    
+    private string GetCategoryIcon(string category)
+    {
+        return category.ToLower() switch
+        {
+            "user" => "user",
+            "profile" => "user-circle",
+            "feed" => "rss",
+            "community" => "users",
+            "gamification" => "trophy",
+            "content" => "file-text",
+            "reference" => "database",
+            _ => "key"
+        };
+    }
+}

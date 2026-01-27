@@ -91,3 +91,5 @@ public class SecurityLogVM
     public string Location { get; set; } = string.Empty;
     public bool IsSuccessful { get; set; }
 }
+
+

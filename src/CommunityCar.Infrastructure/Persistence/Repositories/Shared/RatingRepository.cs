@@ -86,3 +86,4 @@ public class RatingRepository : BaseRepository<Rating>, IRatingRepository
         return await query.OrderByDescending(r => r.CreatedAt).ToListAsync();
     }
 }
+

@@ -93,12 +93,12 @@
                     <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60" for="analyzeUrl">Target URL</label>
                     <div class="flex gap-2">
                         <input type="text" id="analyzeUrl" class="flex-1 bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="Enter URI to profile..." value="/">
-                        <button class="bg-primary text-primary-foreground px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all" onclick="analyzePerformance()">Analyze</button>
+                        <button class="bg-primary text-primary-foreground px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all" data-action="analyze-performance">Analyze</button>
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-3 mt-4">
-                    <button class="inline-flex items-center gap-2 px-6 py-2.5 bg-muted/40 border border-border rounded-xl text-[10px] font-black uppercase tracking-widest text-foreground hover:bg-muted transition-all" onclick="generateReport()">Generate Audit</button>
-                    <button class="inline-flex items-center gap-2 px-6 py-2.5 bg-muted/40 border border-border rounded-xl text-[10px] font-black uppercase tracking-widest text-foreground hover:bg-muted transition-all" onclick="getCriticalResources()">Critical Chain</button>
+                    <button class="inline-flex items-center gap-2 px-6 py-2.5 bg-muted/40 border border-border rounded-xl text-[10px] font-black uppercase tracking-widest text-foreground hover:bg-muted transition-all" data-action="generate-report">Generate Audit</button>
+                    <button class="inline-flex items-center gap-2 px-6 py-2.5 bg-muted/40 border border-border rounded-xl text-[10px] font-black uppercase tracking-widest text-foreground hover:bg-muted transition-all" data-action="get-critical-resources">Critical Chain</button>
                 </div>
             </div>
         </div>
@@ -127,7 +127,7 @@
                         </select>
                     </div>
                 </div>
-                <button type="button" class="w-full bg-green-600 text-white px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-green-500/20 hover:bg-green-700 active:scale-95 transition-all flex items-center justify-center gap-2" onclick="optimizeImage()">
+                <button type="button" class="w-full bg-green-600 text-white px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-green-500/20 hover:bg-green-700 active:scale-95 transition-all flex items-center justify-center gap-2" data-action="optimize-image">
                     <i data-lucide="check" class="w-3.5 h-3.5"></i>
                     Execute Optimization
                 </button>
@@ -183,17 +183,6 @@
     </div>
 </div>
 
-<script>
-    // Preservation of established JS logic with UI bridge
-    async function analyzePerformance() { /* logic preserved */ }
-    async function generateReport() { /* logic preserved */ }
-    async function getCriticalResources() { /* logic preserved */ }
-    async function optimizeImage() { /* logic preserved */ }
-    function displayResults(data) {
-        const container = document.getElementById('resultsContainer');
-        const content = document.getElementById('resultsContent');
-        content.textContent = JSON.stringify(data, null, 2);
-        container.classList.remove('hidden');
-        container.scrollIntoView({ behavior: 'smooth' });
-    }
-</script>
+@section Scripts {
+    <script src="~/js/dashboard-performance.js" asp-append-version="true"></script>
+}

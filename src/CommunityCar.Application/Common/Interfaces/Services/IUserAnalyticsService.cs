@@ -42,3 +42,5 @@ public interface IUserAnalyticsService
     Task<UserPrivacySettingsVM> GetUserPrivacySettingsAsync(Guid userId);
     Task UpdateUserPrivacySettingsAsync(Guid userId, UpdatePrivacySettingsRequest request);
 }
+
+

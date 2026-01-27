@@ -98,6 +98,12 @@ public class PostsRepository : IPostsRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<int> GetUserPostsCountAsync(Guid userId)
+    {
+        return await _context.Posts
+            .CountAsync(p => p.AuthorId == userId);
+    }
+
     public async Task AddAsync(Post post)
     {
         await _context.Posts.AddAsync(post);

@@ -91,9 +91,9 @@
                                                 </form>
                                                 <form asp-action="ResetSetting" asp-route-settingKey="@setting.SettingKey" method="post" class="inline reset-setting-form">
                                                     @Html.AntiForgeryToken()
-                                                    <button type="button" 
+                                                                <button type="button" 
                                                             class="px-3 py-1 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                                                            onclick="confirmReset(this)">
+                                                            data-action="confirm-reset">
                                                         Reset
                                                     </button>
                                                 </form>
@@ -113,7 +113,7 @@
                                         @Html.AntiForgeryToken()
                                         <button type="button" 
                                                 class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-                                                onclick="confirmResetAll(this)">
+                                                data-action="confirm-reset-all">
                                             Reset All Settings
                                         </button>
                                     </form>
@@ -148,44 +148,5 @@
         </div>
 
 @section Scripts {
-    <script>
-        function confirmReset(button) {
-            const form = button.closest('form');
-            const message = 'Are you sure you want to reset this setting to default?';
-            if (window.AlertModal) {
-                window.AlertModal.confirm(message, 'Reset Setting', function(confirmed) {
-                    if (confirmed) form.submit();
-                });
-            } else if (confirm(message)) {
-                form.submit();
-            }
-        }
-
-        function confirmResetAll(button) {
-            const form = button.closest('form');
-            const message = 'Are you sure you want to reset ALL settings to default? This action cannot be undone.';
-            if (window.AlertModal) {
-                window.AlertModal.confirm(message, 'Reset All Settings', function(confirmed) {
-                    if (confirmed) form.submit();
-                });
-            } else if (confirm(message)) {
-                form.submit();
-            }
-        }
-
-        // Auto-save settings on input change (optional enhancement)
-        document.addEventListener('DOMContentLoaded', function() {
-            const settingInputs = document.querySelectorAll('input[name="Value"]');
-            settingInputs.forEach(input => {
-                let timeout;
-                input.addEventListener('input', function() {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        // Could implement auto-save here
-                        console.log('Setting changed:', this.value);
-                    }, 1000);
-                });
-            });
-        });
-    </script>
+    <script src="~/js/dashboard-settings.js" asp-append-version="true"></script>
 }

@@ -26,3 +26,4 @@ public class RouteConfiguration : IEntityTypeConfiguration<Route>
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }
+

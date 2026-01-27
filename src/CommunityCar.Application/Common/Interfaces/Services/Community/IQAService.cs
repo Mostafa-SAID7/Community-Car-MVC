@@ -43,3 +43,5 @@ public interface IQAService
     Task<List<string>> GetAvailableCarMakesAsync();
     Task<QASearchStats> GetQAStatsAsync();
 }
+
+

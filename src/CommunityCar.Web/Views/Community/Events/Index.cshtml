@@ -183,7 +183,10 @@
                                     <span class="bg-gray-500/10 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-full text-xs font-medium">@Localizer["Past"]</span>
                                 }
                             </div>
-                                <a href="/events/@eventItem.Id" class="btn btn-sm btn-outline">@Localizer["ViewDetails"]</a>
+                                <a href="/events/@eventItem.Id" class="inline-flex items-center justify-center px-4 py-2 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/view">
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5 mr-2 group-hover/view:scale-110 transition-transform"></i>
+                                    @Localizer["ViewDetails"]
+                                </a>
                         </div>
                     </div>
                 </div>
@@ -203,7 +206,9 @@
                     @if (currentPage > 1)
                     {
                         <a href="?page=@(currentPage - 1)&pageSize=@Model.SearchRequest.PageSize&searchTerm=@Model.SearchRequest.SearchTerm&location=@Model.SearchRequest.Location" 
-                           class="btn btn-outline btn-sm">@Localizer["Previous"]</a>
+                           class="inline-flex items-center justify-center px-4 py-2 bg-background border border-border/50 hover:bg-muted/10 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95">
+                            @Localizer["Previous"]
+                        </a>
                     }
                     
                     <span class="text-sm text-muted-foreground px-4">
@@ -213,7 +218,9 @@
                     @if (currentPage < totalPages)
                     {
                         <a href="?page=@(currentPage + 1)&pageSize=@Model.SearchRequest.PageSize&searchTerm=@Model.SearchRequest.SearchTerm&location=@Model.SearchRequest.Location" 
-                           class="btn btn-outline btn-sm">@Localizer["Next"]</a>
+                           class="inline-flex items-center justify-center px-4 py-2 bg-background border border-border/50 hover:bg-muted/10 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95">
+                            @Localizer["Next"]
+                        </a>
                     }
                 </div>
             </div>

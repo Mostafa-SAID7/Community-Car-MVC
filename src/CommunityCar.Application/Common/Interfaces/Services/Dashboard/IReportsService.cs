@@ -14,3 +14,5 @@ public interface IReportsService
     Task<bool> ScheduleReportAsync(ReportScheduleRequest request);
     Task<List<SystemReportVM>> GetScheduledReportsAsync();
 }
+
+

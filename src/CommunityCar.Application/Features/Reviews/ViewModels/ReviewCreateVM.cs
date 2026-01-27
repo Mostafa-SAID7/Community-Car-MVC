@@ -96,3 +96,5 @@ public class ReviewCreateVM
                  .Where(con => !string.IsNullOrWhiteSpace(con))
                  .ToList();
 }
+
+

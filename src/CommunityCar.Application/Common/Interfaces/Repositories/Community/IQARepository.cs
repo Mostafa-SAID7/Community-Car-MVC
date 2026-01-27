@@ -12,3 +12,5 @@ public interface IQARepository : IBaseRepository<Question>
     Task UpdateAnswerAsync(Answer answer);
     Task DeleteAnswerAsync(Answer answer);
 }
+
+

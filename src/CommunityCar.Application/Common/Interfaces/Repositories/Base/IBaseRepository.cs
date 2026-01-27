@@ -14,3 +14,5 @@ public interface IBaseRepository<T> where T : class, IBaseEntity
     Task DeleteAsync(T entity);
     Task DeleteRangeAsync(IEnumerable<T> entities);
 }
+
+

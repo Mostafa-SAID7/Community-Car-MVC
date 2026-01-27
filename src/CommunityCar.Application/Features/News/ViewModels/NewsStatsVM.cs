@@ -18,3 +18,5 @@ public class NewsStatsVM
     public double AverageLikesPerNews { get; set; }
     public double AverageCommentsPerNews { get; set; }
 }
+
+

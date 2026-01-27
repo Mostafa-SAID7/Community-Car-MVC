@@ -82,6 +82,27 @@ public class EmailService : IEmailService
         await SendEmailAsync(email, subject, body);
     }
 
+    public async Task SendTwoFactorTokenAsync(string email, string token)
+    {
+        var subject = "Your Two-Factor Authentication Code - CommunityCar";
+        var body = $@"
+            <html>
+            <body>
+                <h2>Two-Factor Authentication Code</h2>
+                <p>Your verification code is:</p>
+                <div style='background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; border-radius: 5px; margin: 20px 0;'>
+                    {token}
+                </div>
+                <p>This code will expire in 5 minutes.</p>
+                <p>If you didn't request this code, please ignore this email and consider changing your password.</p>
+                <br>
+                <p>Best regards,<br>The CommunityCar Team</p>
+            </body>
+            </html>";
+
+        await SendEmailAsync(email, subject, body);
+    }
+
     public async Task SendEmailAsync(string to, string subject, string body, bool isHtml = true)
     {
         try

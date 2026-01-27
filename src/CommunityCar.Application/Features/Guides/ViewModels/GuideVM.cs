@@ -50,3 +50,5 @@ public class GuideVM
     public bool IsBookmarked { get; set; }
     public double? UserRating { get; set; }
 }
+
+

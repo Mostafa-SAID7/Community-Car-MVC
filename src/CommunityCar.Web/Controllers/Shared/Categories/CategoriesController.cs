@@ -175,3 +175,5 @@ public class UpdateCategoryRequest
     public string? Description { get; set; }
     public Guid? ParentCategoryId { get; set; }
 }
+
+

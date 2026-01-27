@@ -62,3 +62,5 @@ public class PointOfInterestSummaryVM
     public double? DistanceKm { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+
+

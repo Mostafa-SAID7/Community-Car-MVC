@@ -11,3 +11,5 @@ public interface IMessageRepository : IBaseRepository<Message>
     Task MarkConversationAsReadAsync(Guid conversationId, Guid userId);
     Task<Message?> GetLastMessageAsync(Guid conversationId);
 }
+
+

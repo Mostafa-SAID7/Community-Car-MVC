@@ -49,3 +49,5 @@ public class UpdateNewsRequest
 
     public bool IsPinned { get; set; } = false;
 }
+
+

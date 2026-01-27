@@ -14,3 +14,6 @@ public interface IRatingRepository : IBaseRepository<Rating>
     Task<Dictionary<int, int>> GetRatingDistributionAsync(Guid entityId, EntityType entityType);
     Task<IEnumerable<Rating>> GetUserRatingsAsync(Guid userId, EntityType? entityType = null);
 }
+
+
+

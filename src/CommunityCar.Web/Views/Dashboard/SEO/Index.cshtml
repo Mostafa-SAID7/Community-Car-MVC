@@ -60,7 +60,7 @@
                     <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60" for="analyzeUrl">Audit Single URI</label>
                     <div class="flex gap-2">
                         <input type="text" id="analyzeUrl" class="flex-1 bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" value="/">
-                        <button class="bg-primary text-primary-foreground px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:opacity-90 transition-all" onclick="analyzePage()">Execute</button>
+                        <button class="bg-primary text-primary-foreground px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:opacity-90 transition-all" data-action="analyze-page">Execute</button>
                     </div>
                 </div>
                 
@@ -181,6 +181,6 @@
     </div>
 </div>
 
-<script>
-    async function analyzePage() { /* logic preserved */ }
-</script>
+@section Scripts {
+    <script src="~/js/dashboard-seo.js" asp-append-version="true"></script>
+}

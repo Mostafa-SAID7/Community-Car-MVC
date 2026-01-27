@@ -14,11 +14,11 @@ class ToasterSystem {
             rtlSupport: true,
             ...options
         };
-        
+
         this.toasts = [];
         this.container = null;
         this.soundEnabled = this.options.enableSounds;
-        
+
         this.init();
     }
 
@@ -26,7 +26,7 @@ class ToasterSystem {
         this.createContainer();
         this.setupStyles();
         this.setupEventListeners();
-        
+
         // Initialize global toaster instance
         if (!window.toaster) {
             window.toaster = this;
@@ -38,13 +38,13 @@ class ToasterSystem {
         this.container.className = `toaster-container toaster-${this.options.position}`;
         this.container.setAttribute('aria-live', 'polite');
         this.container.setAttribute('aria-atomic', 'false');
-        
+
         document.body.appendChild(this.container);
     }
 
     setupStyles() {
         if (document.getElementById('toaster-styles')) return;
-        
+
         const styles = document.createElement('style');
         styles.id = 'toaster-styles';
         styles.textContent = `
@@ -92,9 +92,9 @@ class ToasterSystem {
                 pointer-events: auto;
                 margin-bottom: 0.75rem;
                 border-radius: 0.75rem;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+                box-shadow: var(--shadow-xl);
                 backdrop-filter: blur(16px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid var(--border);
                 overflow: hidden;
                 position: relative;
                 min-height: 64px;
@@ -195,7 +195,7 @@ class ToasterSystem {
                 width: 1.5rem;
                 height: 1.5rem;
                 border: none;
-                background: rgba(255, 255, 255, 0.1);
+                background: hsla(var(--background), 0.2);
                 border-radius: 50%;
                 cursor: pointer;
                 display: flex;
@@ -208,7 +208,7 @@ class ToasterSystem {
             
             .toast-close:hover {
                 opacity: 1;
-                background: rgba(255, 255, 255, 0.2);
+                background: hsla(var(--background), 0.4);
             }
             
             .toast-progress {
@@ -216,75 +216,75 @@ class ToasterSystem {
                 bottom: 0;
                 left: 0;
                 height: 3px;
-                background: rgba(255, 255, 255, 0.3);
+                background: hsla(var(--background), 0.3);
                 transition: width linear;
                 border-radius: 0 0 0.75rem 0.75rem;
             }
             
-            /* Toast Types */
+            /* Toast Types - Using design system colors */
             .toast-success {
-                background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(22, 163, 74, 0.9));
+                background: hsl(var(--chart-success, 142 76% 36%));
                 color: white;
             }
             
             .toast-success .toast-icon {
-                background: rgba(255, 255, 255, 0.2);
+                background: hsla(var(--background), 0.2);
             }
             
             .toast-error {
-                background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
-                color: white;
+                background: hsl(var(--destructive));
+                color: var(--destructive-foreground);
             }
             
             .toast-error .toast-icon {
-                background: rgba(255, 255, 255, 0.2);
+                background: hsla(var(--background), 0.2);
             }
             
             .toast-warning {
-                background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
+                background: hsl(38 92% 50%);
                 color: white;
             }
             
             .toast-warning .toast-icon {
-                background: rgba(255, 255, 255, 0.2);
+                background: hsla(var(--background), 0.2);
             }
             
             .toast-info {
-                background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.9));
-                color: white;
+                background: hsl(var(--primary));
+                color: var(--primary-foreground);
             }
             
             .toast-info .toast-icon {
-                background: rgba(255, 255, 255, 0.2);
+                background: hsla(var(--background), 0.2);
             }
             
             .toast-validation {
-                background: linear-gradient(135deg, rgba(168, 85, 247, 0.9), rgba(147, 51, 234, 0.9));
+                background: hsl(262 83% 58%);
                 color: white;
             }
             
             .toast-validation .toast-icon {
-                background: rgba(255, 255, 255, 0.2);
+                background: hsla(var(--background), 0.2);
             }
             
             /* Action Button Styles */
             .toast-action-primary {
-                background: rgba(255, 255, 255, 0.2);
+                background: hsla(var(--background), 0.2);
                 color: white;
             }
             
             .toast-action-primary:hover {
-                background: rgba(255, 255, 255, 0.3);
+                background: hsla(var(--background), 0.3);
             }
             
             .toast-action-secondary {
                 background: transparent;
-                color: rgba(255, 255, 255, 0.8);
-                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: hsla(var(--background), 0.9);
+                border: 1px solid hsla(var(--background), 0.3);
             }
             
             .toast-action-secondary:hover {
-                background: rgba(255, 255, 255, 0.1);
+                background: hsla(var(--background), 0.1);
                 color: white;
             }
             
@@ -327,7 +327,7 @@ class ToasterSystem {
                 border-radius: 0 0 0.75rem 0.75rem;
             }
         `;
-        
+
         document.head.appendChild(styles);
     }
 
@@ -336,7 +336,7 @@ class ToasterSystem {
         window.addEventListener('resize', () => {
             this.updateContainerPosition();
         });
-        
+
         // Handle RTL changes
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
@@ -345,7 +345,7 @@ class ToasterSystem {
                 }
             });
         });
-        
+
         observer.observe(document.documentElement, {
             attributes: true,
             attributeFilter: ['dir']
@@ -402,9 +402,9 @@ class ToasterSystem {
 
         const toast = this.createToast(config);
         this.toasts.push(toast);
-        
+
         this.container.appendChild(toast.element);
-        
+
         // Trigger show animation
         requestAnimationFrame(() => {
             toast.element.classList.add('show');
@@ -437,7 +437,7 @@ class ToasterSystem {
         element.className = `toast-item toast-${config.type}`;
         element.setAttribute('role', 'alert');
         element.setAttribute('aria-live', 'assertive');
-        
+
         // Add RTL support
         if (document.documentElement.dir === 'rtl') {
             element.classList.add('rtl');
@@ -445,7 +445,7 @@ class ToasterSystem {
 
         const icon = this.getIcon(config.type);
         const actionsHTML = this.createActionsHTML(config.actions, toast);
-        
+
         element.innerHTML = `
             <div class="toast-content">
                 <div class="toast-icon">
@@ -480,7 +480,7 @@ class ToasterSystem {
 
     setupToastEventListeners(toast) {
         const element = toast.element;
-        
+
         // Close button
         const closeBtn = element.querySelector('.toast-close');
         if (closeBtn) {
@@ -497,7 +497,7 @@ class ToasterSystem {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
                     action.handler(toast, e);
-                    
+
                     if (action.closeOnClick !== false) {
                         this.remove(toast);
                     }
@@ -536,11 +536,11 @@ class ToasterSystem {
 
     createActionsHTML(actions, toast) {
         if (!actions || actions.length === 0) return '';
-        
+
         return actions.map((action, index) => {
             const className = `toast-action toast-action-${action.style || 'primary'}`;
             const icon = action.icon ? `<i data-lucide="${action.icon}"></i>` : '';
-            
+
             if (action.url) {
                 return `<a href="${action.url}" class="${className}">${icon}${this.escapeHtml(action.text)}</a>`;
             } else {
@@ -551,7 +551,7 @@ class ToasterSystem {
 
     remove(toast) {
         if (!toast || !toast.element) return;
-        
+
         // Clear timer
         if (toast.timer) {
             clearTimeout(toast.timer);
@@ -566,7 +566,7 @@ class ToasterSystem {
 
         // Animate out
         toast.element.classList.add('removing');
-        
+
         setTimeout(() => {
             if (toast.element && toast.element.parentElement) {
                 toast.element.parentElement.removeChild(toast.element);
@@ -614,7 +614,7 @@ class ToasterSystem {
 
     validation(errors, title = 'Validation Errors', options = {}) {
         let message = '';
-        
+
         if (Array.isArray(errors)) {
             message = errors.join('\n');
         } else if (typeof errors === 'object') {
@@ -636,31 +636,31 @@ class ToasterSystem {
     showValidationErrors(form, errors) {
         // Clear existing validation toasts
         this.clearValidationToasts();
-        
+
         // Show validation toast
         const toast = this.validation(errors, 'Please fix the following errors:');
         toast.isValidation = true;
-        
+
         // Highlight form fields with errors
         if (typeof errors === 'object' && !Array.isArray(errors)) {
             Object.keys(errors).forEach(fieldName => {
                 const field = form.querySelector(`[name="${fieldName}"]`);
                 if (field) {
                     field.classList.add('error');
-                    
+
                     // Remove error class on input
                     const removeError = () => {
                         field.classList.remove('error');
                         field.removeEventListener('input', removeError);
                         field.removeEventListener('change', removeError);
                     };
-                    
+
                     field.addEventListener('input', removeError);
                     field.addEventListener('change', removeError);
                 }
             });
         }
-        
+
         return toast;
     }
 
@@ -691,7 +691,7 @@ class ToasterSystem {
                 info: '/sounds/info.mp3',
                 validation: '/sounds/error.mp3'
             };
-            
+
             const audio = new Audio(sounds[type] || sounds.info);
             audio.volume = 0.3;
             audio.play().catch(() => {
@@ -735,7 +735,7 @@ class ToasterSystem {
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize global toaster
     window.toaster = new ToasterSystem();
-    
+
     // Legacy compatibility with existing toastr calls
     if (!window.toastr) {
         window.toastr = {
@@ -745,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
             info: (message, title) => window.toaster.info(message, title)
         };
     }
-    
+
     // Enhanced notify object
     window.notify = {
         success: (message, title, options) => window.toaster.success(message, title, options),

@@ -51,3 +51,6 @@ public class AccountResource
     public static string Good => "Good";
     public static string Strong => "Strong";
 }
+
+
+

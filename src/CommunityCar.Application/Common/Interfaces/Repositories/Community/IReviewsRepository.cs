@@ -18,3 +18,5 @@ public interface IReviewsRepository : IBaseRepository<Review>
     Task<int> GetReviewCountByTargetAsync(Guid targetId, string targetType);
     Task<bool> HasUserReviewedTargetAsync(Guid userId, Guid targetId, string targetType);
 }
+
+

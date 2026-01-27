@@ -109,3 +109,5 @@ public enum SearchScope
     Popular,
     Trending
 }
+
+

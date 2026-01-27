@@ -6,3 +6,5 @@ public interface IAIChatService
     Task<string> StartConversationAsync();
     Task EndConversationAsync(string conversationId);
 }
+
+

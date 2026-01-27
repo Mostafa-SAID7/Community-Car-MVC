@@ -17,7 +17,7 @@ public class UserActivityConfiguration : IEntityTypeConfiguration<UserActivity>
 
         builder.Property(x => x.ActivityType)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasConversion<int>();
 
         builder.Property(x => x.EntityType)
             .IsRequired()

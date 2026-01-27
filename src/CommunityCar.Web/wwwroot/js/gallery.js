@@ -15,18 +15,64 @@ class GalleryManager {
         this.bindEvents();
         this.initializeFilters();
         this.initializeDragAndDrop();
+
+        // Initialize skeleton loading
+        if (typeof Skeleton !== 'undefined') {
+            Skeleton.initPageLoad('gallery-skeleton', 'galleryContainer');
+        }
     }
 
     bindEvents() {
-        // View toggle buttons
-        document.getElementById('gridViewBtn')?.addEventListener('click', () => this.toggleView('grid'));
-        document.getElementById('listViewBtn')?.addEventListener('click', () => this.toggleView('list'));
+        // Event delegation for all data-action buttons
+        document.body.addEventListener('click', (event) => {
+            const target = event.target.closest('[data-action]');
+            if (!target) return;
+
+            const action = target.dataset.action;
+            const itemId = target.dataset.itemId;
+
+            switch (action) {
+                case 'open-upload':
+                    this.openUploadModal();
+                    break;
+                case 'close-upload':
+                    this.closeUploadModal();
+                    break;
+                case 'toggle-view':
+                    this.toggleView(target.dataset.view);
+                    break;
+                case 'open-media':
+                    this.openMediaModal(itemId);
+                    break;
+                case 'toggle-visibility':
+                    this.toggleItemVisibility(itemId);
+                    break;
+                case 'edit-item':
+                    this.editItem(itemId);
+                    break;
+                case 'delete-item':
+                    this.deleteItem(itemId);
+                    break;
+                case 'remove-tag':
+                    this.removeTag(target.dataset.tag);
+                    break;
+            }
+        });
+
+        // Upload area click to trigger file input
+        const uploadArea = document.getElementById('uploadArea');
+        if (uploadArea) {
+            uploadArea.addEventListener('click', () => {
+                const fileInput = document.getElementById('mediaFile');
+                if (fileInput) fileInput.click();
+            });
+        }
 
         // Filter dropdowns
         document.getElementById('mediaTypeFilter')?.addEventListener('change', () => this.applyFilters());
         document.getElementById('visibilityFilter')?.addEventListener('change', () => this.applyFilters());
 
-        // Upload modal
+        // Upload modal backdrop click
         document.getElementById('uploadModal')?.addEventListener('click', (e) => {
             if (e.target.id === 'uploadModal') {
                 this.closeUploadModal();
@@ -160,7 +206,13 @@ class GalleryManager {
                 show = false;
             }
 
-            item.style.display = show ? 'block' : 'none';
+            if (show) {
+                item.classList.remove('hidden');
+                item.classList.add('block');
+            } else {
+                item.classList.add('hidden');
+                item.classList.remove('block');
+            }
         });
 
         this.updateEmptyState();
@@ -168,11 +220,17 @@ class GalleryManager {
 
     updateEmptyState() {
         const items = document.querySelectorAll('.gallery-item');
-        const visibleItems = Array.from(items).filter(item => item.style.display !== 'none');
+        const visibleItems = Array.from(items).filter(item => !item.classList.contains('hidden'));
         const emptyState = document.querySelector('.col-span-full');
 
         if (emptyState) {
-            emptyState.style.display = visibleItems.length === 0 ? 'block' : 'none';
+            if (visibleItems.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('block');
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('block');
+            }
         }
     }
 
@@ -280,7 +338,7 @@ class GalleryManager {
             tagElement.className = 'bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2';
             tagElement.innerHTML = `
                 #${tag}
-                <button type="button" onclick="gallery.removeTag('${tag}')" class="text-primary hover:text-primary/70">
+                <button type="button" data-action="remove-tag" data-tag="${tag}" class="text-primary hover:text-primary/70">
                     <i data-lucide="x" class="w-3 h-3"></i>
                 </button>
             `;
@@ -452,9 +510,9 @@ class GalleryManager {
     showToast(message, type = 'info') {
         const toast = document.createElement('div');
         toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg font-medium text-white transition-all transform translate-x-full opacity-0 ${type === 'success' ? 'bg-green-500' :
-                type === 'error' ? 'bg-red-500' :
-                    type === 'warning' ? 'bg-yellow-500' :
-                        'bg-blue-500'
+            type === 'error' ? 'bg-red-500' :
+                type === 'warning' ? 'bg-yellow-500' :
+                    'bg-blue-500'
             }`;
         toast.textContent = message;
 
@@ -473,30 +531,6 @@ class GalleryManager {
     }
 }
 
-// Global functions for inline event handlers
-function openUploadModal() {
-    window.gallery?.openUploadModal();
-}
-
-function closeUploadModal() {
-    window.gallery?.closeUploadModal();
-}
-
-function openMediaModal(itemId) {
-    window.gallery?.openMediaModal(itemId);
-}
-
-function toggleItemVisibility(itemId) {
-    window.gallery?.toggleItemVisibility(itemId);
-}
-
-function editItem(itemId) {
-    window.gallery?.editItem(itemId);
-}
-
-function deleteItem(itemId) {
-    window.gallery?.deleteItem(itemId);
-}
 
 // Initialize gallery manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {

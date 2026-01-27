@@ -156,9 +156,11 @@ class SharedInteractions {
 
         // Show/hide stats box based on count
         if (newCount === 0) {
-            statsBox.style.display = 'none';
+            statsBox.classList.add('hidden');
+            statsBox.classList.remove('inline-flex');
         } else {
-            statsBox.style.display = 'inline-flex';
+            statsBox.classList.remove('hidden');
+            statsBox.classList.add('inline-flex');
         }
     }
 
@@ -372,7 +374,8 @@ class SharedInteractions {
 
         // Show stats box if it wasn't visible
         if (newCount > 0) {
-            statsBox.style.display = 'inline-flex';
+            statsBox.classList.remove('hidden');
+            statsBox.classList.add('inline-flex');
         }
     }
 

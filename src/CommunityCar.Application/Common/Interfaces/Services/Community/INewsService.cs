@@ -27,3 +27,5 @@ public interface INewsService
     Task<IEnumerable<string>> GetAvailableCarMakesAsync();
     Task<NewsStatsVM> GetNewsStatsAsync();
 }
+
+

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using CommunityCar.Domain.Enums.Users;
 
 namespace CommunityCar.Application.Features.Analytics.DTOs;
 
@@ -8,8 +9,7 @@ public class TrackActivityRequest
     public Guid UserId { get; set; }
 
     [Required]
-    [StringLength(50)]
-    public string ActivityType { get; set; } = string.Empty; // View, Like, Share, Comment, Search, etc.
+    public ActivityType ActivityType { get; set; }
 
     [Required]
     [StringLength(50)]
@@ -45,3 +45,5 @@ public class UpdatePrivacySettingsRequest
     public bool AllowDataSharing { get; set; } = false;
     public bool AllowAnalytics { get; set; } = true;
 }
+
+

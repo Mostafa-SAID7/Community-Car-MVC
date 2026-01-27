@@ -16,23 +16,23 @@
     
     <!-- Settings Navigation -->
     <div class="flex flex-wrap gap-2 mb-8">
-        <button onclick="showTab('profile')" id="profileTab" class="px-4 py-2 bg-primary text-primary-foreground font-bold text-sm rounded-lg transition-all">
+        <button data-action="show-tab" data-tab="profile" id="profileTab" class="px-4 py-2 bg-primary text-primary-foreground font-bold text-sm rounded-lg transition-all">
             Profile
         </button>
-        <button onclick="showTab('privacy')" id="privacyTab" class="px-4 py-2 bg-background border border-border text-muted-foreground hover:text-foreground font-bold text-sm rounded-lg transition-all">
+        <button data-action="show-tab" data-tab="privacy" id="privacyTab" class="px-4 py-2 bg-background border border-border text-muted-foreground hover:text-foreground font-bold text-sm rounded-lg transition-all">
             Privacy
         </button>
-        <button onclick="showTab('notifications')" id="notificationsTab" class="px-4 py-2 bg-background border border-border text-muted-foreground hover:text-foreground font-bold text-sm rounded-lg transition-all">
+        <button data-action="show-tab" data-tab="notifications" id="notificationsTab" class="px-4 py-2 bg-background border border-border text-muted-foreground hover:text-foreground font-bold text-sm rounded-lg transition-all">
             Notifications
         </button>
-        <button onclick="showTab('security')" id="securityTab" class="px-4 py-2 bg-background border border-border text-muted-foreground hover:text-foreground font-bold text-sm rounded-lg transition-all">
+        <button data-action="show-tab" data-tab="security" id="securityTab" class="px-4 py-2 bg-background border border-border text-muted-foreground hover:text-foreground font-bold text-sm rounded-lg transition-all">
             Security
         </button>
     </div>
     
     <!-- Profile Settings Tab -->
     <div id="profileSettings" class="tab-content">
-        <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+        <form asp-controller="Profile" asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
             <div class="mb-10 text-center relative group/photo">
                 <div class="w-32 h-32 mx-auto mb-6 rounded-3xl overflow-hidden border-4 border-primary/10 shadow-2xl relative">
                     <img src="@(Model.ProfilePictureUrl ?? "/images/default-avatar.png")" alt="Profile Picture" id="profile-preview" class="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500" />
@@ -42,7 +42,7 @@
                 </div>
                 <label class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-black text-xs uppercase tracking-widest py-3 px-8 rounded-2xl transition-all cursor-pointer shadow-sm active:scale-95">
                     <span>Change Photo</span>
-                    <input type="file" name="ProfilePicture" class="hidden" onchange="previewImage(this)" />
+                    <input type="file" name="ProfilePicture" class="hidden" />
                 </label>
             </div>
 
@@ -100,7 +100,7 @@
 
     <!-- Privacy Settings Tab -->
     <div id="privacySettings" class="tab-content hidden">
-        <form asp-action="UpdatePrivacySettings" method="post">
+        <form asp-controller="ProfileSettings" asp-action="UpdatePrivacy" method="post">
             <div class="space-y-8">
                 <!-- Profile Visibility -->
                 <div class="bg-background border border-border rounded-2xl p-6">
@@ -213,7 +213,7 @@
 
     <!-- Notifications Settings Tab -->
     <div id="notificationsSettings" class="tab-content hidden">
-        <form asp-action="UpdateNotificationSettings" method="post">
+        <form asp-controller="ProfileSettings" asp-action="UpdateNotifications" method="post">
             <div class="space-y-8">
                 <!-- Email Notifications -->
                 <div class="bg-background border border-border rounded-2xl p-6">
@@ -299,7 +299,7 @@
                             <h6 class="font-medium text-foreground">Change Password</h6>
                             <p class="text-sm text-muted-foreground">Update your account password</p>
                         </div>
-                        <a href="/profile/change-password" class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-bold text-sm py-2 px-4 rounded-lg transition-all">
+                        <a href="/account/security/change-password" class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-bold text-sm py-2 px-4 rounded-lg transition-all">
                             Change Password
                         </a>
                     </div>
@@ -317,7 +317,7 @@
                                 }
                             </p>
                         </div>
-                        <a href="/profile/two-factor" class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-bold text-sm py-2 px-4 rounded-lg transition-all">
+                        <a href="/account/security/two-factor" class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-bold text-sm py-2 px-4 rounded-lg transition-all">
                             @(Model.IsTwoFactorEnabled ? "Manage 2FA" : "Enable 2FA")
                         </a>
                     </div>
@@ -335,7 +335,7 @@
                         <p class="font-medium text-foreground">@Model.ActiveSessions active session(s)</p>
                         <p class="text-sm text-muted-foreground">Manage your active login sessions</p>
                     </div>
-                    <button onclick="showActiveSessions()" class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-bold text-sm py-2 px-4 rounded-lg transition-all">
+                    <button data-action="show-sessions" class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-bold text-sm py-2 px-4 rounded-lg transition-all">
                         View Sessions
                     </button>
                 </div>
@@ -426,7 +426,7 @@
                         <h6 class="font-medium text-red-600">Delete Account</h6>
                         <p class="text-sm text-red-500">Permanently delete your account and all associated data</p>
                     </div>
-                    <button onclick="showDeleteAccountModal()" class="inline-flex items-center justify-center bg-red-500 text-white hover:bg-red-600 font-bold text-sm py-2 px-4 rounded-lg transition-all">
+                    <button data-action="show-delete-modal" class="inline-flex items-center justify-center bg-red-500 text-white hover:bg-red-600 font-bold text-sm py-2 px-4 rounded-lg transition-all">
                         Delete Account
                     </button>
                 </div>
@@ -436,63 +436,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        function showTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-            });
-            
-            // Remove active class from all tabs
-            document.querySelectorAll('[id$="Tab"]').forEach(tab => {
-                tab.className = 'px-4 py-2 bg-background border border-border text-muted-foreground hover:text-foreground font-bold text-sm rounded-lg transition-all';
-            });
-            
-            // Show selected tab content
-            document.getElementById(tabName + 'Settings').classList.remove('hidden');
-            
-            // Add active class to selected tab
-            document.getElementById(tabName + 'Tab').className = 'px-4 py-2 bg-primary text-primary-foreground font-bold text-sm rounded-lg transition-all';
-        }
-        
-        function previewImage(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profile-preview').src = e.target.result;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        
-        function showActiveSessions() {
-            if (window.AlertModal) {
-                window.AlertModal.info('Active sessions management coming soon!', 'Active Sessions');
-            } else {
-                alert('Active sessions management coming soon!');
-            }
-        }
-        
-        function showDeleteAccountModal() {
-            const message = 'Are you sure you want to delete your account? This action cannot be undone.';
-            if (window.AlertModal) {
-                window.AlertModal.confirm(message, 'Delete Account', function(confirmed) {
-                    if (confirmed) {
-                        // Implementation for account deletion
-                        window.AlertModal.warning('Account deletion process would start here.', 'Action Required');
-                    }
-                });
-            } else if (confirm(message)) {
-                alert('Account deletion process would start here.');
-            }
-        }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Lucide icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        });
-    </script>
+    <script src="~/js/profile-settings.js" asp-append-version="true"></script>
 }

@@ -11,63 +11,7 @@
 }
 
 @section Styles {
-    <style>
-        .login-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            min-height: calc(100vh - 4rem);
-        }
-        
-        @@media (min-width: 1024px) {
-            .login-grid {
-                grid-template-columns: 1.2fr 1fr;
-            }
-        }
-
-        .animation-side {
-            background: linear-gradient(to bottom right, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
-            position: relative;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .car-frame {
-            width: 100%;
-            height: auto;
-            max-width: 500px;
-            z-index: 10;
-            position: relative;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
-        }
-
-        /* Smoke effect container */
-        #smoke-container {
-            position: absolute;
-            bottom: 30%;
-            right: 25%;
-            width: 40px;
-            height: 40px;
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        @@keyframes float-smoke {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            20% { opacity: 0.6; }
-            100% { transform: translateY(-100px) translateX(30px) scale(2); opacity: 0; }
-        }
-
-        .smoke-particle {
-            position: absolute;
-            background: rgba(200, 200, 200, 0.4);
-            border-radius: 50%;
-            filter: blur(8px);
-            animation: float-smoke linear forwards;
-        }
-    </style>
+    @* Login specific styles consolidated in app.css *@
 }
 
 <div class="login-grid">

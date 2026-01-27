@@ -25,3 +25,5 @@ public interface IGuidesRepository
     Task<double?> GetUserRatingAsync(Guid guideId, Guid userId);
     Task IncrementViewCountAsync(Guid guideId);
 }
+
+

@@ -60,3 +60,6 @@ public class PerformanceTagHelper : TagHelper
         output.Content.SetHtmlContent(content.ToString());
     }
 }
+
+
+

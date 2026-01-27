@@ -40,3 +40,5 @@ public class MapsMappingProfile : AutoMapper.Profile
         CreateMap<RouteWaypoint, RouteWaypointVM>();
     }
 }
+
+

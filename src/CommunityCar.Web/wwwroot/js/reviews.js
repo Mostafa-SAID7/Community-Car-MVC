@@ -160,7 +160,7 @@ function executeFlagReview(reviewId) {
                 // Hide flag button
                 const flagBtn = document.querySelector(`[data-review-id="${reviewId}"][data-action="flag"]`);
                 if (flagBtn) {
-                    flagBtn.style.display = 'none';
+                    flagBtn.classList.add('hidden');
                 }
             } else {
                 showNotification(data.message, 'error');
@@ -340,8 +340,8 @@ function showNotification(message, type = 'info') {
     // Create notification element
     const notification = document.createElement('div');
     notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-green-500 text-white' :
-            type === 'error' ? 'bg-red-500 text-white' :
-                'bg-blue-500 text-white'
+        type === 'error' ? 'bg-red-500 text-white' :
+            'bg-blue-500 text-white'
         }`;
     notification.textContent = message;
 
@@ -383,7 +383,7 @@ function loadMoreReviews() {
             // Check if there are more pages
             const hasMorePages = document.querySelector('[data-has-more-pages]');
             if (!hasMorePages || hasMorePages.dataset.hasMorePages === 'false') {
-                loadMoreBtn.style.display = 'none';
+                loadMoreBtn.classList.add('hidden');
             } else {
                 loadMoreBtn.disabled = false;
                 loadMoreBtn.textContent = 'Load More Reviews';

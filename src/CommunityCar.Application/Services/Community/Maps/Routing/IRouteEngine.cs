@@ -85,3 +85,5 @@ public class TrafficConditionDto
     public int? DelayMinutes { get; set; }
     public bool IsActive { get; set; }
 }
+
+

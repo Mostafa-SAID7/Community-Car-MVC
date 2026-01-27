@@ -23,3 +23,5 @@ public class GuideCreateVM
         "Interior", "Transmission", "Suspension", "Performance", "Restoration"
     };
 }
+
+

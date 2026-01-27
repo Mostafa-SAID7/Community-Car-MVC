@@ -5,12 +5,12 @@
 
 <div class="space-y-8 p-6">
     <!-- English/Arabic Font Demonstration -->
-    <div class="card">
-        <div class="card-header">
-            @Html.CultureHeading(2, "Typography Demonstration", new { @class = "card-title" })
-            @Html.CultureParagraph("This page demonstrates the automatic font switching between English and Arabic", new { @class = "card-description" })
+    <div class="eng-card">
+        <div class="eng-card-header">
+            @Html.CultureHeading(2, "Typography Demonstration", new { @class = "eng-card-title" })
+            @Html.CultureParagraph("This page demonstrates the automatic font switching between English and Arabic", new { @class = "text-muted-foreground text-sm" })
         </div>
-        <div class="card-content space-y-6">
+        <div class="p-6 space-y-6">
             
             <!-- Headings Demo -->
             <div>
@@ -43,9 +43,9 @@
                 @Html.CultureHeading(3, "Button Examples", new { @class = "mb-4" })
                 
                 <div class="flex flex-wrap gap-3">
-                    @Html.CultureButton(Html.IsArabicCulture() ? "زر أساسي" : "Primary Button", new { @class = "btn btn-primary" })
-                    @Html.CultureButton(Html.IsArabicCulture() ? "زر ثانوي" : "Secondary Button", new { @class = "btn btn-outline" })
-                    @Html.CultureButton(Html.IsArabicCulture() ? "زر صغير" : "Small Button", new { @class = "btn btn-sm btn-outline" })
+                    @Html.CultureButton(Html.IsArabicCulture() ? "زر أساسي" : "Primary Button", new { @class = "inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95" })
+                    @Html.CultureButton(Html.IsArabicCulture() ? "زر ثانوي" : "Secondary Button", new { @class = "inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95" })
+                    @Html.CultureButton(Html.IsArabicCulture() ? "زر صغير" : "Small Button", new { @class = "inline-flex items-center justify-center gap-2 px-4 py-2 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95" })
                 </div>
             </div>
 
@@ -76,22 +76,22 @@
                 @Html.CultureHeading(3, "Card Examples", new { @class = "mb-4" })
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="card">
-                        <div class="card-header">
-                            @Html.CultureHeading(4, Html.IsArabicCulture() ? "بطاقة تجريبية" : "Sample Card", new { @class = "card-title" })
-                            @Html.CultureParagraph(Html.IsArabicCulture() ? "وصف البطاقة" : "Card description", new { @class = "card-description" })
+                    <div class="eng-card">
+                        <div class="eng-card-header">
+                            @Html.CultureHeading(4, Html.IsArabicCulture() ? "بطاقة تجريبية" : "Sample Card", new { @class = "eng-card-title" })
+                            @Html.CultureParagraph(Html.IsArabicCulture() ? "وصف البطاقة" : "Card description", new { @class = "text-muted-foreground text-sm" })
                         </div>
-                        <div class="card-content">
+                        <div class="p-6">
                             @Html.CultureParagraph(Html.IsArabicCulture() ? "محتوى البطاقة يظهر هنا مع الخط المناسب للغة المحددة." : "Card content appears here with the appropriate font for the selected language.", new { @class = "text-sm" })
                         </div>
                     </div>
                     
-                    <div class="card">
-                        <div class="card-header">
-                            @Html.CultureHeading(4, Html.IsArabicCulture() ? "بطاقة أخرى" : "Another Card", new { @class = "card-title" })
-                            @Html.CultureParagraph(Html.IsArabicCulture() ? "وصف آخر" : "Another description", new { @class = "card-description" })
+                    <div class="eng-card">
+                        <div class="eng-card-header">
+                            @Html.CultureHeading(4, Html.IsArabicCulture() ? "بطاقة أخرى" : "Another Card", new { @class = "eng-card-title" })
+                            @Html.CultureParagraph(Html.IsArabicCulture() ? "وصف آخر" : "Another description", new { @class = "text-muted-foreground text-sm" })
                         </div>
-                        <div class="card-content">
+                        <div class="p-6">
                             @Html.CultureParagraph(Html.IsArabicCulture() ? "هذا مثال آخر على كيفية عرض النص في البطاقات." : "This is another example of how text appears in cards.", new { @class = "text-sm" })
                         </div>
                     </div>

@@ -1,13 +1,17 @@
-using System.Reflection;
 using CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Application.Common.Interfaces.Orchestrators;
+using CommunityCar.Application.Orchestrators;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Localization;
-using CommunityCar.Application.Common.Interfaces.Services.Profile;
+using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.SEO;
 using CommunityCar.Application.Services.Community;
+using CommunityCar.Application.Services.Community.Feed;
 using CommunityCar.Application.Services.Localization;
-using CommunityCar.Application.Services.Profile;
+using CommunityCar.Application.Services.Account;
+using CommunityCar.Application.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Services.Dashboard;
 using CommunityCar.Application.Services.SEO;
 using CommunityCar.Application.Services.Maps.Routing;
@@ -22,6 +26,8 @@ public static class DependencyInjection
     {
         // Register application services here
         services.AddAutoMapper(typeof(DependencyInjection).Assembly);
+        
+        // Community services
         services.AddScoped<IQAService, QAService>();
         services.AddScoped<IMapsService, MapsService>();
         services.AddScoped<INewsService, NewsService>();
@@ -34,18 +40,25 @@ public static class DependencyInjection
         services.AddScoped<IInteractionService, InteractionService>();
         services.AddScoped<IFriendsService, FriendsService>();
         services.AddScoped<IGuidesService, GuidesService>();
+
+        // Focused Feed Services
+        services.AddScoped<IFeedContentAggregatorService, FeedContentAggregatorService>();
+        services.AddScoped<IFeedInteractionService, FeedInteractionService>();
+        services.AddScoped<IFeedUtilityService, FeedUtilityService>();
         services.AddScoped<ILocalizationService, LocalizationService>();
 
-        // Profile services
+        // Unified Account services
         services.AddScoped<IProfileService, ProfileService>();
-        services.AddScoped<IProfileManagementService, ProfileManagementService>();
-        services.AddScoped<IProfileSecurityService, ProfileSecurityService>();
-        services.AddScoped<IProfileOAuthService, ProfileOAuthService>();
-        services.AddScoped<IProfileEmailService, ProfileEmailService>();
-        services.AddScoped<IProfileAccountService, ProfileAccountService>();
+        services.AddScoped<IAccountSecurityService, AccountSecurityService>();
         services.AddScoped<IAccountManagementService, AccountManagementService>();
         services.AddScoped<IUserGalleryService, UserGalleryService>();
         services.AddScoped<IGamificationService, GamificationService>();
+
+        // Identity Management Services
+        services.AddScoped<IIdentityManagementService, IdentityManagementService>();
+        services.AddScoped<IUserIdentityService, UserIdentityService>();
+        services.AddScoped<IRoleManagementService, RoleManagementService>();
+        services.AddScoped<IClaimsManagementService, ClaimsManagementService>();
 
         // Dashboard services
         services.AddScoped<IOverviewService, OverviewService>();
@@ -63,14 +76,17 @@ public static class DependencyInjection
         services.AddScoped<ISEOService, SEOService>();
         services.AddScoped<IPerformanceService, PerformanceService>();
 
-        // Analytics services
-        services.AddScoped<IUserAnalyticsService, CommunityCar.Application.Services.UserAnalyticsService>();
+        // Background Job Services
+        services.AddScoped<BackgroundJobSchedulerService>();
 
-        // Maps services
-        services.AddScoped<IRouteEngine, RouteEngine>();
-        services.AddScoped<IPricingStrategy, StandardPricingStrategy>();
-        services.AddScoped<IPricingStrategy, EcoPricingStrategy>();
+        // Orchestrators
+        services.AddScoped<IIdentityOrchestrator, IdentityOrchestrator>();
+        services.AddScoped<IAccountLifecycleOrchestrator, AccountLifecycleOrchestrator>();
+        services.AddScoped<IAccountSecurityOrchestrator, AccountSecurityOrchestrator>();
+        services.AddScoped<IProfileOrchestrator, ProfileOrchestrator>();
 
         return services;
     }
 }
+
+

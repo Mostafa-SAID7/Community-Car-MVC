@@ -12,7 +12,7 @@
         {
             @foreach (var reaction in Model.Reactions.AvailableReactions.Take(6))
             {
-                <button class="reaction-btn group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black transition-all border @(Model.Reactions.UserReaction == reaction.Type ? "bg-primary/10 text-primary border-primary/30 shadow-inner ring-1 ring-primary/20" : "bg-muted/5 text-muted-foreground border-border/50 hover:bg-muted hover:border-primary/20 hover:text-foreground")" 
+                <button class="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black transition-all border @(Model.Reactions.UserReaction == reaction.Type ? "bg-primary/10 text-primary border-primary/30 shadow-inner ring-1 ring-primary/20" : "bg-muted/5 text-muted-foreground border-border/50 hover:bg-muted hover:border-primary/20 hover:text-foreground")" 
                         data-entity-id="@entityId" 
                         data-entity-type="@entityType" 
                         data-reaction-type="@((int)reaction.Type)"
@@ -25,15 +25,15 @@
         else
         {
             <!-- Default reaction buttons -->
-            <button class="reaction-btn group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border bg-muted/5 text-muted-foreground border-border/50 hover:bg-muted hover:border-primary/20 hover:text-foreground" data-entity-id="@entityId" data-entity-type="@entityType" data-reaction-type="0" title="Like">
+            <button class="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border bg-muted/5 text-muted-foreground border-border/50 hover:bg-muted hover:border-primary/20 hover:text-foreground" data-entity-id="@entityId" data-entity-type="@entityType" data-reaction-type="0" title="Like">
                 <i class="fas fa-thumbs-up group-hover:scale-125 transition-transform"></i>
                 <span class="reaction-count">0</span>
             </button>
-            <button class="reaction-btn group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border bg-muted/5 text-muted-foreground border-border/50 hover:bg-muted hover:border-primary/20 hover:text-foreground" data-entity-id="@entityId" data-entity-type="@entityType" data-reaction-type="1" title="Love">
+            <button class="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border bg-muted/5 text-muted-foreground border-border/50 hover:bg-muted hover:border-primary/20 hover:text-foreground" data-entity-id="@entityId" data-entity-type="@entityType" data-reaction-type="1" title="Love">
                 <i class="fas fa-heart group-hover:scale-125 transition-transform"></i>
                 <span class="reaction-count">0</span>
             </button>
-            <button class="reaction-btn group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border bg-muted/5 text-muted-foreground border-border/50 hover:bg-muted hover:border-primary/20 hover:text-foreground" data-entity-id="@entityId" data-entity-type="@entityType" data-reaction-type="2" title="Haha">
+            <button class="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border bg-muted/5 text-muted-foreground border-border/50 hover:bg-muted hover:border-primary/20 hover:text-foreground" data-entity-id="@entityId" data-entity-type="@entityType" data-reaction-type="2" title="Haha">
                 <i class="fas fa-laugh group-hover:scale-125 transition-transform"></i>
                 <span class="reaction-count">0</span>
             </button>
@@ -51,14 +51,14 @@
     <!-- Action Buttons -->
     <div class="flex items-center gap-1">
         <!-- Comment Button -->
-        <button class="interaction-btn comment-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-muted transition-all border border-transparent hover:border-border group" data-entity-id="@entityId" data-entity-type="@entityType">
+        <button class="comment-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-muted transition-all border border-transparent hover:border-border group" data-entity-id="@entityId" data-entity-type="@entityType">
             <i class="fas fa-comment group-hover:scale-110 transition-transform"></i>
             <span class="hidden xs:inline">@(Model?.CommentCount ?? 0) <span class="opacity-60">Comments</span></span>
             <span class="xs:hidden">@(Model?.CommentCount ?? 0)</span>
         </button>
 
         <!-- Share Button -->
-        <button class="interaction-btn share-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-muted transition-all border border-transparent hover:border-border group" data-entity-id="@entityId" data-entity-type="@entityType">
+        <button class="share-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-muted transition-all border border-transparent hover:border-border group" data-entity-id="@entityId" data-entity-type="@entityType">
             <i class="fas fa-share group-hover:scale-110 transition-transform"></i>
             <span class="hidden xs:inline">@(Model?.Shares?.TotalShares ?? 0) <span class="opacity-60">Shares</span></span>
             <span class="xs:hidden">@(Model?.Shares?.TotalShares ?? 0)</span>
@@ -67,7 +67,7 @@
 </div>
 
 <!-- Comments Section -->
-<div class="comments-section mt-6 space-y-4 animate-in slide-in-from-top-2 duration-500 overflow-hidden" id="comments-@entityId" style="display: none;">
+<div class="comments-section mt-6 space-y-4 animate-in slide-in-from-top-2 duration-500 overflow-hidden hidden" id="comments-@entityId">
     <div class="comments-header flex items-center justify-between px-2">
         <h4 class="comments-count text-xs font-black uppercase tracking-widest text-foreground flex items-center gap-2 opacity-70">
             <i data-lucide="message-square" class="w-3.5 h-3.5"></i>

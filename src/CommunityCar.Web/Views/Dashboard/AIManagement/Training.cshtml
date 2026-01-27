@@ -14,12 +14,12 @@
             <p class="text-muted-foreground">Manage AI model training and performance</p>
         </div>
         <div class="flex items-center gap-3">
-            <a asp-action="Index" class="btn btn-outline">
-                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+            <a asp-action="Index" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
                 Back to Dashboard
             </a>
-            <button class="btn btn-primary" onclick="startTraining()">
-                <i data-lucide="play" class="w-4 h-4 mr-2"></i>
+            <button class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95 group/play" data-action="start-training">
+                <i data-lucide="play" class="w-4 h-4 group-hover/play:scale-125 transition-transform"></i>
                 Start Training
             </button>
         </div>
@@ -29,10 +29,10 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @foreach (var trainingModel in Model.Models)
         {
-            <div class="card">
-                <div class="card-header">
+            <div class="eng-card">
+                <div class="eng-card-header">
                     <div class="flex items-center justify-between">
-                        <h3 class="card-title">@trainingModel.Name</h3>
+                        <h3 class="eng-card-title">@trainingModel.Name</h3>
                         @{
                             var statusClass = trainingModel.Status switch
                             {
@@ -45,15 +45,15 @@
                             @trainingModel.Status
                         </span>
                     </div>
-                    <p class="card-description">Version @trainingModel.Version</p>
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Version @trainingModel.Version</p>
                 </div>
-                <div class="card-content space-y-4">
+                <div class="p-6 space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="text-sm text-muted-foreground">Accuracy</span>
                         <span class="font-medium text-foreground">@trainingModel.Accuracy%</span>
                     </div>
-                    <div class="w-full bg-background rounded-full h-2">
-                        <div class="bg-primary h-2 rounded-full transition-all duration-300" style="width: @trainingModel.Accuracy%"></div>
+                    <div class="eng-progress-container h-2 bg-background">
+                        <div class="eng-progress-bar bg-primary w-[@trainingModel.Accuracy%]" ></div>
                     </div>
                     <div class="flex items-center justify-between text-sm">
                         <span class="text-muted-foreground">Dataset Size</span>
@@ -64,30 +64,30 @@
                         <span class="text-foreground">@trainingModel.LastTrained.ToString("MMM dd, yyyy")</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button class="btn btn-sm btn-outline flex-1" onclick="retrainModel('@trainingModel.Name')">
-                            <i data-lucide="refresh-cw" class="w-3 h-3 mr-1"></i>
+                        <button class="inline-flex items-center justify-center flex-1 px-4 py-2 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/retrain" data-action="retrain-model" data-model="@trainingModel.Name">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 mr-1.5 group-hover/retrain:rotate-180 transition-transform duration-700"></i>
                             Retrain
                         </button>
                         <div class="relative">
-                            <button class="btn btn-sm btn-outline" onclick="toggleModelOptions('@trainingModel.Name')">
-                                <i data-lucide="more-vertical" class="w-3 h-3"></i>
+                            <button class="inline-flex items-center justify-center w-10 h-10 bg-background border border-border/50 hover:bg-muted/10 rounded-xl transition-all active:scale-95" data-action="toggle-options" data-model="@trainingModel.Name">
+                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
                             </button>
                             <div id="options-@trainingModel.Name" class="absolute right-0 top-full mt-1 w-48 bg-background border border-border rounded-lg shadow-lg z-10 hidden">
                                 <div class="py-1">
-                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" onclick="viewModelDetails('@trainingModel.Name')">
+                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="view-details" data-model="@trainingModel.Name">
                                         <i data-lucide="eye" class="w-3 h-3"></i>
                                         View Details
                                     </button>
-                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" onclick="editModelSettings('@trainingModel.Name')">
+                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="edit-settings" data-model="@trainingModel.Name">
                                         <i data-lucide="settings" class="w-3 h-3"></i>
                                         Edit Settings
                                     </button>
-                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" onclick="exportModel('@trainingModel.Name')">
+                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="export-model" data-model="@trainingModel.Name">
                                         <i data-lucide="download" class="w-3 h-3"></i>
                                         Export Model
                                     </button>
                                     <hr class="my-1">
-                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted text-red-600 flex items-center gap-2" onclick="deleteModel('@trainingModel.Name')">
+                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted text-red-600 flex items-center gap-2" data-action="delete-model" data-model="@trainingModel.Name">
                                         <i data-lucide="trash-2" class="w-3 h-3"></i>
                                         Delete Model
                                     </button>
@@ -101,12 +101,12 @@
     </div>
 
     <!-- Training Queue -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Training Queue</h3>
-            <p class="card-description">Scheduled training jobs</p>
+    <div class="eng-card">
+        <div class="eng-card-header">
+            <h3 class="eng-card-title">Training Queue</h3>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Scheduled training jobs</p>
         </div>
-        <div class="card-content">
+        <div class="p-6">
             @if (Model.TrainingQueue.Length > 0)
             {
                 <div class="space-y-3">
@@ -148,12 +148,12 @@
     </div>
 
     <!-- Recent Training History -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Recent Training History</h3>
-            <p class="card-description">Latest training results and improvements</p>
+    <div class="eng-card">
+        <div class="eng-card-header">
+            <h3 class="eng-card-title">Recent Training History</h3>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Latest training results and improvements</p>
         </div>
-        <div class="card-content">
+        <div class="p-6">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="border-b border-border">
@@ -189,12 +189,12 @@
                                 </td>
                                 <td class="p-4">
                                     <div class="flex items-center gap-2">
-                                        <button class="btn btn-sm btn-outline" onclick="viewTrainingDetails('@training.Model', '@training.Date.ToString("yyyy-MM-dd")')">
-                                            <i data-lucide="eye" class="w-3 h-3 mr-1"></i>
+                                        <button class="inline-flex items-center justify-center px-3 py-1.5 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/view" data-action="view-training-details" data-model="@training.Model" data-date="@training.Date.ToString("yyyy-MM-dd")">
+                                            <i data-lucide="eye" class="w-3.5 h-3.5 mr-1.5 group-hover/view:scale-110 transition-transform"></i>
                                             View Details
                                         </button>
-                                        <button class="btn btn-sm btn-outline" onclick="downloadTrainingReport('@training.Model', '@training.Date.ToString("yyyy-MM-dd")')">
-                                            <i data-lucide="download" class="w-3 h-3"></i>
+                                        <button class="inline-flex items-center justify-center w-8 h-8 bg-background border border-border/50 hover:border-primary/50 hover:text-primary rounded-xl transition-all active:scale-95 group/download" data-action="download-report" data-model="@training.Model" data-date="@training.Date.ToString("yyyy-MM-dd")">
+                                            <i data-lucide="download" class="w-4 h-4 group-hover/download:translate-y-0.5 transition-transform"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -208,460 +208,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-
-            // Close dropdowns when clicking outside
-            document.addEventListener('click', function(event) {
-                const dropdowns = document.querySelectorAll('[id^="options-"]');
-                dropdowns.forEach(dropdown => {
-                    const toggleButton = document.querySelector(`button[onclick*="toggleModelOptions('${dropdown.id.replace('options-', '')}')"]`);
-                    
-                    // Check if click is outside both dropdown and its toggle button
-                    if (!dropdown.contains(event.target) && 
-                        (!toggleButton || !toggleButton.contains(event.target))) {
-                        dropdown.classList.add('hidden');
-                    }
-                });
-            });
-        });
-
-        // Start Training Function
-        async function startTraining() {
-            if (window.AlertModal) {
-                window.AlertModal.confirm(
-                    'Are you sure you want to start a new training session? This will queue training for all available models.',
-                    'Start Training Session',
-                    async function(confirmed) {
-                        if (!confirmed) return;
-                        
-                        try {
-                            const response = await fetch('/Dashboard/AIManagement/StartTraining', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-                                }
-                            });
-
-                            const result = await response.json();
-                            
-                            if (result.success) {
-                                window.AlertModal.success('Training session started successfully!');
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                window.AlertModal.error(result.message || 'Failed to start training session');
-                            }
-                        } catch (error) {
-                            console.error('Error starting training:', error);
-                            window.AlertModal.error('Failed to start training session');
-                        }
-                    }
-                );
-            }
-        }
-
-        // Retrain Model Function
-        async function retrainModel(modelName) {
-            if (window.AlertModal) {
-                window.AlertModal.confirm(
-                    `Are you sure you want to retrain the ${modelName} model? This will queue a new training job.`,
-                    'Retrain Model',
-                    async function(confirmed) {
-                        if (!confirmed) return;
-                        
-                        const button = event.target.closest('button');
-                        const originalContent = button.innerHTML;
-                        
-                        try {
-                            // Update button state
-                            button.disabled = true;
-                            button.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 mr-1 animate-spin"></i>Queuing...';
-                            
-                            const response = await fetch('/Dashboard/AIManagement/RetrainModel', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-                                },
-                                body: JSON.stringify({ modelName: modelName })
-                            });
-
-                            const result = await response.json();
-                            
-                            if (result.success) {
-                                window.AlertModal.success(`${modelName} model queued for retraining`);
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                window.AlertModal.error(result.message || `Failed to queue ${modelName} for retraining`);
-                                // Reset button
-                                button.disabled = false;
-                                button.innerHTML = originalContent;
-                                if (typeof lucide !== 'undefined') {
-                                    lucide.createIcons();
-                                }
-                            }
-                        } catch (error) {
-                            console.error('Error retraining model:', error);
-                            window.AlertModal.error(`Failed to queue ${modelName} for retraining`);
-                            
-                            // Reset button
-                            button.disabled = false;
-                            button.innerHTML = originalContent;
-                            if (typeof lucide !== 'undefined') {
-                                lucide.createIcons();
-                            }
-                        }
-                    }
-                );
-            }
-        }
-
-        // Toggle Model Options Dropdown
-        function toggleModelOptions(modelName) {
-            event.stopPropagation(); // Prevent event bubbling
-            
-            const dropdown = document.getElementById(`options-${modelName}`);
-            const allDropdowns = document.querySelectorAll('[id^="options-"]');
-            
-            // Close all other dropdowns
-            allDropdowns.forEach(d => {
-                if (d !== dropdown) {
-                    d.classList.add('hidden');
-                }
-            });
-            
-            // Toggle current dropdown
-            dropdown.classList.toggle('hidden');
-        }
-
-        // View Model Details
-        function viewModelDetails(modelName) {
-            event.stopPropagation(); // Prevent event bubbling
-            
-            // Close dropdown
-            document.getElementById(`options-${modelName}`).classList.add('hidden');
-            
-            if (window.AlertModal) {
-                const detailsHtml = `
-                    <div class="space-y-4 text-left">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="text-sm font-medium text-muted-foreground">Model Name</label>
-                                <p class="text-foreground">${modelName}</p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-medium text-muted-foreground">Status</label>
-                                <p class="text-foreground">Active</p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-medium text-muted-foreground">Accuracy</label>
-                                <p class="text-foreground">94.2%</p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-medium text-muted-foreground">Dataset Size</label>
-                                <p class="text-foreground">15,000 samples</p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-medium text-muted-foreground">Last Trained</label>
-                                <p class="text-foreground">Jan 20, 2026</p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-medium text-muted-foreground">Training Time</label>
-                                <p class="text-foreground">2h 15m</p>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-muted-foreground">Performance Metrics</label>
-                            <div class="mt-2 space-y-2">
-                                <div class="flex justify-between">
-                                    <span>Precision</span>
-                                    <span>92.1%</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Recall</span>
-                                    <span>89.7%</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>F1 Score</span>
-                                    <span>90.9%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                window.AlertModal.show({
-                    type: 'info',
-                    title: `${modelName} Model Details`,
-                    message: detailsHtml,
-                    confirmText: 'Close'
-                });
-            }
-        }
-
-        // Edit Model Settings
-        function editModelSettings(modelName) {
-            event.stopPropagation(); // Prevent event bubbling
-            
-            document.getElementById(`options-${modelName}`).classList.add('hidden');
-            
-            if (window.AlertModal) {
-                const settingsHtml = `
-                    <div class="space-y-4 text-left">
-                        <div>
-                            <label class="text-sm font-medium text-foreground">Learning Rate</label>
-                            <input type="number" id="learningRate" class="input mt-1 w-full" value="0.001" step="0.0001">
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-foreground">Batch Size</label>
-                            <input type="number" id="batchSize" class="input mt-1 w-full" value="32">
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-foreground">Max Epochs</label>
-                            <input type="number" id="maxEpochs" class="input mt-1 w-full" value="100">
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-foreground">Early Stopping</label>
-                            <select id="earlyStopping" class="input mt-1 w-full">
-                                <option value="true">Enabled</option>
-                                <option value="false">Disabled</option>
-                            </select>
-                        </div>
-                    </div>
-                `;
-                
-                window.AlertModal.show({
-                    type: 'info',
-                    title: `Edit ${modelName} Settings`,
-                    message: settingsHtml,
-                    showCancel: true,
-                    confirmText: 'Save Settings',
-                    callback: async function(confirmed) {
-                        if (!confirmed) return;
-                        
-                        try {
-                            const settings = {
-                                modelName: modelName,
-                                learningRate: parseFloat(document.getElementById('learningRate').value),
-                                batchSize: parseInt(document.getElementById('batchSize').value),
-                                maxEpochs: parseInt(document.getElementById('maxEpochs').value),
-                                earlyStopping: document.getElementById('earlyStopping').value === 'true'
-                            };
-
-                            const response = await fetch('/Dashboard/AIManagement/UpdateModelSettings', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-                                },
-                                body: JSON.stringify(settings)
-                            });
-
-                            const result = await response.json();
-                            
-                            if (result.success) {
-                                window.AlertModal.success(`${modelName} settings updated successfully`);
-                            } else {
-                                window.AlertModal.error(result.message || 'Failed to update settings');
-                            }
-                        } catch (error) {
-                            console.error('Error updating settings:', error);
-                            window.AlertModal.error('Failed to update settings');
-                        }
-                    }
-                });
-            }
-        }
-
-        // Export Model
-        async function exportModel(modelName) {
-            event.stopPropagation(); // Prevent event bubbling
-            
-            document.getElementById(`options-${modelName}`).classList.add('hidden');
-            
-            try {
-                if (window.AlertModal) {
-                    window.AlertModal.info(`Preparing ${modelName} model for export...`);
-                }
-                
-                const response = await fetch('/Dashboard/AIManagement/ExportModel', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-                    },
-                    body: JSON.stringify({ modelName: modelName })
-                });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    // Create download link
-                    const link = document.createElement('a');
-                    link.href = result.downloadUrl || '#';
-                    link.download = `${modelName.toLowerCase().replace(' ', '_')}_model.zip`;
-                    link.click();
-                    
-                    if (window.AlertModal) {
-                        window.AlertModal.success(`${modelName} model exported successfully`);
-                    }
-                } else {
-                    if (window.AlertModal) {
-                        window.AlertModal.error(result.message || `Failed to export ${modelName} model`);
-                    }
-                }
-            } catch (error) {
-                console.error('Error exporting model:', error);
-                if (window.AlertModal) {
-                    window.AlertModal.error(`Failed to export ${modelName} model`);
-                }
-            }
-        }
-
-        // Delete Model
-        async function deleteModel(modelName) {
-            event.stopPropagation(); // Prevent event bubbling
-            
-            document.getElementById(`options-${modelName}`).classList.add('hidden');
-            
-            if (window.AlertModal) {
-                window.AlertModal.confirm(
-                    `Are you sure you want to delete the ${modelName} model? This action cannot be undone and will permanently delete all training data and model files.`,
-                    'Delete Model',
-                    async function(confirmed) {
-                        if (!confirmed) return;
-                        
-                        try {
-                            const response = await fetch('/Dashboard/AIManagement/DeleteModel', {
-                                method: 'DELETE',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-                                },
-                                body: JSON.stringify({ modelName: modelName })
-                            });
-
-                            const result = await response.json();
-                            
-                            if (result.success) {
-                                window.AlertModal.success(`${modelName} model deleted successfully`);
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                window.AlertModal.error(result.message || `Failed to delete ${modelName} model`);
-                            }
-                        } catch (error) {
-                            console.error('Error deleting model:', error);
-                            window.AlertModal.error(`Failed to delete ${modelName} model`);
-                        }
-                    }
-                );
-            }
-        }
-
-        // View Training Details
-        async function viewTrainingDetails(modelName, date) {
-            try {
-                const response = await fetch(`/Dashboard/AIManagement/GetTrainingDetails?modelName=${encodeURIComponent(modelName)}&date=${encodeURIComponent(date)}`);
-                const result = await response.json();
-                
-                if (result.success) {
-                    const data = result.data;
-                    if (window.AlertModal) {
-                        window.AlertModal.show({
-                            type: 'info',
-                            title: `Training Details - ${modelName}`,
-                            message: `
-                                <div class="space-y-4 text-left">
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="text-sm font-medium text-muted-foreground">Model</label>
-                                            <p class="text-foreground">${data.ModelName}</p>
-                                        </div>
-                                        <div>
-                                            <label class="text-sm font-medium text-muted-foreground">Training Date</label>
-                                            <p class="text-foreground">${new Date(data.TrainingDate).toLocaleDateString()}</p>
-                                        </div>
-                                        <div>
-                                            <label class="text-sm font-medium text-muted-foreground">Duration</label>
-                                            <p class="text-foreground">${data.Duration}</p>
-                                        </div>
-                                        <div>
-                                            <label class="text-sm font-medium text-muted-foreground">Final Accuracy</label>
-                                            <p class="text-foreground">${data.FinalAccuracy}%</p>
-                                        </div>
-                                        <div>
-                                            <label class="text-sm font-medium text-muted-foreground">Improvement</label>
-                                            <p class="text-foreground">+${data.Improvement}%</p>
-                                        </div>
-                                        <div>
-                                            <label class="text-sm font-medium text-muted-foreground">Epochs</label>
-                                            <p class="text-foreground">${data.Epochs}</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-muted-foreground">Training Log</label>
-                                        <div class="mt-2 p-3 bg-muted rounded-lg text-sm font-mono max-h-40 overflow-y-auto">
-                                            ${data.TrainingLog.map(log => `<div>${log}</div>`).join('')}
-                                        </div>
-                                    </div>
-                                </div>
-                            `
-                        });
-                    }
-                } else {
-                    if (window.AlertModal) {
-                        window.AlertModal.error(result.message || 'Failed to load training details');
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading training details:', error);
-                if (window.AlertModal) {
-                    window.AlertModal.error('Failed to load training details');
-                }
-            }
-        }
-
-        // Download Training Report
-        async function downloadTrainingReport(modelName, date) {
-            try {
-                if (window.AlertModal) {
-                    window.AlertModal.info(`Generating training report for ${modelName}...`);
-                }
-                
-                const response = await fetch(`/Dashboard/AIManagement/DownloadTrainingReport?modelName=${encodeURIComponent(modelName)}&date=${encodeURIComponent(date)}`);
-                const result = await response.json();
-                
-                if (result.success) {
-                    const link = document.createElement('a');
-                    link.href = result.downloadUrl || '#';
-                    link.download = `${modelName.toLowerCase().replace(' ', '_')}_training_report_${date}.pdf`;
-                    link.click();
-                    
-                    if (window.AlertModal) {
-                        window.AlertModal.success('Training report downloaded successfully');
-                    }
-                } else {
-                    if (window.AlertModal) {
-                        window.AlertModal.error(result.message || 'Failed to download training report');
-                    }
-                }
-            } catch (error) {
-                console.error('Error downloading report:', error);
-                if (window.AlertModal) {
-                    window.AlertModal.error('Failed to download training report');
-                }
-            }
-        }
-    </script>
+    <script src="~/js/ai-training.js" asp-append-version="true"></script>
 }

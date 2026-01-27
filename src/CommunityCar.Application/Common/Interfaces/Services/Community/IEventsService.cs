@@ -16,3 +16,5 @@ public interface IEventsService
     Task<bool> LeaveEventAsync(Guid eventId, CancellationToken cancellationToken = default);
     Task<EventsStatsVM> GetEventsStatsAsync(CancellationToken cancellationToken = default);
 }
+
+

@@ -102,12 +102,12 @@
             </div>
             
             <div class="flex items-center justify-between p-6 border-t border-border">
-                <button class="btn btn-outline" id="export-history-btn">
-                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                <button class="inline-flex items-center justify-center px-4 py-2 bg-background border border-border/50 hover:bg-muted/10 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/export" id="export-history-btn">
+                    <i data-lucide="download" class="w-4 h-4 mr-2 group-hover/export:translate-y-0.5 transition-transform"></i>
                     Export History
                 </button>
-                <button class="btn btn-destructive" id="clear-all-history-btn">
-                    <i data-lucide="trash-2" class="w-4 h-4 mr-2"></i>
+                <button class="inline-flex items-center justify-center px-4 py-2 bg-background border border-border/50 hover:border-red-500/50 hover:text-red-500 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/clear" id="clear-all-history-btn">
+                    <i data-lucide="trash-2" class="w-4 h-4 mr-2 group-hover/clear:rotate-12 transition-transform"></i>
                     Clear All History
                 </button>
             </div>

@@ -17,3 +17,5 @@ public class NewsMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.Excerpt, opt => opt.Ignore()); // Will be calculated
     }
 }
+
+

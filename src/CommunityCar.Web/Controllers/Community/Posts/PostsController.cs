@@ -267,3 +267,6 @@ public class PostsController : Controller
         }
     }
 }
+
+
+

@@ -108,3 +108,4 @@ public class ReviewsRepository : BaseRepository<Review>, IReviewsRepository
             .AnyAsync(r => r.ReviewerId == userId && r.TargetId == targetId && r.TargetType == targetType);
     }
 }
+

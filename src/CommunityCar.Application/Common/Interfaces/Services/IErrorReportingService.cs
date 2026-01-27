@@ -9,3 +9,5 @@ public interface IErrorReportingService
     Task<List<ErrorReportResponse>> GetUserErrorReportsAsync(string userId);
     Task<ErrorReportResponse> GetErrorReportByTicketIdAsync(string ticketId);
 }
+
+

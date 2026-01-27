@@ -199,3 +199,5 @@ public class PerformanceReportVM
     public PerformanceMetricsVM Metrics { get; set; } = new();
     public List<string> OptimizationTips { get; set; } = new();
 }
+
+

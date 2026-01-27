@@ -7,3 +7,6 @@ public interface IMaintenanceService
     Task<string> GetMaintenanceMessageAsync();
     Task SetMaintenanceMessageAsync(string message);
 }
+
+
+

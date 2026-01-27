@@ -19,3 +19,5 @@ public interface IStoriesRepository : IBaseRepository<Story>
     Task<int> GetActiveCountByAuthorAsync(Guid authorId);
     Task<bool> DeleteExpiredAsync();
 }
+
+

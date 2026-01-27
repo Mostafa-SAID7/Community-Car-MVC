@@ -22,54 +22,54 @@
 
     <!-- Key Metrics Row -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl hover:border-primary/20 group">
-            <div class="flex items-center justify-between mb-4">
-                <h6 class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">New Users</h6>
+        <div class="eng-stat-group group">
+            <div class="flex items-center justify-between mb-4 w-full">
+                <h6 class="eng-stat-label">New Users</h6>
                 <div class="p-2 rounded-lg bg-green-500/10 text-green-500 text-sm group-hover:scale-110 transition-transform">
                     <i class="fas fa-user-plus"></i>
                 </div>
             </div>
-            <div class="text-3xl font-black text-foreground tabular-nums">@Model.NewUsers.ToString("N0")</div>
-            <div class="text-[10px] font-black uppercase flex items-center gap-1 mt-2 text-green-500">
+            <div class="eng-stat-value">@Model.NewUsers.ToString("N0")</div>
+            <div class="eng-stat-delta text-green-500">
                 <i class="fas fa-arrow-up text-[8px]"></i> +12.5% <span class="opacity-40 ml-1">vs last period</span>
             </div>
         </div>
         
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl hover:border-primary/20 group">
-            <div class="flex items-center justify-between mb-4">
-                <h6 class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Active Users</h6>
+        <div class="eng-stat-group group">
+            <div class="flex items-center justify-between mb-4 w-full">
+                <h6 class="eng-stat-label">Active Users</h6>
                 <div class="p-2 rounded-lg bg-blue-500/10 text-blue-500 text-sm group-hover:scale-110 transition-transform">
                     <i class="fas fa-users"></i>
                 </div>
             </div>
-            <div class="text-3xl font-black text-foreground tabular-nums">@Model.ActiveUsers.ToString("N0")</div>
-            <div class="text-[10px] font-black uppercase flex items-center gap-1 mt-2 text-blue-500">
+            <div class="eng-stat-value">@Model.ActiveUsers.ToString("N0")</div>
+            <div class="eng-stat-delta text-blue-500">
                 <i class="fas fa-arrow-up text-[8px]"></i> +8.3% <span class="opacity-40 ml-1">vs last period</span>
             </div>
         </div>
         
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl hover:border-primary/20 group">
-            <div class="flex items-center justify-between mb-4">
-                <h6 class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Retention Rate</h6>
+        <div class="eng-stat-group group">
+            <div class="flex items-center justify-between mb-4 w-full">
+                <h6 class="eng-stat-label">Retention Rate</h6>
                 <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-500 text-sm group-hover:scale-110 transition-transform">
                     <i class="fas fa-chart-line"></i>
                 </div>
             </div>
-            <div class="text-3xl font-black text-foreground tabular-nums">@Model.RetentionRate.ToString("F1")%</div>
-            <div class="text-[10px] font-black uppercase flex items-center gap-1 mt-2 text-indigo-500">
+            <div class="eng-stat-value">@Model.RetentionRate.ToString("F1")%</div>
+            <div class="eng-stat-delta text-indigo-500">
                 <i class="fas fa-arrow-up text-[8px]"></i> +2.1% <span class="opacity-40 ml-1">vs last period</span>
             </div>
         </div>
         
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl hover:border-primary/20 group">
-            <div class="flex items-center justify-between mb-4">
-                <h6 class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Avg Session</h6>
+        <div class="eng-stat-group group">
+            <div class="flex items-center justify-between mb-4 w-full">
+                <h6 class="eng-stat-label">Avg Session</h6>
                 <div class="p-2 rounded-lg bg-amber-500/10 text-amber-500 text-sm group-hover:scale-110 transition-transform">
                     <i class="fas fa-clock"></i>
                 </div>
             </div>
-            <div class="text-3xl font-black text-foreground tabular-nums">@Model.AverageSessionDuration.ToString(@"mm\:ss")</div>
-            <div class="text-[10px] font-black uppercase flex items-center gap-1 mt-2 text-destructive">
+            <div class="eng-stat-value">@Model.AverageSessionDuration.ToString(@"mm\:ss")</div>
+            <div class="eng-stat-delta text-destructive">
                 <i class="fas fa-arrow-down text-[8px]"></i> -1.2% <span class="opacity-40 ml-1">vs last period</span>
             </div>
         </div>
@@ -77,30 +77,34 @@
 
     <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 bg-card/40 backdrop-blur-md border border-border rounded-xl shadow-md overflow-hidden transition-all hover:border-primary/10 hover:shadow-lg">
-            <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
-                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">User Growth Trend</h5>
+        <div class="lg:col-span-2 eng-card overflow-hidden transition-all">
+            <div class="eng-card-header">
+                <h5 class="eng-card-title">User Growth Trend</h5>
             </div>
             <div class="p-6">
-                <canvas id="userGrowthChart" class="w-full h-[300px]"></canvas>
+                <canvas id="userGrowthChart" class="w-full h-[300px]"
+                        data-labels='@Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Label)))'
+                        data-datasets='[{"label": "New Users", "data": @Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Value)))}, {"label": "Active Users", "data": @Html.Raw(Json.Serialize(Model.ActivityData.Select(x => x.Value)))}]'></canvas>
             </div>
         </div>
         
-        <div class="bg-card/40 backdrop-blur-md border border-border rounded-xl shadow-md overflow-hidden transition-all hover:border-primary/10 hover:shadow-lg">
-            <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
-                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">User Activity</h5>
+        <div class="eng-card overflow-hidden transition-all">
+            <div class="eng-card-header">
+                <h5 class="eng-card-title">User Activity</h5>
             </div>
             <div class="p-6">
-                <canvas id="activityChart" class="w-full h-[300px]"></canvas>
+                <canvas id="activityChart" class="w-full h-[300px]"
+                        data-labels='["Posts", "Questions", "Answers", "Reviews", "Stories"]'
+                        data-values='[@Model.PostsCreated, @Model.QuestionsAsked, @Model.AnswersGiven, @Model.ReviewsWritten, @Model.StoriesShared]'></canvas>
             </div>
         </div>
     </div>
 
     <!-- Detailed Analytics Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="bg-card/40 backdrop-blur-md border border-border rounded-xl shadow-md overflow-hidden transition-all hover:border-primary/10">
-            <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
-                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">User Engagement</h5>
+        <div class="eng-card overflow-hidden transition-all">
+            <div class="eng-card-header">
+                <h5 class="eng-card-title">User Engagement</h5>
             </div>
             <div class="p-8 space-y-6">
                 <div class="space-y-3">
@@ -108,8 +112,8 @@
                         <span class="text-[11px] font-black uppercase tracking-widest opacity-60">Posts Created</span>
                         <span class="text-base font-black tabular-nums">@Model.PostsCreated.ToString("N0")</span>
                     </div>
-                    <div class="h-1.5 bg-muted rounded-full overflow-hidden shadow-inner ring-1 ring-border/30">
-                        <div class="h-full bg-blue-500 rounded-full shadow-lg shadow-blue-500/20 transition-all duration-1000" style="width: 85%"></div>
+                    <div class="eng-progress-container h-1.5">
+                        <div class="eng-progress-bar bg-blue-500 w-[85%]"></div>
                     </div>
                 </div>
                 
@@ -118,8 +122,8 @@
                         <span class="text-[11px] font-black uppercase tracking-widest opacity-60">Questions Asked</span>
                         <span class="text-base font-black tabular-nums">@Model.QuestionsAsked.ToString("N0")</span>
                     </div>
-                    <div class="h-1.5 bg-muted rounded-full overflow-hidden shadow-inner ring-1 ring-border/30">
-                        <div class="h-full bg-green-500 rounded-full shadow-lg shadow-green-500/20 transition-all duration-1000" style="width: 70%"></div>
+                    <div class="eng-progress-container h-1.5">
+                        <div class="eng-progress-bar bg-green-500 w-[70%]"></div>
                     </div>
                 </div>
                 
@@ -128,8 +132,8 @@
                         <span class="text-[11px] font-black uppercase tracking-widest opacity-60">Answers Given</span>
                         <span class="text-base font-black tabular-nums">@Model.AnswersGiven.ToString("N0")</span>
                     </div>
-                    <div class="h-1.5 bg-muted rounded-full overflow-hidden shadow-inner ring-1 ring-border/30">
-                        <div class="h-full bg-amber-500 rounded-full shadow-lg shadow-amber-500/20 transition-all duration-1000" style="width: 60%"></div>
+                    <div class="eng-progress-container h-1.5">
+                        <div class="eng-progress-bar bg-amber-500 w-[60%]"></div>
                     </div>
                 </div>
                 
@@ -138,16 +142,16 @@
                         <span class="text-[11px] font-black uppercase tracking-widest opacity-60">Reviews Written</span>
                         <span class="text-base font-black tabular-nums">@Model.ReviewsWritten.ToString("N0")</span>
                     </div>
-                    <div class="h-1.5 bg-muted rounded-full overflow-hidden shadow-inner ring-1 ring-border/30">
-                        <div class="h-full bg-red-500 rounded-full shadow-lg shadow-red-500/20 transition-all duration-1000" style="width: 45%"></div>
+                    <div class="eng-progress-container h-1.5">
+                        <div class="eng-progress-bar bg-red-500 w-[45%]"></div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="bg-card/40 backdrop-blur-md border border-border rounded-xl shadow-md overflow-hidden transition-all hover:border-primary/10">
-            <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
-                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">User Demographics</h5>
+        <div class="eng-card overflow-hidden transition-all">
+            <div class="eng-card-header">
+                <h5 class="eng-card-title">User Demographics</h5>
             </div>
             <div class="p-6 divide-y divide-border/30">
                 <div class="flex items-center justify-between py-4 group/item">
@@ -182,74 +186,8 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/dashboard-charts.js" asp-append-version="true"></script>
     <script>
-        const textColor = getComputedStyle(document.documentElement).getPropertyValue('--muted-foreground') || '#64748b';
-        const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border') || 'rgba(0,0,0,0.05)';
-        
-        // User Growth Chart
-        const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
-        const userGrowthChart = new Chart(userGrowthCtx, {
-            type: 'line',
-            data: {
-                labels: @Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Label))),
-                datasets: [{
-                    label: 'New Users',
-                    data: @Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Value))),
-                    borderColor: '#3b82f6',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 0,
-                    pointHoverRadius: 6
-                }, {
-                    label: 'Active Users',
-                    data: @Html.Raw(Json.Serialize(Model.ActivityData.Select(x => x.Value))),
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 0,
-                    pointHoverRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'top', labels: { font: { weight: 'bold', size: 10 } } }
-                },
-                scales: {
-                    y: { grid: { color: gridColor }, ticks: { font: { size: 10, weight: 'bold' }, color: textColor } },
-                    x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' }, color: textColor } }
-                }
-            }
-        });
-
-        // Activity Doughnut Chart
-        const activityCtx = document.getElementById('activityChart').getContext('2d');
-        const activityChart = new Chart(activityCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Posts', 'Questions', 'Answers', 'Reviews', 'Stories'],
-                datasets: [{
-                    data: [@Model.PostsCreated, @Model.QuestionsAsked, @Model.AnswersGiven, @Model.ReviewsWritten, @Model.StoriesShared],
-                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
-                    borderWidth: 0,
-                    weight: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '70%',
-                plugins: {
-                    legend: { position: 'bottom', labels: { font: { weight: 'bold', size: 9 }, usePointStyle: true, padding: 20 } }
-                }
-            }
-        });
-
         function exportAnalytics() { console.log('Exporting...'); }
     </script>
 }

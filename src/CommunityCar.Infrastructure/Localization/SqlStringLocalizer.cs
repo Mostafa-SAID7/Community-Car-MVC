@@ -62,3 +62,4 @@ public class SqlStringLocalizer : IStringLocalizer
         return value;
     }
 }
+

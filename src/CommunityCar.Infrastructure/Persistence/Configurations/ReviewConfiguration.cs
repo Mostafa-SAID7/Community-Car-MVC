@@ -47,3 +47,4 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }
+

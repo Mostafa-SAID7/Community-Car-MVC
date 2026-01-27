@@ -14,3 +14,5 @@ public interface IGuidesNotificationService
     Task NotifyNewGuideFromFollowedAuthorAsync(Guide guide, string authorName, List<Guid> followerIds);
     Task NotifyGuideDeletedAsync(Guid guideId, string guideTitle, Guid authorId, string authorName);
 }
+
+

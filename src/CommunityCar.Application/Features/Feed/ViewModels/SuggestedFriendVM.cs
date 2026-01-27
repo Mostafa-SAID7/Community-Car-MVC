@@ -28,3 +28,5 @@ public class SuggestedFriendVM
     public bool IsFriendRequestSent { get; set; }
     public bool IsFollowing { get; set; }
 }
+
+

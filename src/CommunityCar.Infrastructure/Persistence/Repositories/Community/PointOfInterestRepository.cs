@@ -190,3 +190,4 @@ public class PointOfInterestRepository : BaseRepository<PointOfInterest>, IPoint
             .ToListAsync(cancellationToken);
     }
 }
+

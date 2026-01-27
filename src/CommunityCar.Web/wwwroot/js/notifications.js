@@ -217,7 +217,7 @@ class NotificationClient {
         const badges = document.querySelectorAll('.notification-badge, .mobile-notification-badge');
         badges.forEach(badge => {
             if (this.unreadCount > 0) {
-                badge.style.display = 'flex';
+                badge.classList.remove('hidden');
                 badge.textContent = this.unreadCount > 9 ? '9+' : this.unreadCount.toString();
                 if (this.unreadCount > 9) {
                     badge.classList.add('has-count');
@@ -225,7 +225,7 @@ class NotificationClient {
                     badge.classList.remove('has-count');
                 }
             } else {
-                badge.style.display = 'none';
+                badge.classList.add('hidden');
             }
         });
 

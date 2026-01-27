@@ -46,3 +46,5 @@ public class CommunityReportDto
     public bool CanUserConfirm { get; set; }
     public bool HasUserConfirmed { get; set; }
 }
+
+

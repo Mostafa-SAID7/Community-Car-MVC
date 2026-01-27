@@ -17,3 +17,6 @@ public class QAMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.AuthorName, opt => opt.Ignore()); // Will be populated by service
     }
 }
+
+
+

@@ -53,3 +53,5 @@ public class UpdateReviewRequest
     public List<string> Pros { get; set; } = new();
     public List<string> Cons { get; set; } = new();
 }
+
+

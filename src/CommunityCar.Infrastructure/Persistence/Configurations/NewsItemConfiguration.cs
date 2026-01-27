@@ -39,3 +39,4 @@ public class NewsItemConfiguration : IEntityTypeConfiguration<NewsItem>
                 c => c.ToList()));
     }
 }
+

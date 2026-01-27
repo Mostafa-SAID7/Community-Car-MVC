@@ -36,3 +36,5 @@ public interface IMapsService
     // Statistics
     Task<MapsStatsVM> GetMapsStatsAsync(CancellationToken cancellationToken = default);
 }
+
+

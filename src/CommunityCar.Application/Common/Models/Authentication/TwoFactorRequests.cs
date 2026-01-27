@@ -61,3 +61,5 @@ public class GenerateRecoveryCodesRequest
     [Required(ErrorMessage = "Current password is required for security")]
     public string CurrentPassword { get; set; } = string.Empty;
 }
+
+

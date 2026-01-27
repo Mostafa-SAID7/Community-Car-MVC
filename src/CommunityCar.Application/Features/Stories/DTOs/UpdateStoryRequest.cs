@@ -33,3 +33,5 @@ public class UpdateStoryRequest
     public bool IsFeatured { get; set; } = false;
     public bool IsHighlighted { get; set; } = false;
 }
+
+

@@ -68,3 +68,5 @@ public class PostsIndexVM
     public PostsSearchResponse SearchResponse { get; set; } = new();
     public PostsStatsVM Stats { get; set; } = new();
 }
+
+

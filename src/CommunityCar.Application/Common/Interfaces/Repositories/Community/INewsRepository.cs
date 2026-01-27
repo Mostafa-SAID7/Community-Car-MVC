@@ -17,3 +17,5 @@ public interface INewsRepository : IBaseRepository<NewsItem>
     Task<IEnumerable<string>> GetAvailableCarMakesAsync();
     Task<bool> SlugExistsAsync(string slug, Guid? excludeId = null);
 }
+
+

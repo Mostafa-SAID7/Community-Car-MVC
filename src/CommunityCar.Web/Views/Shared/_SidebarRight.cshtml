@@ -5,10 +5,9 @@
 
 <!-- Right Sidebar -->
 <aside
-    class="sidebar-right fixed right-4 rtl:right-auto rtl:left-4 top-24 bottom-8 w-80 bg-card/40 backdrop-blur-xl border border-border rounded-xl shadow-2xl transition-all duration-300 z-40 translate-x-[calc(100%+2rem)] rtl:-translate-x-[calc(100%+2rem)] xl:translate-x-0 rtl:xl:translate-x-0 hidden xl:block overflow-y-auto custom-scrollbar"
-    style="direction: rtl;">
+    class="sidebar-right fixed right-4 rtl:right-auto rtl:left-4 top-24 bottom-8 w-80 bg-card/40 backdrop-blur-xl border border-border rounded-xl shadow-2xl transition-all duration-300 z-40 translate-x-[calc(100%+2rem)] rtl:-translate-x-[calc(100%+2rem)] xl:translate-x-0 rtl:xl:translate-x-0 hidden xl:block overflow-y-auto custom-scrollbar force-rtl">
     
-    <div style="direction: ltr;">
+    <div class="force-ltr">
         <!-- Sidebar backdrop for mobile -->
         <div class="sidebar-backdrop xl:hidden"></div>
         @if (feedData != null)
@@ -70,8 +69,8 @@
                                 </div>
                                 <button
                                     class="inline-flex items-center justify-center h-8 w-8 rounded-md hover:bg-primary hover:text-primary-foreground transition-colors shrink-0"
-                                    onclick="sendFriendRequest('@friend.UserId')" title="@SharedLocalizer["AddFriend"]">
-                                    <i data-lucide="user-plus" class="w-[14px] h-[14px]"></i>
+                                    data-action="send-friend-request" data-user-id="@friend.UserId" title="@SharedLocalizer["AddFriend"]">
+                                    <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
                                 </button>
                             </div>
                         }
@@ -89,7 +88,7 @@
                         <i data-lucide="heart" class="w-4 h-4 text-primary"></i>
                         @SharedLocalizer["YourInterests"]
                     </h3>
-                    <div id="userInterests" class="space-y-2">
+                    <div id="userInterests" class="space-y-2" data-user-id="@currentUserId">
                         <!-- Will be populated by JavaScript -->
                         <div class="flex items-center justify-center py-4">
                             <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
@@ -169,61 +168,5 @@
 
 @if (currentUserId.HasValue)
 {
-    <script>
-        // Load user interests
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUserInterests('@currentUserId');
-        });
-
-        function loadUserInterests(userId) {
-            fetch(`/api/analytics/interests/${userId}?limit=5`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.data.length > 0) {
-                        updateUserInterestsDisplay(data.data);
-                    } else {
-                        showEmptyInterests();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading user interests:', error);
-                    showEmptyInterests();
-                });
-        }
-
-        function updateUserInterestsDisplay(interests) {
-            const container = document.getElementById('userInterests');
-            container.innerHTML = '';
-            
-            interests.forEach(interest => {
-                const interestEl = document.createElement('div');
-                interestEl.className = 'flex items-center justify-between p-2 rounded-md bg-accent/30 hover:bg-accent/50 transition-colors';
-                interestEl.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 rounded-full bg-primary"></div>
-                        <span class="text-xs font-medium text-foreground">${interest.displayName}</span>
-                    </div>
-                    <div class="text-xs text-muted-foreground">${Math.round(interest.score)}</div>
-                `;
-                container.appendChild(interestEl);
-            });
-            
-            // Add view all link
-            const viewAllEl = document.createElement('a');
-            viewAllEl.href = '/profile/interests';
-            viewAllEl.className = 'block text-sm text-primary hover:text-primary/80 transition-colors mt-3 font-medium';
-            viewAllEl.textContent = '@SharedLocalizer["ViewAllInterests"]';
-            container.appendChild(viewAllEl);
-        }
-
-        function showEmptyInterests() {
-            const container = document.getElementById('userInterests');
-            container.innerHTML = `
-                <div class="flex flex-col items-center justify-center py-4 text-center">
-                    <i data-lucide="heart" class="w-6 h-6 text-muted-foreground mb-2"></i>
-                    <p class="text-xs text-muted-foreground">@SharedLocalizer["LearningInterests"]</p>
-                </div>
-            `;
-        }
-    </script>
+    <script src="~/js/sidebar-right.js" asp-append-version="true"></script>
 }

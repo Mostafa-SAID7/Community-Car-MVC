@@ -100,3 +100,5 @@ public enum ParkingAvailabilityStatus
     Full = 2,
     Unknown = 3
 }
+
+

@@ -47,3 +47,4 @@ public class QARepository : BaseRepository<Question>, IQARepository
         return Task.CompletedTask;
     }
 }
+

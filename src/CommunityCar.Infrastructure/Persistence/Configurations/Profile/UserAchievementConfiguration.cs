@@ -16,3 +16,4 @@ public class UserAchievementConfiguration : IEntityTypeConfiguration<UserAchieve
         builder.Property(a => a.DescriptionAr).HasMaxLength(500);
     }
 }
+

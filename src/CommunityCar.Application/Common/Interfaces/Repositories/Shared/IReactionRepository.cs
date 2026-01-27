@@ -12,3 +12,5 @@ public interface IReactionRepository : IBaseRepository<Reaction>
     Task<IEnumerable<Reaction>> GetUserReactionsAsync(Guid userId, EntityType? entityType = null);
     Task RemoveUserReactionAsync(Guid entityId, EntityType entityType, Guid userId);
 }
+
+

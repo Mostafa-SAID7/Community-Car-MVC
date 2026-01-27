@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Models.Notifications;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Users;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Communication;
 
@@ -30,3 +30,5 @@ public interface INotificationService
     Task UpdateUserPreferencesAsync(Guid userId, object preferences);
     Task SendTestNotificationAsync(Guid userId, string message);
 }
+
+

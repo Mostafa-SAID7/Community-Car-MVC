@@ -81,3 +81,5 @@ public class UpdateNotificationSettingsRequest
     public bool SmsNotifications { get; set; }
     public bool MarketingEmails { get; set; }
 }
+
+

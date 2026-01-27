@@ -254,7 +254,7 @@ class ChatClient {
         userElements.forEach(element => {
             const onlineIndicator = element.querySelector('.online-indicator');
             if (onlineIndicator) {
-                onlineIndicator.style.display = 'block';
+                onlineIndicator.classList.remove('hidden');
             }
 
             const statusText = element.querySelector('.chat-header-status');
@@ -271,7 +271,7 @@ class ChatClient {
         userElements.forEach(element => {
             const onlineIndicator = element.querySelector('.online-indicator');
             if (onlineIndicator) {
-                onlineIndicator.style.display = 'none';
+                onlineIndicator.classList.add('hidden');
             }
 
             const statusText = element.querySelector('.chat-header-status');
@@ -352,9 +352,9 @@ class ChatClient {
             <div class="flex flex-col gap-1">
                 <span class="text-xs font-medium text-muted-foreground">${window.chatLocalizer?.Typing || 'Typing...'}</span>
                 <div class="flex gap-1">
-                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
-                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
-                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce delay-0"></div>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:150ms]"></div>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:300ms]"></div>
                 </div>
             </div>
         `;
@@ -393,7 +393,7 @@ class ChatClient {
                 if (unreadBadge) {
                     const currentCount = parseInt(unreadBadge.textContent) || 0;
                     unreadBadge.textContent = currentCount + 1;
-                    unreadBadge.style.display = 'flex';
+                    unreadBadge.classList.remove('hidden');
                 } else {
                     const newBadge = document.createElement('span');
                     newBadge.className = 'unread-badge';
@@ -420,11 +420,11 @@ class ChatClient {
 
         statusElement.textContent = message;
         statusElement.className = `chat-connection-status fixed top-4 right-4 px-4 py-2 rounded-lg text-sm font-medium z-50 transition-all ${type === 'success' ? 'bg-green-500 text-white' : type === 'warning' ? 'bg-yellow-500 text-white' : 'bg-red-500 text-white'}`;
-        statusElement.style.display = 'block';
+        statusElement.classList.remove('hidden');
 
         if (type === 'success') {
             setTimeout(() => {
-                statusElement.style.display = 'none';
+                statusElement.classList.add('hidden');
             }, 3000);
         }
     }
@@ -605,10 +605,13 @@ function initializeChatUI() {
                 ?.classList.add('bg-primary/10', 'border-primary', 'active');
 
             // Show chat interface
-            chatEmptyState.style.display = 'none';
-            chatHeader.style.display = 'flex';
-            chatMessages.style.display = 'flex';
-            chatInputArea.style.display = 'block';
+            chatEmptyState.classList.add('hidden');
+            chatHeader.classList.remove('hidden');
+            chatHeader.classList.add('flex');
+            chatMessages.classList.remove('hidden');
+            chatMessages.classList.add('flex');
+            chatInputArea.classList.remove('hidden');
+            chatInputArea.classList.add('block');
 
             currentConversationId = conversationId;
 
@@ -651,7 +654,13 @@ function initializeChatUI() {
                 (window.chatLocalizer?.Offline || 'Offline');
         }
         if (chatOnlineIndicator) {
-            chatOnlineIndicator.style.display = isOnline ? 'block' : 'none';
+            if (isOnline) {
+                chatOnlineIndicator.classList.remove('hidden');
+                chatOnlineIndicator.classList.add('block');
+            } else {
+                chatOnlineIndicator.classList.add('hidden');
+                chatOnlineIndicator.classList.remove('block');
+            }
         }
     }
 
@@ -740,7 +749,13 @@ function initializeChatUI() {
             const title = conv.querySelector('.font-black.text-sm')?.textContent.toLowerCase() || '';
             const preview = conv.querySelector('.text-\\[11px\\]')?.textContent.toLowerCase() || '';
             const matches = title.includes(query) || preview.includes(query);
-            conv.style.display = matches ? 'flex' : 'none';
+            if (matches) {
+                conv.classList.remove('hidden');
+                conv.classList.add('flex');
+            } else {
+                conv.classList.add('hidden');
+                conv.classList.remove('flex');
+            }
         });
     }
 

@@ -19,3 +19,5 @@ public interface IFriendsService
     Task<FriendshipStatusDTO> GetFriendshipStatusAsync(Guid userId1, Guid userId2);
     Task<IEnumerable<FriendVM>> GetMutualFriendsAsync(Guid userId1, Guid userId2);
 }
+
+

@@ -34,3 +34,5 @@ public class FriendRequestNotificationRequest
     public string RequesterName { get; set; } = string.Empty;
     public Guid RequesterId { get; set; }
 }
+
+

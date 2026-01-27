@@ -5,12 +5,20 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Authentication;
 
 public interface IOAuthService
 {
-    Task<AuthResult> GoogleSignInAsync(GoogleSignInRequest request);
-    Task<AuthResult> FacebookSignInAsync(FacebookSignInRequest request);
-    Task<AuthResult> LinkGoogleAccountAsync(LinkExternalAccountRequest request);
-    Task<AuthResult> LinkFacebookAccountAsync(LinkExternalAccountRequest request);
-    Task<AuthResult> UnlinkExternalAccountAsync(UnlinkExternalAccountRequest request);
+    Task<Result> GoogleSignInAsync(GoogleSignInRequest request);
+    Task<Result> FacebookSignInAsync(FacebookSignInRequest request);
+    Task<Result> LinkGoogleAccountAsync(LinkExternalAccountRequest request);
+    Task<Result> LinkFacebookAccountAsync(LinkExternalAccountRequest request);
+    Task<Result> UnlinkExternalAccountAsync(UnlinkExternalAccountRequest request);
     Task<IEnumerable<ExternalLoginInfo>> GetExternalLoginsAsync(string userId);
+    
+    // Account Management additions
+    Task<bool> IsAccountLinkedAsync(string userId, string provider);
+    Task<string?> GetLinkedAccountIdAsync(string userId, string provider);
+    Task<bool> CanLinkAccountAsync(string userId, string provider);
+    Task<bool> CanUnlinkAccountAsync(string userId, string provider);
+    Task<bool> HasPasswordSetAsync(string userId);
+    Task<IEnumerable<string>> GetAvailableProvidersAsync();
 }
 
 public class ExternalLoginInfo
@@ -51,3 +59,5 @@ public class FacebookPictureData
 {
     public string Url { get; set; } = string.Empty;
 }
+
+

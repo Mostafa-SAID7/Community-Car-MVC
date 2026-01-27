@@ -113,28 +113,28 @@
                 
                 <div class="p-6">
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer" onclick="filterByCategory('automotive')">
+                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer" data-action="filter-category" data-category="automotive">
                             <div class="flex items-center gap-3">
                                 <i data-lucide="car" class="w-4 h-4 text-primary"></i>
                                 <span class="text-sm font-bold text-foreground">Automotive</span>
                             </div>
                             <span class="text-xs text-muted-foreground" id="automotiveCount">-</span>
                         </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer" onclick="filterByCategory('performance')">
+                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer" data-action="filter-category" data-category="performance">
                             <div class="flex items-center gap-3">
                                 <i data-lucide="zap" class="w-4 h-4 text-orange-500"></i>
                                 <span class="text-sm font-bold text-foreground">Performance</span>
                             </div>
                             <span class="text-xs text-muted-foreground" id="performanceCount">-</span>
                         </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer" onclick="filterByCategory('restoration')">
+                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer" data-action="filter-category" data-category="restoration">
                             <div class="flex items-center gap-3">
                                 <i data-lucide="wrench" class="w-4 h-4 text-green-500"></i>
                                 <span class="text-sm font-bold text-foreground">Restoration</span>
                             </div>
                             <span class="text-xs text-muted-foreground" id="restorationCount">-</span>
                         </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer" onclick="filterByCategory('community')">
+                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer" data-action="filter-category" data-category="community">
                             <div class="flex items-center gap-3">
                                 <i data-lucide="users" class="w-4 h-4 text-blue-500"></i>
                                 <span class="text-sm font-bold text-foreground">Community</span>
@@ -148,193 +148,7 @@
     </div>
 </div>
 
+
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize skeleton loading
-            Skeleton.initPageLoad('interests-skeleton', 'interests-list-container');
-            
-            // Re-initialize Lucide icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-            
-            // Load interests
-            loadUserInterests();
-        });
-
-        let userInterests = [];
-        let suggestedInterests = [];
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUserInterests();
-            loadSuggestedInterests();
-        });
-
-        function loadUserInterests() {
-            @if (currentUserId.HasValue)
-            {
-                <text>
-                fetch(`/api/analytics/interests/@currentUserId?detailed=true`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            userInterests = data.data;
-                            displayUserInterests(data.data);
-                            updateAnalytics(data.data);
-                        } else {
-                            showEmptyInterests();
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error loading interests:', error);
-                        showEmptyInterests();
-                    });
-                </text>
-            }
-        }
-
-        function loadSuggestedInterests() {
-            @if (currentUserId.HasValue)
-            {
-                <text>
-                fetch(`/api/analytics/interests/@currentUserId/suggestions`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            suggestedInterests = data.data;
-                            displaySuggestedInterests(data.data);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error loading suggested interests:', error);
-                    });
-                </text>
-            }
-        }
-
-        function displayUserInterests(interests) {
-            const container = document.getElementById('userInterestsList');
-            container.innerHTML = '';
-            
-            if (interests.length === 0) {
-                showEmptyInterests();
-                return;
-            }
-            
-            interests.forEach((interest, index) => {
-                const interestEl = document.createElement('div');
-                interestEl.className = 'flex items-center justify-between p-4 bg-muted/20 rounded-xl hover:bg-muted/30 transition-all group';
-                interestEl.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-lg">
-                            ${index + 1}
-                        </div>
-                        <div>
-                            <div class="text-sm font-black text-foreground">${interest.displayName}</div>
-                            <div class="text-xs text-muted-foreground">${interest.category || 'General'} • Score: ${Math.round(interest.score)}</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-16 bg-muted rounded-full h-2 overflow-hidden">
-                            <div class="h-full bg-primary transition-all duration-500" style="width: ${Math.min(interest.score, 100)}%"></div>
-                        </div>
-                        <button class="opacity-0 group-hover:opacity-100 p-2 text-muted-foreground hover:text-destructive transition-all" onclick="removeInterest('${interest.id}')">
-                            <i data-lucide="x" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(interestEl);
-            });
-        }
-
-        function displaySuggestedInterests(suggestions) {
-            const container = document.getElementById('suggestedInterests');
-            container.innerHTML = '';
-            
-            if (suggestions.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-8">
-                        <i data-lucide="check-circle" class="w-8 h-8 text-green-500 mx-auto mb-2"></i>
-                        <p class="text-xs text-muted-foreground">No new suggestions</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            suggestions.slice(0, 5).forEach(suggestion => {
-                const suggestionEl = document.createElement('div');
-                suggestionEl.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors';
-                suggestionEl.innerHTML = `
-                    <div>
-                        <div class="text-sm font-bold text-foreground">${suggestion.name}</div>
-                        <div class="text-xs text-muted-foreground">${suggestion.reason}</div>
-                    </div>
-                    <button class="p-1 text-primary hover:bg-primary/10 rounded transition-all" onclick="addInterest('${suggestion.id}', '${suggestion.name}')">
-                        <i data-lucide="plus" class="w-4 h-4"></i>
-                    </button>
-                `;
-                container.appendChild(suggestionEl);
-            });
-        }
-
-        function updateAnalytics(interests) {
-            document.getElementById('totalInterests').textContent = interests.length;
-            
-            // Calculate top category
-            const categories = {};
-            interests.forEach(interest => {
-                const category = interest.category || 'General';
-                categories[category] = (categories[category] || 0) + 1;
-            });
-            
-            const topCategory = Object.keys(categories).reduce((a, b) => categories[a] > categories[b] ? a : b, 'None');
-            document.getElementById('topCategory').textContent = topCategory;
-            
-            // Calculate engagement score
-            const avgScore = interests.length > 0 ? Math.round(interests.reduce((sum, i) => sum + i.score, 0) / interests.length) : 0;
-            document.getElementById('engagementScore').textContent = avgScore + '%';
-            
-            document.getElementById('lastUpdated').textContent = 'Today';
-            
-            // Update category counts
-            document.getElementById('automotiveCount').textContent = categories['Automotive'] || 0;
-            document.getElementById('performanceCount').textContent = categories['Performance'] || 0;
-            document.getElementById('restorationCount').textContent = categories['Restoration'] || 0;
-            document.getElementById('communityCount').textContent = categories['Community'] || 0;
-        }
-
-        function showEmptyInterests() {
-            const container = document.getElementById('userInterestsList');
-            container.innerHTML = `
-                <div class="text-center py-12">
-                    <i data-lucide="heart" class="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-30"></i>
-                    <h3 class="text-lg font-black text-foreground mb-2">No interests yet</h3>
-                    <p class="text-sm text-muted-foreground mb-6">Start engaging with content to build your interest profile</p>
-                    <a href="/feed" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl text-sm font-bold hover:bg-primary/90 transition-all">
-                        <i data-lucide="explore" class="w-4 h-4"></i>
-                        Explore Content
-                    </a>
-                </div>
-            `;
-        }
-
-        function addInterest(interestId, interestName) {
-            // Mock implementation
-            console.log('Adding interest:', interestName);
-            // In real app, make API call to add interest
-        }
-
-        function removeInterest(interestId) {
-            // Mock implementation
-            console.log('Removing interest:', interestId);
-            // In real app, make API call to remove interest
-        }
-
-        function filterByCategory(category) {
-            // Mock implementation
-            console.log('Filtering by category:', category);
-            // In real app, filter and display interests by category
-        }
-    </script>
+    <script src="~/js/profile-interests.js" asp-append-version="true"></script>
 }

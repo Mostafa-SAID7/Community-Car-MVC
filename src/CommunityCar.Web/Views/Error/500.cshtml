@@ -12,7 +12,7 @@
             
             <div class="relative w-40 h-40 rounded-[3rem] bg-card border border-destructive/20 flex items-center justify-center text-destructive shadow-2xl rotate-3 group-hover:rotate-0 transition-transform duration-700">
                 <i data-lucide="flame" class="w-20 h-20 animate-bounce"></i>
-                <i data-lucide="alert-triangle" class="w-10 h-10 absolute -top-4 -right-4 text-destructive drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]"></i>
+                <i data-lucide="alert-triangle" class="w-10 h-10 absolute -top-4 -right-4 text-destructive shadow-glow-destructive"></i>
             </div>
         </div>
         
@@ -51,7 +51,7 @@
         
         <div class="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
             <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">System Handled Archive 500-XJ</span>
-            <button onclick="location.reload()" class="w-full md:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10">Attempt Emergency Restart</button>
+            <button data-action="reload-page" class="w-full md:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10">Attempt Emergency Restart</button>
         </div>
     </div>
 
@@ -65,3 +65,7 @@
         </a>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/error-handler.js" asp-append-version="true"></script>
+}

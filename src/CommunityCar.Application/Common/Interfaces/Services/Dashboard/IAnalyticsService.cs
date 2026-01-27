@@ -20,3 +20,5 @@ public interface IAnalyticsService
     Task<List<ChartDataVM>> GetContentCreationChartAsync(int days);
     Task<bool> UpdateAnalyticsAsync(AnalyticsRequest request);
 }
+
+

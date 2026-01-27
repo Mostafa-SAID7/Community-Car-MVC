@@ -57,6 +57,16 @@
                 <i data-lucide="gauge" class="w-[18px] h-[18px] shrink-0 text-blue-500"></i>
                 <span class="hidden xl:inline text-blue-500">@SharedLocalizer["Performance"]</span>
             </a>
+            <a asp-controller="Cache" asp-action="Index"
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                <i data-lucide="database" class="w-[18px] h-[18px] shrink-0 text-cyan-500"></i>
+                <span class="hidden xl:inline text-cyan-500">Cache Management</span>
+            </a>
+            <a asp-controller="BackgroundJobs" asp-action="Index"
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                <i data-lucide="clock" class="w-[18px] h-[18px] shrink-0 text-orange-500"></i>
+                <span class="hidden xl:inline text-orange-500">Background Jobs</span>
+            </a>
             <a asp-controller="SEO" asp-action="Index"
                 class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="search-check" class="w-[18px] h-[18px] shrink-0 text-emerald-500"></i>

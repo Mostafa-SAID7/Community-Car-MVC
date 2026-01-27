@@ -23,3 +23,5 @@ public class FeedStatsVM
     public int TotalShares { get; set; }
     public int TotalViews { get; set; }
 }
+
+

@@ -16,3 +16,5 @@ public interface ICommentRepository : IBaseRepository<Comment>
     Task<IEnumerable<Comment>> GetCommentRepliesAsync(Guid commentId);
     Task<int> GetEntityCommentCountAsync(Guid entityId, EntityType entityType);
 }
+
+

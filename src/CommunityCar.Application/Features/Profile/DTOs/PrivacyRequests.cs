@@ -10,3 +10,5 @@ public class UpdatePrivacySettingsRequest
     public bool AllowMessages { get; set; } = true;
     public bool AllowFriendRequests { get; set; } = true;
 }
+
+

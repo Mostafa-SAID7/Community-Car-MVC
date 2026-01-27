@@ -344,9 +344,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 conversationItems.forEach(item => {
                     const title = item.getAttribute('data-conversation-title');
                     if (title.includes(searchTerm)) {
-                        item.style.display = '';
+                        item.classList.remove('hidden');
                     } else {
-                        item.style.display = 'none';
+                        item.classList.add('hidden');
                     }
                 });
             });
@@ -446,8 +446,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="flex-1 bg-card border border-border rounded-lg p-3 shadow-sm">
                 <div class="flex space-x-1">
                     <div class="w-2 h-2 bg-foreground/50 rounded-full animate-bounce"></div>
-                    <div class="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                    <div class="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+                    <div class="w-2 h-2 bg-foreground/50 rounded-full animate-bounce [animation-delay:200ms]"></div>
+                    <div class="w-2 h-2 bg-foreground/50 rounded-full animate-bounce [animation-delay:400ms]"></div>
                 </div>
             </div>
         `;

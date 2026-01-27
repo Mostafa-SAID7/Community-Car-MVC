@@ -16,3 +16,4 @@ public class UserBadgeConfiguration : IEntityTypeConfiguration<UserBadge>
         builder.Property(b => b.DescriptionAr).HasMaxLength(500);
     }
 }
+

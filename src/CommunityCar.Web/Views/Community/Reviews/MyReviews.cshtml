@@ -22,7 +22,7 @@
                 </div>
                 
                 <div class="flex items-center gap-4">
-                    <a href="/reviews/create" class="btn-primary">
+                    <a href="/reviews/create" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                         @Localizer["WriteNewReview"]
                     </a>
@@ -99,14 +99,14 @@
                                     <span>@review.TimeAgo</span>
                                     @if (review.IsVerifiedPurchase)
                                     {
-                                        <span class="badge badge-success">
+                                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                                             <i data-lucide="shield-check" class="w-3 h-3"></i>
                                             @Localizer["Verified"]
                                         </span>
                                     }
                                     @if (review.IsRecommended)
                                     {
-                                        <span class="badge badge-primary">
+                                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
                                             <i data-lucide="thumbs-up" class="w-3 h-3"></i>
                                             @Localizer["Recommended"]
                                         </span>
@@ -115,14 +115,14 @@
                             </div>
                             
                             <div class="flex items-center gap-2">
-                                <a href="/reviews/@review.Id/edit" class="btn-secondary btn-sm">
+                                <a href="/reviews/@review.Id/edit" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95">
                                     <i data-lucide="edit" class="w-4 h-4"></i>
                                     @Localizer["Edit"]
                                 </a>
                                 <form method="post" action="/reviews/@review.Id/delete" class="inline" 
                                       onsubmit="return confirm('@Localizer["ConfirmDeleteReview"]')">
                                     @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn-secondary btn-sm text-red-600">
+                                    <button type="submit" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-muted/20 border border-border/50 hover:bg-red-500/10 text-red-600 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95">
                                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                                         @Localizer["Delete"]
                                     </button>

@@ -85,3 +85,5 @@ public class ReviewEditVM
                  .Where(con => !string.IsNullOrWhiteSpace(con))
                  .ToList();
 }
+
+

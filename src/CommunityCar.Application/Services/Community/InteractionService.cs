@@ -5,6 +5,7 @@ using CommunityCar.Application.Features.Interactions.ViewModels;
 using CommunityCar.Application.Features.Interactions.DTOs;
 using CommunityCar.Domain.Entities.Shared;
 using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Users;
 using System.Text.RegularExpressions;
 using System.Net;
 
@@ -751,3 +752,5 @@ public partial class InteractionService : IInteractionService
 
     #endregion
 }
+
+

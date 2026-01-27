@@ -108,3 +108,5 @@ public class InteractionSummaryVM
     public bool CanShare { get; set; }
     public bool CanReact { get; set; }
 }
+
+

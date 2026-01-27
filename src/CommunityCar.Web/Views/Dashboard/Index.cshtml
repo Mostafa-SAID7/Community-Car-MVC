@@ -15,66 +15,53 @@
 
     <!-- Stats Cards Row -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="dashboard-content">
-        <div
-            class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg flex items-center gap-4 transition-all hover:shadow-xl hover:border-primary/20 group">
-            <div
-                class="w-12 h-12 rounded-2xl bg-blue-500 shadow-lg shadow-blue-500/20 flex items-center justify-center text-white group-hover:rotate-6 transition-transform">
+        <div class="eng-stat-group">
+            <div class="eng-stat-icon-wrap bg-blue-500 shadow-blue-500/20">
                 <i class="fas fa-users text-lg"></i>
             </div>
             <div class="flex-1">
-                <div class="text-2xl font-black text-foreground tabular-nums">@Model.Stats.TotalUsers.ToString("N0")
-                </div>
-                <div class="text-[10px] font-black text-muted-foreground uppercase tracking-widest">@Localizer["TotalUsers"]</div>
-                <div class="text-[9px] font-black uppercase mt-1 text-green-500">
-                    <i class="fas fa-arrow-up mr-1 text-[8px]"></i> +@Model.Stats.GrowthRate% <span
-                        class="opacity-60 font-bold">@Localizer["ThisMonth"]</span>
+                <div class="eng-stat-value">@Model.Stats.TotalUsers.ToString("N0")</div>
+                <div class="eng-stat-label">@Localizer["TotalUsers"]</div>
+                <div class="eng-stat-delta text-green-500">
+                    <i class="fas fa-arrow-up mr-1 text-[8px]"></i> +@Model.Stats.GrowthRate% <span class="opacity-60 font-bold">@Localizer["ThisMonth"]</span>
                 </div>
             </div>
         </div>
 
-        <div
-            class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg flex items-center gap-4 transition-all hover:shadow-xl hover:border-primary/20 group">
-            <div
-                class="w-12 h-12 rounded-2xl bg-green-500 shadow-lg shadow-green-500/20 flex items-center justify-center text-white group-hover:rotate-6 transition-transform">
+        <div class="eng-stat-group">
+            <div class="eng-stat-icon-wrap bg-green-500 shadow-green-500/20">
                 <i class="fas fa-edit text-lg"></i>
             </div>
             <div class="flex-1">
-                <div class="text-2xl font-black text-foreground tabular-nums">@Model.Stats.TotalPosts.ToString("N0")
-                </div>
-                <div class="text-[10px] font-black text-muted-foreground uppercase tracking-widest">@Localizer["TotalPosts"]</div>
-                <div class="text-[9px] font-black uppercase mt-1 text-muted-foreground opacity-60">
+                <div class="eng-stat-value">@Model.Stats.TotalPosts.ToString("N0")</div>
+                <div class="eng-stat-label">@Localizer["TotalPosts"]</div>
+                <div class="eng-stat-delta text-muted-foreground opacity-60">
                     @Localizer["ActiveToday"]: <span class="text-foreground">@Model.Stats.ActiveUsersToday</span>
                 </div>
             </div>
         </div>
 
-        <div
-            class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg flex items-center gap-4 transition-all hover:shadow-xl hover:border-primary/20 group">
-            <div
-                class="w-12 h-12 rounded-2xl bg-indigo-500 shadow-lg shadow-indigo-500/20 flex items-center justify-center text-white group-hover:rotate-6 transition-transform">
+        <div class="eng-stat-group">
+            <div class="eng-stat-icon-wrap bg-indigo-500 shadow-indigo-500/20">
                 <i class="fas fa-comments text-lg"></i>
             </div>
             <div class="flex-1">
-                <div class="text-2xl font-black text-foreground tabular-nums">@Model.Stats.TotalComments.ToString("N0")
-                </div>
-                <div class="text-[10px] font-black text-muted-foreground uppercase tracking-widest">@Localizer["TotalComments"]</div>
-                <div class="text-[9px] font-black uppercase mt-1 text-indigo-500">
+                <div class="eng-stat-value">@Model.Stats.TotalComments.ToString("N0")</div>
+                <div class="eng-stat-label">@Localizer["TotalComments"]</div>
+                <div class="eng-stat-delta text-indigo-500">
                     @Localizer["Engagement"]: <span class="font-bold">@Model.Stats.EngagementRate%</span>
                 </div>
             </div>
         </div>
 
-        <div
-            class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg flex items-center gap-4 transition-all hover:shadow-xl hover:border-primary/20 group">
-            <div
-                class="w-12 h-12 rounded-2xl bg-amber-500 shadow-lg shadow-amber-500/20 flex items-center justify-center text-white group-hover:rotate-6 transition-transform">
+        <div class="eng-stat-group">
+            <div class="eng-stat-icon-wrap bg-amber-500 shadow-amber-500/20">
                 <i class="fas fa-question-circle text-lg"></i>
             </div>
             <div class="flex-1">
-                <div class="text-2xl font-black text-foreground tabular-nums">@(Model.Stats.TotalQuestions +
-                                        Model.Stats.TotalAnswers)</div>
-                <div class="text-[10px] font-black text-muted-foreground uppercase tracking-widest">@Localizer["QAItems"]</div>
-                <div class="text-[9px] font-black uppercase mt-1 text-amber-600 dark:text-amber-400 opacity-80">
+                <div class="eng-stat-value">@(Model.Stats.TotalQuestions + Model.Stats.TotalAnswers)</div>
+                <div class="eng-stat-label">@Localizer["QAItems"]</div>
+                <div class="eng-stat-delta text-amber-600 dark:text-amber-400 opacity-80">
                     @Model.Stats.TotalQuestions Q / @Model.Stats.TotalAnswers A
                 </div>
             </div>
@@ -83,10 +70,9 @@
 
     <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div
-            class="lg:col-span-2 bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-md overflow-hidden group/chart transition-all hover:border-primary/10 hover:shadow-lg">
-            <div class="p-4 border-b border-border/50 bg-muted/20 flex justify-between items-center px-6">
-                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">User Growth</h5>
+        <div class="lg:col-span-2 eng-card overflow-hidden group/chart">
+            <div class="eng-card-header">
+                <h5 class="eng-card-title">User Growth</h5>
                 <div class="inline-flex p-1 bg-background/50 rounded-lg border border-border/40 shadow-inner">
                     <button type="button"
                         class="px-3 py-1 text-[10px] font-black rounded-md transition-all active bg-primary text-primary-foreground shadow-sm"
@@ -104,10 +90,9 @@
             </div>
         </div>
 
-        <div
-            class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-md overflow-hidden transition-all hover:border-primary/10 group/health">
-            <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
-                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">System Health</h5>
+        <div class="eng-card overflow-hidden group/health">
+            <div class="eng-card-header">
+                <h5 class="eng-card-title">System Health</h5>
             </div>
             <div class="p-6 space-y-6">
                 <div class="flex items-center justify-between">
@@ -127,9 +112,9 @@
                             <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">CPU Usage</span>
                             <span class="text-sm font-black tabular-nums">@Model.SystemHealth.CpuUsage%</span>
                         </div>
-                        <div class="h-2 bg-muted rounded-full overflow-hidden shadow-inner ring-1 ring-border/30">
-                            <div class="h-full rounded-full transition-all duration-1000 @(Model.SystemHealth.CpuUsage > 70 ? "bg-red-500" : Model.SystemHealth.CpuUsage > 50 ? "bg-amber-500" : "bg-green-500") shadow-lg shadow-current/20"
-                                style="width: @Model.SystemHealth.CpuUsage%"></div>
+                        <div class="eng-progress-container">
+                            <div class="eng-progress-bar @(Model.SystemHealth.CpuUsage > 70 ? "bg-red-500" : Model.SystemHealth.CpuUsage > 50 ? "bg-amber-500" : "bg-green-500") w-[@Model.SystemHealth.CpuUsage%]"
+                                ></div>
                         </div>
                     </div>
 
@@ -138,9 +123,9 @@
                             <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Memory Usage</span>
                             <span class="text-sm font-black tabular-nums">@Model.SystemHealth.MemoryUsage%</span>
                         </div>
-                        <div class="h-2 bg-muted rounded-full overflow-hidden shadow-inner ring-1 ring-border/30">
-                            <div class="h-full rounded-full transition-all duration-1000 @(Model.SystemHealth.MemoryUsage > 80 ? "bg-red-500" : Model.SystemHealth.MemoryUsage > 60 ? "bg-amber-500" : "bg-green-500") shadow-lg shadow-current/20"
-                                style="width: @Model.SystemHealth.MemoryUsage%"></div>
+                        <div class="eng-progress-container">
+                            <div class="eng-progress-bar @(Model.SystemHealth.MemoryUsage > 80 ? "bg-red-500" : Model.SystemHealth.MemoryUsage > 60 ? "bg-amber-500" : "bg-green-500") w-[@Model.SystemHealth.MemoryUsage%]"
+                                ></div>
                         </div>
                     </div>
 
@@ -149,9 +134,9 @@
                             <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Disk Usage</span>
                             <span class="text-sm font-black tabular-nums">@Model.SystemHealth.DiskUsage%</span>
                         </div>
-                        <div class="h-2 bg-muted rounded-full overflow-hidden shadow-inner ring-1 ring-border/30">
-                            <div class="h-full rounded-full transition-all duration-1000 @(Model.SystemHealth.DiskUsage > 85 ? "bg-red-500" : Model.SystemHealth.DiskUsage > 70 ? "bg-amber-500" : "bg-green-500") shadow-lg shadow-current/20"
-                                style="width: @Model.SystemHealth.DiskUsage%"></div>
+                        <div class="eng-progress-container">
+                            <div class="eng-progress-bar @(Model.SystemHealth.DiskUsage > 85 ? "bg-red-500" : Model.SystemHealth.DiskUsage > 70 ? "bg-amber-500" : "bg-green-500") w-[@Model.SystemHealth.DiskUsage%]"
+                                ></div>
                         </div>
                     </div>
                 </div>
@@ -295,9 +280,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Use custom styling for Chart.js to match Tailwind theme
-        const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border') || '#e2e8f0';
-        const textColor = getComputedStyle(document.documentElement).getPropertyValue('--foreground') || '#64748b';
-        const primaryColor = '#3b82f6';
+        const rootStyles = getComputedStyle(document.documentElement);
+        const gridColor = `hsla(${rootStyles.getPropertyValue('--chart-grid').trim()}, 0.5)`;
+        const textColor = `hsl(${rootStyles.getPropertyValue('--muted-foreground').trim()})`;
+        const primaryColor = `hsl(${rootStyles.getPropertyValue('--chart-primary').trim()})`;
 
         const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
         const userGrowthChart = new Chart(userGrowthCtx, {
@@ -308,9 +294,9 @@
                     label: 'New Users',
                     data: @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Value))),
                     borderColor: primaryColor,
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    backgroundColor: `hsla(${rootStyles.getPropertyValue('--chart-primary').trim()}, 0.1)`,
                     borderWidth: 3,
-                    pointBackgroundColor: '#fff',
+                    pointBackgroundColor: rootStyles.getPropertyValue('--background'),
                     pointBorderColor: primaryColor,
                     pointBorderWidth: 2,
                     pointRadius: 4,
@@ -325,10 +311,10 @@
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                        titleColor: '#0f172a',
-                        bodyColor: '#334155',
-                        borderColor: '#e2e8f0',
+                        backgroundColor: rootStyles.getPropertyValue('--card'),
+                        titleColor: rootStyles.getPropertyValue('--foreground'),
+                        bodyColor: rootStyles.getPropertyValue('--muted-foreground'),
+                        borderColor: rootStyles.getPropertyValue('--border'),
                         borderWidth: 1,
                         padding: 12,
                         cornerRadius: 8,
@@ -338,7 +324,7 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(226, 232, 240, 0.5)', drawBorder: false },
+                        grid: { color: gridColor, drawBorder: false },
                         ticks: { font: { weight: 'bold', size: 10 }, color: textColor, padding: 8 }
                     },
                     x: {

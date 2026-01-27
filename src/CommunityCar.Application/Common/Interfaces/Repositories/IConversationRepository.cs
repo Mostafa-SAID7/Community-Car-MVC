@@ -11,3 +11,5 @@ public interface IConversationRepository : IBaseRepository<Conversation>
     Task AddParticipantAsync(Guid conversationId, Guid userId);
     Task RemoveParticipantAsync(Guid conversationId, Guid userId);
 }
+
+

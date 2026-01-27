@@ -22,3 +22,5 @@ public class CreateGuideDTO
     public List<string> Prerequisites { get; set; } = new();
     public List<string> RequiredTools { get; set; } = new();
 }
+
+

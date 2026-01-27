@@ -12,3 +12,5 @@ public interface ITagRepository : IBaseRepository<Tag>
     Task<bool> NameExistsAsync(string name, Guid? excludeId = null);
     Task<bool> SlugExistsAsync(string slug, Guid? excludeId = null);
 }
+
+

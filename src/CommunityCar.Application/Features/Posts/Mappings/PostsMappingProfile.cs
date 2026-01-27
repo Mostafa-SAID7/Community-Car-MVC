@@ -43,3 +43,5 @@ public class PostsMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.DeletedBy, opt => opt.Ignore());
     }
 }
+
+

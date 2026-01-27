@@ -110,3 +110,6 @@ public class ChatsController : Controller
         return Guid.Parse(userIdClaim ?? throw new UnauthorizedAccessException());
     }
 }
+
+
+

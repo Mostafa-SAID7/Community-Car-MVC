@@ -17,3 +17,5 @@ public interface IFriendsRepository
     Task<bool> AreFriendsAsync(Guid userId1, Guid userId2);
     Task<int> GetFriendsCountAsync(Guid userId);
 }
+
+

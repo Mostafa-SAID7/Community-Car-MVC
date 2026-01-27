@@ -30,3 +30,5 @@ public interface ICheckInRepository : IBaseRepository<CheckIn>
         int count = 10, 
         CancellationToken cancellationToken = default);
 }
+
+

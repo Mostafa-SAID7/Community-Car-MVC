@@ -1,0 +1,395 @@
+@model RecurringJobsViewModel
+@{
+    ViewData["Title"] = "Recurring Jobs - Scheduler Engine";
+    ViewData["PageHeader"] = "Recurring Jobs";
+    ViewData["PageDescription"] = "Manage scheduled recurring background job infrastructure";
+}
+
+<div class="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-700">
+    <!-- Breadcrumb Protocol -->
+    <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
+        <a href="@Url.Action("Index")" class="hover:text-primary transition-colors flex items-center gap-2">
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Background Jobs
+        </a>
+        <span class="opacity-20">/</span>
+        <span class="text-foreground/40">Recurring Scheduler Engine</span>
+    </nav>
+
+    <!-- Recurring Jobs Registry -->
+    <div class="eng-card overflow-hidden">
+        <div class="flex flex-col lg:flex-row border-b border-border/30">
+            <div class="flex-1 p-8 md:p-12 space-y-6">
+                <div class="space-y-4">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-2xl text-[9px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-600 border border-blue-500/20 flex items-center gap-1.5 shadow-sm">
+                            <i data-lucide="repeat" class="w-3.5 h-3.5"></i> Scheduler Active
+                        </span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-black text-foreground tracking-tighter leading-[1.1]">Recurring Job Registry</h1>
+                </div>
+
+                <div class="flex items-center gap-6 pt-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-muted border border-border/50 flex items-center justify-center overflow-hidden shadow-inner">
+                            <i data-lucide="calendar-clock" class="w-6 h-6 text-muted-foreground opacity-40"></i>
+                        </div>
+                        <div class="space-y-0.5">
+                            <span class="block text-sm font-black text-foreground">Automated Scheduler</span>
+                            <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Cron-Based Execution Engine</span>
+                        </div>
+                    </div>
+                    <div class="h-8 w-px bg-border/40"></div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">System Status:</span>
+                        <span class="w-2 h-2 rounded-full bg-green-500 shadow-glow-success"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Panel -->
+            <div class="lg:w-72 bg-muted/20 border-l border-border/30 p-8 flex flex-col justify-center gap-8">
+                <div class="space-y-1">
+                    <span class="eng-stat-value text-[32px] leading-none tracking-tighter">@Model.Jobs.Count.ToString("D2")</span>
+                    <span class="eng-stat-label tracking-[0.2em] opacity-50">Scheduled Jobs</span>
+                </div>
+                <div class="space-y-1">
+                    <span class="eng-stat-value text-[32px] leading-none tracking-tighter">@Model.Jobs.Count(j => string.IsNullOrEmpty(j.Error)).ToString("D2")</span>
+                    <span class="eng-stat-label tracking-[0.2em] opacity-50">Healthy Jobs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Jobs Registry Stream -->
+    <div class="eng-card overflow-hidden">
+        <div class="border-b border-border/30 p-8 md:p-12">
+            <h3 class="text-xl font-black text-foreground tracking-tighter flex items-center gap-3">
+                <span class="flex items-center justify-center w-8 h-8 rounded-2xl bg-primary text-primary-foreground text-xs leading-none">@Model.Jobs.Count</span>
+                Scheduled Job Entries
+            </h3>
+        </div>
+
+        <div class="p-8 md:p-12">
+            @if (Model.Jobs.Any())
+            {
+                <div class="space-y-6">
+                    @foreach (var job in Model.Jobs)
+                    {
+                        <div class="relative group/job animate-in fade-in slide-in-from-bottom-4 transition-all hover:-translate-y-1">
+                            <div class="eng-card p-8 md:p-10 @(string.IsNullOrEmpty(job.Error) ? "" : "ring-2 ring-red-500/20 bg-red-500/[0.02]")">
+                                @if (!string.IsNullOrEmpty(job.Error))
+                                {
+                                    <div class="absolute -top-3 left-10 px-4 py-1 bg-red-500 text-white rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-red-500/20">
+                                        Error Detected
+                                    </div>
+                                }
+                                
+                                <div class="flex flex-col lg:flex-row gap-8">
+                                    <!-- Job Status Orbit -->
+                                    <div class="lg:w-20 flex flex-col items-center gap-4 pt-2">
+                                        <div class="w-16 h-16 rounded-2xl bg-@(string.IsNullOrEmpty(job.Error) ? "green-500" : "red-500")/10 border border-@(string.IsNullOrEmpty(job.Error) ? "green-500" : "red-500")/20 flex items-center justify-center text-@(string.IsNullOrEmpty(job.Error) ? "green-500" : "red-500")">
+                                            <i data-lucide="@(string.IsNullOrEmpty(job.Error) ? "check-circle" : "alert-triangle")" class="w-8 h-8"></i>
+                                        </div>
+                                        <span class="w-8 h-px bg-border/40"></span>
+                                        <button onclick="showJobDetails('@job.Id', '@job.Cron', '@job.NextExecution', '@job.LastExecution')" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted/30 border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90 group/btn">
+                                            <i data-lucide="info" class="w-5 h-5 group-hover/btn:scale-110 transition-transform"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="flex-1 space-y-8">
+                                        <!-- Job Identity -->
+                                        <div class="flex items-center justify-between">
+                                            <div class="space-y-2">
+                                                <h4 class="text-2xl font-black text-foreground tracking-tighter">@job.Id.Replace("-", " ").ToTitleCase()</h4>
+                                                <div class="flex items-center gap-4">
+                                                    <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Job ID:</span>
+                                                    <code class="px-2 py-1 bg-muted/40 rounded text-[10px] font-black text-foreground">@job.Id</code>
+                                                </div>
+                                            </div>
+                                            <span class="px-4 py-2 rounded-2xl text-[9px] font-black uppercase tracking-widest bg-@(string.IsNullOrEmpty(job.Error) ? "green-500" : "red-500")/10 text-@(string.IsNullOrEmpty(job.Error) ? "green-500" : "red-500") border border-@(string.IsNullOrEmpty(job.Error) ? "green-500" : "red-500")/20 shadow-sm flex items-center gap-2">
+                                                <i data-lucide="@(string.IsNullOrEmpty(job.Error) ? "check-circle" : "alert-triangle")" class="w-3.5 h-3.5"></i>
+                                                @(string.IsNullOrEmpty(job.Error) ? "Healthy" : "Error State")
+                                            </span>
+                                        </div>
+
+                                        <!-- Schedule Information -->
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                            <div class="space-y-2">
+                                                <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Cron Expression:</span>
+                                                <div class="bg-muted/20 border border-border/30 rounded-2xl p-3">
+                                                    <code class="text-sm font-black text-foreground">@job.Cron</code>
+                                                    <div class="text-[10px] font-black uppercase tracking-widest text-primary opacity-60 mt-1">@GetCronDescription(job.Cron)</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="space-y-2">
+                                                <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Next Execution:</span>
+                                                <div class="bg-muted/20 border border-border/30 rounded-2xl p-3">
+                                                    @if (job.NextExecution.HasValue)
+                                                    {
+                                                        <div class="text-sm font-black text-blue-500">@job.NextExecution.Value.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                                                        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60 mt-1">@GetTimeUntil(job.NextExecution.Value)</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="text-sm font-black text-muted-foreground">Not Scheduled</div>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                            <div class="space-y-2">
+                                                <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Last Execution:</span>
+                                                <div class="bg-muted/20 border border-border/30 rounded-2xl p-3">
+                                                    @if (job.LastExecution.HasValue)
+                                                    {
+                                                        <div class="text-sm font-black text-foreground">@job.LastExecution.Value.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                                                        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60 mt-1">@GetTimeAgo(job.LastExecution.Value)</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="text-sm font-black text-muted-foreground">Never Executed</div>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                            <div class="space-y-2">
+                                                <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Last State:</span>
+                                                <div class="bg-muted/20 border border-border/30 rounded-2xl p-3">
+                                                    @if (!string.IsNullOrEmpty(job.LastJobState))
+                                                    {
+                                                        <span class="px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-widest bg-@GetStateBadgeColor(job.LastJobState)/10 text-@GetStateBadgeColor(job.LastJobState) border border-@GetStateBadgeColor(job.LastJobState)/20">
+                                                            @job.LastJobState
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="text-sm font-black text-muted-foreground">No History</div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Interaction Bar -->
+                                        <div class="flex items-center gap-6 pt-6 border-t border-border/20">
+                                            <form asp-action="TriggerRecurringJob" asp-route-jobId="@job.Id" method="post" class="inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" onclick="return confirm('Execute job @job.Id immediately?')" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors group/tool">
+                                                    <i data-lucide="play" class="w-4 h-4 group-hover/tool:scale-110 transition-transform"></i>
+                                                    Trigger Execution
+                                                </button>
+                                            </form>
+                                            
+                                            @if (!string.IsNullOrEmpty(job.Error))
+                                            {
+                                                <button onclick="showJobError('@job.Id', '@job.Error')" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-red-500 transition-colors group/tool">
+                                                    <i data-lucide="alert-triangle" class="w-4 h-4 group-hover/tool:scale-110 transition-transform"></i>
+                                                    View Error Details
+                                                </button>
+                                            }
+                                            
+                                            <button onclick="showJobDetails('@job.Id', '@job.Cron', '@job.NextExecution', '@job.LastExecution')" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-colors group/tool ml-auto">
+                                                <i data-lucide="info" class="w-4 h-4 group-hover/tool:scale-110 transition-transform"></i>
+                                                Inspect Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="py-20 flex flex-col items-center justify-center text-center bg-muted/10 border-2 border-dashed border-border/40 rounded-[2.5rem] animate-pulse">
+                    <div class="w-16 h-16 bg-muted/40 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="calendar-x" class="w-8 h-8 text-muted-foreground opacity-20"></i>
+                    </div>
+                    <h4 class="text-xl font-black text-foreground tracking-tight underline decoration-primary/40 decoration-4 underline-offset-8 mb-3">No Recurring Jobs Configured</h4>
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-widest opacity-60">Scheduled jobs will populate once configured in the system.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Job Details Modal -->
+<div class="modal fade" id="jobDetailsModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-background border border-border/50 rounded-[2rem] shadow-2xl">
+            <div class="modal-header border-b border-border/30 p-8">
+                <h5 class="modal-title text-xl font-black text-foreground tracking-tighter flex items-center gap-3">
+                    <div class="w-8 h-8 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500">
+                        <i data-lucide="info" class="w-4 h-4"></i>
+                    </div>
+                    Job Configuration Details
+                </h5>
+                <button type="button" class="close text-muted-foreground hover:text-foreground transition-colors" data-dismiss="modal">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="modal-body p-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Job Identifier:</span>
+                        <div class="bg-muted/20 border border-border/30 rounded-2xl p-4">
+                            <span id="detail-job-id" class="font-mono text-sm text-foreground"></span>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Cron Expression:</span>
+                        <div class="bg-muted/20 border border-border/30 rounded-2xl p-4">
+                            <code id="detail-cron" class="text-sm text-foreground"></code>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Next Execution:</span>
+                        <div class="bg-muted/20 border border-border/30 rounded-2xl p-4">
+                            <span id="detail-next-execution" class="text-sm text-foreground"></span>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Last Execution:</span>
+                        <div class="bg-muted/20 border border-border/30 rounded-2xl p-4">
+                            <span id="detail-last-execution" class="text-sm text-foreground"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Schedule Description:</span>
+                    <div class="bg-primary/[0.03] border border-primary/10 rounded-2xl p-4">
+                        <span id="detail-schedule-description" class="text-sm font-black text-primary"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-t border-border/30 p-8">
+                <button type="button" class="px-6 py-3 bg-muted/40 text-foreground font-black text-xs uppercase tracking-[0.2em] rounded-2xl border border-border/50 hover:bg-muted/60 transition-all" data-dismiss="modal">
+                    Close Details
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Job Error Modal -->
+<div class="modal fade" id="jobErrorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-background border border-border/50 rounded-[2rem] shadow-2xl">
+            <div class="modal-header border-b border-border/30 p-8">
+                <h5 class="modal-title text-xl font-black text-foreground tracking-tighter flex items-center gap-3">
+                    <div class="w-8 h-8 bg-red-500/10 rounded-2xl flex items-center justify-center text-red-500">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    </div>
+                    Job Error Analysis
+                </h5>
+                <button type="button" class="close text-muted-foreground hover:text-foreground transition-colors" data-dismiss="modal">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="modal-body p-8 space-y-6">
+                <div class="space-y-2">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Job Identifier:</span>
+                    <div class="bg-muted/20 border border-border/30 rounded-2xl p-4">
+                        <span id="error-job-id" class="font-mono text-sm text-foreground"></span>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Error Details:</span>
+                    <div class="bg-red-500/[0.03] border border-red-500/10 rounded-2xl p-6 max-h-80 overflow-y-auto">
+                        <pre id="error-details" class="text-sm text-red-600 font-mono whitespace-pre-wrap"></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-t border-border/30 p-8">
+                <button type="button" class="px-6 py-3 bg-muted/40 text-foreground font-black text-xs uppercase tracking-[0.2em] rounded-2xl border border-border/50 hover:bg-muted/60 transition-all" data-dismiss="modal">
+                    Close Analysis
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showJobDetails(jobId, cron, nextExecution, lastExecution) {
+            $('#detail-job-id').text(jobId);
+            $('#detail-cron').text(cron);
+            $('#detail-next-execution').text(nextExecution || 'Not scheduled');
+            $('#detail-last-execution').text(lastExecution || 'Never executed');
+            $('#detail-schedule-description').text(getCronDescription(cron));
+            $('#jobDetailsModal').modal('show');
+        }
+        
+        function showJobError(jobId, error) {
+            $('#error-job-id').text(jobId);
+            $('#error-details').text(error);
+            $('#jobErrorModal').modal('show');
+        }
+        
+        function getCronDescription(cron) {
+            const descriptions = {
+                '0 2 * * *': 'Daily at 2:00 AM',
+                '0 * * * *': 'Every hour',
+                '*/15 * * * *': 'Every 15 minutes',
+                '*/30 * * * *': 'Every 30 minutes',
+                '0 3 * * 0': 'Weekly on Sunday at 3:00 AM',
+                '0 8 * * *': 'Daily at 8:00 AM',
+                '0 */4 * * *': 'Every 4 hours'
+            };
+            return descriptions[cron] || 'Custom schedule configuration';
+        }
+    </script>
+}
+
+@functions {
+    private string GetCronDescription(string cron)
+    {
+        return cron switch
+        {
+            "0 2 * * *" => "Daily at 2:00 AM",
+            "0 * * * *" => "Every hour",
+            "*/15 * * * *" => "Every 15 minutes",
+            "*/30 * * * *" => "Every 30 minutes",
+            "0 3 * * 0" => "Weekly on Sunday at 3:00 AM",
+            "0 8 * * *" => "Daily at 8:00 AM",
+            "0 */4 * * *" => "Every 4 hours",
+            _ => "Custom schedule"
+        };
+    }
+    
+    private string GetStateBadgeColor(string state)
+    {
+        return state?.ToLower() switch
+        {
+            "succeeded" => "green-500",
+            "failed" => "red-500",
+            "processing" => "amber-500",
+            "enqueued" => "blue-500",
+            _ => "slate-500"
+        };
+    }
+    
+    private string GetTimeUntil(DateTime dateTime)
+    {
+        var timeSpan = dateTime - DateTime.UtcNow;
+        if (timeSpan.TotalMinutes < 1)
+            return "Less than a minute";
+        if (timeSpan.TotalHours < 1)
+            return $"In {timeSpan.Minutes} minutes";
+        if (timeSpan.TotalDays < 1)
+            return $"In {timeSpan.Hours} hours";
+        return $"In {timeSpan.Days} days";
+    }
+    
+    private string GetTimeAgo(DateTime dateTime)
+    {
+        var timeSpan = DateTime.UtcNow - dateTime;
+        if (timeSpan.TotalMinutes < 1)
+            return "Just now";
+        if (timeSpan.TotalHours < 1)
+            return $"{timeSpan.Minutes} minutes ago";
+        if (timeSpan.TotalDays < 1)
+            return $"{timeSpan.Hours} hours ago";
+        return $"{timeSpan.Days} days ago";
+    }
+}

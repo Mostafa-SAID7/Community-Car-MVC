@@ -26,3 +26,5 @@ public interface IPerformanceService
     Task<ResourceAnalysisVM> AnalyzeResourcesAsync(string url);
     Task OptimizeImagesInDirectoryAsync(string directoryPath, ImageOptimizationOptions options);
 }
+
+

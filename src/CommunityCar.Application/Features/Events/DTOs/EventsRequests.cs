@@ -175,3 +175,5 @@ public class EventSummaryVM
     public bool HasAvailableSpots => !MaxAttendees.HasValue || AttendeeCount < MaxAttendees.Value;
     public bool IsFree => !TicketPrice.HasValue || TicketPrice.Value == 0;
 }
+
+

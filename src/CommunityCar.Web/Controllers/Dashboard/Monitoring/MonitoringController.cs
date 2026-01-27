@@ -169,3 +169,5 @@ public class UpdateHealthRequest
     public int ActiveConnections { get; set; }
     public int ErrorCount { get; set; }
 }
+
+

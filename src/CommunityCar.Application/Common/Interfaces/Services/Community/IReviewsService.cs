@@ -20,3 +20,5 @@ public interface IReviewsService
     Task<IEnumerable<ReviewVM>> GetReviewsByTargetAsync(Guid targetId, string targetType);
     Task<double> GetAverageRatingByTargetAsync(Guid targetId, string targetType);
 }
+
+

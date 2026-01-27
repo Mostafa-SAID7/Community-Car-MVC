@@ -71,19 +71,19 @@
 
                 <!-- Quick Date Range Buttons -->
                 <div class="flex flex-wrap gap-2">
-                    <button type="button" onclick="setDateRange(7)" 
+                    <button type="button" data-action="set-date-range" data-days="7" 
                             class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
                         Last 7 days
                     </button>
-                    <button type="button" onclick="setDateRange(30)" 
+                    <button type="button" data-action="set-date-range" data-days="30" 
                             class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
                         Last 30 days
                     </button>
-                    <button type="button" onclick="setDateRange(90)" 
+                    <button type="button" data-action="set-date-range" data-days="90" 
                             class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
                         Last 90 days
                     </button>
-                    <button type="button" onclick="setDateRange(365)" 
+                    <button type="button" data-action="set-date-range" data-days="365" 
                             class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
                         Last year
                     </button>
@@ -177,34 +177,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        function setDateRange(days) {
-            const endDate = new Date();
-            const startDate = new Date();
-            startDate.setDate(endDate.getDate() - days);
-            
-            document.querySelector('input[name="StartDate"]').value = startDate.toISOString().split('T')[0];
-            document.querySelector('input[name="EndDate"]').value = endDate.toISOString().split('T')[0];
-        }
-
-        // Show/hide additional parameters based on report type
-        document.querySelector('select[name="ReportType"]').addEventListener('change', function() {
-            const reportType = this.value;
-            
-            // Hide all parameter sections
-            document.querySelectorAll('[id$="-params"]').forEach(el => el.classList.add('hidden'));
-            
-            // Show relevant parameters
-            if (reportType === 'UserAnalytics') {
-                document.getElementById('user-analytics-params').classList.remove('hidden');
-            } else if (reportType === 'ContentAnalytics') {
-                document.getElementById('content-analytics-params').classList.remove('hidden');
-            }
-        });
-
-        // Set default date range (last 30 days)
-        document.addEventListener('DOMContentLoaded', function() {
-            setDateRange(30);
-        });
-    </script>
+    <script src="~/js/dashboard-reports.js" asp-append-version="true"></script>
 }

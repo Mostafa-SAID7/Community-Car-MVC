@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Globalization;
+using CommunityCar.Domain.Enums.Users;
 
 namespace CommunityCar.Web.Controllers.Community.Feed;
 
@@ -84,7 +85,7 @@ public class FeedController : Controller
                     await _analyticsService.TrackActivityAsync(new TrackActivityRequest
                     {
                         UserId = userId.Value,
-                        ActivityType = "View",
+                        ActivityType = ActivityType.View,
                         EntityType = "Feed",
                         Description = $"Viewed {feedType} feed",
                         IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString(),
@@ -196,7 +197,7 @@ public class FeedController : Controller
             await _analyticsService.TrackActivityAsync(new TrackActivityRequest
             {
                 UserId = userId.Value,
-                ActivityType = "Share",
+                ActivityType = ActivityType.Share,
                 EntityType = request.ContentType,
                 EntityId = request.ContentId,
                 Description = $"Shared {request.ContentType}"
@@ -267,3 +268,5 @@ public class FeedInteractionRequest
     public string? InteractionType { get; set; }
     public string? Reason { get; set; }
 }
+
+

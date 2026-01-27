@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -370,3 +370,4 @@ namespace CommunityCar.Infrastructure.Migrations
         }
     }
 }
+

@@ -19,3 +19,5 @@ public class StoriesStatsVM
     public double AverageLikesPerStory { get; set; }
     public double AverageLifespanHours { get; set; }
 }
+
+

@@ -15,3 +15,6 @@ public class ResourcesVM
     
     public PaginationInfo Pagination { get; set; } = new();
 }
+
+
+

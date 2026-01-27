@@ -1170,3 +1170,5 @@ public class SharedSearchService : ISharedSearchService
         return interactionCount * recencyFactor;
     }
 }
+
+

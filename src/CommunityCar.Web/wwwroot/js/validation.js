@@ -28,11 +28,13 @@ class AuthValidation {
             input.addEventListener('input', (e) => {
                 const value = e.target.value;
                 if (value.length > 0) {
-                    strengthIndicator.style.display = 'block';
+                    strengthIndicator.classList.remove('hidden');
+                    strengthIndicator.classList.add('flex'); // Indicator uses flex layout internally
                     strengthIndicator.classList.add('fade-in');
                     this.validatePasswordStrength(e.target, strengthIndicator);
                 } else {
-                    strengthIndicator.style.display = 'none';
+                    strengthIndicator.classList.add('hidden');
+                    strengthIndicator.classList.remove('flex');
                 }
             });
 
@@ -61,7 +63,7 @@ class AuthValidation {
                 <span class="strength-level text-[10px] font-bold uppercase tracking-widest"></span>
             </div>
             <div class="h-1.5 w-full bg-border/20 rounded-full overflow-hidden mb-4">
-                <div class="strength-fill h-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                <div class="strength-fill h-full transition-all duration-500 ease-out w-0"></div>
             </div>
             <ul class="flex flex-col sm:grid sm:grid-cols-2 gap-x-4 gap-y-1.5 sm:gap-y-2">
                 <li data-requirement="length" class="flex items-center gap-2 text-[10px] text-muted-foreground/60 transition-colors py-0.5">
@@ -125,11 +127,11 @@ class AuthValidation {
         const strengthLevel = indicator.querySelector('.strength-level');
 
         const levels = [
-            { text: data.vweak, color: '#f43f5e' }, // Very Weak
-            { text: data.weak, color: '#f59e0b' },  // Weak
-            { text: data.fair, color: '#8b5cf6' },  // Fair
-            { text: data.good, color: '#10b981' },  // Good
-            { text: data.strong, color: '#0ea5e9' }  // Strong
+            { text: data.vweak, color: 'hsl(var(--destructive))' }, // Very Weak
+            { text: data.weak, color: 'hsl(var(--chart-warning, 38 92% 50%))' },    // Weak
+            { text: data.fair, color: 'hsl(var(--chart-info, 262 83% 58%))' },      // Fair
+            { text: data.good, color: 'hsl(var(--chart-success, 142 76% 36%))' },   // Good
+            { text: data.strong, color: 'hsl(var(--primary))' }     // Strong
         ];
 
         const currentLevel = levels[Math.min(score, 4)];

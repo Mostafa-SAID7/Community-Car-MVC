@@ -191,3 +191,5 @@ public class MapsStatsVM
     public List<PointOfInterestSummaryVM> PopularPOIs { get; set; } = new();
     public List<RouteSummaryVM> PopularRoutes { get; set; } = new();
 }
+
+

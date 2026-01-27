@@ -21,7 +21,6 @@
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            document.documentElement.classList.remove('light', 'dark');
             document.documentElement.classList.add(theme);
         })();
     </script>
@@ -92,7 +91,7 @@
                             <div class="relative notification-wrapper">
                                 <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors mobile-notification-bell" aria-label="@SharedLocalizer["Notifications"]" title="@SharedLocalizer["Notifications"]">
                                     <i data-lucide="bell" class="w-4 h-4"></i>
-                                    <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground mobile-notification-badge" style="display: none;"></span>
+                                    <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground mobile-notification-badge hidden"></span>
                                 </button>
                                 
                                 <div class="absolute right-0 top-12 w-80 bg-card border border-border rounded-2xl shadow-lg hidden mobile-notification-dropdown">
@@ -182,133 +181,8 @@
     <script src="~/js/site.js" asp-append-version="true" defer></script>
     <script src="~/js/notifications.js" asp-append-version="true" defer></script>
     <script src="~/js/ai-assistant.js" asp-append-version="true" defer></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            lucide.createIcons();
-            
-            // Main layout sidebar responsive behavior
-            const mainContent = document.getElementById('main-content');
-            const leftSidebar = document.querySelector('aside:first-of-type'); // Left sidebar
-            const rightSidebar = document.querySelector('aside:last-of-type'); // Right sidebar
-            const rightSidebarToggle = document.getElementById('right-sidebar-toggle');
-            
-            function updateMainContentMargins() {
-                // CSS classes handle the responsive margins, JavaScript only handles mobile sidebar visibility
-                // ml-4 md:ml-20 xl:ml-60 xl:mr-84 are set in CSS for responsive behavior
-            }
-            
-            // Update margins on load and resize
-            // updateMainContentMargins(); // Removed - using CSS classes instead
-            // window.addEventListener('resize', updateMainContentMargins); // Removed - using CSS classes instead
-            
-            // Right sidebar toggle for mobile
-            if (rightSidebarToggle && rightSidebar) {
-                rightSidebarToggle.addEventListener('click', function() {
-                    rightSidebar.classList.toggle('sidebar-visible');
-                    document.body.classList.toggle('right-sidebar-visible');
-                });
-            }
-            
-            // Close sidebars when clicking outside on mobile
-            document.addEventListener('click', function(e) {
-                if (window.innerWidth < 1280) {
-                    // Close right sidebar
-                    if (rightSidebar && 
-                        !rightSidebar.contains(e.target) && 
-                        !rightSidebarToggle?.contains(e.target) &&
-                        rightSidebar.classList.contains('sidebar-visible')) {
-                        rightSidebar.classList.remove('sidebar-visible');
-                        document.body.classList.remove('right-sidebar-visible');
-                    }
-                }
-            });
-            
-            // Handle mobile viewport height
-            function setMobileViewportHeight() {
-                const vh = window.innerHeight * 0.01;
-                document.documentElement.style.setProperty('--vh', `${vh}px`);
-            }
-            
-            setMobileViewportHeight();
-            window.addEventListener('resize', setMobileViewportHeight);
-            window.addEventListener('orientationchange', setMobileViewportHeight);
-            
-            // Mobile search functionality
-            const mobileSearchToggle = document.getElementById('mobile-search-toggle');
-            const mobileSearchOverlay = document.getElementById('mobile-search-overlay');
-            const mobileSearchClose = document.getElementById('mobile-search-close');
-            const mobileSearchInput = document.getElementById('mobile-search-input');
-            
-            if (mobileSearchToggle && mobileSearchOverlay) {
-                mobileSearchToggle.addEventListener('click', function() {
-                    mobileSearchOverlay.classList.remove('hidden');
-                    setTimeout(() => {
-                        mobileSearchInput?.focus();
-                    }, 100);
-                });
-                
-                mobileSearchClose?.addEventListener('click', function() {
-                    mobileSearchOverlay.classList.add('hidden');
-                });
-                
-                // Close search overlay on escape key
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && !mobileSearchOverlay.classList.contains('hidden')) {
-                        mobileSearchOverlay.classList.add('hidden');
-                    }
-                });
-                
-                // Handle search input
-                mobileSearchInput?.addEventListener('input', function(e) {
-                    const query = e.target.value;
-                    // Add your search logic here
-                    console.log('Search query:', query);
-                });
-            }
-            
-            // Mobile language toggle functionality
-            const mobileLangToggle = document.getElementById('mobile-lang-toggle');
-            const desktopLangToggle = document.getElementById('lang-toggle');
-            
-            if (mobileLangToggle && desktopLangToggle) {
-                mobileLangToggle.addEventListener('click', function() {
-                    // Trigger the desktop language toggle
-                    desktopLangToggle.click();
-                });
-                
-                // Sync mobile text with desktop
-                mobileLangToggle.textContent = desktopLangToggle.textContent;
-            }
-            
-            // Mobile notification functionality
-            const mobileNotificationBell = document.querySelector('.mobile-notification-bell');
-            const mobileNotificationDropdown = document.querySelector('.mobile-notification-dropdown');
-            const desktopNotificationBell = document.querySelector('.notification-bell');
-            
-            if (mobileNotificationBell && desktopNotificationBell) {
-                mobileNotificationBell.addEventListener('click', function() {
-                    mobileNotificationDropdown.classList.toggle('hidden');
-                });
-                
-                // Sync notification badge
-                const desktopBadge = document.querySelector('.notification-badge');
-                const mobileBadge = document.querySelector('.mobile-notification-badge');
-                
-                if (desktopBadge && mobileBadge) {
-                    const badgeObserver = new MutationObserver(function(mutations) {
-                        mutations.forEach(function(mutation) {
-                            if (mutation.target === desktopBadge) {
-                                mobileBadge.style.display = desktopBadge.style.display;
-                                mobileBadge.textContent = desktopBadge.textContent;
-                            }
-                        });
-                    });
-                    
-                    badgeObserver.observe(desktopBadge, { attributes: true, childList: true, subtree: true });
-                }
-            }
-        });
-    </script>
+    <script src="~/js/layout-interactions.js" asp-append-version="true" defer></script>
+    <script src="~/js/comments.js" asp-append-version="true" defer></script>
     <!-- Global Skeleton Templates -->
     <div id="global-skeleton-templates" class="hidden">
         <partial name="_SkeletonLoading" model='"Post"' />

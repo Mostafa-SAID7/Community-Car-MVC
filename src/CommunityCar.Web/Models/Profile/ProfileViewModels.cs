@@ -86,18 +86,15 @@ public class ProfileSettingsVM
     public bool IsTwoFactorEnabled { get; set; }
     
     // Notification settings
-    [Display(Name = "Email Notifications")]
     public bool EmailNotifications { get; set; }
-    
-    [Display(Name = "Push Notifications")]
     public bool PushNotifications { get; set; }
-    
-    [Display(Name = "SMS Notifications")]
     public bool SmsNotifications { get; set; }
-    
-    [Display(Name = "Marketing Emails")]
     public bool MarketingEmails { get; set; }
     
+    // Privacy settings (Partial match for summary)
+    public bool ProfileVisible { get; set; }
+    public bool ShowActivityStatus { get; set; }
+
     // OAuth connections
     public bool HasGoogleAccount { get; set; }
     public bool HasFacebookAccount { get; set; }
@@ -187,40 +184,25 @@ public class TwoFactorSetupVM
     public string Code { get; set; } = string.Empty;
 }
 
-public class SecurityVM
-{
-    public bool IsTwoFactorEnabled { get; set; }
-    public DateTime? LastPasswordChange { get; set; }
-    public int ActiveSessions { get; set; }
-    public List<SecurityLogItemVM> RecentActivity { get; set; } = new();
-}
-
-public class SecurityLogItemVM
-{
-    public DateTime Timestamp { get; set; }
-    public string Action { get; set; } = string.Empty;
-    public string IpAddress { get; set; } = string.Empty;
-    public string UserAgent { get; set; } = string.Empty;
-    public string Location { get; set; } = string.Empty;
-    public bool IsSuccessful { get; set; }
-}
-
 public class PrivacySettingsVM
 {
-    [Display(Name = "Profile Visible to Public")]
+    public bool AllowMessages { get; set; }
+    public bool AllowFriendRequests { get; set; }
+    public string DefaultGalleryPrivacy { get; set; } = "public";
+    public bool ShowActivityStatus { get; set; }
+    
+    // Compatibility fields if needed
     public bool ProfileVisible { get; set; } = true;
-    
-    [Display(Name = "Email Visible to Others")]
     public bool EmailVisible { get; set; }
-    
-    [Display(Name = "Phone Number Visible to Others")]
     public bool PhoneVisible { get; set; }
-    
-    [Display(Name = "Allow Direct Messages")]
-    public bool AllowMessages { get; set; } = true;
-    
-    [Display(Name = "Allow Friend Requests")]
-    public bool AllowFriendRequests { get; set; } = true;
+}
+
+public class NotificationSettingsVM
+{
+    public bool EmailNotifications { get; set; }
+    public bool MarketingEmails { get; set; }
+    public bool PushNotifications { get; set; }
+    public bool SmsNotifications { get; set; }
 }
 
 public class DeleteAccountVM
@@ -233,4 +215,8 @@ public class DeleteAccountVM
     [Required]
     [Display(Name = "I understand this action cannot be undone")]
     public bool ConfirmDeletion { get; set; }
+    
+    public string? Reason { get; set; }
 }
+
+

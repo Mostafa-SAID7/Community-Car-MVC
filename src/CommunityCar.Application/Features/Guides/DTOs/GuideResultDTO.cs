@@ -6,3 +6,5 @@ public class GuideResultDTO
     public string Message { get; set; } = string.Empty;
     public Guid? GuideId { get; set; }
 }
+
+

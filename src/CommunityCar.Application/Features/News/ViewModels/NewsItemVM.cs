@@ -48,3 +48,5 @@ public class NewsItemVM
     public bool HasMultipleImages => ImageUrls.Count > 1;
     public string Excerpt { get; set; } = string.Empty;
 }
+
+

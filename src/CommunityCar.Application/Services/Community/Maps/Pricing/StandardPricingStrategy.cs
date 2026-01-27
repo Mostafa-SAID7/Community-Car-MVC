@@ -123,3 +123,5 @@ public class StandardPricingStrategy : IPricingStrategy
         public string Region { get; set; } = string.Empty;
     }
 }
+
+

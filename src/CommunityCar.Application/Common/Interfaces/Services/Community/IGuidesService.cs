@@ -27,3 +27,5 @@ public interface IGuidesService
     Task IncrementViewCountAsync(Guid guideId);
     Task<GuideCreateVM> GetCreateViewModelAsync();
 }
+
+

@@ -43,3 +43,5 @@ public class ErrorBoundaryDto
     public DateTime? RecoveredAt { get; set; }
     public int FailureCount { get; set; }
 }
+
+

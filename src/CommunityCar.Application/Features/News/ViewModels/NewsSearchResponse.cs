@@ -16,3 +16,5 @@ public class NewsSearchResponse
     public IEnumerable<string> AvailableTags { get; set; } = new List<string>();
     public IEnumerable<string> AvailableCarMakes { get; set; } = new List<string>();
 }
+
+

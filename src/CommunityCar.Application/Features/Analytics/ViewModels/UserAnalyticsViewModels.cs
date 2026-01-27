@@ -1,10 +1,12 @@
+using CommunityCar.Domain.Enums.Users;
+
 namespace CommunityCar.Application.Features.Analytics.ViewModels;
 
 public class UserActivityVM
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
-    public string ActivityType { get; set; } = string.Empty;
+    public ActivityType ActivityType { get; set; }
     public string EntityType { get; set; } = string.Empty;
     public Guid? EntityId { get; set; }
     public string? EntityTitle { get; set; }
@@ -165,3 +167,5 @@ public class UserPrivacySettingsVM
     public bool AllowAnalytics { get; set; }
     public DateTime LastUpdated { get; set; }
 }
+
+

@@ -21,3 +21,5 @@ public class ReviewsMappingProfile : AutoMapper.Profile
                 src.ComfortRating.HasValue));
     }
 }
+
+

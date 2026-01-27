@@ -38,3 +38,5 @@ public class ProfileMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
     }
 }
+
+

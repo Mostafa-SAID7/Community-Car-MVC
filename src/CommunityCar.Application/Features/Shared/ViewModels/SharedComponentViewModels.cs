@@ -65,3 +65,5 @@ public class CommentsSectionVM
     public bool HasMoreComments { get; set; }
     public int TotalComments { get; set; }
 }
+
+

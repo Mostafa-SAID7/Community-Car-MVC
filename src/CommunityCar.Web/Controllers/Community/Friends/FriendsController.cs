@@ -155,3 +155,6 @@ public class FriendRequestsVM
     public IEnumerable<FriendRequestVM> PendingRequests { get; set; } = new List<FriendRequestVM>();
     public IEnumerable<FriendRequestVM> SentRequests { get; set; } = new List<FriendRequestVM>();
 }
+
+
+

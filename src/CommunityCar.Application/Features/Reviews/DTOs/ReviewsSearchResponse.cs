@@ -18,3 +18,5 @@ public class ReviewsSearchResponse
     public bool HasPreviousPage => Pagination.HasPreviousPage;
     public bool HasNextPage => Pagination.HasNextPage;
 }
+
+

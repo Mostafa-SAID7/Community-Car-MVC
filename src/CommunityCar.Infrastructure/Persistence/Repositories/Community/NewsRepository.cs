@@ -110,3 +110,4 @@ public class NewsRepository : BaseRepository<NewsItem>, INewsRepository
         return await query.AnyAsync();
     }
 }
+

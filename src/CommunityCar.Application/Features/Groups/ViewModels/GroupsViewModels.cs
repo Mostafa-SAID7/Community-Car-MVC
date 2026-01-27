@@ -74,3 +74,5 @@ public class GroupsIndexVM
     public GroupsSearchResponse SearchResponse { get; set; } = new();
     public GroupsStatsVM Stats { get; set; } = new();
 }
+
+

@@ -16,3 +16,5 @@ public class ReviewsStatsVM
     public double AverageHelpfulnessScore { get; set; }
     public double AverageViewsPerReview { get; set; }
 }
+
+

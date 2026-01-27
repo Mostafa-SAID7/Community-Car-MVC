@@ -20,3 +20,5 @@ public interface IFeedService
     Task<bool> HideContentAsync(Guid userId, Guid contentId, string contentType);
     Task<bool> ReportContentAsync(Guid userId, Guid contentId, string contentType, string reason);
 }
+
+

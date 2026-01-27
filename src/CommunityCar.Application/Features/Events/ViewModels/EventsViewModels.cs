@@ -87,3 +87,5 @@ public class EventsIndexVM
     public EventsSearchResponse SearchResponse { get; set; } = new();
     public EventsStatsVM Stats { get; set; } = new();
 }
+
+

@@ -53,3 +53,5 @@ public class FriendSuggestionVM
     public IEnumerable<string> MutualFriendsNames { get; set; } = new List<string>();
     public string SuggestionReason { get; set; } = string.Empty;
 }
+
+

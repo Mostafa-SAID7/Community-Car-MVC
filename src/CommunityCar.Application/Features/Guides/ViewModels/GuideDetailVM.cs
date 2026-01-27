@@ -10,3 +10,5 @@ public class GuideDetailVM
     public bool CanVerify { get; set; }
     public bool CanFeature { get; set; }
 }
+
+

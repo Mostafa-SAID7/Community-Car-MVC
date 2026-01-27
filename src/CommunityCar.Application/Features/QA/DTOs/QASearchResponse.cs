@@ -35,3 +35,5 @@ public class QASearchStats
     public int TotalVotes { get; set; }
     public int TotalViews { get; set; }
 }
+
+

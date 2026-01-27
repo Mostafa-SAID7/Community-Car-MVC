@@ -19,3 +19,4 @@ public class GroupConfiguration : IEntityTypeConfiguration<Group>
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }
+

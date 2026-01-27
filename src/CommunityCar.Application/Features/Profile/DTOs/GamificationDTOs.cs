@@ -57,3 +57,5 @@ public class BadgeEarnedEvent
     public int Points { get; set; }
     public DateTime EarnedAt { get; set; }
 }
+
+

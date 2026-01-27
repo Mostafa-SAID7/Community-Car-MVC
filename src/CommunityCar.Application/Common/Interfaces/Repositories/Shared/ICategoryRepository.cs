@@ -10,3 +10,5 @@ public interface ICategoryRepository : IBaseRepository<Category>
     Task<IEnumerable<Category>> GetRootCategoriesAsync();
     Task<bool> SlugExistsAsync(string slug, Guid? excludeId = null);
 }
+
+

@@ -12,3 +12,5 @@ public interface INewsNotificationService
     Task NotifyBreakingNewsAsync(NewsItem newsItem);
     Task NotifyFollowersOfNewNewsAsync(NewsItem newsItem, string authorName);
 }
+
+

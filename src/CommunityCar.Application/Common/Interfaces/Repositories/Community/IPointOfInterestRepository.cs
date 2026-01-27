@@ -36,3 +36,5 @@ public interface IPointOfInterestRepository : IBaseRepository<PointOfInterest>
         Guid createdBy, 
         CancellationToken cancellationToken = default);
 }
+
+

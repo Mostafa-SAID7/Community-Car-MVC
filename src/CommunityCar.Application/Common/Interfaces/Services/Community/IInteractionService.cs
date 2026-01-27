@@ -40,3 +40,5 @@ public interface IInteractionService
     // Combined interaction summary
     Task<InteractionSummaryVM> GetInteractionSummaryAsync(Guid entityId, EntityType entityType, Guid? userId = null);
 }
+
+

@@ -1,12 +1,12 @@
 using CommunityCar.Domain.Base;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Users;
 
 namespace CommunityCar.Domain.Entities.Profile;
 
 public class UserActivity : BaseEntity
 {
     public Guid UserId { get; private set; }
-    public string ActivityType { get; private set; } = string.Empty;
+    public ActivityType ActivityType { get; private set; }
     public string EntityType { get; private set; } = string.Empty;
     public Guid? EntityId { get; private set; }
     public string? EntityTitle { get; private set; }
@@ -21,7 +21,7 @@ public class UserActivity : BaseEntity
 
     public UserActivity(
         Guid userId,
-        string activityType,
+        ActivityType activityType,
         string entityType,
         Guid? entityId = null,
         string? entityTitle = null,

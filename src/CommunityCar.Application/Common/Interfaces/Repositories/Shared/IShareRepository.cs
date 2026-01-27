@@ -12,3 +12,5 @@ public interface IShareRepository : IBaseRepository<Share>
     Task<IEnumerable<Share>> GetRecentSharesAsync(int count);
     Task<Dictionary<ShareType, int>> GetShareTypeCountsAsync(Guid entityId, EntityType entityType);
 }
+
+

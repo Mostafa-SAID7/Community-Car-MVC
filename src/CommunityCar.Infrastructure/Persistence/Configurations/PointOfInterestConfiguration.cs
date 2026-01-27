@@ -19,3 +19,4 @@ public class PointOfInterestConfiguration : IEntityTypeConfiguration<PointOfInte
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }
+

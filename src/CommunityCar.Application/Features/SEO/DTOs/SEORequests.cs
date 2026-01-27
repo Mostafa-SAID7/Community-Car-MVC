@@ -38,3 +38,5 @@ public class RSSFeedRequest
     public string FeedType { get; set; } = "all";
     public int MaxItems { get; set; } = 50;
 }
+
+

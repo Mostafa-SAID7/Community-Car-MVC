@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Common.Interfaces.Repositories.Identity;
+using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories;
@@ -31,3 +31,5 @@ public interface IUnitOfWork : IDisposable
     IGuidesRepository Guides { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
+
+

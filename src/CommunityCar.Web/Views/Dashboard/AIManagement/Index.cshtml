@@ -25,12 +25,12 @@
             @Html.CultureParagraph("Monitor and manage AI services and models", new { @class = "text-muted-foreground" })
         </div>
         <div class="flex items-center gap-3">
-            <a asp-action="Training" class="btn btn-primary">
-                <i data-lucide="brain" class="w-4 h-4 mr-2"></i>
+            <a asp-action="Training" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95 group/brain">
+                <i data-lucide="brain" class="w-4 h-4 group-hover/brain:scale-110 transition-transform"></i>
                 Training Center
             </a>
-            <a asp-action="Test" class="btn btn-outline">
-                <i data-lucide="flask" class="w-4 h-4 mr-2"></i>
+            <a asp-action="Test" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/flask">
+                <i data-lucide="flask" class="w-4 h-4 group-hover/flask:rotate-12 transition-transform"></i>
                 Test Console
             </a>
         </div>
@@ -38,8 +38,8 @@
 
     <!-- Overview Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="card">
-            <div class="card-content">
+        <div class="eng-card">
+            <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-muted-foreground">Total Conversations</p>
@@ -56,8 +56,8 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-content">
+        <div class="eng-card">
+            <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-muted-foreground">Active Users</p>
@@ -73,8 +73,8 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-content">
+        <div class="eng-card">
+            <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-muted-foreground">Response Time</p>
@@ -90,8 +90,8 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-content">
+        <div class="eng-card">
+            <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-muted-foreground">Satisfaction Rate</p>
@@ -111,12 +111,12 @@
 
     <!-- AI Models Status -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">AI Models Status</h3>
-                <p class="card-description">Current status of AI models</p>
+        <div class="eng-card">
+            <div class="eng-card-header">
+                <h3 class="eng-card-title">AI Models Status</h3>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Current status of AI models</p>
             </div>
-            <div class="card-content">
+            <div class="p-6">
                 <div class="space-y-4">
                     <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                         <div class="flex items-center gap-3">
@@ -143,12 +143,12 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Top Intents</h3>
-                <p class="card-description">Most common user intents</p>
+        <div class="eng-card">
+            <div class="eng-card-header">
+                <h3 class="eng-card-title">Top Intents</h3>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Most common user intents</p>
             </div>
-            <div class="card-content">
+            <div class="p-6">
                 <div class="space-y-3">
                     @try
                     {
@@ -158,8 +158,8 @@
                             {
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm text-foreground">@intent</span>
-                                    <div class="w-16 h-2 bg-muted rounded-full">
-                                        <div class="h-2 bg-primary rounded-full" style="width: @(new Random().Next(40, 90))%"></div>
+                                    <div class="eng-progress-container w-16 h-2">
+                                        <div class="eng-progress-bar bg-primary w-[@(new Random().Next(40, 90))%]"></div>
                                     </div>
                                 </div>
                             }
@@ -179,12 +179,12 @@
     </div>
 
     <!-- Recent Activity -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Recent Activity</h3>
-            <p class="card-description">Latest AI interactions and events</p>
+    <div class="eng-card">
+        <div class="eng-card-header">
+            <h3 class="eng-card-title">Recent Activity</h3>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Latest AI interactions and events</p>
         </div>
-        <div class="card-content">
+        <div class="p-6">
             <div class="space-y-4">
                 @try
                 {
@@ -227,8 +227,8 @@
 
     <!-- Quick Actions -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <a asp-action="Training" class="card hover:shadow-lg transition-shadow">
-            <div class="card-content text-center">
+        <a asp-action="Training" class="eng-card hover:shadow-lg transition-shadow">
+            <div class="p-6 text-center">
                 <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg mx-auto mb-4 flex items-center justify-center">
                     <i data-lucide="brain" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
                 </div>
@@ -237,8 +237,8 @@
             </div>
         </a>
 
-        <a asp-action="Analytics" class="card hover:shadow-lg transition-shadow">
-            <div class="card-content text-center">
+        <a asp-action="Analytics" class="eng-card hover:shadow-lg transition-shadow">
+            <div class="p-6 text-center">
                 <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg mx-auto mb-4 flex items-center justify-center">
                     <i data-lucide="bar-chart-3" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
                 </div>
@@ -247,8 +247,8 @@
             </div>
         </a>
 
-        <a asp-action="Settings" class="card hover:shadow-lg transition-shadow">
-            <div class="card-content text-center">
+        <a asp-action="Settings" class="eng-card hover:shadow-lg transition-shadow">
+            <div class="p-6 text-center">
                 <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg mx-auto mb-4 flex items-center justify-center">
                     <i data-lucide="settings" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
                 </div>
@@ -260,12 +260,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        });
-    </script>
+    <script src="~/js/ai-dashboard.js" asp-append-version="true"></script>
 }

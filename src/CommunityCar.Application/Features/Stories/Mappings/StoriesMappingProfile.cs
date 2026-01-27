@@ -52,3 +52,5 @@ public class StoriesMappingProfile : global::AutoMapper.Profile
         return "Just now";
     }
 }
+
+

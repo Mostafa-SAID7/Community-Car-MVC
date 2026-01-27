@@ -22,3 +22,5 @@ public class ReportTrafficConditionRequest
     public string Description { get; set; } = string.Empty;
     public string? ImageUrl { get; set; }
 }
+
+

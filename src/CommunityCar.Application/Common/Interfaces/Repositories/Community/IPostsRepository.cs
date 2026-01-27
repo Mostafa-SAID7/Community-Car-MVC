@@ -19,7 +19,10 @@ public interface IPostsRepository
     Task<IEnumerable<Post>> GetByAuthorAsync(Guid authorId, CancellationToken cancellationToken = default);
     Task<IEnumerable<Post>> GetByGroupAsync(Guid groupId, CancellationToken cancellationToken = default);
     Task<IEnumerable<Post>> GetRecentPostsAsync(int count = 10, CancellationToken cancellationToken = default);
+    Task<int> GetUserPostsCountAsync(Guid userId);
     Task AddAsync(Post post);
     Task UpdateAsync(Post post);
     Task DeleteAsync(Post post);
 }
+
+

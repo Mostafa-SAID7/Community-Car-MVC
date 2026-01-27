@@ -516,3 +516,6 @@ public class GuidesController : Controller
         return RedirectToAction(nameof(Details), new { id });
     }
 }
+
+
+

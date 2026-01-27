@@ -18,3 +18,4 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
         builder.Property(p => p.CountryAr).HasMaxLength(100);
     }
 }
+

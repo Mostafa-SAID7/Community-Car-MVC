@@ -21,3 +21,5 @@ public class ErrorReportResponse
     public string Message { get; set; } = string.Empty;
     public string TicketId { get; set; } = string.Empty;
 }
+
+

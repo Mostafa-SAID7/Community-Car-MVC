@@ -143,3 +143,5 @@ public class ErrorReportingService : IErrorReportingService
         return await Task.FromResult(report ?? new ErrorReportResponse());
     }
 }
+
+

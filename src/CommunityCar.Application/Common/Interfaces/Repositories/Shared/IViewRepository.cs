@@ -14,3 +14,5 @@ public interface IViewRepository : IBaseRepository<View>
     Task<IEnumerable<object>> GetMostViewedAsync(EntityType entityType, DateTime startDate, int count);
     Task<IEnumerable<View>> GetViewsByEntityAsync(Guid entityId, EntityType entityType);
 }
+
+

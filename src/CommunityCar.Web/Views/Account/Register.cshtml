@@ -11,73 +11,14 @@
 }
 
 @section Styles {
-    <style>
-        .login-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-        }
-        
-        @@media (min-width: 1024px) {
-            .login-grid {
-                grid-template-columns: 1.2fr 1fr;
-            }
-        }
-
-        .animation-side {
-            background: radial-gradient(circle at center, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
-            position: relative;
-            min-height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .car-frame-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            z-index: 10;
-        }
-
-        .car-frame {
-            width: 100%;
-            height: auto;
-            mix-blend-mode: screen;
-            filter: drop-shadow(0 25px 40px rgba(0,0,0,0.8));
-        }
-
-        #smoke-container {
-            position: absolute;
-            bottom: 27%;
-            right: 18%;
-            width: 50px;
-            height: 50px;
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        @@keyframes float-smoke {
-            0% { transform: translateY(0) scale(0.4); opacity: 0; }
-            10% { opacity: 0.5; }
-            100% { transform: translateY(-120px) translateX(40px) scale(2.5); opacity: 0; }
-        }
-
-        .smoke-particle {
-            position: absolute;
-            background: rgba(180, 180, 180, 0.3);
-            border-radius: 50%;
-            filter: blur(8px);
-            animation: float-smoke linear forwards;
-        }
-    </style>
+    @* Register specific styles consolidated in app.css *@
 }
 
 <div class="login-grid">
     <!-- Left Side: Animation -->
     <div class="animation-side p-8 hidden lg:flex border-r border-border/10">
         <div class="car-frame-container">
-            <div id="smoke-container" style="display: none;"></div>
+            <div id="smoke-container" class="hidden"></div>
             <img id="car-animation" src="/images/login_frames/frame_00.png" class="car-frame" alt="Car Assembly" />
         </div>
     </div>

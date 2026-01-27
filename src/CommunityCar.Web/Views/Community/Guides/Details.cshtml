@@ -31,19 +31,55 @@
     </div>
 
     <div id="main-content" class="space-y-8">
-    <!-- Guide Header -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
-        @if (!string.IsNullOrEmpty(Model.Guide.CoverImageUrl))
-        {
-            <div class="aspect-video md:aspect-[21/9] overflow-hidden relative">
-                <img src="@Model.Guide.CoverImageUrl" alt="@Model.Guide.Title" 
-                     class="w-full h-full object-cover" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                
-                <!-- Header Content Overlay -->
-                <div class="absolute bottom-0 left-0 right-0 p-8">
-                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-                        <div class="flex-1">
+    <!-- Navigation & Guide Strategy -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2 mb-10">
+        <div class="space-y-4">
+            <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">
+                <i data-lucide="book-open" class="w-3.5 h-3.5 fill-current"></i> @SharedLocalizer["GuidePayload"]
+            </nav>
+            <h1 class="text-5xl font-black text-foreground tracking-tighter leading-none">@displayTitle</h1>
+            <p class="text-sm font-medium text-muted-foreground opacity-70 mt-4 border-l-4 border-primary/20 pl-4 py-1 max-w-2xl">@displaySummary</p>
+        </div>
+        
+        <div class="flex gap-3">
+            <a href="/guides" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
+                @SharedLocalizer["ReturnToArchives"]
+            </a>
+        </div>
+    </div>
+
+    <!-- Guide Header & Image Payload -->
+    <div class="relative group mb-12">
+        <div class="absolute -inset-1.5 bg-gradient-to-r from-primary/20 via-blue-500/5 to-primary/20 rounded-[3rem] blur-3xl opacity-10 group-hover:opacity-30 transition duration-1000"></div>
+        
+        <div class="relative bg-card/40 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] shadow-2xl overflow-hidden">
+            @if (!string.IsNullOrEmpty(Model.Guide.CoverImageUrl))
+            {
+                <div class="aspect-video md:aspect-[21/9] overflow-hidden relative">
+                    <img src="@Model.Guide.CoverImageUrl" alt="@Model.Guide.Title" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+                        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+                            <div class="flex-1">
+                                <!-- Status Matrix -->
+                                <div class="flex flex-wrap gap-3 mb-6">
+                                    @if (Model.Guide.IsFeatured)
+                                    {
+                                        <span class="px-4 py-1.5 rounded-2xl bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-[9px] font-black uppercase tracking-widest shadow-lg">
+                                            <i data-lucide="star" class="w-3.5 h-3.5 inline mr-1.5"></i>
+                                            FEATURED SIGNAL
+                                        </span>
+                                    }
+                                    @if (Model.Guide.IsVerified)
+                                    {
+                                        <span class="px-4 py-1.5 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[9px] font-black uppercase tracking-widest shadow-lg">
+                                            <i data-lucide="shield-check" class="w-3.5 h-3.5 inline mr-1.5"></i>
+                                            VERIFIED SOURCE
+                                        </span>
+                                    }
+                                </div>
                             <!-- Badges -->
                             <div class="flex flex-wrap gap-2 mb-4">
                                 @if (Model.Guide.IsFeatured)
@@ -229,9 +265,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <!-- Main Content -->
         <div class="lg:col-span-3 space-y-8">
-            <!-- Guide Content -->
-            <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl p-8">
-                <div class="prose prose-lg max-w-none dark:prose-invert">
+            <!-- Guide Transmission Payload -->
+            <div class="bg-card/40 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] shadow-xl p-8 md:p-12">
+                <div class="prose prose-lg max-w-none dark:prose-invert font-medium leading-relaxed">
                     @Html.Raw(displayContent)
                 </div>
             </div>

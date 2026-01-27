@@ -18,3 +18,5 @@ public class StoriesSearchResponse
     public bool HasNextPage => Pagination.HasNextPage;
     public bool HasPreviousPage => Pagination.HasPreviousPage;
 }
+
+

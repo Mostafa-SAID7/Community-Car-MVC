@@ -22,3 +22,6 @@ public class SharedResource
     public static string Reply => "Reply";
     public static string LoadMore => "Load More";
 }
+
+
+

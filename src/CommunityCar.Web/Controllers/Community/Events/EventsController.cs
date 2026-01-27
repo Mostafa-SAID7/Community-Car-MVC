@@ -242,3 +242,6 @@ public class EventsController : Controller
         return View("~/Views/Community/Events/Upcoming.cshtml", events);
     }
 }
+
+
+

@@ -15,3 +15,5 @@ public interface IChatService
     Task<int> GetUnreadMessageCountAsync(Guid userId);
     Task<List<UserOnlineStatusVM>> GetOnlineUsersAsync(List<Guid> userIds);
 }
+
+

@@ -1,160 +1,24 @@
-@using System.Globalization
+@using CommunityCar.Web.Helpers
 @{
-    var isArabic = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ar";
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var fontFamily = FontHelper.GetBodyFontFamily();
+    var headingFontFamily = FontHelper.GetHeadingFontFamily();
+    var direction = FontHelper.IsArabicCulture() ? "rtl" : "ltr";
 }
 
 <style>
-    @if (isArabic)
-    {
-        <text>
-        /* Arabic-specific font overrides */
-        body {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-            line-height: 1.8 !important;
-        }
-
-        h1, h2, h3, h4, h5, h6,
-        .card-title,
-        .text-xl, .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl,
-        .font-bold, .font-semibold, .font-black,
-        .heading {
-            font-family: 'Lemonada', 'Alexandria', cursive !important;
-            font-weight: 600 !important;
-            line-height: 1.6 !important;
-            letter-spacing: 0.02em !important;
-        }
-
-        p, span, div,
-        .text-sm, .text-xs, .text-base, .text-lg,
-        input, textarea, button, .btn,
-        .body-text {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-        }
-
-        /* Specific text size line heights for Arabic */
-        p {
-            line-height: 1.9 !important;
-        }
-
-        .text-sm {
-            line-height: 1.7 !important;
-        }
-
-        .text-xs {
-            line-height: 1.6 !important;
-        }
-
-        /* Form elements */
-        input, textarea, select {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-            line-height: 1.6 !important;
-        }
-
-        /* Button text */
-        button, .btn {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-            font-weight: 500 !important;
-        }
-
-        /* Navigation and menu items */
-        nav a, .nav-link {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-            font-weight: 500 !important;
-        }
-
-        /* Card components */
-        .card-description {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-            line-height: 1.7 !important;
-        }
-
-        /* Badge and small text components */
-        .badge, .text-muted-foreground {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-        }
-
-        /* Table content */
-        table, th, td {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-        }
-
-        /* Modal and dialog content */
-        .modal-content, .dialog-content {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-        }
-
-        /* Dropdown and select content */
-        .dropdown-menu, .select-content {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-        }
-
-        /* Toast and notification content */
-        .toast, .notification {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-        }
-
-        /* AI Assistant specific styles */
-        #ai-chat-widget {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-        }
-
-        #ai-chat-widget h1, #ai-chat-widget h2, #ai-chat-widget h3,
-        #ai-chat-widget h4, #ai-chat-widget h5, #ai-chat-widget h6 {
-            font-family: 'Lemonada', 'Alexandria', cursive !important;
-        }
-
-        /* Dashboard specific styles */
-        .dashboard-body h1, .dashboard-body h2, .dashboard-body h3,
-        .dashboard-body h4, .dashboard-body h5, .dashboard-body h6 {
-            font-family: 'Lemonada', 'Alexandria', cursive !important;
-        }
-
-        /* Sidebar content */
-        .sidebar {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-        }
-
-        .sidebar h1, .sidebar h2, .sidebar h3,
-        .sidebar h4, .sidebar h5, .sidebar h6 {
-            font-family: 'Lemonada', 'Alexandria', cursive !important;
-        }
-
-        /* Feed and content areas */
-        .feed-content, .post-content, .article-content {
-            font-family: 'Noto Sans Arabic', 'Alexandria', sans-serif !important;
-            line-height: 1.9 !important;
-        }
-
-        .feed-content h1, .feed-content h2, .feed-content h3,
-        .post-content h1, .post-content h2, .post-content h3,
-        .article-content h1, .article-content h2, .article-content h3 {
-            font-family: 'Lemonada', 'Alexandria', cursive !important;
-        }
-        </text>
+    :root {
+        --font-family: @fontFamily;
+        --heading-font-family: @headingFontFamily;
+        --text-direction: @direction;
     }
-    else
-    {
-        <text>
-        /* English/Default font styles */
-        body {
-            font-family: 'Inter', 'Alexandria', system-ui, -apple-system, sans-serif !important;
-        }
-
-        h1, h2, h3, h4, h5, h6,
-        .card-title,
-        .text-xl, .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl,
-        .font-bold, .font-semibold, .font-black,
-        .heading {
-            font-family: 'Inter', 'Alexandria', system-ui, -apple-system, sans-serif !important;
-            font-weight: 700 !important;
-        }
-
-        p, span, div,
-        .text-sm, .text-xs, .text-base, .text-lg,
-        input, textarea, button, .btn,
-        .body-text {
-            font-family: 'Inter', 'Alexandria', system-ui, -apple-system, sans-serif !important;
-        }
-        </text>
+    
+    body {
+        font-family: var(--font-family);
+        direction: var(--text-direction);
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--heading-font-family);
     }
 </style>

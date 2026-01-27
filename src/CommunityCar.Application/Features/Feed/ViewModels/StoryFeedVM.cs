@@ -41,3 +41,5 @@ public class StoryFeedVM
     public bool IsMultiMedia { get; set; }
     public int TotalMediaCount { get; set; }
 }
+
+

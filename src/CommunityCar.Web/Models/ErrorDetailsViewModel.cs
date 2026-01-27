@@ -12,3 +12,5 @@ public class ErrorDetailsViewModel
     public string? Details { get; set; }
     public string? StackTrace { get; set; }
 }
+
+

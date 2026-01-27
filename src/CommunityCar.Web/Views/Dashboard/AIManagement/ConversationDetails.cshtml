@@ -18,113 +18,112 @@
     </div>
 
     <div id="conversation-details-content">
-    <!-- Header -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-foreground">Conversation Details</h1>
-            <p class="text-muted-foreground">@Model.Title</p>
+    <!-- Navigation & Header Strategy -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2 mb-10">
+        <div class="space-y-4">
+            <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">
+                <i data-lucide="bot" class="w-3.5 h-3.5 fill-current"></i> AI_MANAGEMENT_PROTOCOL
+            </nav>
+            <h1 class="text-5xl font-black text-foreground tracking-tighter leading-none">Conversation Details</h1>
+            <p class="text-sm font-medium text-muted-foreground opacity-70 mt-4 border-l-4 border-primary/20 pl-4 py-1 max-w-2xl">@Model.Title</p>
         </div>
-        <div class="flex items-center gap-3">
-            <a asp-action="Conversations" class="btn btn-outline">
-                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
-                Back to Conversations
+        
+        <div class="flex gap-3">
+            <a href="/Dashboard/AIManagement/Conversations" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
+                Back to Archive
             </a>
         </div>
     </div>
 
-    <!-- Conversation Info -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="card">
-            <div class="card-content p-4">
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-primary">@Model.Messages.Length</div>
-                    <div class="text-sm text-muted-foreground">Messages</div>
-                </div>
-            </div>
+    <!-- Diagnostic Stats Matrix -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="bg-card/40 backdrop-blur-xl border border-border/50 rounded-3xl p-6 shadow-xl text-center group hover:border-primary/30 transition-all">
+            <div class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50 mb-4">TOTAL_PAYLOAD</div>
+            <div class="text-3xl font-black text-primary tabular-nums">@Model.Messages.Length</div>
+            <div class="text-[10px] font-bold text-muted-foreground mt-2">MESSAGES</div>
         </div>
-        <div class="card">
-            <div class="card-content p-4">
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-primary">@Model.Status</div>
-                    <div class="text-sm text-muted-foreground">Status</div>
-                </div>
-            </div>
+        <div class="bg-card/40 backdrop-blur-xl border border-border/50 rounded-3xl p-6 shadow-xl text-center group hover:border-primary/30 transition-all">
+            <div class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50 mb-4">SYSTEM_STATUS</div>
+            <div class="text-xl font-black text-foreground uppercase">@Model.Status</div>
+            <div class="text-[10px] font-bold text-muted-foreground mt-2">ACTIVE_BIT</div>
         </div>
-        <div class="card">
-            <div class="card-content p-4">
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-primary">@Model.CreatedAt.ToString("MMM dd")</div>
-                    <div class="text-sm text-muted-foreground">Started</div>
-                </div>
-            </div>
+        <div class="bg-card/40 backdrop-blur-xl border border-border/50 rounded-3xl p-6 shadow-xl text-center group hover:border-primary/30 transition-all">
+            <div class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50 mb-4">TEMPORAL_START</div>
+            <div class="text-3xl font-black text-foreground tabular-nums">@Model.CreatedAt.ToString("MMM dd")</div>
+            <div class="text-[10px] font-bold text-muted-foreground mt-2">REGISTRY_STAMP</div>
         </div>
-        <div class="card">
-            <div class="card-content p-4">
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-primary">@Model.UpdatedAt.ToString("MMM dd")</div>
-                    <div class="text-sm text-muted-foreground">Last Update</div>
-                </div>
-            </div>
+        <div class="bg-card/40 backdrop-blur-xl border border-border/50 rounded-3xl p-6 shadow-xl text-center group hover:border-primary/30 transition-all">
+            <div class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50 mb-4">LAST_TRANSMISSION</div>
+            <div class="text-3xl font-black text-foreground tabular-nums">@Model.UpdatedAt.ToString("MMM dd")</div>
+            <div class="text-[10px] font-bold text-muted-foreground mt-2">DELTA_TIME</div>
         </div>
     </div>
 
-    <!-- Messages -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Conversation Messages</h3>
-            <p class="card-description">Full conversation history</p>
-        </div>
-        <div class="card-content p-6">
-            <div class="space-y-4 max-h-96 overflow-y-auto">
-                @foreach (var message in Model.Messages)
-                {
-                    <div class="flex @(message.IsFromUser ? "justify-end" : "justify-start")">
-                        <div class="max-w-xs lg:max-w-md">
-                            <div class="flex items-start gap-3 @(message.IsFromUser ? "flex-row-reverse" : "")">
-                                <div class="flex items-center justify-center w-8 h-8 rounded-full @(message.IsFromUser ? "bg-primary text-primary-foreground" : "bg-muted")">
-                                    @if (message.IsFromUser)
-                                    {
-                                        <i data-lucide="user" class="w-4 h-4"></i>
-                                    }
-                                    else
-                                    {
-                                        <i data-lucide="bot" class="w-4 h-4"></i>
-                                    }
-                                </div>
-                                <div class="flex-1">
-                                    <div class="@(message.IsFromUser ? "bg-primary text-primary-foreground" : "bg-muted") rounded-lg p-3">
-                                        <p class="text-sm">@message.Content</p>
-                                    </div>
-                                    <div class="flex items-center gap-2 mt-1 @(message.IsFromUser ? "justify-end" : "")">
-                                        <span class="text-xs text-muted-foreground">@message.Timestamp.ToString("HH:mm")</span>
-                                        @if (!string.IsNullOrEmpty(message.Sentiment))
+    <!-- Transmission Stream -->
+    <div class="relative group mb-12">
+        <div class="absolute -inset-1 bg-gradient-to-r from-primary/10 to-blue-500/10 rounded-[2.5rem] blur-2xl opacity-30"></div>
+        <div class="relative bg-card/40 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] shadow-2xl overflow-hidden">
+            <div class="p-8 md:p-12">
+                <div class="flex items-center gap-3 mb-10">
+                    <div class="w-1.5 h-6 bg-primary rounded-full"></div>
+                    <div>
+                        <h3 class="text-xl font-black text-foreground tracking-tight">TRANSMISSION_HISTORY</h3>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">FULL_ENCRYPTED_PAYLOAD_STREAM</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6 max-h-[600px] overflow-y-auto px-4 custom-scrollbar">
+                    @foreach (var message in Model.Messages)
+                    {
+                        <div class="flex @(message.IsFromUser ? "justify-end" : "justify-start")">
+                            <div class="max-w-[85%] lg:max-w-[70%]">
+                                <div class="flex items-start gap-4 @(message.IsFromUser ? "flex-row-reverse" : "")">
+                                    <div class="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-lg @(message.IsFromUser ? "bg-primary text-primary-foreground" : "bg-card border border-border/50 text-foreground")">
+                                        @if (message.IsFromUser)
                                         {
-                                            var sentimentClass = message.Sentiment switch
-                                            {
-                                                "Positive" => "text-green-600",
-                                                "Negative" => "text-red-600",
-                                                _ => "text-yellow-600"
-                                            };
-                                            <span class="text-xs @sentimentClass">@message.Sentiment</span>
+                                            <i data-lucide="user" class="w-5 h-5"></i>
                                         }
+                                        else
+                                        {
+                                            <i data-lucide="bot" class="w-5 h-5"></i>
+                                        }
+                                    </div>
+                                    <div class="flex-1 space-y-2">
+                                        <div class="@(message.IsFromUser ? "bg-primary text-primary-foreground shadow-primary/20" : "bg-muted/30 border border-border/40 text-foreground") rounded-[1.5rem] p-5 shadow-xl">
+                                            <p class="text-sm font-medium leading-relaxed">@message.Content</p>
+                                        </div>
+                                        <div class="flex items-center gap-3 @(message.IsFromUser ? "justify-end" : "") px-2">
+                                            <span class="text-[9px] font-black tabular-nums text-muted-foreground opacity-40">@message.Timestamp.ToString("HH:mm:ss")</span>
+                                            @if (!string.IsNullOrEmpty(message.Sentiment))
+                                            {
+                                                var sentimentColor = message.Sentiment switch
+                                                {
+                                                    "Positive" => "text-green-500",
+                                                    "Negative" => "text-red-500",
+                                                    _ => "text-amber-500"
+                                                };
+                                                <span class="text-[8px] font-black uppercase tracking-widest @sentimentColor">@message.Sentiment.ToUpper()_SIGNAL</span>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Actions -->
     <div class="flex items-center justify-end gap-3">
-        <button class="btn btn-outline">
-            <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+        <button class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/export">
+            <i data-lucide="download" class="w-4 h-4 group-hover/export:translate-y-0.5 transition-transform"></i>
             Export Conversation
         </button>
-        <button class="btn btn-outline text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20">
-            <i data-lucide="trash-2" class="w-4 h-4 mr-2"></i>
+        <button class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:border-red-500/50 hover:text-red-500 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/delete">
+            <i data-lucide="trash-2" class="w-4 h-4 group-hover/delete:rotate-12 transition-transform"></i>
             Delete Conversation
         </button>
     </div>
@@ -132,14 +131,12 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/ai-dashboard.js" asp-append-version="true"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize skeleton loading
-            Skeleton.initPageLoad('conversation-details-skeleton', 'conversation-details-content');
-            
-            // Initialize icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
+            if (typeof Skeleton !== 'undefined') {
+                Skeleton.initPageLoad('conversation-details-skeleton', 'conversation-details-content');
             }
         });
     </script>

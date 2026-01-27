@@ -29,3 +29,4 @@ public class SqlStringLocalizerFactory : IStringLocalizerFactory
         return new SqlStringLocalizer(_localizationService, fallbackLocalizer, baseName);
     }
 }
+

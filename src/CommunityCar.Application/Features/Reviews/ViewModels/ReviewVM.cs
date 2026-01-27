@@ -62,3 +62,5 @@ public class ReviewVM
     public bool HasImages { get; set; }
     public bool HasDetailedRatings { get; set; }
 }
+
+

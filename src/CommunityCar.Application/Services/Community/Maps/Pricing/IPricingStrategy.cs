@@ -34,3 +34,5 @@ public class TripCostBreakdown
     public List<string> CostFactors { get; set; } = new();
     public string PricingStrategy { get; set; } = string.Empty;
 }
+
+

@@ -33,3 +33,4 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
             .Metadata.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }
+

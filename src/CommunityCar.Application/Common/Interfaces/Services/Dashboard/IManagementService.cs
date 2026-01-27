@@ -22,3 +22,5 @@ public interface IManagementService
     Task<bool> ModerateContentAsync(ModerateContentRequest request);
     Task<List<SystemAlertVM>> GetSystemAlertsAsync();
 }
+
+

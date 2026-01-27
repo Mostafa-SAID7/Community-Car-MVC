@@ -11,28 +11,28 @@
             <p class="text-muted-foreground">Test AI responses and debug issues in real-time</p>
         </div>
         <div class="flex items-center gap-3">
-            <a asp-action="Index" class="btn btn-outline">
-                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+            <a asp-action="Index" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
                 Back to Dashboard
             </a>
         </div>
     </div>
 
     <!-- Test Console -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Test AI Assistant</h3>
-            <p class="card-description">Send test messages to the AI assistant</p>
+    <div class="eng-card">
+        <div class="eng-card-header">
+            <h3 class="eng-card-title">Test AI Assistant</h3>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Send test messages to the AI assistant</p>
         </div>
-        <div class="card-content space-y-4">
+        <div class="p-6 space-y-4">
             <div class="space-y-2">
                 <label class="text-sm font-medium text-foreground">Test Message</label>
                 <textarea id="testMessage" class="textarea min-h-[120px]" placeholder="Enter your test message here..."></textarea>
             </div>
             <div class="flex items-center justify-between">
                 <span class="text-sm text-muted-foreground" id="charCount">0 characters</span>
-                <button class="btn btn-primary" onclick="sendTestMessage()" id="sendButton">
-                    <i data-lucide="send" class="w-4 h-4 mr-2"></i>
+                <button class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95 group/send" data-action="send-test" id="sendButton">
+                    <i data-lucide="send" class="w-4 h-4 group-hover/send:translate-x-1 group-hover/send:-translate-y-1 transition-transform"></i>
                     Send Test
                 </button>
             </div>
@@ -40,11 +40,11 @@
     </div>
 
     <!-- Test Results -->
-    <div class="card" id="testResults" style="display: none;">
-        <div class="card-header">
-            <h3 class="card-title">AI Response</h3>
+    <div class="eng-card hidden" id="testResults">
+        <div class="eng-card-header">
+            <h3 class="eng-card-title">AI Response</h3>
         </div>
-        <div class="card-content">
+        <div class="p-6">
             <div class="p-4 rounded-lg bg-muted/50 border border-border">
                 <p class="text-foreground" id="aiResponse">Response will appear here...</p>
             </div>
@@ -53,70 +53,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-
-            // Character counter
-            const testMessage = document.getElementById('testMessage');
-            const charCount = document.getElementById('charCount');
-            
-            testMessage.addEventListener('input', function() {
-                charCount.textContent = `${this.value.length} characters`;
-            });
-        });
-
-        async function sendTestMessage() {
-            const message = document.getElementById('testMessage').value.trim();
-            if (!message) {
-                alert('Please enter a test message');
-                return;
-            }
-
-            const sendButton = document.getElementById('sendButton');
-            const testResults = document.getElementById('testResults');
-            const aiResponse = document.getElementById('aiResponse');
-
-            // Update UI
-            sendButton.disabled = true;
-            sendButton.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 mr-2 animate-spin"></i>Testing...';
-
-            try {
-                const response = await fetch('/Dashboard/AIManagement/TestMessage', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
-                    },
-                    body: JSON.stringify({
-                        message: message
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    aiResponse.textContent = data.data.response;
-                    testResults.style.display = 'block';
-                } else {
-                    aiResponse.textContent = data.message || 'Test failed';
-                    testResults.style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Test error:', error);
-                aiResponse.textContent = 'Connection error. Please check your network.';
-                testResults.style.display = 'block';
-            } finally {
-                // Reset button
-                sendButton.disabled = false;
-                sendButton.innerHTML = '<i data-lucide="send" class="w-4 h-4 mr-2"></i>Send Test';
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
-            }
-        }
-    </script>
+    <script src="~/js/ai-test.js" asp-append-version="true"></script>
 }

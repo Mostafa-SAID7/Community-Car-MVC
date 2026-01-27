@@ -85,7 +85,7 @@ class FriendsManager {
                 // Remove the request card or reload the page
                 const requestCard = button.closest('.request-card');
                 if (requestCard) {
-                    requestCard.style.display = 'none';
+                    requestCard.classList.add('hidden');
                 } else {
                     location.reload();
                 }
@@ -114,7 +114,7 @@ class FriendsManager {
                 // Remove the request card or reload the page
                 const requestCard = button.closest('.request-card');
                 if (requestCard) {
-                    requestCard.style.display = 'none';
+                    requestCard.classList.add('hidden');
                 } else {
                     location.reload();
                 }
@@ -371,7 +371,7 @@ function viewMutualFriends(userId) {
 function hideSuggestion(userId) {
     const card = event.target.closest('.bg-muted\\/20');
     if (card) {
-        card.style.display = 'none';
+        card.classList.add('hidden');
         window.friendsManager.showNotification('success', window.friendsManager.getLocalizedMessage('SuggestionHidden', 'Suggestion hidden'));
     }
 }

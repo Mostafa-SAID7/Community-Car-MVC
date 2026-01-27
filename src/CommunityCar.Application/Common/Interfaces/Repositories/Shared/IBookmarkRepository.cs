@@ -11,3 +11,5 @@ public interface IBookmarkRepository : IBaseRepository<Bookmark>
     Task<bool> IsBookmarkedByUserAsync(Guid entityId, EntityType entityType, Guid userId);
     Task<int> GetBookmarkCountAsync(Guid entityId, EntityType entityType);
 }
+
+

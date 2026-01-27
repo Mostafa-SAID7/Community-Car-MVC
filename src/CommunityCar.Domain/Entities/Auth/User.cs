@@ -27,7 +27,23 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     public string? BioAr { get; set; }
     public string? CityAr { get; set; }
     public string? CountryAr { get; set; }
+    public string? Website { get; set; }
+    public string? CoverImageUrl { get; set; }
     public bool IsActive { get; private set; }
+
+    // Privacy Settings
+    public bool IsPublic { get; set; } = true;
+    public bool ShowEmail { get; set; } = false;
+    public bool ShowLocation { get; set; } = true;
+    public bool ShowOnlineStatus { get; set; } = true;
+    public bool AllowMessagesFromStrangers { get; set; } = true;
+    public bool AllowTagging { get; set; } = true;
+    public bool ShowActivityStatus { get; set; } = true;
+    public bool DataProcessingConsent { get; set; } = false;
+    public bool MarketingEmailsConsent { get; set; } = false;
+    
+    // Security
+    public DateTime? LastPasswordChangeAt { get; set; }
 
     // OAuth properties
     public string? GoogleId { get; set; }
@@ -85,6 +101,11 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     {
         IsActive = false;
         Audit(UpdatedBy);
+    }
+
+    public void Delete()
+    {
+        SoftDelete(UpdatedBy ?? "System");
     }
 
     public virtual void SoftDelete(string deletedBy)
