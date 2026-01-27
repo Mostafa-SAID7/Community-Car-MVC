@@ -27,7 +27,14 @@
     </div>
 
     <!-- Suggestions Grid -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+    <div id="suggestions-skeleton" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        @for (int i = 0; i < 6; i++)
+        {
+            <skeleton type="Card" />
+        }
+    </div>
+
+    <div id="suggestions-content" class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
         <div class="p-6">
             @if (Model.Any())
             {
@@ -140,12 +147,17 @@
                 </div>
             }
         </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('suggestions-skeleton', 'suggestions-content');
+        });
+
         async function sendFriendRequest(receiverId, receiverName) {
             try {
                 const response = await fetch('/friends/send-request', {

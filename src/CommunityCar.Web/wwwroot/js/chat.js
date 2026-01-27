@@ -7,7 +7,7 @@ class ChatClient {
         this.isTyping = false;
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
-        
+
         this.init();
     }
 
@@ -21,10 +21,10 @@ class ChatClient {
 
             // Set up event handlers
             this.setupEventHandlers();
-            
+
             // Start connection
             await this.start();
-            
+
             console.log('Chat client initialized successfully');
         } catch (error) {
             console.error('Failed to initialize chat client:', error);
@@ -32,7 +32,7 @@ class ChatClient {
     }
 
     setupEventHandlers() {
-    // Connection events
+        // Connection events
         this.connection.onreconnecting(() => {
             console.log('Chat connection lost. Reconnecting...');
             this.showConnectionStatus(window.chatLocalizer?.Reconnecting || 'Reconnecting...', 'warning');
@@ -42,7 +42,7 @@ class ChatClient {
             console.log('Chat connection restored');
             this.showConnectionStatus(window.chatLocalizer?.Connected || 'Connected', 'success');
             this.reconnectAttempts = 0;
-            
+
             // Rejoin current conversation if any
             if (this.currentConversationId) {
                 this.joinConversation(this.currentConversationId);
@@ -88,7 +88,7 @@ class ChatClient {
             console.log('Chat SignalR connection started');
         } catch (error) {
             console.error('Error starting chat connection:', error);
-            
+
             // Retry connection
             if (this.reconnectAttempts < this.maxReconnectAttempts) {
                 this.reconnectAttempts++;
@@ -207,15 +207,15 @@ class ChatClient {
     // Event handlers
     handleReceiveMessage(message) {
         console.log('Received message:', message);
-        
+
         // Add message to UI
         this.addMessageToUI(message);
-        
+
         // Play notification sound if not from current user
         if (message.SenderId !== this.getCurrentUserId()) {
             this.playNotificationSound();
         }
-        
+
         // Update conversation list
         this.updateConversationList(message);
     }
@@ -229,7 +229,9 @@ class ChatClient {
                 statusElement.classList.remove('sent');
                 statusElement.classList.add('read');
                 statusElement.innerHTML = '<i data-lucide="check-check"></i>';
-                lucide.createIcons();
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
             }
         }
     }
@@ -254,7 +256,7 @@ class ChatClient {
             if (onlineIndicator) {
                 onlineIndicator.style.display = 'block';
             }
-            
+
             const statusText = element.querySelector('.chat-header-status');
             if (statusText) {
                 statusText.textContent = window.chatLocalizer?.Online || 'Online';
@@ -271,7 +273,7 @@ class ChatClient {
             if (onlineIndicator) {
                 onlineIndicator.style.display = 'none';
             }
-            
+
             const statusText = element.querySelector('.chat-header-status');
             if (statusText) {
                 statusText.textContent = window.chatLocalizer?.Offline || 'Offline';
@@ -287,60 +289,62 @@ class ChatClient {
 
         const isOwnMessage = message.SenderId === this.getCurrentUserId();
         const messageElement = this.createMessageElement(message, isOwnMessage);
-        
+
         messagesContainer.appendChild(messageElement);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        
+
         // Initialize Lucide icons
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
 
     createMessageElement(message, isOwnMessage) {
         const messageGroup = document.createElement('div');
         messageGroup.className = `message-group ${isOwnMessage ? 'own' : 'other'}`;
-        
+
         const messageItem = document.createElement('div');
         messageItem.className = 'message-item';
         messageItem.setAttribute('data-message-id', message.Id);
-        
+
         const messageBubble = document.createElement('div');
         messageBubble.className = 'message-bubble';
         messageBubble.textContent = message.Content;
-        
+
         const messageMeta = document.createElement('div');
         messageMeta.className = 'message-meta';
-        
+
         const messageTime = document.createElement('span');
         messageTime.className = 'message-time';
         messageTime.textContent = this.formatTime(message.CreatedAt);
-        
+
         messageMeta.appendChild(messageTime);
-        
+
         if (isOwnMessage) {
             const messageStatus = document.createElement('span');
             messageStatus.className = 'message-status sent';
             messageStatus.innerHTML = '<i data-lucide="check"></i>';
             messageMeta.appendChild(messageStatus);
         }
-        
+
         messageItem.appendChild(messageBubble);
         messageItem.appendChild(messageMeta);
         messageGroup.appendChild(messageItem);
-        
+
         return messageGroup;
     }
 
     showTypingIndicator(userId) {
         // Remove existing typing indicator for this user
         this.hideTypingIndicator(userId);
-        
+
         const messagesContainer = document.querySelector('.chat-messages');
         if (!messagesContainer) return;
-        
+
         const typingIndicator = document.createElement('div');
         typingIndicator.className = 'typing-indicator flex items-center gap-3 p-4 animate-in fade-in duration-300';
         typingIndicator.setAttribute('data-typing-user', userId);
-        
+
         typingIndicator.innerHTML = `
             <div class="w-8 h-8 rounded-full bg-muted border border-border flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
                 <i data-lucide="user" class="w-4 h-4"></i>
@@ -354,10 +358,12 @@ class ChatClient {
                 </div>
             </div>
         `;
-        
+
         messagesContainer.appendChild(typingIndicator);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
 
     hideTypingIndicator(userId) {
@@ -373,15 +379,15 @@ class ChatClient {
             const preview = conversationItem.querySelector('.conversation-preview');
             const time = conversationItem.querySelector('.conversation-time');
             const unreadBadge = conversationItem.querySelector('.unread-badge');
-            
+
             if (preview) {
                 preview.textContent = message.Content;
             }
-            
+
             if (time) {
                 time.textContent = this.formatTime(message.CreatedAt);
             }
-            
+
             // Update unread count if not current conversation
             if (message.ConversationId !== this.currentConversationId && message.SenderId !== this.getCurrentUserId()) {
                 if (unreadBadge) {
@@ -395,7 +401,7 @@ class ChatClient {
                     conversationItem.appendChild(newBadge);
                 }
             }
-            
+
             // Move conversation to top
             const conversationsList = conversationItem.parentElement;
             conversationsList.insertBefore(conversationItem, conversationsList.firstChild);
@@ -411,11 +417,11 @@ class ChatClient {
             statusElement.className = 'chat-connection-status fixed top-4 right-4 px-4 py-2 rounded-lg text-sm font-medium z-50 transition-all';
             document.body.appendChild(statusElement);
         }
-        
+
         statusElement.textContent = message;
         statusElement.className = `chat-connection-status fixed top-4 right-4 px-4 py-2 rounded-lg text-sm font-medium z-50 transition-all ${type === 'success' ? 'bg-green-500 text-white' : type === 'warning' ? 'bg-yellow-500 text-white' : 'bg-red-500 text-white'}`;
         statusElement.style.display = 'block';
-        
+
         if (type === 'success') {
             setTimeout(() => {
                 statusElement.style.display = 'none';
@@ -447,7 +453,7 @@ class ChatClient {
         const date = new Date(dateString);
         const now = new Date();
         const diffInMinutes = Math.floor((now - date) / (1000 * 60));
-        
+
         if (diffInMinutes < 1) {
             return window.chatLocalizer?.JustNow || 'Just now';
         } else if (diffInMinutes < 60) {
@@ -468,11 +474,11 @@ class ChatClient {
     }
 }
 
-    // Initialize chat client when DOM is loaded
+// Initialize chat client when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof signalR !== 'undefined') {
         window.chatClient = new ChatClient();
-        
+
         // Initialize chat UI interactions
         initializeChatUI();
     } else {
@@ -480,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Chat UI initialization and API integration
+// Chat UI initialization and SignalR integration
 function initializeChatUI() {
     const conversationItems = document.querySelectorAll('[data-conversation-id]');
     const chatEmptyState = document.getElementById('chat-empty-state');
@@ -491,43 +497,43 @@ function initializeChatUI() {
     const sendBtn = document.getElementById('send-message-btn');
     const newChatBtn = document.getElementById('new-chat-btn');
     const searchInput = document.getElementById('chat-search');
-    
+
     let currentConversationId = null;
-    
-    // Load conversations from API
+
+    // Load conversations from SignalR
     loadConversations();
-    
+
     // Conversation selection
     conversationItems.forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             const conversationId = this.getAttribute('data-conversation-id');
             selectConversation(conversationId);
         });
     });
-    
+
     // Message input handling
-    messageInput.addEventListener('input', function() {
+    messageInput.addEventListener('input', function () {
         const hasContent = this.value.trim().length > 0;
         sendBtn.disabled = !hasContent;
         this.style.height = 'auto';
         this.style.height = Math.min(this.scrollHeight, 160) + 'px';
-        
+
         // Send typing indicator
         if (currentConversationId && hasContent) {
             window.chatClient.startTyping(currentConversationId);
         }
     });
-    
-    messageInput.addEventListener('keydown', function(e) {
+
+    messageInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             sendMessage();
         }
     });
-    
+
     // Send message
     sendBtn.addEventListener('click', sendMessage);
-    
+
     // New conversation
     if (newChatBtn) {
         newChatBtn.addEventListener('click', () => {
@@ -535,18 +541,18 @@ function initializeChatUI() {
             console.log('New conversation clicked');
         });
     }
-    
+
     // Search functionality
     if (searchInput) {
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             const query = this.value.toLowerCase();
             filterConversations(query);
         });
     }
-    
+
     async function loadConversations() {
         try {
-            const response = await fetch('/chats/api/conversations');
+            const response = await fetch('/chats/conversations');
             if (response.ok) {
                 const conversations = await response.json();
                 renderConversations(conversations);
@@ -555,11 +561,11 @@ function initializeChatUI() {
             console.error('Failed to load conversations:', error);
         }
     }
-    
+
     function renderConversations(conversations) {
         const conversationsList = document.getElementById('conversations-list');
         if (!conversationsList || conversations.length === 0) return;
-        
+
         conversationsList.innerHTML = conversations.map(conv => `
             <div class="flex items-center gap-4 p-4 cursor-pointer hover:bg-primary/5 transition-all border-l-4 border-l-transparent relative group/conv" data-conversation-id="${conv.Id}">
                 <div class="relative shrink-0">
@@ -580,78 +586,78 @@ function initializeChatUI() {
                 ${conv.UnreadCount > 0 ? `<div class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 bg-primary text-primary-foreground text-[10px] font-black rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">${conv.UnreadCount}</div>` : ''}
             </div>
         `).join('');
-        
+
         // Re-attach event listeners
         conversationsList.querySelectorAll('[data-conversation-id]').forEach(item => {
-            item.addEventListener('click', function() {
+            item.addEventListener('click', function () {
                 const conversationId = this.getAttribute('data-conversation-id');
                 selectConversation(conversationId);
             });
         });
     }
-    
+
     async function selectConversation(conversationId) {
         try {
             // Update UI state
-            document.querySelectorAll('[data-conversation-id]').forEach(i => 
+            document.querySelectorAll('[data-conversation-id]').forEach(i =>
                 i.classList.remove('bg-primary/10', 'border-primary', 'active'));
             document.querySelector(`[data-conversation-id="${conversationId}"]`)
                 ?.classList.add('bg-primary/10', 'border-primary', 'active');
-            
+
             // Show chat interface
             chatEmptyState.style.display = 'none';
             chatHeader.style.display = 'flex';
             chatMessages.style.display = 'flex';
             chatInputArea.style.display = 'block';
-            
+
             currentConversationId = conversationId;
-            
+
             // Join conversation via SignalR
             await window.chatClient.joinConversation(conversationId);
-            
+
             // Load conversation details and messages
             const [conversation, messages] = await Promise.all([
-                fetch(`/chats/api/conversations/${conversationId}`).then(r => r.json()),
-                fetch(`/chats/api/conversations/${conversationId}/messages`).then(r => r.json())
+                fetch(`/chats/conversations/${conversationId}`).then(r => r.json()),
+                fetch(`/chats/conversations/${conversationId}/messages`).then(r => r.json())
             ]);
-            
+
             // Update header
             updateChatHeader(conversation);
-            
+
             // Load messages
             renderMessages(messages);
-            
+
             // Mark conversation as read
-            await fetch(`/chats/api/conversations/${conversationId}/read`, { method: 'POST' });
-            
+            await fetch(`/chats/conversations/${conversationId}/read`, { method: 'POST' });
+
         } catch (error) {
             console.error('Failed to select conversation:', error);
         }
     }
-    
+
     function updateChatHeader(conversation) {
         const chatTitle = document.getElementById('chat-title');
         const chatAvatar = document.getElementById('chat-avatar');
         const chatStatus = document.getElementById('chat-status');
         const chatOnlineIndicator = document.getElementById('chat-online-indicator');
-        
+
         if (chatTitle) chatTitle.textContent = conversation.Title;
         if (chatAvatar) chatAvatar.textContent = getConversationAvatar(conversation);
-        
+
         const isOnline = conversation.Participants?.some(p => p.IsOnline);
         if (chatStatus) {
-            chatStatus.textContent = isOnline ? 
-                (window.chatLocalizer?.Online || 'Online') : 
+            chatStatus.textContent = isOnline ?
+                (window.chatLocalizer?.Online || 'Online') :
                 (window.chatLocalizer?.Offline || 'Offline');
         }
         if (chatOnlineIndicator) {
             chatOnlineIndicator.style.display = isOnline ? 'block' : 'none';
         }
     }
-    
+
     function renderMessages(messages) {
         chatMessages.innerHTML = '';
-        
+
         if (messages.length === 0) {
             chatMessages.innerHTML = `
                 <div class="flex-1 flex items-center justify-center">
@@ -663,50 +669,54 @@ function initializeChatUI() {
                     </div>
                 </div>
             `;
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
             return;
         }
-        
+
         // Group messages by date
         const groupedMessages = groupMessagesByDate(messages);
-        
+
         Object.entries(groupedMessages).forEach(([date, msgs]) => {
             // Add date separator
             const dateSeparator = document.createElement('div');
             dateSeparator.className = 'flex justify-center my-6';
             dateSeparator.innerHTML = `<span class="px-4 py-1.5 bg-muted/40 text-[10px] font-black uppercase tracking-widest text-muted-foreground rounded-full border border-border">${date}</span>`;
             chatMessages.appendChild(dateSeparator);
-            
+
             // Add messages
             msgs.forEach(message => {
                 const messageElement = window.chatClient.createMessageElement(message, message.IsOwnMessage);
                 chatMessages.appendChild(messageElement);
             });
         });
-        
-        lucide.createIcons();
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-    
+
     async function sendMessage() {
         const content = messageInput.value.trim();
         if (!content || !currentConversationId) return;
-        
+
         try {
             // Clear input immediately
             messageInput.value = '';
             sendBtn.disabled = true;
             messageInput.style.height = 'auto';
-            
+
             // Stop typing indicator
             await window.chatClient.stopTyping(currentConversationId);
-            
+
             // Send via SignalR (which will broadcast to all participants)
             const success = await window.chatClient.sendMessage(currentConversationId, content);
-            
+
             if (!success) {
-                // Fallback to API if SignalR fails
-                await fetch('/chats/api/messages', {
+                // Fallback to SignalR if SignalR fails
+                await fetch('/chats/messages', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -715,7 +725,7 @@ function initializeChatUI() {
                     })
                 });
             }
-            
+
         } catch (error) {
             console.error('Failed to send message:', error);
             // Restore message input on error
@@ -723,7 +733,7 @@ function initializeChatUI() {
             sendBtn.disabled = false;
         }
     }
-    
+
     function filterConversations(query) {
         const conversations = document.querySelectorAll('[data-conversation-id]');
         conversations.forEach(conv => {
@@ -733,7 +743,7 @@ function initializeChatUI() {
             conv.style.display = matches ? 'flex' : 'none';
         });
     }
-    
+
     function getConversationAvatar(conversation) {
         if (conversation.IsGroupChat) {
             return conversation.Title.substring(0, 2).toUpperCase();
@@ -742,17 +752,17 @@ function initializeChatUI() {
             return otherParticipant?.Name.substring(0, 2).toUpperCase() || 'U';
         }
     }
-    
+
     function groupMessagesByDate(messages) {
         const groups = {};
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
-        
+
         messages.forEach(message => {
             const messageDate = new Date(message.CreatedAt);
             let dateKey;
-            
+
             if (messageDate.toDateString() === today.toDateString()) {
                 dateKey = 'Today';
             } else if (messageDate.toDateString() === yesterday.toDateString()) {
@@ -760,16 +770,16 @@ function initializeChatUI() {
             } else {
                 dateKey = messageDate.toLocaleDateString();
             }
-            
+
             if (!groups[dateKey]) {
                 groups[dateKey] = [];
             }
             groups[dateKey].push(message);
         });
-        
+
         return groups;
     }
-    
+
     function formatTimeAgo(dateString) {
         return window.chatClient?.formatTime(dateString) || 'Unknown';
     }

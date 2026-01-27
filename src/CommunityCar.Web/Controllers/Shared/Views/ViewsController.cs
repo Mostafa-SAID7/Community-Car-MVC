@@ -23,16 +23,25 @@ public class ViewsController : Controller
         _viewRepository = viewRepository;
     }
 
+    public class ViewRequest
+    {
+        public string EntityId { get; set; }
+        public string EntityType { get; set; }
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Track([FromForm] string entityId, [FromForm] string entityType)
+    public async Task<IActionResult> Track([FromBody] ViewRequest request)
     {
         try
         {
-            if (!Guid.TryParse(entityId, out var parsedEntityId))
+            if (request == null)
+                return Json(new { success = false, message = "Invalid request" });
+
+            if (!Guid.TryParse(request.EntityId, out var parsedEntityId))
                 return Json(new { success = false, message = "Invalid entity ID" });
 
-            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+            if (!Enum.TryParse<EntityType>(request.EntityType, out var parsedEntityType))
                 return Json(new { success = false, message = "Invalid entity type" });
 
             Guid? userId = null;

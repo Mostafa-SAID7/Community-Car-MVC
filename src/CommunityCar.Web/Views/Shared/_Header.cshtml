@@ -23,13 +23,7 @@
             <input type="text" placeholder="@SharedLocalizer["Search"]" class="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground">
         </div>
         
-        <nav class="hidden md:flex items-center gap-1">
-            <a href="/" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Home"]" title="@SharedLocalizer["Home"]">
-                <i data-lucide="home" class="w-[18px] h-[18px]"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["Home"]</span>
-            </a>
-            <a href="/chats" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@SharedLocalizer["Chat"]" title="@SharedLocalizer["Chat"]">
-                <i data-lucide="message-circle" class="w-[18px] h-[18px]"></i>
+        
         @if (ViewData["FullWidth"] == null)
         {
             <nav class="hidden md:flex items-center gap-1">
@@ -74,13 +68,13 @@
             <i data-lucide="moon" id="moon-icon" class="w-4 h-4 hidden"></i>
         </button>
         
-        <div class="relative">
+        <div class="relative notification-wrapper">
             <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors notification-bell" aria-label="@SharedLocalizer["Notifications"]" title="@SharedLocalizer["Notifications"]">
                 <i data-lucide="bell" class="w-4 h-4"></i>
                 <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground notification-badge" style="display: none;"></span>
             </button>
             
-            <div class="absolute right-0 top-12 w-80 bg-card border border-border rounded-2xl shadow-lg hidden notification-dropdown">
+            <div class="absolute right-0 top-12 w-80 dropdown-content hidden notification-dropdown">
                 <div class="flex items-center justify-between p-4 border-b border-border">
                     <h3 class="text-sm font-semibold">@SharedLocalizer["Notifications"]</h3>
                     <div class="flex items-center gap-2">
@@ -88,9 +82,10 @@
                     </div>
                 </div>
                 <div class="max-h-96 overflow-y-auto notification-list">
-                    <div class="flex flex-col items-center justify-center py-8 notification-loading">
-                        <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-muted-foreground"></i>
-                        <p class="text-sm text-muted-foreground mt-2">@SharedLocalizer["LoadingNotifications"]</p>
+                    <div class="flex flex-col gap-2 p-4 notification-loading">
+                        <skeleton type="Line" />
+                        <skeleton type="Line" />
+                        <skeleton type="Line" />
                     </div>
                 </div>
             </div>

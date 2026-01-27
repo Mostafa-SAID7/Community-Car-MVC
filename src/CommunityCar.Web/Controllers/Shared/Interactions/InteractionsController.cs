@@ -6,9 +6,9 @@ using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Web.Controllers.Shared.Interactions;
 
-[Route("api/shared/interactions")]
-[ApiController]
-public class InteractionsController : ControllerBase
+[Route("shared/interactions")]
+[Controller]
+public class InteractionsController : Controller
 {
     private readonly IInteractionService _interactionService;
     private readonly ICurrentUserService _currentUserService;

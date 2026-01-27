@@ -132,10 +132,22 @@ class FriendsManager {
         const friendId = button.dataset.friendId;
         const friendName = button.dataset.friendName;
 
-        if (!friendId || !confirm(this.getLocalizedMessage('ConfirmRemoveFriend', `Are you sure you want to remove ${friendName} from your friends?`).replace('{0}', friendName))) {
-            return;
-        }
+        if (!friendId) return;
 
+        const message = this.getLocalizedMessage('ConfirmRemoveFriend', `Are you sure you want to remove ${friendName} from your friends?`).replace('{0}', friendName);
+
+        if (window.AlertModal) {
+            window.AlertModal.confirm(message, 'Remove Friend', (confirmed) => {
+                if (confirmed) {
+                    this.executeRemoveFriend(friendId);
+                }
+            });
+        } else if (confirm(message)) {
+            this.executeRemoveFriend(friendId);
+        }
+    }
+
+    async executeRemoveFriend(friendId) {
         try {
             const response = await this.makeRequest('/friends/remove-friend', {
                 friendId: friendId
@@ -158,10 +170,22 @@ class FriendsManager {
         const userToBlockId = button.dataset.userToBlockId;
         const userName = button.dataset.userName;
 
-        if (!userToBlockId || !confirm(this.getLocalizedMessage('ConfirmBlockUser', `Are you sure you want to block ${userName}? This will prevent them from contacting you.`).replace('{0}', userName))) {
-            return;
-        }
+        if (!userToBlockId) return;
 
+        const message = this.getLocalizedMessage('ConfirmBlockUser', `Are you sure you want to block ${userName}? This will prevent them from contacting you.`).replace('{0}', userName);
+
+        if (window.AlertModal) {
+            window.AlertModal.confirm(message, 'Block User', (confirmed) => {
+                if (confirmed) {
+                    this.executeBlockUser(userToBlockId);
+                }
+            });
+        } else if (confirm(message)) {
+            this.executeBlockUser(userToBlockId);
+        }
+    }
+
+    async executeBlockUser(userToBlockId) {
         try {
             const response = await this.makeRequest('/friends/block-user', {
                 userToBlockId: userToBlockId
@@ -180,7 +204,7 @@ class FriendsManager {
 
     async makeRequest(url, data) {
         const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
-        
+
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -221,7 +245,7 @@ class FriendsManager {
 
         // Close all other dropdowns
         this.closeAllDropdowns();
-        
+
         // Toggle current dropdown
         dropdown.classList.toggle('hidden');
     }
@@ -244,7 +268,7 @@ class FriendsManager {
     showTooltip(e) {
         const element = e.target;
         const tooltipText = element.dataset.tooltip;
-        
+
         if (!tooltipText) return;
 
         const tooltip = document.createElement('div');

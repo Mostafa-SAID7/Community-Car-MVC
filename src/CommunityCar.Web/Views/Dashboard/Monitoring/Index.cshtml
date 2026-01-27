@@ -32,8 +32,15 @@
             </div>
         </div>
 
+        <div id="monitoring-skeleton" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+        </div>
+
         <!-- System Status Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" id="monitoring-grid">
             <!-- CPU Usage -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center justify-between">

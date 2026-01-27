@@ -15,9 +15,13 @@ function initializeStories() {
     setInterval(refreshStories, 300000);
 }
 
-// Load stories data from API
+// Load stories data from 
 function loadStoriesData() {
-    fetch('/api/stories/feed?count=20')
+    fetch('/stories/GetStoryFeed?count=20', {
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -199,7 +203,11 @@ function setupStoryViewer() {
 // Open story viewer
 function openStoryViewer(storyId) {
     // Load all active stories first
-    fetch('/api/stories/active')
+    fetch('/stories/active', {
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -414,10 +422,11 @@ function toggleStoryLike() {
     const isLiked = story.isLikedByUser;
     const endpoint = isLiked ? 'DELETE' : 'POST';
 
-    fetch(`/api/stories/${story.id}/like`, {
+    fetch(`/stories/${story.id}/like`, {
         method: endpoint,
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
         }
     })
         .then(response => response.json())
@@ -429,7 +438,10 @@ function toggleStoryLike() {
                 // Update UI
                 const likeBtn = document.getElementById('storyLikeBtn');
                 likeBtn.classList.toggle('text-red-500', story.isLikedByUser);
-                document.getElementById('storyLikes').innerHTML = `<i class="fas fa-heart mr-1"></i>${story.likeCount}`;
+                const likesCountElement = document.getElementById('storyLikes');
+                if (likesCountElement) {
+                    likesCountElement.innerHTML = `<i class="fas fa-heart mr-1"></i>${story.likeCount}`;
+                }
 
                 showNotification(
                     isLiked ? (window.storiesLocalizer?.RemovedLike || 'Removed like') : (window.storiesLocalizer?.Liked || 'Liked!'),
@@ -448,10 +460,11 @@ function shareStory() {
     const story = currentStorySet[currentStoryIndex];
     if (!story) return;
 
-    fetch(`/api/stories/${story.id}/share`, {
+    fetch(`/stories/${story.id}/share`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
         }
     })
         .then(response => response.json())
@@ -482,10 +495,11 @@ function shareStory() {
 
 // Mark story as viewed
 function markStoryAsViewed(storyId) {
-    fetch(`/api/stories/${storyId}/view`, {
+    fetch(`/stories/${storyId}/view`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
         }
     })
         .catch(error => {
@@ -506,7 +520,14 @@ function refreshStories() {
 
 // Show notification
 function showNotification(message, type = 'info') {
-    if (window.notify && typeof window.notify[type] === 'function') {
+    if (window.AlertModal) {
+        switch (type) {
+            case 'success': window.AlertModal.success(message); break;
+            case 'error': window.AlertModal.error(message); break;
+            case 'warning': window.AlertModal.warning(message); break;
+            default: window.AlertModal.info(message); break;
+        }
+    } else if (window.notify && typeof window.notify[type] === 'function') {
         window.notify[type](message);
     } else {
         console.log(`${type.toUpperCase()}: ${message}`);

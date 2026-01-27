@@ -69,6 +69,11 @@
                     Earned Badges
                 </h3>
                 
+                <div id="badges-skeleton" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <skeleton type="Card" />
+                    <skeleton type="Card" />
+                </div>
+
                 <div id="earnedBadges" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <!-- Will be populated by JavaScript -->
                     <div class="flex items-center justify-center py-12">
@@ -195,6 +200,9 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize skeleton loading
+            Skeleton.initPageLoad('badges-skeleton', 'earnedBadges');
+
             // Initialize Lucide icons
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();

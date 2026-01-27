@@ -15,12 +15,11 @@
     };
 }
 
-<button class="flex-1 py-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 group/btn @activeClass" 
+<button class="flex-1 py-3 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all group/btn @activeClass" 
         data-action="@Model.Action" 
         data-entity-id="@Model.EntityId" 
         data-entity-type="@Model.EntityType"
-        data-button-type="@Model.Type"
-        onclick="@Model.OnClick">
-    <i data-lucide="@iconName" class="w-5 h-5 group-hover/btn:scale-125 transition-all @iconFillClass"></i> 
-    @Model.Label
+        data-button-type="@Model.Type">
+    <i data-lucide="@iconName" class="w-4 h-4 group-hover/btn:scale-110 transition-all @iconFillClass"></i> 
+    <span>@Model.Label</span>
 </button>

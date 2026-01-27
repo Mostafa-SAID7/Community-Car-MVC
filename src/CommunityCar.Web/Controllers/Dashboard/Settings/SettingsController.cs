@@ -171,7 +171,7 @@ public class SettingsController : Controller
         }
     }
 
-    [HttpGet("api")]
+    [HttpGet("get-all")]
     public async Task<IActionResult> GetSettings(string? category = null)
     {
         try
@@ -194,7 +194,7 @@ public class SettingsController : Controller
         }
     }
 
-    [HttpGet("api/{settingKey}")]
+    [HttpGet("get-one/{settingKey}")]
     public async Task<IActionResult> GetSetting(string settingKey)
     {
         try
@@ -219,7 +219,7 @@ public class SettingsController : Controller
         }
     }
 
-    [HttpPost("api/update")]
+    [HttpPost("update-api")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateSettingApi([FromBody] SettingsRequest request)
     {
@@ -252,7 +252,7 @@ public class SettingsController : Controller
         }
     }
 
-    [HttpPost("api/reset/{settingKey}")]
+    [HttpPost("reset-api/{settingKey}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ResetSettingApi(string settingKey)
     {

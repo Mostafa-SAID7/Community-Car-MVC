@@ -74,7 +74,7 @@
     <!-- Left Side: Animation -->
     <div class="animation-side p-8 hidden lg:flex border-r border-border/20">
         <div id="smoke-container"></div>
-        <img id="car-animation" src="/images/login_frames/frame_08.png" class="car-frame" alt="Car Assembly" />
+        <img id="car-animation" src="/images/login_frames/frame_00.png" class="car-frame" alt="Car Assembly" />
     </div>
 
     <!-- Right Side: Form -->
@@ -113,8 +113,9 @@
                     <a asp-action="ForgotPassword" class="text-sm text-primary hover:text-primary/80 transition-colors">@AccountLocalizer["ForgotPassword"]?</a>
                 </div>
 
-                <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold py-3 px-4 rounded-lg transition-all btn-glow">
-                    @AccountLocalizer["LogIn"]
+                <button type="submit" id="login-button" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold py-3 px-4 rounded-lg transition-all btn-glow flex items-center justify-center gap-2">
+                    <span id="button-text">@AccountLocalizer["LogIn"]</span>
+                    <span id="button-spinner" class="hidden animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
                 </button>
             </form>
 
@@ -157,16 +158,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             const carImg = document.getElementById('car-animation');
             const smokeContainer = document.getElementById('smoke-container');
-            const frames = [
-                '/images/login_frames/frame_08.png',
-                '/images/login_frames/frame_03.png',
-                '/images/login_frames/frame_02.png',
-                '/images/login_frames/frame_01.png',
-                '/images/login_frames/frame_00.png'
-            ];
+            const frames = Array.from({ length: 21 }, (_, i) => `/images/login_frames/frame_${i.toString().padStart(2, '0')}.png`);
             
             let currentFrameIdx = 0;
-            const frameDelay = 600; // Slow motion delay in ms
+            const frameDelay = 150; // Dynamic delay for smooth 21-frame sequence
 
             // Preload frames
             frames.forEach(src => {
@@ -209,6 +204,22 @@
 
             // Start assembly after a short initial delay
             setTimeout(startAnimation, 1000);
+
+            // Handle login button loading
+            const loginForm = document.querySelector('form[asp-action="Login"]');
+            if (loginForm) {
+                loginForm.addEventListener('submit', () => {
+                    const btn = document.getElementById('login-button');
+                    const text = document.getElementById('button-text');
+                    const spinner = document.getElementById('button-spinner');
+                    
+                    if (btn && text && spinner) {
+                        btn.disabled = true;
+                        text.classList.add('opacity-50');
+                        spinner.classList.remove('hidden');
+                    }
+                });
+            }
         });
     </script>
 }

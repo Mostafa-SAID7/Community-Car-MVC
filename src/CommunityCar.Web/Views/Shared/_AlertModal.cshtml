@@ -22,6 +22,9 @@
             <!-- Modal Body -->
             <div class="p-6">
                 <p id="alertMessage" class="text-foreground leading-relaxed">Alert message will appear here.</p>
+                <div id="alertInputContainer" class="mt-4 hidden">
+                    <input type="text" id="alertInput" class="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter reason...">
+                </div>
             </div>
             
             <!-- Modal Footer -->
@@ -36,7 +39,7 @@
 <script>
     // Alert Modal System
     window.AlertModal = (function() {
-        let modal, backdrop, content, icon, title, message, confirmBtn, cancelBtn, closeBtn;
+        let modal, backdrop, content, icon, title, message, inputContainer, input, confirmBtn, cancelBtn, closeBtn;
         let currentCallback = null;
         let isOpen = false;
 
@@ -47,6 +50,8 @@
             icon = document.getElementById('alertIcon');
             title = document.getElementById('alertTitle');
             message = document.getElementById('alertMessage');
+            inputContainer = document.getElementById('alertInputContainer');
+            input = document.getElementById('alertInput');
             confirmBtn = document.getElementById('alertConfirmBtn');
             cancelBtn = document.getElementById('alertCancelBtn');
             closeBtn = document.getElementById('alertCloseBtn');
@@ -62,6 +67,9 @@
                 if (e.key === 'Escape' && isOpen) {
                     handleClose();
                 }
+                if (e.key === 'Enter' && isOpen && !inputContainer.classList.contains('hidden')) {
+                    handleConfirm();
+                }
             });
         }
 
@@ -73,6 +81,8 @@
                 title: alertTitle = 'Alert',
                 message: alertMessage = '',
                 showCancel = false,
+                showInput = false,
+                inputPlaceholder = '',
                 confirmText = 'OK',
                 cancelText = 'Cancel',
                 callback = null
@@ -100,6 +110,16 @@
                 cancelBtn.classList.remove('hidden');
             } else {
                 cancelBtn.classList.add('hidden');
+            }
+
+            // Show/hide input
+            if (showInput) {
+                inputContainer.classList.remove('hidden');
+                input.value = '';
+                input.placeholder = inputPlaceholder;
+                setTimeout(() => input.focus(), 100);
+            } else {
+                inputContainer.classList.add('hidden');
             }
 
             // Show modal with animation
@@ -168,7 +188,8 @@
 
         function handleConfirm() {
             if (currentCallback) {
-                currentCallback(true);
+                const inputValue = (!inputContainer.classList.contains('hidden')) ? input.value : true;
+                currentCallback(inputValue);
             }
             hide();
         }
@@ -237,6 +258,20 @@
                     showCancel: true,
                     confirmText: 'Yes',
                     cancelText: 'No',
+                    callback: callback
+                });
+            },
+            
+            prompt: function(message, title = 'Input Required', callback = null, placeholder = '') {
+                show({
+                    type: 'info',
+                    title: title,
+                    message: message,
+                    showCancel: true,
+                    showInput: true,
+                    inputPlaceholder: placeholder,
+                    confirmText: 'Submit',
+                    cancelText: 'Cancel',
                     callback: callback
                 });
             }

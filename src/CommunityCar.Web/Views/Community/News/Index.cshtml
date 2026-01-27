@@ -182,13 +182,24 @@
         </a>
     </div>
 
-    <!-- News Interface -->
     <div id="newsContent" class="min-h-[400px]">
-        @await Html.PartialAsync("~/Views/Community/News/_NewsList.cshtml", Model)
+        <div id="news-skeleton" class="hidden space-y-6">
+            @for (int i = 0; i < 4; i++)
+            {
+                <skeleton type="Post" />
+            }
+        </div>
+        <div id="news-list-container">
+            @await Html.PartialAsync("~/Views/Community/News/_NewsList.cshtml", Model)
+        </div>
     </div>
 </div>
 
 @section Scripts {
-
     <script src="~/js/news.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('news-skeleton', 'news-list-container');
+        });
+    </script>
 }

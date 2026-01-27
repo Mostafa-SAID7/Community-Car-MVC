@@ -141,7 +141,15 @@
 
     <!-- Reviews Interface -->
     <div id="reviewsContainer" class="min-h-[400px]">
-        <partial name="~/Views/Community/Reviews/_ReviewsList.cshtml" model="Model" />
+        <div id="reviews-skeleton" class="hidden space-y-6">
+            @for (int i = 0; i < 4; i++)
+            {
+                <skeleton type="Post" />
+            }
+        </div>
+        <div id="reviews-list-container">
+            <partial name="~/Views/Community/Reviews/_ReviewsList.cshtml" model="Model" />
+        </div>
     </div>
 </div>
 
@@ -149,6 +157,7 @@
     <script>
         // Preservation of original JS/AJAX logic adapted to new UI hooks
         document.addEventListener('DOMContentLoaded', () => {
+            Skeleton.initPageLoad('reviews-skeleton', 'reviews-list-container');
             const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
             const filtersPanel = document.getElementById('filtersPanel');
             

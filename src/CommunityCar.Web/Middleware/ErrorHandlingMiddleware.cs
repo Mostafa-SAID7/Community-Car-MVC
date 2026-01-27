@@ -26,6 +26,8 @@ public class ErrorHandlingMiddleware
         catch (Exception ex)
         {
             _logger.LogError(ex, "An unhandled exception occurred");
+            Console.WriteLine($"[CRITICAL ERROR]: {ex.Message}");
+            Console.WriteLine(ex.StackTrace);
             await HandleExceptionAsync(context, ex);
         }
     }
@@ -89,8 +91,10 @@ public class ErrorHandlingMiddleware
         }
 
         // Check if this is an API request or browser request
-        var isApiRequest = context.Request.Path.StartsWithSegments("/api") || 
-                          context.Request.Headers.Accept.Any(h => h?.Contains("application/json") == true);
+        var isApiRequest = context.Request.Path.StartsWithSegments("/") || 
+                          context.Request.Path.Value?.Contains("/", StringComparison.OrdinalIgnoreCase) == true ||
+                          context.Request.Headers.Accept.Any(h => h?.Contains("application/json", StringComparison.OrdinalIgnoreCase) == true) ||
+                          context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
         if (isApiRequest)
         {

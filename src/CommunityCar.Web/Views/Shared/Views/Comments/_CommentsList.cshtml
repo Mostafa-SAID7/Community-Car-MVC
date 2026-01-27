@@ -1,65 +1,105 @@
 @model IEnumerable<CommunityCar.Application.Features.Interactions.ViewModels.CommentVM>
 
-<div class="comments-list space-y-4">
+<div class="comments-list space-y-8">
     @if (Model?.Any() == true)
     {
         @foreach (var comment in Model)
         {
-            <div class="comment-item flex gap-3 p-4 bg-muted/30 rounded-lg" data-comment-id="@comment.Id">
-                <div class="flex-shrink-0">
-                    <img src="@(comment.AuthorAvatar ?? "/images/default-avatar.png")" 
-                         alt="@comment.AuthorName" 
-                         class="w-10 h-10 rounded-full object-cover" />
-                </div>
-                <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="font-medium text-foreground">@comment.AuthorName</span>
-                        <span class="text-sm text-muted-foreground">@comment.CreatedAt.ToString("MMM dd, yyyy 'at' HH:mm")</span>
+            <div class="comment-item-container space-y-6">
+                <div class="comment-item flex gap-6 p-6 md:p-8 bg-card/40 backdrop-blur-xl border border-border/50 rounded-[2rem] shadow-lg transition-all hover:border-primary/10 animate-in fade-in slide-in-from-bottom-4" data-comment-id="@comment.Id">
+                    <div class="flex-shrink-0">
+                        <img src="@(comment.AuthorAvatar ?? "/images/default-avatar.png")" 
+                             alt="@comment.AuthorName" 
+                             class="w-12 h-12 rounded-2xl bg-muted border border-border/50 object-cover shadow-inner" />
                     </div>
-                    <div class="text-foreground mb-2">
-                        @comment.Content
-                    </div>
-                    <div class="flex items-center gap-4 text-sm">
-                        <button class="text-muted-foreground hover:text-primary transition-colors reply-btn" 
-                                data-comment-id="@comment.Id">
-                            <i data-lucide="reply" class="w-4 h-4 inline mr-1"></i>
-                            Reply
-                        </button>
-                        @if (comment.CanEdit)
-                        {
-                            <button class="text-muted-foreground hover:text-primary transition-colors edit-btn" 
-                                    data-comment-id="@comment.Id">
-                                <i data-lucide="edit" class="w-4 h-4 inline mr-1"></i>
-                                Edit
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-sm font-black text-foreground tracking-tight underline decoration-primary decoration-4 underline-offset-4 decoration-transparent hover:decoration-primary transition-all cursor-pointer">@comment.AuthorName</span>
+                            <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@comment.CreatedAt.ToString("MMM dd, yyyy 'at' HH:mm")</span>
+                        </div>
+                        <div class="prose prose-sm dark:prose-invert max-w-none text-foreground/80 leading-relaxed font-medium mb-4">
+                            @Html.Raw(comment.Content)
+                        </div>
+                        <div class="flex items-center gap-6 pt-4 border-t border-border/20">
+                            <button class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors group/tool reply-btn" 
+                                    data-comment-id="@comment.Id"
+                                    data-author-name="@comment.AuthorName">
+                                <i data-lucide="reply" class="w-4 h-4 group-hover/tool:-translate-x-0.5 transition-transform"></i>
+                                Reply
                             </button>
-                        }
-                        @if (comment.CanDelete)
-                        {
-                            <button class="text-muted-foreground hover:text-red-600 transition-colors delete-btn" 
-                                    data-comment-id="@comment.Id">
-                                <i data-lucide="trash-2" class="w-4 h-4 inline mr-1"></i>
-                                Delete
-                            </button>
-                        }
+                            @if (comment.CanEdit)
+                            {
+                                <button class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors group/tool edit-btn" 
+                                        data-comment-id="@comment.Id">
+                                    <i data-lucide="edit" class="w-4 h-4 group-hover/tool:scale-110 transition-transform"></i>
+                                    Edit
+                                </button>
+                            }
+                            @if (comment.CanDelete)
+                            {
+                                <button class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-destructive transition-colors group/tool delete-btn ml-auto" 
+                                        data-comment-id="@comment.Id">
+                                    <i data-lucide="trash-2" class="w-4 h-4 group-hover/tool:scale-110 transition-transform"></i>
+                                    Delete
+                                </button>
+                            }
+                        </div>
                     </div>
                 </div>
+
+                @if (comment.Replies?.Any() == true)
+                {
+                    <div class="replies-container ml-12 md:ml-16 space-y-6 border-l-2 border-primary/10 pl-6 md:pl-8">
+                        @foreach (var reply in comment.Replies)
+                        {
+                            <div class="reply-item flex gap-5 p-5 md:p-6 bg-muted/10 backdrop-blur-md border border-border/30 rounded-2xl transition-all hover:border-primary/10" data-comment-id="@reply.Id">
+                                <div class="flex-shrink-0">
+                                    <img src="@(reply.AuthorAvatar ?? "/images/default-avatar.png")" 
+                                         alt="@reply.AuthorName" 
+                                         class="w-10 h-10 rounded-2xl bg-muted border border-border/50 object-cover shadow-inner" />
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-xs font-black text-foreground tracking-tight">@reply.AuthorName</span>
+                                        <span class="text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-30">@reply.CreatedAt.ToString("MMM dd, yyyy")</span>
+                                    </div>
+                                    <div class="prose prose-xs dark:prose-invert max-w-none text-foreground/70 leading-relaxed font-medium mb-3 text-sm">
+                                        @Html.Raw(reply.Content)
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <button class="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors reply-btn" 
+                                                data-comment-id="@comment.Id"
+                                                data-author-name="@reply.AuthorName">
+                                            <i data-lucide="reply" class="w-3.5 h-3.5"></i>
+                                            Reply
+                                        </button>
+                                        @if (reply.CanDelete)
+                                        {
+                                            <button class="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-muted-foreground hover:text-destructive transition-colors delete-btn" 
+                                                    data-comment-id="@reply.Id">
+                                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                                Delete
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
         }
     }
     else
     {
-        <div class="text-center py-8 text-muted-foreground">
-            <i data-lucide="message-circle" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
-            <p>No comments yet. Be the first to comment!</p>
+        <div class="py-20 flex flex-col items-center justify-center text-center bg-muted/10 border-2 border-dashed border-border/40 rounded-[2.5rem] animate-pulse">
+            <div class="w-16 h-16 bg-muted/40 rounded-2xl flex items-center justify-center mb-6">
+                <i data-lucide="message-circle" class="w-8 h-8 text-muted-foreground opacity-20"></i>
+            </div>
+            <h4 class="text-xl font-black text-foreground tracking-tight underline decoration-primary/40 decoration-4 underline-offset-8 mb-3">No Feedback Signals</h4>
+            <p class="text-xs font-medium text-muted-foreground uppercase tracking-widest opacity-60">Be the first to start the discussion!</p>
         </div>
     }
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize icons
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
-});
-</script>
+@* Script handled by parent view *@

@@ -89,7 +89,7 @@
                                 <i data-lucide="moon" id="mobile-moon-icon" class="w-4 h-4 hidden"></i>
                             </button>
                             
-                            <div class="relative">
+                            <div class="relative notification-wrapper">
                                 <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors mobile-notification-bell" aria-label="@SharedLocalizer["Notifications"]" title="@SharedLocalizer["Notifications"]">
                                     <i data-lucide="bell" class="w-4 h-4"></i>
                                     <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground mobile-notification-badge" style="display: none;"></span>
@@ -103,9 +103,10 @@
                                         </div>
                                     </div>
                                     <div class="max-h-96 overflow-y-auto mobile-notification-list">
-                                        <div class="flex flex-col items-center justify-center py-8 mobile-notification-loading">
-                                            <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-muted-foreground"></i>
-                                            <p class="text-sm text-muted-foreground mt-2">@SharedLocalizer["LoadingNotifications"]</p>
+                                        <div class="flex flex-col gap-2 p-4 mobile-notification-loading">
+                                            <skeleton type="Line" />
+                                            <skeleton type="Line" />
+                                            <skeleton type="Line" />
                                         </div>
                                     </div>
                                 </div>
@@ -165,17 +166,17 @@
     <partial name="_AIAssistant" />
     <partial name="_AlertModal" />
 
-    <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>
     <script src="~/js/toaster.js" asp-append-version="true" defer></script>
+    <script src="~/js/skeleton.js" asp-append-version="true"></script>
     <script src="~/js/error-boundary.js" asp-append-version="true" defer></script>
 
     <!-- SignalR -->
     @if (User.Identity?.IsAuthenticated == true)
     {
-        <script src="~/lib/signalr/signalr.min.js" defer></script>
-
+        <script src="~/lib/signalr/signalr.min.js"></script>
     }
 
     <script src="~/js/site.js" asp-append-version="true" defer></script>
@@ -308,6 +309,15 @@
             }
         });
     </script>
+    <!-- Global Skeleton Templates -->
+    <div id="global-skeleton-templates" class="hidden">
+        <partial name="_SkeletonLoading" model='"Post"' />
+        <partial name="_SkeletonLoading" model='"Story"' />
+        <partial name="_SkeletonLoading" model='"Circle"' />
+        <partial name="_SkeletonLoading" model='"Line"' />
+        <partial name="_SkeletonLoading" model='"Card"' />
+    </div>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

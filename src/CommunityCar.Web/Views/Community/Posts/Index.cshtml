@@ -34,8 +34,16 @@
         </div>
     </div>
 
-    @if (!Model.Any())
-    {
+    <div id="posts-skeleton" class="hidden space-y-8">
+        @for (int i = 0; i < 4; i++)
+        {
+            <skeleton type="Post" />
+        }
+    </div>
+
+    <div id="posts-list-container">
+        @if (!Model.Any())
+        {
         <div class="py-20 flex flex-col items-center justify-center text-center bg-muted/10 border-2 border-dashed border-border rounded-3xl">
             <div class="w-20 h-20 bg-muted/40 rounded-full flex items-center justify-center mb-6 shadow-inner animate-pulse">
                 <i data-lucide="radio-receiver" class="w-10 h-10 text-muted-foreground opacity-30"></i>
@@ -94,4 +102,13 @@
             }
         </div>
     }
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('posts-skeleton', 'posts-list-container');
+        });
+    </script>
+}

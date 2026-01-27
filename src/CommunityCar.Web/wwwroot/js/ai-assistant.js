@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const lastConversation = chatHistory[0];
             currentConversationId = lastConversation.id;
             currentMessages = [...lastConversation.messages];
-            
+
             // Display messages in chat
             if (chatMessages) {
                 chatMessages.innerHTML = '';
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Find existing conversation or create new one
         let conversationIndex = chatHistory.findIndex(conv => conv.id === currentConversationId);
-        
+
         const conversation = {
             id: currentConversationId,
             title: generateConversationTitle(),
@@ -225,15 +225,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function generateConversationTitle() {
         if (currentMessages.length === 0) return 'New Conversation';
-        
+
         // Use the first user message as title (truncated)
         const firstUserMessage = currentMessages.find(msg => !msg.isAi);
         if (firstUserMessage) {
-            return firstUserMessage.text.length > 50 
+            return firstUserMessage.text.length > 50
                 ? firstUserMessage.text.substring(0, 50) + '...'
                 : firstUserMessage.text;
         }
-        
+
         return 'New Conversation';
     }
 
@@ -281,11 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const conversationDiv = document.createElement('div');
             conversationDiv.className = 'p-4 rounded-lg border border-border hover:bg-muted/50 transition-colors cursor-pointer conversation-item';
             conversationDiv.setAttribute('data-conversation-title', conversation.title.toLowerCase());
-            
+
             const messageCount = conversation.messages.length;
             const lastMessage = conversation.messages[conversation.messages.length - 1];
             const updatedAt = new Date(conversation.updatedAt);
-            
+
             conversationDiv.innerHTML = `
                 <div class="flex items-start justify-between">
                     <div class="flex-1">
@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
-            
+
             historyContainer.appendChild(conversationDiv);
         });
 
@@ -337,10 +337,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add search functionality
         const searchInput = document.getElementById('history-search');
         if (searchInput) {
-            searchInput.addEventListener('input', function() {
+            searchInput.addEventListener('input', function () {
                 const searchTerm = this.value.toLowerCase();
                 const conversationItems = document.querySelectorAll('.conversation-item');
-                
+
                 conversationItems.forEach(item => {
                     const title = item.getAttribute('data-conversation-title');
                     if (title.includes(searchTerm)) {
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function deleteConversation(conversationId) {
         chatHistory = chatHistory.filter(conv => conv.id !== conversationId);
         localStorage.setItem('aiChatHistory', JSON.stringify(chatHistory));
-        
+
         // If we deleted the current conversation, start a new one
         if (currentConversationId === conversationId) {
             startNewConversation();
@@ -457,12 +457,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             console.log('Sending message to AI:', text);
-            const response = await fetch('/api/ai/chat/message', {
+            const response = await fetch('/ai-chat/send', {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     message: text,
                     conversationId: currentConversationId,
                     context: ''
@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Response status:', response.status);
             const data = await response.json();
             console.log('Response data:', data);
-            
+
             const indicator = document.getElementById('chat-typing');
             if (indicator) indicator.remove();
 

@@ -122,7 +122,7 @@ public class ManagementController : Controller
         }
     }
 
-    [HttpGet("api/history")]
+    [HttpGet("history-data")]
     public async Task<IActionResult> GetHistory(int page = 1, int pageSize = 20)
     {
         try
@@ -137,7 +137,7 @@ public class ManagementController : Controller
         }
     }
 
-    [HttpGet("api/user/{userId}/history")]
+    [HttpGet("user/{userId}/history-data")]
     public async Task<IActionResult> GetUserHistory(Guid userId, int page = 1, int pageSize = 20)
     {
         try
@@ -152,7 +152,7 @@ public class ManagementController : Controller
         }
     }
 
-    [HttpPost("api/action")]
+    [HttpPost("action-api")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> PerformActionApi([FromBody] UserManagementRequest request)
     {
@@ -180,7 +180,7 @@ public class ManagementController : Controller
         }
     }
 
-    [HttpPost("api/reverse/{actionId}")]
+    [HttpPost("reverse-api/{actionId}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ReverseActionApi(Guid actionId)
     {

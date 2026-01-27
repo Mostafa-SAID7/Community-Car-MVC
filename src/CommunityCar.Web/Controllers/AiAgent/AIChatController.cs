@@ -6,10 +6,10 @@ using System.Security.Claims;
 
 namespace CommunityCar.Web.Controllers.AiAgent;
 
-[ApiController]
-[Route("api/ai-chat")]
+[Controller]
+[Route("ai-chat")]
 [Authorize]
-public class AIChatController : ControllerBase
+public class AIChatController : Controller
 {
     private readonly IIntelligentChatService _intelligentChatService;
     private readonly ILogger<AIChatController> _logger;

@@ -134,8 +134,15 @@
             <h2 class="text-xl font-black text-foreground">Recent Errors</h2>
         </div>
         
-        @if (Model.Any())
-        {
+        <div id="errors-skeleton" class="hidden space-y-4 p-6">
+            <skeleton type="Line" />
+            <skeleton type="Line" />
+            <skeleton type="Line" />
+        </div>
+        
+        <div id="errors-list-container">
+            @if (Model.Any())
+            {
             <div class="divide-y divide-border">
                 @foreach (var error in Model)
                 {
@@ -207,7 +214,8 @@
                     <p class="text-muted-foreground">Great! No errors match your current filters.</p>
                 </div>
             </div>
-        }
+            }
+        </div>
     </div>
 
     <!-- Quick Actions -->

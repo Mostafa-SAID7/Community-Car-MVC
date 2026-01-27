@@ -114,6 +114,13 @@
         </div>
     }
 
+    <!-- Items Skeleton -->
+    <div id="trending-skeleton" class="hidden space-y-12">
+        <skeleton type="Post" />
+        <skeleton type="Post" />
+        <skeleton type="Post" />
+    </div>
+
     <!-- Trending Feed Items -->
     <div class="flex flex-col gap-12" id="trending-feed-container">
         @foreach (var item in Model.FeedItems.Take(20))
@@ -152,7 +159,7 @@
                             <i data-lucide="more-horizontal" class="w-5 h-5"></i>
                         </button>
                         <div class="absolute right-0 mt-1 w-48 bg-popover/90 backdrop-blur-lg border border-border rounded-xl shadow-2xl z-50 py-2 hidden group-focus-within/menu:block transform origin-top-right transition-all">
-                            <a class="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-foreground hover:bg-primary hover:text-primary-foreground transition-all mx-1 rounded-lg" href="#" onclick="bookmarkContent('@item.Id', '@item.ContentType')">
+                            <a class="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-foreground hover:bg-primary hover:text-primary-foreground transition-all mx-1 rounded-lg" href="#" onclick="bookmarkContent('@item.Id', '@item.ContentType', event)">
                                 <i data-lucide="bookmark" class="w-4 h-4"></i> @Localizer["SavePost"]
                             </a>
                             <a class="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-foreground hover:bg-muted transition-all mx-1 rounded-lg" href="#" onclick="hideContent('@item.Id')">
@@ -290,7 +297,7 @@
 
                 <!-- Action Toolbar -->
                 <div class="flex p-2 bg-muted/10 border-t border-border/40 gap-1 mt-auto">
-                    <button class="flex-1 py-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 group/btn @(item.IsLikedByUser ? "text-destructive bg-destructive/5" : "text-muted-foreground hover:bg-muted/30 hover:text-foreground")" onclick="toggleLike('@item.Id', '@item.ContentType')">
+                    <button class="flex-1 py-3 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 group/btn @(item.IsLikedByUser ? "text-destructive bg-destructive/5" : "text-muted-foreground hover:bg-muted/30 hover:text-foreground")" onclick="toggleLike('@item.Id', '@item.ContentType', event)">
                         <i data-lucide="heart" class="w-5 h-5 group-hover/btn:scale-125 transition-all @(item.IsLikedByUser ? "fill-current" : "")"></i> @Localizer["Like"]
                     </button>
                     <button class="flex-1 py-3 text-xs font-black text-muted-foreground hover:text-foreground hover:bg-muted/30 rounded-xl transition-all flex items-center justify-center gap-2 group/btn" onclick="toggleComments('@item.Id')">
@@ -299,7 +306,7 @@
                     <button class="flex-1 py-3 text-xs font-black text-muted-foreground hover:text-foreground hover:bg-muted/30 rounded-xl transition-all flex items-center justify-center gap-2 group/btn" onclick="shareContent('@item.Id', '@item.ContentType')">
                         <i data-lucide="share-2" class="w-5 h-5 group-hover/btn:scale-125 transition-all"></i> @Localizer["Share"]
                     </button>
-                    <button class="w-12 h-12 flex items-center justify-center text-muted-foreground hover:text-yellow-500 hover:bg-yellow-500/5 rounded-xl transition-all group/bookmark @(item.IsBookmarkedByUser ? "text-yellow-500 bg-yellow-500/5 shadow-inner" : "")" onclick="bookmarkContent('@item.Id', '@item.ContentType')">
+                    <button class="w-12 h-12 flex items-center justify-center text-muted-foreground hover:text-yellow-500 hover:bg-yellow-500/5 rounded-xl transition-all group/bookmark @(item.IsBookmarkedByUser ? "text-yellow-500 bg-yellow-500/5 shadow-inner" : "")" onclick="bookmarkContent('@item.Id', '@item.ContentType', event)">
                         <i data-lucide="bookmark" class="w-5 h-5 group-hover/bookmark:scale-125 transition-all @(item.IsBookmarkedByUser ? "fill-current" : "")"></i>
                     </button>
                 </div>
@@ -369,6 +376,7 @@
     <script src="~/js/feed.js"></script>
     <script>
         $(document).ready(function() {
+            Skeleton.initPageLoad('trending-skeleton', 'trending-feed-container');
             initializeTrendingFeed();
             
             setInterval(function() {

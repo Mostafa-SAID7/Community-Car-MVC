@@ -56,7 +56,7 @@ class SharedInteractions {
                     const element = entry.target;
                     const entityId = element.dataset.contentId;
                     const entityType = element.dataset.contentType;
-                    
+
                     if (entityId && entityType && !element.dataset.viewed) {
                         this.trackView(entityId, entityType);
                         element.dataset.viewed = 'true';
@@ -73,11 +73,11 @@ class SharedInteractions {
 
     async toggleLike(entityId, entityType, button) {
         if (this.isLoading) return;
-        
+
         try {
             this.isLoading = true;
             const isLiked = button.classList.contains('text-primary');
-            
+
             // Optimistic UI update
             this.updateLikeButton(button, !isLiked);
             this.updateLikeCount(entityId, isLiked ? -1 : 1);
@@ -104,7 +104,7 @@ class SharedInteractions {
             }
 
             const result = await response.json();
-            
+
             if (!result.success) {
                 // Revert optimistic update on failure
                 this.updateLikeButton(button, isLiked);
@@ -128,7 +128,7 @@ class SharedInteractions {
 
     updateLikeButton(button, isLiked) {
         const icon = button.querySelector('[data-lucide="heart"]');
-        
+
         if (isLiked) {
             button.classList.add('text-primary', 'bg-primary/5');
             button.classList.remove('text-muted-foreground');
@@ -149,11 +149,11 @@ class SharedInteractions {
 
         let currentCount = parseInt(countSpan.textContent.replace(/,/g, '')) || 0;
         let newCount = absolute ? change : currentCount + change;
-        
+
         if (newCount < 0) newCount = 0;
-        
+
         countSpan.textContent = newCount.toLocaleString();
-        
+
         // Show/hide stats box based on count
         if (newCount === 0) {
             statsBox.style.display = 'none';
@@ -167,7 +167,7 @@ class SharedInteractions {
         if (!commentsSection) return;
 
         const isVisible = !commentsSection.classList.contains('hidden');
-        
+
         if (isVisible) {
             commentsSection.classList.add('hidden');
         } else {
@@ -182,9 +182,9 @@ class SharedInteractions {
 
     async loadComments(entityId, entityType) {
         try {
-            const response = await fetch(`/api/comments?entityId=${entityId}&entityType=${entityType}&page=1&pageSize=10`);
+            const response = await fetch(`/Comments/get/${entityId}?entityType=${entityType}&page=1&pageSize=10`);
             const result = await response.json();
-            
+
             if (result.success) {
                 this.renderComments(entityId, result.data.comments);
             }
@@ -223,7 +223,7 @@ class SharedInteractions {
         `).join('');
 
         commentsList.innerHTML = commentsHtml;
-        
+
         // Reinitialize Lucide icons
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
@@ -236,7 +236,7 @@ class SharedInteractions {
 
         try {
             input.disabled = true;
-            
+
             const response = await fetch('/Comments/Add', {
                 method: 'POST',
                 headers: {
@@ -256,7 +256,7 @@ class SharedInteractions {
             }
 
             const result = await response.json();
-            
+
             if (result.success) {
                 input.value = '';
                 this.updateCommentCount(entityId, 1);
@@ -283,9 +283,9 @@ class SharedInteractions {
 
         let currentCount = parseInt(countSpan.textContent.replace(/,/g, '')) || 0;
         let newCount = currentCount + change;
-        
+
         if (newCount < 0) newCount = 0;
-        
+
         countSpan.textContent = newCount.toLocaleString();
     }
 
@@ -309,7 +309,7 @@ class SharedInteractions {
 
     showShareModal(entityId, entityType) {
         const url = `${window.location.origin}/content/${entityId}`;
-        
+
         if (window.AlertModal) {
             const shareHtml = `
                 <div class="space-y-4">
@@ -325,7 +325,7 @@ class SharedInteractions {
                     </div>
                 </div>
             `;
-            
+
             window.AlertModal.show({
                 type: 'info',
                 title: 'Share Content',
@@ -337,19 +337,19 @@ class SharedInteractions {
 
     async trackShare(entityId, entityType, platform) {
         try {
-            await fetch('/api/shares', {
+            await fetch('/Shares/Track', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'RequestVerificationToken': this.getAntiForgeryToken()
                 },
-                body: JSON.stringify({
+                body: new URLSearchParams({
                     entityId: entityId,
                     entityType: entityType,
                     platform: platform
                 })
             });
-            
+
             this.updateShareCount(entityId, 1);
         } catch (error) {
             console.error('Error tracking share:', error);
@@ -365,11 +365,11 @@ class SharedInteractions {
 
         let currentCount = parseInt(countSpan.textContent.replace(/,/g, '')) || 0;
         let newCount = currentCount + change;
-        
+
         if (newCount < 0) newCount = 0;
-        
+
         countSpan.textContent = newCount.toLocaleString();
-        
+
         // Show stats box if it wasn't visible
         if (newCount > 0) {
             statsBox.style.display = 'inline-flex';
@@ -378,21 +378,21 @@ class SharedInteractions {
 
     async bookmarkContent(entityId, entityType, button) {
         if (this.isLoading) return;
-        
+
         try {
             this.isLoading = true;
             const isBookmarked = button.classList.contains('text-yellow-500');
-            
+
             // Optimistic UI update
             this.updateBookmarkButton(button, !isBookmarked);
 
-            const response = await fetch('/api/bookmarks/toggle', {
+            const response = await fetch('/Bookmarks/Toggle', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'RequestVerificationToken': this.getAntiForgeryToken()
                 },
-                body: JSON.stringify({
+                body: new URLSearchParams({
                     entityId: entityId,
                     entityType: entityType
                 })
@@ -406,7 +406,7 @@ class SharedInteractions {
             }
 
             const result = await response.json();
-            
+
             if (!result.success) {
                 // Revert optimistic update on failure
                 this.updateBookmarkButton(button, isBookmarked);
@@ -426,7 +426,7 @@ class SharedInteractions {
 
     updateBookmarkButton(button, isBookmarked) {
         const icon = button.querySelector('[data-lucide="bookmark"]');
-        
+
         if (isBookmarked) {
             button.classList.add('text-yellow-500', 'bg-yellow-500/5');
             button.classList.remove('text-muted-foreground');
@@ -440,7 +440,7 @@ class SharedInteractions {
 
     async trackView(entityId, entityType) {
         try {
-            await fetch('/api/views', {
+            await fetch('/Views/Track', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -483,29 +483,30 @@ class SharedInteractions {
                 title: 'Login Required',
                 message: 'You need to be logged in to interact with content. Would you like to login now?',
                 confirmText: 'Login',
+                showCancel: true,
                 cancelText: 'Cancel',
-                onConfirm: () => {
-                    window.location.href = '/Login?returnUrl=' + encodeURIComponent(window.location.pathname);
+                callback: (confirmed) => {
+                    if (confirmed) {
+                        window.location.href = '/Login?returnUrl=' + encodeURIComponent(window.location.pathname);
+                    }
                 }
             });
-        } else {
-            if (confirm('You need to be logged in to interact with content. Would you like to login now?')) {
-                window.location.href = '/Login?returnUrl=' + encodeURIComponent(window.location.pathname);
-            }
+        } else if (confirm('You need to be logged in to interact with content. Would you like to login now?')) {
+            window.location.href = '/Login?returnUrl=' + encodeURIComponent(window.location.pathname);
         }
     }
 }
 
 // Global functions for backward compatibility
-window.toggleLike = function(entityId, entityType) {
+window.toggleLike = function (entityId, entityType) {
     // Try to find button by data attributes first
     let button = document.querySelector(`[data-action="toggle-like"][data-entity-id="${entityId}"]`);
-    
+
     // If not found, try alternative selectors
     if (!button) {
         button = document.querySelector(`[data-button-type="like"][data-entity-id="${entityId}"]`);
     }
-    
+
     if (button && window.sharedInteractions) {
         window.sharedInteractions.toggleLike(entityId, entityType, button);
     } else {
@@ -513,32 +514,32 @@ window.toggleLike = function(entityId, entityType) {
     }
 };
 
-window.toggleComments = function(entityId) {
+window.toggleComments = function (entityId) {
     if (window.sharedInteractions) {
         window.sharedInteractions.toggleComments(entityId);
     }
 };
 
-window.shareContent = function(entityId, entityType) {
+window.shareContent = function (entityId, entityType) {
     if (window.sharedInteractions) {
         window.sharedInteractions.shareContent(entityId, entityType);
     }
 };
 
-window.bookmarkContent = function(entityId, entityType) {
+window.bookmarkContent = function (entityId, entityType) {
     const button = document.querySelector(`[onclick*="bookmarkContent('${entityId}'"]`);
     if (button && window.sharedInteractions) {
         window.sharedInteractions.bookmarkContent(entityId, entityType, button);
     }
 };
 
-window.handleCommentSubmit = function(event, entityId, entityType) {
+window.handleCommentSubmit = function (event, entityId, entityType) {
     if (event.key === 'Enter' && window.sharedInteractions) {
         window.sharedInteractions.submitComment(entityId, entityType, event.target);
     }
 };
 
-window.submitComment = function(entityId, entityType) {
+window.submitComment = function (entityId, entityType) {
     const input = document.querySelector(`[data-comment-input="${entityId}"]`);
     if (input && window.sharedInteractions) {
         window.sharedInteractions.submitComment(entityId, entityType, input);
@@ -546,6 +547,6 @@ window.submitComment = function(entityId, entityType) {
 };
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     window.sharedInteractions = new SharedInteractions();
 });

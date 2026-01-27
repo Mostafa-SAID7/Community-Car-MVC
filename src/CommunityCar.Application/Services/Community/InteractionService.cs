@@ -5,6 +5,8 @@ using CommunityCar.Application.Features.Interactions.ViewModels;
 using CommunityCar.Application.Features.Interactions.DTOs;
 using CommunityCar.Domain.Entities.Shared;
 using CommunityCar.Domain.Enums;
+using System.Text.RegularExpressions;
+using System.Net;
 
 namespace CommunityCar.Application.Services.Community;
 
@@ -12,11 +14,13 @@ public partial class InteractionService : IInteractionService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly INotificationService _notificationService;
+    private readonly IContentModerationService _moderationService;
 
-    public InteractionService(IUnitOfWork unitOfWork, INotificationService notificationService)
+    public InteractionService(IUnitOfWork unitOfWork, INotificationService notificationService, IContentModerationService moderationService)
     {
         _unitOfWork = unitOfWork;
         _notificationService = notificationService;
+        _moderationService = moderationService;
     }
 
     #region Reactions
@@ -165,12 +169,17 @@ public partial class InteractionService : IInteractionService
 
     public async Task<CommentVM> AddCommentAsync(CreateCommentRequest request)
     {
-        var comment = new Comment(request.Content, request.EntityId, request.EntityType, request.AuthorId, request.ParentCommentId);
+        var filteredContent = await _moderationService.FilterToxicContentAsync(request.Content);
+        var comment = new Comment(filteredContent, request.EntityId, request.EntityType, request.AuthorId, request.ParentCommentId);
         await _unitOfWork.Comments.AddAsync(comment);
+        
+        // Increment count on parent entity
+        await UpdateParentEntityCommentCountAsync(request.EntityId, request.EntityType, 1);
+        
         await _unitOfWork.SaveChangesAsync();
 
-        // Send notification to content owner
-        await SendCommentNotificationAsync(request.EntityId, request.EntityType, request.AuthorId);
+        // Send notifications
+        await SendCommentNotificationAsync(request.EntityId, request.EntityType, request.AuthorId, request.ParentCommentId);
 
         return await MapCommentToVMAsync(comment, request.AuthorId);
     }
@@ -193,7 +202,14 @@ public partial class InteractionService : IInteractionService
         if (comment == null || comment.AuthorId != userId)
             return false;
 
+        var entityId = comment.EntityId;
+        var entityType = comment.EntityType;
+
         await _unitOfWork.Comments.DeleteAsync(comment);
+        
+        // Decrement count on parent entity
+        await UpdateParentEntityCommentCountAsync(entityId, entityType, -1);
+        
         await _unitOfWork.SaveChangesAsync();
         return true;
     }
@@ -204,7 +220,8 @@ public partial class InteractionService : IInteractionService
         if (parentComment == null)
             throw new ArgumentException("Parent comment not found");
 
-        var reply = new Comment(request.Content, parentComment.EntityId, parentComment.EntityType, request.AuthorId, request.ParentCommentId);
+        var filteredContent = await _moderationService.FilterToxicContentAsync(request.Content);
+        var reply = new Comment(filteredContent, parentComment.EntityId, parentComment.EntityType, request.AuthorId, request.ParentCommentId);
         await _unitOfWork.Comments.AddAsync(reply);
         await _unitOfWork.SaveChangesAsync();
 
@@ -218,9 +235,9 @@ public partial class InteractionService : IInteractionService
         return await MapCommentToVMAsync(reply, request.AuthorId);
     }
 
-    public async Task<List<CommentVM>> GetEntityCommentsAsync(Guid entityId, EntityType entityType, int page = 1, int pageSize = 20)
+    public async Task<List<CommentVM>> GetEntityCommentsAsync(Guid entityId, EntityType entityType, int page = 1, int pageSize = 10)
     {
-        var comments = await _unitOfWork.Comments.GetTopLevelCommentsAsync(entityId, entityType);
+        var comments = await _unitOfWork.Comments.GetTopLevelCommentsAsync(entityId, entityType, page, pageSize);
         var result = new List<CommentVM>();
 
         foreach (var comment in comments)
@@ -256,6 +273,11 @@ public partial class InteractionService : IInteractionService
     public async Task<int> GetEntityCommentCountAsync(Guid entityId, EntityType entityType)
     {
         return await _unitOfWork.Comments.GetEntityCommentCountAsync(entityId, entityType);
+    }
+
+    public async Task<int> GetTotalTopLevelCommentCountAsync(Guid entityId, EntityType entityType)
+    {
+        return await _unitOfWork.Comments.GetTotalTopLevelCommentCountAsync(entityId, entityType);
     }
 
     #endregion
@@ -459,7 +481,7 @@ public partial class InteractionService : IInteractionService
         var author = await _unitOfWork.Users.GetByIdAsync(comment.AuthorId);
         var reactions = await GetReactionSummaryAsync(comment.Id, EntityType.Comment, currentUserId);
 
-        return new CommentVM
+        var commentVM = new CommentVM
         {
             Id = comment.Id,
             Content = comment.Content,
@@ -475,6 +497,16 @@ public partial class InteractionService : IInteractionService
             ParentCommentId = comment.ParentCommentId,
             Reactions = reactions
         };
+
+        // Secure highlighting: Encode first, then replace
+        if (!string.IsNullOrEmpty(commentVM.Content))
+        {
+            var encodedContent = WebUtility.HtmlEncode(commentVM.Content);
+            commentVM.Content = Regex.Replace(encodedContent, @"@([\w\s]+)", m => 
+                $"<span class=\"text-primary font-bold cursor-pointer hover:underline\">{m.Value}</span>");
+        }
+
+        return commentVM;
     }
 
     private async Task SendReactionNotificationAsync(Guid entityId, EntityType entityType, Guid userId, ReactionType reactionType)
@@ -495,19 +527,53 @@ public partial class InteractionService : IInteractionService
         }
     }
 
-    private async Task SendCommentNotificationAsync(Guid entityId, EntityType entityType, Guid userId)
+    private async Task SendCommentNotificationAsync(Guid entityId, EntityType entityType, Guid userId, Guid? parentCommentId = null)
     {
+        var user = await _unitOfWork.Users.GetByIdAsync(userId);
+        var commenterName = user?.FullName ?? "Someone";
         var entityOwnerId = await GetEntityOwnerIdAsync(entityId, entityType);
-        if (entityOwnerId.HasValue && entityOwnerId != userId)
+        var entityTitle = await GetEntityTitleAsync(entityId, entityType);
+
+        if (parentCommentId.HasValue)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            var entityTitle = await GetEntityTitleAsync(entityId, entityType);
-            
-            await _notificationService.NotifyCommentReceivedAsync(
-                entityOwnerId.Value,
-                entityTitle,
-                user?.FullName ?? "Someone"
-            );
+            // Handling a Reply
+            var parentComment = await _unitOfWork.Comments.GetByIdAsync(parentCommentId.Value);
+            if (parentComment != null)
+            {
+                // 1. Notify parent author (if not the commenter themselves)
+                if (parentComment.AuthorId != userId)
+                {
+                    await _notificationService.SendToUserAsync(
+                        parentComment.AuthorId,
+                        "New Reply",
+                        $"{commenterName} replied to your comment on {entityTitle}",
+                        NotificationType.CommentReceived
+                    );
+                }
+
+                // 2. Notify entity owner if they aren't the commenter or the parent author (already notified)
+                if (entityOwnerId.HasValue && entityOwnerId != userId && entityOwnerId != parentComment.AuthorId)
+                {
+                    await _notificationService.SendToUserAsync(
+                        entityOwnerId.Value,
+                        "New Comment",
+                        $"{commenterName} commented on your {entityType.ToString().ToLower()}: {entityTitle}",
+                        NotificationType.CommentReceived
+                    );
+                }
+            }
+        }
+        else
+        {
+            // Handling a Top-level Comment
+            if (entityOwnerId.HasValue && entityOwnerId != userId)
+            {
+                await _notificationService.NotifyCommentReceivedAsync(
+                    entityOwnerId.Value,
+                    $"{entityType.ToString().ToLower()}: {entityTitle}",
+                    commenterName
+                );
+            }
         }
     }
 
@@ -519,7 +585,11 @@ public partial class InteractionService : IInteractionService
             EntityType.Answer => (await _unitOfWork.QA.GetAnswerByIdAsync(entityId))?.AuthorId,
             EntityType.Story => (await _unitOfWork.Stories.GetByIdAsync(entityId))?.AuthorId,
             EntityType.Review => (await _unitOfWork.Reviews.GetByIdAsync(entityId))?.ReviewerId,
-            // Add other entity types as needed
+            EntityType.Post => (await _unitOfWork.Posts.GetByIdAsync(entityId))?.AuthorId,
+            EntityType.News => (await _unitOfWork.News.GetByIdAsync(entityId))?.AuthorId,
+            EntityType.Guide => (await _unitOfWork.Guides.GetGuideByIdAsync(entityId))?.AuthorId,
+            EntityType.Event => (await _unitOfWork.Events.GetByIdAsync(entityId))?.OrganizerId,
+            EntityType.Group => (await _unitOfWork.Groups.GetByIdAsync(entityId))?.OwnerId,
             _ => null
         };
     }
@@ -531,6 +601,11 @@ public partial class InteractionService : IInteractionService
             EntityType.Question => (await _unitOfWork.QA.GetQuestionByIdAsync(entityId))?.Title ?? "Question",
             EntityType.Story => (await _unitOfWork.Stories.GetByIdAsync(entityId))?.Caption ?? "Story",
             EntityType.Review => (await _unitOfWork.Reviews.GetByIdAsync(entityId))?.Title ?? "Review",
+            EntityType.Post => (await _unitOfWork.Posts.GetByIdAsync(entityId))?.Title ?? "Post",
+            EntityType.News => (await _unitOfWork.News.GetByIdAsync(entityId))?.Headline ?? "News",
+            EntityType.Guide => (await _unitOfWork.Guides.GetGuideByIdAsync(entityId))?.Title ?? "Guide",
+            EntityType.Event => (await _unitOfWork.Events.GetByIdAsync(entityId))?.Title ?? "Event",
+            EntityType.Group => (await _unitOfWork.Groups.GetByIdAsync(entityId))?.Name ?? "Group",
             _ => entityType.ToString()
         };
     }
@@ -542,6 +617,7 @@ public partial class InteractionService : IInteractionService
             EntityType.Question => (await _unitOfWork.QA.GetQuestionByIdAsync(entityId))?.Body ?? "",
             EntityType.Answer => (await _unitOfWork.QA.GetAnswerByIdAsync(entityId))?.Body ?? "",
             EntityType.Review => (await _unitOfWork.Reviews.GetByIdAsync(entityId))?.Comment ?? "",
+            EntityType.News => (await _unitOfWork.News.GetByIdAsync(entityId))?.Summary ?? "",
             _ => ""
         };
     }
@@ -625,6 +701,52 @@ public partial class InteractionService : IInteractionService
             return $"{(int)(timeSpan.TotalDays / 30)}mo ago";
         
         return $"{(int)(timeSpan.TotalDays / 365)}y ago";
+    }
+
+    private async Task UpdateParentEntityCommentCountAsync(Guid entityId, EntityType entityType, int change)
+    {
+        try
+        {
+            switch (entityType)
+            {
+                case EntityType.News:
+                    var news = await _unitOfWork.News.GetByIdAsync(entityId);
+                    if (news != null)
+                    {
+                        if (change > 0) news.IncrementCommentCount();
+                        else news.DecrementCommentCount();
+                    }
+                    break;
+                case EntityType.Review:
+                    var review = await _unitOfWork.Reviews.GetByIdAsync(entityId);
+                    if (review != null)
+                    {
+                        if (change > 0) review.IncrementReplyCount();
+                        else review.DecrementReplyCount();
+                    }
+                    break;
+                case EntityType.Question:
+                    var question = await _unitOfWork.QA.GetQuestionByIdAsync(entityId);
+                    if (question != null)
+                    {
+                        question.UpdateAnswerCount(question.AnswerCount + change);
+                    }
+                    break;
+                case EntityType.Story:
+                    var story = await _unitOfWork.Stories.GetByIdAsync(entityId);
+                    if (story != null)
+                    {
+                        if (change > 0) story.IncrementReplyCount();
+                        else story.DecrementReplyCount();
+                    }
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log error but don't fail comment creation
+            Console.WriteLine($"Error updating comment count: {ex.Message}");
+        }
     }
 
     #endregion

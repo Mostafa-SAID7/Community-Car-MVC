@@ -34,9 +34,16 @@
                 
                 <div class="p-6">
                     <div id="userInterestsList" class="space-y-4">
-                        <!-- Will be populated by JavaScript -->
-                        <div class="flex items-center justify-center py-12">
-                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                        <div id="interests-skeleton" class="hidden space-y-4">
+                            <skeleton type="Line" />
+                            <skeleton type="Line" />
+                            <skeleton type="Line" />
+                        </div>
+                        <div id="interests-list-container">
+                            <!-- Will be populated by JavaScript -->
+                            <div class="flex items-center justify-center py-12">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -143,6 +150,19 @@
 
 @section Scripts {
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize skeleton loading
+            Skeleton.initPageLoad('interests-skeleton', 'interests-list-container');
+            
+            // Re-initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Load interests
+            loadUserInterests();
+        });
+
         let userInterests = [];
         let suggestedInterests = [];
         

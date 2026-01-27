@@ -126,6 +126,7 @@ public static class DependencyInjection
         services.AddScoped<IGuidesNotificationService, GuidesNotificationService>();
         services.AddScoped<INewsNotificationService, NewsNotificationService>();
         services.AddScoped<ISharedSearchService, SharedSearchService>();
+        services.AddScoped<IContentModerationService, ContentModerationService>();
 
         // Storage services
         services.AddScoped<IFileStorageService, FileStorageService>();

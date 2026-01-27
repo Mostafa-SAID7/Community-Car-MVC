@@ -6,8 +6,15 @@
 @inject IViewLocalizer Localizer
 
 <div class="space-y-8 animate-in fade-in duration-700">
+    <div id="dashboard-skeleton" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <skeleton type="Card" />
+        <skeleton type="Card" />
+        <skeleton type="Card" />
+        <skeleton type="Card" />
+    </div>
+
     <!-- Stats Cards Row -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="dashboard-content">
         <div
             class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg flex items-center gap-4 transition-all hover:shadow-xl hover:border-primary/20 group">
             <div
@@ -171,27 +178,31 @@
                     <i class="fas fa-sync-alt text-xs group-hover:rotate-180 transition-transform duration-500"></i>
                 </button>
             </div>
-            <div class="divide-y divide-border/30 max-h-[400px] overflow-y-auto no-scrollbar" id="activityList">
-                @foreach (var activity in Model.RecentActivity)
-                {
-                    <div
-                        class="flex items-center gap-4 p-4 hover:bg-muted/30 transition-colors group/activity cursor-default">
-                        <div
-                            class="w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] shadow-lg group-hover/activity:scale-110 transition-transform @(activity.Color == "blue" ? "bg-blue-500" : activity.Color == "green" ? "bg-green-500" : activity.Color == "amber" ? "bg-amber-500" : "bg-red-500")">
-                            <i class="@activity.Icon"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="text-[13px] font-bold text-foreground leading-snug truncate">@activity.Description
+            <div class="p-6 relative">
+                <div id="activity-skeleton" class="hidden absolute inset-0 bg-background/50 backdrop-blur-sm z-10 flex flex-col p-6 gap-4">
+                    <skeleton type="Line" />
+                    <skeleton type="Line" />
+                    <skeleton type="Line" />
+                    <skeleton type="Line" />
+                </div>
+                <div class="divide-y divide-border/30 max-h-[400px] overflow-y-auto no-scrollbar" id="activityList">
+                    @foreach (var activity in Model.RecentActivity)
+                    {
+                        <div class="flex items-center gap-4 p-4 hover:bg-muted/30 transition-colors group/activity cursor-default">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] shadow-lg group-hover/activity:scale-110 transition-transform @(activity.Color == "blue" ? "bg-blue-500" : activity.Color == "green" ? "bg-green-500" : activity.Color == "amber" ? "bg-amber-500" : "bg-red-500")">
+                                <i class="@activity.Icon"></i>
                             </div>
-                            <div
-                                class="flex items-center gap-2 mt-0.5 text-[10px] font-bold text-muted-foreground uppercase opacity-60">
-                                <span class="text-primary/80">@activity.UserName</span>
-                                <span>•</span>
-                                <span>@activity.TimeAgo</span>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-[13px] font-bold text-foreground leading-snug truncate">@activity.Description</div>
+                                <div class="flex items-center gap-2 mt-0.5 text-[10px] font-bold text-muted-foreground uppercase opacity-60">
+                                    <span class="text-primary/80">@activity.UserName</span>
+                                    <span>•</span>
+                                    <span>@activity.TimeAgo</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         </div>
 
@@ -276,6 +287,7 @@
                 }
             </div>
         </div>
+        </div>
     </div>
 </div>
 
@@ -338,8 +350,14 @@
         });
 
         function refreshActivity() {
-            // Re-using simplified existing logic
-            console.log('Activity refreshed');
+            const skeleton = document.getElementById('activity-skeleton');
+            skeleton.classList.remove('hidden');
+            
+            // Simulate API call
+            setTimeout(() => {
+                skeleton.classList.add('hidden');
+                console.log('Activity refreshed');
+            }, 1000);
         }
 
         setInterval(refreshActivity, 30000);

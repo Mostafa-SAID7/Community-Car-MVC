@@ -106,6 +106,12 @@
         </div>
 
         <!-- Stories Grid -->
+        <div id="stories-initial-skeleton" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            @for (int i = 0; i < 8; i++)
+            {
+                <partial name="_SkeletonLoading" model='"Story"' />
+            }
+        </div>
         <div id="storiesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             @if (Model?.Stories?.Any() == true)
             {
@@ -264,9 +270,7 @@
         <div id="loadingSkeleton" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
             @for (int i = 0; i < 8; i++)
             {
-                <div class="animate-pulse">
-                    <div class="aspect-[9/16] bg-muted rounded-xl"></div>
-                </div>
+                <partial name="_SkeletonLoading" model='"Story"' />
             }
         </div>
     </div>
@@ -276,6 +280,7 @@
     <script src="~/js/stories.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('stories-initial-skeleton', 'storiesContainer');
             // Initialize stories page functionality
             initializeStoriesPage();
         });

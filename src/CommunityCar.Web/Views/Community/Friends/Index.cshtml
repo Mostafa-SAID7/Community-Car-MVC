@@ -74,7 +74,17 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div id="friends-skeleton" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+            <skeleton type="Card" />
+        </div>
+        <div class="space-y-6">
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+        </div>
+    </div>
+
+    <div id="friends-content" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Recent Friends -->
         <div class="lg:col-span-2">
             <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
@@ -266,6 +276,10 @@
 @section Scripts {
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('friends-skeleton', 'friends-content');
+        });
+
         async function sendFriendRequest(receiverId) {
             try {
                 const response = await fetch('/friends/send-request', {

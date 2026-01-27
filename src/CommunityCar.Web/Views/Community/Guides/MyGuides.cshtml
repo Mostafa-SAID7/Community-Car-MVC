@@ -106,6 +106,13 @@
     </div>
 
     <!-- Guides List -->
+    <div id="guides-skeleton" class="hidden space-y-4">
+        <skeleton type="Card" />
+        <skeleton type="Card" />
+        <skeleton type="Card" />
+    </div>
+
+    <div id="guides-content">
     @if (Model.Guides.Any())
     {
         <div class="space-y-4">
@@ -307,6 +314,7 @@
             </div>
         </div>
     }
+    </div> <!-- End guides-content -->
 </div>
 
 @functions {
@@ -326,6 +334,10 @@
 
     <script src="~/js/guides.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('guides-skeleton', 'guides-content');
+        });
+
         function confirmDelete(guideId) {
             if (confirm('Are you sure you want to delete this guide? This action cannot be undone.')) {
                 const form = document.createElement('form');

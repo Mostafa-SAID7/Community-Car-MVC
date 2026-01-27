@@ -22,10 +22,22 @@ public class NotificationHub : Hub
         if (!string.IsNullOrEmpty(userId))
         {
             _userConnections[userId] = Context.ConnectionId;
-            await Groups.AddToGroupAsync(Context.ConnectionId, $"user_{userId}");
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"user_{userId.ToLower()}");
         }
         
         await base.OnConnectedAsync();
+    }
+
+    [HubMethodName("JoinEntityGroup")]
+    public async Task JoinEntityGroup(string entityType, string entityId)
+    {
+        await Groups.AddToGroupAsync(Context.ConnectionId, $"{entityType.ToLower()}_{entityId.ToLower()}");
+    }
+
+    [HubMethodName("LeaveEntityGroup")]
+    public async Task LeaveEntityGroup(string entityType, string entityId)
+    {
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"{entityType.ToLower()}_{entityId.ToLower()}");
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)

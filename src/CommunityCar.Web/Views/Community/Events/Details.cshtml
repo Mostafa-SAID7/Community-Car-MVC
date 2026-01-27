@@ -12,6 +12,16 @@
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
+    <div id="loading-skeleton" class="hidden space-y-8">
+        <skeleton type="Line" class="w-32" />
+        <skeleton type="Card" class="h-64" />
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2"><skeleton type="Card" class="h-96" /></div>
+            <div class="space-y-6"><skeleton type="Card" /><skeleton type="Card" /></div>
+        </div>
+    </div>
+
+    <div id="main-content" class="space-y-8">
     <!-- Back Button -->
     <div>
         <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
@@ -262,9 +272,14 @@
             </div>
         </div>
     </div>
+    </div> <!-- End Main Content -->
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Skeleton.initPageLoad('loading-skeleton', 'main-content');
+    });
+
 async function joinEvent(eventId) {
     try {
         const response = await fetch(`/events/${eventId}/join`, {
@@ -283,10 +298,18 @@ async function joinEvent(eventId) {
             // Update attendee count
             location.reload();
         } else {
-            alert(result.message);
+            if (window.AlertModal) {
+                window.AlertModal.error(result.message, 'Error');
+            } else {
+                alert(result.message);
+            }
         }
     } catch (error) {
-        alert('An error occurred while joining the event.');
+        if (window.AlertModal) {
+            window.AlertModal.error('An error occurred while joining the event.', 'Error');
+        } else {
+            alert('An error occurred while joining the event.');
+        }
     }
 }
 
@@ -308,10 +331,18 @@ async function leaveEvent(eventId) {
             // Update attendee count
             location.reload();
         } else {
-            alert(result.message);
+            if (window.AlertModal) {
+                window.AlertModal.error(result.message, 'Error');
+            } else {
+                alert(result.message);
+            }
         }
     } catch (error) {
-        alert('An error occurred while leaving the event.');
+        if (window.AlertModal) {
+            window.AlertModal.error('An error occurred while leaving the event.', 'Error');
+        } else {
+            alert('An error occurred while leaving the event.');
+        }
     }
 }
 
@@ -324,7 +355,11 @@ function shareEvent() {
         });
     } else {
         navigator.clipboard.writeText(window.location.href);
-        alert('Event link copied to clipboard!');
+        if (window.AlertModal) {
+            window.AlertModal.success('Event link copied to clipboard!', 'Success');
+        } else {
+            alert('Event link copied to clipboard!');
+        }
     }
 }
 
@@ -336,4 +371,9 @@ function addToCalendar() {
     
     window.open(googleCalendarUrl, '_blank');
 }
+
+// Initialize skeleton loading
+document.addEventListener('DOMContentLoaded', function() {
+    Skeleton.initPageLoad('loading-skeleton', 'main-content');
+});
 </script>

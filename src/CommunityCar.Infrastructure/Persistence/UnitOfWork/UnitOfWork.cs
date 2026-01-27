@@ -33,6 +33,7 @@ public class UnitOfWork : IUnitOfWork
         IEventsRepository eventsRepository,
         IGroupsRepository groupsRepository,
         IPostsRepository postsRepository,
+        IGuidesRepository guidesRepository,
         IUserRepository userRepository)
     {
         _context = context;
@@ -57,6 +58,7 @@ public class UnitOfWork : IUnitOfWork
         Events = eventsRepository;
         Groups = groupsRepository;
         Posts = postsRepository;
+        Guides = guidesRepository;
         Users = userRepository;
     }
 
@@ -81,6 +83,7 @@ public class UnitOfWork : IUnitOfWork
     public IEventsRepository Events { get; }
     public IGroupsRepository Groups { get; }
     public IPostsRepository Posts { get; }
+    public IGuidesRepository Guides { get; }
     public IUserRepository Users { get; }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

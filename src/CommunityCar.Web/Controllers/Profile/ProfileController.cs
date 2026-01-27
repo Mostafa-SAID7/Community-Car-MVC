@@ -101,6 +101,56 @@ public class ProfileController : Controller
         return View(viewModel);
     }
 
+    [HttpGet("view/{id:guid}")]
+    public async Task<IActionResult> ViewProfile(Guid id)
+    {
+        var profile = await _profileService.GetProfileAsync(id);
+        if (profile == null)
+        {
+            // Fallback for invalid/mock users to prevent 404 error page
+            // This is common with seeded feed data where the user might not exist
+            var fallbackVM = new ProfileIndexVM
+            {
+                Id = id,
+                FullName = "Unknown User",
+                Email = "hidden",
+                Bio = "This user profile could not be found or is no longer active.",
+                City = "Unknown",
+                Country = "Unknown",
+                CreatedAt = DateTime.UtcNow,
+                PostsCount = 0,
+                CommentsCount = 0,
+                LikesReceived = 0
+            };
+            return View("Index", fallbackVM);
+        }
+
+        var viewModel = new ProfileIndexVM
+        {
+            Id = profile.Id,
+            FullName = profile.FullName,
+            Email = profile.Email,
+            PhoneNumber = profile.PhoneNumber,
+            Bio = profile.Bio,
+            City = profile.City,
+            Country = profile.Country,
+            ProfilePictureUrl = profile.ProfilePictureUrl,
+            CreatedAt = profile.CreatedAt,
+            LastLoginAt = profile.LastLoginAt,
+            IsEmailConfirmed = profile.IsEmailConfirmed,
+            IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
+            IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
+            IsActive = profile.IsActive,
+            HasGoogleAccount = profile.HasGoogleAccount,
+            HasFacebookAccount = profile.HasFacebookAccount,
+            PostsCount = profile.PostsCount,
+            CommentsCount = profile.CommentsCount,
+            LikesReceived = profile.LikesReceived
+        };
+
+        return View("Index", viewModel);
+    }
+
     [HttpGet("settings")]
     public async Task<IActionResult> Settings()
     {

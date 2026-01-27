@@ -131,7 +131,12 @@
                 <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
                     <h5 class="text-[10px] font-black uppercase tracking-widest text-foreground">@Localizer["Hotspots"]</h5>
                 </div>
-                <div class="p-2 space-y-1">
+                <div class="p-2 space-y-1" id="hotspots-wrapper">
+                    <div id="hotspots-skeleton" class="hidden space-y-2 p-4">
+                        <skeleton type="Line" />
+                        <skeleton type="Line" />
+                    </div>
+                    <div id="hotspots-content">
                     @if (Model.PopularPOIs.Any())
                     {
                         @foreach (var poi in Model.PopularPOIs.Take(5))
@@ -159,6 +164,7 @@
                     {
                         <div class="p-8 text-center opacity-30 italic text-xs font-medium">Scanning for popular spots...</div>
                     }
+                    </div>
                 </div>
             </div>
 
@@ -195,6 +201,11 @@
 
 @section Scripts {
     <script src="~/js/maps.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('hotspots-skeleton', 'hotspots-content');
+        });
+    </script>
 }
 
 <!-- Add POI Modal -->

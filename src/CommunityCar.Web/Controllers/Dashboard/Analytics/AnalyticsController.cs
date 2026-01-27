@@ -127,7 +127,7 @@ public class AnalyticsController : Controller
         }
     }
 
-    [HttpGet("api/users")]
+    [HttpGet("users-data")]
     public async Task<IActionResult> GetUserAnalytics([FromQuery] AnalyticsRequest request)
     {
         try
@@ -137,12 +137,12 @@ public class AnalyticsController : Controller
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading user analytics API");
+            _logger.LogError(ex, "Error loading user analytics");
             return Json(new { success = false, message = "Failed to load user analytics" });
         }
     }
 
-    [HttpGet("api/content")]
+    [HttpGet("content-data")]
     public async Task<IActionResult> GetContentAnalytics([FromQuery] AnalyticsRequest request)
     {
         try
@@ -152,12 +152,12 @@ public class AnalyticsController : Controller
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading content analytics API");
+            _logger.LogError(ex, "Error loading content analytics ");
             return Json(new { success = false, message = "Failed to load content analytics" });
         }
     }
 
-    [HttpGet("api/chart")]
+    [HttpGet("chart-data")]
     public async Task<IActionResult> GetAnalyticsChart([FromQuery] AnalyticsRequest request)
     {
         try

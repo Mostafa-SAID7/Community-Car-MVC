@@ -10,7 +10,8 @@
         --card-foreground: 222.2 84% 4.9%;
         --popover: 0 0% 100%;
         --popover-foreground: 222.2 84% 4.9%;
-        --primary: 345 82% 51%; /* Your custom red-500: #e11d48 */
+        --primary: 345 82% 51%;
+        /* Your custom red-500: #e11d48 */
         --primary-foreground: 210 40% 98%;
         --secondary: 210 40% 96.1%;
         --secondary-foreground: 222.2 47.4% 11.2%;
@@ -22,10 +23,11 @@
         --destructive-foreground: 210 40% 98%;
         --border: 214.3 31.8% 91.4%;
         --input: 214.3 31.8% 91.4%;
-        --ring: 345 82% 51%; /* Your custom red-500: #e11d48 */
+        --ring: 345 82% 51%;
+        /* Your custom red-500: #e11d48 */
         --radius: 0.5rem;
         --vh: 1vh;
-        
+
         /* Font families */
         --font-sans: 'Inter', 'Alexandria', system-ui, -apple-system, sans-serif;
         --font-arabic-heading: 'Lemonada', 'Alexandria', cursive;
@@ -39,7 +41,8 @@
         --card-foreground: 210 40% 98%;
         --popover: 222.2 84% 4.9%;
         --popover-foreground: 210 40% 98%;
-        --primary: 345 82% 51%; /* Your custom red-500: #e11d48 */
+        --primary: 345 82% 51%;
+        /* Your custom red-500: #e11d48 */
         --primary-foreground: 222.2 84% 4.9%;
         --secondary: 217.2 32.6% 17.5%;
         --secondary-foreground: 210 40% 98%;
@@ -51,7 +54,8 @@
         --destructive-foreground: 210 40% 98%;
         --border: 217.2 32.6% 17.5%;
         --input: 217.2 32.6% 17.5%;
-        --ring: 345 82% 51%; /* Your custom red-500: #e11d48 */
+        --ring: 345 82% 51%;
+        /* Your custom red-500: #e11d48 */
     }
 }
 
@@ -242,11 +246,12 @@
     /* Ensure main content has consistent width in both LTR and RTL */
     #main-content {
         max-width: none;
-        width: auto; /* Let margins control the width */
+        width: auto;
+        /* Let margins control the width */
     }
 
     /* Ensure content wrapper maintains consistent behavior */
-    #main-content > div {
+    #main-content>div {
         max-width: none;
         width: 100%;
     }
@@ -260,6 +265,7 @@
 
     /* Additional RTL content width control */
     @media (min-width: 1280px) {
+
         /* Force RTL main content to have same effective width as LTR */
         .rtl #main-content {
             /* Calculate: viewport - left sidebar (15rem) - right sidebar (21rem) - padding */
@@ -268,7 +274,7 @@
             margin-left: 21rem !important;
             margin-right: 15rem !important;
         }
-        
+
         /* When right sidebar is hidden in RTL */
         .rtl #main-content.xl\:mr-0 {
             width: calc(100vw - 15rem) !important;
@@ -495,40 +501,45 @@
     /* RTL main content margins - maintain same width as LTR */
     .rtl #main-content {
         margin-left: 0;
-        margin-right: 0.5rem; /* Same as LTR px-2 */
+        margin-right: 0.5rem;
+        /* Same as LTR px-2 */
     }
 
     @media (min-width: 640px) {
         .rtl #main-content {
-            margin-right: 0.75rem; /* Same as LTR sm:px-3 */
+            margin-right: 0.75rem;
+            /* Same as LTR sm:px-3 */
         }
     }
 
     @media (min-width: 768px) {
         .rtl #main-content {
-            margin-right: 5rem; /* Same as LTR md:ml-20 */
+            margin-right: 5rem;
+            /* Same as LTR md:ml-20 */
             margin-left: 0;
         }
     }
 
     @media (min-width: 1280px) {
         .rtl #main-content {
-            margin-right: 15rem; /* Same as LTR xl:ml-60 */
+            margin-right: 15rem;
+            /* Same as LTR xl:ml-60 */
             margin-left: 0;
         }
 
         /* RTL right sidebar spacing - maintain same content width */
         .rtl .xl\:mr-84 {
             margin-right: 0;
-            margin-left: 21rem; /* Same spacing as LTR but on left side */
+            margin-left: 21rem;
+            /* Same spacing as LTR but on left side */
         }
-        
+
         /* Ensure RTL main content with right sidebar has same width as LTR */
         .rtl main[class*="xl:mr-[21rem]"] {
             margin-left: 21rem !important;
             margin-right: 15rem !important;
         }
-        
+
         /* Handle the dynamic class for RTL with right sidebar */
         .rtl main.rtl\:xl\:ml-\[21rem\] {
             margin-left: 21rem !important;
@@ -545,17 +556,20 @@
 
     @media (min-width: 768px) {
         .rtl .dashboard-body #main-content {
-            margin-right: 5rem; /* Same as LTR md:ml-20 */
+            margin-right: 5rem;
+            /* Same as LTR md:ml-20 */
             margin-left: 0;
         }
     }
 
     @media (min-width: 1280px) {
         .rtl .dashboard-body #main-content {
-            margin-right: 15rem; /* Same as LTR xl:ml-60 */
+            margin-right: 15rem;
+            /* Same as LTR xl:ml-60 */
             margin-left: 0;
             /* Force consistent width calculation for dashboard */
-            width: calc(100vw - 15rem - 2rem) !important; /* Account for padding */
+            width: calc(100vw - 15rem - 2rem) !important;
+            /* Account for padding */
             max-width: calc(100vw - 15rem - 2rem) !important;
         }
     }
@@ -570,7 +584,7 @@
         .rtl .dashboard-body .sidebar {
             transform: translateX(calc(100% + 2rem));
         }
-        
+
         .rtl .dashboard-body .sidebar.translate-x-0 {
             transform: translateX(0);
         }
@@ -582,11 +596,12 @@
     }
 
     .rtl .dashboard-body #dashboard-container #main-content {
-        direction: ltr; /* Keep content direction normal */
+        direction: ltr;
+        /* Keep content direction normal */
     }
 
     /* Fix dashboard content wrapper */
-    .rtl .dashboard-body #main-content > div {
+    .rtl .dashboard-body #main-content>div {
         width: 100%;
         max-width: none;
     }
@@ -671,6 +686,7 @@
             opacity: 0;
             transform: translateY(10px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -681,48 +697,50 @@
     .typing-indicator .animate-bounce:nth-child(1) {
         animation-delay: 0s;
     }
+
     .typing-indicator .animate-bounce:nth-child(2) {
         animation-delay: 0.2s;
     }
+
     .typing-indicator .animate-bounce:nth-child(3) {
         animation-delay: 0.4s;
     }
 
     /* Button Components */
     .btn {
-        @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+        @apply inline-flex items-center justify-center px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-95;
     }
 
     .btn-primary {
-        @apply bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary;
+        @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20;
     }
 
     .btn-secondary {
-        @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-secondary;
+        @apply bg-muted/40 text-muted-foreground border border-border/50 hover:bg-muted/60;
     }
 
     .btn-outline {
-        @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground focus:ring-ring;
+        @apply border border-border/60 bg-transparent hover:bg-accent/10 hover:text-accent-foreground;
     }
 
     .btn-ghost {
-        @apply hover:bg-accent hover:text-accent-foreground focus:ring-ring;
+        @apply border border-transparent hover:bg-accent/10 hover:text-accent-foreground;
     }
 
     .btn-destructive {
-        @apply bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:ring-destructive;
+        @apply bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-lg shadow-destructive/20;
     }
 
     .btn-sm {
-        @apply px-3 py-1.5 text-xs;
+        @apply px-4 py-2 text-[9px];
     }
 
     .btn-xs {
-        @apply px-2 py-1 text-xs;
+        @apply px-3 py-1.5 text-[8px];
     }
 
     .btn-lg {
-        @apply px-6 py-3 text-base;
+        @apply px-8 py-4 text-xs;
     }
 
     /* Card Components */
@@ -786,16 +804,25 @@
 
     /* Input Components */
     .input {
-        @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+        @apply flex h-12 w-full rounded-2xl border border-input bg-background/50 px-4 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-inner;
     }
 
     .textarea {
-        @apply flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+        @apply flex min-h-[120px] w-full rounded-2xl border border-input bg-background/50 px-4 py-3 text-sm ring-offset-background placeholder:text-muted-foreground/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-inner;
     }
 
     /* Select Components */
     .select-trigger {
-        @apply flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+        @apply flex h-12 w-full items-center justify-between rounded-2xl border border-input bg-background/50 px-4 py-2 text-sm ring-offset-background placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all;
+    }
+
+    /* Dropdown Menus */
+    .dropdown-content {
+        @apply bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200;
+    }
+
+    .dropdown-item {
+        @apply flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-foreground/70 hover:text-primary hover:bg-primary/5 transition-all cursor-pointer;
     }
 
     /* Separator */
@@ -813,25 +840,26 @@
 }
 
 @layer utilities {
+
     /* RTL-specific utilities to maintain consistent content width */
     .rtl\:xl\:ml-60 {
         @media (min-width: 1280px) {
             margin-left: 15rem;
         }
     }
-    
+
     .rtl\:xl\:mr-60 {
         @media (min-width: 1280px) {
             margin-right: 15rem;
         }
     }
-    
+
     .rtl\:xl\:ml-\[21rem\] {
         @media (min-width: 1280px) {
             margin-left: 21rem;
         }
     }
-    
+
     .rtl\:xl\:mr-\[21rem\] {
         @media (min-width: 1280px) {
             margin-right: 21rem;
@@ -1461,17 +1489,6 @@ input:checked+.toggle-slider:before {
     animation: fadeIn 0.3s ease-in-out;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
 /* Media modal styles */
 .media-modal {
@@ -1490,32 +1507,6 @@ input:checked+.toggle-slider:before {
     }
 }
 
-/* Loading states */
-.loading {
-    position: relative;
-    overflow: hidden;
-}
-
-.loading::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-    0% {
-        left: -100%;
-    }
-
-    100% {
-        left: 100%;
-    }
-}
 
 /* Badge styles for gallery items */
 .badge {
@@ -1764,6 +1755,7 @@ input:checked+.toggle-slider:before {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1784,9 +1776,13 @@ input:checked+.toggle-slider:before {
 }
 
 @keyframes bounce {
-    0%, 80%, 100% {
+
+    0%,
+    80%,
+    100% {
         transform: scale(0);
     }
+
     40% {
         transform: scale(1);
     }
@@ -1833,12 +1829,12 @@ input:checked+.toggle-slider:before {
         right: 1rem !important;
         left: 1rem !important;
     }
-    
+
     [dir="rtl"] #ai-chat-widget {
         right: 1rem !important;
         left: 1rem !important;
     }
-    
+
     #chat-history-modal .bg-card {
         margin: 1rem;
         max-height: calc(100vh - 2rem);

@@ -27,6 +27,13 @@
     </div>
 
     <!-- Upcoming Events List -->
+    <div id="upcoming-skeleton" class="hidden space-y-6">
+        <skeleton type="Card" />
+        <skeleton type="Card" />
+        <skeleton type="Card" />
+    </div>
+
+    <div id="upcoming-content">
     @if (Model.Any())
     {
         <div class="space-y-6">
@@ -186,9 +193,14 @@
             </div>
         </div>
     }
+    </div> <!-- End upcoming-content -->
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Skeleton.initPageLoad('upcoming-skeleton', 'upcoming-content');
+    });
+
 async function joinEvent(eventId) {
     try {
         const response = await fetch(`/events/${eventId}/join`, {

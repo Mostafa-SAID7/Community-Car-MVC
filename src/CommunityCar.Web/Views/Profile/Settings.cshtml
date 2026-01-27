@@ -466,13 +466,23 @@
         }
         
         function showActiveSessions() {
-            // Implementation for showing active sessions modal
-            alert('Active sessions management coming soon!');
+            if (window.AlertModal) {
+                window.AlertModal.info('Active sessions management coming soon!', 'Active Sessions');
+            } else {
+                alert('Active sessions management coming soon!');
+            }
         }
         
         function showDeleteAccountModal() {
-            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-                // Implementation for account deletion
+            const message = 'Are you sure you want to delete your account? This action cannot be undone.';
+            if (window.AlertModal) {
+                window.AlertModal.confirm(message, 'Delete Account', function(confirmed) {
+                    if (confirmed) {
+                        // Implementation for account deletion
+                        window.AlertModal.warning('Account deletion process would start here.', 'Action Required');
+                    }
+                });
+            } else if (confirm(message)) {
                 alert('Account deletion process would start here.');
             }
         }

@@ -1,4 +1,5 @@
 using CommunityCar.Domain.Enums;
+using CommunityCar.Application.Features.Interactions.ViewModels;
 
 namespace CommunityCar.Application.Features.Feed.ViewModels;
 
@@ -54,4 +55,7 @@ public class FeedItemVM
     public bool? IsAnswered { get; set; } // For QA
     public bool? IsExpired { get; set; } // For stories
     public string? Location { get; set; } // For stories/events
+    
+    // Comments
+    public List<CommentVM> InitialComments { get; set; } = new();
 }

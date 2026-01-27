@@ -12,6 +12,19 @@
 }
 
 <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div id="loading-skeleton" class="hidden space-y-8">
+        <skeleton type="Card" class="h-96" />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <skeleton type="Card" class="h-32" />
+            <skeleton type="Card" class="h-32" />
+            <skeleton type="Card" class="h-32" />
+            <skeleton type="Card" class="h-32" />
+            <skeleton type="Card" class="h-32" />
+        </div>
+        <skeleton type="Card" class="h-64" />
+    </div>
+
+    <div id="main-content">
     <!-- Main Review Card -->
     <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden mb-8">
         <div class="p-8">
@@ -252,9 +265,14 @@
             <i data-lucide="arrow-left" class="w-4 h-4"></i>
             @Localizer["BackToReviews"]
         </a>
-    </div>
+    </div> <!-- End Main Content -->
 </div>
 
 @section Scripts {
     <script src="~/js/reviews.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('loading-skeleton', 'main-content');
+        });
+    </script>
 }

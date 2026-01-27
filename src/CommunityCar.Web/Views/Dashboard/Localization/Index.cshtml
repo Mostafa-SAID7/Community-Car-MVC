@@ -20,7 +20,13 @@
         </div>
     </div>
 
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+    <div id="localization-skeleton" class="hidden space-y-4">
+        <skeleton type="Line" />
+        <skeleton type="Line" />
+        <skeleton type="Line" />
+    </div>
+
+    <div id="localization-content" class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -69,8 +75,11 @@
                                     <a href="@Url.Action("EditCulture", "Localization", new { id = culture.Id })" class="w-8 h-8 flex items-center justify-center rounded-lg bg-muted/50 hover:bg-primary/10 hover:text-primary transition-all border border-transparent hover:border-primary/20">
                                         <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                                     </a>
-                                    <form asp-action="DeleteCulture" asp-route-id="@culture.Id" method="post" class="inline" onsubmit="return confirm('Archive this culture protocol?');">
-                                        <button type="submit" class="w-8 h-8 flex items-center justify-center rounded-lg bg-muted/50 hover:bg-red-500/10 hover:text-red-600 transition-all border border-transparent hover:border-red-500/20">
+                                    <form asp-action="DeleteCulture" asp-route-id="@culture.Id" method="post" class="inline delete-culture-form">
+                                        @Html.AntiForgeryToken()
+                                        <button type="button" 
+                                                onclick="confirmDeleteCulture(this)"
+                                                class="w-8 h-8 flex items-center justify-center rounded-lg bg-muted/50 hover:bg-red-500/10 hover:text-red-600 transition-all border border-transparent hover:border-red-500/20">
                                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                                         </button>
                                     </form>
@@ -81,5 +90,26 @@
                 </tbody>
             </table>
         </div>
+@section Scripts {
+    <script>
+        function confirmDeleteCulture(button) {
+            const form = button.closest('form');
+            const message = 'Archive this culture protocol?';
+            if (window.AlertModal) {
+                window.AlertModal.confirm(message, 'Archive Culture', function(confirmed) {
+                    if (confirmed) form.submit();
+                });
+            } else if (confirm(message)) {
+                form.submit();
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+}
     </div>
 </div>

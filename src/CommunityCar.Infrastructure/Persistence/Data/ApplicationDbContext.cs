@@ -132,13 +132,25 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // Handle soft delete audit trail
-        foreach (var entry in ChangeTracker.Entries<ISoftDeletable>())
+        var currentUserId = "System"; // Ideally get from ICurrentUserService
+
+        foreach (var entry in ChangeTracker.Entries())
         {
-            if (entry.State == EntityState.Deleted)
+            if (entry.Entity is ISoftDeletable softDeletable && entry.State == EntityState.Deleted)
             {
                 entry.State = EntityState.Modified;
-                entry.Entity.SoftDelete("System"); // You can get current user here
+                softDeletable.SoftDelete(currentUserId);
+            }
+            else if (entry.Entity is BaseEntity baseEntity)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    baseEntity.Audit(currentUserId);
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    baseEntity.Audit(currentUserId);
+                }
             }
         }
 

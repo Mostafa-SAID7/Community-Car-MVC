@@ -18,9 +18,10 @@ public interface IInteractionService
     Task<CommentVM> UpdateCommentAsync(Guid commentId, string newContent, Guid userId);
     Task<bool> DeleteCommentAsync(Guid commentId, Guid userId);
     Task<CommentVM> AddReplyAsync(CreateReplyRequest request);
-    Task<List<CommentVM>> GetEntityCommentsAsync(Guid entityId, EntityType entityType, int page = 1, int pageSize = 20);
+    Task<List<CommentVM>> GetEntityCommentsAsync(Guid entityId, EntityType entityType, int page = 1, int pageSize = 10);
     Task<List<CommentVM>> GetCommentRepliesAsync(Guid parentCommentId);
     Task<int> GetEntityCommentCountAsync(Guid entityId, EntityType entityType);
+    Task<int> GetTotalTopLevelCommentCountAsync(Guid entityId, EntityType entityType);
 
     // Share methods
     Task<ShareResultVM> ShareEntityAsync(ShareEntityRequest request);

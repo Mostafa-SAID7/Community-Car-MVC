@@ -6,10 +6,10 @@ using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Web.Controllers.Shared.Notifications;
 
-[Route("api/shared/[controller]")]
-[ApiController]
+[Route("shared/[controller]")]
+[Controller]
 [Authorize]
-public class NotificationsController : ControllerBase
+public class NotificationsController : Controller
 {
     private readonly INotificationService _notificationService;
     private readonly ICurrentUserService _currentUserService;

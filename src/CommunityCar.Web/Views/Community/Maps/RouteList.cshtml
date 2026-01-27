@@ -105,6 +105,24 @@
             </div>
         </div>
         
+        </div>
+        
+        <div id="route-list-skeleton" class="hidden divide-y divide-border/30">
+             @for (int i = 0; i < 5; i++)
+             {
+                 <div class="p-6">
+                     <div class="flex items-start gap-4">
+                         <div class="w-16 h-16 rounded-2xl bg-muted animate-pulse"></div>
+                         <div class="flex-1 space-y-2">
+                             <div class="h-6 bg-muted rounded w-1/3 animate-pulse"></div>
+                             <div class="h-4 bg-muted rounded w-2/3 animate-pulse"></div>
+                         </div>
+                     </div>
+                 </div>
+             }
+         </div>
+
+        <div id="route-list-content">
         @if (Model.Items.Any())
         {
             <div class="divide-y divide-border/30">
@@ -257,6 +275,9 @@
                 </button>
             </div>
         }
+        </div>
+    </div>
+</div>
     </div>
 </div>
 
@@ -357,9 +378,13 @@
 @section Scripts {
     <script src="~/js/maps.js"></script>
     <script>
-        // Initialize Lucide icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('route-list-skeleton', 'route-list-content');
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
     </script>
 }

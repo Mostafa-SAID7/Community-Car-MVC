@@ -31,6 +31,9 @@ public class ProfileIndexVM
     public int PostsCount { get; set; }
     public int CommentsCount { get; set; }
     public int LikesReceived { get; set; }
+    public int FriendsCount { get; set; }
+    public int LikesReceivedCount { get; set; }
+    public int BadgesCount { get; set; }
 }
 
 public class ProfileSettingsVM

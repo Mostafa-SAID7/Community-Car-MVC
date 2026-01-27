@@ -5,6 +5,13 @@
 }
 
 <div class="space-y-6">
+    <!-- Skeleton Loader -->
+    <div id="conversations-skeleton" class="hidden space-y-6">
+        <skeleton type="Card" class="h-64" />
+        <skeleton type="Card" class="h-96" />
+    </div>
+
+    <div id="conversations-content">
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
@@ -166,11 +173,15 @@
             }
         </div>
     </div>
+    </div> <!-- End conversations-content -->
 </div>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize skeleton loading
+            Skeleton.initPageLoad('conversations-skeleton', 'conversations-content');
+            
             // Initialize icons
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();

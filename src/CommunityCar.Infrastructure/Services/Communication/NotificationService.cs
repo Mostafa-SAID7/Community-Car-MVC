@@ -3,16 +3,28 @@ using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Models.Notifications;
 using CommunityCar.Infrastructure.Hubs;
 using CommunityCar.Domain.Enums;
+using System.Collections.Concurrent;
 
 namespace CommunityCar.Infrastructure.Services.Communication;
 
 public class NotificationService : INotificationService
 {
     private readonly IHubContext<NotificationHub> _notificationHub;
+    private static readonly ConcurrentDictionary<Guid, List<object>> _userNotifications = new();
 
     public NotificationService(IHubContext<NotificationHub> notificationHub)
     {
         _notificationHub = notificationHub;
+    }
+
+    private void AddToHistory(Guid userId, object notification)
+    {
+        var notifications = _userNotifications.GetOrAdd(userId, _ => new List<object>());
+        lock (notifications)
+        {
+            notifications.Insert(0, notification);
+            if (notifications.Count > 50) notifications.RemoveAt(50);
+        }
     }
 
     public async Task SendNotificationAsync(NotificationRequest request)
@@ -30,8 +42,10 @@ public class NotificationService : INotificationService
             IsRead = false
         };
 
-        await _notificationHub.Clients.Group($"user_{request.UserId}")
+        await _notificationHub.Clients.Group($"user_{request.UserId.ToString().ToLower()}")
             .SendAsync("ReceiveNotification", notification);
+            
+        AddToHistory(request.UserId, notification);
     }
 
     public async Task SendBulkNotificationAsync(BulkNotificationRequest request)
@@ -50,8 +64,13 @@ public class NotificationService : INotificationService
         };
 
         var tasks = request.UserIds.Select(userId =>
-            _notificationHub.Clients.Group($"user_{userId}")
+            _notificationHub.Clients.Group($"user_{userId.ToString().ToLower()}")
                 .SendAsync("ReceiveNotification", notification));
+
+        foreach (var userId in request.UserIds)
+        {
+            AddToHistory(userId, notification);
+        }
 
         await Task.WhenAll(tasks);
     }
@@ -196,40 +215,78 @@ public class NotificationService : INotificationService
     // Additional notification management methods
     public async Task<IEnumerable<object>> GetUserNotificationsAsync(Guid userId, int page = 1, int pageSize = 20)
     {
-        // TODO: Implement with actual database storage
-        await Task.CompletedTask;
+        if (_userNotifications.TryGetValue(userId, out var notifications))
+        {
+            lock (notifications)
+            {
+                return notifications.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            }
+        }
         return new List<object>();
     }
 
     public async Task<object?> GetNotificationByIdAsync(Guid notificationId)
     {
-        // TODO: Implement with actual database storage
-        await Task.CompletedTask;
+        foreach (var userNotifs in _userNotifications.Values)
+        {
+            lock (userNotifs)
+            {
+                var notif = userNotifs.FirstOrDefault(n => (n as dynamic).Id == notificationId);
+                if (notif != null) return notif;
+            }
+        }
         return null;
     }
 
     public async Task MarkAsReadAsync(Guid notificationId, Guid userId)
     {
-        // TODO: Implement with actual database storage
+        if (_userNotifications.TryGetValue(userId, out var notifications))
+        {
+            lock (notifications)
+            {
+                var notif = notifications.FirstOrDefault(n => (n as dynamic).Id == notificationId);
+                if (notif != null) (notif as dynamic).IsRead = true;
+            }
+        }
         await Task.CompletedTask;
     }
 
     public async Task MarkAllAsReadAsync(Guid userId)
     {
-        // TODO: Implement with actual database storage
+        if (_userNotifications.TryGetValue(userId, out var notifications))
+        {
+            lock (notifications)
+            {
+                foreach (var notif in notifications)
+                {
+                    (notif as dynamic).IsRead = true;
+                }
+            }
+        }
         await Task.CompletedTask;
     }
 
     public async Task DeleteNotificationAsync(Guid notificationId, Guid userId)
     {
-        // TODO: Implement with actual database storage
+        if (_userNotifications.TryGetValue(userId, out var notifications))
+        {
+            lock (notifications)
+            {
+                notifications.RemoveAll(n => (n as dynamic).Id == notificationId);
+            }
+        }
         await Task.CompletedTask;
     }
 
     public async Task<int> GetUnreadCountAsync(Guid userId)
     {
-        // TODO: Implement with actual database storage
-        await Task.CompletedTask;
+        if (_userNotifications.TryGetValue(userId, out var notifications))
+        {
+            lock (notifications)
+            {
+                return notifications.Count(n => !(n as dynamic).IsRead);
+            }
+        }
         return 0;
     }
 

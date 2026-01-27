@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityCar.Web.Controllers.Shared.Tags;
 
-[Route("api/shared/tags")]
-[ApiController]
-public class TagsController : ControllerBase
+[Route("shared/tags")]
+[Controller]
+public class TagsController : Controller
 {
     private readonly ITagRepository _tagRepository;
     private readonly ICurrentUserService _currentUserService;

@@ -25,7 +25,7 @@ public class FeedController : Controller
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index(string feedType = "personalized", int page = 1, int pageSize = 0)
+    public async Task<IActionResult> Index(string feedType = "personalized", string? topic = null, int page = 1, int pageSize = 0)
     {
         // Debug current culture
         var currentCulture = CultureInfo.CurrentCulture.Name;
@@ -47,6 +47,19 @@ public class FeedController : Controller
             Page = page,
             PageSize = pageSize
         };
+
+        if (!string.IsNullOrEmpty(topic))
+        {
+            request.Tags.Add(topic);
+            ViewBag.CurrentTopic = topic;
+            
+            // If topic is selected, we might want to default to Trending algorithm if not specified
+            if (feedType == "personalized") 
+            {
+               request.FeedType = FeedType.Trending;
+               feedType = "trending";
+            }
+        }
 
         var feedResponse = request.FeedType switch
         {
@@ -118,6 +131,13 @@ public class FeedController : Controller
             PageSize = pageSize
         };
 
+        // Add topic filter if provided
+        if (!string.IsNullOrEmpty(topic))
+        {
+            request.Tags.Add(topic);
+            ViewBag.CurrentTopic = topic;
+        }
+
         var feedResponse = await _feedService.GetTrendingFeedAsync(request);
 
         ViewBag.FeedType = "trending";
@@ -139,7 +159,7 @@ public class FeedController : Controller
             pageSize = page == 1 ? 20 : 10;
         }
         
-        return await Index("friends", page, pageSize);
+        return await Index("friends", null, page, pageSize);
     }
 
     [HttpGet("privacy")]
@@ -160,4 +180,90 @@ public class FeedController : Controller
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return Guid.TryParse(userIdClaim, out var userId) ? userId : null;
     }
+
+    [HttpPost("interact")]
+    public async Task<IActionResult> Interact([FromBody] FeedInteractionRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
+        
+        bool success = false;
+        if (request.InteractionType?.ToLower() == "share")
+        {
+            success = true; // Placeholder for share tracking
+            
+            // Track share analytics
+            await _analyticsService.TrackActivityAsync(new TrackActivityRequest
+            {
+                UserId = userId.Value,
+                ActivityType = "Share",
+                EntityType = request.ContentType,
+                EntityId = request.ContentId,
+                Description = $"Shared {request.ContentType}"
+            });
+        }
+        else
+        {
+            success = true; // Placeholder for like tracking
+        }
+
+        return Ok(new { success });
+    }
+
+    [HttpPost("bookmark")]
+    public async Task<IActionResult> Bookmark([FromBody] FeedInteractionRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
+
+        var success = await _feedService.BookmarkContentAsync(userId.Value, request.ContentId, request.ContentType);
+        return Ok(new { success, isBookmarked = success }); 
+    }
+
+    [HttpPost("hide")]
+    public async Task<IActionResult> Hide([FromBody] FeedInteractionRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
+
+        var success = await _feedService.HideContentAsync(userId.Value, request.ContentId, request.ContentType);
+        return Ok(new { success });
+    }
+
+    [HttpPost("report")]
+    public async Task<IActionResult> Report([FromBody] FeedInteractionRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
+
+        var success = await _feedService.ReportContentAsync(userId.Value, request.ContentId, request.ContentType, request.Reason);
+        return Ok(new { success });
+    }
+
+    [HttpGet("stats")]
+    public async Task<IActionResult> GetStats()
+    {
+        var userId = GetCurrentUserId();
+        // GetFeedStatsAsync requires userId (nullable or not? checked service, it takes Guid?)
+        // FeedService line 74: await GetFeedStatsAsync(request.UserId) -> FeedRequest.UserId is Guid?
+        var stats = await _feedService.GetFeedStatsAsync(userId);
+        return Ok(stats);
+    }
+    [HttpPost("mark-seen")]
+    public async Task<IActionResult> MarkSeen([FromBody] FeedInteractionRequest request)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
+
+        var success = await _feedService.MarkAsSeenAsync(userId.Value, request.ContentId, request.ContentType);
+        return Ok(new { success });
+    }
+}
+
+public class FeedInteractionRequest
+{
+    public Guid ContentId { get; set; }
+    public string ContentType { get; set; }
+    public string? InteractionType { get; set; }
+    public string? Reason { get; set; }
 }

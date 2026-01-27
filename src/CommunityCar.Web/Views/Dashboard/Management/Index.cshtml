@@ -31,7 +31,18 @@
                         <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-border/30">
+                <tbody class="divide-y divide-border/30" id="management-list-container">
+                    <tr id="management-skeleton" class="hidden">
+                        <td colspan="6" class="p-0">
+                            <div class="space-y-2 p-4">
+                                <skeleton type="Line" />
+                                <skeleton type="Line" />
+                                <skeleton type="Line" />
+                                <skeleton type="Line" />
+                                <skeleton type="Line" />
+                            </div>
+                        </td>
+                    </tr>
                     @foreach (var item in Model)
                     {
                         <tr class="hover:bg-muted/10 transition-colors group">

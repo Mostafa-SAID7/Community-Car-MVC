@@ -17,6 +17,12 @@
     </div>
 
     <!-- Events List -->
+    <div id="events-skeleton" class="hidden space-y-6">
+        <skeleton type="Card" />
+        <skeleton type="Card" />
+    </div>
+
+    <div id="events-content">
     @if (Model.Any())
     {
         <div class="space-y-6">
@@ -149,4 +155,13 @@
             </div>
         </div>
     }
+    </div> <!-- End events-content -->
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('events-skeleton', 'events-content');
+        });
+    </script>
+}

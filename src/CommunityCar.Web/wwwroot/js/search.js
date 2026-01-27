@@ -9,7 +9,7 @@ class SearchManager {
         this.noResults = document.getElementById('noResults');
         this.searchPagination = document.getElementById('searchPagination');
         this.trendingItems = document.getElementById('trendingItems');
-        
+
         this.currentQuery = '';
         this.currentFilters = {
             entityTypes: [],
@@ -18,18 +18,18 @@ class SearchManager {
             page: 1,
             pageSize: 20
         };
-        
+
         this.debounceTimer = null;
         this.suggestionsCache = new Map();
-        
+
         this.init();
     }
-    
+
     init() {
         this.setupEventListeners();
         this.loadTrendingItems();
         this.setupFilters();
-        
+
         // Check for URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const query = urlParams.get('q');
@@ -38,13 +38,13 @@ class SearchManager {
             this.performSearch(query);
         }
     }
-    
+
     setupEventListeners() {
         // Search input
         this.searchInput.addEventListener('input', (e) => {
             this.handleSearchInput(e.target.value);
         });
-        
+
         this.searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -54,29 +54,29 @@ class SearchManager {
                 this.hideSuggestions();
             }
         });
-        
+
         // Search filters
         document.querySelectorAll('.search-filter').forEach(filter => {
             filter.addEventListener('click', (e) => {
                 this.handleFilterClick(e.target);
             });
         });
-        
+
         // Sidebar filters
         document.getElementById('dateRangeFilter').addEventListener('change', (e) => {
             this.currentFilters.dateRange = e.target.value;
             this.performSearch(this.currentQuery);
         });
-        
+
         document.getElementById('sortFilter').addEventListener('change', (e) => {
             this.currentFilters.sortBy = e.target.value;
             this.performSearch(this.currentQuery);
         });
-        
+
         document.getElementById('clearFilters').addEventListener('click', () => {
             this.clearAllFilters();
         });
-        
+
         // Click outside to hide suggestions
         document.addEventListener('click', (e) => {
             if (!this.searchInput.contains(e.target) && !this.searchSuggestions.contains(e.target)) {
@@ -84,7 +84,7 @@ class SearchManager {
             }
         });
     }
-    
+
     setupFilters() {
         const contentTypeFilters = document.getElementById('contentTypeFilters');
         const entityTypes = [
@@ -97,7 +97,7 @@ class SearchManager {
             { value: 'Event', label: 'Events' },
             { value: 'Group', label: 'Groups' }
         ];
-        
+
         entityTypes.forEach(type => {
             const checkbox = document.createElement('label');
             checkbox.className = 'flex items-center cursor-pointer';
@@ -105,38 +105,38 @@ class SearchManager {
                 <input type="checkbox" value="${type.value}" class="entity-type-filter mr-2 rounded border-gray-300 dark:border-gray-600 text-red-500 focus:ring-red-500">
                 <span class="text-sm text-gray-700 dark:text-gray-300">${type.label}</span>
             `;
-            
+
             checkbox.querySelector('input').addEventListener('change', (e) => {
                 this.handleEntityTypeFilter(e.target.value, e.target.checked);
             });
-            
+
             contentTypeFilters.appendChild(checkbox);
         });
     }
-    
+
     handleSearchInput(query) {
         clearTimeout(this.debounceTimer);
-        
+
         if (query.length < 2) {
             this.hideSuggestions();
             return;
         }
-        
+
         this.debounceTimer = setTimeout(() => {
             this.loadSuggestions(query);
         }, 300);
     }
-    
+
     async loadSuggestions(query) {
         if (this.suggestionsCache.has(query)) {
             this.displaySuggestions(this.suggestionsCache.get(query));
             return;
         }
-        
+
         try {
-            const response = await fetch(`/api/shared/search/suggestions?query=${encodeURIComponent(query)}&maxResults=8`);
+            const response = await fetch(`/shared/search/suggestions?query=${encodeURIComponent(query)}&maxResults=8`);
             const result = await response.json();
-            
+
             if (result.success) {
                 this.suggestionsCache.set(query, result.data);
                 this.displaySuggestions(result.data);
@@ -145,13 +145,13 @@ class SearchManager {
             console.error('Error loading suggestions:', error);
         }
     }
-    
+
     displaySuggestions(suggestions) {
         if (!suggestions || suggestions.length === 0) {
             this.hideSuggestions();
             return;
         }
-        
+
         const html = suggestions.map(suggestion => `
             <div class="suggestion-item px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer flex items-center justify-between"
                  data-suggestion="${suggestion.text}">
@@ -162,10 +162,10 @@ class SearchManager {
                 <span class="text-xs text-gray-400">${suggestion.count}</span>
             </div>
         `).join('');
-        
+
         this.searchSuggestions.innerHTML = html;
         this.searchSuggestions.classList.remove('hidden');
-        
+
         // Add click handlers
         this.searchSuggestions.querySelectorAll('.suggestion-item').forEach(item => {
             item.addEventListener('click', () => {
@@ -176,18 +176,18 @@ class SearchManager {
             });
         });
     }
-    
+
     hideSuggestions() {
         this.searchSuggestions.classList.add('hidden');
     }
-    
+
     handleFilterClick(filterElement) {
         // Remove active class from all filters
         document.querySelectorAll('.search-filter').forEach(f => f.classList.remove('active'));
-        
+
         // Add active class to clicked filter
         filterElement.classList.add('active');
-        
+
         // Update entity type filter
         const filterType = filterElement.dataset.filter;
         if (filterType === 'all') {
@@ -195,13 +195,13 @@ class SearchManager {
         } else {
             this.currentFilters.entityTypes = [filterType];
         }
-        
+
         // Perform search if there's a query
         if (this.currentQuery) {
             this.performSearch(this.currentQuery);
         }
     }
-    
+
     handleEntityTypeFilter(entityType, checked) {
         if (checked) {
             if (!this.currentFilters.entityTypes.includes(entityType)) {
@@ -210,23 +210,23 @@ class SearchManager {
         } else {
             this.currentFilters.entityTypes = this.currentFilters.entityTypes.filter(t => t !== entityType);
         }
-        
+
         // Update main filter buttons
         this.updateMainFilterButtons();
-        
+
         // Perform search if there's a query
         if (this.currentQuery) {
             this.performSearch(this.currentQuery);
         }
     }
-    
+
     updateMainFilterButtons() {
         const allFilter = document.querySelector('.search-filter[data-filter="all"]');
         const otherFilters = document.querySelectorAll('.search-filter:not([data-filter="all"])');
-        
+
         // Remove active from all
         document.querySelectorAll('.search-filter').forEach(f => f.classList.remove('active'));
-        
+
         if (this.currentFilters.entityTypes.length === 0) {
             allFilter.classList.add('active');
         } else if (this.currentFilters.entityTypes.length === 1) {
@@ -236,7 +236,7 @@ class SearchManager {
             }
         }
     }
-    
+
     clearAllFilters() {
         this.currentFilters = {
             entityTypes: [],
@@ -245,31 +245,31 @@ class SearchManager {
             page: 1,
             pageSize: 20
         };
-        
+
         // Reset UI
         document.getElementById('dateRangeFilter').value = '';
         document.getElementById('sortFilter').value = 'relevance';
         document.querySelectorAll('.entity-type-filter').forEach(cb => cb.checked = false);
         document.querySelectorAll('.search-filter').forEach(f => f.classList.remove('active'));
         document.querySelector('.search-filter[data-filter="all"]').classList.add('active');
-        
+
         // Perform search if there's a query
         if (this.currentQuery) {
             this.performSearch(this.currentQuery);
         }
     }
-    
+
     async performSearch(query, page = 1) {
         if (!query.trim()) {
             this.clearResults();
             return;
         }
-        
+
         this.currentQuery = query;
         this.currentFilters.page = page;
-        
+
         this.showLoading();
-        
+
         try {
             const searchParams = new URLSearchParams({
                 query: query,
@@ -278,22 +278,22 @@ class SearchManager {
                 sortBy: this.currentFilters.sortBy,
                 sortDirection: 'DESC'
             });
-            
+
             if (this.currentFilters.entityTypes.length > 0) {
                 this.currentFilters.entityTypes.forEach(type => {
                     searchParams.append('entityTypes', type);
                 });
             }
-            
+
             if (this.currentFilters.dateRange) {
                 const dateRange = this.getDateRange(this.currentFilters.dateRange);
                 if (dateRange.fromDate) searchParams.append('fromDate', dateRange.fromDate);
                 if (dateRange.toDate) searchParams.append('toDate', dateRange.toDate);
             }
-            
-            const response = await fetch(`/api/shared/search/universal?${searchParams}`);
+
+            const response = await fetch(`/shared/search/universal?${searchParams}`);
             const result = await response.json();
-            
+
             if (result.success) {
                 this.displayResults(result.data);
                 this.updateURL(query);
@@ -307,35 +307,35 @@ class SearchManager {
             this.hideLoading();
         }
     }
-    
+
     displayResults(data) {
         if (!data.items || data.items.length === 0) {
             this.showNoResults();
             return;
         }
-        
+
         // Show search stats
         this.searchStats.innerHTML = `
             Found ${data.totalCount.toLocaleString()} results in ${data.searchDuration.toFixed(2)}ms
         `;
         this.searchStats.classList.remove('hidden');
-        
+
         // Display results
         const html = data.items.map(item => this.renderSearchResult(item)).join('');
         this.searchResults.innerHTML = html;
         this.searchResults.classList.remove('hidden');
-        
+
         // Display pagination
         this.displayPagination(data);
-        
+
         // Hide no results
         this.noResults.classList.add('hidden');
     }
-    
+
     renderSearchResult(item) {
         const tags = item.tags.map(tag => `<span class="search-result-tag">${tag}</span>`).join('');
         const entityTypeIcon = this.getEntityTypeIcon(item.entityType);
-        
+
         return `
             <div class="search-result-item">
                 <div class="flex items-start justify-between">
@@ -362,7 +362,7 @@ class SearchManager {
             </div>
         `;
     }
-    
+
     getEntityTypeIcon(entityType) {
         const icons = {
             'Post': '<svg class="h-4 w-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"></path></svg>',
@@ -374,50 +374,50 @@ class SearchManager {
             'Event': '<svg class="h-4 w-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>',
             'Group': '<svg class="h-4 w-4 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path></svg>'
         };
-        
+
         return icons[entityType] || '<svg class="h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path></svg>';
     }
-    
+
     displayPagination(data) {
         if (data.totalPages <= 1) {
             this.searchPagination.classList.add('hidden');
             return;
         }
-        
+
         const currentPage = data.page;
         const totalPages = data.totalPages;
         const maxVisiblePages = 5;
-        
+
         let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
         let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-        
+
         if (endPage - startPage + 1 < maxVisiblePages) {
             startPage = Math.max(1, endPage - maxVisiblePages + 1);
         }
-        
+
         let html = '<div class="flex items-center justify-center space-x-2">';
-        
+
         // Previous button
         if (currentPage > 1) {
             html += `<button class="pagination-btn" data-page="${currentPage - 1}">Previous</button>`;
         }
-        
+
         // Page numbers
         for (let i = startPage; i <= endPage; i++) {
             const isActive = i === currentPage;
             html += `<button class="pagination-btn ${isActive ? 'active' : ''}" data-page="${i}">${i}</button>`;
         }
-        
+
         // Next button
         if (currentPage < totalPages) {
             html += `<button class="pagination-btn" data-page="${currentPage + 1}">Next</button>`;
         }
-        
+
         html += '</div>';
-        
+
         this.searchPagination.innerHTML = html;
         this.searchPagination.classList.remove('hidden');
-        
+
         // Add click handlers
         this.searchPagination.querySelectorAll('.pagination-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -426,12 +426,12 @@ class SearchManager {
             });
         });
     }
-    
+
     async loadTrendingItems() {
         try {
-            const response = await fetch('/api/shared/search/trending?maxResults=6');
+            const response = await fetch('/shared/search/trending?maxResults=6');
             const result = await response.json();
-            
+
             if (result.success && result.data.length > 0) {
                 this.displayTrendingItems(result.data);
             }
@@ -439,7 +439,7 @@ class SearchManager {
             console.error('Error loading trending items:', error);
         }
     }
-    
+
     displayTrendingItems(items) {
         const html = items.map(item => `
             <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
@@ -457,14 +457,14 @@ class SearchManager {
                 </div>
             </div>
         `).join('');
-        
+
         this.trendingItems.innerHTML = html;
     }
-    
+
     getDateRange(range) {
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        
+
         switch (range) {
             case 'today':
                 return { fromDate: today.toISOString(), toDate: null };
@@ -484,26 +484,26 @@ class SearchManager {
                 return { fromDate: null, toDate: null };
         }
     }
-    
+
     formatDate(dateString) {
         const date = new Date(dateString);
         const now = new Date();
         const diffTime = Math.abs(now - date);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         if (diffDays === 1) return 'Yesterday';
         if (diffDays < 7) return `${diffDays} days ago`;
         if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
         if (diffDays < 365) return `${Math.ceil(diffDays / 30)} months ago`;
         return `${Math.ceil(diffDays / 365)} years ago`;
     }
-    
+
     updateURL(query) {
         const url = new URL(window.location);
         url.searchParams.set('q', query);
         window.history.replaceState({}, '', url);
     }
-    
+
     showLoading() {
         this.searchLoading.classList.remove('hidden');
         this.searchResults.classList.add('hidden');
@@ -511,18 +511,18 @@ class SearchManager {
         this.searchStats.classList.add('hidden');
         this.searchPagination.classList.add('hidden');
     }
-    
+
     hideLoading() {
         this.searchLoading.classList.add('hidden');
     }
-    
+
     showNoResults() {
         this.noResults.classList.remove('hidden');
         this.searchResults.classList.add('hidden');
         this.searchStats.classList.add('hidden');
         this.searchPagination.classList.add('hidden');
     }
-    
+
     showError(message) {
         this.searchResults.innerHTML = `
             <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
@@ -539,7 +539,7 @@ class SearchManager {
         `;
         this.searchResults.classList.remove('hidden');
     }
-    
+
     clearResults() {
         this.searchResults.classList.add('hidden');
         this.noResults.classList.add('hidden');

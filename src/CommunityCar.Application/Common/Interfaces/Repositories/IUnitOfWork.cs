@@ -28,5 +28,6 @@ public interface IUnitOfWork : IDisposable
     IEventsRepository Events { get; }
     IGroupsRepository Groups { get; }
     IPostsRepository Posts { get; }
+    IGuidesRepository Guides { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

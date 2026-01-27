@@ -159,7 +159,7 @@ public class ReportsController : Controller
         }
     }
 
-    [HttpGet("api")]
+    [HttpGet("list-data")]
     public async Task<IActionResult> GetReports(int page = 1, int pageSize = 20)
     {
         try

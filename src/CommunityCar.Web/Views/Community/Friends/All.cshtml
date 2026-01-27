@@ -22,9 +22,20 @@
     <!-- Friends Grid -->
     <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
         <div class="p-6">
+            <!-- Loading Skeleton (Hidden by default) -->
+            <div id="friends-skeleton" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @for (int i = 0; i < 6; i++)
+                    {
+                        <skeleton type="Card" />
+                    }
+                </div>
+            </div>
+
+            <div id="friends-content">
             @if (Model.Any())
             {
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="friends-grid">
                     @foreach (var friend in Model)
                     {
                         <div class="bg-background/50 border border-border rounded-2xl p-6 group hover:bg-muted/40 transition-all hover:border-primary/20 hover:shadow-md text-center">
@@ -120,6 +131,7 @@
                     </a>
                 </div>
             }
+            </div>
         </div>
     </div>
 </div>
@@ -127,6 +139,10 @@
 @section Scripts {
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('friends-skeleton', 'friends-content');
+        });
+
         function toggleFriendMenu(userId) {
             const menu = document.getElementById(`friend-menu-${userId}`);
             // Close all other menus

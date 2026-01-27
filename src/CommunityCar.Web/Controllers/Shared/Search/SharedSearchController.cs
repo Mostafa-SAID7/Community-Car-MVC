@@ -7,9 +7,9 @@ using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Web.Controllers.Shared.Search;
 
-[Route("api/shared/search")]
-[ApiController]
-public class SharedSearchController : ControllerBase
+[Route("shared/search")]
+[Controller]
+public class SharedSearchController : Controller
 {
     private readonly ISharedSearchService _searchService;
     private readonly ICurrentUserService _currentUserService;

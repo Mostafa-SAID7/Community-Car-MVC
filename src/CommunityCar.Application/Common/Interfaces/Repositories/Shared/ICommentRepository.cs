@@ -11,7 +11,8 @@ public interface ICommentRepository : IBaseRepository<Comment>
     Task<IEnumerable<Comment>> GetUserCommentsAsync(Guid userId, EntityType? entityType = null);
     Task<IEnumerable<Comment>> GetRecentCommentsAsync(int count);
     Task<IEnumerable<Comment>> GetRepliesAsync(Guid parentCommentId);
-    Task<IEnumerable<Comment>> GetTopLevelCommentsAsync(Guid entityId, EntityType entityType);
+    Task<IEnumerable<Comment>> GetTopLevelCommentsAsync(Guid entityId, EntityType entityType, int page = 1, int pageSize = 10);
+    Task<int> GetTotalTopLevelCommentCountAsync(Guid entityId, EntityType entityType);
     Task<IEnumerable<Comment>> GetCommentRepliesAsync(Guid commentId);
     Task<int> GetEntityCommentCountAsync(Guid entityId, EntityType entityType);
 }

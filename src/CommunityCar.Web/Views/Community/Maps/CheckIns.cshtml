@@ -39,8 +39,14 @@
         }
     </div>
 
+    <!-- Skeleton Loader -->
+    <div id="checkins-skeleton" class="hidden space-y-6">
+        <skeleton type="Card" class="h-64" />
+        <skeleton type="Card" class="h-64" />
+    </div>
+
     <!-- Check-ins List -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
+    <div id="checkins-content" class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
         @if (Model.Any())
         {
             <div class="p-6 border-b border-border/50 bg-muted/20">
@@ -139,6 +145,10 @@
 @section Scripts {
     <script src="~/js/maps.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('checkins-skeleton', 'checkins-content');
+        });
+        
         // Initialize Lucide icons
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();

@@ -78,7 +78,7 @@
     <div class="animation-side p-8 hidden lg:flex border-r border-border/10">
         <div class="car-frame-container">
             <div id="smoke-container" style="display: none;"></div>
-            <img id="car-animation" src="/images/login_frames/frame_08.png" class="car-frame" alt="Car Assembly" />
+            <img id="car-animation" src="/images/login_frames/frame_00.png" class="car-frame" alt="Car Assembly" />
         </div>
     </div>
 
@@ -155,8 +155,9 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/95 font-bold py-3 px-4 rounded-xl transition-all shadow-lg hover:shadow-primary/10 btn-glow mt-2 text-sm">
-                    @AccountLocalizer["CreateAccount"]
+                <button type="submit" id="register-button" class="w-full bg-primary text-primary-foreground hover:bg-primary/95 font-bold py-3 px-4 rounded-xl transition-all shadow-lg hover:shadow-primary/10 btn-glow mt-2 text-sm flex items-center justify-center gap-2">
+                    <span id="button-text">@AccountLocalizer["CreateAccount"]</span>
+                    <span id="button-spinner" class="hidden animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
                 </button>
             </form>
 
@@ -176,16 +177,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             const carImg = document.getElementById('car-animation');
             const smokeContainer = document.getElementById('smoke-container');
-            const frames = [
-                '/images/login_frames/frame_08.png',
-                '/images/login_frames/frame_03.png',
-                '/images/login_frames/frame_02.png',
-                '/images/login_frames/frame_01.png',
-                '/images/login_frames/frame_00.png'
-            ];
+            const frames = Array.from({ length: 21 }, (_, i) => `/images/login_frames/frame_${i.toString().padStart(2, '0')}.png`);
             
             let currentFrameIdx = 0;
-            const frameDelay = 350;
+            const frameDelay = 120; // Faster delay for the 21-frame progression
 
             frames.forEach(src => {
                 const img = new Image();
@@ -218,6 +213,22 @@
             }
 
             setTimeout(startAnimation, 1000);
+
+            // Handle register button loading
+            const registerForm = document.querySelector('form[asp-action="Register"]');
+            if (registerForm) {
+                registerForm.addEventListener('submit', () => {
+                    const btn = document.getElementById('register-button');
+                    const text = document.getElementById('button-text');
+                    const spinner = document.getElementById('button-spinner');
+                    
+                    if (btn && text && spinner) {
+                        btn.disabled = true;
+                        text.classList.add('opacity-50');
+                        spinner.classList.remove('hidden');
+                    }
+                });
+            }
         });
     </script>
 }

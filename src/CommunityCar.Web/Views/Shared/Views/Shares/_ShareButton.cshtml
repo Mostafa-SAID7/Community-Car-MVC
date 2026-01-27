@@ -122,11 +122,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Track the share
                 trackShare(entityId, entityType, 'copy');
                 
-                // Show success message (you can implement a toast here)
-                alert('Link copied to clipboard!');
+                // Show success message
+                if (window.AlertModal) {
+                    window.AlertModal.success('Link copied to clipboard!', 'Success');
+                } else {
+                    alert('Link copied to clipboard!');
+                }
             }).catch(err => {
                 console.error('Failed to copy link:', err);
-                alert('Failed to copy link');
+                if (window.AlertModal) {
+                    window.AlertModal.error('Failed to copy link', 'Error');
+                } else {
+                    alert('Failed to copy link');
+                }
             });
         }
     });

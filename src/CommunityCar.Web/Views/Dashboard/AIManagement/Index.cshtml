@@ -4,7 +4,20 @@
     Layout = "_DashboardLayout";
 }
 
-<div class="space-y-6">
+    <div id="ai-skeleton" class="hidden space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+        </div>
+    </div>
+
+    <div id="ai-content" class="space-y-6">
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>

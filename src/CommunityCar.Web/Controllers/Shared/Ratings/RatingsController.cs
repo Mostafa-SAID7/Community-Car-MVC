@@ -8,9 +8,9 @@ using CommunityCar.Domain.Entities.Shared;
 
 namespace CommunityCar.Web.Controllers.Shared.Ratings;
 
-[Route("api/shared/ratings")]
-[ApiController]
-public class RatingsController : ControllerBase
+[Route("shared/ratings")]
+[Controller]
+public class RatingsController : Controller
 {
     private readonly IInteractionService _interactionService;
     private readonly ICurrentUserService _currentUserService;

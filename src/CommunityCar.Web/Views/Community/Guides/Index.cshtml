@@ -141,9 +141,17 @@
     }
 
     <!-- Guides Grid -->
+    <div id="guides-skeleton" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (int i = 0; i < 6; i++)
+        {
+            <skeleton type="Card" />
+        }
+    </div>
+
+    <div id="guides-content">
     @if (Model.Guides.Any())
     {
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="guides-grid">
             @foreach (var guide in Model.Guides)
             {
                 <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden transition-all hover:shadow-2xl hover:border-primary/20 group">
@@ -382,6 +390,7 @@
             </div>
         </div>
     }
+    </div>
 </div>
 
 @functions {
@@ -401,6 +410,11 @@
 
     <script src="~/js/guides.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('guides-skeleton', 'guides-content');
+        });
+
+
         async function toggleBookmark(guideId, button) {
             try {
                 const isBookmarked = button.querySelector('i').classList.contains('fill-current');

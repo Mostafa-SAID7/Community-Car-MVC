@@ -54,7 +54,7 @@ class InteractionManager {
             let response;
             if (isActive) {
                 // Remove reaction
-                response = await fetch('/Shared/Interactions/RemoveReaction', {
+                response = await fetch('/Reactions/Toggle', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -67,7 +67,7 @@ class InteractionManager {
                 });
             } else {
                 // Add reaction
-                response = await fetch('/Shared/Interactions/AddReaction', {
+                response = await fetch('/Reactions/Toggle', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -111,9 +111,9 @@ class InteractionManager {
 
     async loadComments(entityId, entityType) {
         try {
-            const response = await fetch(`/Shared/Interactions/GetEntityComments?entityId=${entityId}&entityType=${entityType}`);
+            const response = await fetch(`/Comments/get/${entityId}?entityType=${entityType}`);
             const comments = await response.json();
-            
+
             const commentsContainer = document.querySelector(`#comments-list-${entityId}`);
             commentsContainer.innerHTML = this.renderComments(comments);
         } catch (error) {
@@ -137,16 +137,16 @@ class InteractionManager {
         }
 
         try {
-            const response = await fetch('/Shared/Interactions/AddComment', {
+            const response = await fetch('/Comments/Add', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'RequestVerificationToken': this.getAntiForgeryToken()
                 },
-                body: JSON.stringify({
+                body: new URLSearchParams({
                     content: content,
                     entityId: entityId,
-                    entityType: parseInt(entityType)
+                    entityType: entityType
                 })
             });
 
@@ -178,15 +178,18 @@ class InteractionManager {
         }
 
         try {
-            const response = await fetch('/Shared/Interactions/AddReply', {
+            const response = await fetch('/Comments/Add', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'RequestVerificationToken': this.getAntiForgeryToken()
                 },
-                body: JSON.stringify({
+                body: new URLSearchParams({
                     content: content,
-                    parentCommentId: parentCommentId
+                    parentCommentId: parentCommentId,
+                    // We need entityId and entityType here too for the Add action
+                    entityId: btn.closest('.comment-form')?.dataset.entityId || form.dataset.entityId || "",
+                    entityType: btn.closest('.comment-form')?.dataset.entityType || form.dataset.entityType || ""
                 })
             });
 
@@ -313,7 +316,7 @@ class InteractionManager {
         const btn = event.target.closest('.reply-btn');
         const commentId = btn.dataset.commentId;
         const replyForm = document.querySelector(`#reply-form-${commentId}`);
-        
+
         if (replyForm.style.display === 'none' || !replyForm.style.display) {
             replyForm.style.display = 'block';
             replyForm.querySelector('.reply-input').focus();
@@ -378,13 +381,21 @@ class InteractionManager {
 
     async deleteComment(event) {
         event.preventDefault();
-        if (!confirm('Are you sure you want to delete this comment?')) {
-            return;
-        }
-
         const btn = event.target.closest('.delete-comment-btn');
         const commentId = btn.dataset.commentId;
 
+        if (window.AlertModal) {
+            window.AlertModal.confirm('Are you sure you want to delete this comment?', 'Delete Comment', (confirmed) => {
+                if (confirmed) {
+                    this.executeDeleteComment(commentId);
+                }
+            });
+        } else if (confirm('Are you sure you want to delete this comment?')) {
+            this.executeDeleteComment(commentId);
+        }
+    }
+
+    async executeDeleteComment(commentId) {
         try {
             const response = await fetch('/Shared/Interactions/DeleteComment', {
                 method: 'POST',
@@ -500,12 +511,12 @@ class InteractionManager {
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         toast.textContent = message;
-        
+
         document.body.appendChild(toast);
-        
+
         // Show toast
         setTimeout(() => toast.classList.add('show'), 100);
-        
+
         // Hide toast after 3 seconds
         setTimeout(() => {
             toast.classList.remove('show');

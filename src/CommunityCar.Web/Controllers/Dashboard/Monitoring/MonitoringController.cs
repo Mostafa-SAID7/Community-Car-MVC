@@ -65,7 +65,7 @@ public class MonitoringController : Controller
         }
     }
 
-    [HttpGet("api/health")]
+    [HttpGet("health")]
     public async Task<IActionResult> GetSystemHealth()
     {
         try
@@ -88,7 +88,7 @@ public class MonitoringController : Controller
         }
     }
 
-    [HttpGet("api/service/{serviceName}")]
+    [HttpGet("service-api/{serviceName}")]
     public async Task<IActionResult> GetServiceHealth(string serviceName)
     {
         try
@@ -108,7 +108,7 @@ public class MonitoringController : Controller
         }
     }
 
-    [HttpGet("api/performance/{serviceName}")]
+    [HttpGet("performance-api/{serviceName}")]
     public async Task<IActionResult> GetPerformanceChart(string serviceName, DateTime? startDate = null, DateTime? endDate = null)
     {
         try
@@ -126,7 +126,7 @@ public class MonitoringController : Controller
         }
     }
 
-    [HttpPost("api/health/{serviceName}")]
+    [HttpPost("health-api/{serviceName}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateServiceHealth(string serviceName, [FromBody] UpdateHealthRequest request)
     {

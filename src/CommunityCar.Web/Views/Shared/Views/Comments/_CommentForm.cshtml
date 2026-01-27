@@ -6,11 +6,52 @@
 
 @if (isAuthenticated)
 {
-    <div class="comment-form bg-card rounded-lg p-4 border">
-        <form asp-controller="Comments" asp-action="Add" method="post" class="space-y-4" id="comment-form">
+    <style>
+        .mention-suggestions {
+            position: absolute;
+            z-index: 50;
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            width: 250px;
+            display: none;
+        }
+        .mention-item {
+            display: flex;
+            items-center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .mention-item:hover, .mention-item.active {
+            background: hsl(var(--muted));
+        }
+    </style>
+
+    <div class="comment-form bg-card rounded-lg p-4 border relative">
+        <!-- Mention Suggestions -->
+        <div class="mention-suggestions" id="mention-suggestions"></div>
+
+        <!-- Reply Info (Hidden by default) -->
+        <div class="reply-info mb-3 p-2 bg-primary/5 rounded border border-primary/10 flex items-center justify-between" style="display: none;">
+            <div class="flex items-center gap-2 text-sm text-primary">
+                <i data-lucide="reply" class="w-4 h-4"></i>
+                <span>Replying to <span class="reply-to-name font-bold"></span></span>
+            </div>
+            <button type="button" class="text-muted-foreground hover:text-foreground cancel-reply-btn">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <form asp-controller="Comments" asp-action="Add" method="post" class="space-y-4 comment-form-element">
             @Html.AntiForgeryToken()
             <input type="hidden" name="entityId" value="@entityId" />
             <input type="hidden" name="entityType" value="@entityType" />
+            <input type="hidden" name="parentCommentId" value="" class="parent-comment-id-input" />
             <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
             
             <div class="flex gap-3">
@@ -22,13 +63,13 @@
                 <div class="flex-1">
                     <textarea name="content" 
                               placeholder="Write a comment..." 
-                              class="w-full p-3 border border-border rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                              class="w-full p-3 border border-border rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-transparent comment-textarea"
                               rows="3"
                               required></textarea>
                     <div class="flex items-center justify-between mt-3">
-                        <div class="text-sm text-muted-foreground">
-                            <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
-                            Be respectful and constructive in your comments
+                        <div class="text-sm text-muted-foreground uppercase tracking-wider text-[10px] font-bold">
+                            <i data-lucide="at-sign" class="w-3.5 h-3.5 inline mr-1"></i>
+                            Type @@ to mention someone
                         </div>
                         <div class="flex items-center gap-2">
                             <button type="button" 
@@ -37,7 +78,7 @@
                                 Cancel
                             </button>
                             <button type="submit" 
-                                    class="btn btn-primary btn-sm">
+                                    class="btn btn-primary btn-sm submit-comment-btn">
                                 <i data-lucide="send" class="w-4 h-4 mr-2"></i>
                                 Post Comment
                             </button>
@@ -50,6 +91,7 @@
 }
 else
 {
+    @* Same else block as before *@
     <div class="comment-form bg-card rounded-lg p-4 border">
         <div class="text-center py-6">
             <div class="mb-4">
@@ -74,75 +116,294 @@ else
 }
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize icons
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
-
-    const form = document.getElementById('comment-form');
-    if (!form) return; // Exit if form doesn't exist (user not authenticated)
-    
-    const textarea = form.querySelector('textarea[name="content"]');
-    const cancelBtn = form.querySelector('.cancel-btn');
-
-    // Show/hide cancel button based on content
-    textarea.addEventListener('input', function() {
-        if (this.value.trim()) {
-            cancelBtn.style.display = 'inline-flex';
-        } else {
-            cancelBtn.style.display = 'none';
+(function() {
+    function initCommentForms() {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
         }
-    });
 
-    // Clear form on cancel
-    cancelBtn.addEventListener('click', function() {
-        textarea.value = '';
-        cancelBtn.style.display = 'none';
-        textarea.blur();
-    });
+        const forms = document.querySelectorAll('.comment-form-element:not([data-initialized])');
+        
+        forms.forEach(form => {
+            const container = form.closest('.comment-form');
+            const textarea = form.querySelector('.comment-textarea');
+            const cancelBtn = form.querySelector('.cancel-btn');
+            const submitBtn = form.querySelector('.submit-comment-btn');
+            const parentIdInput = form.querySelector('.parent-comment-id-input');
+            const replyInfo = container.querySelector('.reply-info');
+            const replyToName = container.querySelector('.reply-to-name');
+            const cancelReplyBtn = container.querySelector('.cancel-reply-btn');
+            const mentionList = container.querySelector('#mention-suggestions');
 
-    // Handle form submission via AJAX
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        
-        // Show loading state
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="w-4 h-4 mr-2 animate-spin">⟳</i>Posting...';
-        
-        fetch(this.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Clear form
+            let mentionQuery = '';
+            let isMentioning = false;
+            let mentionStartIndex = -1;
+
+            function resetForm() {
                 textarea.value = '';
                 cancelBtn.style.display = 'none';
-                
-                // Reload comments section
-                location.reload();
-            } else {
-                alert(data.message || 'Failed to post comment');
+                parentIdInput.value = '';
+                if (replyInfo) replyInfo.style.display = 'none';
+                textarea.placeholder = "Write a comment...";
+                hideMentions();
+                textarea.blur();
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while posting your comment');
-        })
-        .finally(() => {
-            // Reset button state
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
+
+            function hideMentions() {
+                isMentioning = false;
+                if (mentionList) mentionList.style.display = 'none';
+            }
+
+            function showMentions(users) {
+                if (!mentionList || users.length === 0) {
+                    hideMentions();
+                    return;
+                }
+
+                mentionList.innerHTML = users.map(u => `
+                    <div class="mention-item" data-user-name="${u.name}">
+                        <img src="${u.avatar}" class="w-6 h-6 rounded-full" />
+                        <span class="text-sm">${u.name}</span>
+                    </div>
+                `).join('');
+
+                // Position the list
+                const coords = textarea.getBoundingClientRect();
+                mentionList.style.left = `50px`;
+                mentionList.style.bottom = `60px`;
+                mentionList.style.display = 'block';
+
+                mentionList.querySelectorAll('.mention-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const name = this.dataset.userName;
+                        const before = textarea.value.substring(0, mentionStartIndex);
+                        const after = textarea.value.substring(textarea.selectionStart);
+                        textarea.value = before + '@@' + name + ' ' + after;
+                        hideMentions();
+                        textarea.focus();
+                    });
+                });
+            }
+
+            if (textarea) {
+                textarea.addEventListener('input', function(e) {
+                    const value = this.value;
+                    const cursor = this.selectionStart;
+                    const lastChar = value[cursor - 1];
+
+                    if (lastChar === '@@') {
+                        isMentioning = true;
+                        mentionStartIndex = cursor - 1;
+                        mentionQuery = '';
+                    } else if (isMentioning) {
+                        if (lastChar === ' ') {
+                            hideMentions();
+                        } else {
+                            mentionQuery = value.substring(mentionStartIndex + 1, cursor);
+                            if (mentionQuery.length >= 2) {
+                                fetch(`/Comments/SearchUsers?query=${encodeURIComponent(mentionQuery)}`)
+                                    .then(r => r.json())
+                                    .then(users => showMentions(users));
+                            }
+                        }
+                    }
+
+                    if (this.value.trim() || (parentIdInput && parentIdInput.value)) {
+                        if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+                    } else {
+                        if (cancelBtn) cancelBtn.style.display = 'none';
+                    }
+                });
+
+                textarea.addEventListener('keydown', function(e) {
+                    if (isMentioning && (e.key === 'Escape' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+                        // Mentions navigation logic could go here
+                    }
+                });
+            }
+            
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', resetForm);
+            }
+
+            if (cancelReplyBtn) {
+                cancelReplyBtn.addEventListener('click', function() {
+                    parentIdInput.value = '';
+                    replyInfo.style.display = 'none';
+                    textarea.placeholder = "Write a comment...";
+                    if (!textarea.value.trim()) {
+                        cancelBtn.style.display = 'none';
+                    }
+                });
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const originalText = submitBtn.innerHTML;
+                
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="w-4 h-4 mr-2 animate-spin">⟳</i>Posting...';
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(async response => {
+                    if (!response.ok) {
+                        const text = await response.text();
+                        throw new Error(text || `Server returned ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        resetForm();
+                        
+                        // Update comment count in StatsBox
+                        const entityId = form.querySelector('input[name="entityId"]').value;
+                        const statsBox = document.querySelector(`.comments-section-container[data-entity-id="${entityId}"]`)?.parentElement?.querySelector(`[data-stats-type="comments"][data-entity-id="${entityId}"] span`);
+                        if (statsBox) {
+                            const currentCount = parseInt(statsBox.innerText.replace(/,/g, '')) || 0;
+                            statsBox.innerText = (currentCount + 1).toLocaleString();
+                        }
+
+                        // Prepend or append comment to list
+                        const commentsList = form.closest('.comments-section-container')?.querySelector('.comments-list');
+                        if (commentsList) {
+                            const emptyState = commentsList.closest('.comments-list-container')?.querySelector('.text-center.py-8');
+                            if (emptyState) emptyState.remove();
+
+                            const comment = data.comment;
+                            const parentId = parentIdInput.value;
+                            
+                            // Prevent double-insertion if SignalR already added it
+                            if (document.querySelector(`[data-comment-id="${comment.id}"]`)) {
+                                return;
+                            }
+
+                            // Format mentions in content for immediate UI update
+                            let content = comment.content;
+                            content = content.replace(/@@([\w\s]+)/g, '<span class="text-primary font-bold cursor-pointer hover:underline">@@$1</span>');
+
+                            if (parentId) {
+                                // Find parent comment container
+                                const parentContainer = document.querySelector(`.comment-item[data-comment-id="${parentId}"]`)?.closest('.comment-item-container');
+                                if (parentContainer) {
+                                    let repliesList = parentContainer.querySelector('.replies-container');
+                                    if (!repliesList) {
+                                        repliesList = document.createElement('div');
+                                        repliesList.className = 'replies-container ml-8 space-y-3 border-l-2 border-muted pl-4 mt-3';
+                                        parentContainer.appendChild(repliesList);
+                                    }
+
+                                    const replyHtml = `
+                                        <div class="reply-item flex gap-3 p-3 bg-muted/10 rounded-lg animate-in fade-in slide-in-from-top-2 duration-300" data-comment-id="${comment.id}">
+                                            <div class="flex-shrink-0">
+                                                <img src="${comment.authorAvatar}" 
+                                                     alt="${comment.authorName}" 
+                                                     class="w-8 h-8 rounded-full object-cover" />
+                                            </div>
+                                            <div class="flex-1 text-sm">
+                                                <div class="flex items-center gap-2 mb-1">
+                                                    <span class="font-medium text-foreground">${comment.authorName}</span>
+                                                    <span class="text-xs text-muted-foreground">${comment.timeAgo}</span>
+                                                </div>
+                                                <div class="text-foreground mb-1">
+                                                    ${content}
+                                                </div>
+                                                <div class="flex items-center gap-3">
+                                                    <button class="text-muted-foreground hover:text-primary transition-colors reply-btn text-[10px] uppercase font-bold" 
+                                                            data-comment-id="${parentId}"
+                                                            data-author-name="${comment.authorName}">
+                                                        Reply
+                                                    </button>
+                                                    <button class="text-muted-foreground hover:text-red-600 transition-colors delete-btn text-[10px] uppercase font-bold" 
+                                                            data-comment-id="${comment.id}">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                    repliesList.insertAdjacentHTML('beforeend', replyHtml);
+                                } else {
+                                    location.reload();
+                                }
+                            } else {
+                                const commentHtml = `
+                                    <div class="comment-item-container space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                                        <div class="comment-item flex gap-3 p-4 bg-muted/30 rounded-lg" data-comment-id="${comment.id}">
+                                            <div class="flex-shrink-0">
+                                                <img src="${comment.authorAvatar}" 
+                                                     alt="${comment.authorName}" 
+                                                     class="w-10 h-10 rounded-full object-cover" />
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="flex items-center gap-2 mb-2">
+                                                    <span class="font-medium text-foreground">${comment.authorName}</span>
+                                                    <span class="text-sm text-muted-foreground">${comment.timeAgo}</span>
+                                                </div>
+                                                <div class="text-foreground mb-2">
+                                                    ${content}
+                                                </div>
+                                                <div class="flex items-center gap-4 text-sm">
+                                                    <button class="text-muted-foreground hover:text-primary transition-colors reply-btn" data-comment-id="${comment.id}" data-author-name="${comment.authorName}">
+                                                        <i data-lucide="reply" class="w-4 h-4 inline mr-1"></i>
+                                                        Reply
+                                                    </button>
+                                                    <button class="text-muted-foreground hover:text-red-600 transition-colors delete-btn" data-comment-id="${comment.id}">
+                                                        <i data-lucide="trash-2" class="w-4 h-4 inline mr-1"></i>
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                commentsList.insertAdjacentHTML('afterbegin', commentHtml);
+                            }
+                            
+                            if (typeof lucide !== 'undefined') {
+                                lucide.createIcons();
+                            }
+                        } else {
+                            location.reload();
+                        }
+                    } else {
+                        if (window.AlertModal) {
+                            window.AlertModal.error(data.message || 'Failed to post comment', 'Error');
+                        } else {
+                            alert(data.message || 'Failed to post comment');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    if (window.AlertModal) {
+                        window.AlertModal.error('An error occurred while posting your comment: ' + error.message, 'Error');
+                    } else {
+                        alert('An error occurred while posting your comment: ' + error.message);
+                    }
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                });
+            });
+
+            form.setAttribute('data-initialized', 'true');
         });
-    });
-});
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCommentForms);
+    } else {
+        initCommentForms();
+    }
+})();
 </script>

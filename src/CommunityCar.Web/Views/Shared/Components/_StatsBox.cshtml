@@ -3,12 +3,12 @@
 @{
     var colorClass = Model.Type switch
     {
-        "comments" => "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400",
-        "likes" => "bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400",
-        "views" => "bg-green-500/10 border-green-500/20 text-green-600 dark:text-green-400",
-        "shares" => "bg-purple-500/10 border-purple-500/20 text-purple-600 dark:text-purple-400",
-        "bookmarks" => "bg-yellow-500/10 border-yellow-500/20 text-yellow-600 dark:text-yellow-400",
-        _ => "bg-gray-500/10 border-gray-500/20 text-gray-600 dark:text-gray-400"
+        "comments" => "bg-blue-500/5 border-blue-500/10 text-blue-600 dark:text-blue-400",
+        "likes" => "bg-red-500/5 border-red-500/10 text-red-600 dark:text-red-400",
+        "views" => "bg-green-500/5 border-green-500/10 text-green-600 dark:text-green-400",
+        "shares" => "bg-purple-500/5 border-purple-500/10 text-purple-600 dark:text-purple-400",
+        "bookmarks" => "bg-yellow-500/5 border-yellow-500/10 text-yellow-600 dark:text-yellow-400",
+        _ => "bg-gray-500/5 border-gray-500/10 text-gray-600 dark:text-gray-400"
     };
     
     var iconClass = Model.Type switch
@@ -26,11 +26,11 @@
 
 @if (shouldShow)
 {
-    <div class="inline-flex items-center gap-1.5 backdrop-blur-sm px-3 py-1.5 rounded-lg border shadow-sm @colorClass" 
+    <div class="inline-flex items-center gap-2 backdrop-blur-xl px-4 py-2 rounded-2xl border shadow-lg @colorClass" 
          data-stats-type="@Model.Type" 
          data-entity-id="@Model.EntityId" 
          data-entity-type="@Model.EntityType">
         <i data-lucide="@iconClass" class="w-3.5 h-3.5 @(Model.Type == "likes" && Model.IsActive ? "fill-current" : "")"></i>
-        <span class="text-xs font-bold">@Model.Count.ToString("N0")</span>
+        <span class="text-[9px] font-black uppercase tracking-widest tabular-nums">@Model.Count.ToString("N0")</span>
     </div>
 }

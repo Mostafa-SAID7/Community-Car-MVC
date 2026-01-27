@@ -7,7 +7,7 @@ class NotificationClient {
         this.isDropdownOpen = false;
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
-        
+
         this.init();
     }
 
@@ -21,13 +21,13 @@ class NotificationClient {
 
             // Set up event handlers
             this.setupEventHandlers();
-            
+
             // Start connection
             await this.start();
-            
+
             // Initialize UI
             this.initializeUI();
-            
+
             console.log('Notification client initialized successfully');
         } catch (error) {
             console.error('Failed to initialize notification client:', error);
@@ -66,10 +66,11 @@ class NotificationClient {
     async start() {
         try {
             await this.connection.start();
-            console.log('Notification SignalR connection started');
+            window.notificationConnection = this.connection; // Expose globally
+            console.log('✅ Notification SignalR connection started');
         } catch (error) {
             console.error('Error starting notification connection:', error);
-            
+
             // Retry connection
             if (this.reconnectAttempts < this.maxReconnectAttempts) {
                 this.reconnectAttempts++;
@@ -79,22 +80,23 @@ class NotificationClient {
     }
 
     initializeUI() {
-        // Set up notification bell click handler
-        const notificationBell = document.querySelector('.notification-bell');
-        if (notificationBell) {
-            notificationBell.addEventListener('click', (e) => {
+        // Set up notification bell click handlers (Desktop & Mobile)
+        const notificationBells = document.querySelectorAll('.notification-bell, .mobile-notification-bell');
+        notificationBells.forEach(bell => {
+            bell.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.toggleNotificationDropdown();
             });
-        }
+        });
 
-        // Set up mark all as read button
-        const markAllBtn = document.querySelector('.mark-all-read-btn');
-        if (markAllBtn) {
-            markAllBtn.addEventListener('click', () => {
+        // Set up mark all as read buttons (Desktop & Mobile)
+        const markAllBtns = document.querySelectorAll('.mark-all-read-btn, .mobile-mark-all-read-btn');
+        markAllBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 this.markAllAsRead();
             });
-        }
+        });
 
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
@@ -109,12 +111,18 @@ class NotificationClient {
 
     async loadNotifications() {
         try {
-            // TODO: Load notifications from API when implemented
-            // const response = await fetch('/api/notifications');
-            // const data = await response.json();
-            // this.notifications = data.notifications || [];
-            // this.unreadCount = data.unreadCount || 0;
-            // this.updateNotificationUI();
+            const response = await fetch('/shared/Notifications?page=1&pageSize=20', {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            const result = await response.json();
+
+            if (result.success && result.data) {
+                this.notifications = result.data;
+                this.unreadCount = this.notifications.filter(n => !n.isRead).length;
+                this.updateNotificationUI();
+            }
         } catch (error) {
             console.error('Error loading notifications:', error);
         }
@@ -123,37 +131,43 @@ class NotificationClient {
     // Event handlers
     handleReceiveNotification(notification) {
         console.log('Received notification:', notification);
-        
+
         // Add to notifications array
         this.notifications.unshift(notification);
-        
+
         // Update unread count
-        if (!notification.IsRead) {
+        const isRead = notification.isRead ?? notification.IsRead ?? false;
+        if (!isRead) {
             this.unreadCount++;
         }
-        
+
         // Update UI
         this.updateNotificationUI();
-        
+
         // Show toast notification
         this.showToastNotification(notification);
-        
+
         // Play notification sound
         this.playNotificationSound();
     }
 
     handleNotificationMarkedAsRead(notificationId) {
-        const notification = this.notifications.find(n => n.Id === notificationId);
-        if (notification && !notification.IsRead) {
-            notification.IsRead = true;
-            this.unreadCount = Math.max(0, this.unreadCount - 1);
-            this.updateNotificationUI();
+        const notification = this.notifications.find(n => (n.id || n.Id) === notificationId);
+        if (notification) {
+            const isRead = notification.isRead ?? notification.IsRead ?? false;
+            if (!isRead) {
+                if (notification.isRead !== undefined) notification.isRead = true;
+                if (notification.IsRead !== undefined) notification.IsRead = true;
+                this.unreadCount = Math.max(0, this.unreadCount - 1);
+                this.updateNotificationUI();
+            }
         }
     }
 
     handleAllNotificationsMarkedAsRead() {
         this.notifications.forEach(notification => {
-            notification.IsRead = true;
+            if (notification.isRead !== undefined) notification.isRead = true;
+            if (notification.IsRead !== undefined) notification.IsRead = true;
         });
         this.unreadCount = 0;
         this.updateNotificationUI();
@@ -161,8 +175,8 @@ class NotificationClient {
 
     // UI Methods
     toggleNotificationDropdown() {
-        const dropdown = document.querySelector('.notification-dropdown');
-        if (!dropdown) return;
+        const dropdowns = document.querySelectorAll('.notification-dropdown, .mobile-notification-dropdown');
+        if (dropdowns.length === 0) return;
 
         if (this.isDropdownOpen) {
             this.closeNotificationDropdown();
@@ -172,47 +186,48 @@ class NotificationClient {
     }
 
     openNotificationDropdown() {
-        const dropdown = document.querySelector('.notification-dropdown');
-        if (!dropdown) return;
+        const dropdowns = document.querySelectorAll('.notification-dropdown, .mobile-notification-dropdown');
+        if (dropdowns.length === 0) return;
 
-        dropdown.classList.add('visible');
+        dropdowns.forEach(dropdown => {
+            dropdown.classList.remove('hidden');
+        });
         this.isDropdownOpen = true;
-        
+
         // Load notifications if empty
         if (this.notifications.length === 0) {
             this.loadNotifications();
         }
-        
+
         this.renderNotifications();
     }
 
     closeNotificationDropdown() {
-        const dropdown = document.querySelector('.notification-dropdown');
-        if (!dropdown) return;
+        const dropdowns = document.querySelectorAll('.notification-dropdown, .mobile-notification-dropdown');
+        if (dropdowns.length === 0) return;
 
-        dropdown.classList.remove('visible');
+        dropdowns.forEach(dropdown => {
+            dropdown.classList.add('hidden');
+        });
         this.isDropdownOpen = false;
     }
 
     updateNotificationUI() {
         // Update notification badge
-        const badge = document.querySelector('.notification-badge');
-        if (badge) {
+        const badges = document.querySelectorAll('.notification-badge, .mobile-notification-badge');
+        badges.forEach(badge => {
             if (this.unreadCount > 0) {
-                badge.style.display = 'block';
+                badge.style.display = 'flex';
+                badge.textContent = this.unreadCount > 9 ? '9+' : this.unreadCount.toString();
                 if (this.unreadCount > 9) {
                     badge.classList.add('has-count');
-                    badge.textContent = '9+';
-                } else if (this.unreadCount > 1) {
-                    badge.classList.add('has-count');
-                    badge.textContent = this.unreadCount.toString();
                 } else {
                     badge.classList.remove('has-count');
                 }
             } else {
                 badge.style.display = 'none';
             }
-        }
+        });
 
         // Update dropdown if open
         if (this.isDropdownOpen) {
@@ -221,23 +236,27 @@ class NotificationClient {
     }
 
     renderNotifications() {
-        const notificationList = document.querySelector('.notification-list');
-        if (!notificationList) return;
+        const notificationLists = document.querySelectorAll('.notification-list, .mobile-notification-list');
+        if (notificationLists.length === 0) return;
 
-        if (this.notifications.length === 0) {
-            notificationList.innerHTML = `
-                <div class="notification-empty">
-                    <i data-lucide="bell"></i>
-                    <h3>No notifications</h3>
-                    <p>You're all caught up!</p>
-                </div>
-            `;
-        } else {
-            notificationList.innerHTML = this.notifications
-                .slice(0, 20) // Show only latest 20 notifications
-                .map(notification => this.createNotificationHTML(notification))
-                .join('');
-        }
+        notificationLists.forEach(notificationList => {
+            if (this.notifications.length === 0) {
+                notificationList.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
+                        <div class="w-12 h-12 rounded-2xl bg-muted flex items-center justify-center mb-4">
+                            <i data-lucide="bell-off" class="w-6 h-6 text-muted-foreground"></i>
+                        </div>
+                        <h3 class="text-sm font-semibold mb-1">No notifications</h3>
+                        <p class="text-xs text-muted-foreground">You're all caught up!</p>
+                    </div>
+                `;
+            } else {
+                notificationList.innerHTML = this.notifications
+                    .slice(0, 20) // Show only latest 20 notifications
+                    .map(notification => this.createNotificationHTML(notification))
+                    .join('');
+            }
+        });
 
         // Initialize Lucide icons
         lucide.createIcons();
@@ -247,18 +266,28 @@ class NotificationClient {
     }
 
     createNotificationHTML(notification) {
-        const timeAgo = this.formatTimeAgo(notification.CreatedAt);
-        const unreadClass = notification.IsRead ? '' : 'unread';
-        
+        const createdAt = notification.createdAt || notification.CreatedAt;
+        const timeAgo = this.formatTimeAgo(createdAt);
+        const isRead = notification.isRead ?? notification.IsRead ?? false;
+        const unreadClass = isRead ? '' : 'unread';
+        const id = notification.id || notification.Id;
+        const actionUrl = notification.actionUrl || notification.ActionUrl;
+        const type = notification.type || notification.Type;
+        const iconClass = notification.iconClass || notification.IconClass;
+        const title = notification.title || notification.Title;
+        const message = notification.message || notification.Message;
+
         return `
-            <div class="notification-item ${unreadClass}" data-notification-id="${notification.Id}" data-action-url="${notification.ActionUrl || ''}">
-                <div class="notification-icon ${notification.Type}">
-                    <i data-lucide="${notification.IconClass}"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">${this.escapeHtml(notification.Title)}</div>
-                    <div class="notification-message">${this.escapeHtml(notification.Message)}</div>
-                    <div class="notification-time">${timeAgo}</div>
+            <div class="notification-item ${unreadClass} p-3 hover:bg-muted/50 transition-colors cursor-pointer border-b border-border last:border-0" data-notification-id="${id}" data-action-url="${actionUrl || ''}">
+                <div class="flex gap-3">
+                    <div class="notification-icon w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${type}">
+                        <i data-lucide="${iconClass || 'bell'}" class="w-4 h-4"></i>
+                    </div>
+                    <div class="notification-content flex-1 min-w-0">
+                        <div class="notification-title text-sm font-semibold truncate">${this.escapeHtml(title)}</div>
+                        <div class="notification-message text-xs text-muted-foreground line-clamp-2">${this.escapeHtml(message)}</div>
+                        <div class="notification-time text-[10px] text-muted-foreground mt-1">${timeAgo}</div>
+                    </div>
                 </div>
             </div>
         `;
@@ -270,34 +299,40 @@ class NotificationClient {
             item.addEventListener('click', () => {
                 const notificationId = item.getAttribute('data-notification-id');
                 const actionUrl = item.getAttribute('data-action-url');
-                
+
                 // Mark as read
                 if (item.classList.contains('unread')) {
                     this.markAsRead(notificationId);
                 }
-                
+
                 // Navigate to action URL
                 if (actionUrl && actionUrl !== 'null') {
                     window.location.href = actionUrl;
                 }
-                
+
                 this.closeNotificationDropdown();
             });
         });
     }
 
     showToastNotification(notification) {
+        const type = notification.type || notification.Type;
+        const iconClass = notification.iconClass || notification.IconClass;
+        const title = notification.title || notification.Title;
+        const message = notification.message || notification.Message;
+        const actionUrl = notification.actionUrl || notification.ActionUrl;
+
         // Create toast element
         const toast = document.createElement('div');
         toast.className = 'notification-toast';
         toast.innerHTML = `
             <div class="notification-toast-content">
-                <div class="notification-toast-icon ${notification.Type}">
-                    <i data-lucide="${notification.IconClass}"></i>
+                <div class="notification-toast-icon ${type}">
+                    <i data-lucide="${iconClass || 'bell'}"></i>
                 </div>
                 <div class="notification-toast-body">
-                    <div class="notification-toast-title">${this.escapeHtml(notification.Title)}</div>
-                    <div class="notification-toast-message">${this.escapeHtml(notification.Message)}</div>
+                    <div class="notification-toast-title">${this.escapeHtml(title)}</div>
+                    <div class="notification-toast-message">${this.escapeHtml(message)}</div>
                 </div>
                 <button class="notification-toast-close" type="button">
                     <i data-lucide="x"></i>
@@ -327,7 +362,7 @@ class NotificationClient {
         const progressBar = toast.querySelector('.notification-toast-progress');
         progressBar.style.width = '100%';
         progressBar.style.transitionDuration = '5s';
-        
+
         setTimeout(() => {
             progressBar.style.width = '0%';
         }, 100);
@@ -355,7 +390,7 @@ class NotificationClient {
         }, 300);
     }
 
-    // API Methods
+    //  Methods
     async markAsRead(notificationId) {
         if (!this.connection || this.connection.state !== signalR.HubConnectionState.Connected) {
             return;
@@ -397,7 +432,7 @@ class NotificationClient {
         const date = new Date(dateString);
         const now = new Date();
         const diffInMinutes = Math.floor((now - date) / (1000 * 60));
-        
+
         if (diffInMinutes < 1) {
             return 'Just now';
         } else if (diffInMinutes < 60) {

@@ -5,6 +5,14 @@
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Skeleton Loader -->
+    <div id="resources-skeleton" class="hidden space-y-8">
+        <skeleton type="Line" class="w-64" />
+        <skeleton type="Card" class="h-32" />
+        <skeleton type="Card" class="h-96" />
+    </div>
+
+    <div id="resources-content">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
             <h1 class="text-3xl font-black text-foreground tracking-tight">Dictionary Explorer</h1>
@@ -92,8 +100,11 @@
                                     <a href="@Url.Action("EditResource", "Localization", new { id = resource.Id })" class="w-8 h-8 flex items-center justify-center rounded-lg bg-background border border-border hover:border-primary hover:text-primary transition-all shadow-sm">
                                         <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                                     </a>
-                                    <form asp-action="DeleteResource" asp-route-id="@resource.Id" method="post" class="inline" onsubmit="return confirm('Archive this entry?');">
-                                        <button type="submit" class="w-8 h-8 flex items-center justify-center rounded-lg bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all shadow-sm">
+                                    <form asp-action="DeleteResource" asp-route-id="@resource.Id" method="post" class="inline delete-resource-form">
+                                        @Html.AntiForgeryToken()
+                                        <button type="button" 
+                                                onclick="confirmDeleteResource(this)"
+                                                class="w-8 h-8 flex items-center justify-center rounded-lg bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all shadow-sm">
                                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                                         </button>
                                     </form>
@@ -160,4 +171,25 @@
             </div>
         }
     </div>
+    </div> <!-- End resources-content -->
 </div>
+
+@section Scripts {
+    <script>
+        function confirmDeleteResource(button) {
+            const form = button.closest('form');
+            const message = 'Archive this entry?';
+            if (window.AlertModal) {
+                window.AlertModal.confirm(message, 'Archive Resource', function(confirmed) {
+                    if (confirmed) form.submit();
+                });
+            } else if (confirm(message)) {
+                form.submit();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('resources-skeleton', 'resources-content');
+        });
+    </script>
+}

@@ -139,4 +139,54 @@ public class StoriesController : Controller
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return Guid.TryParse(userIdClaim, out var userId) ? userId : null;
     }
+
+    [HttpGet("GetStoryFeed")]
+    public async Task<IActionResult> GetStoryFeed(int count = 20)
+    {
+        // For now using GetActiveStoriesAsync, but you might want specific feed logic
+        var stories = await _storiesService.GetActiveStoriesAsync();
+        // Return wrapped response as JS expects
+        return Ok(new { success = true, data = stories.Take(count) });
+    }
+
+    [HttpGet("active")]
+    public async Task<IActionResult> GetActive()
+    {
+        var stories = await _storiesService.GetActiveStoriesAsync();
+        return Ok(new { success = true, data = stories });
+    }
+
+    [HttpPost("{id}/like")]
+    public async Task<IActionResult> Like(Guid id)
+    {
+        var userId = GetCurrentUserId();
+        if (!userId.HasValue) return Unauthorized();
+        
+        var success = await _storiesService.LikeAsync(id, userId.Value);
+        return Ok(new { success });
+    }
+
+    [HttpDelete("{id}/like")]
+    public async Task<IActionResult> Unlike(Guid id)
+    {
+        var userId = GetCurrentUserId();
+        if (!userId.HasValue) return Unauthorized();
+        
+        var success = await _storiesService.UnlikeAsync(id, userId.Value);
+        return Ok(new { success });
+    }
+
+    [HttpPost("{id}/share")]
+    public IActionResult Share(Guid id)
+    {
+        // Placeholder url generation
+        return Ok(new { success = true, shareUrl = Url.Action("Details", "Stories", new { id }, Request.Scheme) });
+    }
+
+    [HttpPost("{id}/view")]
+    public async Task<IActionResult> ViewStory(Guid id)
+    {
+        await _storiesService.IncrementViewCountAsync(id);
+        return Ok(new { success = true });
+    }
 }

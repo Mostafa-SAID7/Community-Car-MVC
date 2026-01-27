@@ -16,7 +16,7 @@ class ErrorBoundarySystem {
         this.retryAttempts = new Map();
         this.maxRetries = 3;
         this.retryDelay = 1000;
-        
+
         this.init();
     }
 
@@ -24,16 +24,16 @@ class ErrorBoundarySystem {
         // Global error handlers
         window.addEventListener('error', (event) => this.handleGlobalError(event));
         window.addEventListener('unhandledrejection', (event) => this.handleUnhandledRejection(event));
-        
+
         // Network error monitoring
         this.setupNetworkMonitoring();
-        
+
         // Performance monitoring
         this.setupPerformanceMonitoring();
-        
+
         // Initialize error reporting
         this.setupErrorReporting();
-        
+
         console.log('🛡️ Error Boundary System initialized');
     }
 
@@ -44,8 +44,8 @@ class ErrorBoundarySystem {
             element,
             options: {
                 fallbackContent: options.fallbackContent || this.getDefaultFallback(name),
-                onError: options.onError || (() => {}),
-                onRecover: options.onRecover || (() => {}),
+                onError: options.onError || (() => { }),
+                onRecover: options.onRecover || (() => { }),
                 retryable: options.retryable !== false,
                 autoRecover: options.autoRecover || false,
                 recoveryDelay: options.recoveryDelay || 5000,
@@ -59,7 +59,7 @@ class ErrorBoundarySystem {
 
         this.boundaries.set(name, boundary);
         this.wrapBoundary(boundary);
-        
+
         console.log(`🛡️ Registered error boundary: ${name}`);
         return boundary;
     }
@@ -67,17 +67,17 @@ class ErrorBoundarySystem {
     // Wrap boundary with error handling
     wrapBoundary(boundary) {
         const { element, options } = boundary;
-        
+
         // Store original content
         boundary.originalContent = element.innerHTML;
-        
+
         // Add error boundary attributes
         element.setAttribute('data-error-boundary', boundary.name);
         element.setAttribute('data-boundary-status', 'active');
-        
+
         // Wrap all event listeners and async operations
         this.wrapElementEvents(element, boundary);
-        
+
         // Monitor for DOM mutations that might cause errors
         this.setupMutationObserver(element, boundary);
     }
@@ -85,10 +85,10 @@ class ErrorBoundarySystem {
     // Handle errors within a boundary
     async handleBoundaryError(boundary, error, context = {}) {
         console.error(`🚨 Error in boundary "${boundary.name}":`, error);
-        
+
         this.errorStats.boundaryErrors++;
         this.errorStats.totalErrors++;
-        
+
         const errorInfo = {
             id: this.generateErrorId(),
             boundary: boundary.name,
@@ -109,16 +109,16 @@ class ErrorBoundarySystem {
         boundary.errors.push(errorInfo);
         boundary.lastError = errorInfo;
         boundary.isActive = false;
-        
+
         // Update boundary status
         boundary.element.setAttribute('data-boundary-status', 'error');
-        
+
         // Show fallback content
         this.showFallback(boundary, errorInfo);
-        
+
         // Log error to server
         await this.logErrorToServer(errorInfo);
-        
+
         // Call error callback
         if (boundary.options.onError) {
             try {
@@ -127,24 +127,24 @@ class ErrorBoundarySystem {
                 console.error('Error in boundary error callback:', callbackError);
             }
         }
-        
+
         // Attempt recovery if enabled
         if (boundary.options.retryable) {
             this.scheduleRecovery(boundary, errorInfo);
         }
-        
+
         // Show user notification
         this.showErrorNotification(boundary, errorInfo);
-        
+
         return errorInfo;
     }
 
     // Show fallback content
     showFallback(boundary, errorInfo) {
-        const fallbackHtml = typeof boundary.options.fallbackContent === 'function' 
+        const fallbackHtml = typeof boundary.options.fallbackContent === 'function'
             ? boundary.options.fallbackContent(errorInfo, boundary)
             : boundary.options.fallbackContent;
-            
+
         boundary.element.innerHTML = `
             <div class="error-boundary-fallback bg-red-50 border border-red-200 rounded-lg p-6 text-center">
                 <div class="flex items-center justify-center mb-4">
@@ -171,7 +171,7 @@ class ErrorBoundarySystem {
                 </div>
             </div>
         `;
-        
+
         // Re-initialize Lucide icons
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
@@ -184,9 +184,9 @@ class ErrorBoundarySystem {
             console.log(`Max recovery attempts reached for boundary: ${boundary.name}`);
             return;
         }
-        
+
         const delay = boundary.options.recoveryDelay * Math.pow(2, boundary.recoveryAttempts);
-        
+
         setTimeout(() => {
             this.attemptRecovery(boundary, errorInfo);
         }, delay);
@@ -195,48 +195,48 @@ class ErrorBoundarySystem {
     // Attempt to recover a boundary
     async attemptRecovery(boundary, errorInfo) {
         console.log(`🔄 Attempting recovery for boundary: ${boundary.name}`);
-        
+
         boundary.recoveryAttempts++;
-        
+
         try {
             // Restore original content
             boundary.element.innerHTML = boundary.originalContent;
             boundary.element.setAttribute('data-boundary-status', 'recovering');
-            
+
             // Re-wrap the boundary
             this.wrapElementEvents(boundary.element, boundary);
-            
+
             // Wait a moment for DOM to settle
             await new Promise(resolve => setTimeout(resolve, 100));
-            
+
             // Mark as recovered
             boundary.isActive = true;
             boundary.element.setAttribute('data-boundary-status', 'active');
-            
+
             // Update error info
             errorInfo.recovered = true;
             errorInfo.recoveredAt = new Date().toISOString();
-            
+
             this.errorStats.recoveredErrors++;
-            
+
             // Call recovery callback
             if (boundary.options.onRecover) {
                 boundary.options.onRecover(errorInfo, boundary);
             }
-            
+
             // Log recovery to server
             await this.logRecoveryToServer(errorInfo);
-            
+
             console.log(`✅ Successfully recovered boundary: ${boundary.name}`);
-            
+
             // Show success notification
             if (window.ToasterSystem) {
                 window.ToasterSystem.show('Component recovered successfully', 'success');
             }
-            
+
         } catch (recoveryError) {
             console.error(`❌ Failed to recover boundary: ${boundary.name}`, recoveryError);
-            
+
             // Schedule another attempt if we haven't hit the limit
             if (boundary.recoveryAttempts < this.maxRetries) {
                 this.scheduleRecovery(boundary, errorInfo);
@@ -251,7 +251,7 @@ class ErrorBoundarySystem {
     async retryBoundary(boundaryName) {
         const boundary = this.boundaries.get(boundaryName);
         if (!boundary || !boundary.lastError) return;
-        
+
         boundary.recoveryAttempts = 0; // Reset attempts for manual retry
         await this.attemptRecovery(boundary, boundary.lastError);
     }
@@ -259,10 +259,10 @@ class ErrorBoundarySystem {
     // Handle global JavaScript errors
     handleGlobalError(event) {
         console.error('🚨 Global JavaScript Error:', event.error);
-        
+
         this.errorStats.jsErrors++;
         this.errorStats.totalErrors++;
-        
+
         const errorInfo = {
             id: this.generateErrorId(),
             type: 'global',
@@ -279,9 +279,9 @@ class ErrorBoundarySystem {
                 url: window.location.href
             }
         };
-        
+
         this.logErrorToServer(errorInfo);
-        
+
         // Try to find the nearest boundary
         const targetElement = event.target || document.elementFromPoint(event.colno, event.lineno);
         if (targetElement) {
@@ -295,10 +295,10 @@ class ErrorBoundarySystem {
     // Handle unhandled promise rejections
     handleUnhandledRejection(event) {
         console.error('🚨 Unhandled Promise Rejection:', event.reason);
-        
+
         this.errorStats.jsErrors++;
         this.errorStats.totalErrors++;
-        
+
         const errorInfo = {
             id: this.generateErrorId(),
             type: 'promise',
@@ -312,9 +312,9 @@ class ErrorBoundarySystem {
                 url: window.location.href
             }
         };
-        
+
         this.logErrorToServer(errorInfo);
-        
+
         // Prevent the default browser behavior
         event.preventDefault();
     }
@@ -326,29 +326,29 @@ class ErrorBoundarySystem {
         window.fetch = async (...args) => {
             try {
                 const response = await originalFetch(...args);
-                
+
                 if (!response.ok) {
                     this.handleNetworkError(response, args[0]);
                 }
-                
+
                 return response;
             } catch (error) {
                 this.handleNetworkError(error, args[0]);
                 throw error;
             }
         };
-        
+
         // Monitor XMLHttpRequest
         const originalXHROpen = XMLHttpRequest.prototype.open;
-        XMLHttpRequest.prototype.open = function(...args) {
+        XMLHttpRequest.prototype.open = function (...args) {
             this.addEventListener('error', (event) => {
                 window.ErrorBoundary.handleNetworkError(event, args[1]);
             });
-            
+
             this.addEventListener('timeout', (event) => {
                 window.ErrorBoundary.handleNetworkError(new Error('Request timeout'), args[1]);
             });
-            
+
             return originalXHROpen.apply(this, args);
         };
     }
@@ -356,10 +356,10 @@ class ErrorBoundarySystem {
     // Handle network errors
     handleNetworkError(error, url) {
         console.error('🌐 Network Error:', error, 'URL:', url);
-        
+
         this.errorStats.networkErrors++;
         this.errorStats.totalErrors++;
-        
+
         const errorInfo = {
             id: this.generateErrorId(),
             type: 'network',
@@ -375,9 +375,9 @@ class ErrorBoundarySystem {
                 currentUrl: window.location.href
             }
         };
-        
+
         this.logErrorToServer(errorInfo);
-        
+
         // Show network error notification
         if (window.ToasterSystem) {
             window.ToasterSystem.show('Network error occurred. Please check your connection.', 'error');
@@ -393,7 +393,7 @@ class ErrorBoundarySystem {
                     for (const entry of list.getEntries()) {
                         if (entry.duration > 50) { // Tasks longer than 50ms
                             console.warn('⚠️ Long task detected:', entry);
-                            
+
                             this.logPerformanceIssue({
                                 type: 'long-task',
                                 duration: entry.duration,
@@ -403,22 +403,22 @@ class ErrorBoundarySystem {
                         }
                     }
                 });
-                
+
                 observer.observe({ entryTypes: ['longtask'] });
             } catch (e) {
                 console.log('Long task monitoring not supported');
             }
         }
-        
+
         // Monitor memory usage
         if ('memory' in performance) {
             setInterval(() => {
                 const memory = performance.memory;
                 const usagePercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
-                
+
                 if (usagePercent > 90) {
                     console.warn('⚠️ High memory usage detected:', usagePercent.toFixed(2) + '%');
-                    
+
                     this.logPerformanceIssue({
                         type: 'high-memory',
                         usagePercent,
@@ -433,7 +433,7 @@ class ErrorBoundarySystem {
     // Log error to server
     async logErrorToServer(errorInfo) {
         try {
-            await fetch('/api/errors/log', {
+            await fetch('/errors/log', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -451,7 +451,7 @@ class ErrorBoundarySystem {
     // Log recovery to server
     async logRecoveryToServer(errorInfo) {
         try {
-            await fetch('/api/errors/recovery', {
+            await fetch('/errors/recovery', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -472,12 +472,12 @@ class ErrorBoundarySystem {
         try {
             const errors = JSON.parse(localStorage.getItem('pendingErrors') || '[]');
             errors.push(errorInfo);
-            
+
             // Keep only last 50 errors
             if (errors.length > 50) {
                 errors.splice(0, errors.length - 50);
             }
-            
+
             localStorage.setItem('pendingErrors', JSON.stringify(errors));
         } catch (error) {
             console.error('Failed to store error locally:', error);
@@ -518,7 +518,7 @@ class ErrorBoundarySystem {
     showErrorNotification(boundary, errorInfo) {
         if (window.ToasterSystem) {
             window.ToasterSystem.show(
-                `Error in ${boundary.name}: ${errorInfo.error.message}`, 
+                `Error in ${boundary.name}: ${errorInfo.error.message}`,
                 'error'
             );
         }
@@ -537,7 +537,7 @@ class ErrorBoundarySystem {
                 </button>
             </div>
         `;
-        
+
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }

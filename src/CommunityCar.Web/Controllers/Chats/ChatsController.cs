@@ -29,7 +29,7 @@ public class ChatsController : Controller
         return View();
     }
 
-    [HttpGet("api/conversations")]
+    [HttpGet("conversations")]
     public async Task<IActionResult> GetConversations()
     {
         var userId = GetCurrentUserId();
@@ -37,7 +37,7 @@ public class ChatsController : Controller
         return Json(conversations);
     }
 
-    [HttpGet("api/conversations/{conversationId}")]
+    [HttpGet("conversations/{conversationId}")]
     public async Task<IActionResult> GetConversation(Guid conversationId)
     {
         var userId = GetCurrentUserId();
@@ -49,7 +49,7 @@ public class ChatsController : Controller
         return Json(conversation);
     }
 
-    [HttpGet("api/conversations/{conversationId}/messages")]
+    [HttpGet("conversations/{conversationId}/messages")]
     public async Task<IActionResult> GetMessages(Guid conversationId, int page = 1, int pageSize = 50)
     {
         var userId = GetCurrentUserId();
@@ -57,7 +57,7 @@ public class ChatsController : Controller
         return Json(messages);
     }
 
-    [HttpPost("api/conversations")]
+    [HttpPost("conversations")]
     public async Task<IActionResult> CreateConversation([FromBody] CreateConversationRequest request)
     {
         request.CreatedBy = GetCurrentUserId();
@@ -65,7 +65,7 @@ public class ChatsController : Controller
         return Json(conversation);
     }
 
-    [HttpPost("api/messages")]
+    [HttpPost("messages")]
     public async Task<IActionResult> SendMessage([FromBody] SendMessageRequest request)
     {
         request.SenderId = GetCurrentUserId();
@@ -73,7 +73,7 @@ public class ChatsController : Controller
         return Json(message);
     }
 
-    [HttpPost("api/messages/{messageId}/read")]
+    [HttpPost("messages/{messageId}/read")]
     public async Task<IActionResult> MarkMessageAsRead(Guid messageId)
     {
         var userId = GetCurrentUserId();
@@ -81,7 +81,7 @@ public class ChatsController : Controller
         return Json(new { success = result });
     }
 
-    [HttpPost("api/conversations/{conversationId}/read")]
+    [HttpPost("conversations/{conversationId}/read")]
     public async Task<IActionResult> MarkConversationAsRead(Guid conversationId)
     {
         var userId = GetCurrentUserId();
@@ -89,7 +89,7 @@ public class ChatsController : Controller
         return Json(new { success = result });
     }
 
-    [HttpGet("api/unread-count")]
+    [HttpGet("unread-count")]
     public async Task<IActionResult> GetUnreadCount()
     {
         var userId = GetCurrentUserId();
@@ -97,7 +97,7 @@ public class ChatsController : Controller
         return Json(new { count });
     }
 
-    [HttpPost("api/users/online-status")]
+    [HttpPost("users/online-status")]
     public async Task<IActionResult> GetOnlineStatus([FromBody] List<Guid> userIds)
     {
         var statuses = await _chatService.GetOnlineUsersAsync(userIds);

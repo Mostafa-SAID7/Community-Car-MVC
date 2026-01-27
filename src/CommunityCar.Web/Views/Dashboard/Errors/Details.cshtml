@@ -6,6 +6,21 @@
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Skeleton Loader -->
+    <div id="error-skeleton" class="hidden space-y-8">
+        <skeleton type="Line" class="w-48" />
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 space-y-6">
+                <skeleton type="Card" class="h-96" />
+            </div>
+            <div class="space-y-6">
+                <skeleton type="Card" />
+                <skeleton type="Card" />
+            </div>
+        </div>
+    </div>
+
+    <div id="error-content">
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -209,10 +224,15 @@
             </div>
         </div>
     </div>
+    </div> <!-- End error-content -->
 </div>
 
 @section Scripts {
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('error-skeleton', 'error-content');
+        });
+        
         async function deleteError(errorId) {
             if (!confirm('Are you sure you want to delete this error log? This action cannot be undone.')) {
                 return;

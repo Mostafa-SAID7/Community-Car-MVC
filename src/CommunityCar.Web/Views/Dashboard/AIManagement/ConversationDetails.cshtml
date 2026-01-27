@@ -5,6 +5,19 @@
 }
 
 <div class="space-y-6">
+    <!-- Skeleton Loader -->
+    <div id="conversation-details-skeleton" class="hidden space-y-6">
+        <skeleton type="Line" class="w-64" />
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+        </div>
+        <skeleton type="Card" class="h-96" />
+    </div>
+
+    <div id="conversation-details-content">
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
@@ -115,11 +128,15 @@
             Delete Conversation
         </button>
     </div>
+    </div> <!-- End conversation-details-content -->
 </div>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize skeleton loading
+            Skeleton.initPageLoad('conversation-details-skeleton', 'conversation-details-content');
+            
             // Initialize icons
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();

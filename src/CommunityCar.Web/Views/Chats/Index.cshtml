@@ -22,6 +22,20 @@
         </div>
         
         <div class="flex-1 overflow-y-auto no-scrollbar divide-y divide-border/20" id="conversations-list">
+            <div id="chats-sidebar-skeleton" class="hidden flex flex-col p-4 gap-4">
+                <div class="flex items-center gap-3">
+                    <skeleton type="Circle" />
+                    <div class="flex-1"><skeleton type="Line" /></div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <skeleton type="Circle" />
+                    <div class="flex-1"><skeleton type="Line" /></div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <skeleton type="Circle" />
+                    <div class="flex-1"><skeleton type="Line" /></div>
+                </div>
+            </div>
             <!-- Example Conversation 1 -->
             <div class="flex items-center gap-4 p-4 cursor-pointer hover:bg-gradient-to-r hover:from-primary/5 hover:to-transparent transition-smooth border-l-4 border-l-transparent hover:border-l-primary relative group/conv" data-conversation-id="sample-1">
                 <div class="relative shrink-0">
@@ -102,6 +116,20 @@
         </div>
         
         <!-- Messages Area (hidden initially) -->
+        <div id="chat-messages-skeleton" class="hidden flex-1 p-6 space-y-6">
+            <div class="flex items-start gap-3">
+                <skeleton type="Circle" />
+                <div class="bg-muted/20 w-3/4 h-12 rounded-2xl"></div>
+            </div>
+            <div class="flex items-start justify-end gap-3">
+                <div class="bg-primary/10 w-2/3 h-12 rounded-2xl"></div>
+                <skeleton type="Circle" />
+            </div>
+             <div class="flex items-start gap-3">
+                <skeleton type="Circle" />
+                <div class="bg-muted/20 w-1/2 h-12 rounded-2xl"></div>
+            </div>
+        </div>
         <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6 no-scrollbar h-full scroll-smooth" id="chat-messages" style="display: none;">
             <!-- Dynamic data -->
         </div>
@@ -135,6 +163,9 @@
     <!-- Preservation of original script logic with Tailwind updates -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize skeleton loading
+            Skeleton.initPageLoad('chats-sidebar-skeleton', 'conversations-list');
+            
             const conversationItems = document.querySelectorAll('[data-conversation-id]');
             const chatEmptyState = document.getElementById('chat-empty-state');
             const chatHeader = document.getElementById('chat-header');
@@ -149,12 +180,21 @@
                     this.classList.add('bg-primary/10', 'border-primary', 'active');
                     
                     chatEmptyState.style.display = 'none';
-                    chatHeader.style.display = 'flex';
-                    chatMessages.style.display = 'flex';
-                    chatInputArea.style.display = 'block';
+                    chatHeader.style.display = 'none';
+                    chatMessages.style.display = 'none';
+                    chatInputArea.style.display = 'none';
                     
-                    // Trigger fake initial messages for demo
-                    loadFakeMessages();
+                    // Show loading skeleton
+                    const msgSkeleton = document.getElementById('chat-messages-skeleton');
+                    if (msgSkeleton) msgSkeleton.classList.remove('hidden');
+
+                    setTimeout(() => {
+                        if (msgSkeleton) msgSkeleton.classList.add('hidden');
+                        chatHeader.style.display = 'flex';
+                        chatMessages.style.display = 'flex';
+                        chatInputArea.style.display = 'block';
+                        loadFakeMessages();
+                    }, 800);
                 });
             });
 

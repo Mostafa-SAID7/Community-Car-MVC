@@ -6,6 +6,20 @@
 
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Skeleton Loader -->
+        <div id="report-skeleton" class="hidden space-y-8">
+            <skeleton type="Line" class="w-64" />
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <skeleton type="Card" class="h-96" />
+                </div>
+                <div>
+                    <skeleton type="Card" class="h-96" />
+                </div>
+            </div>
+        </div>
+
+        <div id="report-content">
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center space-x-4 mb-4">
@@ -197,11 +211,16 @@
                 </div>
             </div>
         </div>
+        </div> <!-- End report-content -->
     </div>
 </div>
 
 @section Scripts {
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('report-skeleton', 'report-content');
+        });
+        
         // Auto-refresh status for reports that are still processing
         function checkReportStatus() {
             // This would make an AJAX call to check report status

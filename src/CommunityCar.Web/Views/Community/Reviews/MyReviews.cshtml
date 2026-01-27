@@ -31,6 +31,12 @@
         </div>
     </div>
 
+    <div id="reviews-skeleton" class="hidden space-y-6">
+        <skeleton type="Card" />
+        <skeleton type="Card" />
+    </div>
+
+    <div id="reviews-content">
     @if (Model.Reviews.Any())
     {
         <!-- Reviews Stats -->
@@ -227,6 +233,17 @@
             </div>
         </div>
     }
+    </div> <!-- End reviews-content -->
+</div>
+
+@section Scripts {
+    <script src="~/js/reviews.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('reviews-skeleton', 'reviews-content');
+        });
+    </script>
+}
 </div>
 
 @section Scripts {

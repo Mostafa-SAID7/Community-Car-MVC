@@ -6,7 +6,18 @@
 }
 
 <div class="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
-    <!-- Breadcrumb Layer -->
+    <!-- Skeleton Loader -->
+    <div id="loading-skeleton" class="hidden space-y-8">
+        <div class="space-y-4">
+            <skeleton type="Line" class="w-32" /> <!-- Breadcrumb -->
+            <skeleton type="Card" class="h-96" /> <!-- Hero -->
+            <skeleton type="Line" /> <!-- Meta -->
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <!-- Breadcrumb Layer -->
     <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
         <a href="@Url.Action("Index", "Posts")" class="hover:text-primary transition-colors flex items-center gap-2">
             <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> @Localizer["FeedRegistry"]
@@ -104,7 +115,8 @@
         </div>
         <div class="space-y-1">
             <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Originator"]</span>
-            <span class="text-xs font-black text-foreground">EN-AUT-GATEWAY</span>
+            <span class="text-xs font-black text-foreground">EN-AUT-GATEWAY</span>    </div> <!-- End Main Content -->
+</div>
         </div>
         <div class="space-y-1 text-right flex flex-col items-end">
             <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Status"]</span>
@@ -115,3 +127,11 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('loading-skeleton', 'main-content');
+        });
+    </script>
+}

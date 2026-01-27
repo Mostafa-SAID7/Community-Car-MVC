@@ -36,7 +36,7 @@ public class ErrorReportsController : Controller
         }
     }
 
-    [HttpGet("api/reports")]
+    [HttpGet("reports-list")]
     public async Task<IActionResult> GetReports([FromQuery] string? status = null, [FromQuery] string? priority = null)
     {
         try
@@ -90,7 +90,7 @@ public class ErrorReportsController : Controller
         }
     }
 
-    [HttpPost("api/update-status")]
+    [HttpPost("status")]
     public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusRequest request)
     {
         try
@@ -107,7 +107,7 @@ public class ErrorReportsController : Controller
         }
     }
 
-    [HttpDelete("api/delete/{ticketId}")]
+    [HttpDelete("delete/{ticketId}")]
     public async Task<IActionResult> DeleteReport(string ticketId)
     {
         try

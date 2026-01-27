@@ -28,6 +28,13 @@
     <!-- Mutual Friends Grid -->
     <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
         <div class="p-6">
+            <div id="mutual-friends-skeleton" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                 <skeleton type="Card" />
+                 <skeleton type="Card" />
+                 <skeleton type="Card" />
+            </div>
+
+            <div id="mutual-friends-content">
             @if (Model.Any())
             {
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -90,6 +97,7 @@
                     </a>
                 </div>
             }
+            </div>
         </div>
     </div>
 </div>
@@ -97,6 +105,10 @@
 @section Scripts {
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Skeleton.initPageLoad('mutual-friends-skeleton', 'mutual-friends-content');
+        });
+
         function viewProfile(userId) {
             window.location.href = `/profile/${userId}`;
         }

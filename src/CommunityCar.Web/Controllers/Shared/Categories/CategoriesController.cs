@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityCar.Web.Controllers.Shared.Categories;
 
-[Route("api/shared/categories")]
-[ApiController]
-public class CategoriesController : ControllerBase
+[Route("shared/categories")]
+[Controller]
+public class CategoriesController : Controller
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly ICurrentUserService _currentUserService;

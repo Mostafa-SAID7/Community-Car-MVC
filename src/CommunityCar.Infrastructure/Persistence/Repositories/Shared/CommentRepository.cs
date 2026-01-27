@@ -51,13 +51,22 @@ public class CommentRepository : BaseRepository<Comment>, ICommentRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Comment>> GetTopLevelCommentsAsync(Guid entityId, EntityType entityType)
+    public async Task<IEnumerable<Comment>> GetTopLevelCommentsAsync(Guid entityId, EntityType entityType, int page = 1, int pageSize = 10)
     {
         return await DbSet.Where(c => c.EntityId == entityId && 
                                     c.EntityType == entityType && 
                                     c.ParentCommentId == null)
             .OrderByDescending(c => c.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+    }
+
+    public async Task<int> GetTotalTopLevelCommentCountAsync(Guid entityId, EntityType entityType)
+    {
+        return await DbSet.CountAsync(c => c.EntityId == entityId && 
+                                         c.EntityType == entityType && 
+                                         c.ParentCommentId == null);
     }
 
     public async Task<IEnumerable<Comment>> GetCommentRepliesAsync(Guid commentId)

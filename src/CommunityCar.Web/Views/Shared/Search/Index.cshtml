@@ -115,11 +115,11 @@
                 </div>
 
                 <!-- Loading State -->
-                <div id="searchLoading" class="hidden">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 text-center">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500 mx-auto mb-4"></div>
-                        <p class="text-gray-600 dark:text-gray-400">@SharedLocalizer["Searching..."]</p>
-                    </div>
+                <div id="searchLoading" class="hidden space-y-4">
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <skeleton type="Post" />
+                    }
                 </div>
 
                 <!-- No Results -->
@@ -138,6 +138,12 @@
                 </div>
 
                 <!-- Search Results Container -->
+                <div id="searchResultsSkeleton" class="hidden space-y-4">
+                    <skeleton type="Post" />
+                    <skeleton type="Post" />
+                    <skeleton type="Post" />
+                </div>
+
                 <div id="searchResults" class="space-y-4">
                     <!-- Results will be populated here -->
                 </div>

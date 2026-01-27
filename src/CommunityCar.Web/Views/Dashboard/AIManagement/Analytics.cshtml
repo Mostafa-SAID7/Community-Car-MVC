@@ -5,6 +5,23 @@
 }
 
 <div class="space-y-6">
+    <!-- Skeleton Loader -->
+    <div id="analytics-skeleton" class="hidden space-y-6">
+        <skeleton type="Line" class="w-64" />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+            <skeleton type="Card" />
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <skeleton type="Card" class="h-64" />
+            <skeleton type="Card" class="h-64" />
+        </div>
+        <skeleton type="Card" class="h-48" />
+    </div>
+
+    <div id="analytics-content">
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
@@ -230,6 +247,9 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize skeleton loading
+            Skeleton.initPageLoad('analytics-skeleton', 'analytics-content');
+            
             // Initialize icons
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();

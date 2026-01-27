@@ -27,7 +27,15 @@
 
     <!-- Questions List -->
     <div id="questionsContainer" class="min-h-[400px]">
-        <partial name="~/Views/Community/QA/_QuestionList.cshtml" model="Model" />
+        <div id="qa-skeleton" class="hidden space-y-6">
+            @for (int i = 0; i < 4; i++)
+            {
+                <skeleton type="Post" />
+            }
+        </div>
+        <div id="questions-list-container">
+            <partial name="~/Views/Community/QA/_QuestionList.cshtml" model="Model" />
+        </div>
     </div>
 </div>
 
@@ -35,6 +43,7 @@
     <script>
         // Preservation of original JS/AJAX logic adapted to new UI hooks
         document.addEventListener('DOMContentLoaded', () => {
+            Skeleton.initPageLoad('qa-skeleton', 'questions-list-container');
             const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
             const filtersPanel = document.getElementById('filtersPanel');
             
