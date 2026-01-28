@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using CommunityCar.Domain.Base;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
+using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Domain.Entities.Community.Maps;
 

@@ -1,5 +1,5 @@
 using CommunityCar.Domain.Base;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Domain.Entities.Community.News;
 

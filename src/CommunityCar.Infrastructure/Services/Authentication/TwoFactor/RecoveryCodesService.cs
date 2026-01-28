@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
@@ -45,7 +45,17 @@ public class RecoveryCodesService : IRecoveryCodesService
 
             // Store recovery codes (hashed)
             var hashedCodes = recoveryCodes.Select(HashRecoveryCode).ToList();
-            user.BackupCodes = JsonSerializer.Serialize(hashedCodes);
+            var newTwoFactorSettings = new CommunityCar.Domain.ValueObjects.Account.TwoFactorSettings(
+                user.TwoFactorSettings.TwoFactorEnabled,
+                user.TwoFactorSettings.TwoFactorSecretKey,
+                user.TwoFactorSettings.TwoFactorEnabledAt,
+                JsonSerializer.Serialize(hashedCodes),
+                user.TwoFactorSettings.FailedTwoFactorAttempts,
+                user.TwoFactorSettings.TwoFactorLockoutEnd,
+                user.TwoFactorSettings.SmsEnabled,
+                user.TwoFactorSettings.EmailTwoFactorEnabled);
+            
+            user.UpdateTwoFactorSettings(newTwoFactorSettings);
             await _userManager.UpdateAsync(user);
 
             _logger.LogInformation("Recovery codes generated for user {UserId}", request.UserId);
@@ -69,19 +79,29 @@ public class RecoveryCodesService : IRecoveryCodesService
                 return Result.Failure("User not found.");
             }
 
-            if (string.IsNullOrEmpty(user.BackupCodes))
+            if (string.IsNullOrEmpty(user.TwoFactorSettings.BackupCodes))
             {
                 return Result.Failure("No recovery codes available.");
             }
 
-            var hashedCodes = JsonSerializer.Deserialize<List<string>>(user.BackupCodes) ?? new List<string>();
+            var hashedCodes = JsonSerializer.Deserialize<List<string>>(user.TwoFactorSettings.BackupCodes) ?? new List<string>();
             var hashedInputCode = HashRecoveryCode(request.RecoveryCode);
 
             if (hashedCodes.Contains(hashedInputCode))
             {
                 // Remove used code
                 hashedCodes.Remove(hashedInputCode);
-                user.BackupCodes = JsonSerializer.Serialize(hashedCodes);
+                var newTwoFactorSettings = new CommunityCar.Domain.ValueObjects.Account.TwoFactorSettings(
+                    user.TwoFactorSettings.TwoFactorEnabled,
+                    user.TwoFactorSettings.TwoFactorSecretKey,
+                    user.TwoFactorSettings.TwoFactorEnabledAt,
+                    JsonSerializer.Serialize(hashedCodes),
+                    user.TwoFactorSettings.FailedTwoFactorAttempts,
+                    user.TwoFactorSettings.TwoFactorLockoutEnd,
+                    user.TwoFactorSettings.SmsEnabled,
+                    user.TwoFactorSettings.EmailTwoFactorEnabled);
+                
+                user.UpdateTwoFactorSettings(newTwoFactorSettings);
                 await _userManager.UpdateAsync(user);
 
                 _logger.LogInformation("Recovery code verified and used for user {UserId}", request.UserId);
@@ -103,12 +123,12 @@ public class RecoveryCodesService : IRecoveryCodesService
         try
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null || string.IsNullOrEmpty(user.BackupCodes))
+            if (user == null || string.IsNullOrEmpty(user.TwoFactorSettings.BackupCodes))
             {
                 return 0;
             }
 
-            var hashedCodes = JsonSerializer.Deserialize<List<string>>(user.BackupCodes) ?? new List<string>();
+            var hashedCodes = JsonSerializer.Deserialize<List<string>>(user.TwoFactorSettings.BackupCodes) ?? new List<string>();
             return hashedCodes.Count;
         }
         catch (Exception ex)

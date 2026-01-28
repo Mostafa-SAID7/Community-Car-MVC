@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Infrastructure.Models.TwoFactor;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -50,9 +50,7 @@ public class AuthenticatorService : IAuthenticatorService
                 return Result.Failure("Failed to enable two-factor authentication.", errors);
             }
 
-            user.TwoFactorEnabled = true;
-            user.TwoFactorEnabledAt = DateTime.UtcNow;
-            user.TwoFactorSecretKey = key;
+            user.EnableTwoFactor(key);
             await _userManager.UpdateAsync(user);
 
             _logger.LogInformation("Two-factor authentication enabled for user {UserId}", request.UserId);
@@ -89,9 +87,7 @@ public class AuthenticatorService : IAuthenticatorService
                 return Result.Failure("Failed to disable two-factor authentication.", errors);
             }
 
-            user.TwoFactorEnabled = false;
-            user.TwoFactorSecretKey = null;
-            user.BackupCodes = null;
+            user.DisableTwoFactor();
             await _userManager.UpdateAsync(user);
 
             _logger.LogInformation("Two-factor authentication disabled for user {UserId}", request.UserId);

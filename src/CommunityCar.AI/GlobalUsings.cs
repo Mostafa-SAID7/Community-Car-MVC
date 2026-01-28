@@ -5,4 +5,4 @@ global using System.Threading;
 global using System.Threading.Tasks;
 global using Microsoft.Extensions.Logging;
 global using CommunityCar.Application.Common.Models;
-global using CommunityCar.Domain.Entities.Auth;
+global using CommunityCar.Domain.Entities.Account;

@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CommunityCar.Application.Common.Interfaces.Data;
-using CommunityCar.Domain.Entities.Auth;
+using UserEntity = CommunityCar.Domain.Entities.Account.User;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Domain.Entities.Chats;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Domain.Entities.Community.Friends;
@@ -17,11 +18,11 @@ using CommunityCar.Domain.Entities.Community.Reviews;
 using CommunityCar.Domain.Entities.Community.Stories;
 using CommunityCar.Domain.Entities.Dashboard.Analytics;
 using CommunityCar.Domain.Entities.Dashboard.Management;
-using CommunityCar.Domain.Entities.Dashboard.Monitoring;
 using CommunityCar.Domain.Entities.Dashboard.Reports;
 using CommunityCar.Domain.Entities.Dashboard.Settings;
+using CommunityCar.Domain.Entities.Dashboard.System;
 using CommunityCar.Domain.Entities.Localization;
-using CommunityCar.Domain.Entities.Profile;
+
 using CommunityCar.Domain.Entities.Shared;
 using CommunityCar.Domain.Entities.AI;
 using CommunityCar.Domain.Base;
@@ -30,7 +31,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CommunityCar.Infrastructure.Persistence.Data;
 
-public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<Guid>, Guid>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -44,13 +45,14 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
         optionsBuilder.ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
     }
 
-    public new DbSet<User> Users => Set<User>();
+    public new DbSet<UserEntity> Users => Set<UserEntity>();
     public DbSet<UserGallery> UserGalleries => Set<UserGallery>();
     public DbSet<UserBadge> UserBadges => Set<UserBadge>();
     public DbSet<UserAchievement> UserAchievements => Set<UserAchievement>();
     public DbSet<UserActivity> UserActivities => Set<UserActivity>();
     public DbSet<UserInterest> UserInterests => Set<UserInterest>();
     public DbSet<UserFollowing> UserFollowings => Set<UserFollowing>();
+    public DbSet<UserProfileView> UserProfileViews => Set<UserProfileView>();
     
     // Shared
     public DbSet<Comment> Comments => Set<Comment>();

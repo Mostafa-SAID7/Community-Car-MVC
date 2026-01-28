@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Entities.Shared;
 
 namespace CommunityCar.Web.Controllers.Shared.Bookmarks;

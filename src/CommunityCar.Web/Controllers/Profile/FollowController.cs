@@ -82,16 +82,16 @@ public class FollowController : Controller
                 followingVMs.Add(new FollowingVM
                 {
                     UserId = followedUser.Id,
-                    FullName = followedUser.FullName,
-                    ProfilePictureUrl = followedUser.ProfilePictureUrl,
-                    Bio = followedUser.Bio,
-                    City = followedUser.City,
-                    Country = followedUser.Country,
+                    FullName = followedUser.Profile.FullName,
+                    ProfilePictureUrl = followedUser.Profile.ProfilePictureUrl,
+                    Bio = followedUser.Profile.Bio,
+                    City = followedUser.Profile.City,
+                    Country = followedUser.Profile.Country,
                     FollowedAt = follow.FollowedAt,
                     IsFollowingBack = isFollowingBack,
-                    IsOnline = followedUser.LastLoginAt.HasValue && 
-                              followedUser.LastLoginAt.Value > DateTime.UtcNow.AddMinutes(-15),
-                    LastActiveAt = followedUser.LastLoginAt,
+                    IsOnline = followedUser.OAuthInfo.LastLoginAt.HasValue && 
+                              followedUser.OAuthInfo.LastLoginAt.Value > DateTime.UtcNow.AddMinutes(-15),
+                    LastActiveAt = followedUser.OAuthInfo.LastLoginAt,
                     FollowersCount = await _followingRepository.GetFollowersCountAsync(followedUser.Id),
                     FollowingCount = await _followingRepository.GetFollowingCountAsync(followedUser.Id)
                 });
@@ -101,7 +101,7 @@ public class FollowController : Controller
         var viewModel = new UserFollowListVM
         {
             ProfileUserId = userId,
-            ProfileUserName = user.FullName,
+            ProfileUserName = user.Profile.FullName,
             ListType = "following",
             Users = followingVMs,
             TotalCount = totalCount,
@@ -143,16 +143,16 @@ public class FollowController : Controller
                 followersVMs.Add(new FollowingVM
                 {
                     UserId = followerUser.Id,
-                    FullName = followerUser.FullName,
-                    ProfilePictureUrl = followerUser.ProfilePictureUrl,
-                    Bio = followerUser.Bio,
-                    City = followerUser.City,
-                    Country = followerUser.Country,
+                    FullName = followerUser.Profile.FullName,
+                    ProfilePictureUrl = followerUser.Profile.ProfilePictureUrl,
+                    Bio = followerUser.Profile.Bio,
+                    City = followerUser.Profile.City,
+                    Country = followerUser.Profile.Country,
                     FollowedAt = follow.FollowedAt,
                     IsFollowingBack = isFollowingBack,
-                    IsOnline = followerUser.LastLoginAt.HasValue && 
-                              followerUser.LastLoginAt.Value > DateTime.UtcNow.AddMinutes(-15),
-                    LastActiveAt = followerUser.LastLoginAt,
+                    IsOnline = followerUser.OAuthInfo.LastLoginAt.HasValue && 
+                              followerUser.OAuthInfo.LastLoginAt.Value > DateTime.UtcNow.AddMinutes(-15),
+                    LastActiveAt = followerUser.OAuthInfo.LastLoginAt,
                     FollowersCount = await _followingRepository.GetFollowersCountAsync(followerUser.Id),
                     FollowingCount = await _followingRepository.GetFollowingCountAsync(followerUser.Id)
                 });
@@ -162,7 +162,7 @@ public class FollowController : Controller
         var viewModel = new UserFollowListVM
         {
             ProfileUserId = userId,
-            ProfileUserName = user.FullName,
+            ProfileUserName = user.Profile.FullName,
             ListType = "followers",
             Users = followersVMs,
             TotalCount = totalCount,
@@ -201,18 +201,18 @@ public class FollowController : Controller
                     var mutualUser = await _userRepository.GetByIdAsync(mutual.FollowerId);
                     if (mutualUser != null)
                     {
-                        mutualNames.Add(mutualUser.FullName);
+                        mutualNames.Add(mutualUser.Profile.FullName);
                     }
                 }
 
                 suggestedUsers.Add(new SuggestedUserVM
                 {
                     UserId = user.Id,
-                    FullName = user.FullName,
-                    ProfilePictureUrl = user.ProfilePictureUrl,
-                    Bio = user.Bio,
-                    City = user.City,
-                    Country = user.Country,
+                    FullName = user.Profile.FullName,
+                    ProfilePictureUrl = user.Profile.ProfilePictureUrl,
+                    Bio = user.Profile.Bio,
+                    City = user.Profile.City,
+                    Country = user.Profile.Country,
                     MutualFollowersCount = mutualFollowers.Count(),
                     MutualFollowerNames = mutualNames,
                     SuggestionReason = mutualNames.Any() ? 

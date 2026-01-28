@@ -6,9 +6,10 @@ using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using UserEntity = CommunityCar.Domain.Entities.Account.User;
 
 namespace CommunityCar.Application.Services.Account;
 
@@ -18,13 +19,13 @@ namespace CommunityCar.Application.Services.Account;
 public class AccountSecurityService : IAccountSecurityService
 {
     private readonly IUserRepository _userRepository;
-    private readonly UserManager<Domain.Entities.Auth.User> _userManager;
+    private readonly UserManager<CommunityCar.Domain.Entities.Account.User> _userManager;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<AccountSecurityService> _logger;
 
     public AccountSecurityService(
         IUserRepository userRepository,
-        UserManager<Domain.Entities.Auth.User> userManager,
+        UserManager<CommunityCar.Domain.Entities.Account.User> userManager,
         ICurrentUserService currentUserService,
         ILogger<AccountSecurityService> logger)
     {
@@ -171,7 +172,7 @@ public class AccountSecurityService : IAccountSecurityService
             IsTwoFactorEnabled = user.TwoFactorEnabled,
             LastPasswordChange = user.LastPasswordChangeAt,
             ActiveSessions = sessions.Count(),
-            HasOAuthLinked = !string.IsNullOrEmpty(user.GoogleId) || !string.IsNullOrEmpty(user.FacebookId)
+            HasOAuthLinked = user.OAuthInfo.HasAnyOAuthAccount
         };
     }
 

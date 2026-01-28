@@ -1,46 +1,45 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
-using CommunityCar.Domain.Entities.Auth;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using UserEntity = CommunityCar.Domain.Entities.Account.User;
 
 namespace CommunityCar.Infrastructure.Persistence.Repositories.User;
 
 /// <summary>
 /// Comprehensive User repository implementing all user-related operations
 /// </summary>
-public class UserRepository : BaseRepository<Domain.Entities.Auth.User>, IUserRepository
+public class UserRepository : BaseRepository<UserEntity>, IUserRepository
 {
-    private readonly UserManager<Domain.Entities.Auth.User> _userManager;
+    private readonly UserManager<UserEntity> _userManager;
 
-    public UserRepository(ApplicationDbContext context, UserManager<Domain.Entities.Auth.User> userManager) 
-        : base(context)
+    public UserRepository(ApplicationDbContext context, UserManager<UserEntity> userManager) : base(context)
     {
         _userManager = userManager;
     }
 
     #region Generic User Operations
 
-    public async Task<Domain.Entities.Auth.User?> GetByEmailAsync(string email)
+    public async Task<CommunityCar.Domain.Entities.Account.User?> GetByEmailAsync(string email)
     {
         return await _userManager.FindByEmailAsync(email);
     }
 
-    public async Task<Domain.Entities.Auth.User?> GetByUserNameAsync(string userName)
+    public async Task<CommunityCar.Domain.Entities.Account.User?> GetByUserNameAsync(string userName)
     {
         return await _userManager.FindByNameAsync(userName);
     }
 
-    public async Task<IEnumerable<Domain.Entities.Auth.User>> GetActiveUsersAsync()
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetActiveUsersAsync()
     {
         return await Context.Users
             .Where(u => u.IsActive && !u.IsDeleted)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Domain.Entities.Auth.User>> GetUsersByRoleAsync(string roleName)
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetUsersByRoleAsync(string roleName)
     {
         return await _userManager.GetUsersInRoleAsync(roleName);
     }
@@ -73,13 +72,13 @@ public class UserRepository : BaseRepository<Domain.Entities.Auth.User>, IUserRe
 
     #region Profile Operations
 
-    public async Task<Domain.Entities.Auth.User?> GetUserWithProfileAsync(Guid userId)
+    public async Task<CommunityCar.Domain.Entities.Account.User?> GetUserWithProfileAsync(Guid userId)
     {
         return await Context.Users
             .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
     }
 
-    public async Task<IEnumerable<Domain.Entities.Auth.User>> SearchUsersAsync(string searchTerm, int page = 1, int pageSize = 20)
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> SearchUsersAsync(string searchTerm, int page = 1, int pageSize = 20)
     {
         var query = Context.Users
             .Where(u => !u.IsDeleted && u.IsActive)
@@ -150,14 +149,14 @@ public class UserRepository : BaseRepository<Domain.Entities.Auth.User>, IUserRe
 
     #region Account Management
 
-    public async Task<IEnumerable<Domain.Entities.Auth.User>> GetDeactivatedUsersAsync()
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetDeactivatedUsersAsync()
     {
         return await Context.Users
             .Where(u => !u.IsActive && !u.IsDeleted)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Domain.Entities.Auth.User>> GetUsersForDeletionAsync(DateTime cutoffDate)
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetUsersForDeletionAsync(DateTime cutoffDate)
     {
         return await Context.Users
             .Where(u => !u.IsActive && u.UpdatedAt < cutoffDate && !u.IsDeleted)
@@ -239,10 +238,20 @@ public class UserRepository : BaseRepository<Domain.Entities.Auth.User>, IUserRe
         switch (provider.ToLowerInvariant())
         {
             case "google":
-                user.LinkGoogleAccount(providerId, profilePictureUrl);
+                user.LinkGoogleAccount(providerId);
+                if (!string.IsNullOrEmpty(profilePictureUrl))
+                {
+                    var updatedProfile = user.Profile.UpdateProfilePicture(profilePictureUrl);
+                    user.UpdateProfile(updatedProfile);
+                }
                 break;
             case "facebook":
-                user.LinkFacebookAccount(providerId, profilePictureUrl);
+                user.LinkFacebookAccount(providerId);
+                if (!string.IsNullOrEmpty(profilePictureUrl))
+                {
+                    var updatedProfile = user.Profile.UpdateProfilePicture(profilePictureUrl);
+                    user.UpdateProfile(updatedProfile);
+                }
                 break;
             default:
                 return false;
@@ -282,8 +291,8 @@ public class UserRepository : BaseRepository<Domain.Entities.Auth.User>, IUserRe
 
         return provider.ToLowerInvariant() switch
         {
-            "google" => !string.IsNullOrEmpty(user.GoogleId),
-            "facebook" => !string.IsNullOrEmpty(user.FacebookId),
+            "google" => user.OAuthInfo.HasGoogleAccount,
+            "facebook" => user.OAuthInfo.HasFacebookAccount,
             _ => false
         };
     }
@@ -295,8 +304,8 @@ public class UserRepository : BaseRepository<Domain.Entities.Auth.User>, IUserRe
 
         return provider.ToLowerInvariant() switch
         {
-            "google" => user.GoogleId,
-            "facebook" => user.FacebookId,
+            "google" => user.OAuthInfo.GoogleId,
+            "facebook" => user.OAuthInfo.FacebookId,
             _ => null
         };
     }
@@ -330,7 +339,7 @@ public class UserRepository : BaseRepository<Domain.Entities.Auth.User>, IUserRe
 
     #region Additional Helper Methods
 
-    public async Task<IEnumerable<Domain.Entities.Auth.User>> FindAsync(Expression<Func<Domain.Entities.Auth.User, bool>> predicate)
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> FindAsync(Expression<Func<CommunityCar.Domain.Entities.Account.User, bool>> predicate)
     {
         return await Context.Users
             .Where(predicate)

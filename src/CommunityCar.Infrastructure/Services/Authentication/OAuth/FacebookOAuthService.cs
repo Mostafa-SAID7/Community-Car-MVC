@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Infrastructure.Models.OAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -47,12 +47,12 @@ public class FacebookOAuthService : IFacebookOAuthService
             if (existingUser != null)
             {
                 // Link Facebook account if not already linked
-                if (string.IsNullOrEmpty(existingUser.FacebookId))
+                if (!existingUser.OAuthInfo.HasFacebookAccount)
                 {
-                    existingUser.FacebookId = facebookUserInfo.Id;
-                    existingUser.ProfilePictureUrl = facebookUserInfo.Picture?.Data?.Url;
-                    existingUser.LastLoginProvider = "Facebook";
-                    existingUser.LastLoginAt = DateTime.UtcNow;
+                    existingUser.LinkFacebookAccount(facebookUserInfo.Id);
+                    var updatedProfile = existingUser.Profile.UpdateProfilePicture(facebookUserInfo.Picture?.Data?.Url);
+                    existingUser.UpdateProfile(updatedProfile);
+                    existingUser.UpdateLastLogin("Facebook");
                     await _userManager.UpdateAsync(existingUser);
                 }
 
@@ -65,15 +65,15 @@ public class FacebookOAuthService : IFacebookOAuthService
             else
             {
                 // Create new user
-                var newUser = new User(facebookUserInfo.Email, facebookUserInfo.Email)
+                var newUser = new User(facebookUserInfo.Email, facebookUserInfo.Email, facebookUserInfo.Name)
                 {
-                    FullName = facebookUserInfo.Name,
-                    FacebookId = facebookUserInfo.Id,
-                    ProfilePictureUrl = facebookUserInfo.Picture?.Data?.Url,
-                    EmailConfirmed = true, // Facebook emails are considered verified
-                    LastLoginProvider = "Facebook",
-                    LastLoginAt = DateTime.UtcNow
+                    EmailConfirmed = true // Facebook emails are considered verified
                 };
+                
+                newUser.LinkFacebookAccount(facebookUserInfo.Id);
+                var profile = newUser.Profile.UpdateProfilePicture(facebookUserInfo.Picture?.Data?.Url);
+                newUser.UpdateProfile(profile);
+                newUser.UpdateLastLogin("Facebook");
 
                 var result = await _userManager.CreateAsync(newUser);
                 if (result.Succeeded)
@@ -116,17 +116,18 @@ public class FacebookOAuthService : IFacebookOAuthService
 
             // Check if Facebook account is already linked to another user
             var existingUser = await _userManager.Users
-                .FirstOrDefaultAsync(u => u.FacebookId == facebookUserInfo.Id && u.Id != user.Id);
+                .FirstOrDefaultAsync(u => u.OAuthInfo.FacebookId == facebookUserInfo.Id && u.Id != user.Id);
             if (existingUser != null)
             {
                 return Result.Failure("This Facebook account is already linked to another user.");
             }
 
             // Link Facebook account
-            user.FacebookId = facebookUserInfo.Id;
-            if (string.IsNullOrEmpty(user.ProfilePictureUrl))
+            user.LinkFacebookAccount(facebookUserInfo.Id);
+            if (string.IsNullOrEmpty(user.Profile.ProfilePictureUrl))
             {
-                user.ProfilePictureUrl = facebookUserInfo.Picture?.Data?.Url;
+                var updatedProfile = user.Profile.UpdateProfilePicture(facebookUserInfo.Picture?.Data?.Url);
+                user.UpdateProfile(updatedProfile);
             }
 
             var result = await _userManager.UpdateAsync(user);

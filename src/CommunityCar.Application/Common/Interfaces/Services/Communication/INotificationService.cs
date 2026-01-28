@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Models.Notifications;
-using CommunityCar.Domain.Enums.Users;
+using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Communication;
 

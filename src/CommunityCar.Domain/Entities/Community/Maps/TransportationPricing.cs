@@ -1,5 +1,4 @@
 using CommunityCar.Domain.Base;
-using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Domain.Entities.Community.Maps;
 

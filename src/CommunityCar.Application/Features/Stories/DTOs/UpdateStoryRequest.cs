@@ -1,4 +1,4 @@
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 using System.ComponentModel.DataAnnotations;
 
 namespace CommunityCar.Application.Features.Stories.DTOs;

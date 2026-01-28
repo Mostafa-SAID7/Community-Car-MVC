@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Authentication;
 

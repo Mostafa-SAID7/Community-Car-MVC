@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Globalization;
-using CommunityCar.Domain.Enums.Users;
+using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Web.Controllers.Community.Feed;
 

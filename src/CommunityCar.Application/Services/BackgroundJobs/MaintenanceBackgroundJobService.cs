@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Application.Common.Models.Caching;
+using CommunityCar.Domain.Enums.Shared;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using CommunityCar.Application.Common.Models.Account;
@@ -231,7 +232,7 @@ public class MaintenanceBackgroundJobService
             
             // Check for orphaned records
             var orphanedComments = await _context.Comments
-                .Where(c => c.EntityType == CommunityCar.Domain.Enums.EntityType.Post && !_context.Posts.Any(p => p.Id == c.EntityId))
+                .Where(c => c.EntityType == EntityType.Post && !_context.Posts.Any(p => p.Id == c.EntityId))
                 .CountAsync();
             
             if (orphanedComments > 0)

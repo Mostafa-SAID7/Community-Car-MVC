@@ -4,10 +4,11 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Features.Guides.DTOs;
 using CommunityCar.Application.Features.Guides.ViewModels;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Domain.Entities.Community.Guides;
 using CommunityCar.Domain.Entities.Shared;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
+using CommunityCar.Domain.Enums.Shared;
 using Microsoft.AspNetCore.Identity;
 
 namespace CommunityCar.Application.Services.Community;

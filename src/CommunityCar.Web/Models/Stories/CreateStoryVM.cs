@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 using Microsoft.AspNetCore.Http;
 
 namespace CommunityCar.Web.Models.Stories;

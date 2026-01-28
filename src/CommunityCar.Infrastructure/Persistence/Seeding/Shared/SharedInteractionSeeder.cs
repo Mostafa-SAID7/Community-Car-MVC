@@ -1,6 +1,6 @@
 using CommunityCar.Domain.Entities.Shared;
-using CommunityCar.Domain.Entities.Auth;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

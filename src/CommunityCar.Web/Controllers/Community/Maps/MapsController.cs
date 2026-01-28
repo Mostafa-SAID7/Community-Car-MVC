@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Features.Maps.DTOs;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityCar.Web.Controllers.Community.Maps;

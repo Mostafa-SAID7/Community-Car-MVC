@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Features.Shared.DTOs;
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Shared;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 

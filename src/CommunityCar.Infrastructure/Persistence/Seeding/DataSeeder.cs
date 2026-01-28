@@ -1,13 +1,16 @@
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Domain.Entities.Community.QA;
 using CommunityCar.Domain.Entities.Community.Friends;
 using CommunityCar.Domain.Entities.Community.Guides;
 using CommunityCar.Domain.Entities.Community.Maps;
 using CommunityCar.Domain.Entities.Community.News;
 using CommunityCar.Domain.Entities.Community.Reviews;
+using CommunityCar.Domain.Entities.Community.Groups;
+using CommunityCar.Domain.Entities.Community.Posts;
 using CommunityCar.Domain.Entities.Chats;
-using CommunityCar.Domain.Entities.Profile;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Account;
+using CommunityCar.Domain.Enums.Community;
+using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Seeding.Shared;
 using CommunityCar.Infrastructure.Persistence.Seeding.AI;
@@ -2085,7 +2088,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Classic Mustang Enthusiasts",
                 Description = "Dedicated to Ford Mustang lovers from 1964-1973. Share your restoration projects, ask questions, and connect with fellow enthusiasts.",
                 Category = (string?)"Ford",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = (string?)"Detroit, MI",
                 Rules = (string?)"Be respectful. Share knowledge. No spam or commercial posts without permission.",
                 RequiresApproval = false,
@@ -2096,7 +2099,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Vintage Car Restoration",
                 Description = "Share tips, progress, and ask questions about restoring classic cars from all eras. From barn finds to concours restorations.",
                 Category = (string?)"General",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = (string?)null,
                 Rules = (string?)"Be respectful. Share knowledge. No spam. Post progress photos when possible.",
                 RequiresApproval = false,
@@ -2107,7 +2110,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Electric Vehicle Conversion",
                 Description = "Converting classic cars to electric power. Share your EV conversion projects, technical discussions, and troubleshooting.",
                 Category = (string?)"Modification",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Private,
+                Privacy = GroupPrivacy.Private,
                 Location = (string?)null,
                 Rules = (string?)"Technical discussions only. Safety first. Share schematics and progress photos.",
                 RequiresApproval = true,
@@ -2118,7 +2121,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "British Sports Cars",
                 Description = "MG, Triumph, Austin-Healey, Jaguar, and more. Celebrating the heritage of British automotive engineering.",
                 Category = "British",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = "London, UK",
                 Rules = "British cars only. Share stories, photos, and technical advice. Keep it civil.",
                 RequiresApproval = false,
@@ -2129,7 +2132,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "American Muscle",
                 Description = "Discussing classic American muscle cars from the golden era. Camaros, Challengers, GTOs, and more.",
                 Category = "American",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = (string?)null,
                 Rules = "American muscle cars only. No imports. Share dyno sheets and track times.",
                 RequiresApproval = false,
@@ -2140,7 +2143,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "European Classics",
                 Description = "Mercedes, BMW, Porsche, Ferrari, and other European vintage models. Celebrating European automotive excellence.",
                 Category = "European",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = (string?)null,
                 Rules = "European cars only. Share maintenance tips and driving experiences.",
                 RequiresApproval = false,
@@ -2151,7 +2154,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "JDM Legends",
                 Description = "Japanese Domestic Market classics. Skylines, Supras, NSXs, and other JDM icons.",
                 Category = "Japanese",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Private,
+                Privacy = GroupPrivacy.Private,
                 Location = (string?)null,
                 Rules = "JDM cars only. No USDM versions. Share import stories and modifications.",
                 RequiresApproval = true,
@@ -2162,7 +2165,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Corvette Club",
                 Description = "All generations of America's sports car. From C1 to C8, celebrating Corvette heritage and performance.",
                 Category = "Chevrolet",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = "Bowling Green, KY",
                 Rules = "Corvette owners and enthusiasts only. Family-friendly discussions. Share track experiences.",
                 RequiresApproval = false,
@@ -2173,7 +2176,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "VW Air-Cooled",
                 Description = "Beetles, Buses, Type 3s, and other air-cooled Volkswagens. Keeping the air-cooled spirit alive.",
                 Category = "Volkswagen",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = (string?)null,
                 Rules = "Air-cooled VWs only. Share restoration tips and camping adventures.",
                 RequiresApproval = false,
@@ -2184,7 +2187,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Alfa Romeo Owners",
                 Description = "Italian passion and performance. Celebrating the art and engineering of Alfa Romeo.",
                 Category = "Italian",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Private,
+                Privacy = GroupPrivacy.Private,
                 Location = (string?)null,
                 Rules = "Alfa Romeo owners only. Share your passion and mechanical adventures.",
                 RequiresApproval = true,
@@ -2195,7 +2198,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Hot Rod Builders",
                 Description = "Custom builds and modifications. Traditional hot rods, street rods, and custom creations.",
                 Category = "Modification",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = (string?)null,
                 Rules = "Custom builds only. Share build progress and technical details.",
                 RequiresApproval = false,
@@ -2206,7 +2209,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Motorcycle Classics",
                 Description = "Vintage motorcycles and restoration. Two-wheeled classics from all eras and manufacturers.",
                 Category = "Motorcycle",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = (string?)null,
                 Rules = "Motorcycles only. Share restoration projects and riding experiences.",
                 RequiresApproval = false,
@@ -2217,7 +2220,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Truck & Van Classics",
                 Description = "Classic trucks and vans community. Work trucks, panel vans, and commercial vehicles.",
                 Category = "Trucks",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = (string?)null,
                 Rules = "Trucks and vans only. Share work stories and restoration projects.",
                 RequiresApproval = false,
@@ -2228,7 +2231,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Racing Heritage",
                 Description = "Historic racing cars and motorsports. Formula cars, sports racers, and competition vehicles.",
                 Category = "Racing",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Private,
+                Privacy = GroupPrivacy.Private,
                 Location = (string?)null,
                 Rules = "Serious discussions only. Racing cars and motorsport history. No off-topic posts.",
                 RequiresApproval = true,
@@ -2239,7 +2242,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
                 Name = "Parts Marketplace",
                 Description = "Buy, sell, and trade classic car parts. Connect with other enthusiasts for hard-to-find components.",
                 Category = "Marketplace",
-                Privacy = CommunityCar.Domain.Enums.GroupPrivacy.Public,
+                Privacy = GroupPrivacy.Public,
                 Location = (string?)null,
                 Rules = "No scams. Verified sellers only. Be honest about condition. Include photos.",
                 RequiresApproval = false,
@@ -2347,7 +2350,7 @@ For the price, this SUV offers a lot of value and would be a good choice for fam
 - Top off all fluids to prevent corrosion
 
 What are your winter storage tips? Share your experiences below!",
-                Type = CommunityCar.Domain.Enums.PostType.Text
+                Type = PostType.Text
             },
             new {
                 Title = "My 1967 Mustang Restoration Journey",
@@ -2376,7 +2379,7 @@ What are your winter storage tips? Share your experiences below!",
 The journey has been challenging but incredibly rewarding. Can't wait to take her for the first drive!
 
 #mustang #restoration #1967 #classiccar",
-                Type = CommunityCar.Domain.Enums.PostType.Image
+                Type = PostType.Image
             },
             new {
                 Title = "Best engine oils for vintage cars - Comprehensive Guide",
@@ -2411,7 +2414,7 @@ The journey has been challenging but incredibly rewarding. Can't wait to take he
 What oil do you use in your classic? Share your experiences and recommendations!
 
 Link to detailed comparison: https://example.com/vintage-car-oils",
-                Type = CommunityCar.Domain.Enums.PostType.Link
+                Type = PostType.Link
             },
             new {
                 Title = "What's your dream classic car?",
@@ -2442,7 +2445,7 @@ Here are some options to get us started:
 Vote for your favorite category and tell us why! What draws you to that particular car? Is it the design, performance, rarity, or personal connection?
 
 Can't wait to see your choices! 🚗💨",
-                Type = CommunityCar.Domain.Enums.PostType.Poll
+                Type = PostType.Poll
             },
             new {
                 Title = "Track Day Preparation Checklist",
@@ -2493,7 +2496,7 @@ Can't wait to see your choices! 🚗💨",
 Remember: The goal is to have fun and learn, not to set lap records on your first day!
 
 What would you add to this list?",
-                Type = CommunityCar.Domain.Enums.PostType.Text
+                Type = PostType.Text
             }
         };
 
@@ -2533,10 +2536,10 @@ What would you add to this list?",
         };
 
         var postTypes = new[] { 
-            CommunityCar.Domain.Enums.PostType.Text, 
-            CommunityCar.Domain.Enums.PostType.Image, 
-            CommunityCar.Domain.Enums.PostType.Link,
-            CommunityCar.Domain.Enums.PostType.Poll
+            PostType.Text, 
+            PostType.Image, 
+            PostType.Link,
+            PostType.Poll
         };
 
         for (int i = 0; i < 20; i++)
@@ -2547,10 +2550,10 @@ What would you add to this list?",
 
             var content = type switch
             {
-                CommunityCar.Domain.Enums.PostType.Text => $"This is a discussion about {title.ToLower()}. What are your thoughts and experiences with this topic? Share your knowledge with the community!",
-                CommunityCar.Domain.Enums.PostType.Image => $"Check out these photos related to {title.ToLower()}. What do you think? Any similar experiences or advice?",
-                CommunityCar.Domain.Enums.PostType.Link => $"Found this great resource about {title.ToLower()}: https://example.com/{title.Replace(" ", "-").ToLower()}",
-                CommunityCar.Domain.Enums.PostType.Poll => $"Quick poll about {title.ToLower()}. What's your preference? Vote and share your reasoning!",
+                PostType.Text => $"This is a discussion about {title.ToLower()}. What are your thoughts and experiences with this topic? Share your knowledge with the community!",
+                PostType.Image => $"Check out these photos related to {title.ToLower()}. What do you think? Any similar experiences or advice?",
+                PostType.Link => $"Found this great resource about {title.ToLower()}: https://example.com/{title.Replace(" ", "-").ToLower()}",
+                PostType.Poll => $"Quick poll about {title.ToLower()}. What's your preference? Vote and share your reasoning!",
                 _ => $"Discussion about {title.ToLower()}."
             };
 

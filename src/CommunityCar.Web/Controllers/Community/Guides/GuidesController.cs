@@ -4,7 +4,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Guides.DTOs;
 using CommunityCar.Application.Features.Guides.ViewModels;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Localization;
 
 namespace CommunityCar.Web.Controllers.Community.Guides;

@@ -5,7 +5,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Maps.DTOs;
 using CommunityCar.Application.Features.Maps.ViewModels;
 using CommunityCar.Domain.Entities.Community.Maps;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Application.Services.Community;

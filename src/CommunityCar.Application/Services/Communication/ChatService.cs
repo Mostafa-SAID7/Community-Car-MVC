@@ -3,7 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Features.Chat.ViewModels;
 using CommunityCar.Application.Features.Chat.DTOs;
 using CommunityCar.Domain.Entities.Chats;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -199,7 +199,7 @@ public class ChatService : IChatService
         {
             UserId = u.Id,
             IsOnline = IsUserOnline(u.Id),
-            LastSeen = u.LastLoginAt
+            LastSeen = u.OAuthInfo.LastLoginAt
         }).ToList();
     }
 
@@ -207,8 +207,8 @@ public class ChatService : IChatService
     {
         // Check if user was active in the last 15 minutes
         var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
-        return user?.LastLoginAt.HasValue == true && 
-               user.LastLoginAt > DateTime.UtcNow.AddMinutes(-15);
+        return user?.OAuthInfo.LastLoginAt.HasValue == true && 
+               user.OAuthInfo.LastLoginAt > DateTime.UtcNow.AddMinutes(-15);
     }
 
     private string GetTimeAgo(DateTime dateTime)

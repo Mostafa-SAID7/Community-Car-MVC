@@ -1,7 +1,7 @@
 using CommunityCar.Application.Features.Maps.DTOs;
 using CommunityCar.Application.Services.Maps.Pricing;
 using CommunityCar.Application.Common.Interfaces.Data;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommunityCar.Application.Services.Maps.Routing;

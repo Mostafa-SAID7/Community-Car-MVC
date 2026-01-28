@@ -8,6 +8,6 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using CommunityCar.Application.Common.Interfaces.Services.Caching;
 global using CommunityCar.Application.Common.Interfaces.Services.BackgroundJobs;
-global using CommunityCar.Domain.Entities.Auth;
+global using CommunityCar.Domain.Entities.Account;
 global using CommunityCar.Infrastructure.Caching;
 global using CommunityCar.Application.Services.BackgroundJobs;

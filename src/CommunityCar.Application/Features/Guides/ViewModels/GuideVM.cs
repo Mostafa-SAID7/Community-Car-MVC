@@ -1,4 +1,4 @@
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Features.Guides.ViewModels;
 

@@ -2,6 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Models.Caching;
+using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Application.Services.Caching;
@@ -200,7 +201,7 @@ public class CacheWarmupService
                 {
                     var request = new CommunityCar.Application.Features.News.DTOs.NewsSearchRequest
                     {
-                        Category = CommunityCar.Domain.Enums.NewsCategory.General,
+                        Category = NewsCategory.General,
                         Page = 1,
                         PageSize = 10
                     };

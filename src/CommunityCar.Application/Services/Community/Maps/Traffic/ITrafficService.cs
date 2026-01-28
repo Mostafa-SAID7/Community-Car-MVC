@@ -1,5 +1,5 @@
 using CommunityCar.Application.Services.Maps.Routing;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Services.Maps.Traffic;
 

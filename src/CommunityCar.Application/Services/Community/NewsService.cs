@@ -5,7 +5,7 @@ using CommunityCar.Application.Features.News.DTOs;
 using CommunityCar.Application.Features.News.ViewModels;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Community.News;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Services.Community;
 
@@ -243,7 +243,7 @@ public class NewsService : INewsService
             var author = await _unitOfWork.Users.GetByIdAsync(authorId);
             if (author != null)
             {
-                await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, author.FullName);
+                await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, author.Profile.FullName);
             }
         }
 
@@ -311,7 +311,7 @@ public class NewsService : INewsService
         var author = await _unitOfWork.Users.GetByIdAsync(currentUserId);
         if (author != null)
         {
-            await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, author.FullName);
+            await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, author.Profile.FullName);
         }
     }
 
@@ -344,7 +344,7 @@ public class NewsService : INewsService
             var author = await _unitOfWork.Users.GetByIdAsync(newsItem.AuthorId);
             if (author != null)
             {
-                await _newsNotificationService.NotifyNewsFeaturedAsync(newsItem, author.FullName);
+                await _newsNotificationService.NotifyNewsFeaturedAsync(newsItem, author.Profile.FullName);
             }
         }
     }
@@ -385,7 +385,7 @@ public class NewsService : INewsService
         var author = await _unitOfWork.Users.GetByIdAsync(newsItem.AuthorId);
         if (liker != null && author != null)
         {
-            await _newsNotificationService.NotifyNewsLikedAsync(newsItem, author.FullName, liker.FullName, userId);
+            await _newsNotificationService.NotifyNewsLikedAsync(newsItem, author.Profile.FullName, liker.Profile.FullName, userId);
         }
     }
 
@@ -415,7 +415,7 @@ public class NewsService : INewsService
         var author = await _unitOfWork.Users.GetByIdAsync(newsItem.AuthorId);
         if (commenter != null && author != null)
         {
-            await _newsNotificationService.NotifyNewsCommentedAsync(newsItem, author.FullName, commenter.FullName, userId);
+            await _newsNotificationService.NotifyNewsCommentedAsync(newsItem, author.Profile.FullName, commenter.Profile.FullName, userId);
         }
     }
 
@@ -433,7 +433,7 @@ public class NewsService : INewsService
         var author = await _unitOfWork.Users.GetByIdAsync(newsItem.AuthorId);
         if (sharer != null && author != null)
         {
-            await _newsNotificationService.NotifyNewsSharedAsync(newsItem, author.FullName, sharer.FullName, userId);
+            await _newsNotificationService.NotifyNewsSharedAsync(newsItem, author.Profile.FullName, sharer.Profile.FullName, userId);
         }
     }
 

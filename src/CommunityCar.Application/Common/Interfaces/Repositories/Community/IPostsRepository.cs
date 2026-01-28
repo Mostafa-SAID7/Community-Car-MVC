@@ -1,5 +1,5 @@
 using CommunityCar.Domain.Entities.Community.Posts;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories.Community;
 

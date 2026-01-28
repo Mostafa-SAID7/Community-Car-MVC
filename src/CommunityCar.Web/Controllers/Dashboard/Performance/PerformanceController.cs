@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.SEO;
 using CommunityCar.Application.Features.SEO.DTOs;
+using SystemIO = System.IO;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Performance;
 
@@ -72,8 +73,8 @@ public class PerformanceController : Controller
             }
 
             // Save uploaded file temporarily
-            var tempPath = Path.GetTempFileName();
-            using (var stream = new FileStream(tempPath, FileMode.Create))
+            var tempPath = SystemIO.Path.GetTempFileName();
+            using (var stream = new SystemIO.FileStream(tempPath, SystemIO.FileMode.Create))
             {
                 await image.CopyToAsync(stream);
             }
@@ -81,9 +82,9 @@ public class PerformanceController : Controller
             var result = await _performanceService.OptimizeImageAsync(tempPath, options);
 
             // Clean up temp file
-            if (System.IO.File.Exists(tempPath))
+            if (SystemIO.File.Exists(tempPath))
             {
-                System.IO.File.Delete(tempPath);
+                SystemIO.File.Delete(tempPath);
             }
 
             return Json(result);

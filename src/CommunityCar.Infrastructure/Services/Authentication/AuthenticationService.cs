@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -38,7 +38,7 @@ public class AuthenticationService : IAuthenticationService
         var existingUser = await _userManager.FindByEmailAsync(request.Email);
         if (existingUser != null) return Result.Failure("User with this email already exists.");
 
-        var user = new User(request.Email, request.Email) { FullName = request.FullName, EmailConfirmed = false };
+        var user = new User(request.Email, request.Email, request.FullName) { EmailConfirmed = false };
         var result = await _userManager.CreateAsync(user, request.Password);
 
         if (!result.Succeeded) return Result.Failure("Registration failed.", result.Errors.Select(e => e.Description).ToList());
@@ -58,7 +58,7 @@ public class AuthenticationService : IAuthenticationService
         var result = await _userManager.ConfirmEmailAsync(user, token);
         if (!result.Succeeded) return Result.Failure("Email confirmation failed.", result.Errors.Select(e => e.Description).ToList());
 
-        await _emailService.SendWelcomeEmailAsync(user.Email!, user.FullName);
+        await _emailService.SendWelcomeEmailAsync(user.Email!, user.Profile.FullName);
         return Result.Success("Email confirmed successfully. You can now log in.");
     }
 

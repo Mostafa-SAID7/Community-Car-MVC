@@ -1,4 +1,5 @@
 using CommunityCar.Domain.Base;
+using System.Text.Json;
 
 namespace CommunityCar.Domain.Entities.Dashboard.Settings;
 
@@ -31,7 +32,7 @@ public class DashboardSettings : BaseEntity
         {
             "Boolean" => (T)(object)bool.Parse(SettingValue),
             "Number" => (T)(object)decimal.Parse(SettingValue),
-            "JSON" => System.Text.Json.JsonSerializer.Deserialize<T>(SettingValue)!,
+            "JSON" => JsonSerializer.Deserialize<T>(SettingValue)!,
             _ => (T)(object)SettingValue
         };
     }

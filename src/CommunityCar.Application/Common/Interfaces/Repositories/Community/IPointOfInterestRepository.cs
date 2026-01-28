@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Base;
 using CommunityCar.Application.Features.Maps.DTOs;
 using CommunityCar.Domain.Entities.Community.Maps;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories.Community;
 

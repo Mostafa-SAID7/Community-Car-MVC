@@ -58,7 +58,7 @@
                             @if (!string.IsNullOrEmpty(Model.MediaUrl))
                             {
                                 <div class="aspect-[16/9] relative">
-                                    @if (Model.Type == CommunityCar.Domain.Enums.StoryType.Video)
+                                    @if (Model.Type == StoryType.Video)
                                     {
                                         <video controls class="w-full h-full object-cover">
                                             <source src="@Model.MediaUrl" type="video/mp4">

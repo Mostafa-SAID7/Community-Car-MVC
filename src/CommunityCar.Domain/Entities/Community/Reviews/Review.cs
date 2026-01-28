@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using CommunityCar.Domain.Base;
-using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Domain.Entities.Community.Reviews;
 

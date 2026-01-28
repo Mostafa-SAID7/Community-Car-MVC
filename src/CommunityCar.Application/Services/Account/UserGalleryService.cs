@@ -5,7 +5,8 @@ using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Domain.Entities.Profile;
+using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Enums.Account;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 

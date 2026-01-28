@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Infrastructure.Models.OAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -47,12 +47,12 @@ public class GoogleOAuthService : IGoogleOAuthService
             if (existingUser != null)
             {
                 // Link Google account if not already linked
-                if (string.IsNullOrEmpty(existingUser.GoogleId))
+                if (!existingUser.OAuthInfo.HasGoogleAccount)
                 {
-                    existingUser.GoogleId = googleUserInfo.Id;
-                    existingUser.ProfilePictureUrl = googleUserInfo.Picture;
-                    existingUser.LastLoginProvider = "Google";
-                    existingUser.LastLoginAt = DateTime.UtcNow;
+                    existingUser.LinkGoogleAccount(googleUserInfo.Id);
+                    var updatedProfile = existingUser.Profile.UpdateProfilePicture(googleUserInfo.Picture);
+                    existingUser.UpdateProfile(updatedProfile);
+                    existingUser.UpdateLastLogin("Google");
                     await _userManager.UpdateAsync(existingUser);
                 }
 
@@ -65,15 +65,15 @@ public class GoogleOAuthService : IGoogleOAuthService
             else
             {
                 // Create new user
-                var newUser = new User(googleUserInfo.Email, googleUserInfo.Email)
+                var newUser = new User(googleUserInfo.Email, googleUserInfo.Email, googleUserInfo.Name)
                 {
-                    FullName = googleUserInfo.Name,
-                    GoogleId = googleUserInfo.Id,
-                    ProfilePictureUrl = googleUserInfo.Picture,
-                    EmailConfirmed = googleUserInfo.EmailVerified,
-                    LastLoginProvider = "Google",
-                    LastLoginAt = DateTime.UtcNow
+                    EmailConfirmed = googleUserInfo.EmailVerified
                 };
+                
+                newUser.LinkGoogleAccount(googleUserInfo.Id);
+                var profile = newUser.Profile.UpdateProfilePicture(googleUserInfo.Picture);
+                newUser.UpdateProfile(profile);
+                newUser.UpdateLastLogin("Google");
 
                 var result = await _userManager.CreateAsync(newUser);
                 if (result.Succeeded)
@@ -116,17 +116,18 @@ public class GoogleOAuthService : IGoogleOAuthService
 
             // Check if Google account is already linked to another user
             var existingUser = await _userManager.Users
-                .FirstOrDefaultAsync(u => u.GoogleId == googleUserInfo.Id && u.Id != user.Id);
+                .FirstOrDefaultAsync(u => u.OAuthInfo.GoogleId == googleUserInfo.Id && u.Id != user.Id);
             if (existingUser != null)
             {
                 return Result.Failure("This Google account is already linked to another user.");
             }
 
             // Link Google account
-            user.GoogleId = googleUserInfo.Id;
-            if (string.IsNullOrEmpty(user.ProfilePictureUrl))
+            user.LinkGoogleAccount(googleUserInfo.Id);
+            if (string.IsNullOrEmpty(user.Profile.ProfilePictureUrl))
             {
-                user.ProfilePictureUrl = googleUserInfo.Picture;
+                var updatedProfile = user.Profile.UpdateProfilePicture(googleUserInfo.Picture);
+                user.UpdateProfile(updatedProfile);
             }
 
             var result = await _userManager.UpdateAsync(user);

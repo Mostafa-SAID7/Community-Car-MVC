@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Shared.DTOs;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Web.Controllers.Shared.Search;
 

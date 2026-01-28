@@ -1,7 +1,7 @@
 using AutoMapper;
 using CommunityCar.Application.Features.Profile.DTOs;
 using CommunityCar.Application.Features.Profile.ViewModels;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 
 namespace CommunityCar.Application.Features.Profile.Mappings;
 
@@ -11,16 +11,16 @@ public class ProfileMappingProfile : AutoMapper.Profile
     {
         // User to ProfileVM mappings
         CreateMap<User, ProfileVM>()
-            .ForMember(dest => dest.HasGoogleAccount, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.GoogleId)))
-            .ForMember(dest => dest.HasFacebookAccount, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.FacebookId)))
+            .ForMember(dest => dest.HasGoogleAccount, opt => opt.MapFrom(src => src.OAuthInfo.HasGoogleAccount))
+            .ForMember(dest => dest.HasFacebookAccount, opt => opt.MapFrom(src => src.OAuthInfo.HasFacebookAccount))
             .ForMember(dest => dest.PostsCount, opt => opt.Ignore())
             .ForMember(dest => dest.CommentsCount, opt => opt.Ignore())
             .ForMember(dest => dest.LikesReceived, opt => opt.Ignore());
 
         // User to ProfileSettingsVM mappings
         CreateMap<User, ProfileSettingsVM>()
-            .ForMember(dest => dest.HasGoogleAccount, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.GoogleId)))
-            .ForMember(dest => dest.HasFacebookAccount, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.FacebookId)))
+            .ForMember(dest => dest.HasGoogleAccount, opt => opt.MapFrom(src => src.OAuthInfo.HasGoogleAccount))
+            .ForMember(dest => dest.HasFacebookAccount, opt => opt.MapFrom(src => src.OAuthInfo.HasFacebookAccount))
             .ForMember(dest => dest.EmailNotifications, opt => opt.Ignore())
             .ForMember(dest => dest.PushNotifications, opt => opt.Ignore())
             .ForMember(dest => dest.SmsNotifications, opt => opt.Ignore())

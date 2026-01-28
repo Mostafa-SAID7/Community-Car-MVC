@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using CommunityCar.Domain.Base;
+using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Entities.Shared;
-using CommunityCar.Domain.Enums;
 
 namespace CommunityCar.Domain.Entities.Community.QA;
 

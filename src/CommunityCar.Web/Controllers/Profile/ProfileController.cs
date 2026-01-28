@@ -2,9 +2,10 @@ using CommunityCar.Application.Common.Interfaces.Orchestrators;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Web.Models.Profile.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProfileIndexVM = CommunityCar.Web.Models.Profile.Core.ProfileIndexVM;
+using UpdateProfileVM = CommunityCar.Web.Models.Profile.Core.UpdateProfileVM;
 
 namespace CommunityCar.Web.Controllers.Profile;
 

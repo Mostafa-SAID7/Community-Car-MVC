@@ -1,4 +1,4 @@
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Application.Features.Interactions.ViewModels;
 using CommunityCar.Application.Features.Interactions.DTOs;
 

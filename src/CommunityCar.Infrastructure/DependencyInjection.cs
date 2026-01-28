@@ -13,7 +13,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Services.Shared;
 using CommunityCar.Application.Services.AI;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using CommunityCar.Infrastructure.Persistence.Repositories.Community;
@@ -138,6 +138,7 @@ public static class DependencyInjection
         services.AddScoped<IUserActivityRepository, UserActivityRepository>();
         services.AddScoped<IUserInterestRepository, UserInterestRepository>();
         services.AddScoped<IUserFollowingRepository, UserFollowingRepository>();
+        services.AddScoped<IUserProfileViewRepository, UserProfileViewRepository>();
 
         // Authentication & Authorization services
         services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -176,8 +177,13 @@ public static class DependencyInjection
         // Caching Services
         services.AddRedisCache(configuration);
         
-        // Background Job Services
-        services.AddBackgroundJobs(configuration);
+        // Background Job Services - only add if enabled
+        var backgroundJobSettings = configuration.GetSection("BackgroundJobs").Get<BackgroundJobSettings>();
+        if (backgroundJobSettings?.EnableScheduledJobs == true)
+        {
+            services.AddBackgroundJobs(configuration);
+        }
+        
         services.AddScoped<GamificationBackgroundJobService>();
         services.AddScoped<MaintenanceBackgroundJobService>();
         services.AddScoped<FeedBackgroundJobService>();

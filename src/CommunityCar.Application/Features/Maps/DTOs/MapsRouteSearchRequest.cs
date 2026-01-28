@@ -1,5 +1,6 @@
 using CommunityCar.Domain.Entities.Community.Maps;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
+using CommunityCar.Domain.Enums.Shared;
 using System.ComponentModel.DataAnnotations;
 
 namespace CommunityCar.Application.Features.Maps.DTOs;

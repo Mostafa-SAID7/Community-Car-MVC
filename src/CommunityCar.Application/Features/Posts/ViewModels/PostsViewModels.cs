@@ -1,5 +1,5 @@
 using CommunityCar.Application.Features.Posts.DTOs;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Features.Posts.ViewModels;
 

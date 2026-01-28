@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Features.Friends.ViewModels;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

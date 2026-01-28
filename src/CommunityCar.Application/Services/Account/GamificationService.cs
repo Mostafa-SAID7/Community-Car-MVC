@@ -4,8 +4,9 @@ using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Domain.Entities.Profile;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Domain.Constants;
+using CommunityCar.Domain.Enums.Account;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 
@@ -180,7 +181,7 @@ public class GamificationService : IGamificationService
         user.TotalPoints += points;
         await _userRepository.UpdateAsync(user);
 
-        var activity = new UserActivity(userId, Domain.Enums.Users.ActivityType.Other, "PointsExchange", null, reason, reason, points);
+        var activity = new UserActivity(userId, ActivityType.Other, "PointsExchange", null, reason, reason, points);
         await _activityRepository.AddAsync(activity);
 
         await CheckAndPromoteUserAsync(userId);

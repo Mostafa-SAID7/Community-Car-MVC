@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Features.Groups.DTOs;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Web.Controllers.Community.Groups;
 

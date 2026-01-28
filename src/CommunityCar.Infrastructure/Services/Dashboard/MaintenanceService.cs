@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using CommunityCar.Domain.Entities.Dashboard.Settings;
+using CommunityCar.Domain.Entities.Dashboard.System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;

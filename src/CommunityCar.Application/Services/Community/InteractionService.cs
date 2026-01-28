@@ -4,8 +4,8 @@ using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Features.Interactions.ViewModels;
 using CommunityCar.Application.Features.Interactions.DTOs;
 using CommunityCar.Domain.Entities.Shared;
-using CommunityCar.Domain.Enums;
-using CommunityCar.Domain.Enums.Users;
+using CommunityCar.Domain.Enums.Shared;
+using CommunityCar.Domain.Enums.Account;
 using System.Text.RegularExpressions;
 using System.Net;
 

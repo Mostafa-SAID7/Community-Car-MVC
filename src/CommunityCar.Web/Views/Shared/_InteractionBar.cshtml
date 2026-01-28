@@ -100,16 +100,16 @@
 </div>
 
 @functions {
-    private string GetReactionIcon(CommunityCar.Domain.Enums.ReactionType reactionType)
+    private string GetReactionIcon(ReactionType reactionType)
     {
         return reactionType switch
         {
-            CommunityCar.Domain.Enums.ReactionType.Like => "fas fa-thumbs-up",
-            CommunityCar.Domain.Enums.ReactionType.Love => "fas fa-heart",
-            CommunityCar.Domain.Enums.ReactionType.Haha => "fas fa-laugh",
-            CommunityCar.Domain.Enums.ReactionType.Wow => "fas fa-bolt",
-            CommunityCar.Domain.Enums.ReactionType.Sad => "fas fa-frown",
-            CommunityCar.Domain.Enums.ReactionType.Angry => "fas fa-angry",
+            ReactionType.Like => "fas fa-thumbs-up",
+            ReactionType.Love => "fas fa-heart",
+            ReactionType.Haha => "fas fa-laugh",
+            ReactionType.Wow => "fas fa-bolt",
+            ReactionType.Sad => "fas fa-frown",
+            ReactionType.Angry => "fas fa-angry",
             _ => "fas fa-thumbs-up"
         };
     }

@@ -1,4 +1,4 @@
-using CommunityCar.Domain.Entities.Profile;
+using CommunityCar.Domain.Entities.Account;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -122,7 +122,7 @@
                             <!-- Story Media -->
                             @if (!string.IsNullOrEmpty(story.MediaUrl))
                             {
-                                @if (story.Type == CommunityCar.Domain.Enums.StoryType.Video)
+                                @if (story.Type == StoryType.Video)
                                 {
                                     <video class="w-full h-full object-cover" poster="@(story.ThumbnailUrl ?? story.MediaUrl)">
                                         <source src="@story.MediaUrl" type="video/mp4">

@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models.Identity;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -43,13 +43,13 @@ public class IdentityManagementService : IIdentityManagementService
             Id = user.Id,
             UserName = user.UserName ?? string.Empty,
             Email = user.Email ?? string.Empty,
-            FullName = user.FullName,
+            FullName = user.Profile.FullName,
             IsActive = user.IsActive,
             IsEmailConfirmed = user.EmailConfirmed,
             IsLocked = isLocked,
             LockoutEnd = await _userManager.GetLockoutEndDateAsync(user),
             CreatedAt = user.CreatedAt,
-            LastLoginAt = user.LastLoginAt,
+            LastLoginAt = user.OAuthInfo.LastLoginAt,
             Roles = roles.ToList()
         };
     }

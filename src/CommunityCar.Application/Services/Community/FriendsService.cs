@@ -3,7 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Features.Friends.DTOs;
 using CommunityCar.Application.Features.Friends.ViewModels;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Domain.Entities.Community.Friends;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -65,8 +65,8 @@ public class FriendsService : IFriendsService
                     Country = friend.Country,
                     Bio = friend.Bio,
                     FriendsSince = friendship.CreatedAt,
-                    IsOnline = friend.LastLoginAt.HasValue && friend.LastLoginAt > DateTime.UtcNow.AddMinutes(-15),
-                    LastSeen = friend.LastLoginAt,
+                    IsOnline = friend.OAuthInfo.LastLoginAt.HasValue && friend.OAuthInfo.LastLoginAt > DateTime.UtcNow.AddMinutes(-15),
+                    LastSeen = friend.OAuthInfo.LastLoginAt,
                     MutualFriendsCount = mutualFriendsCount
                 });
             }
@@ -171,12 +171,12 @@ public class FriendsService : IFriendsService
                 suggestions.Add(new FriendSuggestionVM
                 {
                     UserId = user.Id,
-                    FullName = user.FullName,
+                    FullName = user.Profile.FullName,
                     UserName = user.UserName ?? "",
-                    ProfilePictureUrl = user.ProfilePictureUrl,
-                    City = user.City,
-                    Country = user.Country,
-                    Bio = user.Bio,
+                    ProfilePictureUrl = user.Profile.ProfilePictureUrl,
+                    City = user.Profile.City,
+                    Country = user.Profile.Country,
+                    Bio = user.Profile.Bio,
                     MutualFriendsCount = mutualFriends.Count(),
                     MutualFriendsNames = mutualFriendsNames,
                     SuggestionReason = reason
@@ -412,11 +412,11 @@ public class FriendsService : IFriendsService
                     FullName = friend.FullName,
                     UserName = friend.UserName ?? "",
                     ProfilePictureUrl = friend.ProfilePictureUrl,
-                    City = friend.City,
-                    Country = friend.Country,
-                    Bio = friend.Bio,
-                    IsOnline = friend.LastLoginAt.HasValue && friend.LastLoginAt > DateTime.UtcNow.AddMinutes(-15),
-                    LastSeen = friend.LastLoginAt
+                    City = friend.Profile.City,
+                    Country = friend.Profile.Country,
+                    Bio = friend.Profile.Bio,
+                    IsOnline = friend.OAuthInfo.LastLoginAt.HasValue && friend.OAuthInfo.LastLoginAt > DateTime.UtcNow.AddMinutes(-15),
+                    LastSeen = friend.OAuthInfo.LastLoginAt
                 });
             }
         }

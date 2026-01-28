@@ -5,6 +5,8 @@ using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.ValueObjects.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +18,7 @@ public class ProfileService : IProfileService
     private readonly IUserFollowingRepository _followingRepository;
     private readonly IPostsRepository _postsRepository;
     private readonly IGamificationService _gamificationService;
-    private readonly UserManager<Domain.Entities.Auth.User> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<ProfileService> _logger;
 
@@ -25,7 +27,7 @@ public class ProfileService : IProfileService
         IUserFollowingRepository followingRepository,
         IPostsRepository postsRepository,
         IGamificationService gamificationService,
-        UserManager<Domain.Entities.Auth.User> userManager,
+        UserManager<User> userManager,
         ICurrentUserService currentUserService,
         ILogger<ProfileService> logger)
     {
@@ -78,11 +80,11 @@ public class ProfileService : IProfileService
         return users.Select(u => new ProfileVM
         {
             Id = u.Id,
-            FullName = u.FullName,
-            Bio = u.Bio,
-            City = u.City,
-            Country = u.Country,
-            ProfilePictureUrl = u.ProfilePictureUrl
+            FullName = u.Profile.FullName,
+            Bio = u.Profile.Bio,
+            City = u.Profile.City,
+            Country = u.Profile.Country,
+            ProfilePictureUrl = u.Profile.ProfilePictureUrl
         });
     }
 
@@ -95,18 +97,30 @@ public class ProfileService : IProfileService
         var user = await _userRepository.GetByIdAsync(request.UserId);
         if (user == null) return false;
 
-        user.FullName = request.FullName;
-        user.Bio = request.Bio;
-        user.Website = request.Website;
-        
-        if (!string.IsNullOrEmpty(request.Location))
-        {
-            var parts = request.Location.Split(',');
-            user.City = parts.Length > 0 ? parts[0].Trim() : user.City;
-            user.Country = parts.Length > 1 ? parts[1].Trim() : user.Country;
-        }
+        // Update profile using value object
+        var updatedProfile = user.Profile
+            .UpdateBasicInfo(request.FullName, null, null)
+            .UpdateBio(request.Bio)
+            .UpdateLocation(
+                !string.IsNullOrEmpty(request.Location) ? request.Location.Split(',')[0].Trim() : user.Profile.City,
+                !string.IsNullOrEmpty(request.Location) && request.Location.Split(',').Length > 1 ? request.Location.Split(',')[1].Trim() : user.Profile.Country);
 
-        user.Audit(_currentUserService.UserId);
+        // Create new profile with website update
+        var finalProfile = new UserProfile(
+            updatedProfile.FullName,
+            updatedProfile.FirstName,
+            updatedProfile.LastName,
+            updatedProfile.Bio,
+            updatedProfile.City,
+            updatedProfile.Country,
+            updatedProfile.BioAr,
+            updatedProfile.CityAr,
+            updatedProfile.CountryAr,
+            request.Website,
+            updatedProfile.ProfilePictureUrl,
+            updatedProfile.CoverImageUrl);
+
+        user.UpdateProfile(finalProfile);
         await _userRepository.UpdateAsync(user);
         return true;
     }
@@ -131,23 +145,25 @@ public class ProfileService : IProfileService
 
     #endregion
 
-    private ProfileVM MapToProfileVM(Domain.Entities.Auth.User user)
+    private ProfileVM MapToProfileVM(User user)
     {
         return new ProfileVM
         {
             Id = user.Id,
             UserName = user.UserName ?? string.Empty,
-            FullName = user.FullName,
+            FullName = user.Profile.FullName,
             Email = user.Email ?? string.Empty,
             PhoneNumber = user.PhoneNumber,
-            Bio = user.Bio,
-            City = user.City,
-            Country = user.Country,
-            ProfilePictureUrl = user.ProfilePictureUrl,
-            CoverImageUrl = user.CoverImageUrl,
+            Bio = user.Profile.Bio,
+            City = user.Profile.City,
+            Country = user.Profile.Country,
+            ProfilePictureUrl = user.Profile.ProfilePictureUrl,
+            CoverImageUrl = user.Profile.CoverImageUrl,
             CreatedAt = user.CreatedAt,
             IsEmailConfirmed = user.EmailConfirmed,
-            IsActive = user.IsActive
+            IsActive = user.IsActive,
+            CommentsCount = 0, // Will be set by GetProfileAsync method
+            LikesReceived = 0  // Will be set by GetProfileAsync method
         };
     }
 }

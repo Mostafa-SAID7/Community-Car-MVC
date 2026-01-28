@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.QA.ViewModels;
 using CommunityCar.Application.Features.QA.DTOs;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

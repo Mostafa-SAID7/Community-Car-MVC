@@ -5,7 +5,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Posts.DTOs;
 using CommunityCar.Application.Features.Posts.ViewModels;
 using CommunityCar.Domain.Entities.Community.Posts;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Services.Community;
 

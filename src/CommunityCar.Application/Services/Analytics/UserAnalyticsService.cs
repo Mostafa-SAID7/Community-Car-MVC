@@ -3,8 +3,8 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Features.Analytics.DTOs;
 using CommunityCar.Application.Features.Analytics.ViewModels;
-using CommunityCar.Domain.Entities.Profile;
-using CommunityCar.Domain.Enums.Users;
+using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Enums.Account;
 using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Application.Services.Analytics;
@@ -264,8 +264,8 @@ public class UserAnalyticsService : IUserAnalyticsService
                 .Select(u => new UserSuggestionVM
                 {
                     UserId = u.Id,
-                    Name = u.FullName ?? u.UserName ?? "",
-                    Avatar = u.ProfilePictureUrl,
+                    Name = u.Profile.FullName ?? u.UserName ?? "",
+                    Avatar = u.Profile.ProfilePictureUrl,
                     SuggestionReason = "Popular user",
                     RelevanceScore = 0.8,
                     MutualFriendsCount = 0,

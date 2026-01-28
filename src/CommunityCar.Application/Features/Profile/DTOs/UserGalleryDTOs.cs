@@ -1,4 +1,5 @@
-using CommunityCar.Domain.Entities.Profile;
+using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Application.Features.Profile.DTOs;
 

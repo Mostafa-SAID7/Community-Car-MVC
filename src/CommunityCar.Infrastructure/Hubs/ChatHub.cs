@@ -102,8 +102,8 @@ public class ChatHub : Hub
             Id = message.Id,
             Content = message.Content,
             SenderId = message.SenderId,
-            SenderName = user?.FullName ?? "Unknown User",
-            SenderAvatar = user?.ProfilePictureUrl,
+            SenderName = user?.Profile.FullName ?? "Unknown User",
+            SenderAvatar = user?.Profile.ProfilePictureUrl,
             ConversationId = message.ConversationId,
             CreatedAt = message.CreatedAt,
             IsRead = message.IsRead

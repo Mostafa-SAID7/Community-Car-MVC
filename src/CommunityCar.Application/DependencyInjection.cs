@@ -56,6 +56,7 @@ public static class DependencyInjection
         services.AddScoped<IUserGalleryService, UserGalleryService>();
         services.AddScoped<IGamificationService, GamificationService>();
         services.AddScoped<IProgressionService, ProgressionService>();
+        services.AddScoped<IProfileViewService, ProfileViewService>();
 
         // Identity Management Services
         services.AddScoped<IIdentityManagementService, IdentityManagementService>();

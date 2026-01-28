@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Domain.Entities.Community.Groups;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 

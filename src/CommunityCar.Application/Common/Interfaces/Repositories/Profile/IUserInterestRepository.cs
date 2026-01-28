@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Base;
-using CommunityCar.Domain.Entities.Profile;
+using CommunityCar.Domain.Entities.Account;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories.Profile;
 

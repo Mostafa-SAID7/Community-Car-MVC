@@ -4,7 +4,8 @@ using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.ValueObjects.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
@@ -75,9 +76,9 @@ public class AccountManagementService : IAccountManagementService
         var user = await _userRepository.GetByIdAsync(userId);
         return new PrivacySettingsVM
         {
-            ProfileVisible = user?.IsPublic ?? true,
-            EmailVisible = user?.ShowEmail ?? false,
-            ShowOnlineStatus = user?.ShowOnlineStatus ?? true
+            ProfileVisible = user?.PrivacySettings.IsPublic ?? true,
+            EmailVisible = user?.PrivacySettings.ShowEmail ?? false,
+            ShowOnlineStatus = user?.PrivacySettings.ShowOnlineStatus ?? true
         };
     }
 
@@ -86,10 +87,16 @@ public class AccountManagementService : IAccountManagementService
         var user = await _userRepository.GetByIdAsync(request.UserId);
         if (user == null) return Result.Failure("User not found.");
 
-        user.IsPublic = request.ProfileVisible;
-        user.ShowEmail = request.EmailVisible;
-        user.ShowOnlineStatus = request.ShowOnlineStatus;
-        
+        var newPrivacySettings = new PrivacySettings(
+            isPublic: request.ProfileVisible,
+            showEmail: request.EmailVisible,
+            showLocation: user.PrivacySettings.ShowLocation,
+            showOnlineStatus: request.ShowOnlineStatus,
+            allowMessagesFromStrangers: user.PrivacySettings.AllowMessagesFromStrangers,
+            allowTagging: user.PrivacySettings.AllowTagging,
+            showActivityStatus: user.PrivacySettings.ShowActivityStatus);
+
+        user.UpdatePrivacySettings(newPrivacySettings);
         await _userRepository.UpdateAsync(user);
         return Result.Success("Privacy settings updated.");
     }
@@ -102,10 +109,10 @@ public class AccountManagementService : IAccountManagementService
         return new NotificationSettingsVM
         {
             UserId = userId,
-            EmailEnabled = user.EmailNotificationsEnabled,
-            PushEnabled = user.PushNotificationsEnabled,
-            SmsEnabled = user.SmsNotificationsEnabled,
-            MarketingEnabled = user.MarketingEmailsEnabled
+            EmailEnabled = user.NotificationSettings.EmailNotificationsEnabled,
+            PushEnabled = user.NotificationSettings.PushNotificationsEnabled,
+            SmsEnabled = user.NotificationSettings.SmsNotificationsEnabled,
+            MarketingEnabled = user.NotificationSettings.MarketingEmailsEnabled
         };
     }
 
@@ -114,11 +121,17 @@ public class AccountManagementService : IAccountManagementService
         var user = await _userRepository.GetByIdAsync(request.UserId);
         if (user == null) return Result.Failure("User not found.");
 
-        user.EmailNotificationsEnabled = request.EmailNotifications;
-        user.PushNotificationsEnabled = request.PushNotifications;
-        user.SmsNotificationsEnabled = request.SmsNotifications;
-        user.MarketingEmailsEnabled = request.MarketingEmails;
+        var newNotificationSettings = new NotificationSettings(
+            emailNotifications: request.EmailNotifications,
+            pushNotifications: request.PushNotifications,
+            smsNotifications: request.SmsNotifications,
+            marketingEmails: request.MarketingEmails,
+            commentNotifications: user.NotificationSettings.CommentNotificationsEnabled,
+            likeNotifications: user.NotificationSettings.LikeNotificationsEnabled,
+            followNotifications: user.NotificationSettings.FollowNotificationsEnabled,
+            messageNotifications: user.NotificationSettings.MessageNotificationsEnabled);
 
+        user.UpdateNotificationSettings(newNotificationSettings);
         await _userRepository.UpdateAsync(user);
         return Result.Success("Notification settings updated.");
     }
@@ -142,7 +155,7 @@ public class AccountManagementService : IAccountManagementService
     }
 
     public async Task<DateTime> GetAccountCreationDateAsync(Guid userId) => (await _userRepository.GetByIdAsync(userId))?.CreatedAt ?? DateTime.UtcNow;
-    public async Task<DateTime?> GetLastLoginDateAsync(Guid userId) => (await _userRepository.GetByIdAsync(userId))?.LastLoginAt;
+    public async Task<DateTime?> GetLastLoginDateAsync(Guid userId) => (await _userRepository.GetByIdAsync(userId))?.OAuthInfo.LastLoginAt;
 
     public Task<bool> CanRecoverAccountAsync(string email) => Task.FromResult(true);
     public Task<Result> RecoverAccountAsync(string email, string password) => Task.FromResult(Result.Success("Account recovered."));

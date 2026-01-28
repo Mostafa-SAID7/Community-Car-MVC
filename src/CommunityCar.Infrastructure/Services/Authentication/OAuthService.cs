@@ -3,6 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Authentication;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Infrastructure.Services.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -14,14 +15,14 @@ public class OAuthService : IOAuthService
     private readonly IGoogleOAuthService _googleOAuthService;
     private readonly IFacebookOAuthService _facebookOAuthService;
     private readonly IUserRepository _userRepository;
-    private readonly UserManager<Domain.Entities.Auth.User> _userManager;
+    private readonly UserManager<CommunityCar.Domain.Entities.Account.User> _userManager;
     private readonly ILogger<OAuthService> _logger;
 
     public OAuthService(
         IGoogleOAuthService googleOAuthService,
         IFacebookOAuthService facebookOAuthService,
         IUserRepository userRepository,
-        UserManager<Domain.Entities.Auth.User> userManager,
+        UserManager<CommunityCar.Domain.Entities.Account.User> userManager,
         ILogger<OAuthService> logger)
     {
         _googleOAuthService = googleOAuthService;
@@ -75,10 +76,10 @@ public class OAuthService : IOAuthService
         if (user == null) return Enumerable.Empty<Application.Common.Interfaces.Services.Authentication.ExternalLoginInfo>();
 
         var logins = new List<Application.Common.Interfaces.Services.Authentication.ExternalLoginInfo>();
-        if (!string.IsNullOrEmpty(user.GoogleId))
-            logins.Add(new Application.Common.Interfaces.Services.Authentication.ExternalLoginInfo { LoginProvider = "Google", ProviderDisplayName = "Google", ProviderKey = user.GoogleId });
-        if (!string.IsNullOrEmpty(user.FacebookId))
-            logins.Add(new Application.Common.Interfaces.Services.Authentication.ExternalLoginInfo { LoginProvider = "Facebook", ProviderDisplayName = "Facebook", ProviderKey = user.FacebookId });
+        if (!string.IsNullOrEmpty(user.OAuthInfo.GoogleId))
+            logins.Add(new Application.Common.Interfaces.Services.Authentication.ExternalLoginInfo { LoginProvider = "Google", ProviderDisplayName = "Google", ProviderKey = user.OAuthInfo.GoogleId });
+        if (!string.IsNullOrEmpty(user.OAuthInfo.FacebookId))
+            logins.Add(new Application.Common.Interfaces.Services.Authentication.ExternalLoginInfo { LoginProvider = "Facebook", ProviderDisplayName = "Facebook", ProviderKey = user.OAuthInfo.FacebookId });
 
         return logins;
     }

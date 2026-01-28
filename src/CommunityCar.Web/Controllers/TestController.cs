@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Data;
-using CommunityCar.Domain.Enums;
+using CommunityCar.Domain.Enums.Community;
+using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Entities.Community.News;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,19 +45,19 @@ public class TestController : Controller
             Reactions = new CommunityCar.Application.Features.Interactions.ViewModels.ReactionSummaryVM
             {
                 TotalReactions = 0,
-                ReactionCounts = new Dictionary<CommunityCar.Domain.Enums.ReactionType, int>(),
+                ReactionCounts = new Dictionary<ReactionType, int>(),
                 AvailableReactions = new List<CommunityCar.Application.Features.Interactions.ViewModels.ReactionTypeInfoVM>
                 {
-                    new() { Type = CommunityCar.Domain.Enums.ReactionType.Like, Display = "Like", Icon = "fas fa-thumbs-up", Count = 0 },
-                    new() { Type = CommunityCar.Domain.Enums.ReactionType.Love, Display = "Love", Icon = "fas fa-heart", Count = 0 },
-                    new() { Type = CommunityCar.Domain.Enums.ReactionType.Haha, Display = "Haha", Icon = "fas fa-laugh", Count = 0 }
+                    new() { Type = ReactionType.Like, Display = "Like", Icon = "fas fa-thumbs-up", Count = 0 },
+                    new() { Type = ReactionType.Love, Display = "Love", Icon = "fas fa-heart", Count = 0 },
+                    new() { Type = ReactionType.Haha, Display = "Haha", Icon = "fas fa-laugh", Count = 0 }
                 }
             },
             CommentCount = 0,
             Shares = new CommunityCar.Application.Features.Interactions.ViewModels.ShareSummaryVM
             {
                 TotalShares = 0,
-                ShareTypeCounts = new Dictionary<CommunityCar.Domain.Enums.ShareType, int>()
+                ShareTypeCounts = new Dictionary<ShareType, int>()
             },
             CanComment = userId.HasValue,
             CanShare = userId.HasValue,
@@ -64,7 +65,7 @@ public class TestController : Controller
         };
         
         ViewBag.EntityId = testEntityId;
-        ViewBag.EntityType = (int)CommunityCar.Domain.Enums.EntityType.Question;
+        ViewBag.EntityType = (int)EntityType.Question;
         
         return View(summary);
     }

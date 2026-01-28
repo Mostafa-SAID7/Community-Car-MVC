@@ -4,8 +4,8 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Features.Interactions.DTOs;
-using CommunityCar.Domain.Enums;
-using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Enums.Shared;
+using CommunityCar.Domain.Entities.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -327,13 +327,13 @@ public class CommentsController : Controller
             return Json(new List<object>());
 
         var users = await _userManager.Users
-            .Where(u => (u.FullName != null && u.FullName.Contains(query)) || (u.UserName != null && u.UserName.Contains(query)))
+            .Where(u => (u.Profile.FullName != null && u.Profile.FullName.Contains(query)) || (u.UserName != null && u.UserName.Contains(query)))
             .Take(5)
             .Select(u => new
             {
                 id = u.Id,
-                name = u.FullName ?? u.UserName ?? "Unknown User",
-                avatar = u.ProfilePictureUrl ?? "/images/default-avatar.png"
+                name = u.Profile.FullName ?? u.UserName ?? "Unknown User",
+                avatar = u.Profile.ProfilePictureUrl ?? "/images/default-avatar.png"
             })
             .ToListAsync();
 
