@@ -3,8 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
 using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Web.Models.Account;
-using CommunityCar.Web.Models.Profile;
+using CommunityCar.Web.Models.Profile.Security.TwoFactor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,7 +42,7 @@ public class SecurityController : Controller
 
     [HttpPost("change-password")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ChangePassword(ChangePasswordVM model)
+    public async Task<IActionResult> ChangePassword(CommunityCar.Web.Models.Profile.Security.ChangePasswordVM model)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
             return RedirectToAction("Login", "Authentication", new { area = "" });
@@ -119,7 +118,7 @@ public class SecurityController : Controller
         if (!ModelState.IsValid)
             return RedirectToAction(nameof(TwoFactor));
 
-        var request = new TwoFactorSetupRequest 
+        var request = new CommunityCar.Application.Common.Models.Security.TwoFactorSetupRequest 
         { 
             Code = model.VerificationCode,
             // SecretKey is needed if the service validates it against the one in request,

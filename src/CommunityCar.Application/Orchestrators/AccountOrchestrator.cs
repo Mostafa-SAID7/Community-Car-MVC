@@ -5,6 +5,7 @@ using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Authentication;
 using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Common.Models.Security;
 
 namespace CommunityCar.Application.Orchestrators;
 
@@ -59,10 +60,10 @@ public class AccountOrchestrator : IAccountOrchestrator
 
     #region Settings
 
-    public Task<PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId) => _managementService.GetPrivacySettingsAsync(userId);
-    public Task<Result> UpdatePrivacySettingsAsync(UpdatePrivacySettingsRequest request) => _managementService.UpdatePrivacySettingsAsync(request);
-    public Task<NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId) => _managementService.GetNotificationSettingsAsync(userId);
-    public Task<Result> UpdateNotificationSettingsAsync(UpdateNotificationSettingsRequest request) => _managementService.UpdateNotificationSettingsAsync(request);
+    public Task<CommunityCar.Application.Common.Models.Profile.PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId) => _managementService.GetPrivacySettingsAsync(userId);
+    public Task<Result> UpdatePrivacySettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdatePrivacySettingsRequest request) => _managementService.UpdatePrivacySettingsAsync(request);
+    public Task<CommunityCar.Application.Common.Models.Profile.NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId) => _managementService.GetNotificationSettingsAsync(userId);
+    public Task<Result> UpdateNotificationSettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdateNotificationSettingsRequest request) => _managementService.UpdateNotificationSettingsAsync(request);
 
     #endregion
 }

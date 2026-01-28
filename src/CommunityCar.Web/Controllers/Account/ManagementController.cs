@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Orchestrators;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Web.Models.Account;
+using CommunityCar.Web.Models.Account.Management;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

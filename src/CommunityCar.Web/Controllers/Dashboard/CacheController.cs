@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Application.Services.Caching;
 using CommunityCar.Infrastructure.Services.Caching;
+using CommunityCar.Web.Models.Dashboard.Cache;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
@@ -257,20 +258,6 @@ public class CacheController : Controller
 
         return statistics;
     }
-}
-
-public class CacheManagementViewModel
-{
-    public bool IsRedisConnected { get; set; }
-    public string CacheType { get; set; } = "Unknown";
-    public Dictionary<string, object> Statistics { get; set; } = new();
-}
-
-public class CacheKeysViewModel
-{
-    public string Pattern { get; set; } = "*";
-    public List<string> Keys { get; set; } = new();
-    public int TotalCount { get; set; }
 }
 
 

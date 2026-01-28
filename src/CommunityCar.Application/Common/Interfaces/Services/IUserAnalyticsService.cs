@@ -40,7 +40,7 @@ public interface IUserAnalyticsService
     Task<bool> OptInToTrackingAsync(Guid userId);
     Task<bool> DeleteUserDataAsync(Guid userId);
     Task<UserPrivacySettingsVM> GetUserPrivacySettingsAsync(Guid userId);
-    Task UpdateUserPrivacySettingsAsync(Guid userId, UpdatePrivacySettingsRequest request);
+    Task UpdateUserPrivacySettingsAsync(Guid userId, UpdateAnalyticsPrivacySettingsRequest request);
 }
 
 

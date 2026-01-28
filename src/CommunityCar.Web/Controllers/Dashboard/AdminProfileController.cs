@@ -1,11 +1,9 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Web.Models.Profile;
+using CommunityCar.Web.Models.Profile.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProfileSettingsVM = CommunityCar.Web.Models.Profile.ProfileSettingsVM;
 
 namespace CommunityCar.Web.Controllers.Dashboard;
 
@@ -81,7 +79,7 @@ public class AdminProfileController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var viewModel = new ProfileSettingsVM
+        var viewModel = new CommunityCar.Web.Models.Profile.Core.ProfileSettingsVM
         {
             Id = settings.Id,
             FullName = settings.FullName,

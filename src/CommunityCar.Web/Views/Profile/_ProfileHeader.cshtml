@@ -2,7 +2,7 @@
 @inject IViewLocalizer Localizer
 @{
     // Get profile data from ViewBag or Model
-    var profileData = ViewBag.ProfileData as CommunityCar.Web.Models.Profile.ProfileIndexVM;
+    var profileData = ViewBag.ProfileData as CommunityCar.Web.Models.Profile.Core.ProfileIndexVM;
     var fullName = profileData?.FullName ?? ViewBag.FullName as string ?? "User Profile";
     var email = profileData?.Email ?? ViewBag.Email as string ?? "user@example.com";
     var profilePictureUrl = profileData?.ProfilePictureUrl ?? ViewBag.ProfilePictureUrl as string;

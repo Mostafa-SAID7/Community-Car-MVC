@@ -21,10 +21,10 @@ public interface IAccountManagementService
     Task<IEnumerable<DataExportVM>> GetDataExportHistoryAsync(Guid userId);
 
     // Privacy & Notification Settings
-    Task<PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId);
-    Task<Result> UpdatePrivacySettingsAsync(UpdatePrivacySettingsRequest request);
-    Task<NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId);
-    Task<Result> UpdateNotificationSettingsAsync(UpdateNotificationSettingsRequest request);
+    public Task<CommunityCar.Application.Common.Models.Profile.PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId);
+    Task<Result> UpdatePrivacySettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdatePrivacySettingsRequest request);
+    Task<CommunityCar.Application.Common.Models.Profile.NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId);
+    Task<Result> UpdateNotificationSettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdateNotificationSettingsRequest request);
 
     // Account Recovery
     Task<bool> CanRecoverAccountAsync(string email);

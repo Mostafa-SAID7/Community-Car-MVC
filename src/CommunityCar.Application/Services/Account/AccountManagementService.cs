@@ -70,7 +70,7 @@ public class AccountManagementService : IAccountManagementService
 
     #region Settings (Privacy & Notifications)
 
-    public async Task<PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId)
+    public async Task<CommunityCar.Application.Common.Models.Profile.PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId)
     {
         var user = await _userRepository.GetByIdAsync(userId);
         return new PrivacySettingsVM
@@ -81,7 +81,7 @@ public class AccountManagementService : IAccountManagementService
         };
     }
 
-    public async Task<Result> UpdatePrivacySettingsAsync(UpdatePrivacySettingsRequest request)
+    public async Task<Result> UpdatePrivacySettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdatePrivacySettingsRequest request)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId);
         if (user == null) return Result.Failure("User not found.");
@@ -94,7 +94,7 @@ public class AccountManagementService : IAccountManagementService
         return Result.Success("Privacy settings updated.");
     }
 
-    public async Task<NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId)
+    public async Task<CommunityCar.Application.Common.Models.Profile.NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId)
     {
         var user = await _userRepository.GetByIdAsync(userId);
         if (user == null) return new NotificationSettingsVM();
@@ -109,7 +109,7 @@ public class AccountManagementService : IAccountManagementService
         };
     }
 
-    public async Task<Result> UpdateNotificationSettingsAsync(UpdateNotificationSettingsRequest request)
+    public async Task<Result> UpdateNotificationSettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdateNotificationSettingsRequest request)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId);
         if (user == null) return Result.Failure("User not found.");

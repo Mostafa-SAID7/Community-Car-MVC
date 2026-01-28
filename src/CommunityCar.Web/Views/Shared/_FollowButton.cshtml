@@ -1,0 +1,67 @@
+@using CommunityCar.Web.Models.Profile.Following
+@model FollowStatsVM
+
+<div class="follow-button-container" data-user-id="@ViewBag.UserId">
+    @if (Model.CanFollow)
+    {
+        <button onclick="toggleFollow('@ViewBag.UserId')" 
+                id="follow-btn-@ViewBag.UserId"
+                class="follow-btn px-4 py-2 rounded-2xl text-sm font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 @(Model.IsFollowing ? "bg-muted text-foreground hover:bg-muted/80" : "bg-primary text-primary-foreground hover:bg-primary/90")"
+                data-following="@Model.IsFollowing.ToString().ToLower()">
+            @if (Model.IsFollowing)
+            {
+                <span class="following-text">Following</span>
+                <span class="unfollow-text hidden">Unfollow</span>
+            }
+            else
+            {
+                <span class="follow-text">Follow</span>
+            }
+        </button>
+    }
+    
+    <div class="follow-stats mt-2 text-xs text-muted-foreground">
+        <span id="followers-count-@ViewBag.UserId">@Model.FollowersCount</span> followers
+        <span class="mx-2">•</span>
+        <span>@Model.FollowingCount following</span>
+        
+        @if (Model.IsFollowedBy)
+        {
+            <div class="mt-1">
+                <span class="px-2 py-1 bg-blue-500/10 text-blue-600 text-xs font-black uppercase tracking-widest rounded-xl border border-blue-500/20">
+                    Follows You
+                </span>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    // Follow button hover effects
+    document.addEventListener('DOMContentLoaded', function() {
+        const followBtn = document.getElementById('follow-btn-@ViewBag.UserId');
+        if (followBtn && followBtn.dataset.following === 'true') {
+            followBtn.addEventListener('mouseenter', function() {
+                const followingText = this.querySelector('.following-text');
+                const unfollowText = this.querySelector('.unfollow-text');
+                if (followingText && unfollowText) {
+                    followingText.classList.add('hidden');
+                    unfollowText.classList.remove('hidden');
+                    this.classList.remove('bg-muted', 'hover:bg-muted/80');
+                    this.classList.add('bg-red-500', 'hover:bg-red-600', 'text-white');
+                }
+            });
+            
+            followBtn.addEventListener('mouseleave', function() {
+                const followingText = this.querySelector('.following-text');
+                const unfollowText = this.querySelector('.unfollow-text');
+                if (followingText && unfollowText) {
+                    followingText.classList.remove('hidden');
+                    unfollowText.classList.add('hidden');
+                    this.classList.remove('bg-red-500', 'hover:bg-red-600', 'text-white');
+                    this.classList.add('bg-muted', 'hover:bg-muted/80');
+                }
+            });
+        }
+    });
+</script>

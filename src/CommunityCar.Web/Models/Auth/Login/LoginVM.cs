@@ -4,10 +4,9 @@ namespace CommunityCar.Web.Models.Auth.Login;
 
 public class LoginVM
 {
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress(ErrorMessage = "Please enter a valid email address")]
-    [Display(Name = "Email")]
-    public string Email { get; set; } = string.Empty;
+    [Required(ErrorMessage = "Email, username, or phone number is required")]
+    [Display(Name = "Email, Username, or Phone")]
+    public string LoginIdentifier { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Password is required")]
     [DataType(DataType.Password)]

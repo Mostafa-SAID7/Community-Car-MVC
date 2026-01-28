@@ -66,7 +66,7 @@ public class ProfileOrchestrator : IProfileOrchestrator
     public Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId)
         => _galleryService.GetUserGalleryAsync(userId);
 
-    public async Task<bool> UploadGalleryItemAsync(UploadImageRequest request)
+    public async Task<bool> UploadGalleryItemAsync(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request)
         => (await _galleryService.UploadImageAsync(request)) != null;
 
     public Task<bool> ToggleGalleryItemVisibilityAsync(Guid itemId, Guid userId)

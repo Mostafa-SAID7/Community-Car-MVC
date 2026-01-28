@@ -73,7 +73,7 @@ public class UserGalleryService : IUserGalleryService
         };
     }
 
-    public async Task<UserGalleryItemVM?> UploadImageAsync(UploadImageRequest request)
+    public async Task<UserGalleryItemVM?> UploadImageAsync(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request)
     {
         try
         {

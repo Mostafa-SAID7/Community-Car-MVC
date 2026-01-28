@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Features.Feed.DTOs;
 using CommunityCar.Application.Features.Analytics.DTOs;
-using CommunityCar.Web.Models;
+using CommunityCar.Web.Models.Error;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -16,9 +16,9 @@ public class FeedController : Controller
 {
     private readonly ILogger<FeedController> _logger;
     private readonly IFeedService _feedService;
-    private readonly IUserAnalyticsService _analyticsService;
+    private readonly IUserAnalyticsService? _analyticsService;
 
-    public FeedController(ILogger<FeedController> logger, IFeedService feedService, IUserAnalyticsService analyticsService)
+    public FeedController(ILogger<FeedController> logger, IFeedService feedService, IUserAnalyticsService? analyticsService = null)
     {
         _logger = logger;
         _feedService = feedService;
@@ -76,7 +76,7 @@ public class FeedController : Controller
         ViewData["FeedSidebarData"] = feedResponse;
         
         // Track user activity
-        if (userId.HasValue)
+        if (userId.HasValue && _analyticsService != null)
         {
             _ = Task.Run(async () =>
             {
@@ -194,14 +194,17 @@ public class FeedController : Controller
             success = true; // Placeholder for share tracking
             
             // Track share analytics
-            await _analyticsService.TrackActivityAsync(new TrackActivityRequest
+            if (_analyticsService != null)
             {
-                UserId = userId.Value,
-                ActivityType = ActivityType.Share,
-                EntityType = request.ContentType,
-                EntityId = request.ContentId,
-                Description = $"Shared {request.ContentType}"
-            });
+                await _analyticsService.TrackActivityAsync(new TrackActivityRequest
+                {
+                    UserId = userId.Value,
+                    ActivityType = ActivityType.Share,
+                    EntityType = request.ContentType,
+                    EntityId = request.ContentId,
+                    Description = $"Shared {request.ContentType}"
+                });
+            }
         }
         else
         {

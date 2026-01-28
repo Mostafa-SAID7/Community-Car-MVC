@@ -36,7 +36,7 @@ public class TrackActivityRequest
     public DateTime? ActivityDate { get; set; }
 }
 
-public class UpdatePrivacySettingsRequest
+public class UpdateAnalyticsPrivacySettingsRequest
 {
     public bool AllowActivityTracking { get; set; } = true;
     public bool AllowInterestTracking { get; set; } = true;

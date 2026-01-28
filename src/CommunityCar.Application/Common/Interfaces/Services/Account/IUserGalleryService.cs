@@ -11,7 +11,7 @@ public interface IUserGalleryService
     // Gallery Management
     Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId);
     Task<UserGalleryItemVM?> GetGalleryItemAsync(Guid userId, Guid imageId);
-    Task<UserGalleryItemVM?> UploadImageAsync(UploadImageRequest request);
+    Task<UserGalleryItemVM?> UploadImageAsync(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request);
     Task<bool> DeleteImageAsync(Guid userId, Guid imageId);
 
     // Image Operations

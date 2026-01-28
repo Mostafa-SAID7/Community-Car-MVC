@@ -17,6 +17,7 @@ using CommunityCar.Application.Services.SEO;
 using CommunityCar.Application.Services.Maps.Routing;
 using CommunityCar.Application.Services.Maps.Pricing;
 using CommunityCar.Application.Services.BackgroundJobs;
+using CommunityCar.Application.Services.Analytics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CommunityCar.Application;
@@ -74,6 +75,9 @@ public static class DependencyInjection
         // SEO and Performance services
         services.AddScoped<ISEOService, SEOService>();
         services.AddScoped<IPerformanceService, PerformanceService>();
+
+        // Analytics services
+        services.AddScoped<IUserAnalyticsService, UserAnalyticsService>();
 
         // Background Job Services
         services.AddScoped<BackgroundJobSchedulerService>();

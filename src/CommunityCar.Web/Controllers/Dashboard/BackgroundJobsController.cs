@@ -1,5 +1,6 @@
 using CommunityCar.Application.Services.BackgroundJobs;
 using CommunityCar.Application.Common.Interfaces.Services.BackgroundJobs;
+using CommunityCar.Web.Models.Dashboard.BackgroundJobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Hangfire;
@@ -299,48 +300,6 @@ public class BackgroundJobsController : Controller
             return new List<RecentJobInfo>();
         }
     }
-}
-
-public class BackgroundJobsViewModel
-{
-    public JobStatistics JobStatistics { get; set; } = new();
-    public List<RecurringJobInfo> RecurringJobs { get; set; } = new();
-    public List<RecentJobInfo> RecentJobs { get; set; } = new();
-}
-
-public class RecurringJobsViewModel
-{
-    public List<RecurringJobInfo> Jobs { get; set; } = new();
-}
-
-public class JobStatistics
-{
-    public long EnqueuedCount { get; set; }
-    public long ProcessingCount { get; set; }
-    public long SucceededCount { get; set; }
-    public long FailedCount { get; set; }
-    public long ScheduledCount { get; set; }
-    public int ServersCount { get; set; }
-}
-
-public class RecurringJobInfo
-{
-    public string Id { get; set; } = string.Empty;
-    public string Cron { get; set; } = string.Empty;
-    public DateTime? NextExecution { get; set; }
-    public DateTime? LastExecution { get; set; }
-    public string? LastJobState { get; set; }
-    public string? Error { get; set; }
-}
-
-public class RecentJobInfo
-{
-    public string Id { get; set; } = string.Empty;
-    public string Method { get; set; } = string.Empty;
-    public string State { get; set; } = string.Empty;
-    public DateTime? CreatedAt { get; set; }
-    public TimeSpan? Duration { get; set; }
-    public string? Error { get; set; }
 }
 
 

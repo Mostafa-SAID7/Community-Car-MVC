@@ -1,0 +1,259 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
+using CommunityCar.Application.Common.Interfaces.Repositories.User;
+using CommunityCar.Web.Models.Profile.Following;
+using CommunityCar.Application.Common.Models;
+
+namespace CommunityCar.Web.Controllers.Profile;
+
+[Authorize]
+[Route("Profile/[controller]")]
+public class FollowController : Controller
+{
+    private readonly IUserFollowingRepository _followingRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly ICurrentUserService _currentUserService;
+
+    public FollowController(
+        IUserFollowingRepository followingRepository,
+        IUserRepository userRepository,
+        ICurrentUserService currentUserService)
+    {
+        _followingRepository = followingRepository;
+        _userRepository = userRepository;
+        _currentUserService = currentUserService;
+    }
+
+    [HttpPost("toggle/{userId:guid}")]
+    public async Task<IActionResult> ToggleFollow(Guid userId)
+    {
+        var currentUserId = Guid.Parse(_currentUserService.UserId!);
+        
+        if (currentUserId == userId)
+        {
+            return BadRequest("Cannot follow yourself");
+        }
+
+        var isFollowing = await _followingRepository.IsFollowingAsync(currentUserId, userId);
+        
+        if (isFollowing)
+        {
+            await _followingRepository.UnfollowUserAsync(currentUserId, userId);
+        }
+        else
+        {
+            await _followingRepository.FollowUserAsync(currentUserId, userId);
+        }
+
+        var followersCount = await _followingRepository.GetFollowersCountAsync(userId);
+        
+        return Json(new
+        {
+            success = true,
+            isFollowing = !isFollowing,
+            followersCount = followersCount
+        });
+    }
+
+    [HttpGet("following/{userId:guid}")]
+    public async Task<IActionResult> Following(Guid userId, int page = 1, int pageSize = 20)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
+        var following = await _followingRepository.GetFollowingAsync(userId, page, pageSize);
+        var totalCount = await _followingRepository.GetFollowingCountAsync(userId);
+
+        var followingVMs = new List<FollowingVM>();
+        foreach (var follow in following)
+        {
+            var followedUser = await _userRepository.GetByIdAsync(follow.FollowedUserId);
+            if (followedUser != null)
+            {
+                var isFollowingBack = currentUserId.HasValue && 
+                    await _followingRepository.IsFollowingAsync(follow.FollowedUserId, currentUserId.Value);
+
+                followingVMs.Add(new FollowingVM
+                {
+                    UserId = followedUser.Id,
+                    FullName = followedUser.FullName,
+                    ProfilePictureUrl = followedUser.ProfilePictureUrl,
+                    Bio = followedUser.Bio,
+                    City = followedUser.City,
+                    Country = followedUser.Country,
+                    FollowedAt = follow.FollowedAt,
+                    IsFollowingBack = isFollowingBack,
+                    IsOnline = followedUser.LastLoginAt.HasValue && 
+                              followedUser.LastLoginAt.Value > DateTime.UtcNow.AddMinutes(-15),
+                    LastActiveAt = followedUser.LastLoginAt,
+                    FollowersCount = await _followingRepository.GetFollowersCountAsync(followedUser.Id),
+                    FollowingCount = await _followingRepository.GetFollowingCountAsync(followedUser.Id)
+                });
+            }
+        }
+
+        var viewModel = new UserFollowListVM
+        {
+            ProfileUserId = userId,
+            ProfileUserName = user.FullName,
+            ListType = "following",
+            Users = followingVMs,
+            TotalCount = totalCount,
+            IsOwnProfile = currentUserId == userId,
+            Pagination = new PaginationInfo
+            {
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = totalCount,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+            }
+        };
+
+        return View("FollowList", viewModel);
+    }
+
+    [HttpGet("followers/{userId:guid}")]
+    public async Task<IActionResult> Followers(Guid userId, int page = 1, int pageSize = 20)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
+        var followers = await _followingRepository.GetFollowersAsync(userId, page, pageSize);
+        var totalCount = await _followingRepository.GetFollowersCountAsync(userId);
+
+        var followersVMs = new List<FollowingVM>();
+        foreach (var follow in followers)
+        {
+            var followerUser = await _userRepository.GetByIdAsync(follow.FollowerId);
+            if (followerUser != null)
+            {
+                var isFollowingBack = currentUserId.HasValue && 
+                    await _followingRepository.IsFollowingAsync(currentUserId.Value, follow.FollowerId);
+
+                followersVMs.Add(new FollowingVM
+                {
+                    UserId = followerUser.Id,
+                    FullName = followerUser.FullName,
+                    ProfilePictureUrl = followerUser.ProfilePictureUrl,
+                    Bio = followerUser.Bio,
+                    City = followerUser.City,
+                    Country = followerUser.Country,
+                    FollowedAt = follow.FollowedAt,
+                    IsFollowingBack = isFollowingBack,
+                    IsOnline = followerUser.LastLoginAt.HasValue && 
+                              followerUser.LastLoginAt.Value > DateTime.UtcNow.AddMinutes(-15),
+                    LastActiveAt = followerUser.LastLoginAt,
+                    FollowersCount = await _followingRepository.GetFollowersCountAsync(followerUser.Id),
+                    FollowingCount = await _followingRepository.GetFollowingCountAsync(followerUser.Id)
+                });
+            }
+        }
+
+        var viewModel = new UserFollowListVM
+        {
+            ProfileUserId = userId,
+            ProfileUserName = user.FullName,
+            ListType = "followers",
+            Users = followersVMs,
+            TotalCount = totalCount,
+            IsOwnProfile = currentUserId == userId,
+            Pagination = new PaginationInfo
+            {
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = totalCount,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+            }
+        };
+
+        return View("FollowList", viewModel);
+    }
+
+    [HttpGet("suggestions")]
+    public async Task<IActionResult> Suggestions()
+    {
+        var currentUserId = Guid.Parse(_currentUserService.UserId!);
+        
+        // Get users followed by people you follow (mutual connections)
+        var suggestions = await _followingRepository.GetFollowSuggestionsAsync(currentUserId, 10);
+        
+        var suggestedUsers = new List<SuggestedUserVM>();
+        foreach (var suggestion in suggestions)
+        {
+            var user = await _userRepository.GetByIdAsync(suggestion.FollowedUserId);
+            if (user != null)
+            {
+                var mutualFollowers = await _followingRepository.GetMutualFollowersAsync(currentUserId, suggestion.FollowedUserId);
+                var mutualNames = new List<string>();
+                
+                foreach (var mutual in mutualFollowers.Take(3))
+                {
+                    var mutualUser = await _userRepository.GetByIdAsync(mutual.FollowerId);
+                    if (mutualUser != null)
+                    {
+                        mutualNames.Add(mutualUser.FullName);
+                    }
+                }
+
+                suggestedUsers.Add(new SuggestedUserVM
+                {
+                    UserId = user.Id,
+                    FullName = user.FullName,
+                    ProfilePictureUrl = user.ProfilePictureUrl,
+                    Bio = user.Bio,
+                    City = user.City,
+                    Country = user.Country,
+                    MutualFollowersCount = mutualFollowers.Count(),
+                    MutualFollowerNames = mutualNames,
+                    SuggestionReason = mutualNames.Any() ? 
+                        $"Followed by {string.Join(", ", mutualNames.Take(2))}" + 
+                        (mutualNames.Count > 2 ? $" and {mutualNames.Count - 2} others" : "") :
+                        "Suggested for you",
+                    FollowersCount = await _followingRepository.GetFollowersCountAsync(user.Id)
+                });
+            }
+        }
+
+        var viewModel = new FollowSuggestionsVM
+        {
+            SuggestedUsers = suggestedUsers
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpGet("stats/{userId:guid}")]
+    public async Task<IActionResult> GetFollowStats(Guid userId)
+    {
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
+        
+        var followersCount = await _followingRepository.GetFollowersCountAsync(userId);
+        var followingCount = await _followingRepository.GetFollowingCountAsync(userId);
+        
+        var isFollowing = currentUserId.HasValue && 
+            await _followingRepository.IsFollowingAsync(currentUserId.Value, userId);
+        var isFollowedBy = currentUserId.HasValue && 
+            await _followingRepository.IsFollowingAsync(userId, currentUserId.Value);
+
+        var stats = new FollowStatsVM
+        {
+            FollowersCount = followersCount,
+            FollowingCount = followingCount,
+            IsFollowing = isFollowing,
+            IsFollowedBy = isFollowedBy,
+            CanFollow = currentUserId.HasValue && currentUserId != userId
+        };
+
+        return Json(stats);
+    }
+}

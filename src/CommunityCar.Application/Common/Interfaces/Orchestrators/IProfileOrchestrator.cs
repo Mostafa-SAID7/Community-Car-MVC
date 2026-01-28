@@ -1,3 +1,4 @@
+using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
 
@@ -15,7 +16,7 @@ public interface IProfileOrchestrator
     
     // Gallery
     Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId);
-    Task<bool> UploadGalleryItemAsync(UploadImageRequest request);
+    Task<bool> UploadGalleryItemAsync(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request);
     Task<bool> ToggleGalleryItemVisibilityAsync(Guid itemId, Guid userId);
     Task<bool> DeleteGalleryItemAsync(Guid itemId, Guid userId);
 

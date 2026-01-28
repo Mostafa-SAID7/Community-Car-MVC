@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Orchestrators;
 using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Web.Models.Profile;
+using CommunityCar.Web.Models.Profile.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,7 +42,7 @@ public class ProfileSettingsController : Controller
 
     [HttpPost("privacy")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdatePrivacy(PrivacySettingsVM model)
+    public async Task<IActionResult> UpdatePrivacy(CommunityCar.Web.Models.Profile.Settings.PrivacySettingsVM model)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
              return BadRequest("User not authenticated");
@@ -50,7 +50,7 @@ public class ProfileSettingsController : Controller
         if (!ModelState.IsValid)
              return BadRequest(ModelState);
 
-        var request = new CommunityCar.Application.Common.Models.Account.UpdatePrivacySettingsRequest
+        var request = new CommunityCar.Application.Common.Models.Profile.UpdatePrivacySettingsRequest
         {
             UserId = userId,
             ProfileVisible = model.ProfileVisible,
@@ -69,7 +69,7 @@ public class ProfileSettingsController : Controller
 
     [HttpPost("notifications")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateNotifications(NotificationSettingsVM model)
+    public async Task<IActionResult> UpdateNotifications(CommunityCar.Web.Models.Profile.Settings.NotificationSettingsVM model)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
              return BadRequest("User not authenticated");
@@ -77,7 +77,7 @@ public class ProfileSettingsController : Controller
         if (!ModelState.IsValid)
              return BadRequest(ModelState);
 
-        var request = new CommunityCar.Application.Common.Models.Account.UpdateNotificationSettingsRequest
+        var request = new CommunityCar.Application.Common.Models.Profile.UpdateNotificationSettingsRequest
         {
             UserId = userId,
             EmailNotifications = model.EmailNotifications,

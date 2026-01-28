@@ -33,10 +33,9 @@ public class RegisterRequest
 
 public class LoginRequest
 {
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress(ErrorMessage = "Invalid email format")]
-    [StringLength(256, ErrorMessage = "Email cannot exceed 256 characters")]
-    public string Email { get; set; } = string.Empty;
+    [Required(ErrorMessage = "Email, username, or phone number is required")]
+    [StringLength(256, ErrorMessage = "Login identifier cannot exceed 256 characters")]
+    public string LoginIdentifier { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Password is required")]
     [StringLength(100, MinimumLength = 1, ErrorMessage = "Password is required")]

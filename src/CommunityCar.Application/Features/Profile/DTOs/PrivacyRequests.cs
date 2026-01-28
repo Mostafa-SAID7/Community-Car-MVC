@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CommunityCar.Application.Features.Profile.DTOs;
 
-public class UpdatePrivacySettingsRequest
+public class UpdateProfilePrivacySettingsRequest
 {
     public bool ProfileVisible { get; set; } = true;
     public bool EmailVisible { get; set; }

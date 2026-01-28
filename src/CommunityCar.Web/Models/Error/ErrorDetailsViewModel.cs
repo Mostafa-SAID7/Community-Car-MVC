@@ -1,4 +1,4 @@
-namespace CommunityCar.Web.Models;
+namespace CommunityCar.Web.Models.Error;
 
 public class ErrorDetailsViewModel
 {
@@ -12,5 +12,3 @@ public class ErrorDetailsViewModel
     public string? Details { get; set; }
     public string? StackTrace { get; set; }
 }
-
-

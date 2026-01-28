@@ -36,6 +36,19 @@ public class UserFollowing : BaseEntity
         Audit(UpdatedBy);
     }
 
+    public void Reactivate()
+    {
+        IsActive = true;
+        FollowedAt = DateTime.UtcNow;
+        Audit(UpdatedBy);
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+        Audit(UpdatedBy);
+    }
+
     public void SetNotifications(bool enabled)
     {
         NotificationsEnabled = enabled;

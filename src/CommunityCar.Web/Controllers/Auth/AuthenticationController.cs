@@ -1,5 +1,7 @@
-using CommunityCar.Web.Models.Auth;
-using CommunityCar.Web.Models.Profile;
+using CommunityCar.Web.Models.Auth.Login;
+using CommunityCar.Web.Models.Auth.Registration;
+using CommunityCar.Web.Models.Auth.PasswordReset;
+using CommunityCar.Web.Models.Auth.Login.External;
 using CommunityCar.Application.Common.Interfaces.Orchestrators;
 using CommunityCar.Application.Common.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -34,13 +36,22 @@ public class AuthenticationController : Controller
 
     [HttpPost("register")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(RegisterRequest request)
+    public async Task<IActionResult> Register(RegisterVM model)
     {
         if (User.Identity?.IsAuthenticated == true)
             return RedirectToAction("Index", "Feed");
 
         if (!ModelState.IsValid)
-            return View(request);
+            return View(model);
+
+        var request = new RegisterRequest
+        {
+            Email = model.Email,
+            Password = model.Password,
+            FullName = model.FullName,
+            FirstName = model.FullName.Split(' ').FirstOrDefault() ?? model.FullName,
+            LastName = model.FullName.Split(' ').Skip(1).FirstOrDefault() ?? ""
+        };
 
         var result = await _authOrchestrator.RegisterAsync(request);
         if (result.Succeeded)
@@ -54,7 +65,7 @@ public class AuthenticationController : Controller
             ModelState.AddModelError(string.Empty, error);
         }
 
-        return View(request);
+        return View(model);
     }
 
     #endregion
@@ -73,7 +84,7 @@ public class AuthenticationController : Controller
 
     [HttpPost("login")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginRequest request, string? returnUrl = null)
+    public async Task<IActionResult> Login(LoginVM model, string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true)
             return RedirectToAction("Index", "Feed");
@@ -81,7 +92,14 @@ public class AuthenticationController : Controller
         ViewData["ReturnUrl"] = returnUrl;
 
         if (!ModelState.IsValid)
-            return View(request);
+            return View(model);
+
+        var request = new LoginRequest
+        {
+            LoginIdentifier = model.LoginIdentifier,
+            Password = model.Password,
+            RememberMe = model.RememberMe
+        };
 
         var result = await _authOrchestrator.LoginAsync(request);
         if (result.Succeeded)
@@ -93,7 +111,7 @@ public class AuthenticationController : Controller
         }
 
         ModelState.AddModelError(string.Empty, result.Message);
-        return View(request);
+        return View(model);
     }
 
     #endregion
@@ -150,15 +168,15 @@ public class AuthenticationController : Controller
 
     [HttpPost("forgot-password")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordVM model)
     {
         if (User.Identity?.IsAuthenticated == true)
             return RedirectToAction("Index", "Feed");
 
         if (!ModelState.IsValid)
-            return View(request);
+            return View(model);
 
-        var result = await _authOrchestrator.ForgotPasswordAsync(request.Email);
+        var result = await _authOrchestrator.ForgotPasswordAsync(model.Email);
 
         // Always show success message for security reasons
         TempData["SuccessMessage"] = "If an account with that email exists, we've sent password reset instructions.";
@@ -177,23 +195,31 @@ public class AuthenticationController : Controller
             return RedirectToAction("Login");
         }
 
-        var request = new ResetPasswordRequest
+        var model = new ResetPasswordVM
         {
-            Token = token
+            Token = token,
+            UserId = userId
         };
 
-        return View(request);
+        return View(model);
     }
 
     [HttpPost("reset-password")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+    public async Task<IActionResult> ResetPassword(ResetPasswordVM model)
     {
         if (User.Identity?.IsAuthenticated == true)
             return RedirectToAction("Index", "Feed");
 
         if (!ModelState.IsValid)
-            return View(request);
+            return View(model);
+
+        var request = new ResetPasswordRequest
+        {
+            Email = model.Email,
+            Token = model.Token,
+            NewPassword = model.Password
+        };
 
         var result = await _authOrchestrator.ResetPasswordAsync(request);
         if (result.Succeeded)
@@ -207,7 +233,7 @@ public class AuthenticationController : Controller
             ModelState.AddModelError(string.Empty, error);
         }
 
-        return View(request);
+        return View(model);
     }
 
     #endregion

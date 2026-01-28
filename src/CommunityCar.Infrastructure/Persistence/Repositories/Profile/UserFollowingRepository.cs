@@ -46,6 +46,12 @@ public class UserFollowingRepository : BaseRepository<UserFollowing>, IUserFollo
             .FirstOrDefaultAsync(uf => uf.FollowerId == followerId && uf.FollowedUserId == followedUserId);
     }
 
+    public async Task<UserFollowing?> GetFollowingAsync(Guid followerId, Guid followedUserId)
+    {
+        return await DbSet
+            .FirstOrDefaultAsync(uf => uf.FollowerId == followerId && uf.FollowedUserId == followedUserId);
+    }
+
     public async Task<bool> IsFollowingAsync(Guid followerId, Guid followedUserId)
     {
         return await DbSet
@@ -82,6 +88,91 @@ public class UserFollowingRepository : BaseRepository<UserFollowing>, IUserFollo
 
         return await DbSet
             .Where(uf => uf.FollowerId == userId2 && uf.IsActive && user1Following.Contains(uf.FollowedUserId))
+            .ToListAsync();
+    }
+
+    public async Task<bool> FollowUserAsync(Guid followerId, Guid followedUserId)
+    {
+        var existingFollow = await GetFollowingRelationshipAsync(followerId, followedUserId);
+        
+        if (existingFollow != null)
+        {
+            if (!existingFollow.IsActive)
+            {
+                existingFollow.Reactivate();
+                await UpdateAsync(existingFollow);
+                return true;
+            }
+            return false; // Already following
+        }
+
+        var newFollow = new UserFollowing(followerId, followedUserId);
+        await AddAsync(newFollow);
+        return true;
+    }
+
+    public async Task<bool> UnfollowUserAsync(Guid followerId, Guid followedUserId)
+    {
+        var existingFollow = await GetFollowingRelationshipAsync(followerId, followedUserId);
+        
+        if (existingFollow != null && existingFollow.IsActive)
+        {
+            existingFollow.Deactivate();
+            await UpdateAsync(existingFollow);
+            return true;
+        }
+        
+        return false;
+    }
+
+    public async Task<IEnumerable<UserFollowing>> GetFollowingAsync(Guid userId, int page = 1, int pageSize = 20)
+    {
+        return await DbSet
+            .Where(uf => uf.FollowerId == userId && uf.IsActive)
+            .OrderByDescending(uf => uf.FollowedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<UserFollowing>> GetFollowersAsync(Guid userId, int page = 1, int pageSize = 20)
+    {
+        return await DbSet
+            .Where(uf => uf.FollowedUserId == userId && uf.IsActive)
+            .OrderByDescending(uf => uf.FollowedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<UserFollowing>> GetFollowSuggestionsAsync(Guid userId, int count = 10)
+    {
+        // Simple implementation - get users followed by people the user follows
+        var userFollowing = await DbSet
+            .Where(uf => uf.FollowerId == userId && uf.IsActive)
+            .Select(uf => uf.FollowedUserId)
+            .ToListAsync();
+
+        return await DbSet
+            .Where(uf => userFollowing.Contains(uf.FollowerId) && 
+                        uf.FollowedUserId != userId && 
+                        uf.IsActive)
+            .GroupBy(uf => uf.FollowedUserId)
+            .OrderByDescending(g => g.Count())
+            .Take(count)
+            .SelectMany(g => g.Take(1))
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<UserFollowing>> GetMutualFollowersAsync(Guid userId1, Guid userId2)
+    {
+        var user1Followers = await DbSet
+            .Where(uf => uf.FollowedUserId == userId1 && uf.IsActive)
+            .Select(uf => uf.FollowerId)
+            .ToListAsync();
+
+        return await DbSet
+            .Where(uf => uf.FollowedUserId == userId2 && uf.IsActive && user1Followers.Contains(uf.FollowerId))
             .ToListAsync();
     }
 }

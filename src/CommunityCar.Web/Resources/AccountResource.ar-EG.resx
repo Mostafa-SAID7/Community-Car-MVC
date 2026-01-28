@@ -181,4 +181,13 @@
   <data name="Strong" xml:space="preserve">
     <value>قوية</value>
   </data>
+  <data name="EmailUsernameOrPhone" xml:space="preserve">
+    <value>البريد الإلكتروني أو اسم المستخدم أو الهاتف</value>
+  </data>
+  <data name="SignInTo" xml:space="preserve">
+    <value>تسجيل الدخول إلى</value>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>دخول</value>
+  </data>
 </root>

@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Orchestrators;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Web.Models.Profile;
+using CommunityCar.Web.Models.Profile.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -290,7 +290,7 @@ public class ProfileController : Controller
 
     [HttpPost("gallery/upload")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UploadGalleryItem(UploadImageRequest request, IFormFile mediaFile)
+    public async Task<IActionResult> UploadGalleryItem(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request, IFormFile mediaFile)
     {
         if (mediaFile == null || mediaFile.Length == 0)
         {

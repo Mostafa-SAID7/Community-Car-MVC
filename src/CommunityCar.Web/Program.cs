@@ -56,7 +56,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStatusCodePagesWithReExecute("/Error/{0}");
 app.UseMiddleware<CommunityCar.Web.Middleware.ErrorHandlingMiddleware>();
-app.UseMiddleware<CommunityCar.Web.Middleware.MaintenanceMiddleware>();
+// app.UseMiddleware<CommunityCar.Web.Middleware.MaintenanceMiddleware>(); // Temporarily disabled due to missing SystemSettings table
 
 app.UseHttpsRedirection();
 app.UseRouting();

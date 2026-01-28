@@ -81,17 +81,22 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<Result> LoginAsync(LoginRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null) return Result.Failure("Invalid email or password.");
+        var user = await FindUserByLoginIdentifierAsync(request.LoginIdentifier);
+        if (user == null) return Result.Failure("Invalid login credentials.");
         if (!user.IsActive) return Result.Failure("Your account has been deactivated.");
 
         var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
-        if (result.Succeeded) return Result.Success("Login successful.");
+        if (result.Succeeded) 
+        {
+            user.UpdateLastLogin();
+            await _userManager.UpdateAsync(user);
+            return Result.Success("Login successful.");
+        }
         if (result.RequiresTwoFactor) return Result.Failure("Two-factor authentication required.");
         if (result.IsLockedOut) return Result.Failure("Account locked due to multiple failed login attempts.");
         if (result.IsNotAllowed) return Result.Failure("Email confirmation required.");
 
-        return Result.Failure("Invalid email or password.");
+        return Result.Failure("Invalid login credentials.");
     }
 
     public async Task LogoutAsync() => await _signInManager.SignOutAsync();
@@ -125,6 +130,43 @@ public class AuthenticationService : IAuthenticationService
 
         var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
         return result.Succeeded ? Result.Success("Password reset successfully.") : Result.Failure("Password reset failed.", result.Errors.Select(e => e.Description).ToList());
+    }
+
+    #endregion
+
+    #region Helper Methods
+
+    private async Task<User?> FindUserByLoginIdentifierAsync(string loginIdentifier)
+    {
+        // Try to determine the type of identifier and find the user accordingly
+        
+        // Check if it's an email (contains @ symbol)
+        if (loginIdentifier.Contains('@'))
+        {
+            return await _userManager.FindByEmailAsync(loginIdentifier);
+        }
+        
+        // Check if it's a phone number (starts with + or contains only digits and common phone chars)
+        if (IsPhoneNumber(loginIdentifier))
+        {
+            var users = _userManager.Users.Where(u => u.PhoneNumber == loginIdentifier).ToList();
+            return users.FirstOrDefault();
+        }
+        
+        // Otherwise, treat it as a username
+        return await _userManager.FindByNameAsync(loginIdentifier);
+    }
+
+    private static bool IsPhoneNumber(string input)
+    {
+        // Simple phone number detection - starts with + or contains only digits, spaces, dashes, parentheses
+        if (string.IsNullOrWhiteSpace(input)) return false;
+        
+        // Remove common phone number formatting characters
+        var cleaned = input.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("+", "");
+        
+        // Check if what remains is all digits and has reasonable length for a phone number
+        return cleaned.All(char.IsDigit) && cleaned.Length >= 7 && cleaned.Length <= 15;
     }
 
     #endregion

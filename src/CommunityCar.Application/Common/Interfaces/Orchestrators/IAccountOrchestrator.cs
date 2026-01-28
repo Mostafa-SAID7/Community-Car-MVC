@@ -2,6 +2,7 @@ using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Authentication;
 using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Common.Models.Security;
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 
 namespace CommunityCar.Application.Common.Interfaces.Orchestrators;
@@ -28,8 +29,8 @@ public interface IAccountOrchestrator
     Task<IEnumerable<ExternalLoginInfo>> GetExternalLoginsAsync(Guid userId);
 
     // Settings
-    Task<PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId);
-    Task<Result> UpdatePrivacySettingsAsync(UpdatePrivacySettingsRequest request);
-    Task<NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId);
-    Task<Result> UpdateNotificationSettingsAsync(UpdateNotificationSettingsRequest request);
+    Task<CommunityCar.Application.Common.Models.Profile.PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId);
+    Task<Result> UpdatePrivacySettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdatePrivacySettingsRequest request);
+    Task<CommunityCar.Application.Common.Models.Profile.NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId);
+    Task<Result> UpdateNotificationSettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdateNotificationSettingsRequest request);
 }
