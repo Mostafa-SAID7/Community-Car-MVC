@@ -1,4 +1,4 @@
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Gamification;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

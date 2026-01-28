@@ -5,7 +5,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.ValueObjects.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;

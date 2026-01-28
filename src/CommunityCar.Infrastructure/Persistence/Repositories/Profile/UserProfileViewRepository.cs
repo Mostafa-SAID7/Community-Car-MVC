@@ -12,7 +12,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<IEnumerable<UserProfileView>> GetProfileViewsAsync(Guid profileUserId, int page = 1, int pageSize = 20)
     {
-        return await _context.Set<UserProfileView>()
+        return await Context.Set<UserProfileView>()
             .Where(v => v.ProfileUserId == profileUserId)
             .OrderByDescending(v => v.ViewedAt)
             .Skip((page - 1) * pageSize)
@@ -22,7 +22,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<IEnumerable<UserProfileView>> GetUserViewHistoryAsync(Guid viewerId, int page = 1, int pageSize = 20)
     {
-        return await _context.Set<UserProfileView>()
+        return await Context.Set<UserProfileView>()
             .Where(v => v.ViewerId == viewerId && !v.IsAnonymous)
             .OrderByDescending(v => v.ViewedAt)
             .Skip((page - 1) * pageSize)
@@ -32,7 +32,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<int> GetProfileViewCountAsync(Guid profileUserId, DateTime? since = null)
     {
-        var query = _context.Set<UserProfileView>()
+        var query = Context.Set<UserProfileView>()
             .Where(v => v.ProfileUserId == profileUserId);
 
         if (since.HasValue)
@@ -43,7 +43,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<int> GetUniqueViewersCountAsync(Guid profileUserId, DateTime? since = null)
     {
-        var query = _context.Set<UserProfileView>()
+        var query = Context.Set<UserProfileView>()
             .Where(v => v.ProfileUserId == profileUserId && !v.IsAnonymous);
 
         if (since.HasValue)
@@ -59,7 +59,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
     {
         var cutoffTime = DateTime.UtcNow.AddMinutes(-minutesThreshold);
         
-        return await _context.Set<UserProfileView>()
+        return await Context.Set<UserProfileView>()
             .Where(v => v.ViewerId == viewerId && v.ProfileUserId == profileUserId && v.ViewedAt >= cutoffTime)
             .OrderByDescending(v => v.ViewedAt)
             .FirstOrDefaultAsync();
@@ -67,7 +67,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<IEnumerable<UserProfileView>> GetViewsBySourceAsync(Guid profileUserId, string viewSource, int page = 1, int pageSize = 20)
     {
-        return await _context.Set<UserProfileView>()
+        return await Context.Set<UserProfileView>()
             .Where(v => v.ProfileUserId == profileUserId && v.ViewSource == viewSource)
             .OrderByDescending(v => v.ViewedAt)
             .Skip((page - 1) * pageSize)
@@ -77,7 +77,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<Dictionary<string, int>> GetViewSourceStatsAsync(Guid profileUserId, DateTime? since = null)
     {
-        var query = _context.Set<UserProfileView>()
+        var query = Context.Set<UserProfileView>()
             .Where(v => v.ProfileUserId == profileUserId);
 
         if (since.HasValue)
@@ -91,7 +91,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<IEnumerable<UserProfileView>> GetTopViewersAsync(Guid profileUserId, int limit = 10, DateTime? since = null)
     {
-        var query = _context.Set<UserProfileView>()
+        var query = Context.Set<UserProfileView>()
             .Where(v => v.ProfileUserId == profileUserId && !v.IsAnonymous);
 
         if (since.HasValue)
@@ -103,7 +103,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
             .OrderByDescending(x => x.Count)
             .ThenByDescending(x => x.LastView)
             .Take(limit)
-            .SelectMany(x => _context.Set<UserProfileView>()
+            .SelectMany(x => Context.Set<UserProfileView>()
                 .Where(v => v.ViewerId == x.ViewerId && v.ProfileUserId == profileUserId)
                 .OrderByDescending(v => v.ViewedAt)
                 .Take(1))
@@ -112,13 +112,13 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<bool> HasViewedProfileAsync(Guid viewerId, Guid profileUserId)
     {
-        return await _context.Set<UserProfileView>()
+        return await Context.Set<UserProfileView>()
             .AnyAsync(v => v.ViewerId == viewerId && v.ProfileUserId == profileUserId);
     }
 
     public async Task<DateTime?> GetLastViewDateAsync(Guid viewerId, Guid profileUserId)
     {
-        return await _context.Set<UserProfileView>()
+        return await Context.Set<UserProfileView>()
             .Where(v => v.ViewerId == viewerId && v.ProfileUserId == profileUserId)
             .OrderByDescending(v => v.ViewedAt)
             .Select(v => v.ViewedAt)
@@ -127,7 +127,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<IEnumerable<UserProfileView>> GetMutualViewsAsync(Guid userId1, Guid userId2)
     {
-        return await _context.Set<UserProfileView>()
+        return await Context.Set<UserProfileView>()
             .Where(v => (v.ViewerId == userId1 && v.ProfileUserId == userId2) ||
                        (v.ViewerId == userId2 && v.ProfileUserId == userId1))
             .OrderByDescending(v => v.ViewedAt)
@@ -139,7 +139,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
         var startOfDay = date.Date;
         var endOfDay = startOfDay.AddDays(1);
 
-        return await _context.Set<UserProfileView>()
+        return await Context.Set<UserProfileView>()
             .Where(v => v.ProfileUserId == profileUserId && 
                        v.ViewedAt >= startOfDay && 
                        v.ViewedAt < endOfDay)
@@ -148,7 +148,7 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task<Dictionary<DateTime, int>> GetViewTrendsAsync(Guid profileUserId, DateTime startDate, DateTime endDate)
     {
-        return await _context.Set<UserProfileView>()
+        return await Context.Set<UserProfileView>()
             .Where(v => v.ProfileUserId == profileUserId && 
                        v.ViewedAt >= startDate && 
                        v.ViewedAt <= endDate)
@@ -159,11 +159,11 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
 
     public async Task CleanupOldViewsAsync(DateTime cutoffDate)
     {
-        var oldViews = await _context.Set<UserProfileView>()
+        var oldViews = await Context.Set<UserProfileView>()
             .Where(v => v.ViewedAt < cutoffDate)
             .ToListAsync();
 
-        _context.Set<UserProfileView>().RemoveRange(oldViews);
-        await _context.SaveChangesAsync();
+        Context.Set<UserProfileView>().RemoveRange(oldViews);
+        await Context.SaveChangesAsync();
     }
 }

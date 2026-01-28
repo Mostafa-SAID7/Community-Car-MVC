@@ -3,8 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CommunityCar.Application.Common.Interfaces.Data;
-using UserEntity = CommunityCar.Domain.Entities.Account.User;
-using CommunityCar.Domain.Entities.Account;
+using UserEntity = CommunityCar.Domain.Entities.Account.Core.User;
+using UserActivityEntity = CommunityCar.Domain.Entities.Account.Core.UserActivity;
+using CommunityCar.Domain.Entities.Account.Core;
+using CommunityCar.Domain.Entities.Account.Gamification;
+using CommunityCar.Domain.Entities.Account.Media;
+using CommunityCar.Domain.Entities.Account.Profile;
 using CommunityCar.Domain.Entities.Chats;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Domain.Entities.Community.Friends;
@@ -17,8 +21,7 @@ using CommunityCar.Domain.Entities.Community.QA;
 using CommunityCar.Domain.Entities.Community.Reviews;
 using CommunityCar.Domain.Entities.Community.Stories;
 using CommunityCar.Domain.Entities.Dashboard.Analytics;
-using CommunityCar.Domain.Entities.Dashboard.Management;
-using CommunityCar.Domain.Entities.Dashboard.Reports;
+using CommunityCar.Domain.Entities.Dashboard.Overview;
 using CommunityCar.Domain.Entities.Dashboard.Settings;
 using CommunityCar.Domain.Entities.Dashboard.System;
 using CommunityCar.Domain.Entities.Localization;
@@ -49,7 +52,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<G
     public DbSet<UserGallery> UserGalleries => Set<UserGallery>();
     public DbSet<UserBadge> UserBadges => Set<UserBadge>();
     public DbSet<UserAchievement> UserAchievements => Set<UserAchievement>();
-    public DbSet<UserActivity> UserActivities => Set<UserActivity>();
+    public DbSet<UserActivityEntity> UserActivities => Set<UserActivityEntity>();
     public DbSet<UserInterest> UserInterests => Set<UserInterest>();
     public DbSet<UserFollowing> UserFollowings => Set<UserFollowing>();
     public DbSet<UserProfileView> UserProfileViews => Set<UserProfileView>();
@@ -87,9 +90,9 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<G
     // Dashboard
     public DbSet<Metric> Metrics => Set<Metric>();
     public DbSet<Ticket> Tickets => Set<Ticket>();
-    public DbSet<LogEntry> LogEntries => Set<LogEntry>();
     public DbSet<GeneratedReport> GeneratedReports => Set<GeneratedReport>();
     public DbSet<SystemSetting> SystemSettings => Set<SystemSetting>();
+    public DbSet<LogEntry> LogEntries => Set<LogEntry>();
 
     // Chats
     public DbSet<Conversation> Conversations => Set<Conversation>();

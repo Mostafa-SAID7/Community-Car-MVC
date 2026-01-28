@@ -19,13 +19,13 @@ namespace CommunityCar.Application.Services.Account;
 public class AccountSecurityService : IAccountSecurityService
 {
     private readonly IUserRepository _userRepository;
-    private readonly UserManager<CommunityCar.Domain.Entities.Account.User> _userManager;
+    private readonly UserManager<UserEntity> _userManager;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<AccountSecurityService> _logger;
 
     public AccountSecurityService(
         IUserRepository userRepository,
-        UserManager<CommunityCar.Domain.Entities.Account.User> userManager,
+        UserManager<UserEntity> userManager,
         ICurrentUserService currentUserService,
         ILogger<AccountSecurityService> logger)
     {

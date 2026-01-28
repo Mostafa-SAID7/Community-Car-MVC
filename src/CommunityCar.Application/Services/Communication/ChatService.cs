@@ -3,7 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Features.Chat.ViewModels;
 using CommunityCar.Application.Features.Chat.DTOs;
 using CommunityCar.Domain.Entities.Chats;
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

@@ -3,7 +3,9 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Features.Analytics.DTOs;
 using CommunityCar.Application.Features.Analytics.ViewModels;
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Core;
+using UserActivityEntity = CommunityCar.Domain.Entities.Account.Core.UserActivity;
+using CommunityCar.Domain.Entities.Account.Profile;
 using CommunityCar.Domain.Enums.Account;
 using Microsoft.Extensions.Logging;
 
@@ -37,7 +39,7 @@ public class UserAnalyticsService : IUserAnalyticsService
     {
         try
         {
-            var activity = new UserActivity(
+            var activity = new UserActivityEntity(
                 request.UserId,
                 request.ActivityType,
                 request.EntityType,

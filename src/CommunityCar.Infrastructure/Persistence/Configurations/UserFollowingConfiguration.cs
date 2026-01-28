@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Profile;
 
 namespace CommunityCar.Infrastructure.Persistence.Configurations;
 

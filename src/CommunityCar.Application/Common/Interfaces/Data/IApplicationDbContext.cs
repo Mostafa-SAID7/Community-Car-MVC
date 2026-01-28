@@ -20,8 +20,8 @@ using CommunityCar.Domain.Entities.Localization;
 using CommunityCar.Domain.Entities.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using UserInterest = CommunityCar.Domain.Entities.Account.Profile.UserInterest;
-using UserFollowing = CommunityCar.Domain.Entities.Account.Profile.UserFollowing;
+using CommunityCar.Domain.Entities.Account.Profile;
+using UserActivityEntity = CommunityCar.Domain.Entities.Account.Core.UserActivity;
 
 namespace CommunityCar.Application.Common.Interfaces.Data;
 
@@ -33,7 +33,7 @@ public interface IApplicationDbContext
     DbSet<UserGallery> UserGalleries { get; }
     DbSet<UserBadge> UserBadges { get; }
     DbSet<UserAchievement> UserAchievements { get; }
-    DbSet<UserActivity> UserActivities { get; }
+    DbSet<UserActivityEntity> UserActivities { get; }
     DbSet<UserInterest> UserInterests { get; }
     DbSet<UserFollowing> UserFollowings { get; }
     

@@ -1,7 +1,7 @@
 using AutoMapper;
 using CommunityCar.Application.Features.Profile.DTOs;
 using CommunityCar.Application.Features.Profile.ViewModels;
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Core;
 
 namespace CommunityCar.Application.Features.Profile.Mappings;
 

@@ -4,7 +4,7 @@ using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using UserEntity = CommunityCar.Domain.Entities.Account.User;
+using UserEntity = CommunityCar.Domain.Entities.Account.Core.User;
 
 namespace CommunityCar.Infrastructure.Persistence.Repositories.User;
 
@@ -22,24 +22,24 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
 
     #region Generic User Operations
 
-    public async Task<CommunityCar.Domain.Entities.Account.User?> GetByEmailAsync(string email)
+    public async Task<CommunityCar.Domain.Entities.Account.Core.User?> GetByEmailAsync(string email)
     {
         return await _userManager.FindByEmailAsync(email);
     }
 
-    public async Task<CommunityCar.Domain.Entities.Account.User?> GetByUserNameAsync(string userName)
+    public async Task<CommunityCar.Domain.Entities.Account.Core.User?> GetByUserNameAsync(string userName)
     {
         return await _userManager.FindByNameAsync(userName);
     }
 
-    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetActiveUsersAsync()
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.Core.User>> GetActiveUsersAsync()
     {
         return await Context.Users
             .Where(u => u.IsActive && !u.IsDeleted)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetUsersByRoleAsync(string roleName)
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.Core.User>> GetUsersByRoleAsync(string roleName)
     {
         return await _userManager.GetUsersInRoleAsync(roleName);
     }
@@ -72,13 +72,13 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
 
     #region Profile Operations
 
-    public async Task<CommunityCar.Domain.Entities.Account.User?> GetUserWithProfileAsync(Guid userId)
+    public async Task<CommunityCar.Domain.Entities.Account.Core.User?> GetUserWithProfileAsync(Guid userId)
     {
         return await Context.Users
             .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
     }
 
-    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> SearchUsersAsync(string searchTerm, int page = 1, int pageSize = 20)
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.Core.User>> SearchUsersAsync(string searchTerm, int page = 1, int pageSize = 20)
     {
         var query = Context.Users
             .Where(u => !u.IsDeleted && u.IsActive)
@@ -149,14 +149,14 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
 
     #region Account Management
 
-    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetDeactivatedUsersAsync()
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.Core.User>> GetDeactivatedUsersAsync()
     {
         return await Context.Users
             .Where(u => !u.IsActive && !u.IsDeleted)
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetUsersForDeletionAsync(DateTime cutoffDate)
+    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.Core.User>> GetUsersForDeletionAsync(DateTime cutoffDate)
     {
         return await Context.Users
             .Where(u => !u.IsActive && u.UpdatedAt < cutoffDate && !u.IsDeleted)
@@ -339,7 +339,7 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
 
     #region Additional Helper Methods
 
-    public async Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> FindAsync(Expression<Func<CommunityCar.Domain.Entities.Account.User, bool>> predicate)
+    public new async Task<IEnumerable<CommunityCar.Domain.Entities.Account.Core.User>> FindAsync(Expression<Func<CommunityCar.Domain.Entities.Account.Core.User, bool>> predicate)
     {
         return await Context.Users
             .Where(predicate)

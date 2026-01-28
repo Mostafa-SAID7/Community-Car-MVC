@@ -1,9 +1,9 @@
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Application.Common.Interfaces.Repositories.Base;
 using CommunityCar.Domain.Entities.Account.Profile;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories.Profile;
 
-public interface IUserProfileViewRepository : IRepository<UserProfileView>
+public interface IUserProfileViewRepository : IBaseRepository<UserProfileView>
 {
     Task<IEnumerable<UserProfileView>> GetProfileViewsAsync(Guid profileUserId, int page = 1, int pageSize = 20);
     Task<IEnumerable<UserProfileView>> GetUserViewHistoryAsync(Guid viewerId, int page = 1, int pageSize = 20);

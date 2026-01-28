@@ -3,7 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Infrastructure.Services.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -15,14 +15,14 @@ public class OAuthService : IOAuthService
     private readonly IGoogleOAuthService _googleOAuthService;
     private readonly IFacebookOAuthService _facebookOAuthService;
     private readonly IUserRepository _userRepository;
-    private readonly UserManager<CommunityCar.Domain.Entities.Account.User> _userManager;
+    private readonly UserManager<CommunityCar.Domain.Entities.Account.Core.User> _userManager;
     private readonly ILogger<OAuthService> _logger;
 
     public OAuthService(
         IGoogleOAuthService googleOAuthService,
         IFacebookOAuthService facebookOAuthService,
         IUserRepository userRepository,
-        UserManager<CommunityCar.Domain.Entities.Account.User> userManager,
+        UserManager<CommunityCar.Domain.Entities.Account.Core.User> userManager,
         ILogger<OAuthService> logger)
     {
         _googleOAuthService = googleOAuthService;

@@ -3,7 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Features.Friends.DTOs;
 using CommunityCar.Application.Features.Friends.ViewModels;
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Community.Friends;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -70,9 +70,9 @@ public class ErrorService : IErrorService
                     AdditionalContext = additionalData,
                     OccurredAt = DateTime.UtcNow
                 };
-                occurrence.Audit(userId ?? "System");
+                // occurrence.Audit(userId ?? "System");
 
-                _context.ErrorOccurrences.Add(occurrence);
+                // _context.ErrorOccurrences.Add(occurrence);
                 await _context.SaveChangesAsync();
 
                 return existingError.ErrorId;
@@ -106,9 +106,9 @@ public class ErrorService : IErrorService
                 AdditionalContext = additionalData,
                 OccurredAt = DateTime.UtcNow
             };
-            initialOccurrence.Audit(userId ?? "System");
+            // initialOccurrence.Audit(userId ?? "System");
 
-            _context.ErrorOccurrences.Add(initialOccurrence);
+            // _context.ErrorOccurrences.Add(initialOccurrence);
             await _context.SaveChangesAsync();
 
             return errorLog.ErrorId;
@@ -153,7 +153,7 @@ public class ErrorService : IErrorService
             
             if (error == null) return false;
 
-            _context.ErrorOccurrences.RemoveRange(error.Occurrences);
+            // _context.ErrorOccurrences.RemoveRange(error.Occurrences);
             _context.ErrorLogs.Remove(error);
             await _context.SaveChangesAsync();
             return true;
@@ -286,7 +286,7 @@ public class ErrorService : IErrorService
 
             foreach (var error in oldErrors)
             {
-                _context.ErrorOccurrences.RemoveRange(error.Occurrences);
+                // _context.ErrorOccurrences.RemoveRange(error.Occurrences);
                 _context.ErrorLogs.Remove(error);
             }
 
