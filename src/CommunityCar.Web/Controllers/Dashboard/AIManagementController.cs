@@ -268,7 +268,7 @@ public class AIManagementController : Controller
     }
 
     [Route("Settings")]
-    public async Task<IActionResult> Settings()
+    public IActionResult Settings()
     {
         try
         {
@@ -435,7 +435,7 @@ public class AIManagementController : Controller
         }
     }
 
-    public async Task<IActionResult> Conversations(int page = 1, int pageSize = 20)
+    public IActionResult Conversations(int page = 1, int pageSize = 20)
     {
         try
         {
@@ -489,7 +489,7 @@ public class AIManagementController : Controller
         }
     }
 
-    public async Task<IActionResult> ConversationDetails(Guid id)
+    public IActionResult ConversationDetails(Guid id)
     {
         try
         {
@@ -609,7 +609,7 @@ public class AIManagementController : Controller
     }
 
     [Route("Test")]
-    public async Task<IActionResult> Test()
+    public IActionResult Test()
     {
         return View("~/Views/Dashboard/AIManagement/Test.cshtml");
     }
@@ -862,7 +862,7 @@ public class AIManagementController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetTrainingDetails(string modelName, string date)
+    public IActionResult GetTrainingDetails(string modelName, string date)
     {
         try
         {

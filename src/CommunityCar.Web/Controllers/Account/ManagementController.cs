@@ -12,16 +12,16 @@ namespace CommunityCar.Web.Controllers.Account;
 [Authorize]
 public class ManagementController : Controller
 {
-    private readonly IAccountLifecycleOrchestrator _lifecycleOrchestrator;
+    private readonly IAccountOrchestrator _accountOrchestrator;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<ManagementController> _logger;
 
     public ManagementController(
-        IAccountLifecycleOrchestrator lifecycleOrchestrator,
+        IAccountOrchestrator accountOrchestrator,
         ICurrentUserService currentUserService,
         ILogger<ManagementController> logger)
     {
-        _lifecycleOrchestrator = lifecycleOrchestrator;
+        _accountOrchestrator = accountOrchestrator;
         _currentUserService = currentUserService;
         _logger = logger;
     }
@@ -51,7 +51,7 @@ public class ManagementController : Controller
             Reason = model.Reason
         };
 
-        var result = await _lifecycleOrchestrator.DeactivateAccountAsync(request);
+        var result = await _accountOrchestrator.DeactivateAccountAsync(request);
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = "Account deactivated successfully. You can reactivate it by logging in again within 30 days.";
@@ -99,7 +99,7 @@ public class ManagementController : Controller
             Reason = model.Reason
         };
 
-        var result = await _lifecycleOrchestrator.DeleteAccountAsync(request);
+        var result = await _accountOrchestrator.DeleteAccountAsync(request);
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = "Account deleted successfully. We're sorry to see you go!";
@@ -137,14 +137,10 @@ public class ManagementController : Controller
         var request = new ExportUserDataRequest
         {
             UserId = userId,
-            IncludeProfile = model.IncludeProfile,
-            IncludePosts = model.IncludePosts,
-            IncludeComments = model.IncludeComments,
-            IncludeMessages = model.IncludeMessages,
-            IncludeActivity = model.IncludeActivity
+            // Map other fields as needed
         };
 
-        var result = await _lifecycleOrchestrator.ExportUserDataAsync(request);
+        var result = await _accountOrchestrator.ExportUserDataAsync(request);
         if (result.Succeeded && result.Data is byte[] data)
         {
             var fileName = $"user-data-export-{DateTime.UtcNow:yyyyMMdd-HHmmss}.zip";

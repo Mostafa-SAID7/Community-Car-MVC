@@ -18,6 +18,7 @@ public class UserActivity : BaseEntity
     public DateTime ActivityDate { get; private set; }
     public int Duration { get; private set; } // in seconds
     public bool IsTracked { get; private set; } = true;
+    public int PointsAwarded { get; private set; }
 
     public UserActivity(
         Guid userId,
@@ -25,7 +26,8 @@ public class UserActivity : BaseEntity
         string entityType,
         Guid? entityId = null,
         string? entityTitle = null,
-        string? description = null)
+        string? description = null,
+        int pointsAwarded = 0)
     {
         UserId = userId;
         ActivityType = activityType;
@@ -35,6 +37,7 @@ public class UserActivity : BaseEntity
         Description = description;
         ActivityDate = DateTime.UtcNow;
         Duration = 0;
+        PointsAwarded = pointsAwarded;
     }
 
     private UserActivity() { }

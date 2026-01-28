@@ -11,7 +11,6 @@ public interface IAuthenticationService
     Task<Result> ConfirmEmailAsync(string userId, string token);
     Task<Result> ForgotPasswordAsync(string email);
     Task<Result> ResetPasswordAsync(ResetPasswordRequest request);
-    Task<Result> ChangePasswordAsync(ChangePasswordRequest request);
     Task<Result> ResendEmailConfirmationAsync(string email);
     Task<User?> GetCurrentUserAsync();
     Task LogoutAsync();

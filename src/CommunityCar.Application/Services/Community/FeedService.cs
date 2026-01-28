@@ -129,6 +129,15 @@ public class FeedService : IFeedService
     public async Task<FeedStatsVM> GetFeedStatsAsync(Guid? userId = null)
         => await _utilityService.GetFeedStatsAsync(userId);
 
+    public async Task<FeedStatsVM> GetFeedStatisticsAsync()
+        => await _utilityService.GetFeedStatsAsync(null);
+
+    public async Task<int> CleanupExpiredStoriesAsync()
+        => await _utilityService.CleanupExpiredStoriesAsync();
+
+    public async Task<IEnumerable<FeedItemVM>> GetPopularContentAsync(int hours)
+        => await _contentAggregatorService.GetPopularContentAsync(hours);
+
     #endregion
 
     #region Delegate to Interaction Service

@@ -11,6 +11,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable("Users");
 
         builder.Property(u => u.FullName).HasMaxLength(100);
+        builder.Property(u => u.FirstName).HasMaxLength(50);
+        builder.Property(u => u.LastName).HasMaxLength(50);
         builder.Property(u => u.Bio).HasMaxLength(500);
         builder.Property(u => u.BioAr).HasMaxLength(500);
         builder.Property(u => u.City).HasMaxLength(100);

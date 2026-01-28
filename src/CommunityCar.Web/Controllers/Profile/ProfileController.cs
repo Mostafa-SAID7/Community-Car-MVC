@@ -81,16 +81,16 @@ public class ProfileController : Controller
             Country = profile.Country,
             ProfilePictureUrl = profile.ProfilePictureUrl,
             CreatedAt = profile.CreatedAt,
-            LastLoginAt = profile.LastLoginAt,
+            // LastLoginAt = profile.LastLoginAt,
             IsEmailConfirmed = profile.IsEmailConfirmed,
-            IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
-            IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
+            // IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
+            // IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
             IsActive = profile.IsActive,
-            HasGoogleAccount = profile.HasGoogleAccount,
-            HasFacebookAccount = profile.HasFacebookAccount,
+            // HasGoogleAccount = profile.HasGoogleAccount,
+            // HasFacebookAccount = profile.HasFacebookAccount,
             PostsCount = profile.PostsCount,
-            CommentsCount = profile.CommentsCount,
-            LikesReceived = profile.LikesReceived
+            // CommentsCount = profile.CommentsCount,
+            // LikesReceived = profile.LikesReceived
         };
 
         return View(viewModel);
@@ -129,16 +129,16 @@ public class ProfileController : Controller
             Country = profile.Country,
             ProfilePictureUrl = profile.ProfilePictureUrl,
             CreatedAt = profile.CreatedAt,
-            LastLoginAt = profile.LastLoginAt,
+            // LastLoginAt = profile.LastLoginAt,
             IsEmailConfirmed = profile.IsEmailConfirmed,
-            IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
-            IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
+            // IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
+            // IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
             IsActive = profile.IsActive,
-            HasGoogleAccount = profile.HasGoogleAccount,
-            HasFacebookAccount = profile.HasFacebookAccount,
+            // HasGoogleAccount = profile.HasGoogleAccount,
+            // HasFacebookAccount = profile.HasFacebookAccount,
             PostsCount = profile.PostsCount,
-            CommentsCount = profile.CommentsCount,
-            LikesReceived = profile.LikesReceived
+            // CommentsCount = profile.CommentsCount,
+            // LikesReceived = profile.LikesReceived
         };
 
         return View("Index", viewModel);
@@ -164,10 +164,15 @@ public class ProfileController : Controller
              return RedirectToAction("Login", "Authentication", new { area = "" });
         }
 
+        var nameParts = model.FullName.Split(' ', 2);
+        var firstName = nameParts.Length > 0 ? nameParts[0] : "";
+        var lastName = nameParts.Length > 1 ? nameParts[1] : "";
+
         var request = new UpdateProfileRequest
         {
             UserId = userId,
-            FullName = model.FullName,
+            FirstName = firstName,
+            LastName = lastName,
             PhoneNumber = model.PhoneNumber,
             Bio = model.Bio,
             City = model.City,
@@ -310,12 +315,12 @@ public class ProfileController : Controller
             request.FileName = mediaFile.FileName;
             request.ContentType = mediaFile.ContentType;
             
-            var galleryItem = await _profileOrchestrator.UploadGalleryItemAsync(request);
+            var success = await _profileOrchestrator.UploadGalleryItemAsync(request);
             
-            if (galleryItem != null)
+            if (success)
             {
                 TempData["SuccessMessage"] = "Media uploaded successfully!";
-                await _profileOrchestrator.ProcessUserActionAsync(userId, "gallery_upload");
+                // await _profileOrchestrator.ProcessUserActionAsync(userId, "gallery_upload");
             }
             else
             {
@@ -377,20 +382,20 @@ public class ProfileController : Controller
     }
 
     [HttpGet("gallery/item/{itemId}")]
-    public async Task<IActionResult> GetGalleryItem(Guid itemId)
+    public IActionResult GetGalleryItem(Guid itemId)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
             return Unauthorized();
         }
 
-        var item = await _profileOrchestrator.GetGalleryItemAsync(userId, itemId);
-        if (item == null)
-        {
-            return NotFound();
-        }
+        // var item = await _profileOrchestrator.GetGalleryItemAsync(userId, itemId);
+        // if (item == null)
+        // {
+        //     return NotFound();
+        // }
 
-        return Json(new { success = true, data = item });
+        return Json(new { success = false, message = "Not implemented" });
     }
 }
 

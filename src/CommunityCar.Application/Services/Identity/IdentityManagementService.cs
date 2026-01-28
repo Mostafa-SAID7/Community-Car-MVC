@@ -1,94 +1,204 @@
+using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Services.Identity.User;
-using CommunityCar.Application.Services.Identity.Role;
-using CommunityCar.Application.Services.Identity.Claims;
-using CommunityCar.Application.Features.Identity.ViewModels;
-using CommunityCar.Application.Features.Identity.DTOs;
+using CommunityCar.Application.Common.Models.Identity;
+using CommunityCar.Domain.Entities.Auth;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace CommunityCar.Application.Services.Identity;
 
-/// <summary>
-/// Orchestrator service for identity management operations (users, roles, claims)
-/// </summary>
 public class IdentityManagementService : IIdentityManagementService
 {
-    private readonly IUserIdentityService _userIdentityService;
-    private readonly IRoleManagementService _roleManagementService;
-    private readonly IClaimsManagementService _claimsManagementService;
+    private readonly IUserRepository _userRepository;
+    private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
     private readonly ILogger<IdentityManagementService> _logger;
 
     public IdentityManagementService(
-        IUserIdentityService userIdentityService,
-        IRoleManagementService roleManagementService,
-        IClaimsManagementService claimsManagementService,
+        IUserRepository userRepository,
+        UserManager<User> userManager,
+        RoleManager<IdentityRole<Guid>> roleManager,
         ILogger<IdentityManagementService> logger)
     {
-        _userIdentityService = userIdentityService;
-        _roleManagementService = roleManagementService;
-        _claimsManagementService = claimsManagementService;
+        _userRepository = userRepository;
+        _userManager = userManager;
+        _roleManager = roleManager;
         _logger = logger;
     }
 
-    #region User Identity - Delegate to UserIdentityService
+    #region User Identity
 
     public async Task<UserIdentityVM?> GetUserIdentityAsync(Guid userId)
-        => await _userIdentityService.GetUserIdentityAsync(userId);
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null) return null;
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var isLocked = await _userManager.IsLockedOutAsync(user);
+
+        return new UserIdentityVM
+        {
+            Id = user.Id,
+            UserName = user.UserName ?? string.Empty,
+            Email = user.Email ?? string.Empty,
+            FullName = user.FullName,
+            IsActive = user.IsActive,
+            IsEmailConfirmed = user.EmailConfirmed,
+            IsLocked = isLocked,
+            LockoutEnd = await _userManager.GetLockoutEndDateAsync(user),
+            CreatedAt = user.CreatedAt,
+            LastLoginAt = user.LastLoginAt,
+            Roles = roles.ToList()
+        };
+    }
 
     public async Task<IEnumerable<UserIdentityVM>> GetAllUsersAsync(int page = 1, int pageSize = 20)
-        => await _userIdentityService.GetAllUsersAsync(page, pageSize);
+    {
+        var users = await _userRepository.GetActiveUsersAsync();
+        var pagedUsers = users.Skip((page - 1) * pageSize).Take(pageSize);
+        var userIdentities = new List<UserIdentityVM>();
+
+        foreach (var user in pagedUsers)
+        {
+            var identity = await GetUserIdentityAsync(user.Id);
+            if (identity != null) userIdentities.Add(identity);
+        }
+
+        return userIdentities;
+    }
 
     public async Task<bool> IsUserActiveAsync(Guid userId)
-        => await _userIdentityService.IsUserActiveAsync(userId);
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        return user?.IsActive ?? false;
+    }
 
     public async Task<bool> LockUserAsync(Guid userId, string reason)
-        => await _userIdentityService.LockUserAsync(userId, reason);
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null) return false;
+
+        var lockoutEnd = DateTimeOffset.UtcNow.AddHours(24);
+        var result = await _userManager.SetLockoutEndDateAsync(user, lockoutEnd);
+        return result.Succeeded;
+    }
 
     public async Task<bool> UnlockUserAsync(Guid userId)
-        => await _userIdentityService.UnlockUserAsync(userId);
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null) return false;
+
+        var result = await _userManager.SetLockoutEndDateAsync(user, null);
+        return result.Succeeded;
+    }
 
     #endregion
 
-    #region Role Management - Delegate to RoleManagementService
+    #region Role Management
 
     public async Task<IEnumerable<RoleVM>> GetAllRolesAsync()
-        => await _roleManagementService.GetAllRolesAsync();
+    {
+        var roles = await _roleManager.Roles.ToListAsync();
+        return roles.Select(r => new RoleVM
+        {
+            Id = r.Id,
+            Name = r.Name ?? string.Empty,
+            NormalizedName = r.NormalizedName ?? string.Empty,
+            ConcurrencyStamp = r.ConcurrencyStamp ?? string.Empty
+        });
+    }
 
     public async Task<bool> CreateRoleAsync(CreateRoleRequest request)
-        => await _roleManagementService.CreateRoleAsync(request);
+    {
+        if (await _roleManager.RoleExistsAsync(request.Name)) return false;
+        var result = await _roleManager.CreateAsync(new IdentityRole<Guid>(request.Name) { Id = Guid.NewGuid() });
+        return result.Succeeded;
+    }
 
     public async Task<bool> UpdateRoleAsync(UpdateRoleRequest request)
-        => await _roleManagementService.UpdateRoleAsync(request);
+    {
+        var role = await _roleManager.FindByIdAsync(request.Id.ToString());
+        if (role == null) return false;
+        role.Name = request.Name;
+        var result = await _roleManager.UpdateAsync(role);
+        return result.Succeeded;
+    }
 
     public async Task<bool> DeleteRoleAsync(string roleName)
-        => await _roleManagementService.DeleteRoleAsync(roleName);
+    {
+        var role = await _roleManager.FindByNameAsync(roleName);
+        if (role == null) return false;
+        var result = await _roleManager.DeleteAsync(role);
+        return result.Succeeded;
+    }
 
     public async Task<bool> AssignRoleToUserAsync(Guid userId, string roleName)
-        => await _roleManagementService.AssignRoleToUserAsync(userId, roleName);
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null || !await _roleManager.RoleExistsAsync(roleName)) return false;
+        var result = await _userManager.AddToRoleAsync(user, roleName);
+        return result.Succeeded;
+    }
 
     public async Task<bool> RemoveRoleFromUserAsync(Guid userId, string roleName)
-        => await _roleManagementService.RemoveRoleFromUserAsync(userId, roleName);
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null) return false;
+        var result = await _userManager.RemoveFromRoleAsync(user, roleName);
+        return result.Succeeded;
+    }
 
     public async Task<IEnumerable<string>> GetUserRolesAsync(Guid userId)
-        => await _roleManagementService.GetUserRolesAsync(userId);
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        return user == null ? Enumerable.Empty<string>() : await _userManager.GetRolesAsync(user);
+    }
+
+    public Task<bool> RoleExistsAsync(string roleName) => _roleManager.RoleExistsAsync(roleName);
+
+    public async Task<bool> IsUserInRoleAsync(Guid userId, string roleName)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        return user != null && await _userManager.IsInRoleAsync(user, roleName);
+    }
 
     #endregion
 
-    #region Claims Management - Delegate to ClaimsManagementService
+    #region Claims Management
 
     public async Task<IEnumerable<UserClaimVM>> GetUserClaimsAsync(Guid userId)
-        => await _claimsManagementService.GetUserClaimsAsync(userId);
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null) return Enumerable.Empty<UserClaimVM>();
+        var claims = await _userManager.GetClaimsAsync(user);
+        return claims.Select(c => new UserClaimVM { Type = c.Type, Value = c.Value });
+    }
 
     public async Task<bool> AddClaimToUserAsync(Guid userId, string claimType, string claimValue)
-        => await _claimsManagementService.AddClaimToUserAsync(userId, claimType, claimValue);
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null) return false;
+        var result = await _userManager.AddClaimAsync(user, new Claim(claimType, claimValue));
+        return result.Succeeded;
+    }
 
     public async Task<bool> RemoveClaimFromUserAsync(Guid userId, string claimType, string claimValue)
-        => await _claimsManagementService.RemoveClaimFromUserAsync(userId, claimType, claimValue);
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null) return false;
+        var result = await _userManager.RemoveClaimAsync(user, new Claim(claimType, claimValue));
+        return result.Succeeded;
+    }
 
     public async Task<bool> UpdateUserClaimAsync(Guid userId, string oldClaimType, string oldClaimValue, string newClaimType, string newClaimValue)
-        => await _claimsManagementService.UpdateUserClaimAsync(userId, oldClaimType, oldClaimValue, newClaimType, newClaimValue);
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null) return false;
+        var result = await _userManager.ReplaceClaimAsync(user, new Claim(oldClaimType, oldClaimValue), new Claim(newClaimType, newClaimValue));
+        return result.Succeeded;
+    }
 
     #endregion
 }
-
-

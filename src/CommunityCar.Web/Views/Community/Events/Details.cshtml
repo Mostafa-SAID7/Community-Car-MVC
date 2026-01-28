@@ -96,7 +96,7 @@
                         </button>
                     }
                     
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity?.IsAuthenticated == true)
                     {
                         var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
                         if (currentUserId == Model.OrganizerId.ToString())

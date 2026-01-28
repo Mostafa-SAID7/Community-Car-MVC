@@ -37,5 +37,6 @@ public enum ActivityType
     SettingsUpdate = 33,
     PrivacyUpdate = 34,
     DataExport = 35,
-    DataDelete = 36
+    DataDelete = 36,
+    Other = 99
 }

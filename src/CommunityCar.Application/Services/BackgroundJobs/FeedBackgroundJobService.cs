@@ -2,6 +2,8 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Application.Common.Models.Caching;
 using Microsoft.Extensions.Logging;
+using CommunityCar.Application.Features.Feed.DTOs;
+using CommunityCar.Application.Features.Feed.ViewModels;
 
 namespace CommunityCar.Application.Services.BackgroundJobs;
 
@@ -38,15 +40,15 @@ public class FeedBackgroundJobService
                 try
                 {
                     // Generate feed for first page
-                    var feedRequest = new CommunityCar.Application.Features.Feed.DTOs.FeedRequest
+                    var personalizedFeedRequest = new FeedRequest
                     {
                         UserId = userId,
                         Page = 1,
                         PageSize = 20,
-                        SortBy = "Recent"
+                        SortBy = FeedSortBy.Newest
                     };
                     
-                    var feed = await _feedService.GetPersonalizedFeedAsync(feedRequest);
+                    var feed = await _feedService.GetPersonalizedFeedAsync(personalizedFeedRequest);
                     
                     // Cache the result
                     var cacheKey = CacheKeys.Feed.PersonalizedFeed(userId, 1);
@@ -182,7 +184,7 @@ public class FeedBackgroundJobService
         {
             _logger.LogInformation("Cleaning up expired stories");
             
-            await _feedService.CleanupExpiredStoriesAsync();
+            int count = await _feedService.CleanupExpiredStoriesAsync();
             
             // Invalidate stories cache
             await _cacheService.RemoveByPatternAsync($"{CacheKeys.Feed.ActiveStories(Guid.Empty).Split(':')[0]}:*");
@@ -209,7 +211,7 @@ public class FeedBackgroundJobService
             {
                 try
                 {
-                    var stats = await _feedService.GetFeedStatisticsAsync(userId);
+                    var stats = await _feedService.GetFeedStatisticsAsync();
                     
                     var cacheKey = CacheKeys.Feed.FeedStats(userId);
                     await _cacheService.SetAsync(cacheKey, stats, CacheSettings.Feed.FeedStats);

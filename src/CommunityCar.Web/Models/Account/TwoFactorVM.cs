@@ -2,6 +2,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CommunityCar.Web.Models.Account;
 
+public class TwoFactorVM
+{
+    public bool IsEnabled { get; set; }
+    public bool IsMachineRemembered { get; set; }
+    public int RecoveryCodesLeft { get; set; }
+    public List<string> RecoveryCodes { get; set; } = new();
+    public string AuthenticatorKey { get; set; } = string.Empty;
+    public string AuthenticatorUri { get; set; } = string.Empty;
+}
+
 public class EnableTwoFactorVM
 {
     public string QrCodeUri { get; set; } = string.Empty;
@@ -47,5 +57,3 @@ public class SendSmsTokenVM
     [Display(Name = "Phone Number")]
     public string PhoneNumber { get; set; } = string.Empty;
 }
-
-

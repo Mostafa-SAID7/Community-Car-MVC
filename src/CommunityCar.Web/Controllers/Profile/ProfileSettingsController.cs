@@ -12,15 +12,18 @@ namespace CommunityCar.Web.Controllers.Profile;
 public class ProfileSettingsController : Controller
 {
     private readonly IProfileOrchestrator _profileOrchestrator;
+    private readonly IAccountOrchestrator _accountOrchestrator;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<ProfileSettingsController> _logger;
 
     public ProfileSettingsController(
         IProfileOrchestrator profileOrchestrator,
+        IAccountOrchestrator accountOrchestrator,
         ICurrentUserService currentUserService,
         ILogger<ProfileSettingsController> logger)
     {
         _profileOrchestrator = profileOrchestrator;
+        _accountOrchestrator = accountOrchestrator;
         _currentUserService = currentUserService;
         _logger = logger;
     }
@@ -31,32 +34,10 @@ public class ProfileSettingsController : Controller
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
              return RedirectToAction("Login", "Authentication", new { area = "" });
 
-        var profile = await _profileOrchestrator.GetProfileAsync(userId);
+        var profile = await _profileOrchestrator.GetProfileSettingsAsync(userId);
         if (profile == null) return NotFound();
 
-        var model = new ProfileSettingsVM
-        {
-            Id = profile.Id,
-            FullName = profile.FullName,
-            Email = profile.Email,
-            PhoneNumber = profile.PhoneNumber,
-            Bio = profile.Bio,
-            City = profile.City,
-            Country = profile.Country,
-            BioAr = profile.BioAr,
-            CityAr = profile.CityAr,
-            CountryAr = profile.CountryAr,
-            ProfilePictureUrl = profile.ProfilePictureUrl,
-            IsEmailConfirmed = profile.IsEmailConfirmed,
-            IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
-            IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
-            HasGoogleAccount = profile.HasGoogleAccount,
-            HasFacebookAccount = profile.HasFacebookAccount,
-            LastPasswordChange = profile.LastPasswordChange,
-            ActiveSessions = 1 // Placeholder
-        };
-
-        return View("~/Views/Profile/Settings.cshtml", model);
+        return View("~/Views/Profile/Settings.cshtml", profile);
     }
 
     [HttpPost("privacy")]
@@ -69,18 +50,18 @@ public class ProfileSettingsController : Controller
         if (!ModelState.IsValid)
              return BadRequest(ModelState);
 
-        var request = new UpdatePrivacySettingsRequest
+        var request = new CommunityCar.Application.Common.Models.Account.UpdatePrivacySettingsRequest
         {
             UserId = userId,
             ProfileVisible = model.ProfileVisible,
             EmailVisible = model.EmailVisible,
             PhoneVisible = model.PhoneVisible,
-            AllowMessages = model.AllowMessages,
-            AllowFriendRequests = model.AllowFriendRequests
+            // AllowMessages = model.AllowMessages, // Not in Request
+            // AllowFriendRequests = model.AllowFriendRequests // Not in Request
         };
 
-        var result = await _profileOrchestrator.UpdatePrivacySettingsAsync(userId, request);
-        if (result)
+        var result = await _accountOrchestrator.UpdatePrivacySettingsAsync(request);
+        if (result.Succeeded)
              return Ok(new { success = true, message = "Privacy settings updated." });
 
         return BadRequest(new { success = false, message = "Failed to update privacy settings." });
@@ -96,7 +77,7 @@ public class ProfileSettingsController : Controller
         if (!ModelState.IsValid)
              return BadRequest(ModelState);
 
-        var request = new UpdateNotificationSettingsRequest
+        var request = new CommunityCar.Application.Common.Models.Account.UpdateNotificationSettingsRequest
         {
             UserId = userId,
             EmailNotifications = model.EmailNotifications,
@@ -105,8 +86,8 @@ public class ProfileSettingsController : Controller
             MarketingEmails = model.MarketingEmails
         };
 
-        var result = await _profileOrchestrator.UpdateNotificationSettingsAsync(userId, request);
-        if (result)
+        var result = await _accountOrchestrator.UpdateNotificationSettingsAsync(request);
+        if (result.Succeeded)
              return Ok(new { success = true, message = "Notification settings updated." });
 
         return BadRequest(new { success = false, message = "Failed to update notification settings." });

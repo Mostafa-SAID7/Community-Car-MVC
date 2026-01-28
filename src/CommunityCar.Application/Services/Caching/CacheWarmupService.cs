@@ -198,13 +198,13 @@ public class CacheWarmupService
                 var newsKey = CacheKeys.Community.News(category, 1);
                 await _cacheService.GetOrSetAsync(newsKey, async () =>
                 {
-                    var request = new CommunityCar.Application.Features.News.DTOs.NewsRequest
+                    var request = new CommunityCar.Application.Features.News.DTOs.NewsSearchRequest
                     {
-                        Category = category,
+                        Category = CommunityCar.Domain.Enums.NewsCategory.General,
                         Page = 1,
                         PageSize = 10
                     };
-                    return await _newsService.GetNewsAsync(request);
+                    return await _newsService.SearchNewsAsync(request);
                 }, CacheSettings.Community.News);
             });
 
@@ -214,14 +214,14 @@ public class CacheWarmupService
             var eventsKey = CacheKeys.Community.Events("all", DateTime.Today);
             await _cacheService.GetOrSetAsync(eventsKey, async () =>
             {
-                var request = new CommunityCar.Application.Features.Events.DTOs.EventsRequest
+                var request = new CommunityCar.Application.Features.Events.DTOs.EventsSearchRequest
                 {
                     Location = "all",
-                    Date = DateTime.Today,
+                    StartDate = DateTime.Today,
                     Page = 1,
                     PageSize = 20
                 };
-                return await _eventsService.GetEventsAsync(request);
+                return await _eventsService.SearchEventsAsync(request);
             }, CacheSettings.Community.Events);
 
             _logger.LogDebug("Community data cache warmed up");
@@ -303,7 +303,7 @@ public class CacheWarmupService
                     UserId = userId,
                     Page = 1,
                     PageSize = 20,
-                    SortBy = "Recent"
+                    SortBy = CommunityCar.Application.Features.Feed.DTOs.FeedSortBy.Newest
                 };
                 return await _feedService.GetPersonalizedFeedAsync(request);
             }, CacheSettings.Feed.PersonalizedFeed);

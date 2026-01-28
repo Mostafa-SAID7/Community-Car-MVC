@@ -49,7 +49,7 @@ public class NewsController : Controller
     {
         try
         {
-            var currentUserId = _currentUserService.UserId != null ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
+            var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
             
             var request = new NewsSearchRequest
             {
@@ -59,7 +59,7 @@ public class NewsController : Controller
                 CarModel = carModel,
                 CarYear = carYear,
                 Tags = !string.IsNullOrEmpty(tag) ? new List<string> { tag } : new List<string>(),
-                SortBy = sortBy,
+                SortBy = sortBy ?? "newest",
                 Page = page,
                 PageSize = pageSize,
                 IsPublished = true // Only show published news on public page
@@ -89,7 +89,7 @@ public class NewsController : Controller
     {
         try
         {
-            var currentUserId = _currentUserService.UserId != null ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
+            var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
             var newsItem = await _newsService.GetByIdAsync(id, currentUserId);
             
             if (newsItem == null)
@@ -373,7 +373,7 @@ public class NewsController : Controller
     {
         try
         {
-            var currentUserId = _currentUserService.UserId != null ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
+            var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
             var newsItem = await _newsService.GetByIdAsync(id, currentUserId);
             
             if (newsItem == null)

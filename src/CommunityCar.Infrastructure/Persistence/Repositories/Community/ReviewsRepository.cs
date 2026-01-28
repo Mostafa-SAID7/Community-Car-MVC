@@ -107,5 +107,11 @@ public class ReviewsRepository : BaseRepository<Review>, IReviewsRepository
         return await Context.Set<Review>()
             .AnyAsync(r => r.ReviewerId == userId && r.TargetId == targetId && r.TargetType == targetType);
     }
+
+    public async Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date)
+    {
+        return await Context.Set<Review>()
+            .CountAsync(r => r.ReviewerId == userId && r.CreatedAt.Date == date.Date);
+    }
 }
 

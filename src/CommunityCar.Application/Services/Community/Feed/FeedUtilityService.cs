@@ -127,9 +127,10 @@ public class FeedUtilityService : IFeedUtilityService
         // - Similar interests (car makes, tags)
         // - Location proximity
         // - Activity patterns
+        // - Mutual interests
 
         // For now, return mock data
-        for (int i = 0; i < count; i++)
+        foreach (var i in Enumerable.Range(0, count))
         {
             suggestions.Add(new SuggestedFriendVM
             {
@@ -223,6 +224,22 @@ public class FeedUtilityService : IFeedUtilityService
         
         return $"{(int)timeSpan.TotalDays}d left";
     }
+
+    public async Task<int> CleanupExpiredStoriesAsync()
+    {
+        var expiredStories = await _unitOfWork.Stories.GetExpiredAsync();
+        int count = 0;
+        foreach (var story in expiredStories)
+        {
+            story.Archive();
+            count++;
+        }
+
+        if (count > 0)
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        return count;
+    }
 }
-
-

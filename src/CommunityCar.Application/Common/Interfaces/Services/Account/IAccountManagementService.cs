@@ -1,7 +1,5 @@
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
 using CommunityCar.Application.Common.Models;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account;
@@ -22,9 +20,11 @@ public interface IAccountManagementService
     Task<bool> RequestDataExportAsync(Guid userId);
     Task<IEnumerable<DataExportVM>> GetDataExportHistoryAsync(Guid userId);
 
-    // Privacy Settings
+    // Privacy & Notification Settings
     Task<PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId);
     Task<Result> UpdatePrivacySettingsAsync(UpdatePrivacySettingsRequest request);
+    Task<NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId);
+    Task<Result> UpdateNotificationSettingsAsync(UpdateNotificationSettingsRequest request);
 
     // Account Recovery
     Task<bool> CanRecoverAccountAsync(string email);

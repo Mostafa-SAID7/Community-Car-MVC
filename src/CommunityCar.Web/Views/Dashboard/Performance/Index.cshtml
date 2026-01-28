@@ -139,7 +139,7 @@
     <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden shadow-red-500/5">
         <div class="p-4 border-b border-border/50 bg-muted/20 px-8 flex justify-between items-center">
             <h3 class="text-[10px] font-black uppercase tracking-widest text-foreground">Identified Performance Bottlenecks</h3>
-             <span class="text-[9px] font-black text-red-500 uppercase tracking-widest">@Model.Issues.Count Flags Raising</span>
+             <span class="text-[9px] font-black text-red-500 uppercase tracking-widest">@(Model?.Issues?.Count ?? 0) Flags Raising</span>
         </div>
         <div class="divide-y divide-border/20">
             @if (Model?.Issues?.Any() == true)

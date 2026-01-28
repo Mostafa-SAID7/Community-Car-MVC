@@ -195,7 +195,7 @@ public class BackgroundJobsController : Controller
     {
         try
         {
-            RecurringJob.Trigger(jobId);
+            RecurringJob.TriggerJob(jobId);
             TempData["SuccessMessage"] = $"Job '{jobId}' triggered successfully.";
             _logger.LogInformation("Recurring job {JobId} triggered by admin user", jobId);
         }
@@ -273,8 +273,8 @@ public class BackgroundJobsController : Controller
                     Id = job.Key,
                     Method = job.Value.Job?.Method?.Name ?? "Unknown",
                     State = "Succeeded",
-                    CreatedAt = job.Value.CreatedAt,
-                    Duration = job.Value.TotalDuration
+                    CreatedAt = job.Value.SucceededAt,
+                    Duration = job.Value.TotalDuration.HasValue ? TimeSpan.FromMilliseconds(job.Value.TotalDuration.Value) : null
                 });
             }
 
@@ -285,8 +285,8 @@ public class BackgroundJobsController : Controller
                     Id = job.Key,
                     Method = job.Value.Job?.Method?.Name ?? "Unknown",
                     State = "Failed",
-                    CreatedAt = job.Value.CreatedAt,
-                    Duration = job.Value.TotalDuration,
+                    CreatedAt = job.Value.FailedAt,
+                    Duration = null, // Failed jobs don't carry duration in DTO usually
                     Error = job.Value.ExceptionDetails
                 });
             }

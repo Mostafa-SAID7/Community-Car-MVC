@@ -1,12 +1,11 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.User;
-using CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Application.Common.Models.Account;
+using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Common.Models.Authentication;
+using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Application.Common.Models;
+using CommunityCar.Application.Common.Interfaces.Repositories.User;
+using CommunityCar.Domain.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
@@ -161,12 +160,17 @@ public class AccountSecurityService : IAccountSecurityService
 
     public async Task<SecurityInfoVM> GetSecurityInfoAsync(Guid userId)
     {
-        var lastPasswordChange = await GetLastPasswordChangeAsync(userId);
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null) return new SecurityInfoVM();
+
+        var sessions = await GetActiveSessionsAsync(userId);
+        
         return new SecurityInfoVM
         {
-            IsTwoFactorEnabled = false, // TODO: Link 2FA
-            LastPasswordChange = lastPasswordChange,
-            ActiveSessions = 1
+            IsTwoFactorEnabled = user.TwoFactorEnabled,
+            LastPasswordChange = user.LastPasswordChangeAt,
+            ActiveSessions = sessions.Count(),
+            HasOAuthLinked = !string.IsNullOrEmpty(user.GoogleId) || !string.IsNullOrEmpty(user.FacebookId)
         };
     }
 
@@ -176,19 +180,53 @@ public class AccountSecurityService : IAccountSecurityService
 
     public async Task<TwoFactorSetupVM> SetupTwoFactorAsync(Guid userId)
     {
-        return new TwoFactorSetupVM { SecretKey = "TOTP_SECRET_PLACEHOLDER" };
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null) throw new Exception("User not found");
+
+        var key = await _userManager.GetAuthenticatorKeyAsync(user);
+        if (string.IsNullOrEmpty(key))
+        {
+            await _userManager.ResetAuthenticatorKeyAsync(user);
+            key = await _userManager.GetAuthenticatorKeyAsync(user);
+        }
+
+        return new TwoFactorSetupVM 
+        { 
+            SecretKey = key ?? string.Empty,
+            QrCodeUri = $"otpauth://totp/CommunityCar:{user.Email}?secret={key}&issuer=CommunityCar"
+        };
     }
 
     public async Task<bool> EnableTwoFactorAsync(Guid userId, TwoFactorSetupRequest request)
     {
-        await LogSecurityEventAsync(userId, "2FA Enabled");
-        return true;
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null) return false;
+
+        var isValid = await _userManager.VerifyTwoFactorTokenAsync(
+            user, _userManager.Options.Tokens.AuthenticatorTokenProvider, request.Code);
+
+        if (isValid)
+        {
+            await _userManager.SetTwoFactorEnabledAsync(user, true);
+            user.EnableTwoFactor(request.SecretKey);
+            await _userRepository.UpdateAsync(user);
+            await LogSecurityEventAsync(userId, "2FA Enabled");
+            return true;
+        }
+
+        return false;
     }
 
     public async Task<bool> DisableTwoFactorAsync(Guid userId, string password)
     {
-        if (await ValidatePasswordAsync(userId, password))
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null) return false;
+
+        if (await _userManager.CheckPasswordAsync(user, password))
         {
+            await _userManager.SetTwoFactorEnabledAsync(user, false);
+            user.DisableTwoFactor();
+            await _userRepository.UpdateAsync(user);
             await LogSecurityEventAsync(userId, "2FA Disabled");
             return true;
         }
@@ -197,7 +235,11 @@ public class AccountSecurityService : IAccountSecurityService
 
     public async Task<bool> VerifyTwoFactorCodeAsync(Guid userId, string code)
     {
-        return code == "123456"; // Placeholder
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null) return false;
+
+        return await _userManager.VerifyTwoFactorTokenAsync(
+            user, _userManager.Options.Tokens.AuthenticatorTokenProvider, code);
     }
 
     #endregion

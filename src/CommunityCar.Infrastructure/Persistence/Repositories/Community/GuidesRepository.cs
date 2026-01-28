@@ -305,4 +305,10 @@ public class GuidesRepository : BaseRepository<Guide>, IGuidesRepository
             await Context.SaveChangesAsync();
         }
     }
+
+    public async Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date)
+    {
+        return await Context.Guides
+            .CountAsync(g => g.AuthorId == userId && g.CreatedAt.Date == date.Date);
+    }
 }

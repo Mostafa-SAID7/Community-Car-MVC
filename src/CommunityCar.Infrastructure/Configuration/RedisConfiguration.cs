@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Infrastructure.Services.Caching;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.Extensions.Caching.SqlServer;
 
 namespace CommunityCar.Infrastructure.Configuration;
 
@@ -73,7 +75,7 @@ public static class RedisConfiguration
                 catch
                 {
                     // Fallback to hybrid cache service if Redis is not available
-                    return provider.GetRequiredService<CacheService>();
+                    return provider.GetRequiredService<CommunityCar.Infrastructure.Caching.CacheService>();
                 }
             });
             
@@ -93,7 +95,7 @@ public static class RedisConfiguration
         else
         {
             // Use in-memory caching only
-            services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<ICacheService, CommunityCar.Infrastructure.Caching.CacheService>();
             services.AddScoped<IDistributedCacheService, DistributedCacheService>();
         }
 
@@ -155,7 +157,7 @@ public static class RedisConfiguration
         try
         {
             var connectionMultiplexer = serviceProvider.GetService<IConnectionMultiplexer>();
-            var logger = serviceProvider.GetRequiredService<ILogger<RedisConfiguration>>();
+            var logger = serviceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("RedisConfiguration");
             
             if (connectionMultiplexer != null)
             {
@@ -178,7 +180,7 @@ public static class RedisConfiguration
         }
         catch (Exception ex)
         {
-            var logger = serviceProvider.GetRequiredService<ILogger<RedisConfiguration>>();
+            var logger = serviceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("RedisConfiguration");
             logger.LogError(ex, "Failed to warm up Redis connection");
         }
     }

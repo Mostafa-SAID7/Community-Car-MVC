@@ -8,7 +8,6 @@ using CommunityCar.Domain.Enums;
 using CommunityCar.Domain.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Microsoft.AspNetCore.SignalR;
 using CommunityCar.Infrastructure.Hubs;
@@ -38,7 +37,7 @@ public class CommentsController : Controller
         _hubContext = hubContext;
     }
 
-    [HttpPost("add")]
+    [HttpPost("api/add")]
     public async Task<IActionResult> AddApi([FromBody] CreateCommentRequest request)
     {
         try
@@ -125,7 +124,7 @@ public class CommentsController : Controller
 
     [HttpPost("Add")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Add(string entityId, string entityType, string content, Guid? parentCommentId = null, string returnUrl = null)
+    public async Task<IActionResult> AddComment(string entityId, string entityType, string content, Guid? parentCommentId = null, string? returnUrl = null)
     {
         try
         {
@@ -136,7 +135,7 @@ public class CommentsController : Controller
                     return Json(new { success = false, message = "You must be logged in to comment" });
                 
                 TempData["ErrorMessage"] = "You must be logged in to comment";
-                return RedirectToAction("Login", "Account", new { returnUrl = returnUrl ?? Request.Headers["Referer"].ToString() });
+                return RedirectToAction("Login", "Account", new { returnUrl = returnUrl ?? Request.Headers["Referer"].FirstOrDefault() ?? "/" });
             }
 
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
@@ -264,14 +263,14 @@ public class CommentsController : Controller
     [HttpPost("Delete")]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(Guid id, string returnUrl = null)
+    public async Task<IActionResult> Delete(Guid id, string? returnUrl = null)
     {
         try
         {
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
             {
                 TempData["ErrorMessage"] = "You must be logged in to delete comments";
-                return RedirectToAction("Login", "Account", new { returnUrl = returnUrl ?? Request.Headers["Referer"].ToString() });
+                return RedirectToAction("Login", "Account", new { returnUrl = returnUrl ?? Request.Headers["Referer"].FirstOrDefault() ?? "/" });
             }
 
             var success = await _interactionService.DeleteCommentAsync(id, userId);
@@ -328,12 +327,12 @@ public class CommentsController : Controller
             return Json(new List<object>());
 
         var users = await _userManager.Users
-            .Where(u => u.FullName.Contains(query) || u.UserName.Contains(query))
+            .Where(u => (u.FullName != null && u.FullName.Contains(query)) || (u.UserName != null && u.UserName.Contains(query)))
             .Take(5)
             .Select(u => new
             {
                 id = u.Id,
-                name = u.FullName,
+                name = u.FullName ?? u.UserName ?? "Unknown User",
                 avatar = u.ProfilePictureUrl ?? "/images/default-avatar.png"
             })
             .ToListAsync();

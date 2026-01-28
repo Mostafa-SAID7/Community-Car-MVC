@@ -50,7 +50,7 @@ public class AuthenticatorService : IAuthenticatorService
                 return Result.Failure("Failed to enable two-factor authentication.", errors);
             }
 
-            user.IsTwoFactorEnabled = true;
+            user.TwoFactorEnabled = true;
             user.TwoFactorEnabledAt = DateTime.UtcNow;
             user.TwoFactorSecretKey = key;
             await _userManager.UpdateAsync(user);
@@ -89,7 +89,7 @@ public class AuthenticatorService : IAuthenticatorService
                 return Result.Failure("Failed to disable two-factor authentication.", errors);
             }
 
-            user.IsTwoFactorEnabled = false;
+            user.TwoFactorEnabled = false;
             user.TwoFactorSecretKey = null;
             user.BackupCodes = null;
             await _userManager.UpdateAsync(user);
@@ -169,7 +169,7 @@ public class AuthenticatorService : IAuthenticatorService
         try
         {
             var user = await _userManager.FindByIdAsync(userId);
-            return user?.IsTwoFactorEnabled ?? false;
+            return user?.TwoFactorEnabled ?? false;
         }
         catch (Exception ex)
         {

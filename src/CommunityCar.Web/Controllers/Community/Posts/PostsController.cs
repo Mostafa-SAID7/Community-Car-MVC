@@ -125,7 +125,7 @@ public class PostsController : Controller
     [HttpPost("{id:guid}/like")]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public async Task<IActionResult> Like(Guid id)
+    public IActionResult Like(Guid id)
     {
         try
         {
@@ -155,7 +155,7 @@ public class PostsController : Controller
     [HttpPost("{id:guid}/comment")]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public async Task<IActionResult> Comment(Guid id, string content)
+    public IActionResult Comment(Guid id, string content)
     {
         if (string.IsNullOrWhiteSpace(content))
         {

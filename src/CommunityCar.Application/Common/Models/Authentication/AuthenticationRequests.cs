@@ -64,6 +64,8 @@ public class ResetPasswordRequest
 
 public class ChangePasswordRequest
 {
+    public Guid UserId { get; set; }
+
     [Required(ErrorMessage = "Current password is required")]
     public string CurrentPassword { get; set; } = string.Empty;
 

@@ -19,7 +19,7 @@ public class CacheService : ICacheService
         _logger = logger;
     }
 
-    public Task<T?> GetAsync<T>(string key) where T : class
+    public Task<T?> GetAsync<T>(string key)
     {
         try
         {
@@ -40,16 +40,16 @@ public class CacheService : ICacheService
             }
 
             _logger.LogDebug("Cache miss for key: {Key}", key);
-            return Task.FromResult<T?>(null);
+            return Task.FromResult<T?>(default);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting cache value for key: {Key}", key);
-            return Task.FromResult<T?>(null);
+            return Task.FromResult<T?>(default);
         }
     }
 
-    public Task SetAsync<T>(string key, T value, TimeSpan? expiration = null) where T : class
+    public Task SetAsync<T>(string key, T value, TimeSpan? expiration = null)
     {
         try
         {
@@ -94,7 +94,7 @@ public class CacheService : ICacheService
         return Task.CompletedTask;
     }
 
-    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> getItem, TimeSpan? expiration = null) where T : class
+    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> getItem, TimeSpan? expiration = null)
     {
         var cachedValue = await GetAsync<T>(key);
         if (cachedValue != null)
@@ -115,6 +115,14 @@ public class CacheService : ICacheService
     {
         var exists = _memoryCache.TryGetValue(key, out _);
         return Task.FromResult(exists);
+    }
+
+    public Task RefreshAsync(string key, TimeSpan? expiration = null)
+    {
+        // Memory cache doesn't support refreshing expiration natively
+        // This would require re-setting the value with new expiration
+        _logger.LogWarning("Refresh expiration not supported in MemoryCache for key: {Key}", key);
+        return Task.CompletedTask;
     }
 
     public Task ClearAsync()

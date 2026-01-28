@@ -146,4 +146,11 @@ public class EmailService : IEmailService
             throw;
         }
     }
+
+    public async Task SendNotificationDigestAsync(string email, string userName, IEnumerable<string> notifications)
+    {
+        // Implementation for sending notification digest
+        _logger.LogInformation("Sending notification digest to {Email} for user {UserName}", email, userName);
+        await Task.CompletedTask;
+    }
 }

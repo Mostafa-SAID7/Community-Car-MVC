@@ -52,7 +52,7 @@ public static class HtmlHelperExtensions
                 }
                 else
                 {
-                    attributes[key] = value;
+                    attributes[key] = value?.ToString() ?? string.Empty;
                 }
             }
         }
@@ -94,7 +94,9 @@ public static class HtmlHelperExtensions
                 
                 if (key == "class")
                 {
-                    tag.AddCssClass(value?.ToString());
+                    var cssClass = value?.ToString();
+                    if (!string.IsNullOrEmpty(cssClass))
+                        tag.AddCssClass(cssClass);
                 }
                 else
                 {
@@ -174,7 +176,9 @@ public static class HtmlHelperExtensions
                 
                 if (key == "class")
                 {
-                    tag.AddCssClass(value?.ToString());
+                    var cssClass = value?.ToString();
+                    if (!string.IsNullOrEmpty(cssClass))
+                        tag.AddCssClass(cssClass);
                 }
                 else
                 {
@@ -212,7 +216,11 @@ public static class HtmlHelperExtensions
                 
                 if (key == "class")
                 {
-                    tag.AddCssClass(value?.ToString());
+                    var cssClass = value?.ToString();
+                    if (!string.IsNullOrEmpty(cssClass))
+                    {
+                        tag.AddCssClass(cssClass);
+                    }
                 }
                 else
                 {

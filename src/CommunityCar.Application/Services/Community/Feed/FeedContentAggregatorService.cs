@@ -101,6 +101,34 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
         };
     }
 
+    public async Task<List<FeedItemVM>> GetPopularContentAsync(int hours)
+    {
+        var since = DateTime.UtcNow.AddHours(-hours);
+        var feedItems = new List<FeedItemVM>();
+
+        // Get popular news
+        var news = await _unitOfWork.News.GetPublishedAsync();
+        var popularNews = news.Where(n => n.CreatedAt >= since)
+            .OrderByDescending(n => n.LikeCount + n.CommentCount + n.ViewCount)
+            .Take(10);
+
+        foreach (var item in popularNews)
+        {
+            feedItems.Add(new FeedItemVM
+            {
+                Id = item.Id,
+                ContentType = "News",
+                Title = item.Headline,
+                LikeCount = item.LikeCount,
+                CommentCount = item.CommentCount,
+                ViewCount = item.ViewCount,
+                CreatedAt = item.CreatedAt
+            });
+        }
+
+        return feedItems;
+    }
+
     #region Private Helper Methods
 
     private async Task<List<FeedItemVM>> GetPersonalizedNewsAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)

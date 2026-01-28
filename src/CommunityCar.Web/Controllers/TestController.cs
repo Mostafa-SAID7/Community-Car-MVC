@@ -28,7 +28,7 @@ public class TestController : Controller
         return View();
     }
 
-    public async Task<IActionResult> Interactions()
+    public IActionResult Interactions()
     {
         // Create a test interaction summary
         var testEntityId = Guid.NewGuid();

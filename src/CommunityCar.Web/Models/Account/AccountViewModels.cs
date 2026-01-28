@@ -126,11 +126,7 @@ public class AccountSettingsVM
 
 #region Security
 
-public class TwoFactorVM
-{
-    public bool IsEnabled { get; set; }
-    public int RecoveryCodesCount { get; set; }
-}
+
 
 public class DisableTwoFactorVM
 {

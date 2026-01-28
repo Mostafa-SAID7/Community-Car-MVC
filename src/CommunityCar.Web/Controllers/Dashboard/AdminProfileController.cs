@@ -5,6 +5,7 @@ using CommunityCar.Application.Common.Models.Profile;
 using CommunityCar.Web.Models.Profile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProfileSettingsVM = CommunityCar.Web.Models.Profile.ProfileSettingsVM;
 
 namespace CommunityCar.Web.Controllers.Dashboard;
 
@@ -50,16 +51,16 @@ public class AdminProfileController : Controller
             Country = profile.Country,
             ProfilePictureUrl = profile.ProfilePictureUrl,
             CreatedAt = profile.CreatedAt,
-            LastLoginAt = profile.LastLoginAt,
+            // LastLoginAt = profile.LastLoginAt,
             IsEmailConfirmed = profile.IsEmailConfirmed,
-            IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
-            IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
+            // IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
+            // IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
             IsActive = profile.IsActive,
-            HasGoogleAccount = profile.HasGoogleAccount,
-            HasFacebookAccount = profile.HasFacebookAccount,
+            // HasGoogleAccount = profile.HasGoogleAccount,
+            // HasFacebookAccount = profile.HasFacebookAccount,
             PostsCount = profile.PostsCount,
-            CommentsCount = profile.CommentsCount,
-            LikesReceived = profile.LikesReceived
+            // CommentsCount = profile.CommentsCount,
+            // LikesReceived = profile.LikesReceived
         };
 
         ViewData["Title"] = "Admin Profile";
@@ -74,7 +75,7 @@ public class AdminProfileController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var settings = await _profileService.GetProfileSettingsAsync(userId);
+        var settings = await _profileService.GetProfileAsync(userId);
         if (settings == null)
         {
             return RedirectToAction("Login", "Account");
@@ -91,15 +92,15 @@ public class AdminProfileController : Controller
             Country = settings.Country,
             ProfilePictureUrl = settings.ProfilePictureUrl,
             IsEmailConfirmed = settings.IsEmailConfirmed,
-            IsPhoneNumberConfirmed = settings.IsPhoneNumberConfirmed,
-            IsTwoFactorEnabled = settings.IsTwoFactorEnabled,
-            HasGoogleAccount = settings.HasGoogleAccount,
-            HasFacebookAccount = settings.HasFacebookAccount,
-            EmailNotifications = settings.EmailNotifications,
-            PushNotifications = settings.PushNotifications,
-            SmsNotifications = settings.SmsNotifications,
-            MarketingEmails = settings.MarketingEmails,
-            ActiveSessions = settings.ActiveSessions
+            // IsPhoneNumberConfirmed = settings.IsPhoneNumberConfirmed,
+            // IsTwoFactorEnabled = settings.IsTwoFactorEnabled,
+            // HasGoogleAccount = settings.HasGoogleAccount,
+            // HasFacebookAccount = settings.HasFacebookAccount,
+            // EmailNotifications = settings.EmailNotifications,
+            // PushNotifications = settings.PushNotifications,
+            // SmsNotifications = settings.SmsNotifications,
+            // MarketingEmails = settings.MarketingEmails,
+            // ActiveSessions = settings.ActiveSessions
         };
 
         ViewData["Title"] = "Admin Profile Settings";
@@ -120,10 +121,15 @@ public class AdminProfileController : Controller
             return RedirectToAction("Login", "Account");
         }
 
+        var nameParts = model.FullName.Split(' ', 2);
+        var firstName = nameParts.Length > 0 ? nameParts[0] : "";
+        var lastName = nameParts.Length > 1 ? nameParts[1] : "";
+
         var request = new UpdateProfileRequest
         {
             UserId = userId,
-            FullName = model.FullName,
+            FirstName = firstName,
+            LastName = lastName,
             PhoneNumber = model.PhoneNumber,
             Bio = model.Bio,
             City = model.City,

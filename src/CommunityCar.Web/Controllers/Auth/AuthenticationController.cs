@@ -1,7 +1,7 @@
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Application.Common.Models.Profile;
 using CommunityCar.Web.Models.Auth;
+using CommunityCar.Web.Models.Profile;
+using CommunityCar.Application.Common.Interfaces.Orchestrators;
+using CommunityCar.Application.Common.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,14 +10,14 @@ namespace CommunityCar.Web.Controllers.Auth;
 [Route("auth")]
 public class AuthenticationController : Controller
 {
-    private readonly IIdentityOrchestrator _identityOrchestrator;
+    private readonly IAuthOrchestrator _authOrchestrator;
     private readonly ILogger<AuthenticationController> _logger;
 
     public AuthenticationController(
-        IIdentityOrchestrator identityOrchestrator,
+        IAuthOrchestrator authOrchestrator,
         ILogger<AuthenticationController> logger)
     {
-        _identityOrchestrator = identityOrchestrator;
+        _authOrchestrator = authOrchestrator;
         _logger = logger;
     }
 
@@ -42,7 +42,7 @@ public class AuthenticationController : Controller
         if (!ModelState.IsValid)
             return View(request);
 
-        var result = await _identityOrchestrator.RegisterAsync(request);
+        var result = await _authOrchestrator.RegisterAsync(request);
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = "Registration successful! Please check your email to confirm your account.";
@@ -83,7 +83,7 @@ public class AuthenticationController : Controller
         if (!ModelState.IsValid)
             return View(request);
 
-        var result = await _identityOrchestrator.LoginAsync(request);
+        var result = await _authOrchestrator.LoginAsync(request);
         if (result.Succeeded)
         {
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -105,7 +105,7 @@ public class AuthenticationController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
-        await _identityOrchestrator.LogoutAsync();
+        await _authOrchestrator.LogoutAsync();
         return RedirectToAction("Login");
     }
 
@@ -122,7 +122,7 @@ public class AuthenticationController : Controller
             return RedirectToAction("Login");
         }
 
-        var result = await _identityOrchestrator.ConfirmEmailAsync(userId, token);
+        var result = await _authOrchestrator.ConfirmEmailAsync(userId, token);
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = "Email confirmed successfully! You can now log in.";
@@ -158,7 +158,7 @@ public class AuthenticationController : Controller
         if (!ModelState.IsValid)
             return View(request);
 
-        var result = await _identityOrchestrator.ForgotPasswordAsync(request.Email);
+        var result = await _authOrchestrator.ForgotPasswordAsync(request.Email);
 
         // Always show success message for security reasons
         TempData["SuccessMessage"] = "If an account with that email exists, we've sent password reset instructions.";
@@ -195,7 +195,7 @@ public class AuthenticationController : Controller
         if (!ModelState.IsValid)
             return View(request);
 
-        var result = await _identityOrchestrator.ResetPasswordAsync(request);
+        var result = await _authOrchestrator.ResetPasswordAsync(request);
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = "Password reset successfully! You can now log in with your new password.";
@@ -222,7 +222,7 @@ public class AuthenticationController : Controller
             return BadRequest(ModelState);
 
         var request = new GoogleSignInRequest { IdToken = model.IdToken };
-        var result = await _identityOrchestrator.GoogleSignInAsync(request);
+        var result = await _authOrchestrator.GoogleSignInAsync(request);
 
         if (result.Succeeded)
         {
@@ -240,7 +240,7 @@ public class AuthenticationController : Controller
             return BadRequest(ModelState);
 
         var request = new FacebookSignInRequest { AccessToken = model.AccessToken };
-        var result = await _identityOrchestrator.FacebookSignInAsync(request);
+        var result = await _authOrchestrator.FacebookSignInAsync(request);
 
         if (result.Succeeded)
         {

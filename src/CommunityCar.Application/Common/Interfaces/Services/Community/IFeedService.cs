@@ -16,9 +16,10 @@ public interface IFeedService
     Task<bool> InteractWithContentAsync(Guid userId, Guid contentId, string contentType, string interactionType);
     Task<bool> AddCommentAsync(Guid userId, Guid contentId, string contentType, string comment);
     Task<IEnumerable<object>> GetCommentsAsync(Guid contentId, string contentType);
-    Task<bool> BookmarkContentAsync(Guid userId, Guid contentId, string contentType);
-    Task<bool> HideContentAsync(Guid userId, Guid contentId, string contentType);
     Task<bool> ReportContentAsync(Guid userId, Guid contentId, string contentType, string reason);
+    Task<IEnumerable<FeedItemVM>> GetPopularContentAsync(int hours);
+    Task<int> CleanupExpiredStoriesAsync();
+    Task<FeedStatsVM> GetFeedStatisticsAsync();
 }
 
 

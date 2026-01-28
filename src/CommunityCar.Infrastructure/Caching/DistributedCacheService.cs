@@ -20,7 +20,7 @@ public class DistributedCacheService : IDistributedCacheService
         _logger = logger;
     }
 
-    public async Task<T?> GetAsync<T>(string key) where T : class
+    public async Task<T?> GetAsync<T>(string key)
     {
         try
         {
@@ -28,7 +28,7 @@ public class DistributedCacheService : IDistributedCacheService
             if (string.IsNullOrEmpty(cachedValue))
             {
                 _logger.LogDebug("Cache miss for key: {Key}", key);
-                return null;
+                return default;
             }
 
             var value = JsonSerializer.Deserialize<T>(cachedValue);
@@ -38,17 +38,17 @@ public class DistributedCacheService : IDistributedCacheService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting distributed cache value for key: {Key}", key);
-            return null;
+            return default;
         }
     }
 
-    public async Task<T?> GetAsync<T>(string key, string region) where T : class
+    public async Task<T?> GetAsync<T>(string key, string region)
     {
         var regionKey = $"{region}:{key}";
         return await GetAsync<T>(regionKey);
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null) where T : class
+    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null)
     {
         try
         {
@@ -68,7 +68,7 @@ public class DistributedCacheService : IDistributedCacheService
         }
     }
 
-    public async Task SetAsync<T>(string key, T value, string region, TimeSpan? expiration = null) where T : class
+    public async Task SetAsync<T>(string key, T value, string region, TimeSpan? expiration = null)
     {
         var regionKey = $"{region}:{key}";
         await SetAsync(regionKey, value, expiration);
@@ -108,7 +108,7 @@ public class DistributedCacheService : IDistributedCacheService
         return Task.CompletedTask;
     }
 
-    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> getItem, TimeSpan? expiration = null) where T : class
+    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> getItem, TimeSpan? expiration = null)
     {
         var cachedValue = await GetAsync<T>(key);
         if (cachedValue != null)
@@ -125,7 +125,7 @@ public class DistributedCacheService : IDistributedCacheService
         return value;
     }
 
-    public async Task<T> GetOrSetAsync<T>(string key, string region, Func<Task<T>> getItem, TimeSpan? expiration = null) where T : class
+    public async Task<T> GetOrSetAsync<T>(string key, string region, Func<Task<T>> getItem, TimeSpan? expiration = null)
     {
         var regionKey = $"{region}:{key}";
         return await GetOrSetAsync(regionKey, getItem, expiration);
@@ -143,6 +143,13 @@ public class DistributedCacheService : IDistributedCacheService
             _logger.LogError(ex, "Error checking if distributed cache key exists: {Key}", key);
             return false;
         }
+    }
+
+    public Task RefreshAsync(string key, TimeSpan? expiration = null)
+    {
+        // Redis implementation would use EXPIRE command
+        _logger.LogWarning("Refresh expiration requires Redis implementation for key: {Key}", key);
+        return Task.CompletedTask;
     }
 
     public Task ClearAsync()

@@ -1,13 +1,5 @@
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account;
 
@@ -37,6 +29,7 @@ public interface IGamificationService
     // Leaderboards
     Task<IEnumerable<LeaderboardEntryVM>> GetLeaderboardAsync(string category, int limit = 10);
     Task<int> GetUserRankAsync(Guid userId, string category);
+    Task<int> GetUserLevelAsync(Guid userId);
 
     // Gamification Events
     Task ProcessUserActionAsync(Guid userId, string action, Dictionary<string, object>? metadata = null);

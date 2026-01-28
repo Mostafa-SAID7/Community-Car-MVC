@@ -1,17 +1,5 @@
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account;
 
@@ -33,11 +21,6 @@ public interface IProfileService
     Task<bool> RemoveCoverImageAsync(Guid userId);
     Task<bool> DeleteProfilePictureAsync(Guid userId);
 
-    // Profile Settings
-    Task<ProfileSettingsVM?> GetProfileSettingsAsync(Guid userId);
-    Task<bool> UpdatePrivacySettingsAsync(Guid userId, UpdatePrivacySettingsRequest request);
-    Task<bool> UpdateNotificationSettingsAsync(Guid userId, UpdateNotificationSettingsRequest request);
-
     // Profile Statistics
     Task<ProfileStatsVM> GetProfileStatsAsync(Guid userId);
     Task<bool> UpdateProfileStatsAsync(Guid userId);
@@ -46,5 +29,3 @@ public interface IProfileService
     Task<bool> IsProfileCompleteAsync(Guid userId);
     Task<IEnumerable<string>> GetProfileCompletionSuggestionsAsync(Guid userId);
 }
-
-

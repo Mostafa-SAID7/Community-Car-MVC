@@ -7,6 +7,7 @@ public interface IEmailService
     Task SendWelcomeEmailAsync(string email, string fullName);
     Task SendTwoFactorTokenAsync(string email, string token);
     Task SendEmailAsync(string to, string subject, string body, bool isHtml = true);
+    Task SendNotificationDigestAsync(string email, string userName, IEnumerable<string> notifications);
 }
 
 public class EmailMessage

@@ -83,6 +83,25 @@ public class OAuthService : IOAuthService
         return logins;
     }
 
+    public Task<Result> LinkAccountAsync(LinkExternalAccountRequest request)
+    {
+        if (request.Provider == "Google")
+            return LinkGoogleAccountAsync(request);
+        if (request.Provider == "Facebook")
+            return LinkFacebookAccountAsync(request);
+            
+        return Task.FromResult(Result.Failure("Unsupported provider."));
+    }
+
+    public Task<Result> UnlinkAccountAsync(Guid userId, string provider)
+    {
+        return UnlinkExternalAccountAsync(new UnlinkExternalAccountRequest 
+        { 
+            UserId = userId.ToString(), 
+            Provider = provider 
+        });
+    }
+
     public async Task<bool> IsAccountLinkedAsync(string userId, string provider)
         => await _userRepository.IsOAuthAccountLinkedAsync(Guid.Parse(userId), provider);
 

@@ -68,7 +68,7 @@ public class InteractionsController : Controller
 
     [HttpGet("user/summary")]
     [Authorize]
-    public async Task<IActionResult> GetUserInteractionSummary()
+    public IActionResult GetUserInteractionSummary()
     {
         try
         {
@@ -86,7 +86,7 @@ public class InteractionsController : Controller
     }
 
     [HttpGet("stats/{entityType}")]
-    public async Task<IActionResult> GetInteractionStats(EntityType entityType, [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
+    public IActionResult GetInteractionStats(EntityType entityType, [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
     {
         try
         {

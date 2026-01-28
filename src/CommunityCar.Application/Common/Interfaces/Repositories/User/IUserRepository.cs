@@ -22,6 +22,8 @@ public interface IUserRepository : IBaseRepository<Domain.Entities.Auth.User>
     Task<IEnumerable<Domain.Entities.Auth.User>> SearchUsersAsync(string searchTerm, int page = 1, int pageSize = 20);
     Task<bool> UpdateProfilePictureAsync(Guid userId, string imageUrl);
     Task<bool> RemoveProfilePictureAsync(Guid userId);
+    Task<bool> UpdateCoverImageAsync(Guid userId, string imageUrl);
+    Task<bool> RemoveCoverImageAsync(Guid userId);
     #endregion
 
     #region Account Management

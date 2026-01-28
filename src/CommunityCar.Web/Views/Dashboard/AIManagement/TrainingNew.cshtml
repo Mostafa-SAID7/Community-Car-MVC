@@ -29,16 +29,16 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @try
         {
-            @if (Model != null && Model.Models != null)
+            @if (Model?.Models != null)
             {
                 @foreach (var trainingModel in Model.Models)
                 {
                     <div class="eng-card">
                         <div class="eng-card-header">
                             <div class="flex items-center justify-between">
-                                <h3 class="eng-card-title">@trainingModel.Name</h3>
+                                <h3 class="eng-card-title">@(trainingModel?.Name ?? "Unknown Model")</h3>
                                 @{
-                                    var statusClass = trainingModel.Status switch
+                                    var statusClass = trainingModel?.Status switch
                                     {
                                         "Active" => "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
                                         "Training" => "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
@@ -46,52 +46,52 @@
                                     };
                                 }
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium @statusClass">
-                                    @trainingModel.Status
+                                    @(trainingModel?.Status ?? "Unknown")
                                 </span>
                             </div>
-                            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Version @trainingModel.Version</p>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Version @(trainingModel?.Version ?? "N/A")</p>
                         </div>
                         <div class="p-6 space-y-4">
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-muted-foreground">Accuracy</span>
-                                <span class="font-medium text-foreground">@trainingModel.Accuracy%</span>
+                                <span class="font-medium text-foreground">@(trainingModel?.Accuracy ?? 0)%</span>
                             </div>
                             <div class="eng-progress-container h-2 bg-background">
-                                <div class="eng-progress-bar bg-primary w-[@trainingModel.Accuracy%]" ></div>
+                                <div class="eng-progress-bar bg-primary w-[@(trainingModel?.Accuracy ?? 0)%]" ></div>
                             </div>
                             <div class="flex items-center justify-between text-sm">
                                 <span class="text-muted-foreground">Dataset Size</span>
-                                <span class="text-foreground">@trainingModel.DatasetSize.ToString("N0")</span>
+                                <span class="text-foreground">@(trainingModel?.DatasetSize.ToString("N0") ?? "0")</span>
                             </div>
                             <div class="flex items-center justify-between text-sm">
                                 <span class="text-muted-foreground">Last Trained</span>
-                                <span class="text-foreground">@trainingModel.LastTrained.ToString("MMM dd, yyyy")</span>
+                                <span class="text-foreground">@(trainingModel?.LastTrained.ToString("MMM dd, yyyy") ?? "Never")</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button class="inline-flex items-center justify-center flex-1 px-4 py-2 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/retrain" data-action="retrain-model" data-model="@trainingModel.Name">
+                                <button class="inline-flex items-center justify-center flex-1 px-4 py-2 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/retrain" data-action="retrain-model" data-model="@(trainingModel?.Name ?? "")">
                                     <i data-lucide="refresh-cw" class="w-3.5 h-3.5 mr-1.5 group-hover/retrain:rotate-180 transition-transform duration-700"></i>
                                     Retrain
                                 </button>
                                 <div class="relative">
-                                    <button class="inline-flex items-center justify-center w-10 h-10 bg-background border border-border/50 hover:bg-muted/10 rounded-xl transition-all active:scale-95" data-action="toggle-options" data-model="@trainingModel.Name">
+                                    <button class="inline-flex items-center justify-center w-10 h-10 bg-background border border-border/50 hover:bg-muted/10 rounded-xl transition-all active:scale-95" data-action="toggle-options" data-model="@(trainingModel?.Name ?? "")">
                                         <i data-lucide="more-vertical" class="w-4 h-4"></i>
                                     </button>
-                                    <div id="options-@trainingModel.Name" class="absolute right-0 top-full mt-1 w-48 bg-background border border-border rounded-lg shadow-lg z-10 hidden">
+                                    <div id="options-@(trainingModel?.Name ?? "")" class="absolute right-0 top-full mt-1 w-48 bg-background border border-border rounded-lg shadow-lg z-10 hidden">
                                         <div class="py-1">
-                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="view-details" data-model="@trainingModel.Name">
+                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="view-details" data-model="@(trainingModel?.Name ?? "")">
                                                 <i data-lucide="eye" class="w-3 h-3"></i>
                                                 View Details
                                             </button>
-                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="edit-settings" data-model="@trainingModel.Name">
+                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="edit-settings" data-model="@(trainingModel?.Name ?? "")">
                                                 <i data-lucide="settings" class="w-3 h-3"></i>
                                                 Edit Settings
                                             </button>
-                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="export-model" data-model="@trainingModel.Name">
+                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="export-model" data-model="@(trainingModel?.Name ?? "")">
                                                 <i data-lucide="download" class="w-3 h-3"></i>
                                                 Export Model
                                             </button>
                                             <hr class="my-1">
-                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted text-red-600 flex items-center gap-2" data-action="delete-model" data-model="@trainingModel.Name">
+                                            <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted text-red-600 flex items-center gap-2" data-action="delete-model" data-model="@(trainingModel?.Name ?? "")">
                                                 <i data-lucide="trash-2" class="w-3 h-3"></i>
                                                 Delete Model
                                             </button>
@@ -129,7 +129,7 @@
         <div class="p-6">
             @try
             {
-                @if (Model != null && Model.TrainingQueue != null && Model.TrainingQueue.Length > 0)
+                @if (Model?.TrainingQueue?.Length > 0)
                 {
                     <div class="space-y-3">
                         @foreach (var job in Model.TrainingQueue)
@@ -137,7 +137,7 @@
                             <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                                 <div class="flex items-center gap-3">
                                     <div class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                        @if (job.Status == "In Progress")
+                                        @if (job?.Status == "In Progress")
                                         {
                                             <i data-lucide="loader" class="w-4 h-4 text-blue-600 dark:text-blue-400 animate-spin"></i>
                                         }
@@ -147,12 +147,12 @@
                                         }
                                     </div>
                                     <div>
-                                        <div class="font-medium text-foreground">@job.Model</div>
-                                        <div class="text-sm text-muted-foreground">@job.Status</div>
+                                        <div class="font-medium text-foreground">@(job?.Model ?? "Unknown")</div>
+                                        <div class="text-sm text-muted-foreground">@(job?.Status ?? "Unknown")</div>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-sm font-medium text-foreground">@job.EstimatedTime</div>
+                                    <div class="text-sm font-medium text-foreground">@(job?.EstimatedTime ?? "Unknown")</div>
                                     <div class="text-xs text-muted-foreground">remaining</div>
                                 </div>
                             </div>
@@ -198,36 +198,36 @@
                     <tbody>
                         @try
                         {
-                            @if (Model != null && Model.RecentTraining != null)
+                            @if (Model?.RecentTraining != null)
                             {
                                 @foreach (var training in Model.RecentTraining)
                                 {
                                     <tr class="border-b border-border hover:bg-muted/50">
                                         <td class="p-4">
-                                            <div class="font-medium text-foreground">@training.Model</div>
+                                            <div class="font-medium text-foreground">@(training?.Model ?? "Unknown")</div>
                                         </td>
                                         <td class="p-4">
-                                            <div class="text-sm text-foreground">@training.Date.ToString("MMM dd, yyyy")</div>
-                                            <div class="text-xs text-muted-foreground">@training.Date.ToString("HH:mm")</div>
+                                            <div class="text-sm text-foreground">@(training?.Date.ToString("MMM dd, yyyy") ?? "Unknown")</div>
+                                            <div class="text-xs text-muted-foreground">@(training?.Date.ToString("HH:mm") ?? "")</div>
                                         </td>
                                         <td class="p-4">
                                             @{
-                                                var resultClass = training.Result == "Success" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
+                                                var resultClass = training?.Result == "Success" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
                                             }
                                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium @resultClass">
-                                                @training.Result
+                                                @(training?.Result ?? "Unknown")
                                             </span>
                                         </td>
                                         <td class="p-4">
-                                            <span class="text-green-600 font-medium">@training.Improvement</span>
+                                            <span class="text-green-600 font-medium">@(training?.Improvement ?? "N/A")</span>
                                         </td>
                                         <td class="p-4">
                                             <div class="flex items-center gap-2">
-                                                <button class="inline-flex items-center justify-center px-3 py-1.5 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/view" data-action="view-training-details" data-model="@training.Model" data-date="@training.Date.ToString("yyyy-MM-dd")">
+                                                <button class="inline-flex items-center justify-center px-3 py-1.5 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/view" data-action="view-training-details" data-model="@(training?.Model ?? "")" data-date="@(training?.Date.ToString("yyyy-MM-dd") ?? "")">>
                                                     <i data-lucide="eye" class="w-3.5 h-3.5 mr-1.5 group-hover/view:scale-110 transition-transform"></i>
                                                     View Details
                                                 </button>
-                                                <button class="inline-flex items-center justify-center w-8 h-8 bg-background border border-border/50 hover:border-primary/50 hover:text-primary rounded-xl transition-all active:scale-95 group/download" data-action="download-report" data-model="@training.Model" data-date="@training.Date.ToString("yyyy-MM-dd")">
+                                                <button class="inline-flex items-center justify-center w-8 h-8 bg-background border border-border/50 hover:border-primary/50 hover:text-primary rounded-xl transition-all active:scale-95 group/download" data-action="download-report" data-model="@(training?.Model ?? "")" data-date="@(training?.Date.ToString("yyyy-MM-dd") ?? "")">>
                                                     <i data-lucide="download" class="w-4 h-4 group-hover/download:translate-y-0.5 transition-transform"></i>
                                                 </button>
                                             </div>

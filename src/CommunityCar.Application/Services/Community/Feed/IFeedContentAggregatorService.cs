@@ -27,6 +27,7 @@ public interface IFeedContentAggregatorService
     /// Gets content from specific sources (news, reviews, QA, stories)
     /// </summary>
     Task<List<FeedItemVM>> GetContentFromSourceAsync(FeedRequest request, string contentType, List<string> userInterests, List<Guid> friendIds);
+    Task<List<FeedItemVM>> GetPopularContentAsync(int hours);
 }
 
 

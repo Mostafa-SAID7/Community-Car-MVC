@@ -1,0 +1,11 @@
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading;
+global using System.Threading.Tasks;
+global using CommunityCar.Domain.Entities.Auth;
+global using CommunityCar.Domain.Entities;
+global using CommunityCar.Application.Common.Models;
+global using CommunityCar.Application.Common.Interfaces.Services.Caching;
+global using CommunityCar.Application.Common.Interfaces.Services.BackgroundJobs;
+global using Microsoft.Extensions.Logging;

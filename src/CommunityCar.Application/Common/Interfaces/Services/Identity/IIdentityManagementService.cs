@@ -1,5 +1,4 @@
-using CommunityCar.Application.Features.Identity.ViewModels;
-using CommunityCar.Application.Features.Identity.DTOs;
+using CommunityCar.Application.Common.Models.Identity;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Identity;
 
@@ -23,6 +22,8 @@ public interface IIdentityManagementService
     Task<bool> AssignRoleToUserAsync(Guid userId, string roleName);
     Task<bool> RemoveRoleFromUserAsync(Guid userId, string roleName);
     Task<IEnumerable<string>> GetUserRolesAsync(Guid userId);
+    Task<bool> RoleExistsAsync(string roleName);
+    Task<bool> IsUserInRoleAsync(Guid userId, string roleName);
 
     // Claims Management
     Task<IEnumerable<UserClaimVM>> GetUserClaimsAsync(Guid userId);

@@ -58,6 +58,7 @@ public interface IFeedUtilityService
     /// Calculates time remaining for stories
     /// </summary>
     string CalculateTimeRemaining(DateTime expiresAt);
+    Task<int> CleanupExpiredStoriesAsync();
 }
 
 

@@ -1,8 +1,0 @@
-﻿
-Build succeeded.
-    41 Warning(s)
-    0 Error(s)
-
-Time Elapsed 00:00:55.98
-
-Workload updates are available. Run `dotnet workload list` for more information.

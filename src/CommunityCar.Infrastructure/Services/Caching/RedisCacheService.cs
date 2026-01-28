@@ -31,7 +31,7 @@ public class RedisCacheService : ICacheService, IDistributedCacheService
 
     #region ICacheService Implementation
 
-    public async Task<T?> GetAsync<T>(string key) where T : class
+    public async Task<T?> GetAsync<T>(string key)
     {
         try
         {
@@ -39,7 +39,7 @@ public class RedisCacheService : ICacheService, IDistributedCacheService
             if (!value.HasValue)
             {
                 _logger.LogDebug("Cache miss: {Key}", key);
-                return null;
+                return default;
             }
 
             var deserializedValue = JsonSerializer.Deserialize<T>(value!, _jsonOptions);
@@ -48,12 +48,11 @@ public class RedisCacheService : ICacheService, IDistributedCacheService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting cache value for key: {Key}", key);
-            return null;
+            return default;
         }
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null) where T : class
+    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null)
     {
         try
         {
@@ -99,7 +98,7 @@ public class RedisCacheService : ICacheService, IDistributedCacheService
         }
     }
 
-    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> getItem, TimeSpan? expiration = null) where T : class
+    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> getItem, TimeSpan? expiration = null)
     {
         var cachedValue = await GetAsync<T>(key);
         if (cachedValue != null)
@@ -153,13 +152,13 @@ public class RedisCacheService : ICacheService, IDistributedCacheService
 
     #region IDistributedCacheService Implementation
 
-    public async Task<T?> GetAsync<T>(string key, string region) where T : class
+    public async Task<T?> GetAsync<T>(string key, string region)
     {
         var regionKey = $"{region}:{key}";
         return await GetAsync<T>(regionKey);
     }
 
-    public async Task SetAsync<T>(string key, T value, string region, TimeSpan? expiration = null) where T : class
+    public async Task SetAsync<T>(string key, T value, string region, TimeSpan? expiration = null)
     {
         var regionKey = $"{region}:{key}";
         await SetAsync(regionKey, value, expiration);
@@ -176,7 +175,7 @@ public class RedisCacheService : ICacheService, IDistributedCacheService
         await RemoveByPatternAsync($"{region}:*");
     }
 
-    public async Task<T> GetOrSetAsync<T>(string key, string region, Func<Task<T>> getItem, TimeSpan? expiration = null) where T : class
+    public async Task<T> GetOrSetAsync<T>(string key, string region, Func<Task<T>> getItem, TimeSpan? expiration = null)
     {
         var regionKey = $"{region}:{key}";
         return await GetOrSetAsync(regionKey, getItem, expiration);
@@ -189,7 +188,7 @@ public class RedisCacheService : ICacheService, IDistributedCacheService
     /// <summary>
     /// Set cache with sliding expiration
     /// </summary>
-    public async Task SetWithSlidingExpirationAsync<T>(string key, T value, TimeSpan slidingExpiration) where T : class
+    public async Task SetWithSlidingExpirationAsync<T>(string key, T value, TimeSpan slidingExpiration)
     {
         try
         {

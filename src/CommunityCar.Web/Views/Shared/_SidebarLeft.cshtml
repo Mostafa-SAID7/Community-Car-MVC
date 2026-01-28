@@ -1,3 +1,4 @@
+@using CommunityCar.Domain.Constants
 <!-- Left Sidebar -->
 <aside
     class="sidebar fixed left-0 md:left-4 rtl:left-auto rtl:right-0 rtl:md:right-4 top-24 bottom-20 w-64 md:w-16 xl:w-56 bg-card/40 backdrop-blur-xl border border-border rounded-2xl shadow-2xl transition-all duration-300 z-40 -translate-x-full rtl:translate-x-full md:translate-x-0">
@@ -61,10 +62,17 @@
     </div>
 
     <div class="p-2 border-t border-border">
+        @{
+            var isStaff = User.IsInRole(Roles.SuperAdmin) || 
+                          User.IsInRole(Roles.ContentAdmin) || 
+                          User.IsInRole(Roles.DesignAdmin) || 
+                          User.IsInRole(Roles.DatabaseAdmin);
+            var profileLabel = isStaff ? SharedLocalizer["AdminProfile"] : SharedLocalizer["MyProfile"];
+        }
         <a href="/profile"
             class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="user" class="w-[18px] h-[18px] shrink-0"></i>
-            <span class="hidden xl:inline">@SharedLocalizer["MyProfile"]</span>
+            <span class="hidden xl:inline">@profileLabel</span>
         </a>
     </div>
 </aside>

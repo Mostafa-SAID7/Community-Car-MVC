@@ -16,6 +16,7 @@ using CommunityCar.Application.Services.Dashboard;
 using CommunityCar.Application.Services.SEO;
 using CommunityCar.Application.Services.Maps.Routing;
 using CommunityCar.Application.Services.Maps.Pricing;
+using CommunityCar.Application.Services.BackgroundJobs;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CommunityCar.Application;
@@ -53,12 +54,10 @@ public static class DependencyInjection
         services.AddScoped<IAccountManagementService, AccountManagementService>();
         services.AddScoped<IUserGalleryService, UserGalleryService>();
         services.AddScoped<IGamificationService, GamificationService>();
+        services.AddScoped<IProgressionService, ProgressionService>();
 
         // Identity Management Services
         services.AddScoped<IIdentityManagementService, IdentityManagementService>();
-        services.AddScoped<IUserIdentityService, UserIdentityService>();
-        services.AddScoped<IRoleManagementService, RoleManagementService>();
-        services.AddScoped<IClaimsManagementService, ClaimsManagementService>();
 
         // Dashboard services
         services.AddScoped<IOverviewService, OverviewService>();
@@ -80,9 +79,8 @@ public static class DependencyInjection
         services.AddScoped<BackgroundJobSchedulerService>();
 
         // Orchestrators
-        services.AddScoped<IIdentityOrchestrator, IdentityOrchestrator>();
-        services.AddScoped<IAccountLifecycleOrchestrator, AccountLifecycleOrchestrator>();
-        services.AddScoped<IAccountSecurityOrchestrator, AccountSecurityOrchestrator>();
+        services.AddScoped<IAuthOrchestrator, AuthOrchestrator>();
+        services.AddScoped<IAccountOrchestrator, AccountOrchestrator>();
         services.AddScoped<IProfileOrchestrator, ProfileOrchestrator>();
 
         return services;

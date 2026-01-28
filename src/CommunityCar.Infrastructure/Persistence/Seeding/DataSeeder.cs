@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using CommunityCar.Domain.Constants;
 
 namespace CommunityCar.Infrastructure.Persistence.Seeding;
 
@@ -22,13 +23,20 @@ public class DataSeeder
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
     private readonly ILogger<DataSeeder> _logger;
     private readonly IServiceProvider _serviceProvider;
 
-    public DataSeeder(ApplicationDbContext context, UserManager<User> userManager, ILogger<DataSeeder> logger, IServiceProvider serviceProvider)
+    public DataSeeder(
+        ApplicationDbContext context, 
+        UserManager<User> userManager, 
+        RoleManager<IdentityRole<Guid>> roleManager,
+        ILogger<DataSeeder> logger, 
+        IServiceProvider serviceProvider)
     {
         _context = context;
         _userManager = userManager;
+        _roleManager = roleManager;
         _logger = logger;
         _serviceProvider = serviceProvider;
     }
@@ -39,9 +47,11 @@ public class DataSeeder
         {
             _logger.LogInformation("Starting database seeding...");
 
-            // Seed core data first
+            // Seed roles first
+            await SeedRolesAsync();
+
+            // Seed core data
             await SeedUsersAsync();
-            await SeedUserProfilesAsync();
             
             // Seed shared entities (categories, tags)
             await SeedSharedEntitiesAsync();
@@ -126,6 +136,26 @@ public class DataSeeder
         }
     }
 
+    private async Task SeedRolesAsync()
+    {
+        _logger.LogInformation("Seeding roles...");
+
+        var roles = new[]
+        {
+            Roles.SuperAdmin, Roles.ContentAdmin, Roles.DesignAdmin, Roles.DatabaseAdmin, Roles.Admin,
+            Roles.User, Roles.Expert, Roles.Reviewer, Roles.Author, Roles.Master
+        };
+
+        foreach (var roleName in roles)
+        {
+            if (!await _roleManager.RoleExistsAsync(roleName))
+            {
+                await _roleManager.CreateAsync(new IdentityRole<Guid>(roleName) { Id = Guid.NewGuid() });
+                _logger.LogInformation("Created role: {RoleName}", roleName);
+            }
+        }
+    }
+
     private async Task SeedUsersAsync()
     {
         if (await _userManager.Users.CountAsync() >= 100) return;
@@ -168,8 +198,14 @@ public class DataSeeder
                 Bio = "Community Car platform administrator and seed user."
             };
             await _userManager.CreateAsync(seedUser, "Password123!");
+            await _userManager.AddToRoleAsync(seedUser, Roles.SuperAdmin);
             users.Add(seedUser);
         }
+
+        // Add specialized staff users
+        await CreateStaffUserAsync("content@communitycar.com", "Content Admin", Roles.ContentAdmin, users);
+        await CreateStaffUserAsync("design@communitycar.com", "Design Admin", Roles.DesignAdmin, users);
+        await CreateStaffUserAsync("db@communitycar.com", "DB Admin", Roles.DatabaseAdmin, users);
 
         // Generate 99 additional users
         for (int i = 1; i <= 99; i++)
@@ -208,6 +244,29 @@ public class DataSeeder
         _logger.LogInformation($"Successfully seeded {users.Count} users.");
     }
 
+    private async Task CreateStaffUserAsync(string email, string fullName, string role, List<User> usersList)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            user = new User(email, email.Split('@')[0])
+            {
+                FullName = fullName,
+                EmailConfirmed = true,
+                City = "Cairo",
+                Country = "Egypt",
+                Bio = $"Staff member: {role}"
+            };
+            var result = await _userManager.CreateAsync(user, "Password123!");
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, role);
+                usersList.Add(user);
+                _logger.LogInformation($"Created staff user: {user.UserName} with role {role}");
+            }
+        }
+    }
+
     private async Task SeedQAAsync()
     {
         if (await _context.Questions.AnyAsync()) return;
@@ -238,31 +297,7 @@ public class DataSeeder
         await _context.SaveChangesAsync();
     }
 
-    private async Task SeedUserProfilesAsync()
-    {
-        if (await _context.UserProfiles.AnyAsync()) return;
 
-        _logger.LogInformation("Seeding user profiles...");
-
-        var users = await _userManager.Users.ToListAsync();
-        var profiles = new List<UserProfile>();
-
-        foreach (var user in users)
-        {
-            var nameParts = user.FullName.Split(' ', 2);
-            var firstName = nameParts[0];
-            var lastName = nameParts.Length > 1 ? nameParts[1] : "";
-
-            var profile = new UserProfile(user.Id, firstName, lastName);
-            profile.UpdateBasicInfo(user.Bio ?? "", user.City ?? "", user.Country ?? "");
-            profiles.Add(profile);
-        }
-
-        await _context.UserProfiles.AddRangeAsync(profiles);
-        await _context.SaveChangesAsync();
-
-        _logger.LogInformation($"Successfully seeded {profiles.Count} user profiles.");
-    }
 
     private async Task SeedFriendshipsAsync()
     {

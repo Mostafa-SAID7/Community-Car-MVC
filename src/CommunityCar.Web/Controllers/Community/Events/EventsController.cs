@@ -207,7 +207,7 @@ public class EventsController : Controller
         {
             return Json(new { success = false, message = ex.Message });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return Json(new { success = false, message = "An error occurred while joining the event." });
         }
@@ -229,7 +229,7 @@ public class EventsController : Controller
                 return Json(new { success = false, message = "Event not found." });
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return Json(new { success = false, message = "An error occurred while leaving the event." });
         }

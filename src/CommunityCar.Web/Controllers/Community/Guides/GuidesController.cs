@@ -41,7 +41,7 @@ public class GuidesController : Controller
     {
         try
         {
-            var currentUserId = _currentUserService.UserId != null ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
+            var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
             
             var filter = new GuideFilterDTO
             {
@@ -49,7 +49,7 @@ public class GuidesController : Controller
                 Category = category,
                 Difficulty = difficulty,
                 Tag = tag,
-                SortBy = sortBy,
+                SortBy = sortBy ?? "newest",
                 Page = page,
                 PageSize = pageSize,
                 IsPublished = true
@@ -72,7 +72,7 @@ public class GuidesController : Controller
     {
         try
         {
-            var currentUserId = _currentUserService.UserId != null ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
+            var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
             
             var guide = await _guidesService.GetGuideAsync(id, currentUserId);
             if (guide == null)

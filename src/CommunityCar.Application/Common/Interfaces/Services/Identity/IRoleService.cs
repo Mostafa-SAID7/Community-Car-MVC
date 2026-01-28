@@ -13,5 +13,3 @@ public interface IRoleService
     Task<IEnumerable<string>> GetUserRolesAsync(Guid userId);
     Task<bool> IsUserInRoleAsync(Guid userId, string roleName);
 }
-
-

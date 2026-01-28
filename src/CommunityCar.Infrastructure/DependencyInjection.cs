@@ -25,9 +25,6 @@ using CommunityCar.Infrastructure.Persistence.UnitOfWork;
 using CommunityCar.Infrastructure.Services.Authentication;
 using CommunityCar.Infrastructure.Services.Authentication.OAuth;
 using CommunityCar.Infrastructure.Services.Authentication.TwoFactor;
-using CommunityCar.Infrastructure.Services.Authentication.Registration;
-using CommunityCar.Infrastructure.Services.Authentication.Login;
-using CommunityCar.Infrastructure.Services.Authentication.PasswordReset;
 using CommunityCar.Application.Services.AI.ModelManagement;
 using CommunityCar.Application.Services.AI.Training;
 using CommunityCar.Application.Services.AI.History;
@@ -40,9 +37,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Application.Common.Interfaces.Services.BackgroundJobs;
-using CommunityCar.Infrastructure.Caching;
 using CommunityCar.Infrastructure.BackgroundJobs;
-using CommunityCar.Infrastructure.Configuration;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -50,6 +45,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -137,7 +133,6 @@ public static class DependencyInjection
 
         // Profile Repositories
         services.AddScoped<IUserGalleryRepository, UserGalleryRepository>();
-        services.AddScoped<IUserProfileRepository, UserProfileRepository>();
         services.AddScoped<IUserBadgeRepository, UserBadgeRepository>();
         services.AddScoped<IUserAchievementRepository, UserAchievementRepository>();
         services.AddScoped<IUserActivityRepository, UserActivityRepository>();
@@ -156,11 +151,6 @@ public static class DependencyInjection
         // Focused TwoFactor Services
         services.AddScoped<IAuthenticatorService, AuthenticatorService>();
         services.AddScoped<IRecoveryCodesService, RecoveryCodesService>();
-
-        // Focused Authentication Services
-        services.AddScoped<IRegistrationService, RegistrationService>();
-        services.AddScoped<ILoginService, LoginService>();
-        services.AddScoped<IPasswordResetService, PasswordResetService>();
 
         // Focused AI Services
         services.AddScoped<IModelManagementService, ModelManagementService>();
@@ -193,11 +183,11 @@ public static class DependencyInjection
         services.AddScoped<FeedBackgroundJobService>();
         services.AddScoped<EmailBackgroundJobService>();
         services.AddScoped<BackgroundJobSchedulerService>();
-        services.AddScoped<IBackgroundJobService, HangfireBackgroundJobService>();
+        services.AddScoped<IBackgroundJobService, BackgroundJobs.BackgroundJobService>();
 
         // Caching Services
         services.Configure<CacheSettings>(configuration.GetSection(CacheSettings.SectionName));
-        services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<ICacheService, CommunityCar.Infrastructure.Caching.CacheService>();
         
         // Add distributed cache if enabled
         var cacheSettings = configuration.GetSection(CacheSettings.SectionName).Get<CacheSettings>();
@@ -212,7 +202,6 @@ public static class DependencyInjection
 
         // Background Jobs Services
         services.Configure<BackgroundJobSettings>(configuration.GetSection(BackgroundJobSettings.SectionName));
-        services.AddScoped<IBackgroundJobService, BackgroundJobService>();
         services.AddScoped<IJobProcessor, JobProcessor>();
         
         // Add hosted service for scheduled jobs
@@ -243,6 +232,7 @@ public static class DependencyInjection
             new CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder(
                 provider.GetRequiredService<ApplicationDbContext>(),
                 provider.GetRequiredService<UserManager<User>>(),
+                provider.GetRequiredService<RoleManager<IdentityRole<Guid>>>(),
                 provider.GetRequiredService<ILogger<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>>(),
                 provider));
 

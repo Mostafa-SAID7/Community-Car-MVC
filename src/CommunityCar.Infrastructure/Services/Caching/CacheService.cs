@@ -35,7 +35,7 @@ public class CacheService : ICacheService
         };
     }
 
-    public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) where T : class
+    public async Task<T?> GetAsync<T>(string key)
     {
         try
         {
@@ -47,7 +47,7 @@ public class CacheService : ICacheService
             }
 
             // Try distributed cache (L2 cache)
-            var distributedValue = await _distributedCache.GetStringAsync(key, cancellationToken);
+            var distributedValue = await _distributedCache.GetStringAsync(key);
             if (!string.IsNullOrEmpty(distributedValue))
             {
                 var deserializedValue = JsonSerializer.Deserialize<T>(distributedValue, _jsonOptions);
@@ -60,16 +60,15 @@ public class CacheService : ICacheService
             }
 
             _logger.LogDebug("Cache miss: {Key}", key);
-            return null;
+            return default;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting cache value for key: {Key}", key);
-            return null;
+            return default;
         }
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default) where T : class
+    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null)
     {
         try
         {
@@ -85,7 +84,7 @@ public class CacheService : ICacheService
                 AbsoluteExpirationRelativeToNow = defaultExpiration
             };
             
-            await _distributedCache.SetStringAsync(key, serializedValue, options, cancellationToken);
+            await _distributedCache.SetStringAsync(key, serializedValue, options);
             
             _logger.LogDebug("Cache set: {Key} (Expiration: {Expiration})", key, defaultExpiration);
         }
@@ -95,7 +94,7 @@ public class CacheService : ICacheService
         }
     }
 
-    public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
+    public async Task RemoveAsync(string key)
     {
         try
         {
@@ -103,7 +102,7 @@ public class CacheService : ICacheService
             _memoryCache.Remove(key);
 
             // Remove from distributed cache
-            await _distributedCache.RemoveAsync(key, cancellationToken);
+            await _distributedCache.RemoveAsync(key);
             
             _logger.LogDebug("Cache removed: {Key}", key);
         }
@@ -113,7 +112,7 @@ public class CacheService : ICacheService
         }
     }
 
-    public async Task RemoveByPatternAsync(string pattern, CancellationToken cancellationToken = default)
+    public async Task RemoveByPatternAsync(string pattern)
     {
         try
         {
@@ -145,9 +144,9 @@ public class CacheService : ICacheService
         }
     }
 
-    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan? expiration = null, CancellationToken cancellationToken = default) where T : class
+    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan? expiration = null)
     {
-        var cachedValue = await GetAsync<T>(key, cancellationToken);
+        var cachedValue = await GetAsync<T>(key);
         if (cachedValue != null)
         {
             return cachedValue;
@@ -158,7 +157,7 @@ public class CacheService : ICacheService
             var value = await factory();
             if (value != null)
             {
-                await SetAsync(key, value, expiration, cancellationToken);
+                await SetAsync(key, value, expiration);
             }
             return value;
         }
@@ -169,7 +168,7 @@ public class CacheService : ICacheService
         }
     }
 
-    public async Task<bool> ExistsAsync(string key, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsAsync(string key)
     {
         try
         {
@@ -187,7 +186,7 @@ public class CacheService : ICacheService
             else
             {
                 // Fallback to getting the value from distributed cache
-                var value = await _distributedCache.GetStringAsync(key, cancellationToken);
+                var value = await _distributedCache.GetStringAsync(key);
                 return !string.IsNullOrEmpty(value);
             }
         }
@@ -198,7 +197,7 @@ public class CacheService : ICacheService
         }
     }
 
-    public async Task RefreshAsync(string key, TimeSpan? expiration = null, CancellationToken cancellationToken = default)
+    public async Task RefreshAsync(string key, TimeSpan? expiration = null)
     {
         try
         {
@@ -212,6 +211,22 @@ public class CacheService : ICacheService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error refreshing cache for key: {Key}", key);
+        }
+    }
+
+    public Task ClearAsync()
+    {
+        try
+        {
+            // Memory cache doesn't support clearing all natively without a reset/tracking
+            // Distributed cache (Redis) supports flushing, but it's dangerous
+            _logger.LogWarning("ClearAsync called on hybrid CacheService. This is not fully implemented for MemoryCache.");
+            return Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error clearing cache");
+            return Task.CompletedTask;
         }
     }
 }

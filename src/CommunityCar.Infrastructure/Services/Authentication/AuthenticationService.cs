@@ -1,72 +1,138 @@
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
+using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Infrastructure.Services.Authentication.Registration;
-using CommunityCar.Infrastructure.Services.Authentication.Login;
-using CommunityCar.Infrastructure.Services.Authentication.PasswordReset;
 using CommunityCar.Domain.Entities.Auth;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Infrastructure.Services.Authentication;
 
-/// <summary>
-/// Orchestrator service for authentication operations
-/// </summary>
 public class AuthenticationService : IAuthenticationService
 {
-    private readonly IRegistrationService _registrationService;
-    private readonly ILoginService _loginService;
-    private readonly IPasswordResetService _passwordResetService;
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
+    private readonly IEmailService _emailService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<AuthenticationService> _logger;
 
     public AuthenticationService(
-        IRegistrationService registrationService,
-        ILoginService loginService,
-        IPasswordResetService passwordResetService,
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
+        IEmailService emailService,
+        IHttpContextAccessor httpContextAccessor,
         ILogger<AuthenticationService> logger)
     {
-        _registrationService = registrationService;
-        _loginService = loginService;
-        _passwordResetService = passwordResetService;
+        _userManager = userManager;
+        _signInManager = signInManager;
+        _emailService = emailService;
+        _httpContextAccessor = httpContextAccessor;
         _logger = logger;
     }
 
-    #region Registration - Delegate to RegistrationService
+    #region Registration
 
     public async Task<Result> RegisterAsync(RegisterRequest request)
-        => await _registrationService.RegisterAsync(request);
+    {
+        var existingUser = await _userManager.FindByEmailAsync(request.Email);
+        if (existingUser != null) return Result.Failure("User with this email already exists.");
+
+        var user = new User(request.Email, request.Email) { FullName = request.FullName, EmailConfirmed = false };
+        var result = await _userManager.CreateAsync(user, request.Password);
+
+        if (!result.Succeeded) return Result.Failure("Registration failed.", result.Errors.Select(e => e.Description).ToList());
+
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var link = GenerateLink("Account/ConfirmEmail", user.Id.ToString(), token);
+        await _emailService.SendEmailConfirmationAsync(user.Email!, link);
+
+        return Result.Success("Registration successful. Please check your email to confirm your account.");
+    }
 
     public async Task<Result> ConfirmEmailAsync(string userId, string token)
-        => await _registrationService.ConfirmEmailAsync(userId, token);
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return Result.Failure("User not found.");
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        if (!result.Succeeded) return Result.Failure("Email confirmation failed.", result.Errors.Select(e => e.Description).ToList());
+
+        await _emailService.SendWelcomeEmailAsync(user.Email!, user.FullName);
+        return Result.Success("Email confirmed successfully. You can now log in.");
+    }
 
     public async Task<Result> ResendEmailConfirmationAsync(string email)
-        => await _registrationService.ResendEmailConfirmationAsync(email);
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null) return Result.Success("If an account exists, a confirmation email has been sent.");
+        if (user.EmailConfirmed) return Result.Failure("Email is already confirmed.");
+
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var link = GenerateLink("Account/ConfirmEmail", user.Id.ToString(), token);
+        await _emailService.SendEmailConfirmationAsync(user.Email!, link);
+
+        return Result.Success("Confirmation email sent.");
+    }
 
     #endregion
 
-    #region Login - Delegate to LoginService
+    #region Login & Logout
 
     public async Task<Result> LoginAsync(LoginRequest request)
-        => await _loginService.LoginAsync(request);
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null) return Result.Failure("Invalid email or password.");
+        if (!user.IsActive) return Result.Failure("Your account has been deactivated.");
+
+        var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+        if (result.Succeeded) return Result.Success("Login successful.");
+        if (result.RequiresTwoFactor) return Result.Failure("Two-factor authentication required.");
+        if (result.IsLockedOut) return Result.Failure("Account locked due to multiple failed login attempts.");
+        if (result.IsNotAllowed) return Result.Failure("Email confirmation required.");
+
+        return Result.Failure("Invalid email or password.");
+    }
+
+    public async Task LogoutAsync() => await _signInManager.SignOutAsync();
 
     public async Task<User?> GetCurrentUserAsync()
-        => await _loginService.GetCurrentUserAsync();
-
-    public async Task LogoutAsync()
-        => await _loginService.LogoutAsync();
+    {
+        var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        return string.IsNullOrEmpty(userId) ? null : await _userManager.FindByIdAsync(userId);
+    }
 
     #endregion
 
-    #region Password Reset - Delegate to PasswordResetService
+    #region Password Management
 
     public async Task<Result> ForgotPasswordAsync(string email)
-        => await _passwordResetService.ForgotPasswordAsync(email);
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null) return Result.Success("If an account exists, a reset link has been sent.");
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var link = GenerateLink("Account/ResetPassword", user.Id.ToString(), token);
+        await _emailService.SendPasswordResetAsync(user.Email!, link);
+
+        return Result.Success("If an account exists, a reset link has been sent.");
+    }
 
     public async Task<Result> ResetPasswordAsync(ResetPasswordRequest request)
-        => await _passwordResetService.ResetPasswordAsync(request);
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null) return Result.Failure("Invalid reset token.");
 
-    public async Task<Result> ChangePasswordAsync(ChangePasswordRequest request)
-        => await _passwordResetService.ChangePasswordAsync(request);
+        var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+        return result.Succeeded ? Result.Success("Password reset successfully.") : Result.Failure("Password reset failed.", result.Errors.Select(e => e.Description).ToList());
+    }
 
     #endregion
+
+    private string GenerateLink(string path, string userId, string token)
+    {
+        var request = _httpContextAccessor.HttpContext?.Request;
+        var baseUrl = $"{request?.Scheme}://{request?.Host}";
+        return $"{baseUrl}/{path}?userId={userId}&token={Uri.EscapeDataString(token)}";
+    }
 }

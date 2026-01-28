@@ -193,7 +193,7 @@ public class QAService : IQAService
 
         // Calculate pagination info
         var totalPages = (int)Math.Ceiling((double)totalCount / request.PageSize);
-        var pagination = new PaginationInfo
+        var pagination = new CommunityCar.Application.Features.QA.DTOs.PaginationInfo
         {
             CurrentPage = request.Page,
             PageSize = request.PageSize,

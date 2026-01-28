@@ -99,7 +99,7 @@
                                         <!-- Job Identity -->
                                         <div class="flex items-center justify-between">
                                             <div class="space-y-2">
-                                                <h4 class="text-2xl font-black text-foreground tracking-tighter">@job.Id.Replace("-", " ").ToTitleCase()</h4>
+                                                <h4 class="text-2xl font-black text-foreground tracking-tighter">@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(job.Id.Replace("-", " "))</h4>
                                                 <div class="flex items-center gap-4">
                                                     <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Job ID:</span>
                                                     <code class="px-2 py-1 bg-muted/40 rounded text-[10px] font-black text-foreground">@job.Id</code>

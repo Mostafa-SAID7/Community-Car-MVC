@@ -109,5 +109,11 @@ public class NewsRepository : BaseRepository<NewsItem>, INewsRepository
 
         return await query.AnyAsync();
     }
+
+    public async Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date)
+    {
+        return await Context.Set<NewsItem>()
+            .CountAsync(n => n.AuthorId == userId && n.CreatedAt.Date == date.Date);
+    }
 }
 

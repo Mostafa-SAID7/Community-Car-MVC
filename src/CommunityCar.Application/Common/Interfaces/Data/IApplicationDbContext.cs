@@ -19,13 +19,15 @@ using CommunityCar.Domain.Entities.Localization;
 using CommunityCar.Domain.Entities.Profile;
 using CommunityCar.Domain.Entities.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace CommunityCar.Application.Common.Interfaces.Data;
 
 public interface IApplicationDbContext
 {
+    DatabaseFacade Database { get; }
+    Task<int> ExecuteSqlRawAsync(string sql, params object[] parameters);
     DbSet<User> Users { get; }
-    DbSet<UserProfile> UserProfiles { get; }
     DbSet<UserGallery> UserGalleries { get; }
     DbSet<UserBadge> UserBadges { get; }
     DbSet<UserAchievement> UserAchievements { get; }

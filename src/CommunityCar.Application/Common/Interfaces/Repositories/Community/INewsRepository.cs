@@ -16,6 +16,7 @@ public interface INewsRepository : IBaseRepository<NewsItem>
     Task<IEnumerable<string>> GetPopularTagsAsync(int count);
     Task<IEnumerable<string>> GetAvailableCarMakesAsync();
     Task<bool> SlugExistsAsync(string slug, Guid? excludeId = null);
+    Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date);
 }
 
 

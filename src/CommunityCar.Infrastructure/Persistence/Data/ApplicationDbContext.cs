@@ -45,7 +45,6 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
     }
 
     public new DbSet<User> Users => Set<User>();
-    public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
     public DbSet<UserGallery> UserGalleries => Set<UserGallery>();
     public DbSet<UserBadge> UserBadges => Set<UserBadge>();
     public DbSet<UserAchievement> UserAchievements => Set<UserAchievement>();
@@ -155,5 +154,10 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
         }
 
         return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<int> ExecuteSqlRawAsync(string sql, params object[] parameters)
+    {
+        return await Database.ExecuteSqlRawAsync(sql, parameters);
     }
 }

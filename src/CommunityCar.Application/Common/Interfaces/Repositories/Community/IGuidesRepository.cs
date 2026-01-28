@@ -24,6 +24,7 @@ public interface IGuidesRepository
     Task<bool> IsBookmarkedByUserAsync(Guid guideId, Guid userId);
     Task<double?> GetUserRatingAsync(Guid guideId, Guid userId);
     Task IncrementViewCountAsync(Guid guideId);
+    Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date);
 }
 
 

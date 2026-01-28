@@ -122,6 +122,30 @@ public class UserRepository : BaseRepository<Domain.Entities.Auth.User>, IUserRe
         return result.Succeeded;
     }
 
+    public async Task<bool> UpdateCoverImageAsync(Guid userId, string imageUrl)
+    {
+        var user = await GetByIdAsync(userId);
+        if (user == null) return false;
+
+        user.CoverImageUrl = imageUrl;
+        user.Audit(userId.ToString());
+        
+        var result = await _userManager.UpdateAsync(user);
+        return result.Succeeded;
+    }
+
+    public async Task<bool> RemoveCoverImageAsync(Guid userId)
+    {
+        var user = await GetByIdAsync(userId);
+        if (user == null) return false;
+
+        user.CoverImageUrl = null;
+        user.Audit(userId.ToString());
+        
+        var result = await _userManager.UpdateAsync(user);
+        return result.Succeeded;
+    }
+
     #endregion
 
     #region Account Management

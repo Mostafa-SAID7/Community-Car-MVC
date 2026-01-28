@@ -21,6 +21,8 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     public string? DeletedBy { get; private set; }
 
     public string FullName { get; set; } = string.Empty;
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
     public string? Bio { get; set; }
     public string? City { get; set; }
     public string? Country { get; set; }
@@ -29,7 +31,11 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     public string? CountryAr { get; set; }
     public string? Website { get; set; }
     public string? CoverImageUrl { get; set; }
-    public bool IsActive { get; private set; }
+    public bool IsActive { get; set; }
+
+    // Gamification & Roles
+    public int TotalPoints { get; set; } = 0;
+    public bool HasPendingAdminRequest { get; set; } = false;
 
     // Privacy Settings
     public bool IsPublic { get; set; } = true;
@@ -41,6 +47,10 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     public bool ShowActivityStatus { get; set; } = true;
     public bool DataProcessingConsent { get; set; } = false;
     public bool MarketingEmailsConsent { get; set; } = false;
+    public string? AcceptedToSVersion { get; set; }
+    public DateTime? ToSAcceptedAt { get; set; }
+    public string? AcceptedPrivacyPolicyVersion { get; set; }
+    public DateTime? PrivacyPolicyAcceptedAt { get; set; }
     
     // Security
     public DateTime? LastPasswordChangeAt { get; set; }
@@ -53,7 +63,6 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     public string? LastLoginProvider { get; set; }
 
     // 2FA properties
-    public bool IsTwoFactorEnabled { get; set; }
     public string? TwoFactorSecretKey { get; set; }
     public DateTime? TwoFactorEnabledAt { get; set; }
     public string? BackupCodes { get; set; } // JSON array of backup codes
@@ -70,6 +79,16 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     public string? EmailTwoFactorToken { get; set; }
     public DateTime? EmailTwoFactorTokenExpiry { get; set; }
 
+    // Notification Settings
+    public bool EmailNotificationsEnabled { get; set; } = true;
+    public bool PushNotificationsEnabled { get; set; } = true;
+    public bool SmsNotificationsEnabled { get; set; } = false;
+    public bool MarketingEmailsEnabled { get; set; } = false;
+    public bool CommentNotificationsEnabled { get; set; } = true;
+    public bool LikeNotificationsEnabled { get; set; } = true;
+    public bool FollowNotificationsEnabled { get; set; } = true;
+    public bool MessageNotificationsEnabled { get; set; } = true;
+
     // Re-implementing AggregateRoot properties
     private readonly List<IDomainEvent> _domainEvents = new();
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
@@ -81,7 +100,6 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
         IsActive = true;
         Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
-        IsTwoFactorEnabled = false;
         SmsEnabled = false;
         EmailTwoFactorEnabled = false;
         FailedTwoFactorAttempts = 0;
@@ -91,7 +109,6 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     public User() 
     {
         IsActive = true;
-        IsTwoFactorEnabled = false;
         SmsEnabled = false;
         EmailTwoFactorEnabled = false;
         FailedTwoFactorAttempts = 0;
@@ -108,7 +125,7 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
         SoftDelete(UpdatedBy ?? "System");
     }
 
-    public virtual void SoftDelete(string deletedBy)
+    public virtual void SoftDelete(string? deletedBy)
     {
         if (IsDeleted) return;
         
@@ -120,7 +137,7 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public virtual void Restore(string restoredBy)
+    public virtual void Restore(string? restoredBy)
     {
         if (!IsDeleted) return;
         
@@ -173,7 +190,6 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
 
     public void EnableTwoFactor(string secretKey)
     {
-        IsTwoFactorEnabled = true;
         TwoFactorSecretKey = secretKey;
         TwoFactorEnabledAt = DateTime.UtcNow;
         TwoFactorEnabled = true; // Identity property
@@ -183,7 +199,6 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
 
     public void DisableTwoFactor()
     {
-        IsTwoFactorEnabled = false;
         TwoFactorSecretKey = null;
         TwoFactorEnabledAt = null;
         TwoFactorEnabled = false; // Identity property
@@ -266,6 +281,20 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     {
         // These would be stored in a separate UserSettings entity or as JSON in a settings column
         // For now, we'll just audit the change
+        Audit(UpdatedBy);
+    }
+
+    public void AcceptTermsOfService(string version)
+    {
+        AcceptedToSVersion = version;
+        ToSAcceptedAt = DateTime.UtcNow;
+        Audit(UpdatedBy);
+    }
+
+    public void AcceptPrivacyPolicy(string version)
+    {
+        AcceptedPrivacyPolicyVersion = version;
+        PrivacyPolicyAcceptedAt = DateTime.UtcNow;
         Audit(UpdatedBy);
     }
 

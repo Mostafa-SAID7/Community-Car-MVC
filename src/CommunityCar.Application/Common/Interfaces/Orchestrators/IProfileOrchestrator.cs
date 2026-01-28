@@ -1,6 +1,3 @@
-using CommunityCar.Application.Common.Models;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
 
@@ -16,10 +13,6 @@ public interface IProfileOrchestrator
     Task<bool> DeleteProfilePictureAsync(Guid userId);
     Task<ProfileStatsVM> GetProfileStatsAsync(Guid userId);
     
-    // Privacy & Notifications
-    Task<bool> UpdatePrivacySettingsAsync(Guid userId, UpdatePrivacySettingsRequest request);
-    Task<bool> UpdateNotificationSettingsAsync(Guid userId, UpdateNotificationSettingsRequest request);
-
     // Gallery
     Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId);
     Task<bool> UploadGalleryItemAsync(UploadImageRequest request);

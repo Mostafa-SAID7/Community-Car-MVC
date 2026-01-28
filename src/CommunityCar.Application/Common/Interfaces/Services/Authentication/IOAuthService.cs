@@ -11,6 +11,8 @@ public interface IOAuthService
     Task<Result> LinkFacebookAccountAsync(LinkExternalAccountRequest request);
     Task<Result> UnlinkExternalAccountAsync(UnlinkExternalAccountRequest request);
     Task<IEnumerable<ExternalLoginInfo>> GetExternalLoginsAsync(string userId);
+    Task<Result> LinkAccountAsync(LinkExternalAccountRequest request);
+    Task<Result> UnlinkAccountAsync(Guid userId, string provider);
     
     // Account Management additions
     Task<bool> IsAccountLinkedAsync(string userId, string provider);

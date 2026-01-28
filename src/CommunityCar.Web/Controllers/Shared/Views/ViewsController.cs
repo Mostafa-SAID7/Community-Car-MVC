@@ -25,8 +25,8 @@ public class ViewsController : Controller
 
     public class ViewRequest
     {
-        public string EntityId { get; set; }
-        public string EntityType { get; set; }
+        public string EntityId { get; set; } = string.Empty;
+        public string EntityType { get; set; } = string.Empty;
     }
 
     [HttpPost]

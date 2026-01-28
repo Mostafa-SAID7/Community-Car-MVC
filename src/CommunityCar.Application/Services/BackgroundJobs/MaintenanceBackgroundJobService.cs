@@ -3,6 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Application.Common.Models.Caching;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using CommunityCar.Application.Common.Models.Account;
 
 namespace CommunityCar.Application.Services.BackgroundJobs;
 
@@ -128,7 +129,7 @@ public class MaintenanceBackgroundJobService
             // For SQL Server: UPDATE STATISTICS
             // For PostgreSQL: ANALYZE
             
-            await _context.Database.ExecuteSqlRawAsync("UPDATE STATISTICS");
+            await _context.ExecuteSqlRawAsync("UPDATE STATISTICS");
             
             _logger.LogInformation("Database statistics updated successfully");
         }
@@ -230,7 +231,7 @@ public class MaintenanceBackgroundJobService
             
             // Check for orphaned records
             var orphanedComments = await _context.Comments
-                .Where(c => !_context.Posts.Any(p => p.Id == c.PostId))
+                .Where(c => c.EntityType == CommunityCar.Domain.Enums.EntityType.Post && !_context.Posts.Any(p => p.Id == c.EntityId))
                 .CountAsync();
             
             if (orphanedComments > 0)

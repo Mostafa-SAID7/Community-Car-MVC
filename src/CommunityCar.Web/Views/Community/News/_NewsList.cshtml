@@ -9,8 +9,8 @@
     var isArabic = currentCulture.StartsWith("ar");
 
     // Helper functions for localized content selection
-    string GetLocalizedHeadline(NewsItemVM item) => isArabic && !string.IsNullOrEmpty(item.HeadlineAr) ? item.HeadlineAr : item.Headline;
-    string GetLocalizedSummary(NewsItemVM item) => isArabic && !string.IsNullOrEmpty(item.SummaryAr) ? item.SummaryAr : item.Summary;
+    string GetLocalizedHeadline(NewsItemVM item) => isArabic && !string.IsNullOrEmpty(item.HeadlineAr) ? item.HeadlineAr : item.Headline ?? string.Empty;
+    string GetLocalizedSummary(NewsItemVM item) => isArabic && !string.IsNullOrEmpty(item.SummaryAr) ? item.SummaryAr : item.Summary ?? string.Empty;
 }
 
 @if (Model.Items.Any())
