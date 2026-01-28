@@ -5,7 +5,7 @@ namespace CommunityCar.Domain.Policies.Community;
 /// <summary>
 /// Policy for content moderation decisions
 /// </summary>
-public class ContentModerationPolicy : IAccessPolicy
+public class ContentModerationPolicy
 {
     /// <summary>
     /// Determines if content should be auto-flagged for review

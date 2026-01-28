@@ -17,6 +17,20 @@ public class Post : AggregateRoot
     
     public PostType Type { get; private set; }
     public Guid AuthorId { get; private set; }
+    public Guid? CategoryId { get; private set; }
+    
+    // Publishing and visibility
+    public bool IsPublished { get; private set; }
+    public bool IsFeatured { get; private set; }
+    
+    // Engagement metrics
+    public int ViewCount { get; private set; }
+    public int LikeCount { get; private set; }
+    public int CommentCount { get; private set; }
+    
+    // Navigation properties
+    private readonly List<Tag> _tags = new();
+    public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
     
     // Simple navigation property placeholder - replace with actual relationships later
     // public Author Author { get; private set; } 
@@ -24,12 +38,18 @@ public class Post : AggregateRoot
     // private readonly List<Comment> _comments = new();
     // public IReadOnlyCollection<Comment> Comments => _comments.AsReadOnly();
 
-    public Post(string title, string content, PostType type, Guid authorId)
+    public Post(string title, string content, PostType type, Guid authorId, Guid? categoryId = null)
     {
         Title = title;
         Content = content;
         Type = type;
         AuthorId = authorId;
+        CategoryId = categoryId;
+        IsPublished = false;
+        IsFeatured = false;
+        ViewCount = 0;
+        LikeCount = 0;
+        CommentCount = 0;
     }
 
     private Post() { }
@@ -45,6 +65,74 @@ public class Post : AggregateRoot
         TitleAr = titleAr;
         ContentAr = contentAr;
         Audit(UpdatedBy ?? "System");
+    }
+
+    public void Publish()
+    {
+        IsPublished = true;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void Unpublish()
+    {
+        IsPublished = false;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void SetFeatured(bool featured)
+    {
+        IsFeatured = featured;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void IncrementViewCount()
+    {
+        ViewCount++;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void IncrementLikeCount()
+    {
+        LikeCount++;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void DecrementLikeCount()
+    {
+        if (LikeCount > 0)
+            LikeCount--;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void IncrementCommentCount()
+    {
+        CommentCount++;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void DecrementCommentCount()
+    {
+        if (CommentCount > 0)
+            CommentCount--;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void AddTag(Tag tag)
+    {
+        if (!_tags.Contains(tag))
+        {
+            _tags.Add(tag);
+            Audit(UpdatedBy ?? "System");
+        }
+    }
+
+    public void RemoveTag(Tag tag)
+    {
+        if (_tags.Contains(tag))
+        {
+            _tags.Remove(tag);
+            Audit(UpdatedBy ?? "System");
+        }
     }
 
     // public void AddComment(Comment comment)

@@ -1,5 +1,6 @@
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.ValueObjects.Common;
+using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Domain.Services.Account;
 
@@ -136,25 +137,12 @@ public class UserDomainService : IDomainService
             UserAction.SendDirectMessage => trustLevel >= UserTrustLevel.Regular,
             UserAction.CreateGroup => trustLevel >= UserTrustLevel.Established,
             UserAction.ModerateContent => trustLevel >= UserTrustLevel.Trusted,
+            UserAction.UploadMedia => trustLevel >= UserTrustLevel.New,
+            UserAction.CreateEvent => trustLevel >= UserTrustLevel.Regular,
+            UserAction.WriteReview => trustLevel >= UserTrustLevel.Regular,
+            UserAction.CreateGuide => trustLevel >= UserTrustLevel.Established,
+            UserAction.VoteOnContent => trustLevel >= UserTrustLevel.New,
             _ => false
         };
     }
-}
-
-public enum UserTrustLevel
-{
-    Unverified = 0,
-    New = 1,
-    Regular = 2,
-    Established = 3,
-    Trusted = 4
-}
-
-public enum UserAction
-{
-    CreatePost,
-    CommentOnPost,
-    SendDirectMessage,
-    CreateGroup,
-    ModerateContent
 }

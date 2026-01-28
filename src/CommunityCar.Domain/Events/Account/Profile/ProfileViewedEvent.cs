@@ -1,8 +1,5 @@
-namespace CommunityCar.Domain.Events.Account;
+namespace CommunityCar.Domain.Events.Account.Profile;
 
-/// <summary>
-/// Domain event raised when a user profile is viewed
-/// </summary>
 public class ProfileViewedEvent : IDomainEvent
 {
     public ProfileViewedEvent(Guid profileUserId, Guid? viewerId, string? viewSource, bool isAnonymous)

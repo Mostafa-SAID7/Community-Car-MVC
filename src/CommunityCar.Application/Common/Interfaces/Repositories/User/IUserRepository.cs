@@ -1,24 +1,25 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Base;
+using CommunityCar.Domain.Entities.Account.Core;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories.User;
 
 /// <summary>
 /// Unified interface for User entity operations
 /// </summary>
-public interface IUserRepository : IBaseRepository<CommunityCar.Domain.Entities.Account.User>
+public interface IUserRepository : IBaseRepository<User>
 {
     #region Generic User Operations
-    Task<CommunityCar.Domain.Entities.Account.User?> GetByEmailAsync(string email);
-    Task<CommunityCar.Domain.Entities.Account.User?> GetByUserNameAsync(string userName);
-    Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetActiveUsersAsync();
-    Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetUsersByRoleAsync(string roleName);
+    Task<User?> GetByEmailAsync(string email);
+    Task<User?> GetByUserNameAsync(string userName);
+    Task<IEnumerable<User>> GetActiveUsersAsync();
+    Task<IEnumerable<User>> GetUsersByRoleAsync(string roleName);
     Task<bool> IsEmailUniqueAsync(string email, Guid? excludeUserId = null);
     Task<bool> IsUserNameUniqueAsync(string userName, Guid? excludeUserId = null);
     #endregion
 
     #region Profile Operations
-    Task<CommunityCar.Domain.Entities.Account.User?> GetUserWithProfileAsync(Guid userId);
-    Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> SearchUsersAsync(string searchTerm, int page = 1, int pageSize = 20);
+    Task<User?> GetUserWithProfileAsync(Guid userId);
+    Task<IEnumerable<User>> SearchUsersAsync(string searchTerm, int page = 1, int pageSize = 20);
     Task<bool> UpdateProfilePictureAsync(Guid userId, string imageUrl);
     Task<bool> RemoveProfilePictureAsync(Guid userId);
     Task<bool> UpdateCoverImageAsync(Guid userId, string imageUrl);
@@ -26,8 +27,8 @@ public interface IUserRepository : IBaseRepository<CommunityCar.Domain.Entities.
     #endregion
 
     #region Account Management
-    Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetDeactivatedUsersAsync();
-    Task<IEnumerable<CommunityCar.Domain.Entities.Account.User>> GetUsersForDeletionAsync(DateTime cutoffDate);
+    Task<IEnumerable<User>> GetDeactivatedUsersAsync();
+    Task<IEnumerable<User>> GetUsersForDeletionAsync(DateTime cutoffDate);
     Task<bool> DeactivateUserAsync(Guid userId, string? reason = null);
     Task<bool> ReactivateUserAsync(Guid userId);
     #endregion

@@ -1,4 +1,7 @@
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Core;
+using CommunityCar.Domain.Entities.Account.Media;
+using CommunityCar.Domain.Entities.Account.Gamification;
+using CommunityCar.Domain.Entities.Account.Analytics;
 using CommunityCar.Domain.Entities.Chats;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Domain.Entities.Community.Friends;
@@ -11,15 +14,14 @@ using CommunityCar.Domain.Entities.Community.QA;
 using CommunityCar.Domain.Entities.Community.Reviews;
 using CommunityCar.Domain.Entities.Community.Stories;
 using CommunityCar.Domain.Entities.Dashboard.Analytics;
-using CommunityCar.Domain.Entities.Dashboard.Management;
-using CommunityCar.Domain.Entities.Dashboard.Reports;
 using CommunityCar.Domain.Entities.Dashboard.Settings;
 using CommunityCar.Domain.Entities.Dashboard.System;
 using CommunityCar.Domain.Entities.Localization;
-using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Domain.Entities.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using UserInterest = CommunityCar.Domain.Entities.Account.Profile.UserInterest;
+using UserFollowing = CommunityCar.Domain.Entities.Account.Profile.UserFollowing;
 
 namespace CommunityCar.Application.Common.Interfaces.Data;
 
@@ -48,7 +50,6 @@ public interface IApplicationDbContext
     
     // Error Management
     DbSet<ErrorLog> ErrorLogs { get; }
-    DbSet<ErrorOccurrence> ErrorOccurrences { get; }
 
     // Community
     DbSet<Post> Posts { get; }

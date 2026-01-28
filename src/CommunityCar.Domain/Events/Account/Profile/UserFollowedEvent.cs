@@ -1,8 +1,5 @@
-namespace CommunityCar.Domain.Events.Account;
+namespace CommunityCar.Domain.Events.Account.Profile;
 
-/// <summary>
-/// Domain event raised when a user follows another user
-/// </summary>
 public class UserFollowedEvent : IDomainEvent
 {
     public UserFollowedEvent(Guid followerId, Guid followedUserId, string? followReason)

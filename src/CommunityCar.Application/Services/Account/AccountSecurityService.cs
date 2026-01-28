@@ -6,10 +6,10 @@ using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
-using CommunityCar.Domain.Entities.Account;
+using CommunityCar.Domain.Entities.Account.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using UserEntity = CommunityCar.Domain.Entities.Account.User;
+using UserEntity = CommunityCar.Domain.Entities.Account.Core.User;
 
 namespace CommunityCar.Application.Services.Account;
 
