@@ -1,7 +1,8 @@
-using CommunityCar.Web.Models.Auth.Login;
-using CommunityCar.Web.Models.Auth.Registration;
-using CommunityCar.Web.Models.Auth.PasswordReset;
-using CommunityCar.Web.Models.Auth.Login.External;
+using CommunityCar.Web.Models.Account.Authentication.Login;
+using CommunityCar.Web.Models.Account.Authentication.Registration;
+using CommunityCar.Web.Models.Account.Authentication.PasswordReset;
+using CommunityCar.Web.Models.Account.Authentication.Login.External;
+using CommunityCar.Web.Models.Account.Authentication.OAuth;
 using CommunityCar.Application.Common.Interfaces.Orchestrators;
 using CommunityCar.Application.Common.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;

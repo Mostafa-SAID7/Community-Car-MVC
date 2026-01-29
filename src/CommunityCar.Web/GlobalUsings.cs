@@ -10,6 +10,5 @@ global using CommunityCar.Application.Common.Models.Account;
 global using CommunityCar.Application.Common.Models.Authentication;
 global using CommunityCar.Application.Common.Models.Profile;
 global using CommunityCar.Web.Models.Account;
-global using CommunityCar.Web.Models.Auth;
 global using CommunityCar.Web.Models.Profile;
 global using CommunityCar.Domain.Entities.Account.Core;

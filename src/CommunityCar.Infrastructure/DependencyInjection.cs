@@ -1,4 +1,5 @@
 using CommunityCar.Infrastructure.Configuration;
+using CommunityCar.Infrastructure.Configuration.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
@@ -7,8 +8,7 @@ using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Common.Interfaces.Repositories.User;
-using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
+using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Services.Shared;
@@ -17,20 +17,25 @@ using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using CommunityCar.Infrastructure.Persistence.Repositories.Community;
-using CommunityCar.Infrastructure.Persistence.Repositories.User;
-using CommunityCar.Infrastructure.Persistence.Repositories.Profile;
+using CommunityCar.Infrastructure.Persistence.Repositories.Account.Core;
+using CommunityCar.Infrastructure.Persistence.Repositories.Account.Authentication;
+using CommunityCar.Infrastructure.Persistence.Repositories.Account.Activity;
+using CommunityCar.Infrastructure.Persistence.Repositories.Account.Gamification;
+using CommunityCar.Infrastructure.Persistence.Repositories.Account.Social;
+using CommunityCar.Infrastructure.Persistence.Repositories.Account.Media;
+using CommunityCar.Infrastructure.Persistence.Repositories.Account.Management;
 using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
 using CommunityCar.Infrastructure.Persistence.Repositories.AI;
 using CommunityCar.Infrastructure.Persistence.UnitOfWork;
-using CommunityCar.Infrastructure.Services.Authentication;
-using CommunityCar.Infrastructure.Services.Authentication.OAuth;
-using CommunityCar.Infrastructure.Services.Authentication.TwoFactor;
+using CommunityCar.Infrastructure.Services.Account.Authentication;
+using CommunityCar.Infrastructure.Services.Account.Authentication.OAuth;
+using CommunityCar.Infrastructure.Services.Account.Authentication.TwoFactor;
 using CommunityCar.Application.Services.AI.ModelManagement;
 using CommunityCar.Application.Services.AI.Training;
 using CommunityCar.Application.Services.AI.History;
 using CommunityCar.Infrastructure.Services.Communication;
 using CommunityCar.Infrastructure.Services.Community;
-using CommunityCar.Infrastructure.Services.Identity;
+using CommunityCar.Infrastructure.Services.Account.Identity;
 using CommunityCar.Infrastructure.Services.Storage;
 using CommunityCar.Infrastructure.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
@@ -55,6 +60,10 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        // Configure Account settings
+        services.AddAccountConfiguration(configuration);
+        AccountConfigurationExtensions.ValidateAccountConfiguration(configuration);
+
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<ApplicationDbContext>(options =>
