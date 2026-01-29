@@ -1,9 +1,9 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
-using CommunityCar.Application.Common.Interfaces.Repositories.User;
+using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Authorization;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
+using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Features.Account.ViewModels.Gamification;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Account.Gamification;
 using CommunityCar.Domain.Constants;
@@ -50,8 +50,8 @@ public class GamificationService : IGamificationService
         {
             Id = b.Id,
             BadgeId = b.BadgeId,
-            Name = b.Name,
-            Description = b.Description,
+            BadgeName = b.Name,
+            BadgeDescription = b.Description,
             IconUrl = b.IconUrl,
             AwardedAt = b.EarnedAt
         });
@@ -157,7 +157,7 @@ public class GamificationService : IGamificationService
         var points = await GetUserPointsAsync(userId);
         var level = await GetUserLevelAsync(userId);
 
-        return new CommunityCar.Application.Common.Models.Profile.ProfileStatsVM
+        return new ProfileStatsVM
         {
             TotalPoints = points,
             Level = level,

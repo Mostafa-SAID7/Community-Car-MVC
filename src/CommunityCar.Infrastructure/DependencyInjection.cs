@@ -1,6 +1,10 @@
 using CommunityCar.Infrastructure.Configuration;
 using CommunityCar.Infrastructure.Configuration.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Authentication;
+using CommunityCar.Infrastructure.Configuration.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
+using CommunityCar.Infrastructure.Services.Account;
+using CommunityCar.Infrastructure.Services.Account.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
@@ -138,7 +142,10 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Consolidated User Repository (replacing multiple user-related repositories)
+        // Consolidated User Repository (replacing multiple user-related repositories)
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAccountManagementService, AccountManagementService>();
+
 
         // Profile Repositories
         services.AddScoped<IUserGalleryRepository, UserGalleryRepository>();
@@ -150,8 +157,7 @@ public static class DependencyInjection
         services.AddScoped<IUserProfileViewRepository, UserProfileViewRepository>();
 
         // Authentication & Authorization services
-        services.AddScoped<IAuthenticationService, AuthenticationService>();
-        services.AddScoped<ITwoFactorService, TwoFactorService>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IOAuthService, OAuthService>();
 
         // Focused OAuth Services
@@ -168,6 +174,7 @@ public static class DependencyInjection
         services.AddScoped<ITrainingHistoryService, TrainingHistoryService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IPermissionService, PermissionService>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IGuidesNotificationService, GuidesNotificationService>();

@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Authentication;
+
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Domain.ValueObjects.Account;
 
@@ -14,7 +14,7 @@ public class OAuthMappingProfile : AutoMapper.Profile
 
     private void CreateOAuthMappings()
     {
-        CreateMap<OAuthInfo, OAuthInfoDTO>();
+
         
         CreateMap<OAuthInfo, OAuthConnectionsVM>()
             .ForMember(dest => dest.AvailableProviders, opt => opt.Ignore());

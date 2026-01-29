@@ -222,4 +222,61 @@ public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserP
     }
 
     #endregion
+
+    #region New Tracking Methods
+
+    public async Task<UserProfileView?> GetRecentViewAsync(Guid viewerId, Guid profileUserId, int minutesThreshold)
+    {
+        return await Context.UserProfileViews
+            .Where(upv => upv.ViewerId == viewerId && upv.ProfileUserId == profileUserId)
+            .Where(upv => upv.ViewedAt >= DateTime.UtcNow.AddMinutes(-minutesThreshold))
+            .OrderByDescending(upv => upv.ViewedAt)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> HasViewedProfileAsync(Guid viewerId, Guid profileUserId)
+    {
+        return await Context.UserProfileViews
+            .AnyAsync(upv => upv.ViewerId == viewerId && upv.ProfileUserId == profileUserId);
+    }
+
+    public async Task<IEnumerable<UserProfileView>> GetMutualViewsAsync(Guid userId1, Guid userId2)
+    {
+        return await Context.UserProfileViews
+            .Where(upv => (upv.ViewerId == userId1 && upv.ProfileUserId == userId2) ||
+                          (upv.ViewerId == userId2 && upv.ProfileUserId == userId1))
+            .OrderByDescending(upv => upv.ViewedAt)
+            .ToListAsync();
+    }
+
+    public async Task<Dictionary<string, int>> GetViewSourceStatsAsync(Guid profileUserId, DateTime? since = null)
+    {
+        var query = Context.UserProfileViews.Where(upv => upv.ProfileUserId == profileUserId);
+        
+        if (since.HasValue)
+        {
+            query = query.Where(upv => upv.ViewedAt >= since.Value);
+        }
+
+        return await query
+            .Where(upv => !string.IsNullOrEmpty(upv.ViewSource))
+            .GroupBy(upv => upv.ViewSource!)
+            .Select(g => new { Source = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.Source, x => x.Count);
+    }
+
+    public async Task<Dictionary<DateTime, int>> GetViewTrendsAsync(Guid profileUserId, DateTime startDate, DateTime endDate)
+    {
+        return await GetViewsByDateAsync(profileUserId, startDate, endDate);
+    }
+
+    public async Task<int> GetDailyViewCountAsync(Guid profileUserId, DateTime date)
+    {
+        var nextDay = date.AddDays(1);
+        return await Context.UserProfileViews
+            .Where(upv => upv.ProfileUserId == profileUserId && upv.ViewedAt >= date && upv.ViewedAt < nextDay)
+            .CountAsync();
+    }
+
+    #endregion
 }

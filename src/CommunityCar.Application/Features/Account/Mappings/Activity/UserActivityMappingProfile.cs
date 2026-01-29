@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Activity;
+
 using CommunityCar.Application.Features.Account.ViewModels.Activity;
 using CommunityCar.Domain.Entities.Account.Analytics;
 
@@ -14,7 +14,7 @@ public class UserActivityMappingProfile : AutoMapper.Profile
 
     private void CreateActivityMappings()
     {
-        CreateMap<UserActivity, UserActivityDTO>();
+
         
         CreateMap<UserActivity, TimelineActivityVM>()
             .ForMember(dest => dest.TimeAgo, opt => opt.Ignore())

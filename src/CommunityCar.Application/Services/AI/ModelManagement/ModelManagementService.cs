@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Application.Common.Interfaces.Repositories.AI;
 using CommunityCar.Domain.Entities.AI;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -23,12 +23,12 @@ public class ModelManagementService : IModelManagementService
 
     public async Task<IEnumerable<AIModel>> GetAllModelsAsync()
     {
-        return await _modelRepository.GetAllModelsAsync();
+        return await _modelRepository.GetAllAsync();
     }
 
     public async Task<AIModel?> GetModelByIdAsync(Guid id)
     {
-        return await _modelRepository.GetModelByIdAsync(id);
+        return await _modelRepository.GetByIdAsync(id);
     }
 
     public async Task<AIModel?> GetModelByNameAsync(string name)
@@ -44,7 +44,8 @@ public class ModelManagementService : IModelManagementService
 
         model.Configuration = JsonSerializer.Serialize(settings);
 
-        return await _modelRepository.UpdateModelAsync(model);
+        await _modelRepository.UpdateAsync(model);
+        return model;
     }
 
     public async Task<bool> DeleteModelAsync(string modelName)
@@ -53,7 +54,8 @@ public class ModelManagementService : IModelManagementService
         if (model == null)
             return false;
 
-        return await _modelRepository.DeleteModelAsync(model.Id);
+        await _modelRepository.DeleteAsync(model);
+        return true;
     }
 
     public async Task<string> ExportModelAsync(string modelName)

@@ -9,6 +9,7 @@ using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Account.Gamification;
 using CommunityCar.Domain.Entities.Account.Media;
 using CommunityCar.Domain.Entities.Account.Profile;
+using CommunityCar.Domain.Entities.Account.Management;
 using CommunityCar.Domain.Entities.Chats;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Domain.Entities.Community.Friends;
@@ -56,6 +57,7 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<G
     public DbSet<UserInterest> UserInterests => Set<UserInterest>();
     public DbSet<UserFollowing> UserFollowings => Set<UserFollowing>();
     public DbSet<UserProfileView> UserProfileViews => Set<UserProfileView>();
+    public DbSet<UserManagement> UserManagements => Set<UserManagement>();
     
     // Shared
     public DbSet<Comment> Comments => Set<Comment>();

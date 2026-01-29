@@ -1,6 +1,3 @@
-using CommunityCar.Application.Common.Interfaces.Services;
-using CommunityCar.Application.Common.Interfaces.Orchestrators;
-using CommunityCar.Application.Orchestrators;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Localization;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
@@ -10,14 +7,12 @@ using CommunityCar.Application.Services.Community;
 using CommunityCar.Application.Services.Community.Feed;
 using CommunityCar.Application.Services.Localization;
 using CommunityCar.Application.Services.Account;
-using CommunityCar.Application.Services.Identity;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Services.Dashboard;
 using CommunityCar.Application.Services.SEO;
 using CommunityCar.Application.Services.Maps.Routing;
 using CommunityCar.Application.Services.Maps.Pricing;
 using CommunityCar.Application.Services.BackgroundJobs;
-using CommunityCar.Application.Services.Analytics;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CommunityCar.Application;
@@ -50,18 +45,16 @@ public static class DependencyInjection
         services.AddScoped<ILocalizationService, LocalizationService>();
 
         // Unified Account services
+        services.AddScoped<IOAuthService, OAuthService>();
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IAccountSecurityService, AccountSecurityService>();
-        services.AddScoped<IAccountManagementService, AccountManagementService>();
+        // AccountManagementService is registered in Infrastructure layer
         services.AddScoped<IUserGalleryService, UserGalleryService>();
         services.AddScoped<IGamificationService, GamificationService>();
         services.AddScoped<IProgressionService, ProgressionService>();
         services.AddScoped<IProfileViewService, ProfileViewService>();
+        services.AddScoped<IUserAnalyticsService, UserAnalyticsService>();
 
-        // Identity Management Services
-        services.AddScoped<IIdentityManagementService, IdentityManagementService>();
-
-        // Dashboard services
         services.AddScoped<IOverviewService, OverviewService>();
         services.AddScoped<IAnalyticsService, AnalyticsService>();
         services.AddScoped<IReportsService, ReportsService>();
@@ -78,15 +71,15 @@ public static class DependencyInjection
         services.AddScoped<IPerformanceService, PerformanceService>();
 
         // Analytics services
-        services.AddScoped<IUserAnalyticsService, UserAnalyticsService>();
+        // services.AddScoped<IUserAnalyticsService, UserAnalyticsService>(); // Duplicate
 
         // Background Job Services
         services.AddScoped<BackgroundJobSchedulerService>();
 
-        // Orchestrators
-        services.AddScoped<IAuthOrchestrator, AuthOrchestrator>();
-        services.AddScoped<IAccountOrchestrator, AccountOrchestrator>();
-        services.AddScoped<IProfileOrchestrator, ProfileOrchestrator>();
+        // Orchestrators (Commented out as they may be missing or need refactoring)
+        // services.AddScoped<IAuthOrchestrator, AuthOrchestrator>();
+        // services.AddScoped<IAccountOrchestrator, AccountOrchestrator>();
+        // services.AddScoped<IProfileOrchestrator, ProfileOrchestrator>();
 
         return services;
     }

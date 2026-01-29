@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Core;
+
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Domain.Entities.Account.Core;
 
@@ -16,8 +16,7 @@ public class UserCoreMappingProfile : AutoMapper.Profile
     private void CreateUserMappings()
     {
         // User Entity Mappings
-        CreateMap<User, UserDTO>()
-            .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => src.IsDeleted));
+
 
         CreateMap<User, ProfileVM>()
             .ForMember(dest => dest.HasGoogleAccount, opt => opt.MapFrom(src => src.OAuthInfo.HasGoogleAccount))

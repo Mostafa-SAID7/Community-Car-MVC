@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Gamification;
+
 using CommunityCar.Application.Features.Account.ViewModels.Gamification;
 using CommunityCar.Domain.Entities.Account.Gamification;
 
@@ -14,10 +14,7 @@ public class UserAchievementMappingProfile : AutoMapper.Profile
 
     private void CreateAchievementMappings()
     {
-        CreateMap<UserAchievement, UserAchievementDTO>()
-            .ForMember(dest => dest.AchievementName, opt => opt.Ignore())
-            .ForMember(dest => dest.AchievementDescription, opt => opt.Ignore())
-            .ForMember(dest => dest.IconUrl, opt => opt.Ignore());
+
 
         CreateMap<UserAchievement, UserAchievementVM>()
             .ForMember(dest => dest.AchievementName, opt => opt.Ignore())

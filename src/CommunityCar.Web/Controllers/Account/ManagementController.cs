@@ -1,10 +1,9 @@
-using CommunityCar.Application.Common.Interfaces.Orchestrators;
+using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Web.Models.Account.Management;
+using CommunityCar.Application.Features.Account.ViewModels.Management;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Web.Controllers.Account;
 
@@ -12,16 +11,16 @@ namespace CommunityCar.Web.Controllers.Account;
 [Authorize]
 public class ManagementController : Controller
 {
-    private readonly IAccountOrchestrator _accountOrchestrator;
+    private readonly IAccountManagementService _managementService;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<ManagementController> _logger;
 
     public ManagementController(
-        IAccountOrchestrator accountOrchestrator,
+        IAccountManagementService managementService,
         ICurrentUserService currentUserService,
         ILogger<ManagementController> logger)
     {
-        _accountOrchestrator = accountOrchestrator;
+        _managementService = managementService;
         _currentUserService = currentUserService;
         _logger = logger;
     }
@@ -39,7 +38,7 @@ public class ManagementController : Controller
     public async Task<IActionResult> DeactivateAccount(DeactivateAccountVM model)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            return RedirectToAction("Login", "Authentication", new { area = "" });
+            return RedirectToAction("Login", "Authentication");
 
         if (!ModelState.IsValid)
             return View(model);
@@ -51,11 +50,11 @@ public class ManagementController : Controller
             Reason = model.Reason
         };
 
-        var result = await _accountOrchestrator.DeactivateAccountAsync(request);
+        var result = await _managementService.DeactivateAccountAsync(request);
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = "Account deactivated successfully. You can reactivate it by logging in again within 30 days.";
-            return RedirectToAction("Logout", "Authentication", new { area = "" });
+            return RedirectToAction("Logout", "Authentication");
         }
 
         foreach (var error in result.Errors)
@@ -81,7 +80,7 @@ public class ManagementController : Controller
     public async Task<IActionResult> DeleteAccount(DeleteAccountVM model)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            return RedirectToAction("Login", "Authentication", new { area = "" });
+            return RedirectToAction("Login", "Authentication");
 
         if (!ModelState.IsValid)
             return View(model);
@@ -99,11 +98,11 @@ public class ManagementController : Controller
             Reason = model.Reason
         };
 
-        var result = await _accountOrchestrator.DeleteAccountAsync(request);
+        var result = await _managementService.DeleteAccountAsync(request);
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = "Account deleted successfully. We're sorry to see you go!";
-            return RedirectToAction("Login", "Authentication", new { area = "" });
+            return RedirectToAction("Login", "Authentication");
         }
 
         foreach (var error in result.Errors)
@@ -132,22 +131,27 @@ public class ManagementController : Controller
             return BadRequest("User not authenticated");
 
         if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+            return View(model);
 
         var request = new ExportUserDataRequest
         {
             UserId = userId,
-            // Map other fields as needed
+            DataCategories = new List<string>()
         };
 
-        var result = await _accountOrchestrator.ExportUserDataAsync(request);
+        if (model.IncludeProfile) request.DataCategories.Add("Profile");
+        if (model.IncludeActivity) request.DataCategories.Add("Activity");
+        if (model.IncludeMedia) request.DataCategories.Add("Media");
+
+        var result = await _managementService.ExportUserDataAsync(request);
         if (result.Succeeded && result.Data is byte[] data)
         {
             var fileName = $"user-data-export-{DateTime.UtcNow:yyyyMMdd-HHmmss}.zip";
             return File(data, "application/zip", fileName);
         }
 
-        return BadRequest(new { success = false, message = result.Message });
+        TempData["ErrorMessage"] = result.Message;
+        return View(model);
     }
 
     #endregion
@@ -162,5 +166,3 @@ public class ManagementController : Controller
 
     #endregion
 }
-
-

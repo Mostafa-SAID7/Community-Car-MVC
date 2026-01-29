@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Authentication;
+
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Domain.Entities.Account.Authentication;
 
@@ -15,7 +15,7 @@ public class UserSessionMappingProfile : AutoMapper.Profile
 
     private void CreateSessionMappings()
     {
-        CreateMap<UserSession, UserSessionDTO>();
+
         
         CreateMap<UserSession, UserSessionVM>()
             .ForMember(dest => dest.DeviceType, opt => opt.Ignore())
@@ -36,7 +36,7 @@ public class UserSessionMappingProfile : AutoMapper.Profile
 
     private void CreateTokenMappings()
     {
-        CreateMap<UserToken, UserTokenDTO>();
+
         
         CreateMap<CreateTokenRequest, UserToken>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())

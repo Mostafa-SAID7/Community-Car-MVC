@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Management;
+
 using CommunityCar.Application.Features.Account.ViewModels.Management;
 using CommunityCar.Domain.Entities.Account.Management;
 
@@ -14,9 +14,7 @@ public class UserManagementMappingProfile : AutoMapper.Profile
 
     private void CreateManagementMappings()
     {
-        CreateMap<UserManagement, UserManagementDTO>()
-            .ForMember(dest => dest.UserName, opt => opt.Ignore())
-            .ForMember(dest => dest.ManagerName, opt => opt.Ignore());
+
 
         CreateMap<UserManagement, ManagedUserVM>()
             .ForMember(dest => dest.UserName, opt => opt.Ignore())

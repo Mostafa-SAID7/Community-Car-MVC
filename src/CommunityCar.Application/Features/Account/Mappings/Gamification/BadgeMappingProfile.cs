@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Gamification;
+
 using CommunityCar.Application.Features.Account.ViewModels.Gamification;
 using CommunityCar.Domain.Entities.Account.Gamification;
 
@@ -14,25 +14,21 @@ public class BadgeMappingProfile : AutoMapper.Profile
 
     private void CreateBadgeMappings()
     {
-        CreateMap<UserBadge, UserBadgeDTO>()
-            .ForMember(dest => dest.BadgeName, opt => opt.Ignore())
-            .ForMember(dest => dest.BadgeDescription, opt => opt.Ignore())
-            .ForMember(dest => dest.IconUrl, opt => opt.Ignore());
+
 
         CreateMap<UserBadge, UserBadgeVM>()
             .ForMember(dest => dest.BadgeName, opt => opt.Ignore())
             .ForMember(dest => dest.BadgeDescription, opt => opt.Ignore())
             .ForMember(dest => dest.IconUrl, opt => opt.Ignore())
             .ForMember(dest => dest.AwardedTimeAgo, opt => opt.Ignore())
-            .ForMember(dest => dest.RarityColor, opt => opt.MapFrom(src => GetRarityColor(src.Rarity)))
-            .ForMember(dest => dest.CategoryIcon, opt => opt.MapFrom(src => GetCategoryIcon(src.Category)));
+            .ForMember(dest => dest.RarityColor, opt => opt.MapFrom(src => GetRarityColor(src.Rarity.ToString())))
+            .ForMember(dest => dest.CategoryIcon, opt => opt.MapFrom(src => GetCategoryIcon(src.Category.ToString())));
 
         CreateMap<AwardBadgeRequest, UserBadge>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Category, opt => opt.Ignore())
             .ForMember(dest => dest.Rarity, opt => opt.Ignore())
-            .ForMember(dest => dest.IsDisplayed, opt => opt.MapFrom(src => false))
-            .ForMember(dest => dest.DisplayOrder, opt => opt.MapFrom(src => 0));
+            .ForMember(dest => dest.IsDisplayed, opt => opt.MapFrom(src => false));
     }
 
     private static string GetRarityColor(string rarity)

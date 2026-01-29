@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Features.Guides.DTOs;
+using CommunityCar.Application.Features.Guides.ViewModels;
 using CommunityCar.Domain.Entities.Community.Guides;
 using CommunityCar.Domain.Enums.Community;
 using CommunityCar.Domain.Enums.Shared;
@@ -27,7 +27,7 @@ public class GuidesRepository : BaseRepository<Guide>, IGuidesRepository
             .FirstOrDefaultAsync(g => g.Id == id);
     }
 
-    public async Task<IEnumerable<Guide>> GetGuidesAsync(GuideFilterDTO filter)
+    public async Task<IEnumerable<Guide>> GetGuidesAsync(GuideFilterVM filter)
     {
         var query = Context.Guides.AsQueryable();
 
@@ -203,7 +203,7 @@ public class GuidesRepository : BaseRepository<Guide>, IGuidesRepository
         }
     }
 
-    public async Task<int> GetTotalCountAsync(GuideFilterDTO filter)
+    public async Task<int> GetTotalCountAsync(GuideFilterVM filter)
     {
         var query = Context.Guides.AsQueryable();
 

@@ -1,5 +1,4 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Social;
 using CommunityCar.Application.Features.Account.ViewModels.Social;
 using CommunityCar.Domain.Entities.Account.Profile;
 
@@ -14,10 +13,8 @@ public class UserInterestMappingProfile : AutoMapper.Profile
 
     private void CreateInterestMappings()
     {
-        CreateMap<UserInterest, UserInterestDTO>()
-            .ForMember(dest => dest.InterestName, opt => opt.Ignore());
-
         CreateMap<UserInterest, ProfileInterestVM>()
+
             .ForMember(dest => dest.InterestName, opt => opt.Ignore())
             .ForMember(dest => dest.InterestDescription, opt => opt.Ignore())
             .ForMember(dest => dest.CategoryIcon, opt => opt.MapFrom(src => GetCategoryIcon(src.Category)))

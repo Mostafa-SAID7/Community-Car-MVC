@@ -43,3 +43,21 @@ public class SecurityLogVM
     public string StatusIcon { get; set; } = string.Empty;
     public string StatusColor { get; set; } = string.Empty;
 }
+
+public class SecurityInfoVM
+{
+    public bool IsTwoFactorEnabled { get; set; }
+    public DateTime? LastPasswordChange { get; set; }
+    public int ActiveSessions { get; set; }
+    public bool HasOAuthLinked { get; set; }
+}
+
+public class ActiveSessionVM
+{
+    public string SessionId { get; set; } = string.Empty;
+    public string IpAddress { get; set; } = string.Empty;
+    public string UserAgent { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public DateTime LastActivityAt { get; set; }
+    public bool IsCurrent { get; set; }
+}

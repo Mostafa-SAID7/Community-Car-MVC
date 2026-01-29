@@ -1,8 +1,7 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
-using CommunityCar.Application.Common.Interfaces.Repositories.User;
+using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Application.Features.Account.ViewModels.Social;
 using CommunityCar.Domain.Entities.Account.Profile;
 using Microsoft.Extensions.Logging;
 
@@ -13,20 +12,17 @@ public class ProfileViewService : IProfileViewService
     private readonly IUserProfileViewRepository _profileViewRepository;
     private readonly IUserRepository _userRepository;
     private readonly IUserFollowingRepository _followingRepository;
-    private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<ProfileViewService> _logger;
 
     public ProfileViewService(
         IUserProfileViewRepository profileViewRepository,
         IUserRepository userRepository,
         IUserFollowingRepository followingRepository,
-        ICurrentUserService currentUserService,
         ILogger<ProfileViewService> logger)
     {
         _profileViewRepository = profileViewRepository;
         _userRepository = userRepository;
         _followingRepository = followingRepository;
-        _currentUserService = currentUserService;
         _logger = logger;
     }
 
@@ -34,31 +30,22 @@ public class ProfileViewService : IProfileViewService
     {
         try
         {
-            // Don't track self-views
-            if (viewerId == profileUserId)
-                return false;
+            if (viewerId == profileUserId) return false;
 
-            // Check if we should track this view
             if (!await ShouldTrackViewAsync(viewerId, profileUserId))
                 return false;
 
-            // Check for recent view to avoid spam
             var recentView = await _profileViewRepository.GetRecentViewAsync(viewerId, profileUserId, 30);
-            if (recentView != null)
-            {
-                _logger.LogDebug("Recent view found for viewer {ViewerId} on profile {ProfileUserId}, skipping", viewerId, profileUserId);
-                return false;
-            }
+            if (recentView != null) return false;
 
             var profileView = new UserProfileView(viewerId, profileUserId, ipAddress, userAgent, location, referrerUrl, viewSource);
             await _profileViewRepository.AddAsync(profileView);
 
-            _logger.LogInformation("Profile view recorded: {ViewerId} viewed {ProfileUserId}", viewerId, profileUserId);
             return true;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error recording profile view for viewer {ViewerId} on profile {ProfileUserId}", viewerId, profileUserId);
+            _logger.LogError(ex, "Error recording profile view");
             return false;
         }
     }
@@ -69,58 +56,44 @@ public class ProfileViewService : IProfileViewService
         {
             var profileView = new UserProfileView(profileUserId, ipAddress, userAgent, location, referrerUrl, viewSource);
             await _profileViewRepository.AddAsync(profileView);
-
-            _logger.LogInformation("Anonymous profile view recorded for profile {ProfileUserId}", profileUserId);
             return true;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error recording anonymous profile view for profile {ProfileUserId}", profileUserId);
+            _logger.LogError(ex, "Error recording anonymous view");
             return false;
         }
     }
 
     public async Task UpdateViewDurationAsync(Guid viewId, TimeSpan duration)
     {
-        try
+        var view = await _profileViewRepository.GetByIdAsync(viewId);
+        if (view != null)
         {
-            var view = await _profileViewRepository.GetByIdAsync(viewId);
-            if (view != null)
-            {
-                view.UpdateViewDuration(duration);
-                await _profileViewRepository.UpdateAsync(view);
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error updating view duration for view {ViewId}", viewId);
+            view.UpdateViewDuration(duration);
+            await _profileViewRepository.UpdateAsync(view);
         }
     }
 
     public async Task<ProfileViewStatsVM> GetProfileViewStatsAsync(Guid profileUserId, DateTime? since = null)
     {
         var totalViews = await _profileViewRepository.GetProfileViewCountAsync(profileUserId, since);
-        var uniqueViewers = await _profileViewRepository.GetUniqueViewersCountAsync(profileUserId, since);
+        var uniqueViewers = await _profileViewRepository.GetUniqueViewerCountAsync(profileUserId, since);
         var todayViews = await _profileViewRepository.GetDailyViewCountAsync(profileUserId, DateTime.Today);
         var weekViews = await _profileViewRepository.GetProfileViewCountAsync(profileUserId, DateTime.Today.AddDays(-7));
         var monthViews = await _profileViewRepository.GetProfileViewCountAsync(profileUserId, DateTime.Today.AddDays(-30));
         var viewSourceStats = await _profileViewRepository.GetViewSourceStatsAsync(profileUserId, since);
 
-        var recentViews = await _profileViewRepository.GetProfileViewsAsync(profileUserId, 1, 1);
-        var lastViewedAt = recentViews.FirstOrDefault()?.ViewedAt;
-
-        var mostCommonSource = viewSourceStats.OrderByDescending(x => x.Value).FirstOrDefault().Key;
-
         return new ProfileViewStatsVM
         {
+            ProfileUserId = profileUserId,
             TotalViews = totalViews,
             UniqueViewers = uniqueViewers,
-            TodayViews = todayViews,
-            WeekViews = weekViews,
-            MonthViews = monthViews,
-            LastViewedAt = lastViewedAt,
-            MostCommonViewSource = mostCommonSource,
-            ViewSourceBreakdown = viewSourceStats
+            ViewsToday = todayViews,
+            ViewsThisWeek = weekViews,
+            ViewsThisMonth = monthViews,
+            ViewSourceBreakdown = viewSourceStats,
+            MostCommonViewSource = viewSourceStats.OrderByDescending(x => x.Value).FirstOrDefault().Key ?? "Direct"
         };
     }
 
@@ -131,32 +104,18 @@ public class ProfileViewService : IProfileViewService
 
         foreach (var view in views)
         {
-            var viewModel = new ProfileViewVM
-            {
-                Id = view.Id,
-                ViewerId = view.ViewerId,
-                ProfileUserId = view.ProfileUserId,
-                ViewedAt = view.ViewedAt,
-                ViewSource = view.ViewSource,
-                ViewDuration = view.ViewDuration,
-                IsAnonymous = view.IsAnonymous,
-                ReferrerUrl = view.ReferrerUrl,
-                ViewerLocation = view.ViewerLocation
-            };
-
+            var vm = MapToVM(view);
             if (!view.IsAnonymous)
             {
                 var viewer = await _userRepository.GetByIdAsync(view.ViewerId);
                 if (viewer != null)
                 {
-                    viewModel.ViewerName = viewer.Profile.FullName;
-                    viewModel.ViewerProfilePicture = viewer.Profile.ProfilePictureUrl;
+                    vm.ViewerName = viewer.Profile.FullName;
+                    vm.ViewerProfilePicture = viewer.Profile.ProfilePictureUrl;
                 }
             }
-
-            result.Add(viewModel);
+            result.Add(vm);
         }
-
         return result;
     }
 
@@ -167,69 +126,43 @@ public class ProfileViewService : IProfileViewService
 
         foreach (var view in views)
         {
+            var vm = MapToVM(view);
             var profileUser = await _userRepository.GetByIdAsync(view.ProfileUserId);
-            var viewModel = new ProfileViewVM
-            {
-                Id = view.Id,
-                ViewerId = view.ViewerId,
-                ProfileUserId = view.ProfileUserId,
-                ViewedAt = view.ViewedAt,
-                ViewSource = view.ViewSource,
-                ViewDuration = view.ViewDuration,
-                IsAnonymous = view.IsAnonymous,
-                ReferrerUrl = view.ReferrerUrl,
-                ViewerLocation = view.ViewerLocation
-            };
-
             if (profileUser != null)
             {
-                viewModel.ViewerName = profileUser.Profile.FullName;
-                viewModel.ViewerProfilePicture = profileUser.Profile.ProfilePictureUrl;
+                vm.ViewerName = profileUser.Profile.FullName;
+                vm.ViewerProfilePicture = profileUser.Profile.ProfilePictureUrl;
             }
-
-            result.Add(viewModel);
+            result.Add(vm);
         }
-
         return result;
     }
 
     public async Task<IEnumerable<ProfileViewerVM>> GetTopViewersAsync(Guid profileUserId, int limit = 10, DateTime? since = null)
     {
-        var topViews = await _profileViewRepository.GetTopViewersAsync(profileUserId, limit, since);
+        var topViewerIds = await _profileViewRepository.GetTopViewersAsync(profileUserId, limit);
         var result = new List<ProfileViewerVM>();
 
-        var viewerGroups = topViews.GroupBy(v => v.ViewerId);
-
-        foreach (var group in viewerGroups)
+        foreach (var viewerId in topViewerIds)
         {
-            var viewerId = group.Key;
-            var views = group.ToList();
             var viewer = await _userRepository.GetByIdAsync(viewerId);
-            
             if (viewer != null)
             {
-                var isFollowing = await _followingRepository.IsFollowingAsync(viewerId, profileUserId);
-                var isMutualFollowing = isFollowing && await _followingRepository.IsFollowingAsync(profileUserId, viewerId);
-
-                var viewerModel = new ProfileViewerVM
+                var viewCount = await _profileViewRepository.GetProfileViewCountAsync(profileUserId, since); // This is inefficient but keep it simple for now
+                var lastView = await _profileViewRepository.GetLastViewAsync(viewerId, profileUserId);
+                
+                result.Add(new ProfileViewerVM
                 {
                     ViewerId = viewerId,
                     ViewerName = viewer.Profile.FullName,
                     ViewerProfilePicture = viewer.Profile.ProfilePictureUrl,
-                    ViewerLocation = viewer.Profile.City,
-                    ViewCount = views.Count,
-                    LastViewedAt = views.Max(v => v.ViewedAt),
-                    FirstViewedAt = views.Min(v => v.ViewedAt),
-                    IsFollowing = isFollowing,
-                    IsMutualFollowing = isMutualFollowing,
-                    AverageViewDuration = TimeSpan.FromSeconds(views.Average(v => v.ViewDuration.TotalSeconds))
-                };
-
-                result.Add(viewerModel);
+                    ViewCount = viewCount,
+                    LastViewedAt = lastView?.ViewedAt ?? DateTime.MinValue,
+                    IsFollowing = await _followingRepository.IsFollowingAsync(viewerId, profileUserId)
+                });
             }
         }
-
-        return result.OrderByDescending(v => v.ViewCount).ThenByDescending(v => v.LastViewedAt);
+        return result;
     }
 
     public async Task<Dictionary<string, int>> GetViewSourceStatsAsync(Guid profileUserId, DateTime? since = null)
@@ -249,42 +182,14 @@ public class ProfileViewService : IProfileViewService
 
     public async Task<DateTime?> GetLastViewDateAsync(Guid viewerId, Guid profileUserId)
     {
-        return await _profileViewRepository.GetLastViewDateAsync(viewerId, profileUserId);
+        var lastView = await _profileViewRepository.GetLastViewAsync(viewerId, profileUserId);
+        return lastView?.ViewedAt;
     }
 
     public async Task<IEnumerable<ProfileViewVM>> GetMutualViewsAsync(Guid userId1, Guid userId2)
     {
         var views = await _profileViewRepository.GetMutualViewsAsync(userId1, userId2);
-        var result = new List<ProfileViewVM>();
-
-        foreach (var view in views)
-        {
-            var viewer = await _userRepository.GetByIdAsync(view.ViewerId);
-            var profileUser = await _userRepository.GetByIdAsync(view.ProfileUserId);
-
-            var viewModel = new ProfileViewVM
-            {
-                Id = view.Id,
-                ViewerId = view.ViewerId,
-                ProfileUserId = view.ProfileUserId,
-                ViewedAt = view.ViewedAt,
-                ViewSource = view.ViewSource,
-                ViewDuration = view.ViewDuration,
-                IsAnonymous = view.IsAnonymous,
-                ReferrerUrl = view.ReferrerUrl,
-                ViewerLocation = view.ViewerLocation
-            };
-
-            if (viewer != null)
-            {
-                viewModel.ViewerName = viewer.Profile.FullName;
-                viewModel.ViewerProfilePicture = viewer.Profile.ProfilePictureUrl;
-            }
-
-            result.Add(viewModel);
-        }
-
-        return result;
+        return views.Select(MapToVM).ToList();
     }
 
     public async Task<bool> IsRecentViewerAsync(Guid viewerId, Guid profileUserId, int minutesThreshold = 30)
@@ -296,50 +201,45 @@ public class ProfileViewService : IProfileViewService
     public async Task<bool> CanViewProfileAsync(Guid viewerId, Guid profileUserId)
     {
         var profileUser = await _userRepository.GetByIdAsync(profileUserId);
-        if (profileUser == null || !profileUser.IsActive || profileUser.IsDeleted)
-            return false;
+        if (profileUser == null || !profileUser.IsActive) return false;
+        if (profileUser.PrivacySettings.IsPublic) return true;
+        if (viewerId == profileUserId) return true;
 
-        // If profile is public, anyone can view
-        if (profileUser.PrivacySettings.IsPublic)
-            return true;
-
-        // If viewer is the profile owner, they can always view
-        if (viewerId == profileUserId)
-            return true;
-
-        // Check if they are following each other for private profiles
-        var isFollowing = await _followingRepository.IsFollowingAsync(profileUserId, viewerId);
-        return isFollowing;
+        return await _followingRepository.IsFollowingAsync(profileUserId, viewerId);
     }
 
     public async Task<bool> ShouldTrackViewAsync(Guid viewerId, Guid profileUserId)
     {
-        // Don't track self-views
-        if (viewerId == profileUserId)
-            return false;
-
-        // Check if profile user exists and is active
+        if (viewerId == profileUserId) return false;
         var profileUser = await _userRepository.GetByIdAsync(profileUserId);
-        if (profileUser == null || !profileUser.IsActive || profileUser.IsDeleted)
-            return false;
-
-        // Check if viewer exists and is active
-        var viewer = await _userRepository.GetByIdAsync(viewerId);
-        if (viewer == null || !viewer.IsActive || viewer.IsDeleted)
-            return false;
-
-        return true;
+        return profileUser != null && profileUser.IsActive;
     }
 
     public async Task CleanupOldViewsAsync(int daysToKeep = 90)
     {
-        var cutoffDate = DateTime.UtcNow.AddDays(-daysToKeep);
-        await _profileViewRepository.CleanupOldViewsAsync(cutoffDate);
-        _logger.LogInformation("Cleaned up profile views older than {CutoffDate}", cutoffDate);
+        await _profileViewRepository.CleanupOldViewsAsync(DateTime.UtcNow.AddDays(-daysToKeep));
     }
 
     public async Task<int> GetDailyViewCountAsync(Guid profileUserId, DateTime date)
     {
         return await _profileViewRepository.GetDailyViewCountAsync(profileUserId, date);
+    }
+
+    private ProfileViewVM MapToVM(UserProfileView view)
+    {
+        return new ProfileViewVM
+        {
+            Id = view.Id,
+            ViewerId = view.ViewerId,
+            ProfileUserId = view.ProfileUserId,
+            ViewedAt = view.ViewedAt,
+            IsAnonymous = view.IsAnonymous,
+            Location = view.Location ?? string.Empty,
+            ViewerLocation = view.ViewerLocation,
+            DeviceType = view.DeviceType,
+            ViewSource = view.ViewSource,
+            ViewDuration = view.ViewDuration.TotalSeconds,
+            ReferrerUrl = view.ReferrerUrl
+        };
     }
 }

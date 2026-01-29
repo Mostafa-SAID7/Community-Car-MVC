@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Media;
+
 using CommunityCar.Application.Features.Account.ViewModels.Media;
 using CommunityCar.Domain.Entities.Account.Media;
 
@@ -14,9 +14,9 @@ public class GalleryMappingProfile : AutoMapper.Profile
 
     private void CreateGalleryMappings()
     {
-        CreateMap<UserGallery, UserGalleryDTO>();
+
         
-        CreateMap<UserGallery, UserGalleryVM>()
+        CreateMap<UserGallery, UserGalleryItemVM>()
             .ForMember(dest => dest.ThumbnailUrl, opt => opt.Ignore())
             .ForMember(dest => dest.FileSizeFormatted, opt => opt.Ignore())
             .ForMember(dest => dest.UploadedTimeAgo, opt => opt.Ignore())

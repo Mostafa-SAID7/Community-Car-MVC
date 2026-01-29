@@ -4,7 +4,7 @@ public class UserBadgeVM
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
-    public Guid BadgeId { get; set; }
+    public string BadgeId { get; set; }
     public string BadgeName { get; set; } = string.Empty;
     public string BadgeDescription { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;

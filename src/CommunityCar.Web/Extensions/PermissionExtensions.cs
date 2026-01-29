@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Authorization;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 

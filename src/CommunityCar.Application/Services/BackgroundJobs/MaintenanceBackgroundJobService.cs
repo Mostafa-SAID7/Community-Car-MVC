@@ -4,7 +4,6 @@ using CommunityCar.Application.Common.Models.Caching;
 using CommunityCar.Domain.Enums.Shared;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using CommunityCar.Application.Common.Models.Account;
 
 namespace CommunityCar.Application.Services.BackgroundJobs;
 

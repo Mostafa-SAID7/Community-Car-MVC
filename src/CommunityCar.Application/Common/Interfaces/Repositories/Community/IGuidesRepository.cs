@@ -1,5 +1,5 @@
 using CommunityCar.Domain.Entities.Community.Guides;
-using CommunityCar.Application.Features.Guides.DTOs;
+using CommunityCar.Application.Features.Guides.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories.Community;
 
@@ -7,7 +7,7 @@ public interface IGuidesRepository
 {
     Task<Guide?> GetGuideByIdAsync(Guid id);
     Task<Guide?> GetGuideWithAuthorAsync(Guid id);
-    Task<IEnumerable<Guide>> GetGuidesAsync(GuideFilterDTO filter);
+    Task<IEnumerable<Guide>> GetGuidesAsync(GuideFilterVM filter);
     Task<IEnumerable<Guide>> GetFeaturedGuidesAsync(int count = 10);
     Task<IEnumerable<Guide>> GetVerifiedGuidesAsync(int count = 10);
     Task<IEnumerable<Guide>> GetPopularGuidesAsync(int count = 10);
@@ -18,7 +18,7 @@ public interface IGuidesRepository
     Task<Guide> CreateGuideAsync(Guide guide);
     Task<Guide> UpdateGuideAsync(Guide guide);
     Task DeleteGuideAsync(Guid id);
-    Task<int> GetTotalCountAsync(GuideFilterDTO filter);
+    Task<int> GetTotalCountAsync(GuideFilterVM filter);
     Task<IEnumerable<string>> GetCategoriesAsync();
     Task<IEnumerable<string>> GetPopularTagsAsync(int count = 20);
     Task<bool> IsBookmarkedByUserAsync(Guid guideId, Guid userId);

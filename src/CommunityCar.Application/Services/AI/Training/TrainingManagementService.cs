@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Application.Common.Interfaces.Repositories.AI;
 using CommunityCar.Application.Services.AI.ModelManagement;
 using CommunityCar.Domain.Entities.AI;
 using Microsoft.Extensions.Logging;

@@ -1,4 +1,6 @@
-namespace CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Application.Features.Friends.ViewModels;
+
+namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 
 public interface IFriendsService
 {

@@ -1,5 +1,4 @@
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Features.Account.ViewModels.Media;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account;
 
@@ -11,7 +10,7 @@ public interface IUserGalleryService
     // Gallery Management
     Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId);
     Task<UserGalleryItemVM?> GetGalleryItemAsync(Guid userId, Guid imageId);
-    Task<UserGalleryItemVM?> UploadImageAsync(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request);
+    Task<UserGalleryItemVM?> UploadImageAsync(UploadImageRequest request);
     Task<bool> DeleteImageAsync(Guid userId, Guid imageId);
 
     // Image Operations

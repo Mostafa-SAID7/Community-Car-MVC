@@ -43,15 +43,36 @@ public class FollowingListVM
     public string? SearchTerm { get; set; }
 }
 
-public class UserSuggestionVM
+public class FollowingVM
 {
     public Guid UserId { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string? ProfilePicture { get; set; }
+    public string FullName { get; set; } = string.Empty;
+    public string? ProfilePictureUrl { get; set; }
     public string? Bio { get; set; }
-    public int MutualConnectionsCount { get; set; }
-    public List<string> MutualConnectionNames { get; set; } = new();
-    public string SuggestionReason { get; set; } = string.Empty;
-    public double SimilarityScore { get; set; }
-    public bool IsFollowing { get; set; }
+    public string? City { get; set; }
+    public string? Country { get; set; }
+    public DateTime FollowedAt { get; set; }
+    public bool IsFollowingBack { get; set; }
+    public bool IsOnline { get; set; }
+    public DateTime? LastActiveAt { get; set; }
+    
+    // Statistics
+    public int FollowersCount { get; set; }
+    public int FollowingCount { get; set; }
+    public int PostsCount { get; set; }
 }
+
+public class FollowStatsVM
+{
+    public int FollowersCount { get; set; }
+    public int FollowingCount { get; set; }
+    public bool IsFollowing { get; set; }
+    public bool IsFollowedBy { get; set; }
+    public bool CanFollow { get; set; } = true;
+}
+
+// Aliases
+public class UserFollowingWebVM : NetworkUserVM { }
+public class FollowingDashboardWebVM : FollowingDashboardVM { }
+public class FollowingListWebVM : FollowingListVM { }
+

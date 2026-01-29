@@ -2,6 +2,7 @@ using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Account.Media;
 using CommunityCar.Domain.Entities.Account.Gamification;
 using CommunityCar.Domain.Entities.Account.Analytics;
+using CommunityCar.Domain.Entities.Account.Management;
 using CommunityCar.Domain.Entities.Chats;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Domain.Entities.Community.Friends;
@@ -36,6 +37,8 @@ public interface IApplicationDbContext
     DbSet<UserActivityEntity> UserActivities { get; }
     DbSet<UserInterest> UserInterests { get; }
     DbSet<UserFollowing> UserFollowings { get; }
+    DbSet<UserProfileView> UserProfileViews { get; }
+    DbSet<UserManagement> UserManagements { get; }
     
     // Shared
     DbSet<Comment> Comments { get; }

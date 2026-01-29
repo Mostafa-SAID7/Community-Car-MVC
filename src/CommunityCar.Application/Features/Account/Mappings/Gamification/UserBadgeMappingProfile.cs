@@ -1,5 +1,5 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Gamification;
+
 using CommunityCar.Application.Features.Account.ViewModels.Gamification;
 using CommunityCar.Domain.Entities.Account.Gamification;
 
@@ -14,10 +14,7 @@ public class UserBadgeMappingProfile : AutoMapper.Profile
 
     private void CreateBadgeMappings()
     {
-        CreateMap<UserBadge, UserBadgeDTO>()
-            .ForMember(dest => dest.BadgeName, opt => opt.Ignore())
-            .ForMember(dest => dest.BadgeDescription, opt => opt.Ignore())
-            .ForMember(dest => dest.IconUrl, opt => opt.Ignore());
+
 
         CreateMap<UserBadge, UserBadgeVM>()
             .ForMember(dest => dest.BadgeName, opt => opt.Ignore())

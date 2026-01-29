@@ -1,6 +1,7 @@
-using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Features.Account.ViewModels.Social;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account;
+
 
 /// <summary>
 /// Interface for profile view tracking and analytics

@@ -33,6 +33,9 @@ public interface IAccountSecurityService
     Task<DateTime?> GetLockoutEndAsync(Guid userId);
     Task<bool> UnlockAccountAsync(Guid userId);
 
+    // Login Tracking (extracted from IUserRepository)
+    Task<Result> UpdateLastLoginAsync(Guid userId, string? ipAddress = null, string? userAgent = null);
+
     // Two-Factor Authentication
     Task<TwoFactorSetupVM> SetupTwoFactorAsync(Guid userId);
     Task<bool> EnableTwoFactorAsync(Guid userId, TwoFactorSetupRequest request);

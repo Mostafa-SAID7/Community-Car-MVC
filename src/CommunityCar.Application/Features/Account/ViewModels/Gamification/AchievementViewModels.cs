@@ -27,6 +27,19 @@ public class AchievementDashboardVM
     public double CompletionPercentage { get; set; }
     public Dictionary<string, int> AchievementsByType { get; set; } = new();
     public List<UserAchievementVM> RecentAchievements { get; set; } = new();
-    public List<UserAchievementVM> InProgressAchievements { get; set; } = new();
+    public List<UserAchievementVM> InProgressAchievementsList { get; set; } = new();
     public List<UserAchievementVM> AvailableAchievements { get; set; } = new();
+}
+
+public class GrantAchievementRequest
+{
+    public Guid UserId { get; set; }
+    public Guid AchievementId { get; set; }
+}
+
+public class UpdateAchievementProgressRequest
+{
+    public Guid UserId { get; set; }
+    public Guid AchievementId { get; set; }
+    public double Progress { get; set; }
 }

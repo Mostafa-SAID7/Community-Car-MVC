@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 
-namespace CommunityCar.Application.Common.Interfaces.Services.Authentication;
+namespace CommunityCar.Application.Common.Interfaces.Services.Account;
 
 public interface IOAuthService
 {
@@ -21,6 +21,12 @@ public interface IOAuthService
     Task<bool> CanUnlinkAccountAsync(string userId, string provider);
     Task<bool> HasPasswordSetAsync(string userId);
     Task<IEnumerable<string>> GetAvailableProvidersAsync();
+
+    // Repository Operations (extracted from IUserRepository)
+    Task<Result> LinkOAuthAccountAsync(Guid userId, string provider, string providerId, string? profilePictureUrl = null);
+    Task<Result> UnlinkOAuthAccountAsync(Guid userId, string provider);
+    Task<bool> IsOAuthAccountLinkedAsync(Guid userId, string provider);
+    Task<string?> GetOAuthAccountIdAsync(Guid userId, string provider);
 }
 
 public class ExternalLoginInfo

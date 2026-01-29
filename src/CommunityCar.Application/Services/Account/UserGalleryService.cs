@@ -1,12 +1,9 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
-using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
 using CommunityCar.Application.Features.Account.ViewModels.Media;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Domain.Entities.Account.Media;
 using CommunityCar.Domain.Enums.Account;
 using Microsoft.Extensions.Logging;
@@ -20,6 +17,7 @@ public class UserGalleryService : IUserGalleryService
     private readonly IUserGalleryRepository _galleryRepository;
     private readonly IFileStorageService _fileStorageService;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IProfileService _profileService;
     private readonly ILogger<UserGalleryService> _logger;
 
     public UserGalleryService(
@@ -27,56 +25,58 @@ public class UserGalleryService : IUserGalleryService
         IUserGalleryRepository galleryRepository,
         IFileStorageService fileStorageService,
         ICurrentUserService currentUserService,
+        IProfileService profileService,
         ILogger<UserGalleryService> logger)
     {
         _userRepository = userRepository;
         _galleryRepository = galleryRepository;
         _fileStorageService = fileStorageService;
         _currentUserService = currentUserService;
+        _profileService = profileService;
         _logger = logger;
     }
 
     #region Gallery Management
 
-    public async Task<IEnumerable<UserGalleryVM>> GetUserGalleryAsync(Guid userId)
+    public async Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId)
     {
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
         var galleryItems = await _galleryRepository.GetUserGalleryAsync(userId, currentUserId != userId);
         
-        return galleryItems.Select(item => new UserGalleryVM
+        return galleryItems.Select(item => new UserGalleryItemVM
         {
             Id = item.Id,
             UserId = item.UserId,
             ImageUrl = item.MediaUrl,
             ThumbnailUrl = item.ThumbnailUrl ?? item.MediaUrl,
             Caption = item.Description ?? item.Title,
-            UploadedAt = item.UploadedAt,
+            CreatedAt = item.UploadedAt,
             ViewCount = item.ViewCount,
-            LikeCount = item.LikeCount,
+            // LikeCount = item.LikeCount, // Not in VM
             IsPublic = item.IsPublic,
-            IsFeatured = item.IsFeatured
+            // IsFeatured = item.IsFeatured // Not in VM
         });
     }
 
-    public async Task<UserGalleryVM?> GetGalleryItemAsync(Guid userId, Guid imageId)
+    public async Task<UserGalleryItemVM?> GetGalleryItemAsync(Guid userId, Guid imageId)
     {
-        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : Guid.Empty;
         var item = await _galleryRepository.GetGalleryItemAsync(imageId, currentUserId);
         if (item == null || item.UserId != userId) return null;
 
-        return new UserGalleryVM
+        return new UserGalleryItemVM
         {
             Id = item.Id,
             UserId = item.UserId,
             ImageUrl = item.MediaUrl,
             ThumbnailUrl = item.ThumbnailUrl ?? item.MediaUrl,
             Caption = item.Description ?? item.Title,
-            UploadedAt = item.UploadedAt,
+            CreatedAt = item.UploadedAt,
             IsPublic = item.IsPublic
         };
     }
 
-    public async Task<UserGalleryVM?> UploadImageAsync(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request)
+    public async Task<UserGalleryItemVM?> UploadImageAsync(UploadImageRequest request)
     {
         try
         {
@@ -93,7 +93,7 @@ public class UserGalleryService : IUserGalleryService
             var item = new UserGallery(request.UserId, request.Caption ?? "Untitled", url, MediaType.Image, request.IsPublic);
             await _galleryRepository.AddAsync(item);
 
-            return new UserGalleryVM { Id = item.Id, UserId = item.UserId, ImageUrl = item.MediaUrl, UploadedAt = item.UploadedAt };
+            return new UserGalleryItemVM { Id = item.Id, UserId = item.UserId, ImageUrl = item.MediaUrl, CreatedAt = item.UploadedAt };
         }
         catch (Exception ex)
         {
@@ -120,14 +120,14 @@ public class UserGalleryService : IUserGalleryService
     {
         var item = await _galleryRepository.GetByIdAsync(imageId);
         if (item == null || item.UserId != userId) return false;
-        return await _userRepository.UpdateProfilePictureAsync(userId, item.MediaUrl);
+        return await _profileService.UpdateProfilePictureAsync(userId, item.MediaUrl);
     }
 
     public async Task<bool> SetAsCoverImageAsync(Guid userId, Guid imageId)
     {
         var item = await _galleryRepository.GetByIdAsync(imageId);
         if (item == null || item.UserId != userId) return false;
-        return await _userRepository.UpdateCoverImageAsync(userId, item.MediaUrl);
+        return await _profileService.UpdateCoverImageAsync(userId, item.MediaUrl);
     }
 
     public async Task<bool> UpdateImageCaptionAsync(Guid userId, Guid imageId, string caption)

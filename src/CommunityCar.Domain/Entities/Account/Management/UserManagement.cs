@@ -2,9 +2,13 @@ using CommunityCar.Domain.Base;
 
 namespace CommunityCar.Domain.Entities.Account.Management;
 
-public class UserManagementOverview : BaseEntity
+public class UserManagement : BaseEntity
 {
-    public Guid UserId { get; set; }
+    public Guid UserId { get; private set; }
+    public Guid? ManagerId { get; private set; }
+    public DateTime AssignedAt { get; private set; }
+    
+    // Legacy properties from Overview
     public string UserName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
@@ -16,6 +20,24 @@ public class UserManagementOverview : BaseEntity
     public int CommentCount { get; set; }
     public int ReportCount { get; set; }
     public string? Notes { get; set; }
+
+    public static UserManagement Create(Guid userId, Guid? managerId = null)
+    {
+        return new UserManagement
+        {
+            UserId = userId,
+            ManagerId = managerId,
+            AssignedAt = DateTime.UtcNow,
+            IsActive = true
+        };
+    }
+
+    public void ChangeManager(Guid newManagerId)
+    {
+        ManagerId = newManagerId;
+        AssignedAt = DateTime.UtcNow;
+        Audit(UpdatedBy);
+    }
 
     public void UpdateActivity(DateTime lastLogin, int loginCount, int postCount, int commentCount)
     {

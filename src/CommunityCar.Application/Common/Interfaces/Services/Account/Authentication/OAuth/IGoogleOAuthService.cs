@@ -1,8 +1,7 @@
 using CommunityCar.Application.Common.Models;
-using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Infrastructure.Models.OAuth;
+using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 
-namespace CommunityCar.Infrastructure.Services.Account.Authentication.OAuth;
+namespace CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
 
 /// <summary>
 /// Service responsible for Google OAuth operations

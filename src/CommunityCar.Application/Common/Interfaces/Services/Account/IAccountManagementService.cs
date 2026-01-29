@@ -1,11 +1,10 @@
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
 using CommunityCar.Application.Common.Models;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account;
 
 /// <summary>
-/// Interface for account management operations (deactivation, deletion, data export, privacy)
+/// Unified interface for account management operations including identity, deactivation, deletion, data export, privacy, and claims management
 /// </summary>
 public interface IAccountManagementService
 {
@@ -21,10 +20,10 @@ public interface IAccountManagementService
     Task<IEnumerable<DataExportVM>> GetDataExportHistoryAsync(Guid userId);
 
     // Privacy & Notification Settings
-    public Task<CommunityCar.Application.Common.Models.Profile.PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId);
-    Task<Result> UpdatePrivacySettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdatePrivacySettingsRequest request);
-    Task<CommunityCar.Application.Common.Models.Profile.NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId);
-    Task<Result> UpdateNotificationSettingsAsync(CommunityCar.Application.Common.Models.Profile.UpdateNotificationSettingsRequest request);
+    Task<PrivacySettingsVM> GetPrivacySettingsAsync(Guid userId);
+    Task<Result> UpdatePrivacySettingsAsync(UpdatePrivacySettingsRequest request);
+    Task<NotificationSettingsVM> GetNotificationSettingsAsync(Guid userId);
+    Task<Result> UpdateNotificationSettingsAsync(UpdateNotificationSettingsRequest request);
 
     // Account Recovery
     Task<bool> CanRecoverAccountAsync(string email);
@@ -39,6 +38,19 @@ public interface IAccountManagementService
     Task<bool> AcceptTermsOfServiceAsync(Guid userId, string version);
     Task<bool> AcceptPrivacyPolicyAsync(Guid userId, string version);
     Task<IEnumerable<ConsentVM>> GetUserConsentsAsync(Guid userId);
+
+    // User Identity Management (merged from IIdentityManagementService)
+    Task<UserIdentityVM?> GetUserIdentityAsync(Guid userId);
+    Task<IEnumerable<UserIdentityVM>> GetAllUsersAsync(int page = 1, int pageSize = 20);
+    Task<bool> IsUserActiveAsync(Guid userId);
+    Task<bool> LockUserAsync(Guid userId, string reason);
+    Task<bool> UnlockUserAsync(Guid userId);
+
+    // Claims Management (merged from IIdentityManagementService)
+    Task<IEnumerable<UserClaimVM>> GetUserClaimsAsync(Guid userId);
+    Task<bool> AddClaimToUserAsync(Guid userId, string claimType, string claimValue);
+    Task<bool> RemoveClaimFromUserAsync(Guid userId, string claimType, string claimValue);
+    Task<bool> UpdateUserClaimAsync(Guid userId, string oldClaimType, string oldClaimValue, string newClaimType, string newClaimValue);
 }
 
 

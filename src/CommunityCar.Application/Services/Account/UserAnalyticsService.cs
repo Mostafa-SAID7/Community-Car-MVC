@@ -1,7 +1,10 @@
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+﻿using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
-using CommunityCar.Application.Features.Account.DTOs;
 using CommunityCar.Application.Features.Account.ViewModels;
+using CommunityCar.Application.Features.Account.ViewModels.Activity;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
+using CommunityCar.Application.Features.Account.ViewModels.Social;
+using CommunityCar.Application.Features.Shared.ViewModels;
 using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Application.Services.Account;
@@ -33,7 +36,7 @@ public class UserAnalyticsService : IUserAnalyticsService
 
     #region Activity Analytics
 
-    public async Task<ActivityAnalyticsDTO> GetUserActivityAnalyticsAsync(Guid userId, DateTime? fromDate = null)
+    public async Task<ActivityAnalyticsVM> GetUserActivityAnalyticsAsync(Guid userId, DateTime? fromDate = null)
     {
         try
         {
@@ -41,28 +44,28 @@ public class UserAnalyticsService : IUserAnalyticsService
             var activitiesByType = await _activityRepository.GetActivityCountByTypeAsync(userId, fromDate);
             var lastActivityDate = await _activityRepository.GetLastActivityDateAsync(userId);
 
-            return new ActivityAnalyticsDTO
+            return new ActivityAnalyticsVM
             {
                 UserId = userId,
                 TotalActivities = totalActivities,
                 ActivitiesByType = activitiesByType,
                 LastActivityDate = lastActivityDate,
-                ActivityTrends = new List<ActivityTrendDTO>() // TODO: Implement trends
+                ActivityTrends = new List<ActivityTrendVM>() // TODO: Implement trends
             };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting activity analytics for user {UserId}", userId);
-            return new ActivityAnalyticsDTO { UserId = userId };
+            return new ActivityAnalyticsVM { UserId = userId };
         }
     }
 
-    public async Task<UserStatisticsDTO> GetUserStatisticsAsync(Guid userId)
+    public async Task<UserStatisticsVM> GetUserStatisticsAsync(Guid userId)
     {
         try
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null) return new UserStatisticsDTO { UserId = userId };
+            if (user == null) return new UserStatisticsVM { UserId = userId };
 
             var followingCount = await _followingRepository.GetFollowingCountAsync(userId);
             var followerCount = await _followingRepository.GetFollowerCountAsync(userId);
@@ -71,7 +74,7 @@ public class UserAnalyticsService : IUserAnalyticsService
             var galleryItemsCount = 0; // TODO: Get from gallery repository
             var lastActivityDate = await _activityRepository.GetLastActivityDateAsync(userId);
 
-            return new UserStatisticsDTO
+            return new UserStatisticsVM
             {
                 UserId = userId,
                 PostsCount = 0, // TODO: Get from posts repository
@@ -91,7 +94,7 @@ public class UserAnalyticsService : IUserAnalyticsService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting user statistics for user {UserId}", userId);
-            return new UserStatisticsDTO { UserId = userId };
+            return new UserStatisticsVM { UserId = userId };
         }
     }
 
@@ -99,7 +102,7 @@ public class UserAnalyticsService : IUserAnalyticsService
 
     #region Following Analytics
 
-    public async Task<FollowingAnalyticsDTO> GetFollowingAnalyticsAsync(Guid userId)
+    public async Task<FollowingAnalyticsVM> GetFollowingAnalyticsAsync(Guid userId)
     {
         try
         {
@@ -109,33 +112,33 @@ public class UserAnalyticsService : IUserAnalyticsService
             var recentFollowing = await _followingRepository.GetRecentFollowingAsync(userId, 10);
             var suggestedFollowing = await _followingRepository.GetSuggestedFollowingAsync(userId, 10);
 
-            return new FollowingAnalyticsDTO
+            return new FollowingAnalyticsVM
             {
                 UserId = userId,
                 FollowingCount = followingCount,
                 FollowerCount = followerCount,
                 MutualFollowingCount = 0, // TODO: Calculate mutual following
-                RecentFollowers = recentFollowers.Select(f => new UserFollowingDTO
+                RecentFollowers = recentFollowers.Select(f => new NetworkUserVM
                 {
                     Id = f.Id,
                     FollowerId = f.FollowerId,
-                    FollowingId = f.FollowingId,
+                    FollowingId = f.FollowedUserId,
                     CreatedAt = f.CreatedAt
                 }).ToList(),
-                RecentFollowing = recentFollowing.Select(f => new UserFollowingDTO
+                RecentFollowing = recentFollowing.Select(f => new NetworkUserVM
                 {
                     Id = f.Id,
                     FollowerId = f.FollowerId,
-                    FollowingId = f.FollowingId,
+                    FollowingId = f.FollowedUserId,
                     CreatedAt = f.CreatedAt
                 }).ToList(),
-                SuggestedFollowing = suggestedFollowing.ToList()
+                SuggestedFollowing = suggestedFollowing.Select(u => new UserSuggestionVM { UserId = u }).ToList()
             };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting following analytics for user {UserId}", userId);
-            return new FollowingAnalyticsDTO { UserId = userId };
+            return new FollowingAnalyticsVM { UserId = userId };
         }
     }
 
@@ -143,7 +146,7 @@ public class UserAnalyticsService : IUserAnalyticsService
 
     #region Interest Analytics
 
-    public async Task<InterestAnalyticsDTO> GetInterestAnalyticsAsync(Guid userId)
+    public async Task<InterestAnalyticsVM> GetInterestAnalyticsAsync(Guid userId)
     {
         try
         {
@@ -152,27 +155,29 @@ public class UserAnalyticsService : IUserAnalyticsService
             var recommendedInterests = await _interestRepository.GetRecommendedInterestsAsync(userId, 10);
             var similarUsers = await _interestRepository.GetUsersWithSimilarInterestsAsync(userId, 10);
 
-            return new InterestAnalyticsDTO
+            return new InterestAnalyticsVM
             {
                 UserId = userId,
                 TotalInterests = totalInterests,
                 InterestsByCategory = new Dictionary<string, int>(), // TODO: Implement
-                TopInterests = topInterests.Select(i => new UserInterestDTO
+                TopInterests = topInterests.Select(i => new ProfileInterestVM
                 {
                     Id = i.Id,
                     UserId = i.UserId,
-                    InterestId = i.InterestId,
-                    Priority = i.Priority,
-                    CreatedAt = i.CreatedAt
+                    InterestId = i.Id,
+                    InterestName = i.InterestValue,
+                    Category = i.Category,
+                    Priority = (int)i.Score,
+                    CreatedAt = i.LastInteraction
                 }).ToList(),
-                RecommendedInterests = recommendedInterests.ToList(),
-                SimilarUsers = similarUsers.ToList()
+                RecommendedInterests = recommendedInterests.Select(id => id.ToString()).ToList(),
+                SimilarUsers = similarUsers.Select(u => new UserSuggestionVM { UserId = u }).ToList()
             };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting interest analytics for user {UserId}", userId);
-            return new InterestAnalyticsDTO { UserId = userId };
+            return new InterestAnalyticsVM { UserId = userId };
         }
     }
 
@@ -180,7 +185,7 @@ public class UserAnalyticsService : IUserAnalyticsService
 
     #region Profile View Analytics
 
-    public async Task<ProfileViewAnalyticsDTO> GetProfileViewAnalyticsAsync(Guid userId, DateTime? fromDate = null)
+    public async Task<ProfileViewStatsVM> GetProfileViewAnalyticsAsync(Guid userId, DateTime? fromDate = null)
     {
         try
         {
@@ -193,13 +198,13 @@ public class UserAnalyticsService : IUserAnalyticsService
             var toDate = DateTime.UtcNow;
             var viewsByDate = await _profileViewRepository.GetViewsByDateAsync(userId, fromDateValue, toDate);
 
-            return new ProfileViewAnalyticsDTO
+            return new ProfileViewStatsVM
             {
                 ProfileUserId = userId,
                 TotalViews = totalViews,
                 UniqueViewers = uniqueViewers,
                 ViewsByDate = viewsByDate,
-                RecentViews = recentViews.Select(v => new UserProfileViewDTO
+                RecentViews = recentViews.Select(v => new ProfileViewVM
                 {
                     Id = v.Id,
                     ViewerId = v.ViewerId,
@@ -207,14 +212,14 @@ public class UserAnalyticsService : IUserAnalyticsService
                     ViewedAt = v.ViewedAt,
                     IsAnonymous = v.IsAnonymous
                 }).ToList(),
-                TopViewers = topViewers.ToList(),
+                TopViewers = topViewers.Select(id => new ProfileViewerVM { ViewerId = id }).ToList(),
                 AverageViewsPerDay = totalViews / Math.Max((toDate - fromDateValue).Days, 1)
             };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting profile view analytics for user {UserId}", userId);
-            return new ProfileViewAnalyticsDTO { ProfileUserId = userId };
+            return new ProfileViewStatsVM { ProfileUserId = userId };
         }
     }
 
@@ -236,8 +241,6 @@ public class UserAnalyticsService : IUserAnalyticsService
         }
     }
 
-
-
     #endregion
 
     #region Data Management
@@ -258,6 +261,52 @@ public class UserAnalyticsService : IUserAnalyticsService
         {
             _logger.LogError(ex, "Error cleaning up old data");
             return false;
+        }
+    }
+
+    #endregion
+
+    #region User Statistics (extracted from IUserRepository)
+
+    public async Task<int> GetTotalUsersCountAsync()
+    {
+        try
+        {
+            var allUsers = await _userRepository.GetAllAsync();
+            return allUsers.Count();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting total users count");
+            return 0;
+        }
+    }
+
+    public async Task<int> GetActiveUsersCountAsync()
+    {
+        try
+        {
+            var activeUsers = await _userRepository.GetActiveUsersAsync();
+            return activeUsers.Count();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting active users count");
+            return 0;
+        }
+    }
+
+    public async Task<int> GetNewUsersCountAsync(DateTime fromDate)
+    {
+        try
+        {
+            var allUsers = await _userRepository.GetAllAsync();
+            return allUsers.Count(u => u.CreatedAt >= fromDate);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting new users count");
+            return 0;
         }
     }
 

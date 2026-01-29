@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Application.Common.Interfaces.Services.Authorization;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
 using CommunityCar.Application.Features.Account.ViewModels.Authorization;
 using CommunityCar.Domain.Constants;
 using CommunityCar.Web.Attributes;

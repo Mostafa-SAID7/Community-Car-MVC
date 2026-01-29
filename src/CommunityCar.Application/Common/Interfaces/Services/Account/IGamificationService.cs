@@ -1,5 +1,5 @@
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Features.Account.ViewModels.Gamification;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account;
 
@@ -46,5 +46,3 @@ public interface IGamificationService
     // User Statistics
     Task<ProfileStatsVM> GetUserStatsAsync(Guid userId);
 }
-
-

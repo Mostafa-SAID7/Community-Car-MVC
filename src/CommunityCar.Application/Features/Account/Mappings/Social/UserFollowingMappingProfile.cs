@@ -1,5 +1,4 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Social;
 using CommunityCar.Application.Features.Account.ViewModels.Social;
 using CommunityCar.Domain.Entities.Account.Profile;
 
@@ -14,14 +13,8 @@ public class UserFollowingMappingProfile : AutoMapper.Profile
 
     private void CreateFollowingMappings()
     {
-        CreateMap<UserFollowing, UserFollowingDTO>()
-            .ForMember(dest => dest.FollowerName, opt => opt.Ignore())
-            .ForMember(dest => dest.FollowingName, opt => opt.Ignore())
-            .ForMember(dest => dest.FollowerProfilePicture, opt => opt.Ignore())
-            .ForMember(dest => dest.FollowingProfilePicture, opt => opt.Ignore())
-            .ForMember(dest => dest.IsMutual, opt => opt.Ignore());
-
         CreateMap<UserFollowing, NetworkUserVM>()
+
             .ForMember(dest => dest.FollowerName, opt => opt.Ignore())
             .ForMember(dest => dest.FollowingName, opt => opt.Ignore())
             .ForMember(dest => dest.FollowerProfilePicture, opt => opt.Ignore())

@@ -1,10 +1,8 @@
+using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
-using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.ValueObjects.Account;
 using Microsoft.AspNetCore.Identity;
@@ -51,7 +49,7 @@ public class ProfileService : IProfileService
         
         // Fetch counts in parallel for better performance
         var followingCountTask = _followingRepository.GetFollowingCountAsync(userId);
-        var followersCountTask = _followingRepository.GetFollowersCountAsync(userId);
+        var followersCountTask = _followingRepository.GetFollowerCountAsync(userId);
         var postsCountTask = _postsRepository.GetUserPostsCountAsync(userId);
         var statsTask = GetProfileStatsAsync(userId);
 
@@ -98,29 +96,29 @@ public class ProfileService : IProfileService
         if (user == null) return false;
 
         // Update profile using value object
-        var updatedProfile = user.Profile
-            .UpdateBasicInfo(request.FullName, null, null)
-            .UpdateBio(request.Bio)
-            .UpdateLocation(
-                !string.IsNullOrEmpty(request.Location) ? request.Location.Split(',')[0].Trim() : user.Profile.City,
-                !string.IsNullOrEmpty(request.Location) && request.Location.Split(',').Length > 1 ? request.Location.Split(',')[1].Trim() : user.Profile.Country);
+        var currentProfile = user.Profile;
+        
+        var updatedProfile = new UserProfile(
+            request.FullName,
+            currentProfile.FirstName,
+            currentProfile.LastName,
+            request.Bio ?? currentProfile.Bio,
+            request.City ?? currentProfile.City,
+            request.Country ?? currentProfile.Country,
+            currentProfile.BioAr,
+            currentProfile.CityAr,
+            currentProfile.CountryAr,
+            request.Website ?? currentProfile.Website,
+            currentProfile.ProfilePictureUrl,
+            currentProfile.CoverImageUrl);
 
-        // Create new profile with website update
-        var finalProfile = new UserProfile(
-            updatedProfile.FullName,
-            updatedProfile.FirstName,
-            updatedProfile.LastName,
-            updatedProfile.Bio,
-            updatedProfile.City,
-            updatedProfile.Country,
-            updatedProfile.BioAr,
-            updatedProfile.CityAr,
-            updatedProfile.CountryAr,
-            request.Website,
-            updatedProfile.ProfilePictureUrl,
-            updatedProfile.CoverImageUrl);
+        user.UpdateProfile(updatedProfile);
+        
+        if (!string.IsNullOrEmpty(request.PhoneNumber))
+        {
+            user.PhoneNumber = request.PhoneNumber;
+        }
 
-        user.UpdateProfile(finalProfile);
         await _userRepository.UpdateAsync(user);
         return true;
     }
@@ -138,6 +136,7 @@ public class ProfileService : IProfileService
 
     public async Task<ProfileStatsVM> GetProfileStatsAsync(Guid userId) 
         => await _gamificationService.GetUserStatsAsync(userId);
+    
     public Task<bool> UpdateProfileStatsAsync(Guid userId) => Task.FromResult(true);
 
     public Task<bool> IsProfileCompleteAsync(Guid userId) => Task.FromResult(true);
@@ -161,9 +160,7 @@ public class ProfileService : IProfileService
             CoverImageUrl = user.Profile.CoverImageUrl,
             CreatedAt = user.CreatedAt,
             IsEmailConfirmed = user.EmailConfirmed,
-            IsActive = user.IsActive,
-            CommentsCount = 0, // Will be set by GetProfileAsync method
-            LikesReceived = 0  // Will be set by GetProfileAsync method
+            IsActive = user.IsActive
         };
     }
 }

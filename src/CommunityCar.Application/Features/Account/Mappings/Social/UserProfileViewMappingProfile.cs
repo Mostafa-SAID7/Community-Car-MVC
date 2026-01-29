@@ -1,5 +1,4 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Account.DTOs.Social;
 using CommunityCar.Application.Features.Account.ViewModels.Social;
 using CommunityCar.Domain.Entities.Account.Profile;
 
@@ -14,12 +13,7 @@ public class UserProfileViewMappingProfile : AutoMapper.Profile
 
     private void CreateProfileViewMappings()
     {
-        CreateMap<UserProfileView, UserProfileViewDTO>()
-            .ForMember(dest => dest.ViewerName, opt => opt.Ignore())
-            .ForMember(dest => dest.ViewerProfilePicture, opt => opt.Ignore())
-            .ForMember(dest => dest.Location, opt => opt.Ignore());
-
-        CreateMap<UserProfileView, UserProfileViewVM>()
+        CreateMap<UserProfileView, ProfileViewVM>()
             .ForMember(dest => dest.ViewerName, opt => opt.Ignore())
             .ForMember(dest => dest.ViewerProfilePicture, opt => opt.Ignore())
             .ForMember(dest => dest.Location, opt => opt.Ignore())
@@ -30,6 +24,7 @@ public class UserProfileViewMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.ViewedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
             .ForMember(dest => dest.IsAnonymous, opt => opt.MapFrom(src => src.ViewerId == Guid.Empty));
+
     }
 
     private static string GetDeviceType(string? userAgent)

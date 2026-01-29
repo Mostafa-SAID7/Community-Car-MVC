@@ -35,4 +35,13 @@ public interface IUserProfileViewRepository : IBaseRepository<UserProfileView>
     Task<bool> SetViewTrackingAsync(Guid profileUserId, bool enabled);
     Task<IEnumerable<UserProfileView>> GetAnonymousViewsAsync(Guid profileUserId, int page = 1, int pageSize = 20);
     #endregion
+
+    #region New Tracking Methods
+    Task<UserProfileView?> GetRecentViewAsync(Guid viewerId, Guid profileUserId, int minutesThreshold);
+    Task<bool> HasViewedProfileAsync(Guid viewerId, Guid profileUserId);
+    Task<IEnumerable<UserProfileView>> GetMutualViewsAsync(Guid userId1, Guid userId2);
+    Task<Dictionary<string, int>> GetViewSourceStatsAsync(Guid profileUserId, DateTime? since = null);
+    Task<Dictionary<DateTime, int>> GetViewTrendsAsync(Guid profileUserId, DateTime startDate, DateTime endDate);
+    Task<int> GetDailyViewCountAsync(Guid profileUserId, DateTime date);
+    #endregion
 }
