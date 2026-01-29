@@ -7,7 +7,7 @@ public class ActivityAnalyticsVM
     public Dictionary<string, int> ActivitiesByType { get; set; } = new();
     public DateTime? LastActivityDate { get; set; }
     public List<ActivityTrendVM> ActivityTrends { get; set; } = new();
-    public List<UserActivityVM> RecentActivities { get; set; } = new();
+    public List<TimelineActivityVM> RecentActivities { get; set; } = new();
 }
 
 public class ActivityTrendVM

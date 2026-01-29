@@ -18,7 +18,7 @@ public class UserManagementMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.UserName, opt => opt.Ignore())
             .ForMember(dest => dest.ManagerName, opt => opt.Ignore());
 
-        CreateMap<UserManagement, UserManagementVM>()
+        CreateMap<UserManagement, ManagedUserVM>()
             .ForMember(dest => dest.UserName, opt => opt.Ignore())
             .ForMember(dest => dest.UserEmail, opt => opt.Ignore())
             .ForMember(dest => dest.UserProfilePicture, opt => opt.Ignore())

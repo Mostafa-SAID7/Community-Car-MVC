@@ -13,18 +13,13 @@ public class IdentityManagementService : IIdentityManagementService
 {
     private readonly IUserRepository _userRepository;
     private readonly UserManager<User> _userManager;
-    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
-    private readonly ILogger<IdentityManagementService> _logger;
-
     public IdentityManagementService(
         IUserRepository userRepository,
         UserManager<User> userManager,
-        RoleManager<IdentityRole<Guid>> roleManager,
         ILogger<IdentityManagementService> logger)
     {
         _userRepository = userRepository;
         _userManager = userManager;
-        _roleManager = roleManager;
         _logger = logger;
     }
 
@@ -96,75 +91,7 @@ public class IdentityManagementService : IIdentityManagementService
 
     #endregion
 
-    #region Role Management
 
-    public async Task<IEnumerable<RoleVM>> GetAllRolesAsync()
-    {
-        var roles = await _roleManager.Roles.ToListAsync();
-        return roles.Select(r => new RoleVM
-        {
-            Id = r.Id,
-            Name = r.Name ?? string.Empty,
-            NormalizedName = r.NormalizedName ?? string.Empty,
-            ConcurrencyStamp = r.ConcurrencyStamp ?? string.Empty
-        });
-    }
-
-    public async Task<bool> CreateRoleAsync(CreateRoleRequest request)
-    {
-        if (await _roleManager.RoleExistsAsync(request.Name)) return false;
-        var result = await _roleManager.CreateAsync(new IdentityRole<Guid>(request.Name) { Id = Guid.NewGuid() });
-        return result.Succeeded;
-    }
-
-    public async Task<bool> UpdateRoleAsync(UpdateRoleRequest request)
-    {
-        var role = await _roleManager.FindByIdAsync(request.Id.ToString());
-        if (role == null) return false;
-        role.Name = request.Name;
-        var result = await _roleManager.UpdateAsync(role);
-        return result.Succeeded;
-    }
-
-    public async Task<bool> DeleteRoleAsync(string roleName)
-    {
-        var role = await _roleManager.FindByNameAsync(roleName);
-        if (role == null) return false;
-        var result = await _roleManager.DeleteAsync(role);
-        return result.Succeeded;
-    }
-
-    public async Task<bool> AssignRoleToUserAsync(Guid userId, string roleName)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-        if (user == null || !await _roleManager.RoleExistsAsync(roleName)) return false;
-        var result = await _userManager.AddToRoleAsync(user, roleName);
-        return result.Succeeded;
-    }
-
-    public async Task<bool> RemoveRoleFromUserAsync(Guid userId, string roleName)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-        if (user == null) return false;
-        var result = await _userManager.RemoveFromRoleAsync(user, roleName);
-        return result.Succeeded;
-    }
-
-    public async Task<IEnumerable<string>> GetUserRolesAsync(Guid userId)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-        return user == null ? Enumerable.Empty<string>() : await _userManager.GetRolesAsync(user);
-    }
-
-    public Task<bool> RoleExistsAsync(string roleName) => _roleManager.RoleExistsAsync(roleName);
-
-    public async Task<bool> IsUserInRoleAsync(Guid userId, string roleName)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-        return user != null && await _userManager.IsInRoleAsync(user, roleName);
-    }
-
-    #endregion
 
     #region Claims Management
 

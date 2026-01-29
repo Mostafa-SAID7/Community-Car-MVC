@@ -1,5 +1,4 @@
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account;
 

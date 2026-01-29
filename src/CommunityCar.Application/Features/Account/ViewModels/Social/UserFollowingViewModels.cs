@@ -1,6 +1,6 @@
 namespace CommunityCar.Application.Features.Account.ViewModels.Social;
 
-public class UserFollowingVM
+public class NetworkUserVM
 {
     public Guid Id { get; set; }
     public Guid FollowerId { get; set; }
@@ -24,17 +24,17 @@ public class FollowingDashboardVM
     public int FollowingCount { get; set; }
     public int FollowerCount { get; set; }
     public int MutualFollowingCount { get; set; }
-    public List<UserFollowingVM> RecentFollowers { get; set; } = new();
-    public List<UserFollowingVM> RecentFollowing { get; set; } = new();
+    public List<NetworkUserVM> RecentFollowers { get; set; } = new();
+    public List<NetworkUserVM> RecentFollowing { get; set; } = new();
     public List<UserSuggestionVM> SuggestedFollowing { get; set; } = new();
-    public List<UserFollowingVM> MutualConnections { get; set; } = new();
+    public List<NetworkUserVM> MutualConnections { get; set; } = new();
 }
 
 public class FollowingListVM
 {
     public Guid UserId { get; set; }
     public string ListType { get; set; } = string.Empty; // "following" or "followers"
-    public List<UserFollowingVM> Users { get; set; } = new();
+    public List<NetworkUserVM> Users { get; set; } = new();
     public int TotalCount { get; set; }
     public int Page { get; set; }
     public int PageSize { get; set; }

@@ -57,7 +57,7 @@ public class ProfileStatsVM
 /// <summary>
 /// View model for user identity information
 /// </summary>
-public class UserIdentityVM
+public class AccountIdentityVM
 {
     public Guid Id { get; set; }
     public string UserName { get; set; } = string.Empty;
@@ -86,7 +86,7 @@ public class RoleVM
 /// <summary>
 /// View model for user claim information
 /// </summary>
-public class UserClaimVM
+public class AccountClaimVM
 {
     public string Type { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;

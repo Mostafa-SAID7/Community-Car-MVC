@@ -42,9 +42,8 @@ public class RolePermission : BaseEntity
     public void Revoke(string? revokedBy = null, string? reason = null)
     {
         IsGranted = false;
-        UpdatedBy = revokedBy;
         Reason = reason;
-        Audit(UpdatedBy);
+        Audit(revokedBy);
     }
 
     public void SetExpiration(DateTime? expiresAt)

@@ -1,7 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Features.Friends.DTOs;
 using CommunityCar.Application.Features.Friends.ViewModels;
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Community.Friends;
@@ -187,11 +186,11 @@ public class FriendsService : IFriendsService
         return suggestions;
     }
 
-    public async Task<FriendshipResultDTO> SendFriendRequestAsync(Guid requesterId, Guid receiverId)
+    public async Task<FriendshipResultVM> SendFriendRequestAsync(Guid requesterId, Guid receiverId)
     {
         if (requesterId == receiverId)
         {
-            return new FriendshipResultDTO { Success = false, Message = "Cannot send friend request to yourself" };
+            return new FriendshipResultVM { Success = false, Message = "Cannot send friend request to yourself" };
         }
 
         var existingFriendship = await _friendsRepository.GetFriendshipAsync(requesterId, receiverId);
@@ -199,17 +198,17 @@ public class FriendsService : IFriendsService
         {
             return existingFriendship.Status switch
             {
-                FriendshipStatus.Accepted => new FriendshipResultDTO { Success = false, Message = "You are already friends" },
-                FriendshipStatus.Pending => new FriendshipResultDTO { Success = false, Message = "Friend request already sent" },
-                FriendshipStatus.Blocked => new FriendshipResultDTO { Success = false, Message = "Cannot send friend request" },
-                _ => new FriendshipResultDTO { Success = false, Message = "Unknown friendship status" }
+                FriendshipStatus.Accepted => new FriendshipResultVM { Success = false, Message = "You are already friends" },
+                FriendshipStatus.Pending => new FriendshipResultVM { Success = false, Message = "Friend request already sent" },
+                FriendshipStatus.Blocked => new FriendshipResultVM { Success = false, Message = "Cannot send friend request" },
+                _ => new FriendshipResultVM { Success = false, Message = "Unknown friendship status" }
             };
         }
 
         var receiver = await _userManager.FindByIdAsync(receiverId.ToString());
         if (receiver == null)
         {
-            return new FriendshipResultDTO { Success = false, Message = "User not found" };
+            return new FriendshipResultVM { Success = false, Message = "User not found" };
         }
 
         var friendship = new Friendship(requesterId, receiverId);
@@ -222,7 +221,7 @@ public class FriendsService : IFriendsService
             await _notificationService.NotifyFriendRequestAsync(receiverId, requester.FullName, requesterId);
         }
 
-        return new FriendshipResultDTO 
+        return new FriendshipResultVM 
         { 
             Success = true, 
             Message = $"Friend request sent to {receiver.FullName}",
@@ -230,22 +229,22 @@ public class FriendsService : IFriendsService
         };
     }
 
-    public async Task<FriendshipResultDTO> AcceptFriendRequestAsync(Guid userId, Guid friendshipId)
+    public async Task<FriendshipResultVM> AcceptFriendRequestAsync(Guid userId, Guid friendshipId)
     {
         var friendship = await _friendsRepository.GetFriendshipByIdAsync(friendshipId);
         if (friendship == null)
         {
-            return new FriendshipResultDTO { Success = false, Message = "Friend request not found" };
+            return new FriendshipResultVM { Success = false, Message = "Friend request not found" };
         }
 
         if (friendship.ReceiverId != userId)
         {
-            return new FriendshipResultDTO { Success = false, Message = "You can only accept requests sent to you" };
+            return new FriendshipResultVM { Success = false, Message = "You can only accept requests sent to you" };
         }
 
         if (friendship.Status != FriendshipStatus.Pending)
         {
-            return new FriendshipResultDTO { Success = false, Message = "Friend request is no longer pending" };
+            return new FriendshipResultVM { Success = false, Message = "Friend request is no longer pending" };
         }
 
         friendship.Accept();
@@ -259,7 +258,7 @@ public class FriendsService : IFriendsService
             await _notificationService.NotifyFriendRequestAcceptedAsync(friendship.RequesterId, accepter.FullName, userId);
         }
 
-        return new FriendshipResultDTO 
+        return new FriendshipResultVM 
         { 
             Success = true, 
             Message = $"You are now friends with {requester?.FullName}",
@@ -267,17 +266,17 @@ public class FriendsService : IFriendsService
         };
     }
 
-    public async Task<FriendshipResultDTO> DeclineFriendRequestAsync(Guid userId, Guid friendshipId)
+    public async Task<FriendshipResultVM> DeclineFriendRequestAsync(Guid userId, Guid friendshipId)
     {
         var friendship = await _friendsRepository.GetFriendshipByIdAsync(friendshipId);
         if (friendship == null)
         {
-            return new FriendshipResultDTO { Success = false, Message = "Friend request not found" };
+            return new FriendshipResultVM { Success = false, Message = "Friend request not found" };
         }
 
         if (friendship.ReceiverId != userId)
         {
-            return new FriendshipResultDTO { Success = false, Message = "You can only decline requests sent to you" };
+            return new FriendshipResultVM { Success = false, Message = "You can only decline requests sent to you" };
         }
 
         await _friendsRepository.DeleteFriendshipAsync(friendshipId);
@@ -294,20 +293,20 @@ public class FriendsService : IFriendsService
             }
         }
 
-        return new FriendshipResultDTO { Success = true, Message = "Friend request declined" };
+        return new FriendshipResultVM { Success = true, Message = "Friend request declined" };
     }
 
-    public async Task<FriendshipResultDTO> RemoveFriendAsync(Guid userId, Guid friendId)
+    public async Task<FriendshipResultVM> RemoveFriendAsync(Guid userId, Guid friendId)
     {
         var friendship = await _friendsRepository.GetFriendshipAsync(userId, friendId);
         if (friendship == null)
         {
-            return new FriendshipResultDTO { Success = false, Message = "Friendship not found" };
+            return new FriendshipResultVM { Success = false, Message = "Friendship not found" };
         }
 
         if (friendship.Status != FriendshipStatus.Accepted)
         {
-            return new FriendshipResultDTO { Success = false, Message = "You are not friends with this user" };
+            return new FriendshipResultVM { Success = false, Message = "You are not friends with this user" };
         }
 
         await _friendsRepository.DeleteFriendshipAsync(friendship.Id);
@@ -320,14 +319,14 @@ public class FriendsService : IFriendsService
         }
 
         var friend = await _userManager.FindByIdAsync(friendId.ToString());
-        return new FriendshipResultDTO 
+        return new FriendshipResultVM 
         { 
             Success = true, 
             Message = $"Removed {friend?.FullName} from your friends"
         };
     }
 
-    public async Task<FriendshipResultDTO> BlockUserAsync(Guid userId, Guid userToBlockId)
+    public async Task<FriendshipResultVM> BlockUserAsync(Guid userId, Guid userToBlockId)
     {
         var friendship = await _friendsRepository.GetFriendshipAsync(userId, userToBlockId);
         
@@ -345,7 +344,7 @@ public class FriendsService : IFriendsService
         }
 
         var blockedUser = await _userManager.FindByIdAsync(userToBlockId.ToString());
-        return new FriendshipResultDTO 
+        return new FriendshipResultVM 
         { 
             Success = true, 
             Message = $"Blocked {blockedUser?.FullName}",
@@ -353,31 +352,31 @@ public class FriendsService : IFriendsService
         };
     }
 
-    public async Task<FriendshipResultDTO> UnblockUserAsync(Guid userId, Guid userToUnblockId)
+    public async Task<FriendshipResultVM> UnblockUserAsync(Guid userId, Guid userToUnblockId)
     {
         var friendship = await _friendsRepository.GetFriendshipAsync(userId, userToUnblockId);
         if (friendship == null || friendship.Status != FriendshipStatus.Blocked)
         {
-            return new FriendshipResultDTO { Success = false, Message = "User is not blocked" };
+            return new FriendshipResultVM { Success = false, Message = "User is not blocked" };
         }
 
         await _friendsRepository.DeleteFriendshipAsync(friendship.Id);
 
         var unblockedUser = await _userManager.FindByIdAsync(userToUnblockId.ToString());
-        return new FriendshipResultDTO 
+        return new FriendshipResultVM 
         { 
             Success = true, 
             Message = $"Unblocked {unblockedUser?.FullName}"
         };
     }
 
-    public async Task<FriendshipStatusDTO> GetFriendshipStatusAsync(Guid userId1, Guid userId2)
+    public async Task<FriendshipStatusVM> GetFriendshipStatusAsync(Guid userId1, Guid userId2)
     {
         var friendship = await _friendsRepository.GetFriendshipAsync(userId1, userId2);
         
         if (friendship == null)
         {
-            return new FriendshipStatusDTO
+            return new FriendshipStatusVM
             {
                 AreFriends = false,
                 HasPendingRequest = false,
@@ -386,7 +385,7 @@ public class FriendsService : IFriendsService
             };
         }
 
-        return new FriendshipStatusDTO
+        return new FriendshipStatusVM
         {
             AreFriends = friendship.Status == FriendshipStatus.Accepted,
             HasPendingRequest = friendship.Status == FriendshipStatus.Pending && friendship.ReceiverId == userId1,

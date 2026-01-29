@@ -1,6 +1,8 @@
 namespace CommunityCar.Application.Features.Account.ViewModels.Social;
 
-public class UserInterestVM
+using CommunityCar.Application.Features.Shared.ViewModels;
+
+public class ProfileInterestVM
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
@@ -20,7 +22,7 @@ public class InterestsDashboardVM
     public Guid UserId { get; set; }
     public int TotalInterests { get; set; }
     public Dictionary<string, int> InterestsByCategory { get; set; } = new();
-    public List<UserInterestVM> TopInterests { get; set; } = new();
+    public List<ProfileInterestVM> TopInterests { get; set; } = new();
     public List<InterestSuggestionVM> RecommendedInterests { get; set; } = new();
     public List<UserSuggestionVM> SimilarUsers { get; set; } = new();
     public List<CategoryVM> Categories { get; set; } = new();
@@ -37,11 +39,3 @@ public class InterestSuggestionVM
     public bool IsAdded { get; set; }
 }
 
-public class CategoryVM
-{
-    public string Name { get; set; } = string.Empty;
-    public string Icon { get; set; } = string.Empty;
-    public string Color { get; set; } = string.Empty;
-    public int InterestCount { get; set; }
-    public List<UserInterestVM> Interests { get; set; } = new();
-}

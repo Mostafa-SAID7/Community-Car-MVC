@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Models;
-using CommunityCar.Application.Features.Guides.DTOs;
+using CommunityCar.Application.Features.Guides.ViewModels;
 using CommunityCar.Application.Features.Guides.ViewModels;
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Community.Guides;
@@ -65,7 +65,7 @@ public class GuidesService : IGuidesService
         };
     }
 
-    public async Task<GuideListVM> GetGuidesAsync(GuideFilterDTO filter, Guid? currentUserId = null)
+    public async Task<GuideListVM> GetGuidesAsync(GuideFilterVM filter, Guid? currentUserId = null)
     {
         var guides = await _guidesRepository.GetGuidesAsync(filter);
         var totalCount = await _guidesRepository.GetTotalCountAsync(filter);
@@ -180,7 +180,7 @@ public class GuidesService : IGuidesService
         return guideVMs;
     }
 
-    public async Task<GuideResultDTO> CreateGuideAsync(CreateGuideDTO dto, Guid authorId)
+    public async Task<GuideResultVM> CreateGuideAsync(CreateGuideRequest dto, Guid authorId)
     {
         try
         {
@@ -219,7 +219,7 @@ public class GuidesService : IGuidesService
 
             var createdGuide = await _guidesRepository.CreateGuideAsync(guide);
 
-            return new GuideResultDTO
+            return new GuideResultVM
             {
                 Success = true,
                 Message = "Guide created successfully",
@@ -228,7 +228,7 @@ public class GuidesService : IGuidesService
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO
+            return new GuideResultVM
             {
                 Success = false,
                 Message = $"Failed to create guide: {ex.Message}"
@@ -236,14 +236,14 @@ public class GuidesService : IGuidesService
         }
     }
 
-    public async Task<GuideResultDTO> UpdateGuideAsync(UpdateGuideDTO dto, Guid currentUserId)
+    public async Task<GuideResultVM> UpdateGuideAsync(UpdateGuideRequest dto, Guid currentUserId)
     {
         try
         {
             var guide = await _guidesRepository.GetGuideByIdAsync(dto.Id);
             if (guide == null)
             {
-                return new GuideResultDTO
+                return new GuideResultVM
                 {
                     Success = false,
                     Message = "Guide not found"
@@ -252,7 +252,7 @@ public class GuidesService : IGuidesService
 
             if (guide.AuthorId != currentUserId && !await IsAdminAsync(currentUserId))
             {
-                return new GuideResultDTO
+                return new GuideResultVM
                 {
                     Success = false,
                     Message = "You don't have permission to edit this guide"
@@ -293,7 +293,7 @@ public class GuidesService : IGuidesService
                 await _notificationService.NotifyGuideUpdatedAsync(guide, author.FullName ?? author.UserName);
             }
 
-            return new GuideResultDTO
+            return new GuideResultVM
             {
                 Success = true,
                 Message = "Guide updated successfully",
@@ -302,7 +302,7 @@ public class GuidesService : IGuidesService
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO
+            return new GuideResultVM
             {
                 Success = false,
                 Message = $"Failed to update guide: {ex.Message}"
@@ -310,14 +310,14 @@ public class GuidesService : IGuidesService
         }
     }
 
-    public async Task<GuideResultDTO> DeleteGuideAsync(Guid id, Guid currentUserId)
+    public async Task<GuideResultVM> DeleteGuideAsync(Guid id, Guid currentUserId)
     {
         try
         {
             var guide = await _guidesRepository.GetGuideByIdAsync(id);
             if (guide == null)
             {
-                return new GuideResultDTO
+                return new GuideResultVM
                 {
                     Success = false,
                     Message = "Guide not found"
@@ -326,7 +326,7 @@ public class GuidesService : IGuidesService
 
             if (guide.AuthorId != currentUserId && !await IsAdminAsync(currentUserId))
             {
-                return new GuideResultDTO
+                return new GuideResultVM
                 {
                     Success = false,
                     Message = "You don't have permission to delete this guide"
@@ -350,7 +350,7 @@ public class GuidesService : IGuidesService
                     author.FullName ?? author.UserName);
             }
 
-            return new GuideResultDTO
+            return new GuideResultVM
             {
                 Success = true,
                 Message = "Guide deleted successfully"
@@ -358,7 +358,7 @@ public class GuidesService : IGuidesService
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO
+            return new GuideResultVM
             {
                 Success = false,
                 Message = $"Failed to delete guide: {ex.Message}"
@@ -366,19 +366,19 @@ public class GuidesService : IGuidesService
         }
     }
 
-    public async Task<GuideResultDTO> PublishGuideAsync(Guid id, Guid currentUserId)
+    public async Task<GuideResultVM> PublishGuideAsync(Guid id, Guid currentUserId)
     {
         try
         {
             var guide = await _guidesRepository.GetGuideByIdAsync(id);
             if (guide == null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide not found" };
+                return new GuideResultVM { Success = false, Message = "Guide not found" };
             }
 
             if (guide.AuthorId != currentUserId && !await IsAdminAsync(currentUserId))
             {
-                return new GuideResultDTO { Success = false, Message = "You don't have permission to publish this guide" };
+                return new GuideResultVM { Success = false, Message = "You don't have permission to publish this guide" };
             }
 
             guide.Publish();
@@ -391,53 +391,53 @@ public class GuidesService : IGuidesService
                 await _notificationService.NotifyGuidePublishedAsync(guide, author.FullName ?? author.UserName);
             }
 
-            return new GuideResultDTO { Success = true, Message = "Guide published successfully", GuideId = guide.Id };
+            return new GuideResultVM { Success = true, Message = "Guide published successfully", GuideId = guide.Id };
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO { Success = false, Message = $"Failed to publish guide: {ex.Message}" };
+            return new GuideResultVM { Success = false, Message = $"Failed to publish guide: {ex.Message}" };
         }
     }
 
-    public async Task<GuideResultDTO> UnpublishGuideAsync(Guid id, Guid currentUserId)
+    public async Task<GuideResultVM> UnpublishGuideAsync(Guid id, Guid currentUserId)
     {
         try
         {
             var guide = await _guidesRepository.GetGuideByIdAsync(id);
             if (guide == null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide not found" };
+                return new GuideResultVM { Success = false, Message = "Guide not found" };
             }
 
             if (guide.AuthorId != currentUserId && !await IsAdminAsync(currentUserId))
             {
-                return new GuideResultDTO { Success = false, Message = "You don't have permission to unpublish this guide" };
+                return new GuideResultVM { Success = false, Message = "You don't have permission to unpublish this guide" };
             }
 
             guide.Unpublish();
             await _guidesRepository.UpdateGuideAsync(guide);
 
-            return new GuideResultDTO { Success = true, Message = "Guide unpublished successfully", GuideId = guide.Id };
+            return new GuideResultVM { Success = true, Message = "Guide unpublished successfully", GuideId = guide.Id };
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO { Success = false, Message = $"Failed to unpublish guide: {ex.Message}" };
+            return new GuideResultVM { Success = false, Message = $"Failed to unpublish guide: {ex.Message}" };
         }
     }
 
-    public async Task<GuideResultDTO> VerifyGuideAsync(Guid id, Guid currentUserId)
+    public async Task<GuideResultVM> VerifyGuideAsync(Guid id, Guid currentUserId)
     {
         try
         {
             if (!await IsAdminAsync(currentUserId))
             {
-                return new GuideResultDTO { Success = false, Message = "You don't have permission to verify guides" };
+                return new GuideResultVM { Success = false, Message = "You don't have permission to verify guides" };
             }
 
             var guide = await _guidesRepository.GetGuideByIdAsync(id);
             if (guide == null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide not found" };
+                return new GuideResultVM { Success = false, Message = "Guide not found" };
             }
 
             guide.Verify();
@@ -450,27 +450,27 @@ public class GuidesService : IGuidesService
                 await _notificationService.NotifyGuideVerifiedAsync(guide, author.FullName ?? author.UserName);
             }
 
-            return new GuideResultDTO { Success = true, Message = "Guide verified successfully", GuideId = guide.Id };
+            return new GuideResultVM { Success = true, Message = "Guide verified successfully", GuideId = guide.Id };
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO { Success = false, Message = $"Failed to verify guide: {ex.Message}" };
+            return new GuideResultVM { Success = false, Message = $"Failed to verify guide: {ex.Message}" };
         }
     }
 
-    public async Task<GuideResultDTO> FeatureGuideAsync(Guid id, Guid currentUserId)
+    public async Task<GuideResultVM> FeatureGuideAsync(Guid id, Guid currentUserId)
     {
         try
         {
             if (!await IsAdminAsync(currentUserId))
             {
-                return new GuideResultDTO { Success = false, Message = "You don't have permission to feature guides" };
+                return new GuideResultVM { Success = false, Message = "You don't have permission to feature guides" };
             }
 
             var guide = await _guidesRepository.GetGuideByIdAsync(id);
             if (guide == null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide not found" };
+                return new GuideResultVM { Success = false, Message = "Guide not found" };
             }
 
             guide.Feature();
@@ -483,54 +483,54 @@ public class GuidesService : IGuidesService
                 await _notificationService.NotifyGuideFeaturedAsync(guide, author.FullName ?? author.UserName);
             }
 
-            return new GuideResultDTO { Success = true, Message = "Guide featured successfully", GuideId = guide.Id };
+            return new GuideResultVM { Success = true, Message = "Guide featured successfully", GuideId = guide.Id };
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO { Success = false, Message = $"Failed to feature guide: {ex.Message}" };
+            return new GuideResultVM { Success = false, Message = $"Failed to feature guide: {ex.Message}" };
         }
     }
 
-    public async Task<GuideResultDTO> UnfeatureGuideAsync(Guid id, Guid currentUserId)
+    public async Task<GuideResultVM> UnfeatureGuideAsync(Guid id, Guid currentUserId)
     {
         try
         {
             if (!await IsAdminAsync(currentUserId))
             {
-                return new GuideResultDTO { Success = false, Message = "You don't have permission to unfeature guides" };
+                return new GuideResultVM { Success = false, Message = "You don't have permission to unfeature guides" };
             }
 
             var guide = await _guidesRepository.GetGuideByIdAsync(id);
             if (guide == null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide not found" };
+                return new GuideResultVM { Success = false, Message = "Guide not found" };
             }
 
             guide.Unfeature();
             await _guidesRepository.UpdateGuideAsync(guide);
 
-            return new GuideResultDTO { Success = true, Message = "Guide unfeatured successfully", GuideId = guide.Id };
+            return new GuideResultVM { Success = true, Message = "Guide unfeatured successfully", GuideId = guide.Id };
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO { Success = false, Message = $"Failed to unfeature guide: {ex.Message}" };
+            return new GuideResultVM { Success = false, Message = $"Failed to unfeature guide: {ex.Message}" };
         }
     }
 
-    public async Task<GuideResultDTO> BookmarkGuideAsync(Guid guideId, Guid userId)
+    public async Task<GuideResultVM> BookmarkGuideAsync(Guid guideId, Guid userId)
     {
         try
         {
             var guide = await _guidesRepository.GetGuideByIdAsync(guideId);
             if (guide == null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide not found" };
+                return new GuideResultVM { Success = false, Message = "Guide not found" };
             }
 
             var existingBookmark = await _unitOfWork.Bookmarks.GetUserBookmarkAsync(guideId, EntityType.Guide, userId);
             if (existingBookmark != null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide already bookmarked" };
+                return new GuideResultVM { Success = false, Message = "Guide already bookmarked" };
             }
 
             var bookmark = new Bookmark(guideId, EntityType.Guide, userId);
@@ -551,28 +551,28 @@ public class GuidesService : IGuidesService
                     userId);
             }
 
-            return new GuideResultDTO { Success = true, Message = "Guide bookmarked successfully" };
+            return new GuideResultVM { Success = true, Message = "Guide bookmarked successfully" };
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO { Success = false, Message = $"Failed to bookmark guide: {ex.Message}" };
+            return new GuideResultVM { Success = false, Message = $"Failed to bookmark guide: {ex.Message}" };
         }
     }
 
-    public async Task<GuideResultDTO> UnbookmarkGuideAsync(Guid guideId, Guid userId)
+    public async Task<GuideResultVM> UnbookmarkGuideAsync(Guid guideId, Guid userId)
     {
         try
         {
             var guide = await _guidesRepository.GetGuideByIdAsync(guideId);
             if (guide == null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide not found" };
+                return new GuideResultVM { Success = false, Message = "Guide not found" };
             }
 
             var bookmark = await _unitOfWork.Bookmarks.GetUserBookmarkAsync(guideId, EntityType.Guide, userId);
             if (bookmark == null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide not bookmarked" };
+                return new GuideResultVM { Success = false, Message = "Guide not bookmarked" };
             }
 
             await _unitOfWork.Bookmarks.DeleteAsync(bookmark);
@@ -580,27 +580,27 @@ public class GuidesService : IGuidesService
             guide.DecrementBookmarkCount();
             await _guidesRepository.UpdateGuideAsync(guide);
 
-            return new GuideResultDTO { Success = true, Message = "Guide unbookmarked successfully" };
+            return new GuideResultVM { Success = true, Message = "Guide unbookmarked successfully" };
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO { Success = false, Message = $"Failed to unbookmark guide: {ex.Message}" };
+            return new GuideResultVM { Success = false, Message = $"Failed to unbookmark guide: {ex.Message}" };
         }
     }
 
-    public async Task<GuideResultDTO> RateGuideAsync(Guid guideId, Guid userId, double rating)
+    public async Task<GuideResultVM> RateGuideAsync(Guid guideId, Guid userId, double rating)
     {
         try
         {
             if (rating < 1 || rating > 5)
             {
-                return new GuideResultDTO { Success = false, Message = "Rating must be between 1 and 5" };
+                return new GuideResultVM { Success = false, Message = "Rating must be between 1 and 5" };
             }
 
             var guide = await _guidesRepository.GetGuideByIdAsync(guideId);
             if (guide == null)
             {
-                return new GuideResultDTO { Success = false, Message = "Guide not found" };
+                return new GuideResultVM { Success = false, Message = "Guide not found" };
             }
 
             var existingRating = await _unitOfWork.Ratings.GetUserRatingAsync(guideId, EntityType.Guide, userId);
@@ -633,11 +633,11 @@ public class GuidesService : IGuidesService
                     rating);
             }
 
-            return new GuideResultDTO { Success = true, Message = "Guide rated successfully" };
+            return new GuideResultVM { Success = true, Message = "Guide rated successfully" };
         }
         catch (Exception ex)
         {
-            return new GuideResultDTO { Success = false, Message = $"Failed to rate guide: {ex.Message}" };
+            return new GuideResultVM { Success = false, Message = $"Failed to rate guide: {ex.Message}" };
         }
     }
 

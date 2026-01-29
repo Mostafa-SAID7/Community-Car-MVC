@@ -16,7 +16,7 @@ public class UserActivityMappingProfile : AutoMapper.Profile
     {
         CreateMap<UserActivity, UserActivityDTO>();
         
-        CreateMap<UserActivity, UserActivityVM>()
+        CreateMap<UserActivity, TimelineActivityVM>()
             .ForMember(dest => dest.TimeAgo, opt => opt.Ignore())
             .ForMember(dest => dest.ActivityIcon, opt => opt.Ignore())
             .ForMember(dest => dest.ActivityColor, opt => opt.Ignore());

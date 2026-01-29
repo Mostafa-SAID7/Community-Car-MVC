@@ -1,6 +1,6 @@
 namespace CommunityCar.Application.Features.Account.ViewModels.Activity;
 
-public class UserActivityVM
+public class TimelineActivityVM
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
@@ -18,7 +18,7 @@ public class UserActivityVM
 public class ActivityDashboardVM
 {
     public Guid UserId { get; set; }
-    public List<UserActivityVM> RecentActivities { get; set; } = new();
+    public List<TimelineActivityVM> RecentActivities { get; set; } = new();
     public Dictionary<string, int> ActivitiesByType { get; set; } = new();
     public int TotalActivities { get; set; }
     public DateTime? LastActivityDate { get; set; }

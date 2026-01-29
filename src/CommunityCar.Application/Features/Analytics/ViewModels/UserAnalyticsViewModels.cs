@@ -2,7 +2,7 @@ using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Application.Features.Analytics.ViewModels;
 
-public class UserActivityVM
+public class AnalyticsActivityVM
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
@@ -35,7 +35,7 @@ public class UserActivityStatsVM
     public Dictionary<string, int> DailyActivity { get; set; } = new();
 }
 
-public class UserInterestVM
+public class AnalyticsInterestVM
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
@@ -52,7 +52,7 @@ public class UserInterestVM
     public string ScoreLevel { get; set; } = string.Empty; // Low, Medium, High, Very High
 }
 
-public class UserFollowingVM
+public class AnalyticsFollowingVM
 {
     public Guid Id { get; set; }
     public Guid FollowerId { get; set; }
@@ -69,7 +69,7 @@ public class UserFollowingVM
     public string TimeAgo { get; set; } = string.Empty;
 }
 
-public class UserSuggestionVM
+public class AnalyticsSuggestionVM
 {
     public Guid UserId { get; set; }
     public string Name { get; set; } = string.Empty;

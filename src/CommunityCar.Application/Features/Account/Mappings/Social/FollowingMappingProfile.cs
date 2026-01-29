@@ -21,7 +21,7 @@ public class FollowingMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.FollowingProfilePicture, opt => opt.Ignore())
             .ForMember(dest => dest.IsMutual, opt => opt.Ignore());
 
-        CreateMap<UserFollowing, UserFollowingVM>()
+        CreateMap<UserFollowing, NetworkUserVM>()
             .ForMember(dest => dest.FollowerName, opt => opt.Ignore())
             .ForMember(dest => dest.FollowingName, opt => opt.Ignore())
             .ForMember(dest => dest.FollowerProfilePicture, opt => opt.Ignore())

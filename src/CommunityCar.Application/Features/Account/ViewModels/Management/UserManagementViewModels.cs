@@ -1,6 +1,6 @@
 namespace CommunityCar.Application.Features.Account.ViewModels.Management;
 
-public class UserManagementVM
+public class ManagedUserVM
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
@@ -23,7 +23,7 @@ public class ManagementDashboardVM
     public int TotalManagedUsers { get; set; }
     public int DirectReports { get; set; }
     public int IndirectReports { get; set; }
-    public List<UserManagementVM> DirectManagedUsers { get; set; } = new();
+    public List<ManagedUserVM> DirectManagedUsers { get; set; } = new();
     public List<ManagementHierarchyVM> Hierarchy { get; set; } = new();
     public Dictionary<string, int> ManagementStatistics { get; set; } = new();
 }
@@ -33,7 +33,7 @@ public class ManagementHierarchyVM
     public Guid ManagerId { get; set; }
     public string ManagerName { get; set; } = string.Empty;
     public string? ManagerProfilePicture { get; set; }
-    public List<UserManagementVM> ManagedUsers { get; set; } = new();
+    public List<ManagedUserVM> ManagedUsers { get; set; } = new();
     public int TotalManagedUsers { get; set; }
     public int Level { get; set; }
 }

@@ -14,16 +14,7 @@ public interface IIdentityManagementService
     Task<bool> LockUserAsync(Guid userId, string reason);
     Task<bool> UnlockUserAsync(Guid userId);
 
-    // Role Management
-    Task<IEnumerable<RoleVM>> GetAllRolesAsync();
-    Task<bool> CreateRoleAsync(CreateRoleRequest request);
-    Task<bool> UpdateRoleAsync(UpdateRoleRequest request);
-    Task<bool> DeleteRoleAsync(string roleName);
-    Task<bool> AssignRoleToUserAsync(Guid userId, string roleName);
-    Task<bool> RemoveRoleFromUserAsync(Guid userId, string roleName);
-    Task<IEnumerable<string>> GetUserRolesAsync(Guid userId);
-    Task<bool> RoleExistsAsync(string roleName);
-    Task<bool> IsUserInRoleAsync(Guid userId, string roleName);
+
 
     // Claims Management
     Task<IEnumerable<UserClaimVM>> GetUserClaimsAsync(Guid userId);

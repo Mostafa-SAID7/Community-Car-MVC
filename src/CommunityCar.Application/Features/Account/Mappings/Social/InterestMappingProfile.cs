@@ -17,7 +17,7 @@ public class InterestMappingProfile : AutoMapper.Profile
         CreateMap<UserInterest, UserInterestDTO>()
             .ForMember(dest => dest.InterestName, opt => opt.Ignore());
 
-        CreateMap<UserInterest, UserInterestVM>()
+        CreateMap<UserInterest, ProfileInterestVM>()
             .ForMember(dest => dest.InterestName, opt => opt.Ignore())
             .ForMember(dest => dest.InterestDescription, opt => opt.Ignore())
             .ForMember(dest => dest.CategoryIcon, opt => opt.MapFrom(src => GetCategoryIcon(src.Category)))

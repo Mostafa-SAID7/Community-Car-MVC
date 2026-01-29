@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Authorization;
-using CommunityCar.Application.Features.Account.DTOs.Authorization;
+using CommunityCar.Application.Features.Account.ViewModels.Authorization;
 using CommunityCar.Domain.Constants;
 using CommunityCar.Web.Attributes;
 
@@ -40,7 +40,7 @@ public class RolesController : Controller
         {
             _logger.LogError(ex, "Error loading roles");
             TempData["Error"] = "Failed to load roles";
-            return View(Enumerable.Empty<RoleDTO>());
+            return View(Enumerable.Empty<RoleVM>());
         }
     }
 
@@ -286,7 +286,7 @@ public class RolesController : Controller
         {
             _logger.LogError(ex, "Error loading role hierarchy");
             TempData["Error"] = "Failed to load role hierarchy";
-            return View(Enumerable.Empty<RoleDTO>());
+            return View(Enumerable.Empty<RoleVM>());
         }
     }
 

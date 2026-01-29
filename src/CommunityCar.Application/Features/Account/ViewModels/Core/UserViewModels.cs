@@ -13,5 +13,5 @@ public class UserDashboardVM
     public int AchievementsCount { get; set; }
     public int BadgesCount { get; set; }
     public DateTime LastLoginAt { get; set; }
-    public List<UserActivityVM> RecentActivities { get; set; } = new();
+    public List<TimelineActivityVM> RecentActivities { get; set; } = new();
 }

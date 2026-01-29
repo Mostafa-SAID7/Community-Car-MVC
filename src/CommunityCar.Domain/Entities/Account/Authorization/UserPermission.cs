@@ -44,10 +44,9 @@ public class UserPermission : BaseEntity
     public void Revoke(string? revokedBy = null, string? reason = null, bool isOverride = false)
     {
         IsGranted = false;
-        UpdatedBy = revokedBy;
         Reason = reason;
         IsOverride = isOverride;
-        Audit(UpdatedBy);
+        Audit(revokedBy);
     }
 
     public void SetExpiration(DateTime? expiresAt)

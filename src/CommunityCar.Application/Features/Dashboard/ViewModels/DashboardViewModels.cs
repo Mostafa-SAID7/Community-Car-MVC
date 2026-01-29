@@ -182,7 +182,7 @@ public class TopPageVM
     public decimal BounceRate { get; set; }
 }
 
-public class UserManagementVM
+public class AdminUserVM
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }

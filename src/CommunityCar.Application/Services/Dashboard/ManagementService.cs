@@ -14,10 +14,10 @@ public class ManagementService : IManagementService
         _currentUserService = currentUserService;
     }
 
-    public async Task<List<UserManagementVM>> GetUserManagementHistoryAsync(int page = 1, int pageSize = 20)
+    public async Task<List<AdminUserVM>> GetUserManagementHistoryAsync(int page = 1, int pageSize = 20)
     {
         // Mock data
-        var history = new List<UserManagementVM>();
+        var history = new List<AdminUserVM>();
         var actions = new[] { "Created", "Updated", "Suspended", "Activated", "Deleted" };
         var random = new Random();
 
@@ -26,7 +26,7 @@ public class ManagementService : IManagementService
             var action = actions[random.Next(actions.Length)];
             var actionDate = DateTime.UtcNow.AddDays(-random.Next(1, 30));
 
-            history.Add(new UserManagementVM
+            history.Add(new AdminUserVM
             {
                 Id = Guid.NewGuid(),
                 UserId = Guid.NewGuid(),
@@ -47,7 +47,7 @@ public class ManagementService : IManagementService
         return await Task.FromResult(history.OrderByDescending(h => h.ActionDate).ToList());
     }
 
-    public async Task<List<UserManagementVM>> GetUserManagementHistoryByUserAsync(Guid userId, int page = 1, int pageSize = 20)
+    public async Task<List<AdminUserVM>> GetUserManagementHistoryByUserAsync(Guid userId, int page = 1, int pageSize = 20)
     {
         var allHistory = await GetUserManagementHistoryAsync(1, 100);
         return allHistory.Where(h => h.UserId == userId)
@@ -104,12 +104,12 @@ public class ManagementService : IManagementService
         };
     }
 
-    public async Task<List<UserManagementVM>> GetUsersAsync(int page, int pageSize, string? search)
+    public async Task<List<AdminUserVM>> GetUsersAsync(int page, int pageSize, string? search)
     {
-        var users = new List<UserManagementVM>();
+        var users = new List<AdminUserVM>();
         for (int i = 0; i < pageSize; i++)
         {
-            users.Add(new UserManagementVM
+            users.Add(new AdminUserVM
             {
                 Id = Guid.NewGuid(),
                 UserId = Guid.NewGuid(),
@@ -125,9 +125,9 @@ public class ManagementService : IManagementService
         return await Task.FromResult(users);
     }
 
-    public async Task<UserManagementVM?> GetUserAsync(Guid userId)
+    public async Task<AdminUserVM?> GetUserAsync(Guid userId)
     {
-        return new UserManagementVM
+        return new AdminUserVM
         {
             Id = Guid.NewGuid(),
             UserId = userId,

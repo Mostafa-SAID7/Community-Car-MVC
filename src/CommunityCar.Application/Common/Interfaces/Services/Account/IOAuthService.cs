@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Models;
-using CommunityCar.Application.Common.Models.Authentication;
+using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Authentication;
 

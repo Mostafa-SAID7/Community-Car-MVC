@@ -1,10 +1,12 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
+using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Features.Account.ViewModels.Media;
 using CommunityCar.Domain.Entities.Account.Media;
 using CommunityCar.Domain.Enums.Account;
 using Microsoft.Extensions.Logging;
@@ -36,12 +38,12 @@ public class UserGalleryService : IUserGalleryService
 
     #region Gallery Management
 
-    public async Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId)
+    public async Task<IEnumerable<UserGalleryVM>> GetUserGalleryAsync(Guid userId)
     {
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
         var galleryItems = await _galleryRepository.GetUserGalleryAsync(userId, currentUserId != userId);
         
-        return galleryItems.Select(item => new UserGalleryItemVM
+        return galleryItems.Select(item => new UserGalleryVM
         {
             Id = item.Id,
             UserId = item.UserId,
@@ -56,13 +58,13 @@ public class UserGalleryService : IUserGalleryService
         });
     }
 
-    public async Task<UserGalleryItemVM?> GetGalleryItemAsync(Guid userId, Guid imageId)
+    public async Task<UserGalleryVM?> GetGalleryItemAsync(Guid userId, Guid imageId)
     {
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
         var item = await _galleryRepository.GetGalleryItemAsync(imageId, currentUserId);
         if (item == null || item.UserId != userId) return null;
 
-        return new UserGalleryItemVM
+        return new UserGalleryVM
         {
             Id = item.Id,
             UserId = item.UserId,
@@ -74,7 +76,7 @@ public class UserGalleryService : IUserGalleryService
         };
     }
 
-    public async Task<UserGalleryItemVM?> UploadImageAsync(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request)
+    public async Task<UserGalleryVM?> UploadImageAsync(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request)
     {
         try
         {
@@ -91,7 +93,7 @@ public class UserGalleryService : IUserGalleryService
             var item = new UserGallery(request.UserId, request.Caption ?? "Untitled", url, MediaType.Image, request.IsPublic);
             await _galleryRepository.AddAsync(item);
 
-            return new UserGalleryItemVM { Id = item.Id, UserId = item.UserId, ImageUrl = item.MediaUrl, UploadedAt = item.UploadedAt };
+            return new UserGalleryVM { Id = item.Id, UserId = item.UserId, ImageUrl = item.MediaUrl, UploadedAt = item.UploadedAt };
         }
         catch (Exception ex)
         {

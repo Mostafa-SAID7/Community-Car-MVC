@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Authorization;
-using CommunityCar.Application.Features.Account.DTOs.Authorization;
+using CommunityCar.Application.Features.Account.ViewModels.Authorization;
 using CommunityCar.Domain.Constants;
 using CommunityCar.Web.Attributes;
 
@@ -40,7 +40,7 @@ public class PermissionsController : Controller
         {
             _logger.LogError(ex, "Error loading permissions");
             TempData["Error"] = "Failed to load permissions";
-            return View(Enumerable.Empty<PermissionDTO>());
+            return View(Enumerable.Empty<PermissionVM>());
         }
     }
 

@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
 using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Authorization;
 using CommunityCar.Application.Common.Models.Account;
 using CommunityCar.Application.Common.Models.Profile;
 using CommunityCar.Domain.Entities.Account.Core;
@@ -211,7 +211,7 @@ public class GamificationService : IGamificationService
             var userRoles = await _roleService.GetUserRolesAsync(userId);
             if (!userRoles.Contains(targetRole))
             {
-                await _roleService.AddUserToRoleAsync(userId, targetRole);
+                await _roleService.AssignRoleAsync(userId, targetRole);
                 _logger.LogInformation("User {UserId} promoted to {Role}", userId, targetRole);
             }
         }

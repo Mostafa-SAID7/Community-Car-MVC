@@ -1,7 +1,5 @@
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
-using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Application.Common.Models.Security;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
+using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 

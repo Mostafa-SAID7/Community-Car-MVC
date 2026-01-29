@@ -236,18 +236,7 @@ public class UserAnalyticsService : IUserAnalyticsService
         }
     }
 
-    public async Task<bool> RecordProfileViewAsync(Guid viewerId, Guid profileUserId, string? ipAddress = null, string? userAgent = null)
-    {
-        try
-        {
-            return await _profileViewRepository.RecordProfileViewAsync(viewerId, profileUserId, ipAddress, userAgent);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error recording profile view for user {ProfileUserId} by {ViewerId}", profileUserId, viewerId);
-            return false;
-        }
-    }
+
 
     #endregion
 

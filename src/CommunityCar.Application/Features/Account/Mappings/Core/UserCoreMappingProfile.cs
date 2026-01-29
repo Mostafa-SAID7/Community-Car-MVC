@@ -60,7 +60,7 @@ public class UserCoreMappingProfile : AutoMapper.Profile
     private void CreateProfileMappings()
     {
         // User Identity mappings
-        CreateMap<User, UserIdentityVM>()
+        CreateMap<User, AccountIdentityVM>()
             .ForMember(dest => dest.Roles, opt => opt.Ignore());
 
         // User statistics mappings
