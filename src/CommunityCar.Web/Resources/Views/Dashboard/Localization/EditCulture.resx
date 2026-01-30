@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="ModifyCulture" xml:space="preserve"><value>Modify Culture</value></data>
+  <data name="DeployCulture" xml:space="preserve"><value>Deploy Culture</value></data>
+  <data name="AdjustProfile" xml:space="preserve"><value>Adjust Profile</value></data>
+  <data name="InitializeLocale" xml:space="preserve"><value>Initialize Locale</value></data>
+  <data name="GlobalizingDesc" xml:space="preserve"><value>Globalizing the enthusiast experience</value></data>
+  <data name="ReturnToHub" xml:space="preserve"><value>Return to Hub</value></data>
+  <data name="IETFLanguagePort" xml:space="preserve"><value>IETF Language Port</value></data>
+  <data name="IETFLanguagePortDesc" xml:space="preserve"><value>Standard BCP 47 protocol (e.g., en-GB, de-DE)</value></data>
+  <data name="IdentityLabel" xml:space="preserve"><value>Identity Label</value></data>
+  <data name="IdentityLabelDesc" xml:space="preserve"><value>Human-readable descriptor for selection</value></data>
+  <data name="RTLLogic" xml:space="preserve"><value>RTL Logic</value></data>
+  <data name="RTLLogicDesc" xml:space="preserve"><value>Mirror UI</value></data>
+  <data name="SystemDefault" xml:space="preserve"><value>System Default</value></data>
+  <data name="SystemDefaultDesc" xml:space="preserve"><value>Fallback Node</value></data>
+  <data name="ActiveStatus" xml:space="preserve"><value>Active Status</value></data>
+  <data name="ActiveStatusDesc" xml:space="preserve"><value>Live Relay</value></data>
+  <data name="DeployProfile" xml:space="preserve"><value>Deploy Profile</value></data>
+</root>

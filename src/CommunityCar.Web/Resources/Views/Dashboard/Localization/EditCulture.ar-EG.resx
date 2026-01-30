@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="ModifyCulture" xml:space="preserve"><value>تعديل الثقافة</value></data>
+  <data name="DeployCulture" xml:space="preserve"><value>نشر الثقافة</value></data>
+  <data name="AdjustProfile" xml:space="preserve"><value>ضبط الملف الشخصي</value></data>
+  <data name="InitializeLocale" xml:space="preserve"><value>تهيئة الإعدادات الإقليمية</value></data>
+  <data name="GlobalizingDesc" xml:space="preserve"><value>عولمة تجربة المتحمسين</value></data>
+  <data name="ReturnToHub" xml:space="preserve"><value>العودة إلى المركز</value></data>
+  <data name="IETFLanguagePort" xml:space="preserve"><value>منفذ لغة IETF</value></data>
+  <data name="IETFLanguagePortDesc" xml:space="preserve"><value>بروتوكول BCP 47 القياسي (مثلاً: en-GB، de-DE)</value></data>
+  <data name="IdentityLabel" xml:space="preserve"><value>تسمية الهوية</value></data>
+  <data name="IdentityLabelDesc" xml:space="preserve"><value>واصف سهل القراءة للاختيار</value></data>
+  <data name="RTLLogic" xml:space="preserve"><value>منطق RTL</value></data>
+  <data name="RTLLogicDesc" xml:space="preserve"><value>مرآة واجهة المستخدم</value></data>
+  <data name="SystemDefault" xml:space="preserve"><value>افتراضي النظام</value></data>
+  <data name="SystemDefaultDesc" xml:space="preserve"><value>عقدة التراجع</value></data>
+  <data name="ActiveStatus" xml:space="preserve"><value>الحالة النشطة</value></data>
+  <data name="ActiveStatusDesc" xml:space="preserve"><value>ترحيل مباشر</value></data>
+  <data name="DeployProfile" xml:space="preserve"><value>نشر الملف الشخصي</value></data>
+</root>
