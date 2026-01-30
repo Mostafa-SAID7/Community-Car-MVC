@@ -1,0 +1,24 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<aside class="w-full space-y-6">
+    <div class="bg-card/40 backdrop-blur-xl border border-border rounded-2xl p-6 shadow-sm">
+        <h3 class="flex items-center gap-2 text-sm font-bold mb-6 uppercase tracking-wider text-primary">
+            <i data-lucide="newspaper" class="w-4 h-4"></i>
+            News
+        </h3>
+        
+        <div class="space-y-6">
+            <div class="space-y-4">
+                <h4 class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Latest Headlines</h4>
+                @for (int i = 1; i <= 3; i++)
+                {
+                    <div class="space-y-1 cursor-pointer group">
+                        <p class="text-xs font-bold leading-tight group-hover:text-primary transition-colors">Future of Automotive Technology Revealed @i</p>
+                        <p class="text-[9px] text-muted-foreground">@(i * 2) hours ago</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</aside>

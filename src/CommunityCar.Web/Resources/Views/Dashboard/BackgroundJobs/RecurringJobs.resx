@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="RecurringJobsTitle" xml:space="preserve"><value>Recurring Jobs - Scheduler Engine</value></data>
+  <data name="RecurringJobsHeader" xml:space="preserve"><value>Recurring Jobs</value></data>
+  <data name="RecurringJobsDescription" xml:space="preserve"><value>Manage scheduled recurring background job infrastructure</value></data>
+  <data name="BackgroundJobs" xml:space="preserve"><value>Background Jobs</value></data>
+  <data name="RecurringSchedulerEngine" xml:space="preserve"><value>Recurring Scheduler Engine</value></data>
+  <data name="SchedulerActive" xml:space="preserve"><value>Scheduler Active</value></data>
+  <data name="RecurringJobRegistry" xml:space="preserve"><value>Recurring Job Registry</value></data>
+  <data name="AutomatedScheduler" xml:space="preserve"><value>Automated Scheduler</value></data>
+  <data name="CronBasedEngine" xml:space="preserve"><value>Cron-Based Execution Engine</value></data>
+  <data name="SystemStatus" xml:space="preserve"><value>System Status</value></data>
+  <data name="ScheduledJobs" xml:space="preserve"><value>Scheduled Jobs</value></data>
+  <data name="HealthyJobs" xml:space="preserve"><value>Healthy Jobs</value></data>
+  <data name="ScheduledJobEntries" xml:space="preserve"><value>Scheduled Job Entries</value></data>
+  <data name="ErrorDetected" xml:space="preserve"><value>Error Detected</value></data>
+  <data name="JobID" xml:space="preserve"><value>Job ID</value></data>
+  <data name="Healthy" xml:space="preserve"><value>Healthy</value></data>
+  <data name="ErrorState" xml:space="preserve"><value>Error State</value></data>
+  <data name="CronExpression" xml:space="preserve"><value>Cron Expression</value></data>
+  <data name="NextExecution" xml:space="preserve"><value>Next Execution</value></data>
+  <data name="NotScheduled" xml:space="preserve"><value>Not Scheduled</value></data>
+  <data name="LastExecution" xml:space="preserve"><value>Last Execution</value></data>
+  <data name="NeverExecuted" xml:space="preserve"><value>Never Executed</value></data>
+  <data name="LastState" xml:space="preserve"><value>Last State</value></data>
+  <data name="NoHistory" xml:space="preserve"><value>No History</value></data>
+  <data name="TriggerExecution" xml:space="preserve"><value>Trigger Execution</value></data>
+  <data name="ConfirmTrigger" xml:space="preserve"><value>Execute job immediately?</value></data>
+  <data name="ViewErrorDetails" xml:space="preserve"><value>View Error Details</value></data>
+  <data name="InspectDetails" xml:space="preserve"><value>Inspect Details</value></data>
+  <data name="NoRecurringJobs" xml:space="preserve"><value>No Recurring Jobs Configured</value></data>
+  <data name="NoRecurringJobsConfigDesc" xml:space="preserve"><value>Scheduled jobs will populate once configured in the system.</value></data>
+  <data name="JobConfigDetails" xml:space="preserve"><value>Job Configuration Details</value></data>
+  <data name="JobIdentifier" xml:space="preserve"><value>Job Identifier</value></data>
+  <data name="ScheduleDescription" xml:space="preserve"><value>Schedule Description</value></data>
+  <data name="CloseDetails" xml:space="preserve"><value>Close Details</value></data>
+  <data name="JobErrorAnalysis" xml:space="preserve"><value>Job Error Analysis</value></data>
+  <data name="ErrorDetails" xml:space="preserve"><value>Error Details</value></data>
+  <data name="CloseAnalysis" xml:space="preserve"><value>Close Analysis</value></data>
+  <data name="NotScheduledJS" xml:space="preserve"><value>Not scheduled</value></data>
+  <data name="NeverExecutedJS" xml:space="preserve"><value>Never executed</value></data>
+  <data name="Daily2AM" xml:space="preserve"><value>Daily at 2:00 AM</value></data>
+  <data name="EveryHour" xml:space="preserve"><value>Every hour</value></data>
+  <data name="Every15Min" xml:space="preserve"><value>Every 15 minutes</value></data>
+  <data name="Every30Min" xml:space="preserve"><value>Every 30 minutes</value></data>
+  <data name="WeeklySunday3AM" xml:space="preserve"><value>Weekly on Sunday at 3:00 AM</value></data>
+  <data name="Daily8AM" xml:space="preserve"><value>Daily at 8:00 AM</value></data>
+  <data name="Every4Hours" xml:space="preserve"><value>Every 4 hours</value></data>
+  <data name="CustomScheduleJS" xml:space="preserve"><value>Custom schedule configuration</value></data>
+  <data name="CustomSchedule" xml:space="preserve"><value>Custom schedule</value></data>
+  <data name="LessMin" xml:space="preserve"><value>Less than a minute</value></data>
+  <data name="InMinutes" xml:space="preserve"><value>In {0} minutes</value></data>
+  <data name="InHours" xml:space="preserve"><value>In {0} hours</value></data>
+  <data name="InDays" xml:space="preserve"><value>In {0} days</value></data>
+  <data name="JustNow" xml:space="preserve"><value>Just now</value></data>
+  <data name="MinutesAgo" xml:space="preserve"><value>{0} minutes ago</value></data>
+  <data name="HoursAgo" xml:space="preserve"><value>{0} hours ago</value></data>
+  <data name="DaysAgo" xml:space="preserve"><value>{0} days ago</value></data>
+</root>

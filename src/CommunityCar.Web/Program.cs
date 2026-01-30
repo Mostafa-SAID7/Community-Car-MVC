@@ -39,12 +39,13 @@ var app = builder.Build();
 var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(locOptions.Value);
 
-// Seed Data - Temporarily disabled for faster startup
-// using (var scope = app.Services.CreateScope())
-// {
-//     var seeder = scope.ServiceProvider.GetRequiredService<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>();
-//     await seeder.SeedAsync();
-// }
+// Seed Data
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>();
+    await seeder.SeedAsync();
+}
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -70,6 +71,22 @@ app.MapStaticAssets();
 app.MapHub<ChatHub>("/hubs/chat");
 app.MapHub<NotificationHub>("/hubs/notifications");
 
+// Authentication Routes (for backward compatibility)
+app.MapControllerRoute(
+    name: "login",
+    pattern: "Login",
+    defaults: new { controller = "Account", action = "Login" });
+
+app.MapControllerRoute(
+    name: "register",
+    pattern: "Register",
+    defaults: new { controller = "Account", action = "Register" });
+
+app.MapControllerRoute(
+    name: "logout",
+    pattern: "Logout",
+    defaults: new { controller = "Account", action = "Logout" });
+
 app.MapControllerRoute(
     name: "dashboard",
     pattern: "Dashboard/{controller}/{action=Index}/{id?}");
@@ -79,6 +96,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapControllers();
 
 app.Run();
 

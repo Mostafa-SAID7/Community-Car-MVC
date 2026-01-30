@@ -6,7 +6,7 @@ namespace CommunityCar.Application.Common.Interfaces.Repositories.AI;
 public interface IAIModelRepository : IBaseRepository<AIModel>
 {
     Task<IEnumerable<AIModel>> GetActiveModelsAsync();
-    Task<IEnumerable<AIModel>> GetModelsByTypeAsync(string modelType);
+    Task<IEnumerable<AIModel>> GetModelsByTypeAsync(AIModelType modelType);
     Task<AIModel?> GetModelByNameAsync(string name);
     Task<bool> ModelExistsAsync(string name);
     Task<IEnumerable<AIModel>> GetModelsByUserAsync(Guid userId);

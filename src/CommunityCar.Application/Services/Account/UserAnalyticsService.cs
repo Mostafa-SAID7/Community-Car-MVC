@@ -1,6 +1,5 @@
 ﻿using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
-using CommunityCar.Application.Features.Account.ViewModels;
 using CommunityCar.Application.Features.Account.ViewModels.Activity;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Application.Features.Account.ViewModels.Social;

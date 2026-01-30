@@ -41,7 +41,7 @@ public class AccountSecurityService : IAccountSecurityService
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null) return Result.Failure("User not found.");
 
-            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
             if (result.Succeeded)
             {
                 user.LastPasswordChangeAt = DateTime.UtcNow;
@@ -171,6 +171,20 @@ public class AccountSecurityService : IAccountSecurityService
             ActiveSessions = sessions.Count(),
             HasOAuthLinked = user.OAuthInfo.HasAnyOAuthAccount
         };
+    }
+
+    public async Task<Result> UpdateLastLoginAsync(Guid userId, string? ipAddress = null, string? userAgent = null)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user != null)
+        {
+            user.OAuthInfo.LastLoginAt = DateTime.UtcNow;
+            await _userRepository.UpdateAsync(user);
+            
+            await LogSecurityEventAsync(userId, "Login", ipAddress, userAgent);
+            return Result.Success("Login time updated.");
+        }
+        return Result.Failure("User not found.");
     }
 
     #endregion

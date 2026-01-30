@@ -6,8 +6,8 @@ public class OAuthInfo : ValueObject
 {
     public string? GoogleId { get; private set; }
     public string? FacebookId { get; private set; }
-    public DateTime? LastLoginAt { get; private set; }
-    public string? LastLoginProvider { get; private set; }
+    public DateTime? LastLoginAt { get; set; }
+    public string? LastLoginProvider { get; set; }
 
     // Parameterless constructor for EF Core
     private OAuthInfo()

@@ -47,7 +47,8 @@ public class TrainingManagementService : ITrainingManagementService
             Priority = 1
         };
 
-        return await _jobRepository.CreateJobAsync(job);
+        await _jobRepository.AddAsync(job);
+        return job;
     }
 
     public async Task<TrainingJob> RetrainModelAsync(string modelName, object parameters)

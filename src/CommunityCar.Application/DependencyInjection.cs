@@ -12,6 +12,7 @@ using CommunityCar.Application.Services.SEO;
 using CommunityCar.Application.Services.Maps.Routing;
 using CommunityCar.Application.Services.Maps.Pricing;
 using CommunityCar.Application.Services.BackgroundJobs;
+using CommunityCar.Application.Common.Interfaces.Services;
 
 using Microsoft.Extensions.DependencyInjection;
 

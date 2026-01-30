@@ -13,7 +13,10 @@ public class UserSession : BaseEntity
     public DateTime StartedAt { get; private set; }
     public DateTime? EndedAt { get; private set; }
     public DateTime LastActivityAt { get; private set; }
+    public DateTime? ExpiresAt { get; private set; }
     public bool IsActive { get; private set; }
+    public bool IsSuspicious { get; private set; }
+    public bool IsExpired => ExpiresAt.HasValue && ExpiresAt.Value <= DateTime.UtcNow;
     public TimeSpan Duration => (EndedAt ?? DateTime.UtcNow) - StartedAt;
 
     public UserSession(
@@ -33,6 +36,11 @@ public class UserSession : BaseEntity
         StartedAt = DateTime.UtcNow;
         LastActivityAt = DateTime.UtcNow;
         IsActive = true;
+    }
+
+    public static UserSession Create(Guid userId, string sessionId, string? ipAddress = null, string? userAgent = null)
+    {
+        return new UserSession(userId, sessionId, null, ipAddress, userAgent);
     }
 
     private UserSession() { }
@@ -56,7 +64,7 @@ public class UserSession : BaseEntity
         Audit(UpdatedBy);
     }
 
-    public bool IsExpired(TimeSpan timeout)
+    public bool HasTimedOut(TimeSpan timeout)
     {
         return DateTime.UtcNow - LastActivityAt > timeout;
     }

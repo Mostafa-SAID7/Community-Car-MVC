@@ -51,12 +51,13 @@ public class QAController : Controller
         return View("~/Views/Community/QA/SearchResults.cshtml", response);
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> Details(Guid id)
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> Details(string slug)
     {
-        var question = await _qaService.GetQuestionByIdAsync(id);
+        var question = await _qaService.GetQuestionBySlugAsync(slug);
         if (question == null) return NotFound();
 
+        var id = question.Id;
         // Increment view count
         var userId = _currentUserService.UserId != null ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -111,13 +112,15 @@ public class QAController : Controller
     {
         if (string.IsNullOrWhiteSpace(body))
         {
-            return RedirectToAction(nameof(Details), new { id });
+            var q = await _qaService.GetQuestionByIdAsync(id);
+            return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? id.ToString() });
         }
 
         var authorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.CreateAnswerAsync(id, body, authorId, bodyAr);
 
-        return RedirectToAction(nameof(Details), new { id });
+        var question = await _qaService.GetQuestionByIdAsync(id);
+        return RedirectToAction(nameof(Details), new { slug = question?.Slug ?? id.ToString() });
     }
 
     [HttpPost("answer/{answerId:guid}/accept")]
@@ -127,7 +130,8 @@ public class QAController : Controller
     {
         // TODO: Check if current user is the author of the question
         await _qaService.AcceptAnswerAsync(answerId);
-        return RedirectToAction(nameof(Details), new { id = questionId });
+        var q = await _qaService.GetQuestionByIdAsync(questionId);
+        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
     }
 
     // Alternative route for AcceptAnswer to match asp-action helper
@@ -138,7 +142,8 @@ public class QAController : Controller
     {
         // TODO: Check if current user is the author of the question
         await _qaService.AcceptAnswerAsync(answerId);
-        return RedirectToAction(nameof(Details), new { id = questionId });
+        var q = await _qaService.GetQuestionByIdAsync(questionId);
+        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("vote")]
@@ -158,7 +163,8 @@ public class QAController : Controller
 
         if (entityType == EntityType.Question)
         {
-            return RedirectToAction(nameof(Details), new { id = entityId });
+            var q = await _qaService.GetQuestionByIdAsync(entityId);
+            return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? entityId.ToString() });
         }
         
         return RedirectToAction(nameof(Index));
@@ -177,7 +183,8 @@ public class QAController : Controller
             return Json(new { success = true, bookmarked = true });
         }
 
-        return RedirectToAction(nameof(Details), new { id = questionId });
+        var q = await _qaService.GetQuestionByIdAsync(questionId);
+        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("unbookmark")]
@@ -193,7 +200,8 @@ public class QAController : Controller
             return Json(new { success = true, bookmarked = false });
         }
 
-        return RedirectToAction(nameof(Details), new { id = questionId });
+        var q = await _qaService.GetQuestionByIdAsync(questionId);
+        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("answer/{answerId:guid}/helpful")]
@@ -249,7 +257,8 @@ public class QAController : Controller
     {
         var moderatorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.PinQuestionAsync(questionId, moderatorId);
-        return RedirectToAction(nameof(Details), new { id = questionId });
+        var q = await _qaService.GetQuestionByIdAsync(questionId);
+        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("{questionId:guid}/unpin")]
@@ -259,7 +268,8 @@ public class QAController : Controller
     {
         var moderatorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.UnpinQuestionAsync(questionId, moderatorId);
-        return RedirectToAction(nameof(Details), new { id = questionId });
+        var q = await _qaService.GetQuestionByIdAsync(questionId);
+        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("{questionId:guid}/lock")]
@@ -269,7 +279,8 @@ public class QAController : Controller
     {
         var moderatorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.LockQuestionAsync(questionId, reason, moderatorId);
-        return RedirectToAction(nameof(Details), new { id = questionId });
+        var q = await _qaService.GetQuestionByIdAsync(questionId);
+        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("{questionId:guid}/unlock")]
@@ -279,7 +290,8 @@ public class QAController : Controller
     {
         var moderatorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.UnlockQuestionAsync(questionId, moderatorId);
-        return RedirectToAction(nameof(Details), new { id = questionId });
+        var q = await _qaService.GetQuestionByIdAsync(questionId);
+        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
     }
 
     // AJAX endpoints for dynamic content

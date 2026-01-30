@@ -1,4 +1,4 @@
-@model CommunityCar.Web.Models.Auth.Login.LoginVM
+@model CommunityCar.Application.Features.Account.ViewModels.Authentication.LoginVM
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @using Microsoft.Extensions.Localization
@@ -15,12 +15,6 @@
 }
 
 <div class="login-grid">
-    <!-- Left Side: Animation -->
-    <div class="animation-side p-8 hidden lg:flex border-r border-border/20">
-        <div id="smoke-container"></div>
-        <img id="car-animation" src="/images/login_frames/frame_00.png" class="car-frame" alt="Car Assembly" />
-    </div>
-
     <!-- Right Side: Form -->
     <div class="p-8 sm:p-10 flex flex-col justify-center">
         <div class="space-y-6">

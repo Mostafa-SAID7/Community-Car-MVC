@@ -4,6 +4,7 @@ using CommunityCar.Infrastructure.Persistence.Seeding.Shared;
 using CommunityCar.Infrastructure.Persistence.Seeding.AI;
 using CommunityCar.Infrastructure.Persistence.Seeding.Account.Core;
 using CommunityCar.Infrastructure.Persistence.Seeding.Account.Authorization;
+using CommunityCar.Domain.Entities.Account.Authorization;
 using CommunityCar.Infrastructure.Persistence.Seeding.Account.Activity;
 using CommunityCar.Infrastructure.Persistence.Seeding.Account.Gamification;
 using CommunityCar.Infrastructure.Persistence.Seeding.Account.Social;
@@ -25,14 +26,14 @@ public class DataSeeder
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<User> _userManager;
-    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
+    private readonly RoleManager<Role> _roleManager;
     private readonly ILogger<DataSeeder> _logger;
     private readonly IServiceProvider _serviceProvider;
 
     public DataSeeder(
         ApplicationDbContext context, 
         UserManager<User> userManager, 
-        RoleManager<IdentityRole<Guid>> roleManager,
+        RoleManager<Role> roleManager,
         ILogger<DataSeeder> logger, 
         IServiceProvider serviceProvider)
     {
@@ -89,10 +90,13 @@ public class DataSeeder
             await activitySeeder.SeedAsync();
 
             // Seed gamification data
-            var badgeSeeder = new BadgeSeeder(_context, _serviceProvider.GetRequiredService<ILogger<BadgeSeeder>>());
+            var seedUser = await _userManager.FindByEmailAsync("seed@communitycar.com");
+            var seedUserId = seedUser?.Id ?? Guid.Empty;
+
+            var badgeSeeder = new BadgeSeeder(_context, _serviceProvider.GetRequiredService<ILogger<BadgeSeeder>>(), seedUserId);
             await badgeSeeder.SeedAsync();
 
-            var achievementSeeder = new AchievementSeeder(_context, _serviceProvider.GetRequiredService<ILogger<AchievementSeeder>>());
+            var achievementSeeder = new AchievementSeeder(_context, _serviceProvider.GetRequiredService<ILogger<AchievementSeeder>>(), seedUserId);
             await achievementSeeder.SeedAsync();
 
             // Seed social data

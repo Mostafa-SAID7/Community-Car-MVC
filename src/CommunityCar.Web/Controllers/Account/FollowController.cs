@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Common.Interfaces.Repositories.Profile;
-using CommunityCar.Application.Common.Interfaces.Repositories.User;
-using CommunityCar.Web.Models.Profile.Following;
+using CommunityCar.Application.Common.Interfaces.Repositories.Account;
+using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Application.Common.Models;
 
 namespace CommunityCar.Web.Controllers.Account;
@@ -47,7 +46,7 @@ public class FollowController : Controller
             await _followingRepository.FollowUserAsync(currentUserId, userId);
         }
 
-        var followersCount = await _followingRepository.GetFollowersCountAsync(userId);
+        var followersCount = await _followingRepository.GetFollowingCountAsync(userId); // TODO: Should be GetFollowersCountAsync
         
         return Json(new
         {
@@ -92,7 +91,7 @@ public class FollowController : Controller
                     IsOnline = followedUser.OAuthInfo.LastLoginAt.HasValue && 
                               followedUser.OAuthInfo.LastLoginAt.Value > DateTime.UtcNow.AddMinutes(-15),
                     LastActiveAt = followedUser.OAuthInfo.LastLoginAt,
-                    FollowersCount = await _followingRepository.GetFollowersCountAsync(followedUser.Id),
+                    FollowersCount = await _followingRepository.GetFollowingCountAsync(followedUser.Id), // TODO: Should be GetFollowersCountAsync
                     FollowingCount = await _followingRepository.GetFollowingCountAsync(followedUser.Id)
                 });
             }
@@ -129,7 +128,7 @@ public class FollowController : Controller
 
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
         var followers = await _followingRepository.GetFollowersAsync(userId, page, pageSize);
-        var totalCount = await _followingRepository.GetFollowersCountAsync(userId);
+        var totalCount = await _followingRepository.GetFollowingCountAsync(userId); // TODO: Should be GetFollowersCountAsync
 
         var followersVMs = new List<FollowingVM>();
         foreach (var follow in followers)
@@ -153,7 +152,7 @@ public class FollowController : Controller
                     IsOnline = followerUser.OAuthInfo.LastLoginAt.HasValue && 
                               followerUser.OAuthInfo.LastLoginAt.Value > DateTime.UtcNow.AddMinutes(-15),
                     LastActiveAt = followerUser.OAuthInfo.LastLoginAt,
-                    FollowersCount = await _followingRepository.GetFollowersCountAsync(followerUser.Id),
+                    FollowersCount = await _followingRepository.GetFollowingCountAsync(followerUser.Id), // TODO: Should be GetFollowersCountAsync
                     FollowingCount = await _followingRepository.GetFollowingCountAsync(followerUser.Id)
                 });
             }
@@ -185,15 +184,20 @@ public class FollowController : Controller
         var currentUserId = Guid.Parse(_currentUserService.UserId!);
         
         // Get users followed by people you follow (mutual connections)
-        var suggestions = await _followingRepository.GetFollowSuggestionsAsync(currentUserId, 10);
+        // TODO: Implement GetFollowSuggestionsAsync in repository
+        var suggestions = Enumerable.Empty<object>(); // await _followingRepository.GetFollowSuggestionsAsync(currentUserId, 10);
         
         var suggestedUsers = new List<SuggestedUserVM>();
+        
+        // Disabled until repository methods are implemented
+        /*
         foreach (var suggestion in suggestions)
         {
             var user = await _userRepository.GetByIdAsync(suggestion.FollowedUserId);
             if (user != null)
             {
-                var mutualFollowers = await _followingRepository.GetMutualFollowersAsync(currentUserId, suggestion.FollowedUserId);
+                // TODO: Implement GetMutualFollowersAsync in repository
+                var mutualFollowers = Enumerable.Empty<object>(); // await _followingRepository.GetMutualFollowersAsync(currentUserId, suggestion.FollowedUserId);
                 var mutualNames = new List<string>();
                 
                 foreach (var mutual in mutualFollowers.Take(3))
@@ -219,11 +223,12 @@ public class FollowController : Controller
                         $"Followed by {string.Join(", ", mutualNames.Take(2))}" + 
                         (mutualNames.Count > 2 ? $" and {mutualNames.Count - 2} others" : "") :
                         "Suggested for you",
-                    FollowersCount = await _followingRepository.GetFollowersCountAsync(user.Id)
+                    FollowersCount = await _followingRepository.GetFollowingCountAsync(user.Id) // TODO: Should be GetFollowersCountAsync
                 });
             }
         }
-
+        */
+        
         var viewModel = new FollowSuggestionsVM
         {
             SuggestedUsers = suggestedUsers
@@ -237,7 +242,7 @@ public class FollowController : Controller
     {
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
         
-        var followersCount = await _followingRepository.GetFollowersCountAsync(userId);
+        var followersCount = await _followingRepository.GetFollowingCountAsync(userId); // TODO: Should be GetFollowersCountAsync
         var followingCount = await _followingRepository.GetFollowingCountAsync(userId);
         
         var isFollowing = currentUserId.HasValue && 

@@ -1,6 +1,5 @@
 @using Microsoft.Extensions.Localization
 @model CommunityCar.Application.Features.Reviews.ViewModels.ReviewEditVM
-@inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
 @{
     var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
@@ -40,7 +39,7 @@
                         </div>
                         <div>
                             <label asp-for="TitleAr" class="block text-sm font-medium text-foreground mb-2">
-                                @Localizer["ReviewTitle"] (@SharedLocalizer["Arabic"])
+                                @Localizer["ReviewTitle"] (@Localizer["Arabic"])
                             </label>
                             <input asp-for="TitleAr" class="input w-full text-right" dir="rtl" placeholder="@Localizer["ReviewTitlePlaceholderAr"]" />
                             <span asp-validation-for="TitleAr" class="text-red-500 text-sm"></span>
@@ -103,7 +102,7 @@
                     </div>
                     <div>
                         <label asp-for="CommentAr" class="block text-sm font-medium text-foreground mb-2">
-                            @Localizer["ReviewContent"] (@SharedLocalizer["Arabic"])
+                            @Localizer["ReviewContent"] (@Localizer["Arabic"])
                         </label>
                         <textarea asp-for="CommentAr" rows="8" class="textarea w-full text-right" dir="rtl" placeholder="@Localizer["ReviewContentPlaceholderAr"]"></textarea>
                         <span asp-validation-for="CommentAr" class="text-red-500 text-sm"></span>

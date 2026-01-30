@@ -1,0 +1,58 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<aside class="w-full space-y-6">
+    <!-- Post Stats -->
+    <div class="bg-card/40 backdrop-blur-xl border border-border rounded-2xl p-6 shadow-sm">
+        <h3 class="flex items-center gap-2 text-sm font-bold mb-4 uppercase tracking-wider text-primary">
+            <i data-lucide="trending-up" class="w-4 h-4"></i>
+            @Localizer["PostStats"]
+        </h3>
+        <div class="space-y-4">
+            <div class="flex items-center justify-between p-3 rounded-xl bg-accent/30 border border-border/50">
+                <span class="text-xs text-muted-foreground">New Today</span>
+                <span class="text-sm font-black">+124</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-accent/30 border border-border/50">
+                <span class="text-xs text-muted-foreground">Active Creators</span>
+                <span class="text-sm font-black">2.1k</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trending Posts -->
+    <div class="bg-card/40 backdrop-blur-xl border border-border rounded-2xl p-6 shadow-sm">
+        <h3 class="flex items-center gap-2 text-sm font-bold mb-4 uppercase tracking-wider">
+            <i data-lucide="flame" class="w-4 h-4 text-orange-500"></i>
+            @Localizer["TrendingPosts"]
+        </h3>
+        <div class="space-y-4">
+            @for (int i = 1; i <= 3; i++)
+            {
+                <div class="space-y-1 cursor-pointer group">
+                    <p class="text-xs font-bold leading-tight group-hover:text-primary transition-colors">Amazing trip with my new sedan @i...</p>
+                    <div class="flex items-center gap-2 text-[10px] text-muted-foreground">
+                        <span>1.2k Likes</span>
+                        <span>•</span>
+                        <span>@(i * 5)m ago</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Top Authors -->
+    <div class="bg-card/40 backdrop-blur-xl border border-border rounded-2xl p-6 shadow-sm">
+        <h3 class="flex items-center gap-2 text-sm font-bold mb-4 uppercase tracking-wider">
+            <i data-lucide="users" class="w-4 h-4 text-primary"></i>
+            @Localizer["TopAuthors"]
+        </h3>
+        <div class="flex -space-x-3 rtl:space-x-reverse overflow-hidden mb-4 justify-center">
+            @for (int i = 0; i < 5; i++)
+            {
+                <img class="inline-block h-10 w-10 rounded-xl ring-2 ring-background grayscale hover:grayscale-0 transition-all cursor-pointer" src="/images/default-avatar.png" alt="" />
+            }
+        </div>
+        <p class="text-[10px] text-center text-muted-foreground">Join the elite club of car enthusiasts.</p>
+    </div>
+</aside>

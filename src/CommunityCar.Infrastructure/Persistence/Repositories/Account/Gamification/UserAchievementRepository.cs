@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Domain.Entities.Account.Gamification;
+using CommunityCar.Domain.Enums.Account;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
@@ -27,14 +28,16 @@ public class UserAchievementRepository : BaseRepository<UserAchievement>, IUserA
 
     public async Task<UserAchievement?> GetUserAchievementAsync(Guid userId, Guid achievementId)
     {
+        var achievementIdString = achievementId.ToString();
         return await Context.UserAchievements
-            .FirstOrDefaultAsync(ua => ua.UserId == userId && ua.AchievementId == achievementId);
+            .FirstOrDefaultAsync(ua => ua.UserId == userId && ua.AchievementId == achievementIdString);
     }
 
     public async Task<bool> HasAchievementAsync(Guid userId, Guid achievementId)
     {
+        var achievementIdString = achievementId.ToString();
         return await Context.UserAchievements
-            .AnyAsync(ua => ua.UserId == userId && ua.AchievementId == achievementId && ua.IsUnlocked);
+            .AnyAsync(ua => ua.UserId == userId && ua.AchievementId == achievementIdString && ua.IsUnlocked);
     }
 
     public async Task<bool> GrantAchievementAsync(Guid userId, Guid achievementId, DateTime? unlockedAt = null)
@@ -96,17 +99,22 @@ public class UserAchievementRepository : BaseRepository<UserAchievement>, IUserA
 
     public async Task<Dictionary<Guid, int>> GetAchievementStatisticsAsync()
     {
-        return await Context.UserAchievements
+        var stats = await Context.UserAchievements
             .Where(ua => ua.IsUnlocked)
             .GroupBy(ua => ua.AchievementId)
             .Select(g => new { AchievementId = g.Key, Count = g.Count() })
-            .ToDictionaryAsync(x => x.AchievementId, x => x.Count);
+            .ToListAsync();
+
+        return stats
+            .Where(x => Guid.TryParse(x.AchievementId, out _))
+            .ToDictionary(x => Guid.Parse(x.AchievementId), x => x.Count);
     }
 
     public async Task<IEnumerable<Guid>> GetTopAchieversAsync(Guid achievementId, int count = 10)
     {
+        var achievementIdString = achievementId.ToString();
         return await Context.UserAchievements
-            .Where(ua => ua.AchievementId == achievementId && ua.IsUnlocked)
+            .Where(ua => ua.AchievementId == achievementIdString && ua.IsUnlocked)
             .OrderBy(ua => ua.UnlockedAt)
             .Take(count)
             .Select(ua => ua.UserId)

@@ -14,8 +14,7 @@ public class UserInterestMappingProfile : AutoMapper.Profile
     private void CreateInterestMappings()
     {
         CreateMap<UserInterest, ProfileInterestVM>()
-
-            .ForMember(dest => dest.InterestName, opt => opt.Ignore())
+            .ForMember(dest => dest.InterestName, opt => opt.MapFrom(src => src.InterestValue))
             .ForMember(dest => dest.InterestDescription, opt => opt.Ignore())
             .ForMember(dest => dest.CategoryIcon, opt => opt.MapFrom(src => GetCategoryIcon(src.Category)))
             .ForMember(dest => dest.CategoryColor, opt => opt.MapFrom(src => GetCategoryColor(src.Category)))
@@ -23,9 +22,8 @@ public class UserInterestMappingProfile : AutoMapper.Profile
 
         CreateMap<AddInterestRequest, UserInterest>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.InterestName, opt => opt.Ignore())
-            .ForMember(dest => dest.Category, opt => opt.Ignore())
-            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ConstructUsing(src => new UserInterest(src.UserId, src.Category, src.SubCategory, src.InterestType, src.InterestValue, src.InitialScore, null));
     }
 
     private static string GetCategoryIcon(string? category)

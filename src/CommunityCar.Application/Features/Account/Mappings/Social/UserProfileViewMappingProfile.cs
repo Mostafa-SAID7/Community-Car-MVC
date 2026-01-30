@@ -18,7 +18,7 @@ public class UserProfileViewMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.ViewerProfilePicture, opt => opt.Ignore())
             .ForMember(dest => dest.Location, opt => opt.Ignore())
             .ForMember(dest => dest.ViewedTimeAgo, opt => opt.Ignore())
-            .ForMember(dest => dest.DeviceType, opt => opt.MapFrom(src => GetDeviceType(src.UserAgent)));
+            .ForMember(dest => dest.DeviceType, opt => opt.MapFrom(src => GetDeviceType(src.ViewerUserAgent)));
 
         CreateMap<RecordProfileViewRequest, UserProfileView>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())

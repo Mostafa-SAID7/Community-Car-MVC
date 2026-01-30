@@ -1,8 +1,10 @@
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Account.Media;
 using CommunityCar.Domain.Entities.Account.Gamification;
+using CommunityCar.Domain.Entities.Account.Authentication;
 using CommunityCar.Domain.Entities.Account.Analytics;
 using CommunityCar.Domain.Entities.Account.Management;
+using CommunityCar.Domain.Entities.Account.Authorization;
 using CommunityCar.Domain.Entities.Chats;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Domain.Entities.Community.Friends;
@@ -33,12 +35,17 @@ public interface IApplicationDbContext
     DbSet<User> Users { get; }
     DbSet<UserGallery> UserGalleries { get; }
     DbSet<UserBadge> UserBadges { get; }
+    DbSet<UserToken> UserTokens { get; }
     DbSet<UserAchievement> UserAchievements { get; }
     DbSet<UserActivityEntity> UserActivities { get; }
     DbSet<UserInterest> UserInterests { get; }
     DbSet<UserFollowing> UserFollowings { get; }
     DbSet<UserProfileView> UserProfileViews { get; }
     DbSet<UserManagement> UserManagements { get; }
+    DbSet<Role> Roles { get; }
+    DbSet<Permission> Permissions { get; }
+    DbSet<RolePermission> RolePermissions { get; }
+    DbSet<UserPermission> UserPermissions { get; }
     
     // Shared
     DbSet<Comment> Comments { get; }

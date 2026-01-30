@@ -1,4 +1,5 @@
 using CommunityCar.Domain.Constants;
+using CommunityCar.Domain.Entities.Account.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
@@ -6,10 +7,10 @@ namespace CommunityCar.Infrastructure.Persistence.Seeding.Account.Authorization;
 
 public class RoleSeeder
 {
-    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
+    private readonly RoleManager<Role> _roleManager;
     private readonly ILogger<RoleSeeder> _logger;
 
-    public RoleSeeder(RoleManager<IdentityRole<Guid>> roleManager, ILogger<RoleSeeder> logger)
+    public RoleSeeder(RoleManager<Role> roleManager, ILogger<RoleSeeder> logger)
     {
         _roleManager = roleManager;
         _logger = logger;
@@ -29,7 +30,8 @@ public class RoleSeeder
         {
             if (!await _roleManager.RoleExistsAsync(roleName))
             {
-                await _roleManager.CreateAsync(new IdentityRole<Guid>(roleName) { Id = Guid.NewGuid() });
+                var role = new Role(roleName, $"{roleName} role", "System", true);
+                await _roleManager.CreateAsync(role);
                 _logger.LogInformation("Created role: {RoleName}", roleName);
             }
         }

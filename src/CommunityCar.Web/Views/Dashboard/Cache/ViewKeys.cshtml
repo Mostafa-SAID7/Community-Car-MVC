@@ -1,8 +1,9 @@
+@inject IViewLocalizer Localizer
 @model CommunityCar.Web.Models.Dashboard.Cache.CacheKeysViewModel
 @{
-    ViewData["Title"] = "Cache Registry - Key Explorer";
-    ViewData["PageHeader"] = "Cache Registry";
-    ViewData["PageDescription"] = "Browse and manage cache key infrastructure";
+    ViewData["Title"] = Localizer["CacheRegistryTitle"];
+    ViewData["PageHeader"] = Localizer["CacheRegistryHeader"];
+    ViewData["PageDescription"] = Localizer["CacheRegistryDescription"];
 }
 
 @Html.AntiForgeryToken()
@@ -11,10 +12,10 @@
     <!-- Breadcrumb Protocol -->
     <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
         <a href="@Url.Action("Index")" class="hover:text-primary transition-colors flex items-center gap-2">
-            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Cache Management
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> @Localizer["CacheManagement"]
         </a>
         <span class="opacity-20">/</span>
-        <span class="text-foreground/40">Key Registry Explorer</span>
+        <span class="text-foreground/40">@Localizer["KeyRegistryExplorer"]</span>
     </nav>
 
     <!-- Search Protocol Interface -->
@@ -24,10 +25,10 @@
                 <div class="space-y-4">
                     <div class="flex flex-wrap gap-2">
                         <span class="px-3 py-1 rounded-2xl text-[9px] font-black uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 flex items-center gap-1.5 shadow-sm">
-                            <i data-lucide="search" class="w-3.5 h-3.5"></i> Pattern Search
+                        <i data-lucide="search" class="w-3.5 h-3.5"></i> @Localizer["PatternSearch"]
                         </span>
                     </div>
-                    <h1 class="text-4xl md:text-5xl font-black text-foreground tracking-tighter leading-[1.1]">Cache Key Registry</h1>
+                    <h1 class="text-4xl md:text-5xl font-black text-foreground tracking-tighter leading-[1.1]">@Localizer["CacheKeyRegistry"]</h1>
                 </div>
 
                 <form method="get" asp-action="ViewKeys" class="space-y-6">
@@ -35,16 +36,16 @@
                         <div class="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-3xl blur opacity-0 group-focus-within/field:opacity-100 transition duration-500"></div>
                         <div class="relative bg-background/50 border border-border/50 rounded-[2rem] overflow-hidden focus-within:border-primary/50 transition-all shadow-inner">
                             <div class="flex">
-                                <input type="text" name="pattern" value="@Model.Pattern" class="flex-1 p-6 bg-transparent border-none focus:ring-0 text-foreground font-medium placeholder:text-muted-foreground/40" placeholder="Initialize pattern search protocol (e.g., user:*, feed:*, *)">
+                                <input type="text" name="pattern" value="@Model.Pattern" class="flex-1 p-6 bg-transparent border-none focus:ring-0 text-foreground font-medium placeholder:text-muted-foreground/40" placeholder="@Localizer["SearchPlaceholder"]">
                                 <button type="submit" class="px-8 py-6 bg-primary text-primary-foreground font-black text-xs uppercase tracking-[0.2em] hover:bg-primary/90 transition-all flex items-center gap-3">
-                                    <i data-lucide="search" class="w-4 h-4"></i> Execute Search
+                                    <i data-lucide="search" class="w-4 h-4"></i> @Localizer["ExecuteSearch"]
                                 </button>
                             </div>
                         </div>
                     </div>
                     
                     <div class="px-4">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Pattern Examples:</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["PatternExamples"]:</span>
                         <div class="flex flex-wrap gap-2 mt-2">
                             <code class="px-2 py-1 bg-muted/40 rounded text-[10px] font-black uppercase tracking-widest text-primary">user:*</code>
                             <code class="px-2 py-1 bg-muted/40 rounded text-[10px] font-black uppercase tracking-widest text-primary">feed:trending:*</code>
@@ -58,11 +59,11 @@
             <div class="lg:w-72 bg-muted/20 border-l border-border/30 p-8 flex flex-col justify-center gap-8">
                 <div class="space-y-1">
                     <span class="eng-stat-value text-[32px] leading-none tracking-tighter">@Model.TotalCount.ToString("D2")</span>
-                    <span class="eng-stat-label tracking-[0.2em] opacity-50">Keys Located</span>
+                    <span class="eng-stat-label tracking-[0.2em] opacity-50">@Localizer["KeysLocated"]</span>
                 </div>
                 <div class="space-y-1">
                     <span class="eng-stat-value text-[32px] leading-none tracking-tighter">@Model.Pattern</span>
-                    <span class="eng-stat-label tracking-[0.2em] opacity-50">Active Pattern</span>
+                    <span class="eng-stat-label tracking-[0.2em] opacity-50">@Localizer["ActivePattern"]</span>
                 </div>
             </div>
         </div>
@@ -74,10 +75,10 @@
             <div class="flex items-center justify-between">
                 <h3 class="text-xl font-black text-foreground tracking-tighter flex items-center gap-3">
                     <span class="flex items-center justify-center w-8 h-8 rounded-2xl bg-primary text-primary-foreground text-xs leading-none">@Model.TotalCount</span>
-                    Registry Entries
+                    @Localizer["RegistryEntries"]
                 </h3>
                 <div class="flex items-center gap-4">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Pattern Filter:</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["PatternFilter"]:</span>
                     <span class="px-3 py-1 rounded-2xl text-[9px] font-black uppercase tracking-widest bg-muted/40 text-foreground border border-border/50">@Model.Pattern</span>
                 </div>
             </div>
@@ -109,8 +110,8 @@
                                                     <i data-lucide="@GetCategoryIcon(category)" class="w-4 h-4"></i>
                                                 </div>
                                                 <div>
-                                                    <span class="block text-xs font-black text-foreground">@category.ToUpper() NAMESPACE</span>
-                                                    <span class="block text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Cache Registry Entry</span>
+                                                    <span class="block text-xs font-black text-foreground">@string.Format(Localizer["Namespace"].Value, category.ToUpper())</span>
+                                                    <span class="block text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["CacheRegistryEntry"]</span>
                                                 </div>
                                             </div>
                                             <span class="px-3 py-1 rounded-2xl text-[9px] font-black uppercase tracking-widest bg-@GetCategoryColor(category)/10 text-@GetCategoryColor(category) border border-@GetCategoryColor(category)/20 shadow-sm">
@@ -127,11 +128,11 @@
                                         <div class="flex items-center gap-6 pt-4 border-t border-border/20">
                                             <button onclick="inspectKey('@key')" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors group/tool">
                                                 <i data-lucide="eye" class="w-4 h-4 group-hover/tool:scale-110 transition-transform"></i>
-                                                Inspect Protocol
+                                                @Localizer["InspectProtocol"]
                                             </button>
                                             <button onclick="deleteKey('@key')" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-destructive transition-colors group/tool ml-auto">
                                                 <i data-lucide="trash-2" class="w-4 h-4 group-hover/tool:scale-110 transition-transform"></i>
-                                                Purge Entry
+                                                @Localizer["PurgeEntry"]
                                             </button>
                                         </div>
                                     </div>
@@ -149,8 +150,8 @@
                                 <i data-lucide="info" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <span class="block text-[9px] font-black uppercase tracking-widest text-primary/60 mb-0.5">Registry Limit Reached</span>
-                                <span class="block text-sm font-black text-foreground">Displaying first 100 entries. Refine pattern for targeted results.</span>
+                                <span class="block text-[9px] font-black uppercase tracking-widest text-primary/60 mb-0.5">@Localizer["RegistryLimitReached"]</span>
+                                <span class="block text-sm font-black text-foreground">@Localizer["RegistryLimitReachedDesc"]</span>
                             </div>
                         </div>
                     </div>
@@ -162,8 +163,8 @@
                     <div class="w-16 h-16 bg-muted/40 rounded-2xl flex items-center justify-center mb-6">
                         <i data-lucide="search-x" class="w-8 h-8 text-muted-foreground opacity-20"></i>
                     </div>
-                    <h4 class="text-xl font-black text-foreground tracking-tight underline decoration-primary/40 decoration-4 underline-offset-8 mb-3">No Registry Entries Located</h4>
-                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-widest opacity-60">Pattern "@Model.Pattern" returned zero matches. Adjust search parameters.</p>
+                    <h4 class="text-xl font-black text-foreground tracking-tight underline decoration-primary/40 decoration-4 underline-offset-8 mb-3">@Localizer["NoRegistryEntries"]</h4>
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-widest opacity-60">@string.Format(Localizer["NoRegistryEntriesDesc"].Value, Model.Pattern)</p>
                 </div>
             }
         </div>
@@ -179,7 +180,7 @@
                     <div class="w-8 h-8 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
                         <i data-lucide="eye" class="w-4 h-4"></i>
                     </div>
-                    Registry Inspector Protocol
+                    @Localizer["RegistryInspectorProtocol"]
                 </h5>
                 <button type="button" class="close text-muted-foreground hover:text-foreground transition-colors" data-dismiss="modal">
                     <i data-lucide="x" class="w-6 h-6"></i>
@@ -187,19 +188,19 @@
             </div>
             <div class="modal-body p-8 space-y-6">
                 <div class="space-y-2">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Registry Key:</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["RegistryKey"]:</span>
                     <div class="bg-muted/20 border border-border/30 rounded-2xl p-4 font-mono text-sm text-foreground break-all">
                         <span id="inspected-key"></span>
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Cached Payload:</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["CachedPayload"]:</span>
                     <div class="bg-muted/20 border border-border/30 rounded-2xl p-4 font-mono text-sm text-foreground/80 max-h-80 overflow-y-auto">
                         <pre id="inspected-value" class="whitespace-pre-wrap"></pre>
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">TTL Status:</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TTLStatus"]:</span>
                     <div class="bg-muted/20 border border-border/30 rounded-2xl p-4 font-mono text-sm text-foreground">
                         <span id="inspected-ttl"></span>
                     </div>
@@ -207,10 +208,10 @@
             </div>
             <div class="modal-footer border-t border-border/30 p-8 flex items-center gap-4">
                 <button type="button" class="px-6 py-3 bg-muted/40 text-foreground font-black text-xs uppercase tracking-[0.2em] rounded-2xl border border-border/50 hover:bg-muted/60 transition-all" data-dismiss="modal">
-                    Close Inspector
+                    @Localizer["CloseInspector"]
                 </button>
                 <button type="button" class="px-6 py-3 bg-destructive text-destructive-foreground font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-destructive/30 hover:shadow-destructive/50 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center gap-2" onclick="deleteInspectedKey()">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i> Purge Entry
+                    <i data-lucide="trash-2" class="w-4 h-4"></i> @Localizer["PurgeEntry"]
                 </button>
             </div>
         </div>
@@ -221,8 +222,8 @@
     <script>
         function inspectKey(key) {
             $('#inspected-key').text(key);
-            $('#inspected-value').text('Loading cache payload...');
-            $('#inspected-ttl').text('Analyzing TTL status...');
+            $('#inspected-value').text('@Localizer["LoadingPayloadJS"]');
+            $('#inspected-ttl').text('@Localizer["AnalyzingTTLJS"]');
             $('#keyInspectorModal').modal('show');
             
             // Get key value and TTL from API
@@ -237,13 +238,13 @@
                     }
                 })
                 .fail(function() {
-                    $('#inspected-value').text('Failed to retrieve cache payload');
+                    $('#inspected-value').text('@Localizer["FailedToRetrieveJS"]');
                     $('#inspected-ttl').text('N/A');
                 });
         }
         
         function deleteKey(key) {
-            if (!confirm('Confirm purge operation for registry key "' + key + '"? This action is irreversible.')) {
+            if (!confirm('@Localizer["ConfirmPurgeJS"] ' + key + '?')) {
                 return;
             }
             
@@ -255,14 +256,14 @@
                 },
                 success: function(data) {
                     if (data.success) {
-                        toastr.success('Registry entry purged successfully');
+                        toastr.success('@Localizer["PurgedSuccessJS"]');
                         location.reload();
                     } else {
                         toastr.error(data.error || 'Failed to purge registry entry');
                     }
                 },
                 error: function() {
-                    toastr.error('Purge operation failed');
+                    toastr.error('@Localizer["PurgeFailedJS"]');
                 }
             });
         }

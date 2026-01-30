@@ -15,6 +15,7 @@ public class UserToken : BaseEntity
     public string? Metadata { get; private set; } // JSON for additional data
     public int AttemptCount { get; private set; }
     public int MaxAttempts { get; private set; } = 3;
+    public bool IsActive => IsValid();
 
     public UserToken(
         Guid userId,
@@ -79,5 +80,11 @@ public class UserToken : BaseEntity
             ExpiresAt = ExpiresAt.Add(additionalTime);
             Audit(UpdatedBy);
         }
+    }
+
+    public void Invalidate()
+    {
+        ExpiresAt = DateTime.UtcNow.AddSeconds(-1);
+        Audit(UpdatedBy);
     }
 }

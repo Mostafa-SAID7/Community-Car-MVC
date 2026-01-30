@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Base;
 using CommunityCar.Domain.Entities.Account.Authentication;
+using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories.Account;
 
@@ -9,12 +10,12 @@ namespace CommunityCar.Application.Common.Interfaces.Repositories.Account;
 public interface IUserTokenRepository : IBaseRepository<UserToken>
 {
     #region Token Management
-    Task<UserToken?> GetTokenAsync(Guid userId, string tokenType, string token);
-    Task<UserToken?> GetActiveTokenAsync(Guid userId, string tokenType);
-    Task<IEnumerable<UserToken>> GetUserTokensAsync(Guid userId, string? tokenType = null);
-    Task<bool> CreateTokenAsync(Guid userId, string tokenType, string token, DateTime expiresAt, Dictionary<string, object>? metadata = null);
+    Task<UserToken?> GetTokenAsync(Guid userId, TokenType tokenType, string token);
+    Task<UserToken?> GetActiveTokenAsync(Guid userId, TokenType tokenType);
+    Task<IEnumerable<UserToken>> GetUserTokensAsync(Guid userId, TokenType? tokenType = null);
+    Task<bool> CreateTokenAsync(Guid userId, TokenType tokenType, string token, DateTime expiresAt, Dictionary<string, object>? metadata = null);
     Task<bool> InvalidateTokenAsync(string token);
-    Task<bool> InvalidateUserTokensAsync(Guid userId, string? tokenType = null);
+    Task<bool> InvalidateUserTokensAsync(Guid userId, TokenType? tokenType = null);
     #endregion
 
     #region Token Validation

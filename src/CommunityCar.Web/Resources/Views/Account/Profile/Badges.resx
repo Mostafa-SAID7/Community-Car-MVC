@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PageTitle" xml:space="preserve"><value>My Badges</value></data>
+  <data name="MyBadges" xml:space="preserve"><value>My Badges</value></data>
+  <data name="BadgesSubtitle" xml:space="preserve"><value>Showcase your automotive achievements and milestones</value></data>
+  <data name="TotalBadges" xml:space="preserve"><value>Total Badges</value></data>
+  <data name="RareBadges" xml:space="preserve"><value>Rare Badges</value></data>
+  <data name="Recent" xml:space="preserve"><value>Recent</value></data>
+  <data name="Progress" xml:space="preserve"><value>Progress</value></data>
+  <data name="EarnedBadges" xml:space="preserve"><value>Earned Badges</value></data>
+  <data name="NoBadgesTitle" xml:space="preserve"><value>No badges earned yet</value></data>
+  <data name="NoBadgesSubtitle" xml:space="preserve"><value>Start engaging with the community to earn your first badge!</value></data>
+  <data name="GetStarted" xml:space="preserve"><value>Get Started</value></data>
+  <data name="InProgress" xml:space="preserve"><value>In Progress</value></data>
+  <data name="Categories" xml:space="preserve"><value>Categories</value></data>
+  <data name="Community" xml:space="preserve"><value>Community</value></data>
+  <data name="Automotive" xml:space="preserve"><value>Automotive</value></data>
+  <data name="Content" xml:space="preserve"><value>Content</value></data>
+  <data name="Special" xml:space="preserve"><value>Special</value></data>
+  <data name="BadgesCount" xml:space="preserve"><value>{0} badges</value></data>
+  <data name="RecentActivity" xml:space="preserve"><value>Recent Activity</value></data>
+  <data name="NoRecentActivity" xml:space="preserve"><value>No recent badge activity</value></data>
+</root>

@@ -91,8 +91,7 @@ public class ErrorHandlingMiddleware
         }
 
         // Check if this is an API request or browser request
-        var isApiRequest = context.Request.Path.StartsWithSegments("/") || 
-                          context.Request.Path.Value?.Contains("/", StringComparison.OrdinalIgnoreCase) == true ||
+        var isApiRequest = context.Request.Path.StartsWithSegments("/api") || 
                           context.Request.Headers.Accept.Any(h => h?.Contains("application/json", StringComparison.OrdinalIgnoreCase) == true) ||
                           context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 

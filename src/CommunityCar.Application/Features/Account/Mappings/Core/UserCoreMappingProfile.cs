@@ -1,5 +1,4 @@
 using AutoMapper;
-
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Domain.Entities.Account.Core;
 
@@ -16,8 +15,6 @@ public class UserCoreMappingProfile : AutoMapper.Profile
     private void CreateUserMappings()
     {
         // User Entity Mappings
-
-
         CreateMap<User, ProfileVM>()
             .ForMember(dest => dest.HasGoogleAccount, opt => opt.MapFrom(src => src.OAuthInfo.HasGoogleAccount))
             .ForMember(dest => dest.HasFacebookAccount, opt => opt.MapFrom(src => src.OAuthInfo.HasFacebookAccount))
@@ -33,35 +30,28 @@ public class UserCoreMappingProfile : AutoMapper.Profile
         CreateMap<User, ProfileSettingsVM>()
             .ForMember(dest => dest.HasGoogleAccount, opt => opt.MapFrom(src => src.OAuthInfo.HasGoogleAccount))
             .ForMember(dest => dest.HasFacebookAccount, opt => opt.MapFrom(src => src.OAuthInfo.HasFacebookAccount))
-            .ForMember(dest => dest.EmailNotifications, opt => opt.MapFrom(src => src.NotificationSettings.EmailNotifications))
-            .ForMember(dest => dest.PushNotifications, opt => opt.MapFrom(src => src.NotificationSettings.PushNotifications))
-            .ForMember(dest => dest.SmsNotifications, opt => opt.MapFrom(src => src.NotificationSettings.SmsNotifications))
-            .ForMember(dest => dest.MarketingEmails, opt => opt.MapFrom(src => src.NotificationSettings.MarketingEmails))
-            .ForMember(dest => dest.ActiveSessions, opt => opt.Ignore());
+            .ForMember(dest => dest.EmailNotifications, opt => opt.MapFrom(src => src.NotificationSettings.EmailNotificationsEnabled))
+            .ForMember(dest => dest.PushNotifications, opt => opt.MapFrom(src => src.NotificationSettings.PushNotificationsEnabled))
+            .ForMember(dest => dest.SmsNotifications, opt => opt.MapFrom(src => src.NotificationSettings.SmsNotificationsEnabled))
+            .ForMember(dest => dest.MarketingEmails, opt => opt.MapFrom(src => src.NotificationSettings.MarketingEmailsEnabled))
+            .ForMember(dest => dest.PublicProfile, opt => opt.MapFrom(src => src.PrivacySettings.IsPublic));
 
         // Request Mappings
-        CreateMap<CreateUserRequest, User>()
+        CreateMap<RegisterVM, User>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
-            .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
-            .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
 
-        CreateMap<UpdateUserRequest, User>()
+        CreateMap<UpdateProfileVM, User>()
             .ForMember(dest => dest.Email, opt => opt.Ignore())
-            .ForMember(dest => dest.UserName, opt => opt.Ignore())
-            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
-            .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
-            .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+            .ForMember(dest => dest.UserName, opt => opt.Ignore());
+            
+        CreateMap<AccountIdentityVM, User>().ReverseMap();
+        CreateMap<AccountClaimVM, User>().ReverseMap();
     }
 
     private void CreateProfileMappings()
     {
-        // User Identity mappings
-        CreateMap<User, AccountIdentityVM>()
-            .ForMember(dest => dest.Roles, opt => opt.Ignore());
-
         // User statistics mappings
         CreateMap<User, ProfileStatsVM>()
             .ForMember(dest => dest.PostsCount, opt => opt.Ignore())

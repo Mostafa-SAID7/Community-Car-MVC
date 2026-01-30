@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CommunityCar.Domain.Base;
 using CommunityCar.Domain.Enums.Community;
+using CommunityCar.Domain.Entities.Account.Core;
 
 namespace CommunityCar.Domain.Entities.Community.Guides;
 
@@ -12,6 +13,7 @@ public class Guide : AggregateRoot
     public string Content { get; private set; } // Markdown or HTML content
     public string? Summary { get; private set; }
     public Guid AuthorId { get; private set; }
+    public virtual User Author { get; private set; } = null!;
     
     // Arabic Localization
     public string? TitleAr { get; private set; }

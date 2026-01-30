@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 
 namespace CommunityCar.Application.Features.Account.ViewModels.Security;
 
@@ -36,10 +37,11 @@ public class ChangeEmailVM
 public class SecurityVM
 {
     public SecurityOverviewVM Overview { get; set; } = new();
-    public List<UserSessionVM> ActiveSessions { get; set; } = new();
+    public List<ActiveSessionVM> ActiveSessions { get; set; } = new();
 }
 
 // Aliases for compatibility
 public class UpdateEmailVM : ChangeEmailVM { }
 public class SecurityOverviewWebVM : SecurityOverviewVM { }
 public class SecurityLogItemWebVM : SecurityLogItemVM { }
+public class UserSessionVM : ActiveSessionVM { }

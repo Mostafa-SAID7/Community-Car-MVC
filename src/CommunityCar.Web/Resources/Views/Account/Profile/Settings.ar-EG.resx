@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PageTitle" xml:space="preserve"><value>إعدادات الحساب</value></data>
+  <data name="AccountSettings" xml:space="preserve"><value>إعدادات الحساب</value></data>
+  <data name="Profile" xml:space="preserve"><value>الملف الشخصي</value></data>
+  <data name="Privacy" xml:space="preserve"><value>الخصوصية</value></data>
+  <data name="Notifications" xml:space="preserve"><value>الإشعارات</value></data>
+  <data name="Security" xml:space="preserve"><value>الأمان</value></data>
+  <data name="ChangePhoto" xml:space="preserve"><value>تغيير الصورة</value></data>
+  <data name="FullName" xml:space="preserve"><value>الاسم الكامل</value></data>
+  <data name="FullNamePlaceholder" xml:space="preserve"><value>أدخل اسمك الكامل</value></data>
+  <data name="UsernameEmail" xml:space="preserve"><value>اسم المستخدم (البريد الإلكتروني)</value></data>
+  <data name="PrimaryEmail" xml:space="preserve"><value>البريد الإلكتروني الأساسي</value></data>
+  <data name="EmailChangeRestriction" xml:space="preserve"><value>لا يمكن تغيير البريد الإلكتروني يدوياً لدواعي أمنية.</value></data>
+  <data name="PhoneNumber" xml:space="preserve"><value>رقم الهاتف</value></data>
+  <data name="PhoneNumberPlaceholder" xml:space="preserve"><value>أدخل رقم هاتفك</value></data>
+  <data name="Country" xml:space="preserve"><value>الدولة</value></data>
+  <data name="CountryPlaceholder" xml:space="preserve"><value>أدخل الدولة</value></data>
+  <data name="City" xml:space="preserve"><value>المدينة</value></data>
+  <data name="CityPlaceholder" xml:space="preserve"><value>أدخل المدينة</value></data>
+  <data name="CountryAr" xml:space="preserve"><value>الدولة (بالعربية)</value></data>
+  <data name="CountryArPlaceholder" xml:space="preserve"><value>أدخل الدولة بالعربية</value></data>
+  <data name="CityAr" xml:space="preserve"><value>المدينة (بالعربية)</value></data>
+  <data name="CityArPlaceholder" xml:space="preserve"><value>أدخل المدينة بالعربية</value></data>
+  <data name="Bio" xml:space="preserve"><value>السيرة الذاتية</value></data>
+  <data name="BioPlaceholder" xml:space="preserve"><value>أخبرنا عن نفسك...</value></data>
+  <data name="BioAr" xml:space="preserve"><value>السيرة الذاتية (بالعربية)</value></data>
+  <data name="BioArPlaceholder" xml:space="preserve"><value>أخبرنا عن نفسك بالعربية...</value></data>
+  <data name="SaveProfileChanges" xml:space="preserve"><value>حفظ تغييرات الملف الشخصي</value></data>
+  <data name="ProfileVisibility" xml:space="preserve"><value>ظهور الملف الشخصي</value></data>
+  <data name="PublicProfile" xml:space="preserve"><value>ملف شخصي عام</value></data>
+  <data name="PublicProfileDescription" xml:space="preserve"><value>السماح للآخرين بالعثور على ملفك الشخصي وعرضه</value></data>
+  <data name="ShowEmail" xml:space="preserve"><value>إظهار البريد الإلكتروني</value></data>
+  <data name="ShowEmailDescription" xml:space="preserve"><value>عرض عنوان بريدك الإلكتروني في ملفك الشخصي</value></data>
+  <data name="ShowPhoneNumber" xml:space="preserve"><value>إظهار رقم الهاتف</value></data>
+  <data name="ShowPhoneDescription" xml:space="preserve"><value>عرض رقم هاتفك في ملفك الشخصي</value></data>
+  <data name="Communication" xml:space="preserve"><value>التواصل</value></data>
+  <data name="AllowMessages" xml:space="preserve"><value>السماح بالرسائل المباشرة</value></data>
+  <data name="AllowMessagesDescription" xml:space="preserve"><value>السماح للمستخدمين الآخرين بإرسال رسائل خاصة إليك</value></data>
+  <data name="AllowFriendRequests" xml:space="preserve"><value>السماح بطلبات الصداقة</value></data>
+  <data name="AllowFriendRequestsDescription" xml:space="preserve"><value>السماح للمستخدمين الآخرين بإرسال طلبات صداقة إليك</value></data>
+  <data name="ContentPrivacy" xml:space="preserve"><value>خصوصية المحتوى</value></data>
+  <data name="DefaultGalleryPrivacy" xml:space="preserve"><value>خصوصية المعرض الافتراضية</value></data>
+  <data name="DefaultGalleryPrivacyDescription" xml:space="preserve"><value>ستكون عمليات الرفع الجديدة خاصة بشكل افتراضي</value></data>
+  <data name="Public" xml:space="preserve"><value>عام</value></data>
+  <data name="Private" xml:space="preserve"><value>خاص</value></data>
+  <data name="ShowActivityStatus" xml:space="preserve"><value>إظهار حالة النشاط</value></data>
+  <data name="ShowActivityDescription" xml:space="preserve"><value>السماح للآخرين برؤية متى تكون متصلاً</value></data>
+  <data name="SavePrivacySettings" xml:space="preserve"><value>حفظ إعدادات الخصوصية</value></data>
+  <data name="EmailNotifications" xml:space="preserve"><value>إشعارات البريد الإلكتروني</value></data>
+  <data name="GeneralNotifications" xml:space="preserve"><value>الإشعارات العامة</value></data>
+  <data name="GeneralNotificationsDescription" xml:space="preserve"><value>تلقي إشعارات البريد الإلكتروني للتحديثات الهامة</value></data>
+  <data name="MarketingEmails" xml:space="preserve"><value>رائل تسويقية</value></data>
+  <data name="MarketingEmailsDescription" xml:space="preserve"><value>تلقي محتوى ترويجي وتحديثات</value></data>
+  <data name="PushNotifications" xml:space="preserve"><value>إشعارات الدفع</value></data>
+  <data name="BrowserNotifications" xml:space="preserve"><value>إشعارات المتصفح</value></data>
+  <data name="BrowserNotificationsDescription" xml:space="preserve"><value>تلقي إشعارات الدفع في متصفحك</value></data>
+  <data name="SmsNotifications" xml:space="preserve"><value>إشعارات SMS</value></data>
+  <data name="SmsNotificationsDescription" xml:space="preserve"><value>تلقي تنبيهات هامة عبر الرسائل النصية</value></data>
+  <data name="SaveNotificationSettings" xml:space="preserve"><value>حفظ إعدادات الإشعارات</value></data>
+  <data name="PasswordSecurity" xml:space="preserve"><value>كلمة المرور والأمان</value></data>
+  <data name="ChangePassword" xml:space="preserve"><value>تغيير كلمة المرور</value></data>
+  <data name="ChangePasswordDescription" xml:space="preserve"><value>تحديث كلمة مرور حسابك</value></data>
+  <data name="TwoFactorAuthentication" xml:space="preserve"><value>المصادقة الثنائية</value></data>
+  <data name="TwoFactorEnabled" xml:space="preserve"><value>مفعل - حسابك محمي</value></data>
+  <data name="TwoFactorDisabled" xml:space="preserve"><value>معطل - فكر في تفعيله لمزيد من الأمان</value></data>
+  <data name="ConnectedAccounts" xml:space="preserve"><value>الحسابات المتصلة</value></data>
+  <data name="Connected" xml:space="preserve"><value>متصل</value></data>
+  <data name="NotConnected" xml:space="preserve"><value>غير متصل</value></data>
+  <data name="Disconnect" xml:space="preserve"><value>قطع الاتصال</value></data>
+  <data name="Connect" xml:space="preserve"><value>اتصال</value></data>
+  <data name="DangerZone" xml:space="preserve"><value>منطقة الخطر</value></data>
+  <data name="DeleteAccount" xml:space="preserve"><value>حذف الحساب</value></data>
+  <data name="DeleteAccountDescription" xml:space="preserve"><value>حذف حسابك وجميع البيانات المرتبطة به بشكل دائم</value></data>
+  <data name="Cancel" xml:space="preserve"><value>إلغاء</value></data>
+</root>

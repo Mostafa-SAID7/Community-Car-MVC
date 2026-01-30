@@ -33,15 +33,15 @@ public class UserActivitySeeder
         var activityTypes = new[]
         {
             ActivityType.Login,
-            ActivityType.PostCreated,
-            ActivityType.CommentAdded,
-            ActivityType.ProfileUpdated,
-            ActivityType.PhotoUploaded,
-            ActivityType.ReviewPosted,
-            ActivityType.QuestionAsked,
-            ActivityType.AnswerProvided,
-            ActivityType.EventAttended,
-            ActivityType.GroupJoined
+            ActivityType.Post,
+            ActivityType.Comment,
+            ActivityType.ProfileUpdate,
+            ActivityType.Other, // PhotoUploaded
+            ActivityType.Other, // ReviewPosted
+            ActivityType.Other, // QuestionAsked
+            ActivityType.Other, // AnswerProvided
+            ActivityType.EventAttend,
+            ActivityType.GroupJoin
         };
 
         var entityTypes = new[] { "Post", "Comment", "Review", "Question", "Answer", "Event", "Group", "Photo" };

@@ -76,4 +76,22 @@
   <data name="TrendingStories" xml:space="preserve">
     <value>قصص رائجة</value>
   </data>
+  <data name="Stories" xml:space="preserve">
+    <value>القصص</value>
+  </data>
+  <data name="ShareMoments" xml:space="preserve">
+    <value>شارك اللحظات</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>البحث في القصص...</value>
+  </data>
+  <data name="NoStoriesFound" xml:space="preserve">
+    <value>لم يتم العثور على قصص</value>
+  </data>
+  <data name="NoStoriesMessage" xml:space="preserve">
+    <value>لا توجد قصص حالياً تطابق بحثك.</value>
+  </data>
+  <data name="CreateYourFirst" xml:space="preserve">
+    <value>أنشئ قصتك الأولى</value>
+  </data>
 </root>

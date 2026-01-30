@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AdminControl" xml:space="preserve"><value>تحكم المشرف</value></data>
+  <data name="ReviewManageLogs" xml:space="preserve"><value>مراجعة وإدارة سجلات نشاط المجتمع</value></data>
+  <data name="ExportLogs" xml:space="preserve"><value>تصدير السجلات</value></data>
+  <data name="User" xml:space="preserve"><value>المستخدم</value></data>
+  <data name="Action" xml:space="preserve"><value>الإجراء</value></data>
+  <data name="Reason" xml:space="preserve"><value>السبب</value></data>
+  <data name="Date" xml:space="preserve"><value>التاريخ</value></data>
+  <data name="PerformedBy" xml:space="preserve"><value>نفذ بواسطة</value></data>
+  <data name="Actions" xml:space="preserve"><value>الإجراءات</value></data>
+  <data name="ReverseAction" xml:space="preserve"><value>إلغاء الإجراء</value></data>
+  <data name="ViewUserHistory" xml:space="preserve"><value>مشاهدة سجل المستخدم</value></data>
+  <data name="ShowingRecords" xml:space="preserve"><value>عرض السجلات من الصفحة</value></data>
+  <data name="Previous" xml:space="preserve"><value>السابق</value></data>
+  <data name="Next" xml:space="preserve"><value>التالي</value></data>
+</root>

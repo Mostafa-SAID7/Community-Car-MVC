@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Guides.DTOs;
+
 using CommunityCar.Application.Features.Guides.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Localization;
@@ -43,7 +43,7 @@ public class GuidesController : Controller
         {
             var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
             
-            var filter = new GuideFilterDTO
+            var filter = new GuideFilterVM
             {
                 Search = search,
                 Category = category,
@@ -114,7 +114,7 @@ public class GuidesController : Controller
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
             
-            var dto = new CreateGuideDTO
+            var dto = new CreateGuideRequest
             {
                 Title = model.Title,
                 Content = model.Content,
@@ -341,7 +341,7 @@ public class GuidesController : Controller
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
             
-            var dto = new UpdateGuideDTO
+            var dto = new UpdateGuideRequest
             {
                 Id = id,
                 Title = model.Title,
@@ -448,7 +448,7 @@ public class GuidesController : Controller
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
             
-            var filterDto = new GuideFilterDTO
+            var filterDto = new GuideFilterVM
             {
                 AuthorId = currentUserId,
                 Page = page,

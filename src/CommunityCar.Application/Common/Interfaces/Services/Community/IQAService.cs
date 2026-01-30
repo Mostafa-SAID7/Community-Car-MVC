@@ -10,6 +10,7 @@ public interface IQAService
     Task<QASearchResponse> SearchQuestionsAsync(QASearchRequest request);
     Task<IEnumerable<QuestionVM>> GetAllQuestionsAsync();
     Task<QuestionVM?> GetQuestionByIdAsync(Guid id);
+    Task<QuestionVM?> GetQuestionBySlugAsync(string slug);
     Task<IEnumerable<AnswerVM>> GetAnswersByQuestionIdAsync(Guid questionId);
     
     // Question management

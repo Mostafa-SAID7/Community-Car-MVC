@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AnalyticsDashboard" xml:space="preserve"><value>لوحة تحليلات الإحصائيات</value></data>
+  <data name="NewUsers" xml:space="preserve"><value>مستخدمون جدد</value></data>
+  <data name="VsLastPeriod" xml:space="preserve"><value>مقابل الفترة الماضية</value></data>
+  <data name="ActiveUsers" xml:space="preserve"><value>المستخدمون النشطون</value></data>
+  <data name="RetentionRate" xml:space="preserve"><value>معدل الاحتفاظ</value></data>
+  <data name="AvgSession" xml:space="preserve"><value>متوسط الجلسة</value></data>
+  <data name="UserGrowthTrend" xml:space="preserve"><value>اتجاه نمو المستخدمين</value></data>
+  <data name="UserActivity" xml:space="preserve"><value>نشاط المستخدمين</value></data>
+  <data name="Posts" xml:space="preserve"><value>المنشورات</value></data>
+  <data name="Questions" xml:space="preserve"><value>الأسئلة</value></data>
+  <data name="Answers" xml:space="preserve"><value>الأجوبة</value></data>
+  <data name="Reviews" xml:space="preserve"><value>المراجعات</value></data>
+  <data name="Stories" xml:space="preserve"><value>القصص</value></data>
+  <data name="UserEngagement" xml:space="preserve"><value>تفاعل المستخدمين</value></data>
+  <data name="PostsCreated" xml:space="preserve"><value>المنشورات المنشأة</value></data>
+  <data name="QuestionsAsked" xml:space="preserve"><value>الأسئلة المطروحة</value></data>
+  <data name="AnswersGiven" xml:space="preserve"><value>الأجوبة المقدمة</value></data>
+  <data name="ReviewsWritten" xml:space="preserve"><value>المراجعات المكتوبة</value></data>
+  <data name="UserDemographics" xml:space="preserve"><value>التركيبة السكانية للمستخدمين</value></data>
+  <data name="MostActiveDevice" xml:space="preserve"><value>الجهاز الأكثر نشاطًا</value></data>
+  <data name="PrimaryBrowser" xml:space="preserve"><value>المتصفح الأساسي</value></data>
+  <data name="TopLocation" xml:space="preserve"><value>أهم المواقع</value></data>
+  <data name="MostVisitedArea" xml:space="preserve"><value>القسم الأكثر زيارة</value></data>
+  <data name="TotalPageViews" xml:space="preserve"><value>إجمالي مشاهدات الصفحة</value></data>
+  <data name="TimeOnSite" xml:space="preserve"><value>الوقت في الموقع (متوسط)</value></data>
+</root>

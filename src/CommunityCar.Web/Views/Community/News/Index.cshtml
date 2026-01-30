@@ -1,6 +1,5 @@
 @using Microsoft.Extensions.Localization
 @model CommunityCar.Application.Features.News.ViewModels.NewsSearchResponse
-@inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["PageTitle"];
@@ -16,7 +15,7 @@
         <div class="flex items-center gap-4">
             <div class="text-center">
                 <div class="text-2xl font-black text-primary">@Model.TotalCount</div>
-                <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@SharedLocalizer["Articles"]</div>
+                <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Articles"]</div>
             </div>
             @if (User.Identity?.IsAuthenticated == true)
             {
@@ -202,4 +201,7 @@
             Skeleton.initPageLoad('news-skeleton', 'news-list-container');
         });
     </script>
+}
+@section SidebarRight {
+    <partial name="_NewsSidebar" />
 }

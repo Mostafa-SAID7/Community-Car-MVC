@@ -41,7 +41,9 @@ public class UserGalleryService : IUserGalleryService
     public async Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId)
     {
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
-        var galleryItems = await _galleryRepository.GetUserGalleryAsync(userId, currentUserId != userId);
+        var galleryItems = (currentUserId != userId) 
+            ? await _galleryRepository.GetPublicGalleryAsync(userId)
+            : await _galleryRepository.GetUserGalleryAsync(userId);
         
         return galleryItems.Select(item => new UserGalleryItemVM
         {
@@ -159,7 +161,7 @@ public class UserGalleryService : IUserGalleryService
 
     #region Statistics & Validation
 
-    public async Task<int> GetImageCountAsync(Guid userId) => (await _galleryRepository.GetUserGalleryAsync(userId, false)).Count();
+    public async Task<int> GetImageCountAsync(Guid userId) => (await _galleryRepository.GetUserGalleryAsync(userId, 1, int.MaxValue)).Count();
     public Task<long> GetTotalStorageUsedAsync(Guid userId) => Task.FromResult(0L);
     public Task<bool> IsStorageLimitExceededAsync(Guid userId) => Task.FromResult(false);
     public Task<bool> IsValidImageAsync(byte[] imageData) => Task.FromResult(true);

@@ -17,9 +17,10 @@ public class BadgeMappingProfile : AutoMapper.Profile
 
 
         CreateMap<UserBadge, UserBadgeVM>()
-            .ForMember(dest => dest.BadgeName, opt => opt.Ignore())
-            .ForMember(dest => dest.BadgeDescription, opt => opt.Ignore())
-            .ForMember(dest => dest.IconUrl, opt => opt.Ignore())
+            .ForMember(dest => dest.BadgeName, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.BadgeDescription, opt => opt.MapFrom(src => src.Description))
+            .ForMember(dest => dest.IconUrl, opt => opt.MapFrom(src => src.IconUrl))
+            .ForMember(dest => dest.AwardedAt, opt => opt.MapFrom(src => src.EarnedAt))
             .ForMember(dest => dest.AwardedTimeAgo, opt => opt.Ignore())
             .ForMember(dest => dest.RarityColor, opt => opt.MapFrom(src => GetRarityColor(src.Rarity.ToString())))
             .ForMember(dest => dest.CategoryIcon, opt => opt.MapFrom(src => GetCategoryIcon(src.Category.ToString())));
@@ -28,7 +29,7 @@ public class BadgeMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Category, opt => opt.Ignore())
             .ForMember(dest => dest.Rarity, opt => opt.Ignore())
-            .ForMember(dest => dest.IsDisplayed, opt => opt.MapFrom(src => false));
+            .ForMember(dest => dest.IsDisplayed, opt => opt.MapFrom(src => true));
     }
 
     private static string GetRarityColor(string rarity)

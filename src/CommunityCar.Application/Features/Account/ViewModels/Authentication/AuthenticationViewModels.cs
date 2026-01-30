@@ -67,10 +67,10 @@ public class ResetPasswordVM
     [Required(ErrorMessage = "Password is required")]
     [StringLength(100, MinimumLength = 8)]
     [DataType(DataType.Password)]
-    public string Password { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
 
     [DataType(DataType.Password)]
-    [Compare("Password")]
+    [Compare("NewPassword")]
     public string ConfirmPassword { get; set; } = string.Empty;
 
     [Required]
@@ -161,6 +161,16 @@ public class CreateTokenRequest
     public string? Email { get; set; }
     public string? UserName { get; set; }
     public string? Password { get; set; }
+}
+
+public class CreateSessionRequest
+{
+    public Guid UserId { get; set; }
+    public string SessionId { get; set; } = string.Empty;
+    public string? DeviceInfo { get; set; }
+    public string? IpAddress { get; set; }
+    public string? UserAgent { get; set; }
+    public string? Location { get; set; }
 }
 
 #endregion

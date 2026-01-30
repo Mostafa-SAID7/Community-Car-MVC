@@ -72,17 +72,17 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 eng-card overflow-hidden group/chart">
             <div class="eng-card-header">
-                <h5 class="eng-card-title">User Growth</h5>
+                <h5 class="eng-card-title">@Localizer["UserGrowth"]</h5>
                 <div class="inline-flex p-1 bg-background/50 rounded-lg border border-border/40 shadow-inner">
                     <button type="button"
                         class="px-3 py-1 text-[10px] font-black rounded-md transition-all active bg-primary text-primary-foreground shadow-sm"
-                        data-period="7">7D</button>
+                        data-period="7">@Localizer["SevenDays"]</button>
                     <button type="button"
                         class="px-3 py-1 text-[10px] font-black rounded-md transition-all text-muted-foreground hover:text-foreground"
-                        data-period="30">30D</button>
+                        data-period="30">@Localizer["ThirtyDays"]</button>
                     <button type="button"
                         class="px-3 py-1 text-[10px] font-black rounded-md transition-all text-muted-foreground hover:text-foreground"
-                        data-period="90">90D</button>
+                        data-period="90">@Localizer["NinetyDays"]</button>
                 </div>
             </div>
             <div class="p-6">
@@ -92,24 +92,24 @@
 
         <div class="eng-card overflow-hidden group/health">
             <div class="eng-card-header">
-                <h5 class="eng-card-title">System Health</h5>
+                <h5 class="eng-card-title">@Localizer["SystemHealth"]</h5>
             </div>
             <div class="p-6 space-y-6">
                 <div class="flex items-center justify-between">
-                    <h6 class="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Status</h6>
+                    <h6 class="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">@Localizer["Status"]</h6>
                     <span
                         class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-current/20 @(Model.SystemHealth.IsHealthy ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500 animate-pulse")">
                         <div
                             class="w-1.5 h-1.5 rounded-full bg-current @(Model.SystemHealth.IsHealthy ? "" : "animate-ping")">
                         </div>
-                        @(Model.SystemHealth.IsHealthy ? "Healthy" : "Issues Detected")
+                        @(Model.SystemHealth.IsHealthy ? Localizer["Healthy"] : Localizer["IssuesDetected"])
                     </span>
                 </div>
 
                 <div class="space-y-4">
                     <div class="space-y-2">
                         <div class="flex justify-between items-end">
-                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">CPU Usage</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">@Localizer["CpuUsage"]</span>
                             <span class="text-sm font-black tabular-nums">@Model.SystemHealth.CpuUsage%</span>
                         </div>
                         <div class="eng-progress-container">
@@ -120,7 +120,7 @@
 
                     <div class="space-y-2">
                         <div class="flex justify-between items-end">
-                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Memory Usage</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">@Localizer["MemoryUsage"]</span>
                             <span class="text-sm font-black tabular-nums">@Model.SystemHealth.MemoryUsage%</span>
                         </div>
                         <div class="eng-progress-container">
@@ -131,7 +131,7 @@
 
                     <div class="space-y-2">
                         <div class="flex justify-between items-end">
-                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Disk Usage</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">@Localizer["DiskUsage"]</span>
                             <span class="text-sm font-black tabular-nums">@Model.SystemHealth.DiskUsage%</span>
                         </div>
                         <div class="eng-progress-container">
@@ -144,7 +144,7 @@
                 <div class="pt-4 mt-6 border-t border-border/30">
                     <div
                         class="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase opacity-60">
-                        <i class="fas fa-clock text-[8px]"></i> Last check: <span
+                        <i class="fas fa-clock text-[8px]"></i> @Localizer["LastCheck"]: <span
                             class="text-foreground">@Model.SystemHealth.LastCheck.ToString("HH:mm")</span>
                     </div>
                 </div>
@@ -266,7 +266,7 @@
                         <div class="text-right shrink-0">
                             <div class="text-sm font-black text-foreground tabular-nums">@user.PostsCount</div>
                             <div class="text-[8px] font-black text-muted-foreground uppercase tracking-widest opacity-50">
-                                Posts</div>
+                                @Localizer["Posts"]</div>
                         </div>
                     </div>
                 }
@@ -291,7 +291,7 @@
             data: {
                 labels: @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Label))),
                 datasets: [{
-                    label: 'New Users',
+                    label: '@Localizer["NewUsers"]',
                     data: @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Value))),
                     borderColor: primaryColor,
                     backgroundColor: `hsla(${rootStyles.getPropertyValue('--chart-primary').trim()}, 0.1)`,

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MyReviews" xml:space="preserve">
+    <value>مراجعاتي</value>
+  </data>
+  <data name="MyReviewsDescription" xml:space="preserve">
+    <value>إدارة مراجعاتك وملاحظاتك حول السيارات.</value>
+  </data>
+  <data name="WriteNewReview" xml:space="preserve">
+    <value>كتابة مراجعة جديدة</value>
+  </data>
+  <data name="TotalReviews" xml:space="preserve">
+    <value>إجمالي المراجعات</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>متوسط التقييم</value>
+  </data>
+  <data name="TotalViews" xml:space="preserve">
+    <value>إجمالي المشاهدات</value>
+  </data>
+  <data name="HelpfulVotes" xml:space="preserve">
+    <value>تصويتات مفيدة</value>
+  </data>
+  <data name="Views" xml:space="preserve">
+    <value>مشاهدة</value>
+  </data>
+  <data name="Helpful" xml:space="preserve">
+    <value>مفيد</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>شراء مؤكد</value>
+  </data>
+  <data name="Recommended" xml:space="preserve">
+    <value>موصى به</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="ConfirmDeleteReview" xml:space="preserve">
+    <value>هل أنت متأكد من حذف هذه المراجعة؟</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="Quality" xml:space="preserve">
+    <value>الجودة</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>القيمة</value>
+  </data>
+  <data name="Reliability" xml:space="preserve">
+    <value>الاعتمادية</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>الأداء</value>
+  </data>
+  <data name="Comfort" xml:space="preserve">
+    <value>الراحة</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>السابق</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>التالي</value>
+  </data>
+  <data name="NoReviewsYet" xml:space="preserve">
+    <value>لا توجد مراجعات بعد</value>
+  </data>
+  <data name="NoReviewsYetDescription" xml:space="preserve">
+    <value>لم تقم بكتابة أي مراجعة حتى الآن.</value>
+  </data>
+  <data name="WriteFirstReview" xml:space="preserve">
+    <value>اكتب أول مراجعة</value>
+  </data>
+</root>

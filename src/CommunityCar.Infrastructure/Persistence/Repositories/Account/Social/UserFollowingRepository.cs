@@ -42,13 +42,13 @@ public class UserFollowingRepository : BaseRepository<UserFollowing>, IUserFollo
     public async Task<bool> IsFollowingAsync(Guid followerId, Guid followingId)
     {
         return await Context.UserFollowings
-            .AnyAsync(uf => uf.FollowerId == followerId && uf.FollowingId == followingId);
+            .AnyAsync(uf => uf.FollowerId == followerId && uf.FollowedUserId == followingId);
     }
 
     public async Task<UserFollowing?> GetFollowingRelationshipAsync(Guid followerId, Guid followingId)
     {
         return await Context.UserFollowings
-            .FirstOrDefaultAsync(uf => uf.FollowerId == followerId && uf.FollowingId == followingId);
+            .FirstOrDefaultAsync(uf => uf.FollowerId == followerId && uf.FollowedUserId == followingId);
     }
 
     #endregion
@@ -68,7 +68,7 @@ public class UserFollowingRepository : BaseRepository<UserFollowing>, IUserFollo
     public async Task<IEnumerable<UserFollowing>> GetFollowersAsync(Guid userId, int page = 1, int pageSize = 20)
     {
         return await Context.UserFollowings
-            .Where(uf => uf.FollowingId == userId)
+            .Where(uf => uf.FollowedUserId == userId)
             .OrderByDescending(uf => uf.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -79,18 +79,18 @@ public class UserFollowingRepository : BaseRepository<UserFollowing>, IUserFollo
     {
         var user1Following = await Context.UserFollowings
             .Where(uf => uf.FollowerId == userId1)
-            .Select(uf => uf.FollowingId)
+            .Select(uf => uf.FollowedUserId)
             .ToListAsync();
 
         var user2Following = await Context.UserFollowings
             .Where(uf => uf.FollowerId == userId2)
-            .Select(uf => uf.FollowingId)
+            .Select(uf => uf.FollowedUserId)
             .ToListAsync();
 
         var mutualIds = user1Following.Intersect(user2Following).ToList();
 
         return await Context.UserFollowings
-            .Where(uf => uf.FollowerId == userId1 && mutualIds.Contains(uf.FollowingId))
+            .Where(uf => uf.FollowerId == userId1 && mutualIds.Contains(uf.FollowedUserId))
             .ToListAsync();
     }
 
@@ -98,14 +98,14 @@ public class UserFollowingRepository : BaseRepository<UserFollowing>, IUserFollo
     {
         return await Context.UserFollowings
             .Where(uf => uf.FollowerId == userId)
-            .Select(uf => uf.FollowingId)
+            .Select(uf => uf.FollowedUserId)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<Guid>> GetFollowerIdsAsync(Guid userId)
     {
         return await Context.UserFollowings
-            .Where(uf => uf.FollowingId == userId)
+            .Where(uf => uf.FollowedUserId == userId)
             .Select(uf => uf.FollowerId)
             .ToListAsync();
     }
@@ -124,14 +124,14 @@ public class UserFollowingRepository : BaseRepository<UserFollowing>, IUserFollo
     public async Task<int> GetFollowerCountAsync(Guid userId)
     {
         return await Context.UserFollowings
-            .Where(uf => uf.FollowingId == userId)
+            .Where(uf => uf.FollowedUserId == userId)
             .CountAsync();
     }
 
     public async Task<IEnumerable<UserFollowing>> GetRecentFollowersAsync(Guid userId, int count = 10)
     {
         return await Context.UserFollowings
-            .Where(uf => uf.FollowingId == userId)
+            .Where(uf => uf.FollowedUserId == userId)
             .OrderByDescending(uf => uf.CreatedAt)
             .Take(count)
             .ToListAsync();
@@ -155,8 +155,8 @@ public class UserFollowingRepository : BaseRepository<UserFollowing>, IUserFollo
             .ToDictionaryAsync(x => x.UserId, x => x.Count);
 
         var followerCounts = await Context.UserFollowings
-            .Where(uf => userIds.Contains(uf.FollowingId))
-            .GroupBy(uf => uf.FollowingId)
+            .Where(uf => userIds.Contains(uf.FollowedUserId))
+            .GroupBy(uf => uf.FollowedUserId)
             .Select(g => new { UserId = g.Key, Count = g.Count() })
             .ToDictionaryAsync(x => x.UserId, x => x.Count);
 
@@ -181,9 +181,9 @@ public class UserFollowingRepository : BaseRepository<UserFollowing>, IUserFollo
         var userFollowing = await GetFollowingIdsAsync(userId);
         
         var suggestions = await Context.UserFollowings
-            .Where(uf => userFollowing.Contains(uf.FollowerId) && uf.FollowingId != userId)
-            .Where(uf => !userFollowing.Contains(uf.FollowingId))
-            .GroupBy(uf => uf.FollowingId)
+            .Where(uf => userFollowing.Contains(uf.FollowerId) && uf.FollowedUserId != userId)
+            .Where(uf => !userFollowing.Contains(uf.FollowedUserId))
+            .GroupBy(uf => uf.FollowedUserId)
             .OrderByDescending(g => g.Count())
             .Take(count)
             .Select(g => g.Key)

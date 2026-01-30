@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AnalyticsDashboard" xml:space="preserve"><value>Analytics Dashboard</value></data>
+  <data name="NewUsers" xml:space="preserve"><value>New Users</value></data>
+  <data name="VsLastPeriod" xml:space="preserve"><value>vs last period</value></data>
+  <data name="ActiveUsers" xml:space="preserve"><value>Active Users</value></data>
+  <data name="RetentionRate" xml:space="preserve"><value>Retention Rate</value></data>
+  <data name="AvgSession" xml:space="preserve"><value>Avg Session</value></data>
+  <data name="UserGrowthTrend" xml:space="preserve"><value>User Growth Trend</value></data>
+  <data name="UserActivity" xml:space="preserve"><value>User Activity</value></data>
+  <data name="Posts" xml:space="preserve"><value>Posts</value></data>
+  <data name="Questions" xml:space="preserve"><value>Questions</value></data>
+  <data name="Answers" xml:space="preserve"><value>Answers</value></data>
+  <data name="Reviews" xml:space="preserve"><value>Reviews</value></data>
+  <data name="Stories" xml:space="preserve"><value>Stories</value></data>
+  <data name="UserEngagement" xml:space="preserve"><value>User Engagement</value></data>
+  <data name="PostsCreated" xml:space="preserve"><value>Posts Created</value></data>
+  <data name="QuestionsAsked" xml:space="preserve"><value>Questions Asked</value></data>
+  <data name="AnswersGiven" xml:space="preserve"><value>Answers Given</value></data>
+  <data name="ReviewsWritten" xml:space="preserve"><value>Reviews Written</value></data>
+  <data name="UserDemographics" xml:space="preserve"><value>User Demographics</value></data>
+  <data name="MostActiveDevice" xml:space="preserve"><value>Most Active Device</value></data>
+  <data name="PrimaryBrowser" xml:space="preserve"><value>Primary Browser</value></data>
+  <data name="TopLocation" xml:space="preserve"><value>Top Location</value></data>
+  <data name="MostVisitedArea" xml:space="preserve"><value>Most Visited Area</value></data>
+  <data name="TotalPageViews" xml:space="preserve"><value>Total Page Views</value></data>
+  <data name="TimeOnSite" xml:space="preserve"><value>Time on Site (Avg)</value></data>
+</root>

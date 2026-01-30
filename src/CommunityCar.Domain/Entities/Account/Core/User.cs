@@ -653,7 +653,7 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
 
     public void ExpireInactiveSessions(TimeSpan timeout)
     {
-        var expiredSessions = Sessions.Where(s => s.IsActive && s.IsExpired(timeout));
+        var expiredSessions = Sessions.Where(s => s.IsActive && s.HasTimedOut(timeout));
         foreach (var session in expiredSessions)
         {
             session.ExpireSession();

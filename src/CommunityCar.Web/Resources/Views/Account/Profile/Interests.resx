@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PageTitle" xml:space="preserve"><value>My Interests</value></data>
+  <data name="MyInterests" xml:space="preserve"><value>My Interests</value></data>
+  <data name="InterestsSubtitle" xml:space="preserve"><value>Discover and manage your automotive interests</value></data>
+  <data name="TopInterests" xml:space="preserve"><value>Your Top Interests</value></data>
+  <data name="TopInterestsSubtitle" xml:space="preserve"><value>Based on your activity and engagement</value></data>
+  <data name="InterestAnalytics" xml:space="preserve"><value>Interest Analytics</value></data>
+  <data name="TotalInterests" xml:space="preserve"><value>Total Interests</value></data>
+  <data name="TopCategory" xml:space="preserve"><value>Top Category</value></data>
+  <data name="Engagement" xml:space="preserve"><value>Engagement</value></data>
+  <data name="LastUpdated" xml:space="preserve"><value>Last Updated</value></data>
+  <data name="Suggested" xml:space="preserve"><value>Suggested</value></data>
+  <data name="Categories" xml:space="preserve"><value>Categories</value></data>
+  <data name="Automotive" xml:space="preserve"><value>Automotive</value></data>
+  <data name="Performance" xml:space="preserve"><value>Performance</value></data>
+  <data name="Restoration" xml:space="preserve"><value>Restoration</value></data>
+  <data name="Community" xml:space="preserve"><value>Community</value></data>
+</root>

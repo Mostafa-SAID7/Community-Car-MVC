@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PageTitle" xml:space="preserve"><value>أوسمتي</value></data>
+  <data name="MyBadges" xml:space="preserve"><value>أوسمتي</value></data>
+  <data name="BadgesSubtitle" xml:space="preserve"><value>استعرض إنجازاتك وبطولاتك في عالم السيارات</value></data>
+  <data name="TotalBadges" xml:space="preserve"><value>إجمالي الأوسمة</value></data>
+  <data name="RareBadges" xml:space="preserve"><value>أوسمة نادرة</value></data>
+  <data name="Recent" xml:space="preserve"><value>الأحدث</value></data>
+  <data name="Progress" xml:space="preserve"><value>التقدم</value></data>
+  <data name="EarnedBadges" xml:space="preserve"><value>الأوسمة المكتسبة</value></data>
+  <data name="NoBadgesTitle" xml:space="preserve"><value>لم تكتسب أي أوسمة بعد</value></data>
+  <data name="NoBadgesSubtitle" xml:space="preserve"><value>ابدأ بالتفاعل مع المجتمع لتحصل على وسامك الأول!</value></data>
+  <data name="GetStarted" xml:space="preserve"><value>ابدأ الآن</value></data>
+  <data name="InProgress" xml:space="preserve"><value>قيد التقدم</value></data>
+  <data name="Categories" xml:space="preserve"><value>الفئات</value></data>
+  <data name="Community" xml:space="preserve"><value>المجتمع</value></data>
+  <data name="Automotive" xml:space="preserve"><value>عالم السيارات</value></data>
+  <data name="Content" xml:space="preserve"><value>المحتوى</value></data>
+  <data name="Special" xml:space="preserve"><value>خاص</value></data>
+  <data name="BadgesCount" xml:space="preserve"><value>{0} أوسمة</value></data>
+  <data name="RecentActivity" xml:space="preserve"><value>النشاط الأخير</value></data>
+  <data name="NoRecentActivity" xml:space="preserve"><value>لا يوجد نشاط أخير للأوسمة</value></data>
+</root>

@@ -5,6 +5,9 @@ namespace CommunityCar.Domain.Entities.Account.Profile;
 public class UserInterest : BaseEntity
 {
     public Guid UserId { get; private set; }
+    public Guid InterestId { get; private set; }
+    public string InterestName { get; private set; } = string.Empty;
+    public int Priority { get; private set; }
     public string Category { get; private set; } = string.Empty;
     public string SubCategory { get; private set; } = string.Empty;
     public string InterestType { get; private set; } = string.Empty; // CarMake, CarModel, Topic, Tag, etc.
@@ -14,6 +17,31 @@ public class UserInterest : BaseEntity
     public DateTime LastInteraction { get; private set; }
     public bool IsActive { get; private set; } = true;
     public string? Source { get; private set; } // How this interest was detected
+
+    public static UserInterest Create(Guid userId, Guid interestId, int priority = 0)
+    {
+        return new UserInterest
+        {
+            UserId = userId,
+            InterestId = interestId,
+            Priority = priority,
+            LastInteraction = DateTime.UtcNow,
+            InteractionCount = 1,
+            Score = 1.0
+        };
+    }
+
+    public void UpdatePriority(int priority)
+    {
+        Priority = priority;
+        Audit(UpdatedBy);
+    }
+
+    public void UpdateCategory(string category)
+    {
+        Category = category;
+        Audit(UpdatedBy);
+    }
 
     public UserInterest(
         Guid userId,

@@ -1,0 +1,79 @@
+@using Microsoft.Extensions.Localization
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    // Get profile data from ViewBag or Model
+    var profileData = ViewBag.ProfileData as CommunityCar.Application.Features.Account.ViewModels.Core.ProfileIndexVM;
+    var fullName = profileData?.FullName ?? ViewBag.FullName as string ?? "User Profile";
+    var email = profileData?.Email ?? ViewBag.Email as string ?? "user@example.com";
+    var profilePictureUrl = profileData?.ProfilePictureUrl ?? ViewBag.ProfilePictureUrl as string;
+    var createdAt = profileData?.CreatedAt ?? ViewBag.CreatedAt as DateTime? ?? DateTime.Now;
+    var postsCount = profileData?.PostsCount ?? ViewBag.PostsCount as int? ?? 0;
+    var commentsCount = profileData?.CommentsCount ?? ViewBag.CommentsCount as int? ?? 0;
+    var likesReceived = profileData?.LikesReceived ?? ViewBag.LikesReceived as int? ?? 0;
+}
+
+<!-- Premium Profile Hero -->
+<div class="relative group/hero -mx-3 sm:-mx-4 md:-mx-6 lg:-mx-8 -mt-3 sm:-mt-4 md:-mt-6 lg:-mt-8 mb-10">
+    <!-- Banner -->
+    <div class="h-60 sm:h-72 bg-gradient-to-br from-primary via-primary/80 to-indigo-600 shadow-2xl relative overflow-hidden sm:rounded-b-3xl">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        
+        <!-- Quick Actions Floating -->
+        <div class="absolute top-6 right-6 flex gap-3">
+            <a href="/profile/settings" class="bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-xl active:scale-95 flex items-center gap-2">
+                <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                @Localizer["Settings"]
+            </a>
+        </div>
+    </div>
+
+    <!-- Float Profile Info -->
+    <div class="px-6 md:px-12 -mt-16 md:-mt-20 relative flex flex-col md:flex-row items-end gap-6 md:gap-8">
+        <div class="relative group/avatar shrink-0">
+            <div class="w-40 h-40 rounded-3xl bg-background p-1.5 shadow-2xl ring-1 ring-border/50">
+                <div class="w-full h-full rounded-2xl overflow-hidden border-2 border-border/50">
+                    <img src="@(profilePictureUrl ?? "/images/default-avatar.png")" alt="@fullName" class="w-full h-full object-cover group-hover/avatar:scale-110 transition-transform duration-700" />
+                </div>
+            </div>
+            <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-green-500 border-4 border-background rounded-full shadow-lg ring-1 ring-black/5 flex items-center justify-center text-white" title="Active Enthusiast">
+                <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
+            </div>
+        </div>
+
+        <div class="flex-1 pb-4">
+            <div class="flex items-center gap-3">
+                <h2 class="text-4xl font-black text-foreground tracking-tighter">@fullName</h2>
+                <span class="inline-flex px-3 py-1 rounded-2xl bg-primary/10 text-primary border border-primary/20 text-[10px] font-black uppercase tracking-widest">@Localizer["Enthusiast"]</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-6 mt-3 text-muted-foreground font-bold text-sm">
+                <div class="flex items-center gap-2 transition-colors hover:text-primary cursor-default">
+                    <i data-lucide="at-sign" class="w-4 h-4 opacity-50"></i>
+                    @email
+                </div>
+                <div class="flex items-center gap-2 opacity-60">
+                    <i data-lucide="calendar" class="w-4 h-4 opacity-50"></i>
+                    @Localizer["Joined"] @createdAt.ToString("MMM yyyy")
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Bar (Hidden on mobile) -->
+        <div class="hidden lg:flex items-center gap-8 bg-card/60 backdrop-blur-2xl border border-white/5 p-6 px-10 rounded-3xl shadow-2xl mb-4">
+            <div class="text-center group/stat cursor-pointer">
+                <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">@postsCount</div>
+                <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">@Localizer["Posts"]</div>
+            </div>
+            <div class="w-px h-8 bg-border/20"></div>
+            <div class="text-center group/stat cursor-pointer">
+                <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">@commentsCount</div>
+                <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">@Localizer["Comments"]</div>
+            </div>
+            <div class="w-px h-8 bg-border/20"></div>
+            <div class="text-center group/stat cursor-pointer">
+                <div class="text-2xl font-black text-foreground group-hover/stat:text-primary transition-colors">@likesReceived</div>
+                <div class="text-[9px] font-black uppercase text-muted-foreground tracking-widest opacity-60">@Localizer["Likes"]</div>
+            </div>
+        </div>
+    </div>
+</div>

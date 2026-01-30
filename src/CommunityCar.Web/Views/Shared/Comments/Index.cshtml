@@ -1,0 +1,61 @@
+@model IEnumerable<CommunityCar.Application.Features.Interactions.ViewModels.CommentVM>
+@{
+    ViewData["Title"] = "Comments";
+    var entityId = ViewBag.EntityId?.ToString() ?? "";
+    var entityType = ViewBag.EntityType?.ToString() ?? "";
+    var totalComments = Model?.Count() ?? 0;
+    var displayedComments = Model?.Take(3) ?? Enumerable.Empty<CommunityCar.Application.Features.Interactions.ViewModels.CommentVM>();
+    var hasMoreComments = totalComments > 3;
+}
+
+<div class="comments-section space-y-8 comments-section-container p-6 md:p-8" id="comments-@entityId" data-entity-id="@entityId" data-entity-type="@entityType">
+    <!-- Comments Header -->
+    <div class="flex items-center justify-between">
+        <h3 class="text-lg font-black text-foreground tracking-tight uppercase">
+            <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">Discussion</span>
+            <span class="block text-xl">@totalComments @(totalComments == 1 ? "Comment" : "Comments")</span>
+        </h3>
+    </div>
+
+    <!-- Comment Form (Hidden by default) -->
+    <div class="comment-form-wrap hidden" data-entity-id="@entityId">
+        @await Html.PartialAsync("~/Views/Shared/Comments/_CommentForm.cshtml")
+    </div>
+
+    <!-- Comments List -->
+    <div class="comments-list-container space-y-6">
+        @await Html.PartialAsync("~/Views/Shared/Comments/_CommentsList.cshtml", displayedComments)
+        
+        <!-- Load More Button -->
+        @if (hasMoreComments)
+        {
+            <div class="text-center pt-4">
+                <button class="inline-flex items-center gap-3 bg-muted/30 backdrop-blur-md border border-border/50 px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-foreground hover:bg-muted/50 hover:border-border transition-all shadow-lg group load-initial-comments-btn" 
+                        data-entity-id="@entityId" 
+                        data-entity-type="@entityType"
+                        data-page="1"
+                        data-partial-url="@Url.Action("GetPartial", "Comments")">
+                    <i data-lucide="chevron-down" class="w-4 h-4 group-hover:translate-y-0.5 transition-transform"></i>
+                    <span>View @(totalComments - 3) More @(totalComments - 3 == 1 ? "Comment" : "Comments")</span>
+                </button>
+            </div>
+        }
+    </div>
+
+    <!-- Standard Load More (for pagination beyond initial load) -->
+    @if (ViewBag.HasMore == true)
+    {
+        <div class="text-center hidden load-more-container">
+            <button class="inline-flex items-center gap-3 bg-muted/30 backdrop-blur-md border border-border/50 px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-foreground hover:bg-muted/50 hover:border-border transition-all shadow-lg group load-more-comments-btn" 
+                    data-entity-id="@entityId" 
+                    data-entity-type="@entityType"
+                    data-page="@(ViewBag.Page + 1)"
+                    data-partial-url="@Url.Action("GetPartial", "Comments")">
+                <i data-lucide="chevron-down" class="w-4 h-4 group-hover:translate-y-0.5 transition-transform"></i>
+                Load More Comments
+            </button>
+        </div>
+    }
+</div>
+
+@* Script externalized to wwwroot/js/comments.js *@

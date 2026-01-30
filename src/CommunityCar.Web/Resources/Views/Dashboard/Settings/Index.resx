@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="DashboardSettings" xml:space="preserve"><value>Dashboard Settings</value></data>
+  <data name="Categories" xml:space="preserve"><value>Categories</value></data>
+  <data name="AllSettings" xml:space="preserve"><value>All Settings</value></data>
+  <data name="CategorySettings" xml:space="preserve"><value>{0} Settings</value></data>
+  <data name="CategoryLabel" xml:space="preserve"><value>Category</value></data>
+  <data name="Update" xml:space="preserve"><value>Update</value></data>
+  <data name="Reset" xml:space="preserve"><value>Reset</value></data>
+  <data name="ResetAllSettings" xml:space="preserve"><value>Reset All Settings</value></data>
+  <data name="ResetAllDescription" xml:space="preserve"><value>Reset all settings to their default values</value></data>
+  <data name="NoSettingsFound" xml:space="preserve"><value>No Settings Found</value></data>
+  <data name="NoSettingsForCategory" xml:space="preserve"><value>No settings found for the '{0}' category.</value></data>
+  <data name="NoSettingsConfigured" xml:space="preserve"><value>No settings have been configured yet.</value></data>
+</root>

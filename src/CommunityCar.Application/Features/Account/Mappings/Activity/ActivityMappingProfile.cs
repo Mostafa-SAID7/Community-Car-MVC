@@ -1,7 +1,7 @@
 using AutoMapper;
 
 using CommunityCar.Application.Features.Account.ViewModels.Activity;
-using CommunityCar.Domain.Entities.Account.Analytics;
+using CommunityCar.Domain.Entities.Account.Core;
 
 namespace CommunityCar.Application.Features.Account.Mappings.Activity;
 

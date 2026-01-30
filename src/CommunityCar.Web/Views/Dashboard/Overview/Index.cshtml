@@ -1,6 +1,7 @@
 @model CommunityCar.Application.Features.Dashboard.ViewModels.OverviewVM
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Dashboard Overview";
+    ViewData["Title"] = Localizer["DashboardOverview"];
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
@@ -24,7 +25,7 @@
                 <div class="eng-stat-label">@SharedLocalizer["TotalUsers"]</div>
                 <div class="eng-stat-delta text-green-500">
                     <i class="fas fa-arrow-up mr-1 text-[8px]"></i> +@Model.Stats.GrowthRate% <span
-                        class="opacity-60 font-bold">this month</span>
+                        class="opacity-60 font-bold">@Localizer["ThisMonth"]</span>
                 </div>
             </div>
         </div>
@@ -37,7 +38,7 @@
                 <div class="eng-stat-value">@Model.Stats.TotalPosts.ToString("N0")</div>
                 <div class="eng-stat-label">@SharedLocalizer["TotalPosts"]</div>
                 <div class="eng-stat-delta text-muted-foreground opacity-60">
-                    Active: <span class="text-foreground">@Model.Stats.ActiveUsersToday</span>
+                    @Localizer["Active"]: <span class="text-foreground">@Model.Stats.ActiveUsersToday</span>
                 </div>
             </div>
         </div>
@@ -50,7 +51,7 @@
                 <div class="eng-stat-value">@Model.Stats.TotalComments.ToString("N0")</div>
                 <div class="eng-stat-label">@SharedLocalizer["TotalComments"]</div>
                 <div class="eng-stat-delta text-indigo-500">
-                    Engage: <span class="font-bold">@Model.Stats.EngagementRate%</span>
+                    @Localizer["Engage"]: <span class="font-bold">@Model.Stats.EngagementRate%</span>
                 </div>
             </div>
         </div>
@@ -73,7 +74,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 eng-card overflow-hidden">
             <div class="eng-card-header">
-                <h5 class="eng-card-title">User Growth Trend</h5>
+                <h5 class="eng-card-title">@Localizer["UserGrowthTrend"]</h5>
                 <div class="inline-flex p-1 bg-background/50 rounded-lg border border-border/40 shadow-inner">
                     <button type="button"
                         class="px-3 py-1 text-[10px] font-black rounded-md transition-all active bg-primary text-primary-foreground shadow-sm"
@@ -89,31 +90,31 @@
             <div class="p-6">
                 <canvas id="userGrowthChart" class="w-full h-[300px]"
                         data-labels='@Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Label)))'
-                        data-datasets='[{"label": "New Users", "data": @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Value)))}]'
+                        data-datasets='[{"label": "@Localizer["NewUsers"]", "data": @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Value)))}]'
                         data-show-points="true"></canvas>
             </div>
         </div>
 
         <div class="eng-card overflow-hidden">
             <div class="eng-card-header">
-                <h5 class="eng-card-title">System Monitoring</h5>
+                <h5 class="eng-card-title">@Localizer["SystemMonitoring"]</h5>
             </div>
             <div class="p-6 space-y-6">
                 <div class="flex items-center justify-between">
-                    <h6 class="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Status</h6>
+                    <h6 class="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">@Localizer["Status"]</h6>
                     <span
                         class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-current/20 @(Model.SystemHealth.IsHealthy ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500 animate-pulse")">
                         <div
                             class="w-1.5 h-1.5 rounded-full bg-current @(Model.SystemHealth.IsHealthy ? "" : "animate-ping")">
                         </div>
-                        @(Model.SystemHealth.IsHealthy ? "Healthy" : "Issues Detected")
+                        @(Model.SystemHealth.IsHealthy ? Localizer["Healthy"] : Localizer["IssuesDetected"])
                     </span>
                 </div>
 
                 <div class="space-y-4">
                     <div class="space-y-2">
                         <div class="flex justify-between items-end">
-                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">CPU Usage</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">@Localizer["CpuUsage"]</span>
                             <span class="text-sm font-black tabular-nums">@Model.SystemHealth.CpuUsage%</span>
                         </div>
                         <div class="eng-progress-container">
@@ -124,7 +125,7 @@
 
                     <div class="space-y-2">
                         <div class="flex justify-between items-end">
-                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Memory Usage</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">@Localizer["MemoryUsage"]</span>
                             <span class="text-sm font-black tabular-nums">@Model.SystemHealth.MemoryUsage%</span>
                         </div>
                         <div class="eng-progress-container">
@@ -135,7 +136,7 @@
 
                     <div class="space-y-2">
                         <div class="flex justify-between items-end">
-                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Disk Usage</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">@Localizer["DiskUsage"]</span>
                             <span class="text-sm font-black tabular-nums">@Model.SystemHealth.DiskUsage%</span>
                         </div>
                         <div class="eng-progress-container">
@@ -148,7 +149,7 @@
                 <div class="pt-4 mt-6 border-t border-border/30">
                     <div
                         class="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase opacity-60">
-                        <i class="fas fa-clock text-[8px]"></i> Last check: <span
+                        <i class="fas fa-clock text-[8px]"></i> @Localizer["LastCheck"]: <span
                             class="text-foreground">@Model.SystemHealth.LastCheck.ToString("HH:mm")</span>
                     </div>
                 </div>
@@ -161,7 +162,7 @@
         <div
             class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-md overflow-hidden transition-all hover:border-primary/10">
             <div class="p-4 border-b border-border/50 bg-muted/20 flex justify-between items-center px-6">
-                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">Recent Activity</h5>
+                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">@Localizer["RecentActivity"]</h5>
                 <button class="p-1.5 rounded-lg hover:bg-background/50 hover:text-primary transition-all group/refresh"
                     data-action="refresh-activity">
                     <i class="fas fa-sync-alt text-xs group-hover:rotate-180 transition-transform duration-500"></i>
@@ -194,7 +195,7 @@
         <div
             class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-md overflow-hidden transition-all hover:border-primary/10">
             <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
-                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">Top Content</h5>
+                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">@Localizer["TopContent"]</h5>
             </div>
             <div class="divide-y divide-border/30">
                 @foreach (var content in Model.TopContent)
@@ -230,7 +231,7 @@
         <div
             class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-md overflow-hidden transition-all hover:border-primary/10">
             <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
-                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">Active Users</h5>
+                <h5 class="text-xs font-black uppercase tracking-widest text-foreground">@Localizer["ActiveUsers"]</h5>
             </div>
             <div class="divide-y divide-border/30">
                 @foreach (var user in Model.ActiveUsers)
@@ -266,7 +267,7 @@
                         <div class="text-right shrink-0">
                             <div class="text-sm font-black text-foreground tabular-nums">@user.PostsCount</div>
                             <div class="text-[8px] font-black text-muted-foreground uppercase tracking-widest opacity-50">
-                                Posts</div>
+                                @Localizer["Posts"]</div>
                         </div>
                     </div>
                 }

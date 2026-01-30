@@ -49,7 +49,7 @@ public class UserManagementActionRepository : BaseRepository<UserManagementActio
 
     public async Task LogManagementActionAsync(Guid managerId, Guid targetUserId, string actionType, string description, Dictionary<string, object>? metadata = null)
     {
-        var action = UserManagementAction.Create(managerId, targetUserId, actionType, description, metadata);
+        var action = UserManagementAction.Create(targetUserId, managerId, actionType, description);
         await AddAsync(action);
     }
 
@@ -93,10 +93,12 @@ public class UserManagementActionRepository : BaseRepository<UserManagementActio
             query = query.Where(uma => uma.CreatedAt >= fromDate.Value);
         }
 
-        return await query
+        var stats = await query
             .GroupBy(uma => uma.ActionType)
             .Select(g => new { ActionType = g.Key, Count = g.Count() })
-            .ToDictionaryAsync(x => x.ActionType, x => x.Count);
+            .ToListAsync();
+
+        return stats.ToDictionary(x => x.ActionType, x => x.Count);
     }
 
     public async Task<IEnumerable<UserManagementAction>> GetRecentActionsAsync(int count = 20)

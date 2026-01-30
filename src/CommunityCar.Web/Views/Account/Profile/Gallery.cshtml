@@ -1,0 +1,336 @@
+@using CommunityCar.Application.Features.Account.ViewModels.Media
+@using CommunityCar.Application.Features.Account.ViewModels.Core
+@using CommunityCar.Domain.Entities.Account
+@using CommunityCar.Domain.Enums.Account
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"];
+    var currentUserId = ViewBag.CurrentUserId as Guid?;
+    var galleryItems = ViewBag.GalleryItems as IEnumerable<UserGalleryItemVM> ?? new List<UserGalleryItemVM>();
+    var gamificationStats = ViewBag.GamificationStats as ProfileStatsVM;
+}
+
+@await Html.PartialAsync("_ProfileHeader")
+
+@await Html.PartialAsync("_ProfileNavigation")
+
+<div class="space-y-8 animate-in fade-in duration-700">
+    <!-- Gallery Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+            <h1 class="text-2xl font-black text-foreground tracking-tight flex items-center gap-3">
+                <i data-lucide="image" class="w-6 h-6 text-primary"></i>
+                @Localizer["MyGallery"]
+            </h1>
+            <p class="text-sm text-muted-foreground mt-1">@Localizer["GallerySubtitle"]</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="openUploadModal()" class="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-sm py-3 px-6 rounded-xl transition-all shadow-lg active:scale-95">
+                <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                @Localizer["UploadMedia"]
+            </button>
+            <a href="/profile/settings" class="inline-flex items-center justify-center bg-background border border-border hover:border-primary text-foreground hover:text-primary font-bold text-sm py-3 px-6 rounded-xl transition-all">
+                <i data-lucide="settings" class="w-4 h-4 mr-2"></i>
+                @Localizer["PrivacySettings"]
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    @if (gamificationStats != null)
+    {
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border border-blue-500/20 rounded-2xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-600 font-bold text-sm">@Localizer["TotalPoints"]</p>
+                        <p class="text-2xl font-black text-foreground">@gamificationStats.TotalPoints.ToString("N0")</p>
+                    </div>
+                    <i data-lucide="star" class="w-8 h-8 text-blue-500"></i>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-green-500/10 to-green-600/10 border border-green-500/20 rounded-2xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-600 font-bold text-sm">@Localizer["Level"]</p>
+                        <p class="text-2xl font-black text-foreground">@gamificationStats.Level</p>
+                    </div>
+                    <i data-lucide="trophy" class="w-8 h-8 text-green-500"></i>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border border-purple-500/20 rounded-2xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-600 font-bold text-sm">@Localizer["Badges"]</p>
+                        <p class="text-2xl font-black text-foreground">@gamificationStats.TotalBadges</p>
+                    </div>
+                    <i data-lucide="award" class="w-8 h-8 text-purple-500"></i>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border border-orange-500/20 rounded-2xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-orange-600 font-bold text-sm">@Localizer["GalleryItems"]</p>
+                        <p class="text-2xl font-black text-foreground">@galleryItems.Count()</p>
+                    </div>
+                    <i data-lucide="image" class="w-8 h-8 text-orange-500"></i>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Filter Bar -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 bg-background border border-border rounded-2xl">
+        <div class="flex items-center gap-4">
+            <select id="mediaTypeFilter" class="px-4 py-2 bg-background border border-border rounded-lg text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/20">
+                <option value="">@Localizer["AllMediaTypes"]</option>
+                <option value="1">@Localizer["Images"]</option>
+                <option value="2">@Localizer["Videos"]</option>
+                <option value="3">@Localizer["Audio"]</option>
+            </select>
+            <select id="visibilityFilter" class="px-4 py-2 bg-background border border-border rounded-lg text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-primary/20">
+                <option value="">@Localizer["AllItems"]</option>
+                <option value="true">@Localizer["Public"]</option>
+                <option value="false">@Localizer["Private"]</option>
+            </select>
+        </div>
+        <div class="flex items-center gap-2">
+            <button data-action="toggle-view" data-view="grid" id="gridViewBtn" class="p-2 bg-primary text-primary-foreground rounded-lg transition-all">
+                <i data-lucide="grid-3x3" class="w-4 h-4"></i>
+            </button>
+            <button data-action="toggle-view" data-view="list" id="listViewBtn" class="p-2 bg-background border border-border text-muted-foreground hover:text-foreground rounded-lg transition-all">
+                <i data-lucide="list" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Gallery Skeleton (Hidden by default) -->
+    <div id="gallery-skeleton" class="hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            @for (int i = 0; i < 8; i++)
+            {
+                <skeleton type="Card" />
+            }
+        </div>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div id="galleryContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @if (galleryItems.Any())
+        {
+            @foreach (var item in galleryItems)
+            {
+                <div class="gallery-item bg-background border border-border rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 group" 
+                     data-media-type="@((int)item.MediaType)" 
+                     data-is-public="@item.IsPublic.ToString().ToLower()">
+                    
+                    <!-- Media Preview -->
+                    <div class="relative aspect-square overflow-hidden">
+                        @if (item.MediaType == MediaType.Image)
+                        {
+                            <img src="@(item.ThumbnailUrl ?? item.MediaUrl)" alt="@item.Title" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 cursor-pointer" 
+                                 data-action="open-media" data-item-id="@item.Id" />
+                        }
+                        else if (item.MediaType == MediaType.Video)
+                        {
+                            <div class="w-full h-full bg-gradient-to-br from-red-500/20 to-red-600/20 flex items-center justify-center cursor-pointer" 
+                                 data-action="open-media" data-item-id="@item.Id">
+                                <i data-lucide="play-circle" class="w-16 h-16 text-red-500"></i>
+                            </div>
+                        }
+                        else if (item.MediaType == MediaType.Audio)
+                        {
+                            <div class="w-full h-full bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center cursor-pointer" 
+                                 data-action="open-media" data-item-id="@item.Id">
+                                <i data-lucide="music" class="w-16 h-16 text-purple-500"></i>
+                            </div>
+                        }
+                        
+                        <!-- Overlay Icons -->
+                        <div class="absolute top-3 right-3 flex items-center gap-2">
+                            @if (item.IsFeatured)
+                            {
+                                <span class="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                    <i data-lucide="star" class="w-3 h-3"></i>
+                                </span>
+                            }
+                            <span class="bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                @if (item.IsPublic)
+                                {
+                                    <i data-lucide="globe" class="w-3 h-3"></i>
+                                }
+                                else
+                                {
+                                    <i data-lucide="lock" class="w-3 h-3"></i>
+                                }
+                            </span>
+                        </div>
+                        
+                        <!-- Stats Overlay -->
+                        <div class="absolute bottom-3 left-3 flex items-center gap-3">
+                            <span class="bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                                <i data-lucide="eye" class="w-3 h-3"></i>
+                                @item.ViewCount
+                            </span>
+                            <span class="bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                                <i data-lucide="heart" class="w-3 h-3"></i>
+                                @item.LikeCount
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-4">
+                        <h3 class="font-bold text-foreground mb-2 line-clamp-2">@item.Title</h3>
+                        @if (!string.IsNullOrEmpty(item.Description))
+                        {
+                            <p class="text-sm text-muted-foreground mb-3 line-clamp-2">@item.Description</p>
+                        }
+                        
+                        <!-- Tags -->
+                        @if (item.Tags.Any())
+                        {
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                @foreach (var tag in item.Tags.Take(3))
+                                {
+                                    <span class="bg-primary/10 text-primary text-xs font-medium px-2 py-1 rounded-full">
+                                        #@tag
+                                    </span>
+                                }
+                                @if (item.Tags.Count > 3)
+                                {
+                                    <span class="text-xs text-muted-foreground">+@(item.Tags.Count - 3) more</span>
+                                }
+                            </div>
+                        }
+                        
+                        <!-- Footer -->
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-muted-foreground">@item.TimeAgo</span>
+                            <div class="flex items-center gap-2">
+                                <button data-action="toggle-visibility" data-item-id="@item.Id" class="text-muted-foreground hover:text-foreground transition-colors">
+                                    @if (item.IsPublic)
+                                    {
+                                        <i data-lucide="eye" class="w-4 h-4"></i>
+                                    }
+                                    else
+                                    {
+                                        <i data-lucide="eye-off" class="w-4 h-4"></i>
+                                    }
+                                </button>
+                                <button data-action="edit-item" data-item-id="@item.Id" class="text-muted-foreground hover:text-primary transition-colors">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                                <button data-action="delete-item" data-item-id="@item.Id" class="text-muted-foreground hover:text-red-500 transition-colors">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-span-full text-center py-16">
+                <div class="max-w-md mx-auto">
+                    <i data-lucide="image-off" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
+                    <h3 class="text-xl font-bold text-foreground mb-2">@Localizer["NoItemsTitle"]</h3>
+                    <p class="text-muted-foreground mb-6">@Localizer["NoItemsMessage"]</p>
+                    <button data-action="open-upload" class="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-sm py-3 px-6 rounded-xl transition-all">
+                        <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                        @Localizer["UploadFirstItem"]
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Upload Modal -->
+<div id="uploadModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-background border border-border rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b border-border">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-foreground">@Localizer["UploadMediaTitle"]</h2>
+                <button data-action="close-upload" class="text-muted-foreground hover:text-foreground transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        
+        <form asp-action="UploadGalleryItem" method="post" enctype="multipart/form-data" class="p-6 space-y-6">
+            <!-- File Upload -->
+            <div class="space-y-2">
+                <label class="block text-sm font-bold text-foreground">@Localizer["MediaFile"]</label>
+                <div class="border-2 border-dashed border-border rounded-xl p-8 text-center hover:border-primary transition-colors">
+                    <input type="file" name="mediaFile" id="mediaFile" accept="image/*,video/*,audio/*" class="hidden" required />
+                    <div id="uploadArea" class="cursor-pointer">
+                        <i data-lucide="upload" class="w-12 h-12 text-muted-foreground mx-auto mb-4"></i>
+                        <p class="text-foreground font-medium mb-2">@Localizer["UploadPrompt"]</p>
+                        <p class="text-sm text-muted-foreground">@Localizer["UploadLimits"]</p>
+                    </div>
+                    <div id="filePreview" class="hidden mt-4"></div>
+                </div>
+            </div>
+            
+            <!-- Title -->
+            <div class="space-y-2">
+                <label class="block text-sm font-bold text-foreground">@Localizer["Title"]</label>
+                <input type="text" name="Title" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="@Localizer["TitlePlaceholder"]" required />
+            </div>
+            
+            <!-- Description -->
+            <div class="space-y-2">
+                <label class="block text-sm font-bold text-foreground">@Localizer["DescriptionOptional"]</label>
+                <textarea name="Description" rows="3" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none" placeholder="@Localizer["DescriptionPlaceholder"]"></textarea>
+            </div>
+            
+            <!-- Tags -->
+            <div class="space-y-2">
+                <label class="block text-sm font-bold text-foreground">@Localizer["Tags"]</label>
+                <input type="text" id="tagsInput" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="@Localizer["TagsPlaceholder"]" />
+                <input type="hidden" name="Tags" id="tagsHidden" />
+                <div id="tagsList" class="flex flex-wrap gap-2 mt-2"></div>
+            </div>
+            
+            <!-- Privacy -->
+            <div class="space-y-2">
+                <label class="block text-sm font-bold text-foreground">@Localizer["Privacy"]</label>
+                <div class="flex items-center gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="IsPublic" value="true" checked class="text-primary focus:ring-primary" />
+                        <span class="text-foreground">@Localizer["Public"]</span>
+                        <i data-lucide="globe" class="w-4 h-4 text-muted-foreground"></i>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="IsPublic" value="false" class="text-primary focus:ring-primary" />
+                        <span class="text-foreground">@Localizer["Private"]</span>
+                        <i data-lucide="lock" class="w-4 h-4 text-muted-foreground"></i>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="flex items-center justify-end gap-4 pt-4 border-t border-border">
+                <button type="button" data-action="close-upload" class="px-6 py-3 text-muted-foreground hover:text-foreground font-medium transition-colors">
+                    @Localizer["Cancel"]
+                </button>
+                <button type="submit" class="bg-primary text-primary-foreground hover:bg-primary/90 font-bold px-6 py-3 rounded-xl transition-all">
+                    @Localizer["UploadMedia"]
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize skeleton loading
+            Skeleton.initPageLoad('gallery-skeleton', 'galleryContainer');
+        });
+    </script>
+    <script src="~/js/gallery.js"></script>
+}

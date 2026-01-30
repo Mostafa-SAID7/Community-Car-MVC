@@ -125,3 +125,53 @@ public class ConsentVM
     public DateTime AcceptedAt { get; set; }
     public string IpAddress { get; set; } = string.Empty;
 }
+
+public class UserManagementActionVM
+{
+    public Guid Id { get; set; }
+    public Guid UserId { get; set; }
+    public string Action { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty; // Added
+    public string Reason { get; set; } = string.Empty;
+    public Guid PerformedBy { get; set; }
+    public DateTime ActionDate { get; set; }
+    public DateTime CreatedAt => ActionDate; // Added
+    public string? ManagerName { get; set; }
+    public string? TargetUserName { get; set; }
+    public string? ManagerProfilePicture { get; set; }
+    public string? TargetUserProfilePicture { get; set; }
+    public string? TimeAgo { get; set; }
+    public string? ActionIcon { get; set; }
+    public string? ActionColor { get; set; }
+    public string? Notes { get; set; }
+}
+
+public class ManagementAuditVM
+{
+    public Guid UserId { get; set; }
+    public List<UserManagementActionVM> Actions { get; set; } = new();
+    public int TotalActions { get; set; }
+    public Dictionary<string, int> ActionsByType { get; set; } = new();
+    public DateTime? LastActionDate { get; set; }
+    public int Page { get; set; }
+    public int PageSize { get; set; }
+    public bool HasMore { get; set; }
+}
+
+public class CreateManagementActionRequest
+{
+    public Guid UserId { get; set; }
+    public string Action { get; set; } = string.Empty;
+    public string Reason { get; set; } = string.Empty;
+    public Guid PerformedBy { get; set; }
+    public string? Notes { get; set; }
+    public bool IsReversible { get; set; } = true;
+}
+
+public class AssignManagerRequest
+{
+    public Guid UserId { get; set; }
+    public Guid ManagerId { get; set; }
+    public string? Role { get; set; }
+    public string? Reason { get; set; }
+}

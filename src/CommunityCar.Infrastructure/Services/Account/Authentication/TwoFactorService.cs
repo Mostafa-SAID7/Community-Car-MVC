@@ -1,61 +1,60 @@
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Application.Common.Models;
-using CommunityCar.Application.Common.Models.Authentication;
-using CommunityCar.Infrastructure.Services.Account.TwoFactor;
-using CommunityCar.Infrastructure.Models.TwoFactor;
+using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Infrastructure.Services.Account.Authentication;
 
-/// <summary>
-/// Orchestrator service for two-factor authentication
-/// </summary>
+
 public class TwoFactorService : ITwoFactorService
 {
-    private readonly IAuthenticatorService _authenticatorService;
-    private readonly IRecoveryCodesService _recoveryCodesService;
     private readonly ILogger<TwoFactorService> _logger;
 
-    public TwoFactorService(
-        IAuthenticatorService authenticatorService,
-        IRecoveryCodesService recoveryCodesService,
-        ILogger<TwoFactorService> logger)
+    public TwoFactorService(ILogger<TwoFactorService> logger)
     {
-        _authenticatorService = authenticatorService;
-        _recoveryCodesService = recoveryCodesService;
         _logger = logger;
     }
 
-    #region Authenticator - Delegate to AuthenticatorService
+    #region Authenticator
 
-    public async Task<Result> EnableTwoFactorAsync(EnableTwoFactorRequest request)
-        => await _authenticatorService.EnableTwoFactorAsync(request);
-
-    public async Task<Result> DisableTwoFactorAsync(DisableTwoFactorRequest request)
-        => await _authenticatorService.DisableTwoFactorAsync(request);
-
-    public async Task<Result> GenerateQrCodeAsync(string userId)
+    public Task<Result> EnableTwoFactorAsync(EnableTwoFactorRequest request)
     {
-        var request = new GenerateQrCodeRequest { UserId = userId };
-        var qrCodeUri = await _authenticatorService.GenerateQrCodeAsync(request);
-        return Result.Success("QR code generated successfully.", new { QrCodeUri = qrCodeUri });
+        return Task.FromResult(Result.Failure("Two-factor authentication is not yet implemented."));
     }
 
-    public async Task<Result> VerifyTwoFactorTokenAsync(VerifyTwoFactorTokenRequest request)
-        => await _authenticatorService.VerifyTwoFactorTokenAsync(request);
+    public Task<Result> DisableTwoFactorAsync(DisableTwoFactorRequest request)
+    {
+        return Task.FromResult(Result.Failure("Two-factor authentication is not yet implemented."));
+    }
 
-    public async Task<bool> IsTwoFactorEnabledAsync(string userId)
-        => await _authenticatorService.IsTwoFactorEnabledAsync(userId);
+    public Task<Result> GenerateQrCodeAsync(string userId)
+    {
+        return Task.FromResult(Result.Failure("Two-factor authentication is not yet implemented."));
+    }
+
+    public Task<Result> VerifyTwoFactorTokenAsync(VerifyTwoFactorTokenRequest request)
+    {
+        return Task.FromResult(Result.Failure("Two-factor authentication is not yet implemented."));
+    }
+
+    public Task<bool> IsTwoFactorEnabledAsync(string userId)
+    {
+        return Task.FromResult(false);
+    }
 
     #endregion
 
-    #region Recovery Codes - Delegate to RecoveryCodesService
+    #region Recovery Codes
 
-    public async Task<Result> GenerateRecoveryCodesAsync(GenerateRecoveryCodesRequest request)
-        => await _recoveryCodesService.GenerateRecoveryCodesAsync(request);
+    public Task<Result> GenerateRecoveryCodesAsync(GenerateRecoveryCodesRequest request)
+    {
+        return Task.FromResult(Result.Failure("Recovery codes are not yet implemented."));
+    }
 
-    public async Task<Result> VerifyRecoveryCodeAsync(VerifyRecoveryCodeRequest request)
-        => await _recoveryCodesService.VerifyRecoveryCodeAsync(request);
+    public Task<Result> VerifyRecoveryCodeAsync(VerifyRecoveryCodeRequest request)
+    {
+        return Task.FromResult(Result.Failure("Recovery codes are not yet implemented."));
+    }
 
     #endregion
 

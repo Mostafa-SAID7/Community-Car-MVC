@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Application.Common.Interfaces.Repositories.Account;
+using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Common.Interfaces.Repositories.User;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Infrastructure.Persistence.Data;
 

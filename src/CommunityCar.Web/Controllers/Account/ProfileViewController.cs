@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Common.Models.Profile;
+using CommunityCar.Application.Features.Account.ViewModels.Activity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -73,8 +73,8 @@ public class ProfileViewController : Controller
             var viewModel = new ProfileViewAnalyticsVM
             {
                 Stats = stats,
-                TopViewers = topViewers,
-                RecentViews = recentViews
+                TopViewers = topViewers.ToList(),
+                RecentViews = recentViews.ToList()
             };
 
             ViewBag.StartDate = start;

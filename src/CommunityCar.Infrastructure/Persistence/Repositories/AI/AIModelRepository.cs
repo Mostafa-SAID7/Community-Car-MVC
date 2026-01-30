@@ -20,7 +20,7 @@ public class AIModelRepository : BaseRepository<AIModel>, IAIModelRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<AIModel>> GetModelsByTypeAsync(string modelType)
+    public async Task<IEnumerable<AIModel>> GetModelsByTypeAsync(AIModelType modelType)
     {
         return await Context.AIModels
             .Where(m => m.Type == modelType && !m.IsDeleted)

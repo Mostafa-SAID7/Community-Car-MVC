@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CommunityCar.Domain.Base;
 using CommunityCar.Domain.Enums.Community;
+using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Shared;
 
 namespace CommunityCar.Domain.Entities.Community.Posts;
@@ -17,7 +18,9 @@ public class Post : AggregateRoot
     
     public PostType Type { get; private set; }
     public Guid AuthorId { get; private set; }
+    public virtual User Author { get; private set; } = null!;
     public Guid? CategoryId { get; private set; }
+    public Guid? GroupId { get; private set; }
     
     // Publishing and visibility
     public bool IsPublished { get; private set; }

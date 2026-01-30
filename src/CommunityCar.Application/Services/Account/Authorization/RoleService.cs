@@ -38,7 +38,7 @@ public class RoleService : IRoleService
         {
             var roleDTO = _mapper.Map<RoleVM>(role);
             roleDTO.UserCount = await _roleRepository.GetUserCountInRoleAsync(role.Name!);
-            roleDTO.Permissions = (await _permissionService.GetRolePermissionsAsync(role.Name!)).ToList();
+            roleDTO.Permissions = (await _permissionService.GetRolePermissionDetailsAsync(role.Name!)).ToList();
             roleDTO.PermissionCount = roleDTO.Permissions.Count;
             roleDTOs.Add(roleDTO);
         }
@@ -65,7 +65,7 @@ public class RoleService : IRoleService
 
         var roleDTO = _mapper.Map<RoleVM>(role);
         roleDTO.UserCount = await _roleRepository.GetUserCountInRoleAsync(name);
-        roleDTO.Permissions = (await _permissionService.GetRolePermissionsAsync(name)).ToList();
+        roleDTO.Permissions = (await _permissionService.GetRolePermissionDetailsAsync(name)).ToList();
         roleDTO.PermissionCount = roleDTO.Permissions.Count;
 
         return roleDTO;
@@ -78,7 +78,7 @@ public class RoleService : IRoleService
 
         var roleDTO = _mapper.Map<RoleVM>(role);
         roleDTO.UserCount = await _roleRepository.GetUserCountInRoleAsync(role.Name!);
-        roleDTO.Permissions = (await _permissionService.GetRolePermissionsAsync(role.Name!)).ToList();
+        roleDTO.Permissions = (await _permissionService.GetRolePermissionDetailsAsync(role.Name!)).ToList();
         roleDTO.PermissionCount = roleDTO.Permissions.Count;
 
         return roleDTO;
@@ -101,8 +101,8 @@ public class RoleService : IRoleService
         _logger.LogInformation("Role '{RoleName}' created with {PermissionCount} permissions", request.Name, request.Permissions.Count);
 
         var roleDTO = _mapper.Map<RoleVM>(createdRole);
-        roleDTO.Permissions = request.Permissions.ToList();
-        roleDTO.PermissionCount = request.Permissions.Count;
+        roleDTO.Permissions = (await _permissionService.GetRolePermissionDetailsAsync(createdRole.Name!)).ToList();
+        roleDTO.PermissionCount = roleDTO.Permissions.Count;
         roleDTO.UserCount = 0;
 
         return roleDTO;
@@ -129,8 +129,8 @@ public class RoleService : IRoleService
 
         var roleDTO = _mapper.Map<RoleVM>(updatedRole);
         roleDTO.UserCount = await _roleRepository.GetUserCountInRoleAsync(role.Name!);
-        roleDTO.Permissions = request.Permissions.ToList();
-        roleDTO.PermissionCount = request.Permissions.Count;
+        roleDTO.Permissions = (await _permissionService.GetRolePermissionDetailsAsync(updatedRole.Name!)).ToList();
+        roleDTO.PermissionCount = roleDTO.Permissions.Count;
 
         return roleDTO;
     }
@@ -263,7 +263,7 @@ public class RoleService : IRoleService
 
         var roleDTO = _mapper.Map<RoleVM>(role);
         roleDTO.UserCount = await _roleRepository.GetUserCountInRoleAsync(role.Name!);
-        roleDTO.Permissions = (await _permissionService.GetRolePermissionsAsync(role.Name!)).ToList();
+        roleDTO.Permissions = (await _permissionService.GetRolePermissionDetailsAsync(role.Name!)).ToList();
         roleDTO.PermissionCount = roleDTO.Permissions.Count;
 
         return roleDTO;
@@ -385,7 +385,7 @@ public class RoleService : IRoleService
         {
             var roleDTO = _mapper.Map<RoleVM>(role);
             roleDTO.UserCount = await _roleRepository.GetUserCountInRoleAsync(role.Name!);
-            roleDTO.Permissions = (await _permissionService.GetRolePermissionsAsync(role.Name!)).ToList();
+            roleDTO.Permissions = (await _permissionService.GetRolePermissionDetailsAsync(role.Name!)).ToList();
             roleDTO.PermissionCount = roleDTO.Permissions.Count;
             roleDTOs.Add(roleDTO);
         }

@@ -1,4 +1,5 @@
 using CommunityCar.Web.Models.Error;
+using CommunityCar.Web.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text.Json;
@@ -30,15 +31,42 @@ namespace CommunityCar.Web.Controllers
         }
 
         [Route("Error/Details/{errorId}")]
-        public IActionResult Details(string errorId)
+        public IActionResult Details(string errorId, string? data = null)
         {
-            // In a real application, you would fetch error details from database
-            // For now, we'll create a mock error details view
             var model = new ErrorDetailsViewModel
             {
                 ErrorId = errorId,
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             };
+
+            // Parse error data from query string if provided
+            if (!string.IsNullOrEmpty(data))
+            {
+                try
+                {
+                    var decodedData = Uri.UnescapeDataString(data);
+                    var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(decodedData, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    if (errorResponse != null)
+                    {
+                        model.Message = errorResponse.Message;
+                        model.StatusCode = errorResponse.StatusCode;
+                        model.Details = errorResponse.Details;
+                        model.StackTrace = errorResponse.StackTrace;
+                        model.Path = errorResponse.Path;
+                        model.Method = errorResponse.Method;
+                        model.Timestamp = errorResponse.Timestamp;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log the parsing error but continue to show basic error page
+                    Console.WriteLine($"Failed to parse error data: {ex.Message}");
+                }
+            }
 
             return View("Details", model);
         }

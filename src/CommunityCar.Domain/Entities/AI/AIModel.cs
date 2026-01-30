@@ -20,6 +20,18 @@ public class AIModel : BaseEntity
     // Navigation properties
     public virtual ICollection<TrainingJob> TrainingJobs { get; set; } = new List<TrainingJob>();
     public virtual ICollection<TrainingHistory> TrainingHistories { get; set; } = new List<TrainingHistory>();
+
+    public void Activate()
+    {
+        IsActive = true;
+        Audit(UpdatedBy);
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+        Audit(UpdatedBy);
+    }
 }
 
 public enum AIModelType

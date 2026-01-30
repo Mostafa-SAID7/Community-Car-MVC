@@ -39,3 +39,22 @@ public class InterestSuggestionVM
     public bool IsAdded { get; set; }
 }
 
+public class AddInterestRequest
+{
+    public Guid UserId { get; set; }
+    public string Category { get; set; } = string.Empty;
+    public string SubCategory { get; set; } = string.Empty;
+    public string InterestType { get; set; } = string.Empty;
+    public string InterestValue { get; set; } = string.Empty;
+    public double InitialScore { get; set; } = 1.0;
+}
+
+public class InterestAnalyticsVM
+{
+    public Guid UserId { get; set; }
+    public int TotalInterests { get; set; }
+    public Dictionary<string, int> InterestsByCategory { get; set; } = new();
+    public List<ProfileInterestVM> TopInterests { get; set; } = new();
+    public List<string> RecommendedInterests { get; set; } = new();
+    public List<UserSuggestionVM> SimilarUsers { get; set; } = new();
+}

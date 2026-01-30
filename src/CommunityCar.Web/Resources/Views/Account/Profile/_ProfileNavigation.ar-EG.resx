@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Overview" xml:space="preserve">
+    <value>نظرة عامة</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>المعرض</value>
+  </data>
+  <data name="Interests" xml:space="preserve">
+    <value>الاهتمامات</value>
+  </data>
+  <data name="Badges" xml:space="preserve">
+    <value>الأوسمة</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+</root>

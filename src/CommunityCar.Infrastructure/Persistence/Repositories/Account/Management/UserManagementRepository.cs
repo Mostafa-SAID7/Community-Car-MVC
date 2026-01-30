@@ -129,8 +129,9 @@ public class UserManagementRepository : BaseRepository<UserManagement>, IUserMan
     public async Task<Dictionary<Guid, int>> GetManagementStatisticsAsync()
     {
         return await Context.UserManagements
+            .Where(um => um.ManagerId.HasValue)
             .GroupBy(um => um.ManagerId)
-            .Select(g => new { ManagerId = g.Key, Count = g.Count() })
+            .Select(g => new { ManagerId = g.Key.Value, Count = g.Count() })
             .ToDictionaryAsync(x => x.ManagerId, x => x.Count);
     }
 

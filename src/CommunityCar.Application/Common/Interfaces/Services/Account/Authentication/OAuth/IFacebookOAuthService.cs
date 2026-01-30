@@ -21,5 +21,5 @@ public interface IFacebookOAuthService
     /// <summary>
     /// Verifies Facebook access token and returns user info
     /// </summary>
-    Task<FacebookUserInfo?> VerifyFacebookTokenAsync(string accessToken);
+    Task<CommunityCar.Application.Features.Account.ViewModels.Authentication.FacebookUserInfo?> VerifyFacebookTokenAsync(string accessToken);
 }

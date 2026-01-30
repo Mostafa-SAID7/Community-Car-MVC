@@ -69,12 +69,7 @@ public class UserFollowingSeeder
                     var following = new UserFollowing(
                         user.Id,
                         followedUser.Id,
-                        followedAt,
-                        true,
-                        reason,
-                        notificationsEnabled,
-                        followedAt.AddDays(random.Next(1, 30)), // Last interaction within 30 days
-                        random.Next(1, 50) // Interaction count
+                        reason
                     );
 
                     followings.Add(following);

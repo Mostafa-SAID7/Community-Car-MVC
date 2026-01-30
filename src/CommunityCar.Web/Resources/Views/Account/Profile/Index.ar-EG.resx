@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PageTitle" xml:space="preserve">
+    <value>ملفي الشخصي</value>
+  </data>
+  <data name="UserCredentials" xml:space="preserve">
+    <value>بيانات الاعتماد</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="LastActive" xml:space="preserve">
+    <value>آخر ظهور</value>
+  </data>
+  <data name="AccountStatus" xml:space="preserve">
+    <value>حالة الحساب</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>مؤكد</value>
+  </data>
+  <data name="PendingVerification" xml:space="preserve">
+    <value>قيد التأكيد</value>
+  </data>
+  <data name="AboutMe" xml:space="preserve">
+    <value>عني</value>
+  </data>
+  <data name="NoBio" xml:space="preserve">
+    <value>لم يتم إضافة سيرة ذاتية بعد. أخبر المجتمع عن نفسك!</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>المنشورات</value>
+  </data>
+  <data name="Friends" xml:space="preserve">
+    <value>الأصدقاء</value>
+  </data>
+  <data name="Likes" xml:space="preserve">
+    <value>الإعجابات</value>
+  </data>
+  <data name="Badges" xml:space="preserve">
+    <value>الأوسمة</value>
+  </data>
+  <data name="StartJourneyTitle" xml:space="preserve">
+    <value>ابدأ رحلتك</value>
+  </data>
+  <data name="StartJourneyMessage" xml:space="preserve">
+    <value>شارك منشورك الأول، وتواصل مع زملائك من عشاق السيارات، وابدأ في بناء إرثك في المجتمع.</value>
+  </data>
+  <data name="CreatePost" xml:space="preserve">
+    <value>إنشاء منشور</value>
+  </data>
+  <data name="BrowseFeed" xml:space="preserve">
+    <value>تصفح الموجز</value>
+  </data>
+</root>

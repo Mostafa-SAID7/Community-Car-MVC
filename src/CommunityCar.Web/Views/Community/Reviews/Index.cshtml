@@ -1,6 +1,5 @@
 @using Microsoft.Extensions.Localization
 @model CommunityCar.Application.Features.Reviews.DTOs.ReviewsSearchResponse
-@inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
 
 @{
@@ -172,4 +171,7 @@
         });
     </script>
     <script src="~/js/reviews.js"></script>
+}
+@section SidebarRight {
+    <partial name="_ReviewsSidebar" />
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AIManagementDashboard" xml:space="preserve"><value>AI Management Dashboard</value></data>
+  <data name="MonitorManageAI" xml:space="preserve"><value>Monitor and manage AI services and models</value></data>
+  <data name="TrainingCenter" xml:space="preserve"><value>Training Center</value></data>
+  <data name="TestConsole" xml:space="preserve"><value>Test Console</value></data>
+  <data name="TotalConversations" xml:space="preserve"><value>Total Conversations</value></data>
+  <data name="FromLastWeek" xml:space="preserve"><value>from last week</value></data>
+  <data name="ActiveUsers" xml:space="preserve"><value>Active Users</value></data>
+  <data name="CurrentlyOnline" xml:space="preserve"><value>Currently online</value></data>
+  <data name="ResponseTime" xml:space="preserve"><value>Response Time</value></data>
+  <data name="AverageResponse" xml:space="preserve"><value>Average response</value></data>
+  <data name="SatisfactionRate" xml:space="preserve"><value>Satisfaction Rate</value></data>
+  <data name="Excellent" xml:space="preserve"><value>Excellent</value></data>
+  <data name="Rating" xml:space="preserve"><value>rating</value></data>
+  <data name="AIModelsStatus" xml:space="preserve"><value>AI Models Status</value></data>
+  <data name="CurrentStatusModels" xml:space="preserve"><value>Current status of AI models</value></data>
+  <data name="ActiveModels" xml:space="preserve"><value>Active Models</value></data>
+  <data name="TrainingJobs" xml:space="preserve"><value>Training Jobs</value></data>
+  <data name="RecentTraining" xml:space="preserve"><value>Recent Training</value></data>
+  <data name="TopIntents" xml:space="preserve"><value>Top Intents</value></data>
+  <data name="CommonUserIntents" xml:space="preserve"><value>Most common user intents</value></data>
+  <data name="NoIntentData" xml:space="preserve"><value>No intent data available</value></data>
+  <data name="ErrorLoadingIntents" xml:space="preserve"><value>Error loading intent data</value></data>
+  <data name="RecentActivity" xml:space="preserve"><value>Recent Activity</value></data>
+  <data name="LatestAIInteractions" xml:space="preserve"><value>Latest AI interactions and events</value></data>
+  <data name="NoRecentActivity" xml:space="preserve"><value>No recent activity</value></data>
+  <data name="ErrorLoadingActivity" xml:space="preserve"><value>Error loading activity data</value></data>
+  <data name="ManageAIModels" xml:space="preserve"><value>Manage AI model training and performance</value></data>
+  <data name="Analytics" xml:space="preserve"><value>Analytics</value></data>
+  <data name="ViewAIPerformance" xml:space="preserve"><value>View detailed AI performance metrics</value></data>
+  <data name="Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="ConfigureAIModels" xml:space="preserve"><value>Configure AI models and parameters</value></data>
+</root>

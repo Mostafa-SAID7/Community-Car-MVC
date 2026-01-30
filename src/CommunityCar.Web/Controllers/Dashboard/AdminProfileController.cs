@@ -1,7 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Web.Models.Profile.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,16 +47,16 @@ public class AdminProfileController : Controller
             Country = profile.Country,
             ProfilePictureUrl = profile.ProfilePictureUrl,
             CreatedAt = profile.CreatedAt,
-            // LastLoginAt = profile.LastLoginAt,
+            LastLoginAt = profile.LastLoginAt,
             IsEmailConfirmed = profile.IsEmailConfirmed,
-            // IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
-            // IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
+            IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
+            IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
             IsActive = profile.IsActive,
-            // HasGoogleAccount = profile.HasGoogleAccount,
-            // HasFacebookAccount = profile.HasFacebookAccount,
+            HasGoogleAccount = profile.HasGoogleAccount,
+            HasFacebookAccount = profile.HasFacebookAccount,
             PostsCount = profile.PostsCount,
-            // CommentsCount = profile.CommentsCount,
-            // LikesReceived = profile.LikesReceived
+            CommentsCount = profile.CommentsCount,
+            LikesReceived = profile.LikesReceived
         };
 
         ViewData["Title"] = "Admin Profile";
@@ -79,7 +77,7 @@ public class AdminProfileController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var viewModel = new CommunityCar.Web.Models.Profile.Core.ProfileSettingsVM
+        var viewModel = new ProfileSettingsVM
         {
             Id = settings.Id,
             FullName = settings.FullName,
@@ -90,10 +88,11 @@ public class AdminProfileController : Controller
             Country = settings.Country,
             ProfilePictureUrl = settings.ProfilePictureUrl,
             IsEmailConfirmed = settings.IsEmailConfirmed,
-            // IsPhoneNumberConfirmed = settings.IsPhoneNumberConfirmed,
-            // IsTwoFactorEnabled = settings.IsTwoFactorEnabled,
-            // HasGoogleAccount = settings.HasGoogleAccount,
-            // HasFacebookAccount = settings.HasFacebookAccount,
+            IsPhoneNumberConfirmed = settings.IsPhoneNumberConfirmed,
+            IsTwoFactorEnabled = settings.IsTwoFactorEnabled,
+            HasGoogleAccount = settings.HasGoogleAccount,
+            HasFacebookAccount = settings.HasFacebookAccount
+            // Notification settings not available in ProfileVM
             // EmailNotifications = settings.EmailNotifications,
             // PushNotifications = settings.PushNotifications,
             // SmsNotifications = settings.SmsNotifications,
@@ -126,8 +125,7 @@ public class AdminProfileController : Controller
         var request = new UpdateProfileRequest
         {
             UserId = userId,
-            FirstName = firstName,
-            LastName = lastName,
+            FullName = model.FullName,
             PhoneNumber = model.PhoneNumber,
             Bio = model.Bio,
             City = model.City,

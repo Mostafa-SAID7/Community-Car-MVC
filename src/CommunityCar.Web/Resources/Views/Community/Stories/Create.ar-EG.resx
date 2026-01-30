@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateStory" xml:space="preserve">
+    <value>إنشاء قصة</value>
+  </data>
+  <data name="ShareMoments" xml:space="preserve">
+    <value>شارك لحظاتك مع المجتمع</value>
+  </data>
+  <data name="SaveDraft" xml:space="preserve">
+    <value>حفظ كمسودة</value>
+  </data>
+  <data name="PublishStory" xml:space="preserve">
+    <value>نشر القصة</value>
+  </data>
+  <data name="StoryMedia" xml:space="preserve">
+    <value>وسائط القصة</value>
+  </data>
+  <data name="UploadYourStoryMedia" xml:space="preserve">
+    <value>ارفع وسائط قصتك</value>
+  </data>
+  <data name="DragAndDrop" xml:space="preserve">
+    <value>اسحب وأفلت أو انقر لاختيار الصور أو الفيديوهات</value>
+  </data>
+  <data name="SupportsFormats" xml:space="preserve">
+    <value>يدعم: JPG, PNG, MP4, MOV (بحد أقصى 50 ميجابايت)</value>
+  </data>
+  <data name="StoryDetails" xml:space="preserve">
+    <value>تفاصيل القصة</value>
+  </data>
+  <data name="TitleOptional" xml:space="preserve">
+    <value>العنوان (اختياري)</value>
+  </data>
+  <data name="TitlePlaceholder" xml:space="preserve">
+    <value>اكتب عنواناً لقصتك...</value>
+  </data>
+  <data name="Caption" xml:space="preserve">
+    <value>الوصف</value>
+  </data>
+  <data name="CaptionPlaceholder" xml:space="preserve">
+    <value>شارك ما يحدث...</value>
+  </data>
+  <data name="StoryType" xml:space="preserve">
+    <value>نوع القصة</value>
+  </data>
+  <data name="Photo" xml:space="preserve">
+    <value>صورة</value>
+  </data>
+  <data name="Video" xml:space="preserve">
+    <value>فيديو</value>
+  </data>
+  <data name="TextOnly" xml:space="preserve">
+    <value>نص فقط</value>
+  </data>
+  <data name="Visibility" xml:space="preserve">
+    <value>الخصوصية</value>
+  </data>
+  <data name="Public" xml:space="preserve">
+    <value>عام - يمكن للجميع الرؤية</value>
+  </data>
+  <data name="Friends" xml:space="preserve">
+    <value>الأصدقاء فقط</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>خاص - أنا فقط</value>
+  </data>
+  <data name="CarInformationOptional" xml:space="preserve">
+    <value>معلومات السيارة (اختياري)</value>
+  </data>
+  <data name="Make" xml:space="preserve">
+    <value>الماركة</value>
+  </data>
+  <data name="SelectMake" xml:space="preserve">
+    <value>اختر الماركة</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>الموديل</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>السنة</value>
+  </data>
+  <data name="LocationOptional" xml:space="preserve">
+    <value>الموقع (اختياري)</value>
+  </data>
+  <data name="AddLocationToStory" xml:space="preserve">
+    <value>إضافة موقع للقصة</value>
+  </data>
+  <data name="LocationName" xml:space="preserve">
+    <value>اسم الموقع</value>
+  </data>
+  <data name="Latitude" xml:space="preserve">
+    <value>خط العرض</value>
+  </data>
+  <data name="Longitude" xml:space="preserve">
+    <value>خط الطول</value>
+  </data>
+  <data name="UseCurrentLocation" xml:space="preserve">
+    <value>استخدام موقعي الحالي</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>الوسوم</value>
+  </data>
+  <data name="AddTagsSeparatedByCommas" xml:space="preserve">
+    <value>أضف وسوماً مفصولة بفاصلة</value>
+  </data>
+  <data name="StorySettings" xml:space="preserve">
+    <value>إعدادات القصة</value>
+  </data>
+  <data name="AllowComments" xml:space="preserve">
+    <value>السماح بالتعليقات</value>
+  </data>
+  <data name="AllowCommentsDescription" xml:space="preserve">
+    <value>السماح للآخرين بالتعليق على قصتك</value>
+  </data>
+  <data name="AllowLikes" xml:space="preserve">
+    <value>السماح بالإعجابات</value>
+  </data>
+  <data name="AllowLikesDescription" xml:space="preserve">
+    <value>السماح للآخرين بالإعجاب بقصتك</value>
+  </data>
+  <data name="AllowShares" xml:space="preserve">
+    <value>السماح بالمشاركة</value>
+  </data>
+  <data name="AllowSharesDescription" xml:space="preserve">
+    <value>السماح للآخرين بمشاركة قصتك</value>
+  </data>
+</root>

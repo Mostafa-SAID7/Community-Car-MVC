@@ -1,6 +1,5 @@
 @model CommunityCar.Application.Features.Events.ViewModels.EventsIndexVM
 @using Microsoft.Extensions.Localization
-@inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
 @{
     // Get current culture for localization
@@ -264,4 +263,7 @@
             Skeleton.initPageLoad('events-skeleton', 'events-list-container');
         });
     </script>
+}
+@section SidebarRight {
+    <partial name="_EventsSidebar" />
 }

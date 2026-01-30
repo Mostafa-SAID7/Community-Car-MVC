@@ -9,6 +9,9 @@ public class Message : BaseEntity
     public Guid ConversationId { get; private set; }
     public Guid SenderId { get; private set; }
     public bool IsRead { get; private set; }
+    
+    // Navigation properties
+    public virtual Conversation Conversation { get; set; } = null!;
 
     // Parameterless constructor for EF
     private Message() { }
@@ -24,6 +27,12 @@ public class Message : BaseEntity
     public void MarkAsRead()
     {
         IsRead = true;
+        Audit(UpdatedBy);
+    }
+
+    public void EditContent(string newContent)
+    {
+        Content = newContent;
         Audit(UpdatedBy);
     }
 }

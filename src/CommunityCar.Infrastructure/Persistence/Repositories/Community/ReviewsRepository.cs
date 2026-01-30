@@ -12,106 +12,43 @@ public class ReviewsRepository : BaseRepository<Review>, IReviewsRepository
     {
     }
 
+    public async Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date)
+    {
+        return await Context.Reviews
+            .CountAsync(r => r.ReviewerId == userId && r.CreatedAt.Date == date.Date);
+    }
+
+    public async Task<double> GetAverageRatingByTargetAsync(Guid targetId, string targetType)
+    {
+        var ratings = await Context.Reviews
+            .Where(r => r.TargetId == targetId && r.TargetType == targetType)
+            .Select(r => r.Rating)
+            .ToListAsync();
+
+        return ratings.Any() ? ratings.Average() : 0;
+    }
+
     public async Task<IEnumerable<Review>> GetByTargetAsync(Guid targetId, string targetType)
     {
-        return await Context.Set<Review>()
+        return await Context.Reviews
             .Where(r => r.TargetId == targetId && r.TargetType == targetType)
-            .OrderByDescending(r => r.CreatedAt)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Review>> GetByReviewerAsync(Guid reviewerId)
-    {
-        return await Context.Set<Review>()
-            .Where(r => r.ReviewerId == reviewerId)
-            .OrderByDescending(r => r.CreatedAt)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Review>> GetApprovedAsync()
-    {
-        return await Context.Set<Review>()
-            .Where(r => r.IsApproved)
-            .OrderByDescending(r => r.CreatedAt)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Review>> GetFlaggedAsync()
-    {
-        return await Context.Set<Review>()
-            .Where(r => r.IsFlagged)
-            .OrderByDescending(r => r.CreatedAt)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Review>> GetVerifiedPurchasesAsync()
-    {
-        return await Context.Set<Review>()
-            .Where(r => r.IsVerifiedPurchase)
-            .OrderByDescending(r => r.CreatedAt)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Review>> GetByCarMakeAsync(string carMake)
-    {
-        return await Context.Set<Review>()
-            .Where(r => r.CarMake != null && r.CarMake.ToLower() == carMake.ToLower())
-            .OrderByDescending(r => r.CreatedAt)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Review>> GetByRatingAsync(int rating)
-    {
-        return await Context.Set<Review>()
-            .Where(r => r.Rating == rating)
-            .OrderByDescending(r => r.CreatedAt)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Review>> GetRecentAsync(int count)
-    {
-        return await Context.Set<Review>()
-            .Where(r => r.IsApproved)
-            .OrderByDescending(r => r.CreatedAt)
-            .Take(count)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<string>> GetAvailableCarMakesAsync()
     {
-        return await Context.Set<Review>()
-            .Where(r => r.CarMake != null)
-            .Select(r => r.CarMake!)
+        return await Context.Reviews
+            .Select(r => r.CarMake)
+            .Where(m => !string.IsNullOrEmpty(m))
             .Distinct()
-            .OrderBy(m => m)
             .ToListAsync();
     }
 
-    public async Task<double> GetAverageRatingByTargetAsync(Guid targetId, string targetType)
+    public async Task<IEnumerable<Review>> GetApprovedAsync()
     {
-        var reviews = await Context.Set<Review>()
-            .Where(r => r.TargetId == targetId && r.TargetType == targetType && r.IsApproved)
+        return await Context.Reviews
+            .Where(r => r.IsApproved)
+            .OrderByDescending(r => r.CreatedAt)
             .ToListAsync();
-
-        return reviews.Any() ? reviews.Average(r => r.Rating) : 0;
-    }
-
-    public async Task<int> GetReviewCountByTargetAsync(Guid targetId, string targetType)
-    {
-        return await Context.Set<Review>()
-            .CountAsync(r => r.TargetId == targetId && r.TargetType == targetType && r.IsApproved);
-    }
-
-    public async Task<bool> HasUserReviewedTargetAsync(Guid userId, Guid targetId, string targetType)
-    {
-        return await Context.Set<Review>()
-            .AnyAsync(r => r.ReviewerId == userId && r.TargetId == targetId && r.TargetType == targetType);
-    }
-
-    public async Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date)
-    {
-        return await Context.Set<Review>()
-            .CountAsync(r => r.ReviewerId == userId && r.CreatedAt.Date == date.Date);
     }
 }
-

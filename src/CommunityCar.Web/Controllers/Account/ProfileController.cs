@@ -1,11 +1,7 @@
-using CommunityCar.Application.Common.Interfaces.Orchestrators;
+using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Common.Models.Account;
-using CommunityCar.Application.Common.Models.Profile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProfileIndexVM = CommunityCar.Web.Models.Profile.Core.ProfileIndexVM;
-using UpdateProfileVM = CommunityCar.Web.Models.Profile.Core.UpdateProfileVM;
 
 namespace CommunityCar.Web.Controllers.Account;
 
@@ -13,16 +9,22 @@ namespace CommunityCar.Web.Controllers.Account;
 [Authorize]
 public class ProfileController : Controller
 {
-    private readonly IProfileOrchestrator _profileOrchestrator;
+    private readonly IProfileService _profileService;
+    private readonly IUserGalleryService _userGalleryService;
+    private readonly IGamificationService _gamificationService;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<ProfileController> _logger;
 
     public ProfileController(
-        IProfileOrchestrator profileOrchestrator,
+        IProfileService profileService,
+        IUserGalleryService userGalleryService,
+        IGamificationService gamificationService,
         ICurrentUserService currentUserService,
         ILogger<ProfileController> logger)
     {
-        _profileOrchestrator = profileOrchestrator;
+        _profileService = profileService;
+        _userGalleryService = userGalleryService;
+        _gamificationService = gamificationService;
         _currentUserService = currentUserService;
         _logger = logger;
     }
@@ -31,7 +33,7 @@ public class ProfileController : Controller
     {
         try
         {
-            var profile = await _profileOrchestrator.GetProfileAsync(userId);
+            var profile = await _profileService.GetProfileAsync(userId);
             if (profile != null)
             {
                 ViewBag.FullName = profile.FullName;
@@ -62,13 +64,13 @@ public class ProfileController : Controller
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
-            return RedirectToAction("Login", "Authentication", new { area = "" });
+            return RedirectToAction("Login", "Account", new { area = "" });
         }
 
-        var profile = await _profileOrchestrator.GetProfileAsync(userId);
+        var profile = await _profileService.GetProfileAsync(userId);
         if (profile == null)
         {
-            return RedirectToAction("Login", "Authentication", new { area = "" });
+            return RedirectToAction("Login", "Account", new { area = "" });
         }
 
         var viewModel = new ProfileIndexVM
@@ -100,7 +102,7 @@ public class ProfileController : Controller
     [HttpGet("view/{id:guid}")]
     public async Task<IActionResult> ViewProfile(Guid id)
     {
-        var profile = await _profileOrchestrator.GetProfileAsync(id);
+        var profile = await _profileService.GetProfileAsync(id);
         if (profile == null)
         {
             var fallbackVM = new ProfileIndexVM
@@ -162,7 +164,7 @@ public class ProfileController : Controller
 
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
-             return RedirectToAction("Login", "Authentication", new { area = "" });
+             return RedirectToAction("Login", "Account", new { area = "" });
         }
 
         var nameParts = model.FullName.Split(' ', 2);
@@ -172,15 +174,14 @@ public class ProfileController : Controller
         var request = new UpdateProfileRequest
         {
             UserId = userId,
-            FirstName = firstName,
-            LastName = lastName,
+            FullName = model.FullName,
             PhoneNumber = model.PhoneNumber,
             Bio = model.Bio,
             City = model.City,
             Country = model.Country
         };
 
-        var success = await _profileOrchestrator.UpdateProfileAsync(request);
+        var success = await _profileService.UpdateProfileAsync(request);
         if (success)
         {
             TempData["SuccessMessage"] = "Profile updated successfully!";
@@ -203,12 +204,12 @@ public class ProfileController : Controller
 
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
-             return RedirectToAction("Login", "Authentication", new { area = "" });
+             return RedirectToAction("Login", "Account", new { area = "" });
         }
 
         // Placeholder URL logic - ideally this should be handled by the orchestrator/service fully including upload
         var imageUrl = $"/uploads/profiles/{userId}_{profilePicture.FileName}";
-        var success = await _profileOrchestrator.UpdateProfilePictureAsync(userId, imageUrl);
+        var success = await _profileService.UpdateProfilePictureAsync(userId, imageUrl);
         
         if (success)
         {
@@ -228,10 +229,10 @@ public class ProfileController : Controller
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
-             return RedirectToAction("Login", "Authentication", new { area = "" });
+             return RedirectToAction("Login", "Account", new { area = "" });
         }
 
-        var success = await _profileOrchestrator.DeleteProfilePictureAsync(userId);
+        var success = await _profileService.DeleteProfilePictureAsync(userId);
         
         if (success)
         {
@@ -253,7 +254,7 @@ public class ProfileController : Controller
             return Json(new { success = false, message = "User not found" });
         }
 
-        var stats = await _profileOrchestrator.GetProfileStatsAsync(userId);
+        var stats = await _profileService.GetProfileStatsAsync(userId);
         return Json(new { success = true, data = stats });
     }
 
@@ -262,7 +263,7 @@ public class ProfileController : Controller
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
-             return RedirectToAction("Login", "Authentication", new { area = "" });
+             return RedirectToAction("Login", "Account", new { area = "" });
         }
 
         await SetProfileHeaderDataAsync(userId);
@@ -275,11 +276,11 @@ public class ProfileController : Controller
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
-             return RedirectToAction("Login", "Authentication", new { area = "" });
+             return RedirectToAction("Login", "Account", new { area = "" });
         }
 
-        var galleryItems = await _profileOrchestrator.GetUserGalleryAsync(userId);
-        var gamificationStats = await _profileOrchestrator.GetGamificationStatsAsync(userId);
+        var galleryItems = await _userGalleryService.GetUserGalleryAsync(userId);
+        var gamificationStats = await _gamificationService.GetUserStatsAsync(userId);
 
         await SetProfileHeaderDataAsync(userId);
         ViewBag.CurrentUserId = userId;
@@ -291,7 +292,7 @@ public class ProfileController : Controller
 
     [HttpPost("gallery/upload")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UploadGalleryItem(CommunityCar.Application.Common.Models.Profile.UploadImageRequest request, IFormFile mediaFile)
+    public async Task<IActionResult> UploadGalleryItem(CommunityCar.Application.Features.Account.ViewModels.Media.UploadImageRequest request, IFormFile mediaFile)
     {
         if (mediaFile == null || mediaFile.Length == 0)
         {
@@ -316,7 +317,7 @@ public class ProfileController : Controller
             request.FileName = mediaFile.FileName;
             request.ContentType = mediaFile.ContentType;
             
-            var success = await _profileOrchestrator.UploadGalleryItemAsync(request);
+            var success = await _userGalleryService.UploadImageAsync(request) != null;
             
             if (success)
             {
@@ -345,9 +346,9 @@ public class ProfileController : Controller
              return RedirectToAction("Login", "Authentication", new { area = "" });
         }
 
-        var badges = await _profileOrchestrator.GetUserBadgesAsync(userId);
-        var achievements = await _profileOrchestrator.GetUserAchievementsAsync(userId);
-        var stats = await _profileOrchestrator.GetGamificationStatsAsync(userId);
+        var badges = await _gamificationService.GetUserBadgesAsync(userId);
+        var achievements = await _gamificationService.GetUserAchievementsAsync(userId);
+        var stats = await _gamificationService.GetUserStatsAsync(userId);
 
         await SetProfileHeaderDataAsync(userId);
         ViewBag.CurrentUserId = userId;
@@ -366,7 +367,7 @@ public class ProfileController : Controller
             return Json(new { success = false, message = "User not found" });
         }
 
-        var success = await _profileOrchestrator.ToggleGalleryItemVisibilityAsync(itemId, userId);
+        var success = await _userGalleryService.ToggleItemVisibilityAsync(userId, itemId);
         return Json(new { success });
     }
 
@@ -378,7 +379,7 @@ public class ProfileController : Controller
             return Json(new { success = false, message = "User not found" });
         }
 
-        var success = await _profileOrchestrator.DeleteGalleryItemAsync(itemId, userId);
+        var success = await _userGalleryService.DeleteGalleryItemAsync(userId, itemId);
         return Json(new { success });
     }
 

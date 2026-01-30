@@ -100,7 +100,8 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
         if (user == null) return false;
 
         user.Profile.UpdateProfilePicture(imageUrl);
-        return await UpdateAsync(user);
+        await UpdateAsync(user);
+        return true;
     }
 
     public async Task<bool> UpdateCoverImageAsync(Guid userId, string imageUrl)
@@ -109,7 +110,8 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
         if (user == null) return false;
 
         user.Profile.UpdateCoverImage(imageUrl);
-        return await UpdateAsync(user);
+        await UpdateAsync(user);
+        return true;
     }
 
     public async Task<bool> RemoveProfilePictureAsync(Guid userId)
@@ -118,7 +120,8 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
         if (user == null) return false;
 
         user.Profile.UpdateProfilePicture(string.Empty);
-        return await UpdateAsync(user);
+        await UpdateAsync(user);
+        return true;
     }
 
     public async Task<bool> RemoveCoverImageAsync(Guid userId)
@@ -127,7 +130,8 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
         if (user == null) return false;
 
         user.Profile.UpdateCoverImage(string.Empty);
-        return await UpdateAsync(user);
+        await UpdateAsync(user);
+        return true;
     }
 
     #endregion
@@ -146,6 +150,26 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
         return await Context.Users
             .Where(u => !u.IsActive && u.UpdatedAt < cutoffDate)
             .ToListAsync();
+    }
+
+    public async Task<bool> IsAccountLockedAsync(Guid userId)
+    {
+        var user = await GetByIdAsync(userId);
+        return user != null && await _userManager.IsLockedOutAsync(user);
+    }
+
+    public async Task<DateTime?> GetLockoutEndAsync(Guid userId)
+    {
+        var user = await GetByIdAsync(userId);
+        if (user == null) return null;
+        var offset = await _userManager.GetLockoutEndDateAsync(user);
+        return offset?.UtcDateTime;
+    }
+
+    public async Task<DateTime?> GetLastPasswordChangeAsync(Guid userId)
+    {
+        var user = await GetByIdAsync(userId);
+        return user?.LastPasswordChangeAt;
     }
 
     #endregion

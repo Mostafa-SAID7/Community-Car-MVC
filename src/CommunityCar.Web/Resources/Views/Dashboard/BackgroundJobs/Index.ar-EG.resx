@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="BackgroundJobsTitle" xml:space="preserve"><value>المهام الخلفية - محرك المعالجة</value></data>
+  <data name="BackgroundJobsManagement" xml:space="preserve"><value>إدارة المهام الخلفية</value></data>
+  <data name="BackgroundJobsDescription" xml:space="preserve"><value>مراقبة وإدارة بنية معالجة المهام الخلفية</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>لوحة التحكم</value></data>
+  <data name="BackgroundProcessingEngine" xml:space="preserve"><value>محرك المعالجة الخلفية</value></data>
+  <data name="ProcessingEngineActive" xml:space="preserve"><value>محرك المعالجة نشط</value></data>
+  <data name="JobProcessingEngine" xml:space="preserve"><value>محرك معالجة المهام</value></data>
+  <data name="RefreshStatistics" xml:space="preserve"><value>تحديث الإحصائيات</value></data>
+  <data name="SystemStatus" xml:space="preserve"><value>حالة النظام</value></data>
+  <data name="ActiveJobs" xml:space="preserve"><value>المهام النشطة</value></data>
+  <data name="ServerNodes" xml:space="preserve"><value>عقد الخادم</value></data>
+  <data name="Enqueued" xml:space="preserve"><value>في الانتظار</value></data>
+  <data name="Succeeded" xml:space="preserve"><value>ناجحة</value></data>
+  <data name="Failed" xml:space="preserve"><value>فاشلة</value></data>
+  <data name="Scheduled" xml:space="preserve"><value>مجدولة</value></data>
+  <data name="ManualJobExecution" xml:space="preserve"><value>تنفيذ المهام يدوياً</value></data>
+  <data name="SystemMaintenance" xml:space="preserve"><value>صيانة النظام</value></data>
+  <data name="DatabaseHealthChecks" xml:space="preserve"><value>قاعدة البيانات وفحص الحالة</value></data>
+  <data name="SystemMaintenanceDesc" xml:space="preserve"><value>تنفيذ تنظيف قاعدة البيانات، وتحديث الإحصائيات، وبروتوكولات التحقق من صحة النظام الشاملة.</value></data>
+  <data name="ExecuteMaintenance" xml:space="preserve"><value>تنفيذ الصيانة</value></data>
+  <data name="ConfirmMaintenance" xml:space="preserve"><value>بدء تسلسل بروتوكول الصيانة؟</value></data>
+  <data name="FeedUpdates" xml:space="preserve"><value>تحديثات الخلاصة</value></data>
+  <data name="ContentSynchronization" xml:space="preserve"><value>مزامنة المحتوى</value></data>
+  <data name="FeedUpdatesDesc" xml:space="preserve"><value>تحديث الخلاصات الشخصية ومزامنة خوارزميات المحتوى الشائعة لقاعدة المستخدمين النشطة.</value></data>
+  <data name="UpdateFeeds" xml:space="preserve"><value>تحديث الخلاصات</value></data>
+  <data name="ConfirmFeedUpdate" xml:space="preserve"><value>بدء بروتوكول تحديث الخلاصة؟</value></data>
+  <data name="TrendingTopics" xml:space="preserve"><value>المواضيع الشائعة</value></data>
+  <data name="AlgorithmRefresh" xml:space="preserve"><value>تحديث الخوارزمية</value></data>
+  <data name="TrendingTopicsDesc" xml:space="preserve"><value>إعادة حساب المواضيع الشائعة وتحديث خوارزميات اكتشاف المحتوى الشائعة.</value></data>
+  <data name="UpdateTrending" xml:space="preserve"><value>تحديث الشائع</value></data>
+  <data name="ConfirmTrendingUpdate" xml:space="preserve"><value>بدء بروتوكول حساب المواضيع الشائعة؟</value></data>
+  <data name="Gamification" xml:space="preserve"><value>التلعيب (Gamification)</value></data>
+  <data name="AchievementProcessing" xml:space="preserve"><value>معالجة الإنجازات</value></data>
+  <data name="GamificationDesc" xml:space="preserve"><value>معالجة الشارات والإنجازات وتحديث تصنيفات المتصدرين عبر جميع قطاعات المستخدمين.</value></data>
+  <data name="ProcessGamification" xml:space="preserve"><value>معالجة التلعيب</value></data>
+  <data name="ConfirmGamification" xml:space="preserve"><value>بدء بروتوكول معالجة التلعيب؟</value></data>
+  <data name="EmailDigest" xml:space="preserve"><value>ملخص البريد الإلكتروني</value></data>
+  <data name="NotificationDistribution" xml:space="preserve"><value>توزيع التنبيهات</value></data>
+  <data name="EmailDigestDesc" xml:space="preserve"><value>توزيع رسائل بريد إلكتروني يومية لجميع المستخدمين المشتركين مع ملخصات محتوى مخصصة.</value></data>
+  <data name="SendDigest" xml:space="preserve"><value>إرسال الملخص</value></data>
+  <data name="ConfirmEmailDigest" xml:space="preserve"><value>بدء بروتوكول توزيع ملخص البريد الإلكتروني؟</value></data>
+  <data name="RecurringJobs" xml:space="preserve"><value>المهام المتكررة</value></data>
+  <data name="ViewAll" xml:space="preserve"><value>عرض الكل</value></data>
+  <data name="Healthy" xml:space="preserve"><value>سليم</value></data>
+  <data name="Error" xml:space="preserve"><value>خطأ</value></data>
+  <data name="NextExecution" xml:space="preserve"><value>التنفيذ القادم</value></data>
+  <data name="NoRecurringJobs" xml:space="preserve"><value>لا توجد مهام متكررة</value></data>
+  <data name="NoRecurringJobsDesc" xml:space="preserve"><value>ستظهر المهام عند جدولتها</value></data>
+  <data name="RecentJobHistory" xml:space="preserve"><value>سجل المهام الأخير</value></data>
+  <data name="JobID" xml:space="preserve"><value>معرف المهمة</value></data>
+  <data name="Created" xml:space="preserve"><value>تم الإنشاء</value></data>
+  <data name="Duration" xml:space="preserve"><value>المدة</value></data>
+  <data name="ErrorStatus" xml:space="preserve"><value>حالة الخطأ</value></data>
+  <data name="ViewDetails" xml:space="preserve"><value>عرض التفاصيل</value></data>
+  <data name="NoJobHistory" xml:space="preserve"><value>لا يوجد سجل مهام متاح</value></data>
+  <data name="NoJobHistoryDesc" xml:space="preserve"><value>سيتم ملء سجل تنفيذ المهام بمجرد بدء المعالجة.</value></data>
+  <data name="JobErrorAnalysis" xml:space="preserve"><value>تحليل خطأ المهمة</value></data>
+  <data name="ErrorDetails" xml:space="preserve"><value>تفاصيل الخطأ</value></data>
+  <data name="CloseAnalysis" xml:space="preserve"><value>إغلاق التحليل</value></data>
+</root>

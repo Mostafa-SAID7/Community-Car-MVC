@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Account.ViewModels.Social;
+using CommunityCar.Application.Features.Account.ViewModels.Activity;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account;
 

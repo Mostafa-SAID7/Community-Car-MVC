@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="SEODashboard" xml:space="preserve"><value>SEO Dashboard</value></data>
+  <data name="SearchOptimization" xml:space="preserve"><value>Search Optimization</value></data>
+  <data name="GlobalVisibilityManagement" xml:space="preserve"><value>Global visibility management and indexability metrics</value></data>
+  <data name="ProtocolHealthScore" xml:space="preserve"><value>Protocol Health Score</value></data>
+  <data name="Percentile" xml:space="preserve"><value>Percentile</value></data>
+  <data name="Optimized" xml:space="preserve"><value>Optimized</value></data>
+  <data name="Commercial" xml:space="preserve"><value>Commercial</value></data>
+  <data name="Underperforming" xml:space="preserve"><value>Underperforming</value></data>
+  <data name="AcceleratedActions" xml:space="preserve"><value>Accelerated Actions</value></data>
+  <data name="AuditSingleURI" xml:space="preserve"><value>Audit Single URI</value></data>
+  <data name="Execute" xml:space="preserve"><value>Execute</value></data>
+  <data name="EngineCrawlability" xml:space="preserve"><value>Engine Crawlability</value></data>
+  <data name="Sitemap" xml:space="preserve"><value>Sitemap</value></data>
+  <data name="RSSFeed" xml:space="preserve"><value>RSS Feed</value></data>
+  <data name="ProTip" xml:space="preserve"><value>Pro Tip</value></data>
+  <data name="ProTipText" xml:space="preserve"><value>Optimize your image ALT tags and ensure title lengths are between 50-60 characters for maximum CTR on search engines.</value></data>
+  <data name="TitleLength" xml:space="preserve"><value>Title Length</value></data>
+  <data name="Optimal" xml:space="preserve"><value>Optimal</value></data>
+  <data name="CheckRange" xml:space="preserve"><value>Check Range</value></data>
+  <data name="MetaDescription" xml:space="preserve"><value>Meta Description</value></data>
+  <data name="Good" xml:space="preserve"><value>Good</value></data>
+  <data name="Optimize" xml:space="preserve"><value>Optimize</value></data>
+  <data name="H1Tags" xml:space="preserve"><value>H1 Tags</value></data>
+  <data name="Perfect" xml:space="preserve"><value>Perfect</value></data>
+  <data name="Error" xml:space="preserve"><value>Error</value></data>
+  <data name="MissingAlts" xml:space="preserve"><value>Missing Alts</value></data>
+  <data name="Healthy" xml:space="preserve"><value>Healthy</value></data>
+  <data name="FixAlts" xml:space="preserve"><value>Fix Alts</value></data>
+  <data name="CriticalSEOObstacles" xml:space="preserve"><value>Critical SEO Obstacles</value></data>
+  <data name="Severity" xml:space="preserve"><value>Severity</value></data>
+  <data name="Type" xml:space="preserve"><value>Type</value></data>
+  <data name="ResolutionProtocol" xml:space="preserve"><value>Resolution Protocol</value></data>
+  <data name="GrowthRecommendations" xml:space="preserve"><value>Growth Recommendations</value></data>
+  <data name="Priority" xml:space="preserve"><value>Priority</value></data>
+  <data name="Impact" xml:space="preserve"><value>Impact</value></data>
+</root>

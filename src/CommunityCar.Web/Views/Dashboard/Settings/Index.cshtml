@@ -1,6 +1,7 @@
+@inject IViewLocalizer Localizer
 @model IEnumerable<CommunityCar.Application.Features.Dashboard.DTOs.SettingsRequest>
 @{
-    ViewData["Title"] = "Dashboard Settings";
+    ViewData["Title"] = Localizer["DashboardSettings"];
     ViewData["PageType"] = "Settings";
     var category = ViewBag.Category as string;
     var categories = ViewBag.Categories as string[] ?? new string[0];
@@ -24,11 +25,11 @@
             <!-- Categories Sidebar -->
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">@Localizer["Categories"]</h3>
                     <nav class="space-y-2">
                         <a href="@Url.Action("Index", "Settings", new { area = "" })" 
                            class="@(string.IsNullOrEmpty(category) ? "bg-primary-50 text-primary-700 border-primary-200" : "text-gray-700 hover:bg-gray-50") block px-3 py-2 rounded-md text-sm font-medium border">
-                            All Settings
+                            @Localizer["AllSettings"]
                         </a>
                         @foreach (var cat in categories)
                         {
@@ -48,11 +49,11 @@
                         <h2 class="text-xl font-semibold text-gray-900">
                             @if (!string.IsNullOrEmpty(category))
                             {
-                                @($"{category} Settings")
+                                @string.Format(Localizer["CategorySettings"].Value, category)
                             }
                             else
                             {
-                                @("All Settings")
+                                @Localizer["AllSettings"]
                             }
                         </h2>
                     </div>
@@ -75,7 +76,7 @@
                                         <div class="flex items-center justify-between">
                                             <div class="flex-1">
                                                 <h4 class="text-sm font-medium text-gray-900">@setting.SettingKey</h4>
-                                                <p class="text-sm text-gray-500 mt-1">Category: @setting.Category</p>
+                                                <p class="text-sm text-gray-500 mt-1">@Localizer["CategoryLabel"]: @setting.Category</p>
                                             </div>
                                             <div class="flex items-center space-x-3">
                                                 <form asp-action="UpdateSetting" method="post" class="inline-flex items-center space-x-2">
@@ -86,7 +87,7 @@
                                                            class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
                                                     <button type="submit" 
                                                             class="px-3 py-1 bg-primary-600 text-white text-sm rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
-                                                        Update
+                                                        @Localizer["Update"]
                                                     </button>
                                                 </form>
                                                 <form asp-action="ResetSetting" asp-route-settingKey="@setting.SettingKey" method="post" class="inline reset-setting-form">
@@ -94,7 +95,7 @@
                                                                 <button type="button" 
                                                             class="px-3 py-1 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
                                                             data-action="confirm-reset">
-                                                        Reset
+                                                        @Localizer["Reset"]
                                                     </button>
                                                 </form>
                                             </div>
@@ -106,15 +107,15 @@
                             <div class="mt-8 pt-6 border-t border-gray-200">
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <h3 class="text-lg font-medium text-gray-900">Reset All Settings</h3>
-                                        <p class="text-sm text-gray-500 mt-1">Reset all settings to their default values</p>
+                                        <h3 class="text-lg font-medium text-gray-900">@Localizer["ResetAllSettings"]</h3>
+                                        <p class="text-sm text-gray-500 mt-1">@Localizer["ResetAllDescription"]</p>
                                     </div>
                                     <form asp-action="ResetAllSettings" method="post" class="inline reset-all-settings-form">
                                         @Html.AntiForgeryToken()
                                         <button type="button" 
                                                 class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                                                 data-action="confirm-reset-all">
-                                            Reset All Settings
+                                            @Localizer["ResetAllSettings"]
                                         </button>
                                     </form>
                                 </div>
@@ -129,15 +130,16 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">No Settings Found</h3>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">@Localizer["NoSettingsFound"]</h3>
                                 <p class="text-gray-500">
                                     @if (!string.IsNullOrEmpty(category))
                                     {
-                                        @($"No settings found for the '{category}' category.")
+                                        var localizedMsg = Localizer["NoSettingsForCategory"].Value;
+                                        @string.Format(localizedMsg, category)
                                     }
                                     else
                                     {
-                                        @("No settings have been configured yet.")
+                                        @Localizer["NoSettingsConfigured"]
                                     }
                                 </p>
                         </div>

@@ -29,7 +29,7 @@ public class SecurityController : Controller
     public async Task<IActionResult> Index()
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            return RedirectToAction("Login", "Authentication");
+            return RedirectToAction("Login", "Account");
 
         var securityInfo = await _securityService.GetSecurityInfoAsync(userId);
         var activeSessions = await _securityService.GetActiveSessionsAsync(userId);
@@ -60,7 +60,7 @@ public class SecurityController : Controller
     public async Task<IActionResult> ChangePassword(ChangePasswordVM model)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            return RedirectToAction("Login", "Authentication");
+            return RedirectToAction("Login", "Account");
 
         if (!ModelState.IsValid)
             return View(model);
@@ -96,7 +96,7 @@ public class SecurityController : Controller
     public async Task<IActionResult> TwoFactor()
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            return RedirectToAction("Login", "Authentication");
+            return RedirectToAction("Login", "Account");
 
         var securityInfo = await _securityService.GetSecurityInfoAsync(userId);
         

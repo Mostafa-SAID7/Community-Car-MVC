@@ -54,8 +54,8 @@ public class OAuthService : IOAuthService
             var hasPassword = await _userManager.HasPasswordAsync(user);
             if (!hasPassword) return Result.Failure("Please set a password before unlinking your only login method.");
 
-            var result = await _userRepository.UnlinkOAuthAccountAsync(user.Id, request.Provider);
-            if (result)
+            var result = await UnlinkOAuthAccountAsync(user.Id, request.Provider);
+            if (result.Succeeded)
             {
                 _logger.LogInformation("{Provider} account unlinked for user {UserId}", request.Provider, request.UserId);
                 return Result.Success($"{request.Provider} account unlinked successfully.");

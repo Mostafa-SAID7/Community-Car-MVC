@@ -29,5 +29,8 @@ public interface IUserRepository : IBaseRepository<UserEntity>
     #region Account Management
     Task<IEnumerable<UserEntity>> GetDeactivatedUsersAsync();
     Task<IEnumerable<UserEntity>> GetUsersForDeletionAsync(DateTime cutoffDate);
+    Task<bool> IsAccountLockedAsync(Guid userId);
+    Task<DateTime?> GetLockoutEndAsync(Guid userId);
+    Task<DateTime?> GetLastPasswordChangeAsync(Guid userId);
     #endregion
 }

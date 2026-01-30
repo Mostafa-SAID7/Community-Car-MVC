@@ -193,4 +193,7 @@
   <data name="UpdateReview" xml:space="preserve">
     <value>تحديث المراجعة</value>
   </data>
+  <data name="Arabic" xml:space="preserve">
+    <value>اللغة العربية</value>
+  </data>
 </root>

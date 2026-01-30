@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PageTitle" xml:space="preserve">
+    <value>My Gallery</value>
+  </data>
+  <data name="MyGallery" xml:space="preserve">
+    <value>My Gallery</value>
+  </data>
+  <data name="GallerySubtitle" xml:space="preserve">
+    <value>Share your automotive journey and achievements</value>
+  </data>
+  <data name="UploadMedia" xml:space="preserve">
+    <value>Upload Media</value>
+  </data>
+  <data name="PrivacySettings" xml:space="preserve">
+    <value>Privacy Settings</value>
+  </data>
+  <data name="TotalPoints" xml:space="preserve">
+    <value>Total Points</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="Badges" xml:space="preserve">
+    <value>Badges</value>
+  </data>
+  <data name="GalleryItems" xml:space="preserve">
+    <value>Gallery Items</value>
+  </data>
+  <data name="AllMediaTypes" xml:space="preserve">
+    <value>All Media Types</value>
+  </data>
+  <data name="Images" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="Videos" xml:space="preserve">
+    <value>Videos</value>
+  </data>
+  <data name="Audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>All Items</value>
+  </data>
+  <data name="Public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="NoItemsTitle" xml:space="preserve">
+    <value>No Gallery Items Yet</value>
+  </data>
+  <data name="NoItemsMessage" xml:space="preserve">
+    <value>Start building your automotive gallery by uploading your first photo or video.</value>
+  </data>
+  <data name="UploadFirstItem" xml:space="preserve">
+    <value>Upload Your First Item</value>
+  </data>
+  <data name="UploadMediaTitle" xml:space="preserve">
+    <value>Upload Media</value>
+  </data>
+  <data name="MediaFile" xml:space="preserve">
+    <value>Media File</value>
+  </data>
+  <data name="UploadPrompt" xml:space="preserve">
+    <value>Click to upload or drag and drop</value>
+  </data>
+  <data name="UploadLimits" xml:space="preserve">
+    <value>Images, videos, and audio files supported</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="TitlePlaceholder" xml:space="preserve">
+    <value>Enter a title for your media</value>
+  </data>
+  <data name="DescriptionOptional" xml:space="preserve">
+    <value>Description (Optional)</value>
+  </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>Describe your media...</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagsPlaceholder" xml:space="preserve">
+    <value>Enter tags separated by commas</value>
+  </data>
+  <data name="Privacy" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+</root>

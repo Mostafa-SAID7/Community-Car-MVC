@@ -41,7 +41,6 @@ public class UserSessionMappingProfile : AutoMapper.Profile
         CreateMap<CreateTokenRequest, UserToken>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-            .ForMember(dest => dest.IsActive, opt => opt.Ignore())
-            .ForMember(dest => dest.IsExpired, opt => opt.Ignore());
+            .ForMember(dest => dest.IsActive, opt => opt.Ignore());
     }
 }

@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Features.Feed.DTOs;
 using CommunityCar.Application.Features.Analytics.DTOs;
 using CommunityCar.Web.Models.Error;
@@ -8,9 +9,11 @@ using System.Diagnostics;
 using System.Security.Claims;
 using System.Globalization;
 using CommunityCar.Domain.Enums.Account;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityCar.Web.Controllers.Community.Feed;
 
+[Authorize]
 [Route("feed")]
 public class FeedController : Controller
 {
@@ -76,6 +79,8 @@ public class FeedController : Controller
         ViewData["FeedSidebarData"] = feedResponse;
         
         // Track user activity
+        // TODO: Update to use LogUserActivityAsync from IUserAnalyticsService
+        /*
         if (userId.HasValue && _analyticsService != null)
         {
             _ = Task.Run(async () =>
@@ -109,6 +114,7 @@ public class FeedController : Controller
                 }
             });
         }
+        */
         
         return View("~/Views/Community/Feed/Index.cshtml", feedResponse);
     }
@@ -194,6 +200,8 @@ public class FeedController : Controller
             success = true; // Placeholder for share tracking
             
             // Track share analytics
+            // TODO: Update to use LogUserActivityAsync
+            /*
             if (_analyticsService != null)
             {
                 await _analyticsService.TrackActivityAsync(new TrackActivityRequest
@@ -205,6 +213,7 @@ public class FeedController : Controller
                     Description = $"Shared {request.ContentType}"
                 });
             }
+            */
         }
         else
         {

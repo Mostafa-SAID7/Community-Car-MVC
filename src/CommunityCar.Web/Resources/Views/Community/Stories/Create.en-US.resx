@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateStory" xml:space="preserve">
+    <value>Create Story</value>
+  </data>
+  <data name="ShareMoments" xml:space="preserve">
+    <value>Share your automotive moment</value>
+  </data>
+  <data name="SaveDraft" xml:space="preserve">
+    <value>Save Draft</value>
+  </data>
+  <data name="PublishStory" xml:space="preserve">
+    <value>Publish Story</value>
+  </data>
+  <data name="StoryMedia" xml:space="preserve">
+    <value>Story Media</value>
+  </data>
+  <data name="UploadYourStoryMedia" xml:space="preserve">
+    <value>Upload your story media</value>
+  </data>
+  <data name="DragAndDrop" xml:space="preserve">
+    <value>Drag and drop or click to select photos or videos</value>
+  </data>
+  <data name="SupportsFormats" xml:space="preserve">
+    <value>Supports: JPG, PNG, MP4, MOV (Max 50MB)</value>
+  </data>
+  <data name="StoryDetails" xml:space="preserve">
+    <value>Story Details</value>
+  </data>
+  <data name="TitleOptional" xml:space="preserve">
+    <value>Title (Optional)</value>
+  </data>
+  <data name="TitlePlaceholder" xml:space="preserve">
+    <value>Give your story a title...</value>
+  </data>
+  <data name="Caption" xml:space="preserve">
+    <value>Caption</value>
+  </data>
+  <data name="CaptionPlaceholder" xml:space="preserve">
+    <value>Share what's happening...</value>
+  </data>
+  <data name="StoryType" xml:space="preserve">
+    <value>Story Type</value>
+  </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+  <data name="Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="TextOnly" xml:space="preserve">
+    <value>Text Only</value>
+  </data>
+  <data name="Visibility" xml:space="preserve">
+    <value>Visibility</value>
+  </data>
+  <data name="Public" xml:space="preserve">
+    <value>Public - Everyone can see</value>
+  </data>
+  <data name="Friends" xml:space="preserve">
+    <value>Friends Only</value>
+  </data>
+  <data name="Private" xml:space="preserve">
+    <value>Private - Only me</value>
+  </data>
+  <data name="CarInformationOptional" xml:space="preserve">
+    <value>Car Information (Optional)</value>
+  </data>
+  <data name="Make" xml:space="preserve">
+    <value>Make</value>
+  </data>
+  <data name="SelectMake" xml:space="preserve">
+    <value>Select Make</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="LocationOptional" xml:space="preserve">
+    <value>Location (Optional)</value>
+  </data>
+  <data name="AddLocationToStory" xml:space="preserve">
+    <value>Add location to story</value>
+  </data>
+  <data name="LocationName" xml:space="preserve">
+    <value>Location Name</value>
+  </data>
+  <data name="Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="Longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="UseCurrentLocation" xml:space="preserve">
+    <value>Use Current Location</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="AddTagsSeparatedByCommas" xml:space="preserve">
+    <value>Add tags separated by commas</value>
+  </data>
+  <data name="StorySettings" xml:space="preserve">
+    <value>Story Settings</value>
+  </data>
+  <data name="AllowComments" xml:space="preserve">
+    <value>Allow Comments</value>
+  </data>
+  <data name="AllowCommentsDescription" xml:space="preserve">
+    <value>Let others comment on your story</value>
+  </data>
+  <data name="AllowLikes" xml:space="preserve">
+    <value>Allow Likes</value>
+  </data>
+  <data name="AllowLikesDescription" xml:space="preserve">
+    <value>Let others like your story</value>
+  </data>
+  <data name="AllowShares" xml:space="preserve">
+    <value>Allow Shares</value>
+  </data>
+  <data name="AllowSharesDescription" xml:space="preserve">
+    <value>Let others share your story</value>
+  </data>
+</root>

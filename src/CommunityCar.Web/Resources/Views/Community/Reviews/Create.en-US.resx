@@ -211,4 +211,7 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Arabic" xml:space="preserve">
+    <value>Arabic</value>
+  </data>
 </root>

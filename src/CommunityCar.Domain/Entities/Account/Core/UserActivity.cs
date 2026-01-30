@@ -27,6 +27,12 @@ public class UserActivity : BaseEntity
         Guid? entityId = null,
         string? entityTitle = null,
         string? description = null,
+        string? ipAddress = null,
+        string? userAgent = null,
+        string? location = null,
+        DateTime? activityDate = null,
+        int duration = 0,
+        bool isTracked = true,
         int pointsAwarded = 0)
     {
         UserId = userId;
@@ -35,9 +41,18 @@ public class UserActivity : BaseEntity
         EntityId = entityId;
         EntityTitle = entityTitle;
         Description = description;
-        ActivityDate = DateTime.UtcNow;
-        Duration = 0;
+        IpAddress = ipAddress;
+        UserAgent = userAgent;
+        Location = location;
+        ActivityDate = activityDate ?? DateTime.UtcNow;
+        Duration = duration;
+        IsTracked = isTracked;
         PointsAwarded = pointsAwarded;
+    }
+
+    public static UserActivity Create(Guid userId, ActivityType activityType, string entityType, Guid? entityId = null, string? description = null)
+    {
+        return new UserActivity(userId, activityType, entityType, entityId, null, description);
     }
 
     private UserActivity() { }

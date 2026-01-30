@@ -10,6 +10,9 @@ using CommunityCar.Domain.Entities.Account.Gamification;
 using CommunityCar.Domain.Entities.Account.Media;
 using CommunityCar.Domain.Entities.Account.Profile;
 using CommunityCar.Domain.Entities.Account.Management;
+using CommunityCar.Domain.Entities.Account.Authentication;
+using CommunityCar.Domain.Entities.Account.Authorization;
+using CommunityCar.Domain.Entities.Account.Analytics;
 using CommunityCar.Domain.Entities.Chats;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Domain.Entities.Community.Friends;
@@ -35,7 +38,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CommunityCar.Infrastructure.Persistence.Data;
 
-public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<Guid>, Guid>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<UserEntity, Role, Guid>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -52,12 +55,19 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<G
     public new DbSet<UserEntity> Users => Set<UserEntity>();
     public DbSet<UserGallery> UserGalleries => Set<UserGallery>();
     public DbSet<UserBadge> UserBadges => Set<UserBadge>();
+    public DbSet<UserToken> UserTokens => Set<UserToken>();
     public DbSet<UserAchievement> UserAchievements => Set<UserAchievement>();
     public DbSet<UserActivityEntity> UserActivities => Set<UserActivityEntity>();
+    public DbSet<UserSession> UserSessions => Set<UserSession>();
     public DbSet<UserInterest> UserInterests => Set<UserInterest>();
     public DbSet<UserFollowing> UserFollowings => Set<UserFollowing>();
     public DbSet<UserProfileView> UserProfileViews => Set<UserProfileView>();
     public DbSet<UserManagement> UserManagements => Set<UserManagement>();
+    public DbSet<UserManagementAction> UserManagementActions => Set<UserManagementAction>();
+    public DbSet<Role> Roles => Set<Role>();
+    public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
+    public DbSet<UserPermission> UserPermissions => Set<UserPermission>();
     
     // Shared
     public DbSet<Comment> Comments => Set<Comment>();
@@ -130,6 +140,21 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole<G
             
         builder.Entity<Review>()
             .Property(r => r.PurchasePrice)
+            .HasPrecision(18, 2);
+
+        builder.Entity<UserContentAnalytics>()
+            .Property(u => u.EngagementRate)
+            .HasPrecision(18, 4);
+
+        builder.Entity<UserAnalytics>(entity =>
+        {
+            entity.Property(e => e.RetentionRate).HasPrecision(18, 4);
+            entity.Property(e => e.ChurnRate).HasPrecision(18, 4);
+            entity.Property(e => e.BounceRate).HasPrecision(18, 4);
+        });
+
+        builder.Entity<PointOfInterest>()
+            .Property(p => p.PriceRange)
             .HasPrecision(18, 2);
         
         // Configure Route entity to ignore RouteWaypoint as a separate entity

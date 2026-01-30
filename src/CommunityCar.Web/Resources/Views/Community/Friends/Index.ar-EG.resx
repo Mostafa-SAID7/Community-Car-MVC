@@ -187,4 +187,7 @@
   <data name="NoMutualFriendsMessage" xml:space="preserve">
     <value>ليس لديك أي أصدقاء مشتركين مع هذا الشخص.</value>
   </data>
+  <data name="Friends" xml:space="preserve">
+    <value>الأصدقاء</value>
+  </data>
 </root>

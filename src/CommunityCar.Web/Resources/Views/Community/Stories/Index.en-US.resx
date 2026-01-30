@@ -76,4 +76,22 @@
   <data name="TrendingStories" xml:space="preserve">
     <value>Trending Stories</value>
   </data>
+  <data name="Stories" xml:space="preserve">
+    <value>Stories</value>
+  </data>
+  <data name="ShareMoments" xml:space="preserve">
+    <value>Share Moments</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Search stories...</value>
+  </data>
+  <data name="NoStoriesFound" xml:space="preserve">
+    <value>No stories found</value>
+  </data>
+  <data name="NoStoriesMessage" xml:space="preserve">
+    <value>There are no stories at the moment that match your search.</value>
+  </data>
+  <data name="CreateYourFirst" xml:space="preserve">
+    <value>Create Your First Story</value>
+  </data>
 </root>

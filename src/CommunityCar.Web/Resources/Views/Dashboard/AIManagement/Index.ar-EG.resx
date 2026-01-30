@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AIManagementDashboard" xml:space="preserve"><value>لوحة التحكم في الذكاء الاصطناعي</value></data>
+  <data name="MonitorManageAI" xml:space="preserve"><value>مراقبة وإدارة خدمات ونماذج الذكاء الاصطناعي</value></data>
+  <data name="TrainingCenter" xml:space="preserve"><value>مركز التدريب</value></data>
+  <data name="TestConsole" xml:space="preserve"><value>منصة الاختبار</value></data>
+  <data name="TotalConversations" xml:space="preserve"><value>إجمالي المحادثات</value></data>
+  <data name="FromLastWeek" xml:space="preserve"><value>من الأسبوع الماضي</value></data>
+  <data name="ActiveUsers" xml:space="preserve"><value>المستخدمون النشطون</value></data>
+  <data name="CurrentlyOnline" xml:space="preserve"><value>متصل حاليًا</value></data>
+  <data name="ResponseTime" xml:space="preserve"><value>وقت الاستجابة</value></data>
+  <data name="AverageResponse" xml:space="preserve"><value>متوسط الاستجابة</value></data>
+  <data name="SatisfactionRate" xml:space="preserve"><value>معدل الرضا</value></data>
+  <data name="Excellent" xml:space="preserve"><value>ممتاز</value></data>
+  <data name="Rating" xml:space="preserve"><value>تقييم</value></data>
+  <data name="AIModelsStatus" xml:space="preserve"><value>حالة نماذج الذكاء الاصطناعي</value></data>
+  <data name="CurrentStatusModels" xml:space="preserve"><value>الحالة الحالية لنماذج الذكاء الاصطناعي</value></data>
+  <data name="ActiveModels" xml:space="preserve"><value>النماذج النشطة</value></data>
+  <data name="TrainingJobs" xml:space="preserve"><value>مهام التدريب</value></data>
+  <data name="RecentTraining" xml:space="preserve"><value>التدريب الأخير</value></data>
+  <data name="TopIntents" xml:space="preserve"><value>أهم النوايا</value></data>
+  <data name="CommonUserIntents" xml:space="preserve"><value>أكثر نوايا المستخدمين شيوعًا</value></data>
+  <data name="NoIntentData" xml:space="preserve"><value>لا تتوفر بيانات نوايا</value></data>
+  <data name="ErrorLoadingIntents" xml:space="preserve"><value>خطأ في تحميل بيانات النوايا</value></data>
+  <data name="RecentActivity" xml:space="preserve"><value>النشاط الأخير</value></data>
+  <data name="LatestAIInteractions" xml:space="preserve"><value>أحدث تفاعلات وأحداث الذكاء الاصطناعي</value></data>
+  <data name="NoRecentActivity" xml:space="preserve"><value>لا يوجد نشاط أخير</value></data>
+  <data name="ErrorLoadingActivity" xml:space="preserve"><value>خطأ في تحميل بيانات النشاط</value></data>
+  <data name="ManageAIModels" xml:space="preserve"><value>إدارة تدريب وأداء نماذج الذكاء الاصطناعي</value></data>
+  <data name="Analytics" xml:space="preserve"><value>التحليلات</value></data>
+  <data name="ViewAIPerformance" xml:space="preserve"><value>عرض مقاييس أداء الذكاء الاصطناعي التفصيلية</value></data>
+  <data name="Settings" xml:space="preserve"><value>الإعدادات</value></data>
+  <data name="ConfigureAIModels" xml:space="preserve"><value>تكوين نماذج ومعايير الذكاء الاصطناعي</value></data>
+</root>

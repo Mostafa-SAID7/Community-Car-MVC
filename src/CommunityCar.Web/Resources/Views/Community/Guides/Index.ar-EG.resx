@@ -97,4 +97,61 @@
   <data name="ShareYourKnowledge" xml:space="preserve">
     <value>شارك معرفتك في مجال السيارات مع المجتمع من خلال إنشاء أدلة مفصلة.</value>
   </data>
+  <data name="Guides" xml:space="preserve">
+    <value>الأدلة</value>
+  </data>
+  <data name="CreateGuide" xml:space="preserve">
+    <value>إنشاء دليل</value>
+  </data>
+  <data name="GuideCategory" xml:space="preserve">
+    <value>الفئة</value>
+  </data>
+  <data name="GuideDifficulty" xml:space="preserve">
+    <value>مستوى الصعوبة</value>
+  </data>
+  <data name="FilterBy" xml:space="preserve">
+    <value>تصفية حسب</value>
+  </data>
+  <data name="Beginner" xml:space="preserve">
+    <value>مبتدئ</value>
+  </data>
+  <data name="Intermediate" xml:space="preserve">
+    <value>متوسط</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>متقدم</value>
+  </data>
+  <data name="Newest" xml:space="preserve">
+    <value>الأحدث</value>
+  </data>
+  <data name="MostPopular" xml:space="preserve">
+    <value>الأكثر شعبية</value>
+  </data>
+  <data name="HighestRated" xml:space="preserve">
+    <value>الأعلى تقييماً</value>
+  </data>
+  <data name="AllGuides" xml:space="preserve">
+    <value>جميع الأدلة</value>
+  </data>
+  <data name="Featured" xml:space="preserve">
+    <value>مميز</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>معتمد</value>
+  </data>
+  <data name="ApplyFilters" xml:space="preserve">
+    <value>تطبيق المرشحات</value>
+  </data>
+  <data name="SortBy" xml:space="preserve">
+    <value>ترتيب حسب</value>
+  </data>
+  <data name="MostBookmarked" xml:space="preserve">
+    <value>الأكثر حفظاً</value>
+  </data>
+  <data name="ReadGuide" xml:space="preserve">
+    <value>اقرأ الدليل</value>
+  </data>
+  <data name="FilteredBy" xml:space="preserve">
+    <value>تمت التصفية بواسطة:</value>
+  </data>
 </root>

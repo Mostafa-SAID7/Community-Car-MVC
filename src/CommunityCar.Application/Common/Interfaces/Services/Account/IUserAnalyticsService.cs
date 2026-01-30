@@ -1,4 +1,3 @@
-using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Features.Account.ViewModels.Activity;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Application.Features.Account.ViewModels.Social;

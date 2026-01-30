@@ -12,16 +12,12 @@ public class QARepository : BaseRepository<Question>, IQARepository
     {
     }
 
-    public async Task<Question?> GetQuestionByIdAsync(Guid id)
-    {
-        return await GetByIdAsync(id);
-    }
-
     public async Task<IEnumerable<Answer>> GetAnswersByQuestionIdAsync(Guid questionId)
     {
         return await Context.Answers
             .Where(a => a.QuestionId == questionId)
-            .OrderByDescending(a => a.CreatedAt)
+            .OrderByDescending(a => a.IsAccepted)
+            .ThenByDescending(a => a.VoteScore)
             .ToListAsync();
     }
 
@@ -35,16 +31,19 @@ public class QARepository : BaseRepository<Question>, IQARepository
         await Context.Answers.AddAsync(answer);
     }
 
-    public Task UpdateAnswerAsync(Answer answer)
+    public async Task UpdateAnswerAsync(Answer answer)
     {
         Context.Answers.Update(answer);
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 
-    public Task DeleteAnswerAsync(Answer answer)
+    public async Task<Question?> GetQuestionByIdAsync(Guid id)
     {
-        Context.Answers.Remove(answer);
-        return Task.CompletedTask;
+        return await GetByIdAsync(id);
+    }
+
+    public async Task<Question?> GetQuestionBySlugAsync(string slug)
+    {
+        return await Context.Questions.FirstOrDefaultAsync(q => q.Slug == slug);
     }
 }
-

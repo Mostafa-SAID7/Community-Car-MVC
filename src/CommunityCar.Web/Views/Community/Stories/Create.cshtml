@@ -1,4 +1,5 @@
 @model CommunityCar.Web.Models.Stories.CreateStoryVM
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Create Story";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,20 +16,20 @@
                         <i data-lucide="arrow-left" class="w-5 h-5 text-foreground"></i>
                     </a>
                     <div>
-                        <h1 class="text-xl font-bold text-foreground">Create Story</h1>
-                        <p class="text-sm text-muted-foreground">Share your automotive moment</p>
+                        <h1 class="text-xl font-bold text-foreground">@Localizer["CreateStory"]</h1>
+                        <p class="text-sm text-muted-foreground">@Localizer["ShareMoments"]</p>
                     </div>
                 </div>
                 
                 <div class="flex items-center gap-2">
                     <button type="button" id="saveDraftBtn" 
                             class="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors">
-                        Save Draft
+                        @Localizer["SaveDraft"]
                     </button>
                     <button type="submit" form="createStoryForm"
                             class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium">
                         <i data-lucide="send" class="w-4 h-4"></i>
-                        Publish Story
+                        @Localizer["PublishStory"]
                     </button>
                 </div>
             </div>
@@ -81,7 +82,7 @@
                         <label asp-for="Title" class="block text-sm font-medium text-foreground mb-2">Title (Optional)</label>
                         <input asp-for="Title" type="text" 
                                class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                               placeholder="Give your story a title...">
+                               placeholder="Give your story a title..." dir="auto">
                         <span asp-validation-for="Title" class="text-red-500 text-sm"></span>
                     </div>
 
@@ -90,7 +91,7 @@
                         <label asp-for="Caption" class="block text-sm font-medium text-foreground mb-2">Caption</label>
                         <textarea asp-for="Caption" rows="3"
                                   class="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
-                                  placeholder="Share what's happening..."></textarea>
+                                  placeholder="Share what's happening..." dir="auto"></textarea>
                         <span asp-validation-for="Caption" class="text-red-500 text-sm"></span>
                     </div>
 

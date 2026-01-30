@@ -15,9 +15,15 @@ public class FriendsRepository : BaseRepository<Friendship>, IFriendsRepository
     public async Task<IEnumerable<Friendship>> GetUserFriendsAsync(Guid userId)
     {
         return await Context.Friendships
-            .Where(f => (f.RequesterId == userId || f.ReceiverId == userId) && 
-                       f.Status == FriendshipStatus.Accepted)
+            .Where(f => (f.RequesterId == userId || f.ReceiverId == userId) && f.Status == FriendshipStatus.Accepted)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Guid>> GetMutualFriendsAsync(Guid userId1, Guid userId2)
+    {
+        var user1Friends = await GetUserFriendIdsAsync(userId1);
+        var user2Friends = await GetUserFriendIdsAsync(userId2);
+        return user1Friends.Intersect(user2Friends);
     }
 
     public async Task<IEnumerable<Friendship>> GetPendingFriendRequestsAsync(Guid userId)
@@ -34,105 +40,54 @@ public class FriendsRepository : BaseRepository<Friendship>, IFriendsRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<Guid>> GetFriendSuggestionsAsync(Guid userId, int count)
+    {
+        // Simple suggestion: users who are not friends yet
+        var friendIds = await GetUserFriendIdsAsync(userId);
+        return await Context.Users
+            .Where(u => u.Id != userId && !friendIds.Contains(u.Id))
+            .Take(count)
+            .Select(u => u.Id)
+            .ToListAsync();
+    }
+
     public async Task<Friendship?> GetFriendshipAsync(Guid userId1, Guid userId2)
     {
         return await Context.Friendships
-            .FirstOrDefaultAsync(f => 
-                (f.RequesterId == userId1 && f.ReceiverId == userId2) ||
-                (f.RequesterId == userId2 && f.ReceiverId == userId1));
-    }
-
-    public async Task<Friendship?> GetFriendshipByIdAsync(Guid friendshipId)
-    {
-        return await Context.Friendships
-            .FirstOrDefaultAsync(f => f.Id == friendshipId);
+            .FirstOrDefaultAsync(f => (f.RequesterId == userId1 && f.ReceiverId == userId2) ||
+                                      (f.RequesterId == userId2 && f.ReceiverId == userId1));
     }
 
     public async Task<Friendship> CreateFriendshipAsync(Friendship friendship)
     {
-        await Context.Friendships.AddAsync(friendship);
-        await Context.SaveChangesAsync();
+        await AddAsync(friendship);
         return friendship;
     }
 
-    public async Task<Friendship> UpdateFriendshipAsync(Friendship friendship)
+    public async Task<Friendship?> GetFriendshipByIdAsync(Guid friendshipId)
     {
-        Context.Friendships.Update(friendship);
-        await Context.SaveChangesAsync();
-        return friendship;
+        return await GetByIdAsync(friendshipId);
+    }
+
+    public async Task UpdateFriendshipAsync(Friendship friendship)
+    {
+        await UpdateAsync(friendship);
     }
 
     public async Task DeleteFriendshipAsync(Guid friendshipId)
     {
-        var friendship = await GetFriendshipByIdAsync(friendshipId);
+        var friendship = await GetByIdAsync(friendshipId);
         if (friendship != null)
         {
-            Context.Friendships.Remove(friendship);
-            await Context.SaveChangesAsync();
+            await DeleteAsync(friendship);
         }
     }
 
-    public async Task<IEnumerable<Guid>> GetMutualFriendsAsync(Guid userId1, Guid userId2)
+    private async Task<List<Guid>> GetUserFriendIdsAsync(Guid userId)
     {
-        var user1Friends = await Context.Friendships
-            .Where(f => (f.RequesterId == userId1 || f.ReceiverId == userId1) && 
-                       f.Status == FriendshipStatus.Accepted)
-            .Select(f => f.RequesterId == userId1 ? f.ReceiverId : f.RequesterId)
-            .ToListAsync();
-
-        var user2Friends = await Context.Friendships
-            .Where(f => (f.RequesterId == userId2 || f.ReceiverId == userId2) && 
-                       f.Status == FriendshipStatus.Accepted)
-            .Select(f => f.RequesterId == userId2 ? f.ReceiverId : f.RequesterId)
-            .ToListAsync();
-
-        return user1Friends.Intersect(user2Friends);
-    }
-
-    public async Task<IEnumerable<Guid>> GetFriendSuggestionsAsync(Guid userId, int count = 10)
-    {
-        // Get user's current friends
-        var currentFriends = await Context.Friendships
-            .Where(f => (f.RequesterId == userId || f.ReceiverId == userId) && 
-                       f.Status == FriendshipStatus.Accepted)
+        var friendships = await GetUserFriendsAsync(userId);
+        return friendships
             .Select(f => f.RequesterId == userId ? f.ReceiverId : f.RequesterId)
-            .ToListAsync();
-
-        // Get pending requests (both sent and received)
-        var pendingUsers = await Context.Friendships
-            .Where(f => (f.RequesterId == userId || f.ReceiverId == userId) && 
-                       f.Status == FriendshipStatus.Pending)
-            .Select(f => f.RequesterId == userId ? f.ReceiverId : f.RequesterId)
-            .ToListAsync();
-
-        // Exclude current user, friends, and pending requests
-        var excludeUsers = new List<Guid> { userId };
-        excludeUsers.AddRange(currentFriends);
-        excludeUsers.AddRange(pendingUsers);
-
-        // Get suggestions based on mutual friends
-        var suggestions = await Context.Users
-            .Where(u => !excludeUsers.Contains(u.Id))
-            .Take(count)
-            .Select(u => u.Id)
-            .ToListAsync();
-
-        return suggestions;
-    }
-
-    public async Task<bool> AreFriendsAsync(Guid userId1, Guid userId2)
-    {
-        return await Context.Friendships
-            .AnyAsync(f => 
-                ((f.RequesterId == userId1 && f.ReceiverId == userId2) ||
-                 (f.RequesterId == userId2 && f.ReceiverId == userId1)) &&
-                f.Status == FriendshipStatus.Accepted);
-    }
-
-    public async Task<int> GetFriendsCountAsync(Guid userId)
-    {
-        return await Context.Friendships
-            .CountAsync(f => (f.RequesterId == userId || f.ReceiverId == userId) && 
-                            f.Status == FriendshipStatus.Accepted);
+            .ToList();
     }
 }

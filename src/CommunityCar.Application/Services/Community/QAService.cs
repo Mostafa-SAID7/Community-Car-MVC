@@ -286,6 +286,21 @@ public class QAService : IQAService
         return vm;
     }
 
+    public async Task<QuestionVM?> GetQuestionBySlugAsync(string slug)
+    {
+        var question = await _unitOfWork.QA.GetQuestionBySlugAsync(slug);
+        if (question == null) return null;
+
+        var vm = _mapper.Map<QuestionVM>(question);
+        var answers = await _unitOfWork.QA.GetAnswersByQuestionIdAsync(question.Id);
+        vm.AnswerCount = answers.Count();
+        vm.VoteCount = await _unitOfWork.Votes.GetVoteCountAsync(question.Id, EntityType.Question);
+        vm.VoteScore = question.VoteScore;
+        vm.ViewCount = question.ViewCount;
+        
+        return vm;
+    }
+
     public async Task<IEnumerable<AnswerVM>> GetAnswersByQuestionIdAsync(Guid questionId)
     {
         var answers = await _unitOfWork.QA.GetAnswersByQuestionIdAsync(questionId);

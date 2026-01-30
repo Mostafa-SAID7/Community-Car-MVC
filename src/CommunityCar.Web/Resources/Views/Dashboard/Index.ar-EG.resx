@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="DashboardOverview" xml:space="preserve"><value>نظرة عامة على لوحة القيادة</value></data>
+  <data name="TotalUsers" xml:space="preserve"><value>إجمالي المستخدمين</value></data>
+  <data name="ThisMonth" xml:space="preserve"><value>هذا الشهر</value></data>
+  <data name="TotalPosts" xml:space="preserve"><value>إجمالي المنشورات</value></data>
+  <data name="ActiveToday" xml:space="preserve"><value>نشط اليوم</value></data>
+  <data name="TotalComments" xml:space="preserve"><value>إجمالي التعليقات</value></data>
+  <data name="Engagement" xml:space="preserve"><value>التفاعل</value></data>
+  <data name="QAItems" xml:space="preserve"><value>عناصر الأسئلة والأجوبة</value></data>
+  <data name="UserGrowth" xml:space="preserve"><value>نمو المستخدمين</value></data>
+  <data name="SevenDays" xml:space="preserve"><value>7 أيام</value></data>
+  <data name="ThirtyDays" xml:space="preserve"><value>30 يوم</value></data>
+  <data name="NinetyDays" xml:space="preserve"><value>90 يوم</value></data>
+  <data name="SystemHealth" xml:space="preserve"><value>صحة النظام</value></data>
+  <data name="Status" xml:space="preserve"><value>الحالة</value></data>
+  <data name="Healthy" xml:space="preserve"><value>سليم</value></data>
+  <data name="IssuesDetected" xml:space="preserve"><value>تم اكتشاف مشكلات</value></data>
+  <data name="CpuUsage" xml:space="preserve"><value>استخدام المعالج</value></data>
+  <data name="MemoryUsage" xml:space="preserve"><value>استخدام الذاكرة</value></data>
+  <data name="DiskUsage" xml:space="preserve"><value>استخدام القرص</value></data>
+  <data name="LastCheck" xml:space="preserve"><value>آخر فحص</value></data>
+  <data name="RecentActivity" xml:space="preserve"><value>النشاط الأخير</value></data>
+  <data name="TopContent" xml:space="preserve"><value>أهم المحتويات</value></data>
+  <data name="ActiveUsers" xml:space="preserve"><value>المستخدمون النشطون</value></data>
+  <data name="Posts" xml:space="preserve"><value>منشورات</value></data>
+  <data name="NewUsers" xml:space="preserve"><value>مستخدمون جدد</value></data>
+</root>

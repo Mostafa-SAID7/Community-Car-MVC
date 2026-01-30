@@ -126,7 +126,7 @@ public class AccountSecurityService : IAccountSecurityService
          // However, User.OAuthInfo is a value object or owned type?
          // Let's try to update it.
          
-         user.OAuthInfo = user.OAuthInfo with { LastLoginAt = DateTime.UtcNow };
+         user.UpdateLastLogin();
          var result = await _userManager.UpdateAsync(user);
          return result.ToApplicationResult();
     }

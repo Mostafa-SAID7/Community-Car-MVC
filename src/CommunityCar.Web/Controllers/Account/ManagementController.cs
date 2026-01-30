@@ -38,7 +38,7 @@ public class ManagementController : Controller
     public async Task<IActionResult> DeactivateAccount(DeactivateAccountVM model)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            return RedirectToAction("Login", "Authentication");
+            return RedirectToAction("Login", "Account");
 
         if (!ModelState.IsValid)
             return View(model);
@@ -80,7 +80,7 @@ public class ManagementController : Controller
     public async Task<IActionResult> DeleteAccount(DeleteAccountVM model)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            return RedirectToAction("Login", "Authentication");
+            return RedirectToAction("Login", "Account");
 
         if (!ModelState.IsValid)
             return View(model);
@@ -102,7 +102,7 @@ public class ManagementController : Controller
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = "Account deleted successfully. We're sorry to see you go!";
-            return RedirectToAction("Login", "Authentication");
+            return RedirectToAction("Login", "Account");
         }
 
         foreach (var error in result.Errors)

@@ -19,6 +19,10 @@ public class Route : BaseEntity
     // Route metrics
     public double DistanceKm { get; private set; }
     public int EstimatedDurationMinutes { get; private set; }
+    public double StartLatitude { get; private set; }
+    public double StartLongitude { get; private set; }
+    public double EndLatitude { get; private set; }
+    public double EndLongitude { get; private set; }
     public double AverageRating { get; private set; }
     public int ReviewCount { get; private set; }
     public int TimesCompleted { get; private set; }

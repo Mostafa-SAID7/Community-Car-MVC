@@ -21,5 +21,5 @@ public interface IGoogleOAuthService
     /// <summary>
     /// Verifies Google ID token and returns user info
     /// </summary>
-    Task<GoogleUserInfo?> VerifyGoogleTokenAsync(string idToken);
+    Task<CommunityCar.Application.Features.Account.ViewModels.Authentication.GoogleUserInfo?> VerifyGoogleTokenAsync(string idToken);
 }

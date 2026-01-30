@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="DashboardSettings" xml:space="preserve"><value>إعدادات لوحة التحكم</value></data>
+  <data name="Categories" xml:space="preserve"><value>الفئات</value></data>
+  <data name="AllSettings" xml:space="preserve"><value>جميع الإعدادات</value></data>
+  <data name="CategorySettings" xml:space="preserve"><value>إعدادات {0}</value></data>
+  <data name="CategoryLabel" xml:space="preserve"><value>الفئة</value></data>
+  <data name="Update" xml:space="preserve"><value>تحديث</value></data>
+  <data name="Reset" xml:space="preserve"><value>إعادة تعيين</value></data>
+  <data name="ResetAllSettings" xml:space="preserve"><value>إعادة تعيين جميع الإعدادات</value></data>
+  <data name="ResetAllDescription" xml:space="preserve"><value>إعادة تعيين جميع الإعدادات إلى قيمها الافتراضية</value></data>
+  <data name="NoSettingsFound" xml:space="preserve"><value>لم يتم العثور على إعدادات</value></data>
+  <data name="NoSettingsForCategory" xml:space="preserve"><value>لم يتم العثور على إعدادات لفئة '{0}'.</value></data>
+  <data name="NoSettingsConfigured" xml:space="preserve"><value>لم يتم تكوين أي إعدادات بعد.</value></data>
+</root>

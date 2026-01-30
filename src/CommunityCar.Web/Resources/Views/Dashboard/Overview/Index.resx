@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="DashboardOverview" xml:space="preserve"><value>Dashboard Overview</value></data>
+  <data name="ThisMonth" xml:space="preserve"><value>this month</value></data>
+  <data name="Active" xml:space="preserve"><value>Active Today</value></data>
+  <data name="Engage" xml:space="preserve"><value>Engagement</value></data>
+  <data name="UserGrowthTrend" xml:space="preserve"><value>User Growth Trend</value></data>
+  <data name="NewUsers" xml:space="preserve"><value>New Users</value></data>
+  <data name="SystemMonitoring" xml:space="preserve"><value>System Monitoring</value></data>
+  <data name="Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Healthy" xml:space="preserve"><value>Healthy</value></data>
+  <data name="IssuesDetected" xml:space="preserve"><value>Issues Detected</value></data>
+  <data name="CpuUsage" xml:space="preserve"><value>CPU Usage</value></data>
+  <data name="MemoryUsage" xml:space="preserve"><value>Memory Usage</value></data>
+  <data name="DiskUsage" xml:space="preserve"><value>Disk Usage</value></data>
+  <data name="LastCheck" xml:space="preserve"><value>Last check</value></data>
+  <data name="RecentActivity" xml:space="preserve"><value>Recent Activity</value></data>
+  <data name="TopContent" xml:space="preserve"><value>Top Content</value></data>
+  <data name="ActiveUsers" xml:space="preserve"><value>Active Users</value></data>
+  <data name="Posts" xml:space="preserve"><value>Posts</value></data>
+</root>

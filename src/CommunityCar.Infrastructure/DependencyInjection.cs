@@ -1,10 +1,9 @@
 using CommunityCar.Infrastructure.Configuration;
 using CommunityCar.Infrastructure.Configuration.Account;
-using CommunityCar.Infrastructure.Configuration.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
 using CommunityCar.Infrastructure.Services.Account;
-using CommunityCar.Infrastructure.Services.Account.Authorization;
+using CommunityCar.Application.Services.Account.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
@@ -13,6 +12,8 @@ using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
+using CommunityCar.Application.Common.Interfaces.Repositories.AI;
+using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Services.Shared;
@@ -29,17 +30,17 @@ using CommunityCar.Infrastructure.Persistence.Repositories.Account.Social;
 using CommunityCar.Infrastructure.Persistence.Repositories.Account.Media;
 using CommunityCar.Infrastructure.Persistence.Repositories.Account.Management;
 using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
+using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
 using CommunityCar.Infrastructure.Persistence.Repositories.AI;
+using CommunityCar.Infrastructure.Persistence.Repositories.Chat;
 using CommunityCar.Infrastructure.Persistence.UnitOfWork;
 using CommunityCar.Infrastructure.Services.Account.Authentication;
 using CommunityCar.Infrastructure.Services.Account.Authentication.OAuth;
-using CommunityCar.Infrastructure.Services.Account.Authentication.TwoFactor;
 using CommunityCar.Application.Services.AI.ModelManagement;
 using CommunityCar.Application.Services.AI.Training;
 using CommunityCar.Application.Services.AI.History;
 using CommunityCar.Infrastructure.Services.Communication;
 using CommunityCar.Infrastructure.Services.Community;
-using CommunityCar.Infrastructure.Services.Account.Identity;
 using CommunityCar.Infrastructure.Services.Storage;
 using CommunityCar.Infrastructure.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
@@ -47,7 +48,6 @@ using CommunityCar.Application.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Application.Common.Interfaces.Services.BackgroundJobs;
 using CommunityCar.Infrastructure.BackgroundJobs;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +57,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CommunityCar.Application.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
+using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Authentication;
+using CommunityCar.Domain.Entities.Account.Authorization;
+using CommunityCar.Application.Common.Interfaces.Repositories.Authorization;
+using CommunityCar.Infrastructure.Persistence.Repositories.Account.Authorization;
 
 namespace CommunityCar.Infrastructure;
 
@@ -79,7 +86,7 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-        services.AddIdentity<User, IdentityRole<Guid>>(options => {
+        services.AddIdentity<User, Role>(options => {
             // Password policy
             options.Password.RequireDigit = true;
             options.Password.RequiredLength = 8;
@@ -108,6 +115,16 @@ public static class DependencyInjection
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/auth/login");
+            options.LogoutPath = new Microsoft.AspNetCore.Http.PathString("/auth/logout");
+            options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/auth/access-denied");
+            options.Cookie.HttpOnly = true;
+            options.ExpireTimeSpan = TimeSpan.FromDays(30);
+            options.SlidingExpiration = true;
+        });
+
         services.AddScoped<IConversationRepository, ConversationRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<IQARepository, QARepository>();
@@ -131,6 +148,8 @@ public static class DependencyInjection
         services.AddScoped<IPostsRepository, PostsRepository>();
         services.AddScoped<IFriendsRepository, FriendsRepository>();
         services.AddScoped<IGuidesRepository, GuidesRepository>();
+        services.AddScoped<IConversationRepository, ConversationRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
 
         // AI Repositories
         services.AddScoped<IAIModelRepository, AIModelRepository>();
@@ -156,6 +175,10 @@ public static class DependencyInjection
         services.AddScoped<IUserFollowingRepository, UserFollowingRepository>();
         services.AddScoped<IUserProfileViewRepository, UserProfileViewRepository>();
 
+        // Authorization Repositories
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IPermissionRepository, PermissionRepository>();
+
         // Authentication & Authorization services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IOAuthService, OAuthService>();
@@ -165,8 +188,7 @@ public static class DependencyInjection
         services.AddScoped<IFacebookOAuthService, FacebookOAuthService>();
 
         // Focused TwoFactor Services
-        services.AddScoped<IAuthenticatorService, AuthenticatorService>();
-        services.AddScoped<IRecoveryCodesService, RecoveryCodesService>();
+        services.AddScoped<ITwoFactorService, TwoFactorService>();
 
         // Focused AI Services
         services.AddScoped<IModelManagementService, ModelManagementService>();
@@ -254,7 +276,7 @@ public static class DependencyInjection
             new CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder(
                 provider.GetRequiredService<ApplicationDbContext>(),
                 provider.GetRequiredService<UserManager<User>>(),
-                provider.GetRequiredService<RoleManager<IdentityRole<Guid>>>(),
+                provider.GetRequiredService<RoleManager<Role>>(),
                 provider.GetRequiredService<ILogger<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>>(),
                 provider));
 

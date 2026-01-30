@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="SEODashboard" xml:space="preserve"><value>لوحة تحكم SEO</value></data>
+  <data name="SearchOptimization" xml:space="preserve"><value>تحسين محركات البحث</value></data>
+  <data name="GlobalVisibilityManagement" xml:space="preserve"><value>إدارة الظهور العالمي ومقاييس القابلية للفهرسة</value></data>
+  <data name="ProtocolHealthScore" xml:space="preserve"><value>درجة صحة البروتوكول</value></data>
+  <data name="Percentile" xml:space="preserve"><value>النسبة المئوية</value></data>
+  <data name="Optimized" xml:space="preserve"><value>محسن</value></data>
+  <data name="Commercial" xml:space="preserve"><value>تاري</value></data>
+  <data name="Underperforming" xml:space="preserve"><value>دون المستوى</value></data>
+  <data name="AcceleratedActions" xml:space="preserve"><value>إجراءات متسارعة</value></data>
+  <data name="AuditSingleURI" xml:space="preserve"><value>تدقيق رابط واحد</value></data>
+  <data name="Execute" xml:space="preserve"><value>تنفيذ</value></data>
+  <data name="EngineCrawlability" xml:space="preserve"><value>قابلية الزحف للمحركات</value></data>
+  <data name="Sitemap" xml:space="preserve"><value>خريطة الموقع</value></data>
+  <data name="RSSFeed" xml:space="preserve"><value>خلاصة RSS</value></data>
+  <data name="ProTip" xml:space="preserve"><value>نصيحة الخبراء</value></data>
+  <data name="ProTipText" xml:space="preserve"><value>قم بتحسين علامات ALT للصور وتأكد من أن طول العنوان يتراوح بين 50-60 حرفًا لتحقيق أقصى معدل نقر (CTR) في محركات البحث.</value></data>
+  <data name="TitleLength" xml:space="preserve"><value>طول العنوان</value></data>
+  <data name="Optimal" xml:space="preserve"><value>أمثل</value></data>
+  <data name="CheckRange" xml:space="preserve"><value>تحقق من النطاق</value></data>
+  <data name="MetaDescription" xml:space="preserve"><value>وصف الميتا</value></data>
+  <data name="Good" xml:space="preserve"><value>جيد</value></data>
+  <data name="Optimize" xml:space="preserve"><value>تحسين</value></data>
+  <data name="H1Tags" xml:space="preserve"><value>علامات H1</value></data>
+  <data name="Perfect" xml:space="preserve"><value>مثالي</value></data>
+  <data name="Error" xml:space="preserve"><value>خطأ</value></data>
+  <data name="MissingAlts" xml:space="preserve"><value>نصوص بديلة مفقودة</value></data>
+  <data name="Healthy" xml:space="preserve"><value>سليم</value></data>
+  <data name="FixAlts" xml:space="preserve"><value>إصلاح النصوص البديلة</value></data>
+  <data name="CriticalSEOObstacles" xml:space="preserve"><value>عقبات SEO حرجة</value></data>
+  <data name="Severity" xml:space="preserve"><value>الخطورة</value></data>
+  <data name="Type" xml:space="preserve"><value>النوع</value></data>
+  <data name="ResolutionProtocol" xml:space="preserve"><value>بروتوكول الحل</value></data>
+  <data name="GrowthRecommendations" xml:space="preserve"><value>توصيات النمو</value></data>
+  <data name="Priority" xml:space="preserve"><value>الأولوية</value></data>
+  <data name="Impact" xml:space="preserve"><value>التأثير</value></data>
+</root>

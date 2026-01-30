@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Home" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="QA" xml:space="preserve">
+    <value>الأسئلة والأجوبة</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>المنشورات</value>
+  </data>
+  <data name="Guides" xml:space="preserve">
+    <value>الأدلة</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>المجموعات</value>
+  </data>
+  <data name="Friends" xml:space="preserve">
+    <value>الأصدقاء</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>الأخبار</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>الفعاليات</value>
+  </data>
+  <data name="Reviews" xml:space="preserve">
+    <value>المراجعات</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>الخرائط</value>
+  </data>
+  <data name="AdminProfile" xml:space="preserve">
+    <value>الملف الشخصي للمشرف</value>
+  </data>
+  <data name="MyProfile" xml:space="preserve">
+    <value>ملفي الشخصي</value>
+  </data>
+</root>

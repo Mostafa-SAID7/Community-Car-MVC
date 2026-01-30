@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PageTitle" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
+  <data name="UserCredentials" xml:space="preserve">
+    <value>User Credentials</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="LastActive" xml:space="preserve">
+    <value>Last Active</value>
+  </data>
+  <data name="AccountStatus" xml:space="preserve">
+    <value>Account Status</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>Verified</value>
+  </data>
+  <data name="PendingVerification" xml:space="preserve">
+    <value>Pending Verification</value>
+  </data>
+  <data name="AboutMe" xml:space="preserve">
+    <value>About Me</value>
+  </data>
+  <data name="NoBio" xml:space="preserve">
+    <value>No bio added yet. Tell the community about yourself!</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>Posts</value>
+  </data>
+  <data name="Friends" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="Likes" xml:space="preserve">
+    <value>Likes</value>
+  </data>
+  <data name="Badges" xml:space="preserve">
+    <value>Badges</value>
+  </data>
+  <data name="StartJourneyTitle" xml:space="preserve">
+    <value>Start Your Journey</value>
+  </data>
+  <data name="StartJourneyMessage" xml:space="preserve">
+    <value>Share your first post, connect with fellow car enthusiasts, and start building your automotive legacy in the community.</value>
+  </data>
+  <data name="CreatePost" xml:space="preserve">
+    <value>Create Post</value>
+  </data>
+  <data name="BrowseFeed" xml:space="preserve">
+    <value>Browse Feed</value>
+  </data>
+</root>

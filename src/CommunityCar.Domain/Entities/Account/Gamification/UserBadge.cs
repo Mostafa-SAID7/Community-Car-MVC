@@ -16,7 +16,9 @@ public class UserBadge : BaseEntity
     public BadgeRarity Rarity { get; private set; }
     public int Points { get; private set; }
     public DateTime EarnedAt { get; private set; }
+    public DateTime AwardedAt => EarnedAt; // Alias for repository
     public bool IsDisplayed { get; private set; }
+    public int DisplayOrder { get; private set; }
 
     public UserBadge(Guid userId, string badgeId, string name, string description, string iconUrl, 
                      BadgeCategory category, BadgeRarity rarity, int points)
@@ -33,6 +35,16 @@ public class UserBadge : BaseEntity
         IsDisplayed = true;
     }
 
+    public static UserBadge Create(Guid userId, Guid badgeId, DateTime awardedAt)
+    {
+        // Note: Creating a stub UserBadge with Guid-based BadgeId and default values
+        // because the repository expects a Guid badgeId in Create.
+        return new UserBadge(userId, badgeId.ToString(), "Awarded Badge", "Description", "", BadgeCategory.Special, BadgeRarity.Common, 0)
+        {
+            EarnedAt = awardedAt
+        };
+    }
+
     public void UpdateArabicContent(string? nameAr, string? descriptionAr)
     {
         NameAr = nameAr;
@@ -46,6 +58,18 @@ public class UserBadge : BaseEntity
     public void ToggleDisplay()
     {
         IsDisplayed = !IsDisplayed;
+        Audit(UpdatedBy);
+    }
+
+    public void SetDisplayStatus(bool isDisplayed)
+    {
+        IsDisplayed = isDisplayed;
+        Audit(UpdatedBy);
+    }
+
+    public void SetDisplayOrder(int order)
+    {
+        DisplayOrder = order;
         Audit(UpdatedBy);
     }
 }

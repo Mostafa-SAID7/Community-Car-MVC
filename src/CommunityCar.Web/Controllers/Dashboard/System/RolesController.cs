@@ -138,7 +138,7 @@ public class RolesController : Controller
                 Description = role.Description,
                 Category = role.Category,
                 Priority = role.Priority,
-                Permissions = role.Permissions
+                Permissions = role.Permissions.Select(p => p.Name).ToList()
             };
 
             await PopulateEditViewData();

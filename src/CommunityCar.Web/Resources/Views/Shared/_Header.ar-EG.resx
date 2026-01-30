@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ToggleSidebar" xml:space="preserve">
+    <value>تبديل الشريط الجانبي</value>
+  </data>
+  <data name="AppInitials" xml:space="preserve">
+    <value>CC</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>مجتمع السيارات</value>
+  </data>
+  <data name="AppTagline" xml:space="preserve">
+    <value>مجتمع عشاق السيارات الأمثل</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>بحث...</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>الدردشة</value>
+  </data>
+  <data name="Friends" xml:space="preserve">
+    <value>الأصدقاء</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>لوحة القيادة</value>
+  </data>
+  <data name="ToggleTheme" xml:space="preserve">
+    <value>تبديل المظهر</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>التنبيهات</value>
+  </data>
+  <data name="MarkAllRead" xml:space="preserve">
+    <value>تمييز الكل كمقروء</value>
+  </data>
+</root>

@@ -477,12 +477,17 @@ public class SharedInteractionSeeder
 
     private Guid GetEntityId<T>(T entity) where T : class
     {
-        var idProperty = typeof(T).GetProperty("Id");
+        if (entity is CommunityCar.Domain.Base.IBaseEntity baseEntity)
+        {
+            return baseEntity.Id;
+        }
+
+        var idProperty = entity.GetType().GetProperty("Id");
         if (idProperty != null && idProperty.PropertyType == typeof(Guid))
         {
             return (Guid)idProperty.GetValue(entity)!;
         }
-        throw new InvalidOperationException($"Entity type {typeof(T).Name} does not have a Guid Id property");
+        throw new InvalidOperationException($"Entity type {entity.GetType().Name} does not have a Guid Id property");
     }
 }
 

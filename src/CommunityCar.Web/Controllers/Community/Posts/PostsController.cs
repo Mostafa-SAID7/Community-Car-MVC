@@ -4,7 +4,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Features.Posts.DTOs;
 using CommunityCar.Domain.Enums.Community;
 
-namespace CommunityCar.Web.Controllers.Community.Posts;
+namespace CommunityCar.Web.Controllers.Community.Post;
 
 [Route("posts")]
 public class PostsController : Controller
@@ -47,7 +47,7 @@ public class PostsController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading posts index");
-            return View("~/Views/Community/Posts/Index.cshtml", new List<CommunityCar.Domain.Entities.Community.Posts.Post>());
+            return View("~/Views/Community/Posts/Index.cshtml", new List<PostSummaryVM>());
         }
     }
 

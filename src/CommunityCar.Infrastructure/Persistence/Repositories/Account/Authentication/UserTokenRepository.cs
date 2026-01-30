@@ -1,7 +1,9 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
-using CommunityCar.Domain.Entities.Account.Authentication;
-using CommunityCar.Infrastructure.Persistence.Data;
+using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
+using CommunityCar.Domain.Entities.Account.Authentication;
+using CommunityCar.Domain.Enums.Account;
+using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommunityCar.Infrastructure.Persistence.Repositories.Account.Authentication;
@@ -17,27 +19,27 @@ public class UserTokenRepository : BaseRepository<UserToken>, IUserTokenReposito
 
     #region Token Management
 
-    public async Task<UserToken?> GetTokenAsync(Guid userId, string tokenType, string token)
+    public async Task<UserToken?> GetTokenAsync(Guid userId, TokenType tokenType, string token)
     {
         return await Context.UserTokens
             .FirstOrDefaultAsync(t => t.UserId == userId && t.TokenType == tokenType && t.Token == token);
     }
 
-    public async Task<UserToken?> GetActiveTokenAsync(Guid userId, string tokenType)
+    public async Task<UserToken?> GetActiveTokenAsync(Guid userId, TokenType tokenType)
     {
         return await Context.UserTokens
-            .Where(t => t.UserId == userId && t.TokenType == tokenType && t.IsActive && !t.IsExpired)
+            .Where(t => t.UserId == userId && t.TokenType == tokenType && t.IsActive && !t.IsExpired())
             .OrderByDescending(t => t.CreatedAt)
             .FirstOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<UserToken>> GetUserTokensAsync(Guid userId, string? tokenType = null)
+    public async Task<IEnumerable<UserToken>> GetUserTokensAsync(Guid userId, TokenType? tokenType = null)
     {
         var query = Context.UserTokens.Where(t => t.UserId == userId);
         
-        if (!string.IsNullOrEmpty(tokenType))
+        if (tokenType.HasValue)
         {
-            query = query.Where(t => t.TokenType == tokenType);
+            query = query.Where(t => t.TokenType == tokenType.Value);
         }
 
         return await query
@@ -45,9 +47,12 @@ public class UserTokenRepository : BaseRepository<UserToken>, IUserTokenReposito
             .ToListAsync();
     }
 
-    public async Task<bool> CreateTokenAsync(Guid userId, string tokenType, string token, DateTime expiresAt, Dictionary<string, object>? metadata = null)
+    public async Task<bool> CreateTokenAsync(Guid userId, TokenType tokenType, string token, DateTime expiresAt, Dictionary<string, object>? metadata = null)
     {
-        var userToken = UserToken.Create(userId, tokenType, token, expiresAt, metadata);
+        // Note: UserToken constructor adds validity to DateTime.UtcNow
+        // For CreateTokenAsync, we'll calculate the validity span
+        var validity = expiresAt - DateTime.UtcNow;
+        var userToken = new UserToken(userId, tokenType, token, validity);
         await AddAsync(userToken);
         return true;
     }
@@ -64,20 +69,20 @@ public class UserTokenRepository : BaseRepository<UserToken>, IUserTokenReposito
         return true;
     }
 
-    public async Task<bool> InvalidateUserTokensAsync(Guid userId, string? tokenType = null)
+    public async Task<bool> InvalidateUserTokensAsync(Guid userId, TokenType? tokenType = null)
     {
-        var query = Context.UserTokens.Where(t => t.UserId == userId && t.IsActive);
+        var query = Context.UserTokens.Where(t => t.UserId == userId && t.IsUsed == false);
         
-        if (!string.IsNullOrEmpty(tokenType))
+        if (tokenType.HasValue)
         {
-            query = query.Where(t => t.TokenType == tokenType);
+            query = query.Where(t => t.TokenType == tokenType.Value);
         }
 
         var tokens = await query.ToListAsync();
 
         foreach (var token in tokens)
         {
-            token.Invalidate();
+            token.MarkAsUsed();
         }
 
         if (tokens.Any())
@@ -98,7 +103,7 @@ public class UserTokenRepository : BaseRepository<UserToken>, IUserTokenReposito
         var userToken = await Context.UserTokens
             .FirstOrDefaultAsync(t => t.Token == token);
 
-        return userToken?.IsActive == true && !userToken.IsExpired;
+        return userToken?.IsActive == true;
     }
 
     public async Task<bool> IsTokenExpiredAsync(string token)
@@ -106,17 +111,17 @@ public class UserTokenRepository : BaseRepository<UserToken>, IUserTokenReposito
         var userToken = await Context.UserTokens
             .FirstOrDefaultAsync(t => t.Token == token);
 
-        return userToken?.IsExpired == true;
+        return userToken?.IsExpired() == true;
     }
 
     public async Task<UserToken?> ValidateAndGetTokenAsync(string token)
     {
         var userToken = await Context.UserTokens
-            .FirstOrDefaultAsync(t => t.Token == token && t.IsActive);
+            .FirstOrDefaultAsync(t => t.Token == token && t.IsUsed == false);
 
-        if (userToken?.IsExpired == true)
+        if (userToken?.IsExpired() == true)
         {
-            userToken.Invalidate();
+            userToken.MarkAsUsed();
             await UpdateAsync(userToken);
             return null;
         }
@@ -127,12 +132,12 @@ public class UserTokenRepository : BaseRepository<UserToken>, IUserTokenReposito
     public async Task<bool> CleanupExpiredTokensAsync()
     {
         var expiredTokens = await Context.UserTokens
-            .Where(t => t.IsActive && t.ExpiresAt < DateTime.UtcNow)
+            .Where(t => t.IsUsed == false && t.ExpiresAt < DateTime.UtcNow)
             .ToListAsync();
 
         foreach (var token in expiredTokens)
         {
-            token.Invalidate();
+            token.MarkAsUsed();
         }
 
         if (expiredTokens.Any())
@@ -150,22 +155,26 @@ public class UserTokenRepository : BaseRepository<UserToken>, IUserTokenReposito
 
     public async Task<UserToken?> GetPasswordResetTokenAsync(Guid userId)
     {
-        return await GetActiveTokenAsync(userId, "PasswordReset");
+        return await GetActiveTokenAsync(userId, TokenType.PasswordReset);
     }
 
     public async Task<UserToken?> GetEmailConfirmationTokenAsync(Guid userId)
     {
-        return await GetActiveTokenAsync(userId, "EmailConfirmation");
+        return await GetActiveTokenAsync(userId, TokenType.EmailVerification);
     }
 
     public async Task<UserToken?> GetTwoFactorTokenAsync(Guid userId)
     {
-        return await GetActiveTokenAsync(userId, "TwoFactor");
+        // Try both email and SMS two factor tokens
+        var emailToken = await GetActiveTokenAsync(userId, TokenType.EmailTwoFactor);
+        if (emailToken != null) return emailToken;
+        
+        return await GetActiveTokenAsync(userId, TokenType.SmsTwoFactor);
     }
 
     public async Task<UserToken?> GetRefreshTokenAsync(Guid userId)
     {
-        return await GetActiveTokenAsync(userId, "RefreshToken");
+        return await GetActiveTokenAsync(userId, TokenType.RefreshToken);
     }
 
     #endregion

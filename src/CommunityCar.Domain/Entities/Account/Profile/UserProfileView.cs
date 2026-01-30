@@ -75,4 +75,17 @@ public class UserProfileView : BaseEntity
         
         return !string.IsNullOrEmpty(ipAddress) && ViewerIpAddress == ipAddress;
     }
+
+    public static UserProfileView Create(Guid viewerId, Guid profileUserId, string? ipAddress = null, string? userAgent = null)
+    {
+        return new UserProfileView(viewerId, profileUserId, ipAddress, userAgent);
+    }
+
+    public void UpdateView(string? ipAddress = null, string? userAgent = null)
+    {
+        ViewedAt = DateTime.UtcNow;
+        ViewerIpAddress = ipAddress;
+        ViewerUserAgent = userAgent;
+        Audit(UpdatedBy);
+    }
 }

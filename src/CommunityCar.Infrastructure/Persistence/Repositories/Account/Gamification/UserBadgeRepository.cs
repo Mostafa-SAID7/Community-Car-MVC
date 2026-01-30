@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Domain.Entities.Account.Gamification;
+using CommunityCar.Domain.Enums.Account;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
@@ -27,14 +28,16 @@ public class UserBadgeRepository : BaseRepository<UserBadge>, IUserBadgeReposito
 
     public async Task<UserBadge?> GetUserBadgeAsync(Guid userId, Guid badgeId)
     {
+        var badgeIdString = badgeId.ToString();
         return await Context.UserBadges
-            .FirstOrDefaultAsync(ub => ub.UserId == userId && ub.BadgeId == badgeId);
+            .FirstOrDefaultAsync(ub => ub.UserId == userId && ub.BadgeId == badgeIdString);
     }
 
     public async Task<bool> HasBadgeAsync(Guid userId, Guid badgeId)
     {
+        var badgeIdString = badgeId.ToString();
         return await Context.UserBadges
-            .AnyAsync(ub => ub.UserId == userId && ub.BadgeId == badgeId);
+            .AnyAsync(ub => ub.UserId == userId && ub.BadgeId == badgeIdString);
     }
 
     public async Task<bool> AwardBadgeAsync(Guid userId, Guid badgeId, DateTime? awardedAt = null)
@@ -80,32 +83,39 @@ public class UserBadgeRepository : BaseRepository<UserBadge>, IUserBadgeReposito
 
     public async Task<IEnumerable<UserBadge>> GetBadgesByRarityAsync(Guid userId, string rarity)
     {
+        if (!Enum.TryParse<BadgeRarity>(rarity, true, out var rarityEnum)) return new List<UserBadge>();
         return await Context.UserBadges
-            .Where(ub => ub.UserId == userId && ub.Rarity == rarity)
+            .Where(ub => ub.UserId == userId && ub.Rarity == rarityEnum)
             .OrderByDescending(ub => ub.AwardedAt)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<UserBadge>> GetBadgesByCategoryAsync(Guid userId, string category)
     {
+        if (!Enum.TryParse<BadgeCategory>(category, true, out var categoryEnum)) return new List<UserBadge>();
         return await Context.UserBadges
-            .Where(ub => ub.UserId == userId && ub.Category == category)
+            .Where(ub => ub.UserId == userId && ub.Category == categoryEnum)
             .OrderByDescending(ub => ub.AwardedAt)
             .ToListAsync();
     }
 
     public async Task<Dictionary<Guid, int>> GetBadgeStatisticsAsync()
     {
-        return await Context.UserBadges
+        var stats = await Context.UserBadges
             .GroupBy(ub => ub.BadgeId)
             .Select(g => new { BadgeId = g.Key, Count = g.Count() })
-            .ToDictionaryAsync(x => x.BadgeId, x => x.Count);
+            .ToListAsync();
+
+        return stats
+            .Where(x => Guid.TryParse(x.BadgeId, out _))
+            .ToDictionary(x => Guid.Parse(x.BadgeId), x => x.Count);
     }
 
     public async Task<IEnumerable<Guid>> GetTopBadgeHoldersAsync(Guid badgeId, int count = 10)
     {
+        var badgeIdString = badgeId.ToString();
         return await Context.UserBadges
-            .Where(ub => ub.BadgeId == badgeId)
+            .Where(ub => ub.BadgeId == badgeIdString)
             .OrderBy(ub => ub.AwardedAt)
             .Take(count)
             .Select(ub => ub.UserId)
@@ -137,13 +147,14 @@ public class UserBadgeRepository : BaseRepository<UserBadge>, IUserBadgeReposito
 
     public async Task<bool> UpdateBadgeDisplayOrderAsync(Guid userId, Dictionary<Guid, int> badgeOrders)
     {
+        var badgeIdStrings = badgeOrders.Keys.Select(k => k.ToString()).ToList();
         var userBadges = await Context.UserBadges
-            .Where(ub => ub.UserId == userId && badgeOrders.Keys.Contains(ub.BadgeId))
+            .Where(ub => ub.UserId == userId && badgeIdStrings.Contains(ub.BadgeId))
             .ToListAsync();
 
         foreach (var userBadge in userBadges)
         {
-            if (badgeOrders.TryGetValue(userBadge.BadgeId, out var order))
+            if (Guid.TryParse(userBadge.BadgeId, out var badgeGuid) && badgeOrders.TryGetValue(badgeGuid, out var order))
             {
                 userBadge.SetDisplayOrder(order);
             }

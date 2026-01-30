@@ -148,7 +148,8 @@ public class UserGalleryRepository : BaseRepository<UserGallery>, IUserGalleryRe
             .ToListAsync();
 
         return galleryItems
-            .SelectMany(tags => tags)
+            .Where(tags => !string.IsNullOrEmpty(tags))
+            .SelectMany(tags => System.Text.Json.JsonSerializer.Deserialize<List<string>>(tags) ?? new List<string>())
             .Distinct()
             .OrderBy(tag => tag)
             .ToList();

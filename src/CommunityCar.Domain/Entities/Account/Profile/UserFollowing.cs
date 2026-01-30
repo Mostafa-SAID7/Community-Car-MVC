@@ -6,6 +6,7 @@ public class UserFollowing : BaseEntity
 {
     public Guid FollowerId { get; private set; }
     public Guid FollowedUserId { get; private set; }
+    public Guid FollowingId => FollowedUserId; // Alias for repository compatibility
     public DateTime FollowedAt { get; private set; }
     public bool IsActive { get; private set; } = true;
     public string? FollowReason { get; private set; } // Why they followed (mutual friends, interests, etc.)
@@ -19,6 +20,11 @@ public class UserFollowing : BaseEntity
         FollowedUserId = followedUserId;
         FollowedAt = DateTime.UtcNow;
         FollowReason = followReason;
+    }
+
+    public static UserFollowing Create(Guid followerId, Guid followedUserId, string? followReason = null)
+    {
+        return new UserFollowing(followerId, followedUserId, followReason);
     }
 
     private UserFollowing() { }

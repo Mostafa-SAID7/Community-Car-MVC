@@ -59,11 +59,16 @@ public class ProfileVM
     public bool CanFollow { get; set; } = true;
     public bool IsOwnProfile { get; set; }
     
+    // View compatibility aliases
+    public int LikesReceivedCount => LikesReceived;
+    public int FriendsCount => FollowersCount; // Treating followers as friends for now
+    
     public ProfileStatsVM Stats { get; set; } = new();
 }
 
-public class ProfileStatsVM
+public class UserStatisticsVM
 {
+    public Guid UserId { get; set; }
     public int PostsCount { get; set; }
     public int CommentsCount { get; set; }
     public int LikesReceived { get; set; }
@@ -76,7 +81,18 @@ public class ProfileStatsVM
     public DateTime JoinedDate { get; set; }
     public int DaysActive { get; set; }
     public DateTime? LastActivityDate { get; set; }
+    public string JoinedTimeAgo { get; set; } = string.Empty;
+    public string LastActivityTimeAgo { get; set; } = string.Empty;
+    public int ExperiencePoints { get; set; }
+    public int TotalPoints { get; set; }
+    public int Level { get; set; }
+    public int Rank { get; set; }
+    
+    // Aliases
+    public int TotalBadges => BadgesCount;
 }
+
+public class ProfileStatsVM : UserStatisticsVM { }
 
 public class ProfileSettingsVM
 {
@@ -134,6 +150,8 @@ public class ProfileSettingsVM
     // Notification and Privacy flags (flattened)
     public bool EmailNotifications { get; set; } = true;
     public bool PushNotifications { get; set; } = true;
+    public bool SmsNotifications { get; set; } = true;
+    public bool MarketingEmails { get; set; } = true;
     public bool PublicProfile { get; set; } = true;
 }
 

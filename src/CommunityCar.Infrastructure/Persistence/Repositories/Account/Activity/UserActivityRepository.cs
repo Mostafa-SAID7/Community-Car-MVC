@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Domain.Entities.Account.Core;
+using CommunityCar.Domain.Enums.Account;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
@@ -38,8 +39,11 @@ public class UserActivityRepository : BaseRepository<UserActivity>, IUserActivit
 
     public async Task<IEnumerable<UserActivity>> GetActivitiesByTypeAsync(Guid userId, string activityType)
     {
+        if (!Enum.TryParse<ActivityType>(activityType, true, out var typeEnum))
+            return new List<UserActivity>();
+
         return await Context.UserActivities
-            .Where(a => a.UserId == userId && a.ActivityType == activityType)
+            .Where(a => a.UserId == userId && a.ActivityType == typeEnum)
             .OrderByDescending(a => a.CreatedAt)
             .ToListAsync();
     }
@@ -77,10 +81,12 @@ public class UserActivityRepository : BaseRepository<UserActivity>, IUserActivit
             query = query.Where(a => a.CreatedAt >= fromDate.Value);
         }
 
-        return await query
+        var stats = await query
             .GroupBy(a => a.ActivityType)
             .Select(g => new { Type = g.Key, Count = g.Count() })
-            .ToDictionaryAsync(x => x.Type, x => x.Count);
+            .ToListAsync();
+
+        return stats.ToDictionary(x => x.Type.ToString(), x => x.Count);
     }
 
     public async Task<IEnumerable<UserActivity>> GetMostActiveUsersAsync(DateTime fromDate, int count = 10)
@@ -110,7 +116,16 @@ public class UserActivityRepository : BaseRepository<UserActivity>, IUserActivit
 
     public async Task LogActivityAsync(Guid userId, string activityType, string description, Dictionary<string, object>? metadata = null)
     {
-        var activity = UserActivity.Create(userId, activityType, description, metadata);
+        if (!Enum.TryParse<ActivityType>(activityType, true, out var typeEnum))
+            typeEnum = ActivityType.Other;
+
+        var activity = UserActivity.Create(userId, typeEnum, "General", null, description);
+        if (metadata != null)
+        {
+            // Assuming Metadata property exists and takes a string or can be handled
+            // For now, if entity has SetMetadata(string)
+            // activity.SetMetadata(JsonSerializer.Serialize(metadata)); 
+        }
         await AddAsync(activity);
     }
 

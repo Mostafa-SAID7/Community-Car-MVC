@@ -14,6 +14,7 @@ public class Question : AggregateRoot
     // Arabic Localization
     public string? TitleAr { get; private set; }
     public string? BodyAr { get; private set; }
+    public string Slug { get; private set; } = string.Empty;
     
     public Guid AuthorId { get; private set; }
     public bool IsSolved { get; private set; }
@@ -44,11 +45,11 @@ public class Question : AggregateRoot
     // Collections
     private readonly List<string> _tags = new();
     public IReadOnlyCollection<string> Tags => _tags.AsReadOnly();
-
     public Question(string title, string body, Guid authorId, DifficultyLevel difficulty = DifficultyLevel.Beginner)
     {
         Title = title;
         Body = body;
+        Slug = GenerateSlug(title);
         AuthorId = authorId;
         IsSolved = false;
         ViewCount = 0;
@@ -152,6 +153,14 @@ public class Question : AggregateRoot
         LastActivityBy = activityBy;
     }
 
+    public void UpdateContent(string title, string body)
+    {
+        Title = title;
+        Body = body;
+        Slug = GenerateSlug(title);
+        Audit(UpdatedBy);
+    }
+
     public void UpdateArabicContent(string? titleAr, string? bodyAr)
     {
         TitleAr = titleAr;
@@ -163,4 +172,45 @@ public class Question : AggregateRoot
         !string.IsNullOrEmpty(CarMake) && !string.IsNullOrEmpty(CarModel) 
             ? $"{CarYear} {CarMake} {CarModel}".Trim()
             : string.Empty;
+
+    private static string GenerateSlug(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            return Guid.NewGuid().ToString("N")[..8];
+
+        var slug = title.ToLowerInvariant()
+            .Replace(" ", "-")
+            .Replace("'", "")
+            .Replace("\"", "")
+            .Replace(".", "")
+            .Replace(",", "")
+            .Replace("!", "")
+            .Replace("?", "")
+            .Replace(":", "")
+            .Replace(";", "")
+            .Replace("(", "")
+            .Replace(")", "")
+            .Replace("[", "")
+            .Replace("]", "")
+            .Replace("{", "")
+            .Replace("}", "")
+            .Replace("/", "-")
+            .Replace("\\", "-")
+            .Replace("&", "and");
+
+        // Remove multiple consecutive dashes
+        while (slug.Contains("--"))
+            slug = slug.Replace("--", "-");
+
+        // Remove leading and trailing dashes
+        slug = slug.Trim('-');
+
+        // Ensure slug is not empty and not too long
+        if (string.IsNullOrWhiteSpace(slug))
+            slug = Guid.NewGuid().ToString("N")[..8];
+        else if (slug.Length > 100)
+            slug = slug[..100].TrimEnd('-');
+
+        return slug;
+    }
 }

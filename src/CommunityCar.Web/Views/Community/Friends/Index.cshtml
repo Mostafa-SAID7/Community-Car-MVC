@@ -1,6 +1,5 @@
 @using Microsoft.Extensions.Localization
 @model CommunityCar.Application.Features.Friends.ViewModels.FriendsOverviewVM
-@inject IStringLocalizer<SharedResource> SharedLocalizer
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["PageTitle"];
@@ -28,7 +27,7 @@
                 <i data-lucide="users" class="w-5 h-5"></i>
             </div>
             <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.TotalFriends</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@SharedLocalizer["Friends"]</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Friends"]</div>
         </div>
         
         <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-orange-500/20">
@@ -353,4 +352,7 @@
             window.location.href = `/profile/${userId}`;
         }
     </script>
+}
+@section SidebarRight {
+    <partial name="_FriendsSidebar" />
 }

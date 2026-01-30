@@ -1,3 +1,5 @@
+using CommunityCar.Application.Common.Models;
+
 namespace CommunityCar.Application.Features.Account.ViewModels.Social;
 
 public class NetworkUserVM
@@ -71,8 +73,48 @@ public class FollowStatsVM
     public bool CanFollow { get; set; } = true;
 }
 
+public class UserFollowListVM
+{
+    public Guid ProfileUserId { get; set; }
+    public string ProfileUserName { get; set; } = string.Empty;
+    public string ListType { get; set; } = string.Empty;
+    public IEnumerable<FollowingVM> Users { get; set; } = new List<FollowingVM>();
+    public int TotalCount { get; set; }
+    public bool IsOwnProfile { get; set; }
+    public PaginationInfo Pagination { get; set; } = new();
+}
+
+public class SuggestedUserVM : FollowingVM
+{
+    public int MutualFollowersCount { get; set; }
+    public List<string> MutualFollowerNames { get; set; } = new();
+    public string SuggestionReason { get; set; } = string.Empty;
+}
+
+public class FollowSuggestionsVM
+{
+    public List<SuggestedUserVM> SuggestedUsers { get; set; } = new();
+}
+
 // Aliases
 public class UserFollowingWebVM : NetworkUserVM { }
 public class FollowingDashboardWebVM : FollowingDashboardVM { }
 public class FollowingListWebVM : FollowingListVM { }
+
+public class FollowingAnalyticsVM
+{
+    public Guid UserId { get; set; }
+    public int FollowingCount { get; set; }
+    public int FollowerCount { get; set; }
+    public int MutualFollowingCount { get; set; }
+    public List<NetworkUserVM> RecentFollowers { get; set; } = new();
+    public List<NetworkUserVM> RecentFollowing { get; set; } = new();
+    public List<UserSuggestionVM> SuggestedFollowing { get; set; } = new();
+}
+
+public class FollowUserRequest
+{
+    public Guid FollowerId { get; set; }
+    public Guid FollowingId { get; set; }
+}
 

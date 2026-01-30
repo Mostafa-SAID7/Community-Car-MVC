@@ -25,12 +25,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
                         <label for="name" class="block text-sm font-bold text-foreground mb-2">@Localizer["GroupName"] *</label>
-                        <input type="text" id="name" name="name" value="@Model.Name" required class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="@Localizer["GroupNamePlaceholder"]">
+                        <input type="text" id="name" name="name" value="@Model.Name" required class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="@Localizer["GroupNamePlaceholder"]" dir="auto">
                     </div>
 
                     <div class="md:col-span-2">
                         <label for="description" class="block text-sm font-bold text-foreground mb-2">@Localizer["Description"] *</label>
-                        <textarea id="description" name="description" rows="4" required class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" placeholder="@Localizer["DescriptionPlaceholder"]">@Model.Description</textarea>
+                        <textarea id="description" name="description" rows="4" required class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" placeholder="@Localizer["DescriptionPlaceholder"]" dir="auto">@Model.Description</textarea>
                     </div>
 
                     <div>
@@ -52,12 +52,12 @@
 
                     <div class="md:col-span-2">
                         <label for="location" class="block text-sm font-bold text-foreground mb-2">@Localizer["Location"]</label>
-                        <input type="text" id="location" name="location" value="@Model.Location" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="@Localizer["LocationPlaceholder"]">
+                        <input type="text" id="location" name="location" value="@Model.Location" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" placeholder="@Localizer["LocationPlaceholder"]" dir="auto">
                     </div>
 
                     <div class="md:col-span-2">
                         <label for="rules" class="block text-sm font-bold text-foreground mb-2">@Localizer["GroupRules"]</label>
-                        <textarea id="rules" name="rules" rows="6" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" placeholder="@Localizer["RulesPlaceholder"]">@Model.Rules</textarea>
+                        <textarea id="rules" name="rules" rows="6" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" placeholder="@Localizer["RulesPlaceholder"]" dir="auto">@Model.Rules</textarea>
                     </div>
                 </div>
 

@@ -9,5 +9,6 @@ public enum TokenType
     SmsTwoFactor = 5,
     PhoneVerification = 6,
     AccountActivation = 7,
-    LoginVerification = 8
+    LoginVerification = 8,
+    RefreshToken = 9
 }

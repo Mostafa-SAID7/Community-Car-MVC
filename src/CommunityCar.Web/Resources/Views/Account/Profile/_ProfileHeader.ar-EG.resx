@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Settings" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+  <data name="Enthusiast" xml:space="preserve">
+    <value>هاوٍ</value>
+  </data>
+  <data name="Joined" xml:space="preserve">
+    <value>انضم في</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>المنشورات</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>التعليقات</value>
+  </data>
+  <data name="Likes" xml:space="preserve">
+    <value>الإعجابات</value>
+  </data>
+</root>
