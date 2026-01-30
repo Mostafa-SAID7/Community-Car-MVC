@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="EditMapping" xml:space="preserve"><value>تعديل التعيين</value></data>
+  <data name="InitializeMapping" xml:space="preserve"><value>تهيئة التعيين</value></data>
+  <data name="RefineProtocol" xml:space="preserve"><value>تحسين البروتوكول</value></data>
+  <data name="NewTranslationNode" xml:space="preserve"><value>عقدة ترجمة جديدة</value></data>
+  <data name="ResourceOrchestrationDesc" xml:space="preserve"><value>تنسيق الموارد للمتحمسين العالميين</value></data>
+  <data name="EscapeToRegistry" xml:space="preserve"><value>الهروب إلى السجل</value></data>
+  <data name="SystemIdentifierKey" xml:space="preserve"><value>مفتاح معرف النظام</value></data>
+  <data name="SystemIdentifierKeyDesc" xml:space="preserve"><value>مرجع نظام غير قابل للتغيير لهذه العقدة</value></data>
+  <data name="LocaleTarget" xml:space="preserve"><value>هدف الإعدادات الإقليمية</value></data>
+  <data name="SelectProtocol" xml:space="preserve"><value>اختر البروتوكول...</value></data>
+  <data name="DomainNamespace" xml:space="preserve"><value>مساحة عمل النطاق</value></data>
+  <data name="LocalizedContentPayload" xml:space="preserve"><value>حمولة المحتوى المعرب</value></data>
+  <data name="LocalizedContentPlaceholder" xml:space="preserve"><value>أدخل الترجمة عالية الجودة هنا...</value></data>
+  <data name="CommitToRegistry" xml:space="preserve"><value>التزام بالسجل</value></data>
+</root>

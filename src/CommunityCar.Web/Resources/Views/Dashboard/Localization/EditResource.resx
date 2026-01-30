@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="EditMapping" xml:space="preserve"><value>Edit Mapping</value></data>
+  <data name="InitializeMapping" xml:space="preserve"><value>Initialize Mapping</value></data>
+  <data name="RefineProtocol" xml:space="preserve"><value>Refine Protocol</value></data>
+  <data name="NewTranslationNode" xml:space="preserve"><value>New Translation Node</value></data>
+  <data name="ResourceOrchestrationDesc" xml:space="preserve"><value>Resource orchestration for global enthusiasts</value></data>
+  <data name="EscapeToRegistry" xml:space="preserve"><value>Escape to Registry</value></data>
+  <data name="SystemIdentifierKey" xml:space="preserve"><value>System Identifier Key</value></data>
+  <data name="SystemIdentifierKeyDesc" xml:space="preserve"><value>Immutable system reference for this node</value></data>
+  <data name="LocaleTarget" xml:space="preserve"><value>Locale Target</value></data>
+  <data name="SelectProtocol" xml:space="preserve"><value>Select Protocol...</value></data>
+  <data name="DomainNamespace" xml:space="preserve"><value>Domain Namespace</value></data>
+  <data name="LocalizedContentPayload" xml:space="preserve"><value>Localized Content Payload</value></data>
+  <data name="LocalizedContentPlaceholder" xml:space="preserve"><value>Enter the high-fidelity translation here...</value></data>
+  <data name="CommitToRegistry" xml:space="preserve"><value>Commit to Registry</value></data>
+</root>
