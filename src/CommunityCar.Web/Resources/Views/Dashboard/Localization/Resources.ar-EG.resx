@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="DictionaryExplorerTitle" xml:space="preserve"><value>مستكشف القاموس</value></data>
+  <data name="DictionaryExplorer" xml:space="preserve"><value>مستكشف القاموس</value></data>
+  <data name="ActiveEntriesDesc" xml:space="preserve"><value>تعيين موارد حبيبي عبر {0} إدخالات نشطة</value></data>
+  <data name="NewEntry" xml:space="preserve"><value>إدخال جديد</value></data>
+  <data name="NamespaceCulture" xml:space="preserve"><value>مساحة الاسم / الثقافة</value></data>
+  <data name="GlobalDictionary" xml:space="preserve"><value>القاموس العالمي</value></data>
+  <data name="TargetFileGroup" xml:space="preserve"><value>ملف الهدف / المجموعة</value></data>
+  <data name="AllResourceFiles" xml:space="preserve"><value>جميع ملفات الموارد</value></data>
+  <data name="SearchKeywords" xml:space="preserve"><value>بحث عن كلمات مفتاحية...</value></data>
+  <data name="Search" xml:space="preserve"><value>بحث</value></data>
+  <data name="ResourceKey" xml:space="preserve"><value>مفتاح المورد</value></data>
+  <data name="CultureID" xml:space="preserve"><value>معرف الثقافة</value></data>
+  <data name="Group" xml:space="preserve"><value>المجموعة</value></data>
+  <data name="MappedValue" xml:space="preserve"><value>القيمة المعينة</value></data>
+  <data name="Actions" xml:space="preserve"><value>الإجراءات</value></data>
+  <data name="NoResourcesFound" xml:space="preserve"><value>لم يتم العثور على موارد</value></data>
+  <data name="NoResourcesFoundDesc" xml:space="preserve"><value>اضبط الفلاتر الخاصة بك أو جرب مصطلح بحث مختلف للعثور على ما تبحث عنه.</value></data>
+  <data name="ShowingEntries" xml:space="preserve"><value>عرض {0} - {1} من {2} إدخالات</value></data>
+  <data name="PageOf" xml:space="preserve"><value>صفحة {0} من {1}</value></data>
+</root>
