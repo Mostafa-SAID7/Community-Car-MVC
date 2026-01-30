@@ -1,6 +1,7 @@
+@inject IViewLocalizer Localizer
 @model CommunityCar.Application.Features.Dashboard.DTOs.ReportGenerationRequest
 @{
-    ViewData["Title"] = "Generate Report";
+    ViewData["Title"] = Localizer["GenerateReportTitle"];
     ViewData["PageType"] = "Reports";
 }
 
@@ -15,15 +16,15 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                 </a>
-                <h1 class="text-3xl font-bold text-gray-900">Generate Report</h1>
+                <h1 class="text-3xl font-bold text-gray-900">@Localizer["GenerateReport"]</h1>
             </div>
-            <p class="text-gray-600">Create a new report with custom parameters</p>
+            <p class="text-gray-600">@Localizer["GenerateReportDesc"]</p>
         </div>
 
         <!-- Form -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-900">Report Configuration</h2>
+                <h2 class="text-xl font-semibold text-gray-900">@Localizer["ReportConfiguration"]</h2>
             </div>
 
             <form asp-action="Generate" method="post" class="p-6 space-y-6">
@@ -32,18 +33,18 @@
                 <!-- Report Type -->
                 <div>
                     <label asp-for="ReportType" class="block text-sm font-medium text-gray-700 mb-2">
-                        Report Type
+                        @Localizer["ReportType"]
                     </label>
                     <select asp-for="ReportType" 
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        <option value="">Select a report type</option>
-                        <option value="UserAnalytics">User Analytics</option>
-                        <option value="ContentAnalytics">Content Analytics</option>
-                        <option value="PerformanceReport">Performance Report</option>
-                        <option value="SecurityReport">Security Report</option>
-                        <option value="ActivityReport">Activity Report</option>
-                        <option value="EngagementReport">Engagement Report</option>
-                        <option value="SystemHealthReport">System Health Report</option>
+                        <option value="">@Localizer["SelectReportType"]</option>
+                        <option value="UserAnalytics">@Localizer["UserAnalytics"]</option>
+                        <option value="ContentAnalytics">@Localizer["ContentAnalytics"]</option>
+                        <option value="PerformanceReport">@Localizer["PerformanceReport"]</option>
+                        <option value="SecurityReport">@Localizer["SecurityReport"]</option>
+                        <option value="ActivityReport">@Localizer["ActivityReport"]</option>
+                        <option value="EngagementReport">@Localizer["EngagementReport"]</option>
+                        <option value="SystemHealthReport">@Localizer["SystemHealthReport"]</option>
                     </select>
                     <span asp-validation-for="ReportType" class="text-red-600 text-sm"></span>
                 </div>
@@ -52,7 +53,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label asp-for="StartDate" class="block text-sm font-medium text-gray-700 mb-2">
-                            Start Date
+                            @Localizer["StartDate"]
                         </label>
                         <input asp-for="StartDate" type="date" 
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
@@ -61,7 +62,7 @@
 
                     <div>
                         <label asp-for="EndDate" class="block text-sm font-medium text-gray-700 mb-2">
-                            End Date
+                            @Localizer["EndDate"]
                         </label>
                         <input asp-for="EndDate" type="date" 
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
@@ -73,46 +74,46 @@
                 <div class="flex flex-wrap gap-2">
                     <button type="button" data-action="set-date-range" data-days="7" 
                             class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
-                        Last 7 days
+                        @Localizer["Last7Days"]
                     </button>
                     <button type="button" data-action="set-date-range" data-days="30" 
                             class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
-                        Last 30 days
+                        @Localizer["Last30Days"]
                     </button>
                     <button type="button" data-action="set-date-range" data-days="90" 
                             class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
-                        Last 90 days
+                        @Localizer["Last90Days"]
                     </button>
                     <button type="button" data-action="set-date-range" data-days="365" 
                             class="px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
-                        Last year
+                        @Localizer["LastYear"]
                     </button>
                 </div>
 
                 <!-- Additional Parameters -->
                 <div id="additional-parameters" class="space-y-4">
-                    <h3 class="text-lg font-medium text-gray-900">Additional Parameters</h3>
+                    <h3 class="text-lg font-medium text-gray-900">@Localizer["AdditionalParameters"]</h3>
                     <div class="bg-gray-50 rounded-lg p-4">
                         <p class="text-sm text-gray-600 mb-4">
-                            Additional parameters will be shown based on the selected report type.
+                            @Localizer["AdditionalParametersDesc"]
                         </p>
                         
                         <!-- User Analytics Parameters -->
                         <div id="user-analytics-params" class="hidden space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">User Segments</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">@Localizer["UserSegments"]</label>
                                 <div class="space-y-2">
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" name="Parameters[IncludeNewUsers]" value="true" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-                                        <span class="ml-2 text-sm text-gray-700">Include new users</span>
+                                        <span class="ml-2 text-sm text-gray-700">@Localizer["IncludeNewUsers"]</span>
                                     </label>
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" name="Parameters[IncludeActiveUsers]" value="true" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-                                        <span class="ml-2 text-sm text-gray-700">Include active users</span>
+                                        <span class="ml-2 text-sm text-gray-700">@Localizer["IncludeActiveUsers"]</span>
                                     </label>
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" name="Parameters[IncludeInactiveUsers]" value="true" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-                                        <span class="ml-2 text-sm text-gray-700">Include inactive users</span>
+                                        <span class="ml-2 text-sm text-gray-700">@Localizer["IncludeInactiveUsers"]</span>
                                     </label>
                                 </div>
                             </div>
@@ -121,19 +122,19 @@
                         <!-- Content Analytics Parameters -->
                         <div id="content-analytics-params" class="hidden space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Content Types</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">@Localizer["ContentTypes"]</label>
                                 <div class="space-y-2">
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" name="Parameters[IncludePosts]" value="true" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-                                        <span class="ml-2 text-sm text-gray-700">Posts</span>
+                                        <span class="ml-2 text-sm text-gray-700">@Localizer["Posts"]</span>
                                     </label>
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" name="Parameters[IncludeQuestions]" value="true" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-                                        <span class="ml-2 text-sm text-gray-700">Questions</span>
+                                        <span class="ml-2 text-sm text-gray-700">@Localizer["Questions"]</span>
                                     </label>
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" name="Parameters[IncludeReviews]" value="true" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-                                        <span class="ml-2 text-sm text-gray-700">Reviews</span>
+                                        <span class="ml-2 text-sm text-gray-700">@Localizer["Reviews"]</span>
                                     </label>
                                 </div>
                             </div>
@@ -143,7 +144,7 @@
 
                 <!-- Format Selection -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Output Format</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">@Localizer["OutputFormat"]</label>
                     <div class="flex space-x-4">
                         <label class="inline-flex items-center">
                             <input type="radio" name="Parameters[Format]" value="PDF" checked class="text-primary-600 focus:ring-primary-500">
@@ -164,11 +165,11 @@
                 <div class="flex items-center justify-between pt-6 border-t border-gray-200">
                     <a href="@Url.Action("Index", "Reports")" 
                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
-                        Cancel
+                        @Localizer["Cancel"]
                     </a>
                     <button type="submit" 
                             class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
-                        Generate Report
+                        @Localizer["GenerateReport"]
                     </button>
                 </div>
             </form>

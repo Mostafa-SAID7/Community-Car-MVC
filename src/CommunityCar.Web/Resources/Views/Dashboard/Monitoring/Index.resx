@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="SystemMonitoringTitle" xml:space="preserve"><value>System Monitoring</value></data>
+  <data name="SystemMonitoring" xml:space="preserve"><value>System Monitoring</value></data>
+  <data name="SystemMonitoringDesc" xml:space="preserve"><value>Real-time system health and performance monitoring</value></data>
+  <data name="SystemHealthy" xml:space="preserve"><value>System Healthy</value></data>
+  <data name="SystemIssuesDetected" xml:space="preserve"><value>System Issues Detected</value></data>
+  <data name="Refresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="CPUUsage" xml:space="preserve"><value>CPU Usage</value></data>
+  <data name="MemoryUsage" xml:space="preserve"><value>Memory Usage</value></data>
+  <data name="DiskUsage" xml:space="preserve"><value>Disk Usage</value></data>
+  <data name="ActiveUsers" xml:space="preserve"><value>Active Users</value></data>
+  <data name="IncreaseFromLastHour" xml:space="preserve"><value>+{0} from last hour</value></data>
+  <data name="ServicesHealth" xml:space="preserve"><value>Services Health</value></data>
+  <data name="WebServer" xml:space="preserve"><value>Web Server</value></data>
+  <data name="Database" xml:space="preserve"><value>Database</value></data>
+  <data name="CacheService" xml:space="preserve"><value>Cache Service</value></data>
+  <data name="FileStorage" xml:space="preserve"><value>File Storage</value></data>
+  <data name="Healthy" xml:space="preserve"><value>Healthy</value></data>
+  <data name="Warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="RecentAlerts" xml:space="preserve"><value>Recent Alerts</value></data>
+  <data name="HighMemoryAlert" xml:space="preserve"><value>High memory usage detected</value></data>
+  <data name="DatabaseBackupAlert" xml:space="preserve"><value>Database backup completed</value></data>
+  <data name="SystemUpdateAlert" xml:space="preserve"><value>System update available</value></data>
+  <data name="MinutesAgo" xml:space="preserve"><value>{0} minutes ago</value></data>
+  <data name="HoursAgo" xml:space="preserve"><value>{0} hour ago</value></data>
+  <data name="PerformanceMetrics" xml:space="preserve"><value>Performance Metrics</value></data>
+  <data name="ResponseTime24h" xml:space="preserve"><value>Response Time (24h)</value></data>
+  <data name="ErrorRate24h" xml:space="preserve"><value>Error Rate (24h)</value></data>
+  <data name="ChartWillLoad" xml:space="preserve"><value>Chart will load here</value></data>
+</root>

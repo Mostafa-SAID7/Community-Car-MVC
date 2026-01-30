@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="SystemMonitoringTitle" xml:space="preserve"><value>مراقبة النظام</value></data>
+  <data name="SystemMonitoring" xml:space="preserve"><value>مراقبة النظام</value></data>
+  <data name="SystemMonitoringDesc" xml:space="preserve"><value>مراقبة صحة وأداء النظام في الوقت الفعلي</value></data>
+  <data name="SystemHealthy" xml:space="preserve"><value>النظام سليم</value></data>
+  <data name="SystemIssuesDetected" xml:space="preserve"><value>تم اكتشاف مشكلات في النظام</value></data>
+  <data name="Refresh" xml:space="preserve"><value>تحديث</value></data>
+  <data name="CPUUsage" xml:space="preserve"><value>استخدام المعالج</value></data>
+  <data name="MemoryUsage" xml:space="preserve"><value>استخدام الذاكرة</value></data>
+  <data name="DiskUsage" xml:space="preserve"><value>استخدام القرص</value></data>
+  <data name="ActiveUsers" xml:space="preserve"><value>المستخدمون النشطون</value></data>
+  <data name="IncreaseFromLastHour" xml:space="preserve"><value>+{0} من الساعة الماضية</value></data>
+  <data name="ServicesHealth" xml:space="preserve"><value>صحة الخدمات</value></data>
+  <data name="WebServer" xml:space="preserve"><value>خادم الويب</value></data>
+  <data name="Database" xml:space="preserve"><value>قاعدة البيانات</value></data>
+  <data name="CacheService" xml:space="preserve"><value>خدمة التخزين المؤقت</value></data>
+  <data name="FileStorage" xml:space="preserve"><value>تخزين الملفات</value></data>
+  <data name="Healthy" xml:space="preserve"><value>سليم</value></data>
+  <data name="Warning" xml:space="preserve"><value>تحذير</value></data>
+  <data name="RecentAlerts" xml:space="preserve"><value>التنبيهات الأخيرة</value></data>
+  <data name="HighMemoryAlert" xml:space="preserve"><value>تم اكتشاف استخدام عالي للذاكرة</value></data>
+  <data name="DatabaseBackupAlert" xml:space="preserve"><value>اكتمل النسخ الاحتياطي لقاعدة البيانات</value></data>
+  <data name="SystemUpdateAlert" xml:space="preserve"><value>يتوفر تحديث للنظام</value></data>
+  <data name="MinutesAgo" xml:space="preserve"><value>منذ {0} دقائق</value></data>
+  <data name="HoursAgo" xml:space="preserve"><value>منذ {0} ساعة</value></data>
+  <data name="PerformanceMetrics" xml:space="preserve"><value>مقاييس الأداء</value></data>
+  <data name="ResponseTime24h" xml:space="preserve"><value>وقت الاستجابة (24 ساعة)</value></data>
+  <data name="ErrorRate24h" xml:space="preserve"><value>معدل الخطأ (24 ساعة)</value></data>
+  <data name="ChartWillLoad" xml:space="preserve"><value>سيتم تحميل المخطط هنا</value></data>
+</root>

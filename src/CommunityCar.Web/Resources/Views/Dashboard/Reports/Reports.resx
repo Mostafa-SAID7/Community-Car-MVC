@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- Index -->
+  <data name="ReportsTitle" xml:space="preserve"><value>Reports</value></data>
+  <data name="Reports" xml:space="preserve"><value>Reports</value></data>
+  <data name="ReportsDesc" xml:space="preserve"><value>Generate and manage system reports</value></data>
+  <data name="GenerateReport" xml:space="preserve"><value>Generate Report</value></data>
+  <data name="GeneratedReports" xml:space="preserve"><value>Generated Reports</value></data>
+  <data name="ReportType" xml:space="preserve"><value>Report Type</value></data>
+  <data name="DateRange" xml:space="preserve"><value>Date Range</value></data>
+  <data name="Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Created" xml:space="preserve"><value>Created</value></data>
+  <data name="Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="View" xml:space="preserve"><value>View</value></data>
+  <data name="Download" xml:space="preserve"><value>Download</value></data>
+  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="ShowingPageOfReports" xml:space="preserve"><value>Showing page {0} of reports</value></data>
+  <data name="Previous" xml:space="preserve"><value>Previous</value></data>
+  <data name="Next" xml:space="preserve"><value>Next</value></data>
+  <data name="NoReportsFound" xml:space="preserve"><value>No Reports Found</value></data>
+  <data name="NoReportsFoundDesc" xml:space="preserve"><value>You haven't generated any reports yet.</value></data>
+  <data name="GenerateYourFirstReport" xml:space="preserve"><value>Generate Your First Report</value></data>
+
+  <!-- Generate -->
+  <data name="GenerateReportTitle" xml:space="preserve"><value>Generate Report</value></data>
+  <data name="GenerateReportDesc" xml:space="preserve"><value>Create a new report with custom parameters</value></data>
+  <data name="ReportConfiguration" xml:space="preserve"><value>Report Configuration</value></data>
+  <data name="SelectReportType" xml:space="preserve"><value>Select a report type</value></data>
+  <data name="UserAnalytics" xml:space="preserve"><value>User Analytics</value></data>
+  <data name="ContentAnalytics" xml:space="preserve"><value>Content Analytics</value></data>
+  <data name="PerformanceReport" xml:space="preserve"><value>Performance Report</value></data>
+  <data name="SecurityReport" xml:space="preserve"><value>Security Report</value></data>
+  <data name="ActivityReport" xml:space="preserve"><value>Activity Report</value></data>
+  <data name="EngagementReport" xml:space="preserve"><value>Engagement Report</value></data>
+  <data name="SystemHealthReport" xml:space="preserve"><value>System Health Report</value></data>
+  <data name="StartDate" xml:space="preserve"><value>Start Date</value></data>
+  <data name="EndDate" xml:space="preserve"><value>End Date</value></data>
+  <data name="Last7Days" xml:space="preserve"><value>Last 7 days</value></data>
+  <data name="Last30Days" xml:space="preserve"><value>Last 30 days</value></data>
+  <data name="Last90Days" xml:space="preserve"><value>Last 90 days</value></data>
+  <data name="LastYear" xml:space="preserve"><value>Last year</value></data>
+  <data name="AdditionalParameters" xml:space="preserve"><value>Additional Parameters</value></data>
+  <data name="AdditionalParametersDesc" xml:space="preserve"><value>Additional parameters will be shown based on the selected report type.</value></data>
+  <data name="UserSegments" xml:space="preserve"><value>User Segments</value></data>
+  <data name="IncludeNewUsers" xml:space="preserve"><value>Include new users</value></data>
+  <data name="IncludeActiveUsers" xml:space="preserve"><value>Include active users</value></data>
+  <data name="IncludeInactiveUsers" xml:space="preserve"><value>Include inactive users</value></data>
+  <data name="ContentTypes" xml:space="preserve"><value>Content Types</value></data>
+  <data name="Posts" xml:space="preserve"><value>Posts</value></data>
+  <data name="Questions" xml:space="preserve"><value>Questions</value></data>
+  <data name="Reviews" xml:space="preserve"><value>Reviews</value></data>
+  <data name="OutputFormat" xml:space="preserve"><value>Output Format</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+
+  <!-- Details -->
+  <data name="ReportDetailsTitle" xml:space="preserve"><value>Report Details</value></data>
+  <data name="AnalyticsReportTransmission" xml:space="preserve"><value>ANALYTICS_REPORT_TRANSMISSION</value></data>
+  <data name="ReportDetails" xml:space="preserve"><value>Report Details</value></data>
+  <data name="ReportDetailsDesc" xml:space="preserve"><value>View and manage diagnostic archival data payloads.</value></data>
+  <data name="ReturnToRegistry" xml:space="preserve"><value>Return to Registry</value></data>
+  <data name="ReportPayloadConfiguration" xml:space="preserve"><value>REPORT_PAYLOAD_CONFIGURATION</value></data>
+  <data name="Classification" xml:space="preserve"><value>CLASSIFICATION</value></data>
+  <data name="TemporalStart" xml:space="preserve"><value>TEMPORAL_START</value></data>
+  <data name="TemporalEnd" xml:space="preserve"><value>TEMPORAL_END</value></data>
+  <data name="ParameterMatrix" xml:space="preserve"><value>PARAMETER_MATRIX</value></data>
+  <data name="ArchivePreview" xml:space="preserve"><value>ARCHIVE_PREVIEW</value></data>
+  <data name="ArchivePreviewDesc" xml:space="preserve"><value>Full analytical data structures are integrated and ready for diagnostic extraction.</value></data>
+  <data name="DataPointsCount" xml:space="preserve"><value>{0}</value></data>
+  <data name="DataPoints" xml:space="preserve"><value>DATA_POINTS</value></data>
+  <data name="VisualizationsCount" xml:space="preserve"><value>{0}</value></data>
+  <data name="Visualizations" xml:space="preserve"><value>VISUALIZATIONS</value></data>
+  <data name="DataTablesCount" xml:space="preserve"><value>{0}</value></data>
+  <data name="DataTables" xml:space="preserve"><value>DATA_TABLES</value></data>
+  <data name="LifecycleStatus" xml:space="preserve"><value>LIFECYCLE_STATUS</value></data>
+  <data name="CurrentState" xml:space="preserve"><value>CURRENT_STATE</value></data>
+  <data name="CompletedBit" xml:space="preserve"><value>COMPLETED_BIT</value></data>
+  <data name="ProgressLock" xml:space="preserve"><value>PROGRESS_LOCK</value></data>
+  <data name="Read" xml:space="preserve"><value>READ</value></data>
+  <data name="CreationStamp" xml:space="preserve"><value>CREATION_STAMP</value></data>
+  <data name="PayloadVolume" xml:space="preserve"><value>PAYLOAD_VOLUME</value></data>
+  <data name="TerminalActions" xml:space="preserve"><value>TERMINAL_ACTIONS</value></data>
+  <data name="TransmitPayload" xml:space="preserve"><value>TRANSMIT_PAYLOAD</value></data>
+  <data name="BroadcastData" xml:space="preserve"><value>BROADCAST_DATA</value></data>
+  <data name="PurgeArchive" xml:space="preserve"><value>PURGE_ARCHIVE</value></data>
+  <data name="AutomationSync" xml:space="preserve"><value>AUTOMATION_SYNC</value></data>
+  <data name="AutomationSyncDesc" xml:space="preserve"><value>Synchronize this payload with active recurring generation protocols.</value></data>
+  <data name="InitSchedule" xml:space="preserve"><value>INIT_SCHEDULE</value></data>
+
+  <!-- Statuses -->
+  <data name="generated" xml:space="preserve"><value>Generated</value></data>
+  <data name="generating" xml:space="preserve"><value>Generating</value></data>
+  <data name="failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="scheduled" xml:space="preserve"><value>Scheduled</value></data>
+</root>

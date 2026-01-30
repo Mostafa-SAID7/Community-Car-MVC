@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="SystemMaintenanceControl" xml:space="preserve"><value>System Maintenance Control</value></data>
+  <data name="Protocol" xml:space="preserve"><value>Protocol</value></data>
+  <data name="SystemWideMaintenanceLockdown" xml:space="preserve"><value>System-Wide Maintenance Lockdown</value></data>
+  <data name="Status" xml:space="preserve"><value>Status</value></data>
+  <data name="ActiveLockdown" xml:space="preserve"><value>Active Lockdown</value></data>
+  <data name="GridOperational" xml:space="preserve"><value>Grid Operational</value></data>
+  <data name="DeactivateLockdown" xml:space="preserve"><value>Deactivate Lockdown</value></data>
+  <data name="InitiateSystemShutdown" xml:space="preserve"><value>Initiate System Shutdown</value></data>
+  <data name="DeactivateLockdownDesc" xml:space="preserve"><value>Disabling maintenance mode will restore public access to the entire platform. All traffic will be routed back to standard protocols.</value></data>
+  <data name="InitiateSystemShutdownDesc" xml:space="preserve"><value>Enabling maintenance mode will redirect all non-administrator traffic to the maintenance terminal. This is a destructive action for user sessions.</value></data>
+  <data name="RestoreGridAccess" xml:space="preserve"><value>Restore Grid Access</value></data>
+  <data name="ExecuteSystemKillSwitch" xml:space="preserve"><value>Execute System Kill-Switch</value></data>
+  <data name="TransmissionTelemetry" xml:space="preserve"><value>Transmission Telemetry</value></data>
+  <data name="PublicBroadcastMessage" xml:space="preserve"><value>Public Broadcast Message</value></data>
+  <data name="MaintenanceMessagePlaceholder" xml:space="preserve"><value>Enter the message users will see during maintenance...</value></data>
+  <data name="Standard" xml:space="preserve"><value>Standard</value></data>
+  <data name="VerifiedAdminDesc" xml:space="preserve"><value>Verified: You are authenticated as an administrator. Your current session will remain active during lockdown.</value></data>
+  <data name="Node" xml:space="preserve"><value>Node</value></data>
+  <data name="Link" xml:space="preserve"><value>LINK</value></data>
+  <data name="Secure" xml:space="preserve"><value>SECURE</value></data>
+  <data name="Standby" xml:space="preserve"><value>STANDBY</value></data>
+  <data name="Active" xml:space="preserve"><value>ACTIVE</value></data>
+</root>

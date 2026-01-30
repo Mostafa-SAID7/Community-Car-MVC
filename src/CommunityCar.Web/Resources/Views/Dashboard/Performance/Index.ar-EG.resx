@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PerformanceDashboardTitle" xml:space="preserve"><value>لوحة تحكم الأداء</value></data>
+  <data name="PerformanceEngineering" xml:space="preserve"><value>هندسة الأداء</value></data>
+  <data name="PerformanceEngineeringDesc" xml:space="preserve"><value>طبقة مراقبة مؤشرات الويب الحيوية وتحسين المحتوى</value></data>
+  <data name="RealTimeMonitoringActive" xml:space="preserve"><value>مراقبة الوقت الفعلي نشطة</value></data>
+  <data name="LCPTitle" xml:space="preserve"><value>أكبر رسم محتوى (LCP)</value></data>
+  <data name="FIDTitle" xml:space="preserve"><value>تأخير الإدخال الأول (FID)</value></data>
+  <data name="CLSTitle" xml:space="preserve"><value>تغيير التخطيط التراكمي (CLS)</value></data>
+  <data name="ms" xml:space="preserve"><value>مللي ثانية</value></data>
+  <data name="GradeLabel" xml:space="preserve"><value>درجة {0}</value></data>
+  <data name="LCPDesc" xml:space="preserve"><value>سرعة عرض المحتوى الرئيسي</value></data>
+  <data name="FIDDesc" xml:space="preserve"><value>درجة الاستجابة</value></data>
+  <data name="CLSDesc" xml:space="preserve"><value>مقياس الاستقرار البصري</value></data>
+  <data name="RuntimeAnalysis" xml:space="preserve"><value>تحليل وقت التشغيل</value></data>
+  <data name="TargetURL" xml:space="preserve"><value>رابط الهدف</value></data>
+  <data name="AnalyzePlaceholder" xml:space="preserve"><value>أدخل الرابط للتحليل...</value></data>
+  <data name="Analyze" xml:space="preserve"><value>تحليل</value></data>
+  <data name="GenerateAudit" xml:space="preserve"><value>إنشاء تدقيق</value></data>
+  <data name="CriticalChain" xml:space="preserve"><value>السلسلة الحرجة</value></data>
+  <data name="AssetOptimization" xml:space="preserve"><value>تحسين الأصول</value></data>
+  <data name="SourceImage" xml:space="preserve"><value>الصورة المصدر</value></data>
+  <data name="QualityLabel" xml:space="preserve"><value>الجودة</value></data>
+  <data name="Engine" xml:space="preserve"><value>المحرك</value></data>
+  <data name="Recommended" xml:space="preserve"><value>موصى به</value></data>
+  <data name="BestRatio" xml:space="preserve"><value>أفضل نسبة</value></data>
+  <data name="ExecuteOptimization" xml:space="preserve"><value>تنفيذ التحسين</value></data>
+  <data name="IdentifiedBottlenecks" xml:space="preserve"><value>اختناقات الأداء المحددة</value></data>
+  <data name="FlagsRaising" xml:space="preserve"><value>{0} أعلام مرفوعة</value></data>
+  <data name="SeverityLabel" xml:space="preserve"><value>شدة {0}</value></data>
+  <data name="ImpactLabel" xml:space="preserve"><value>التأثير: توفير ~{0} ثانية</value></data>
+  <data name="RecommendedCorrection" xml:space="preserve"><value>التصحيح الموصى به</value></data>
+  <data name="NoIssuesDetected" xml:space="preserve"><value>لم يتم اكتشاف مشكلات عالية التأثير في الوقت الحالي.</value></data>
+  <data name="ProtocolAnalysisLog" xml:space="preserve"><value>سجل تحليل البروتوكول</value></data>
+</root>

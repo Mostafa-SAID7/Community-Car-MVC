@@ -1,6 +1,7 @@
+@inject IViewLocalizer Localizer
 @{
     Layout = "_DashboardLayout";
-    ViewData["Title"] = "System Maintenance Control";
+    ViewData["Title"] = Localizer["SystemMaintenanceControl"];
     bool isEnabled = ViewBag.IsMaintenanceEnabled ?? false;
     string message = ViewBag.MaintenanceMessage ?? "";
 }
@@ -12,14 +13,14 @@
         <div class="flex items-center justify-between mb-12 border-b border-white/10 pb-8">
             <div>
                 <h1 class="text-4xl font-black tracking-tighter uppercase mb-2 italic">
-                    <span class="text-red-600">Protocol</span> 503
+                    <span class="text-red-600">@Localizer["Protocol"]</span> 503
                 </h1>
-                <p class="text-zinc-500 text-sm tracking-widest uppercase">System-Wide Maintenance Lockdown</p>
+                <p class="text-zinc-500 text-sm tracking-widest uppercase">@Localizer["SystemWideMaintenanceLockdown"]</p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="h-2 w-2 rounded-full @(isEnabled ? "bg-red-600 animate-pulse" : "bg-green-600")"></div>
                 <span class="text-xs font-bold uppercase tracking-widest">
-                    Status: @(isEnabled ? "Active Lockdown" : "Grid Operational")
+                    @Localizer["Status"]: @(isEnabled ? Localizer["ActiveLockdown"] : Localizer["GridOperational"])
                 </span>
             </div>
         </div>
@@ -37,12 +38,12 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold mb-2 uppercase tracking-tight">
-                                @(isEnabled ? "Deactivate Lockdown" : "Initiate System Shutdown")
+                                @(isEnabled ? Localizer["DeactivateLockdown"] : Localizer["InitiateSystemShutdown"])
                             </h3>
                             <p class="text-zinc-400 text-sm leading-relaxed mb-6">
                                 @(isEnabled 
-                                    ? "Disabling maintenance mode will restore public access to the entire platform. All traffic will be routed back to standard protocols." 
-                                    : "Enabling maintenance mode will redirect all non-administrator traffic to the maintenance terminal. This is a destructive action for user sessions.")
+                                    ? Localizer["DeactivateLockdownDesc"] 
+                                    : Localizer["InitiateSystemShutdownDesc"])
                             </p>
                             
                             <input type="hidden" name="isEnabled" value="@((!isEnabled).ToString().ToLower())" />
@@ -50,7 +51,7 @@
                             <button type="submit" 
                                     class="relative px-8 py-4 bg-white text-black font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform group overflow-hidden">
                                 <span class="relative z-10 flex items-center gap-2">
-                                    @(isEnabled ? "Restore Grid Access" : "Execute System Kill-Switch")
+                                    @(isEnabled ? Localizer["RestoreGridAccess"] : Localizer["ExecuteSystemKillSwitch"])
                                     <i data-lucide="chevron-right" class="w-4 h-4"></i>
                                 </span>
                                 <div class="absolute inset-0 bg-zinc-200 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
@@ -64,20 +65,20 @@
             <div class="space-y-6">
                 <div class="flex items-center gap-4 mb-4">
                     <span class="h-[1px] flex-1 bg-white/10"></span>
-                    <h2 class="text-xs font-bold uppercase tracking-[0.3em] text-zinc-500">Transmission Telemetry</h2>
+                    <h2 class="text-xs font-bold uppercase tracking-[0.3em] text-zinc-500">@Localizer["TransmissionTelemetry"]</h2>
                     <span class="h-[1px] flex-1 bg-white/10"></span>
                 </div>
 
                 <div class="grid grid-cols-1 gap-8">
                     <!-- Message Input -->
                     <div class="space-y-4">
-                        <label class="block text-xs font-bold uppercase tracking-widest text-zinc-400">Public Broadcast Message</label>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-zinc-400">@Localizer["PublicBroadcastMessage"]</label>
                         <div class="relative">
                             <textarea name="message" rows="4" 
                                 class="w-full bg-zinc-900 border border-white/10 rounded-lg p-6 text-zinc-300 focus:outline-none focus:border-red-600 transition-colors placeholder:text-zinc-700 resize-none"
-                                placeholder="Enter the message users will see during maintenance...">@message</textarea>
+                                placeholder="@Localizer["MaintenanceMessagePlaceholder"]">@message</textarea>
                             <div class="absolute bottom-4 right-4 text-[10px] text-zinc-600 uppercase tracking-widest">
-                                Protocol: Standard
+                                @Localizer["Protocol"]: @Localizer["Standard"]
                             </div>
                         </div>
                     </div>
@@ -88,7 +89,7 @@
                             <i data-lucide="shield-check" class="w-4 h-4 text-zinc-500"></i>
                         </div>
                         <p class="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">
-                            Verified: You are authenticated as an administrator. Your current session will remain active during lockdown.
+                            @Localizer["VerifiedAdminDesc"]
                         </p>
                     </div>
                 </div>
@@ -98,16 +99,16 @@
         <!-- Footer Stats -->
         <div class="mt-20 grid grid-cols-3 gap-8">
             <div class="border-t border-white/5 pt-4">
-                <div class="text-[10px] text-zinc-600 uppercase tracking-widest mb-1">Node 01</div>
-                <div class="text-xs font-bold text-zinc-400">LINK: SECURE</div>
+                <div class="text-[10px] text-zinc-600 uppercase tracking-widest mb-1">@Localizer["Node"] 01</div>
+                <div class="text-xs font-bold text-zinc-400">@Localizer["Link"]: @Localizer["Secure"]</div>
             </div>
             <div class="border-t border-white/5 pt-4">
-                <div class="text-[10px] text-zinc-600 uppercase tracking-widest mb-1">Node 02</div>
-                <div class="text-xs font-bold text-zinc-400">LINK: STANDBY</div>
+                <div class="text-[10px] text-zinc-600 uppercase tracking-widest mb-1">@Localizer["Node"] 02</div>
+                <div class="text-xs font-bold text-zinc-400">@Localizer["Link"]: @Localizer["Standby"]</div>
             </div>
             <div class="border-t border-white/5 pt-4">
-                <div class="text-[10px] text-zinc-600 uppercase tracking-widest mb-1">Node 03</div>
-                <div class="text-xs font-bold text-zinc-400">LINK: ACTIVE</div>
+                <div class="text-[10px] text-zinc-600 uppercase tracking-widest mb-1">@Localizer["Node"] 03</div>
+                <div class="text-xs font-bold text-zinc-400">@Localizer["Link"]: @Localizer["Active"]</div>
             </div>
         </div>
     </div>

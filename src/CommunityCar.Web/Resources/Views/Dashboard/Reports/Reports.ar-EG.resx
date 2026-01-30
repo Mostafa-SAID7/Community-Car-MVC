@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- Index -->
+  <data name="ReportsTitle" xml:space="preserve"><value>التقارير</value></data>
+  <data name="Reports" xml:space="preserve"><value>التقارير</value></data>
+  <data name="ReportsDesc" xml:space="preserve"><value>إنشاء وإدارة تقارير النظام</value></data>
+  <data name="GenerateReport" xml:space="preserve"><value>إنشاء تقرير</value></data>
+  <data name="GeneratedReports" xml:space="preserve"><value>التقارير المنشأة</value></data>
+  <data name="ReportType" xml:space="preserve"><value>نوع التقرير</value></data>
+  <data name="DateRange" xml:space="preserve"><value>النطاق الزمني</value></data>
+  <data name="Status" xml:space="preserve"><value>الحالة</value></data>
+  <data name="Created" xml:space="preserve"><value>تاريخ الإنشاء</value></data>
+  <data name="Actions" xml:space="preserve"><value>الإجراءات</value></data>
+  <data name="View" xml:space="preserve"><value>عرض</value></data>
+  <data name="Download" xml:space="preserve"><value>تحميل</value></data>
+  <data name="Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="ShowingPageOfReports" xml:space="preserve"><value>عرض الصفحة {0} من التقارير</value></data>
+  <data name="Previous" xml:space="preserve"><value>السابق</value></data>
+  <data name="Next" xml:space="preserve"><value>التالي</value></data>
+  <data name="NoReportsFound" xml:space="preserve"><value>لم يتم العثور على تقارير</value></data>
+  <data name="NoReportsFoundDesc" xml:space="preserve"><value>لم تقم بإنشاء أي تقارير بعد.</value></data>
+  <data name="GenerateYourFirstReport" xml:space="preserve"><value>أنشئ تقريرك الأول</value></data>
+
+  <!-- Generate -->
+  <data name="GenerateReportTitle" xml:space="preserve"><value>إنشاء تقرير</value></data>
+  <data name="GenerateReportDesc" xml:space="preserve"><value>إنشاء تقرير جديد بمعلمات مخصصة</value></data>
+  <data name="ReportConfiguration" xml:space="preserve"><value>تكوين التقرير</value></data>
+  <data name="SelectReportType" xml:space="preserve"><value>اختر نوع التقرير</value></data>
+  <data name="UserAnalytics" xml:space="preserve"><value>تحليل المستخدمين</value></data>
+  <data name="ContentAnalytics" xml:space="preserve"><value>تحليل المحتوى</value></data>
+  <data name="PerformanceReport" xml:space="preserve"><value>تقرير الأداء</value></data>
+  <data name="SecurityReport" xml:space="preserve"><value>تقرير الأمان</value></data>
+  <data name="ActivityReport" xml:space="preserve"><value>تقرير النشاط</value></data>
+  <data name="EngagementReport" xml:space="preserve"><value>تقرير التفاعل</value></data>
+  <data name="SystemHealthReport" xml:space="preserve"><value>تقرير صحة النظام</value></data>
+  <data name="StartDate" xml:space="preserve"><value>تاريخ البدء</value></data>
+  <data name="EndDate" xml:space="preserve"><value>تاريخ الانتهاء</value></data>
+  <data name="Last7Days" xml:space="preserve"><value>آخر 7 أيام</value></data>
+  <data name="Last30Days" xml:space="preserve"><value>آخر 30 يومًا</value></data>
+  <data name="Last90Days" xml:space="preserve"><value>آخر 90 يومًا</value></data>
+  <data name="LastYear" xml:space="preserve"><value>السنة الماضية</value></data>
+  <data name="AdditionalParameters" xml:space="preserve"><value>معلمات إضافية</value></data>
+  <data name="AdditionalParametersDesc" xml:space="preserve"><value>سيتم عرض معلمات إضافية بناءً على نوع التقرير المختار.</value></data>
+  <data name="UserSegments" xml:space="preserve"><value>شرائح المستخدمين</value></data>
+  <data name="IncludeNewUsers" xml:space="preserve"><value>تضمين المستخدمين الجدد</value></data>
+  <data name="IncludeActiveUsers" xml:space="preserve"><value>تضمين المستخدمين النشطين</value></data>
+  <data name="IncludeInactiveUsers" xml:space="preserve"><value>تضمين المستخدمين غير النشطين</value></data>
+  <data name="ContentTypes" xml:space="preserve"><value>أنواع المحتوى</value></data>
+  <data name="Posts" xml:space="preserve"><value>المنشورات</value></data>
+  <data name="Questions" xml:space="preserve"><value>الأسئلة</value></data>
+  <data name="Reviews" xml:space="preserve"><value>المراجعات</value></data>
+  <data name="OutputFormat" xml:space="preserve"><value>تنسيق المخرجات</value></data>
+  <data name="Cancel" xml:space="preserve"><value>إلغاء</value></data>
+
+  <!-- Details -->
+  <data name="ReportDetailsTitle" xml:space="preserve"><value>تفاصيل التقرير</value></data>
+  <data name="AnalyticsReportTransmission" xml:space="preserve"><value>نقل_تقرير_التحليلات</value></data>
+  <data name="ReportDetails" xml:space="preserve"><value>تفاصيل التقرير</value></data>
+  <data name="ReportDetailsDesc" xml:space="preserve"><value>عرض وإدارة حمولات بيانات الأرشيف التشخيصية.</value></data>
+  <data name="ReturnToRegistry" xml:space="preserve"><value>العودة إلى السجل</value></data>
+  <data name="ReportPayloadConfiguration" xml:space="preserve"><value>تكوين_حمولة_التقرير</value></data>
+  <data name="Classification" xml:space="preserve"><value>التصنيف</value></data>
+  <data name="TemporalStart" xml:space="preserve"><value>البداية_الزمنية</value></data>
+  <data name="TemporalEnd" xml:space="preserve"><value>النهاية_الزمنية</value></data>
+  <data name="ParameterMatrix" xml:space="preserve"><value>مصفوفة_المعلمات</value></data>
+  <data name="ArchivePreview" xml:space="preserve"><value>معاينة_الأرشيف</value></data>
+  <data name="ArchivePreviewDesc" xml:space="preserve"><value>هياكل البيانات التحليلية الكاملة متكاملة وجاهزة للاستخراج التشخيصي.</value></data>
+  <data name="DataPointsCount" xml:space="preserve"><value>{0}</value></data>
+  <data name="DataPoints" xml:space="preserve"><value>نقاط_بيانات</value></data>
+  <data name="VisualizationsCount" xml:space="preserve"><value>{0}</value></data>
+  <data name="Visualizations" xml:space="preserve"><value>تصورات_بيانية</value></data>
+  <data name="DataTablesCount" xml:space="preserve"><value>{0}</value></data>
+  <data name="DataTables" xml:space="preserve"><value>جداول_بيانات</value></data>
+  <data name="LifecycleStatus" xml:space="preserve"><value>حالة_دورة_الحياة</value></data>
+  <data name="CurrentState" xml:space="preserve"><value>الحالة_الحالية</value></data>
+  <data name="CompletedBit" xml:space="preserve"><value>تم_بنجاح</value></data>
+  <data name="ProgressLock" xml:space="preserve"><value>قفل_التقدم</value></data>
+  <data name="Read" xml:space="preserve"><value>قراءة</value></data>
+  <data name="CreationStamp" xml:space="preserve"><value>طابع_الإنشاء</value></data>
+  <data name="PayloadVolume" xml:space="preserve"><value>حجم_الحمولة</value></data>
+  <data name="TerminalActions" xml:space="preserve"><value>إجراءات_نهائية</value></data>
+  <data name="TransmitPayload" xml:space="preserve"><value>نقل_الحمولة</value></data>
+  <data name="BroadcastData" xml:space="preserve"><value>بث_البيانات</value></data>
+  <data name="PurgeArchive" xml:space="preserve"><value>تطهير_الأرشيف</value></data>
+  <data name="AutomationSync" xml:space="preserve"><value>مزامنة_الأتمتة</value></data>
+  <data name="AutomationSyncDesc" xml:space="preserve"><value>مزامنة هذه الحمولة مع بروتوكولات الإنشاء المتكررة النشطة.</value></data>
+  <data name="InitSchedule" xml:space="preserve"><value>بدء_الجدولة</value></data>
+
+  <!-- Statuses -->
+  <data name="generated" xml:space="preserve"><value>تم الإنشاء</value></data>
+  <data name="generating" xml:space="preserve"><value>جاري الإنشاء</value></data>
+  <data name="failed" xml:space="preserve"><value>فشل</value></data>
+  <data name="scheduled" xml:space="preserve"><value>مجدول</value></data>
+</root>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PerformanceDashboardTitle" xml:space="preserve"><value>Performance Dashboard</value></data>
+  <data name="PerformanceEngineering" xml:space="preserve"><value>Performance Engineering</value></data>
+  <data name="PerformanceEngineeringDesc" xml:space="preserve"><value>Core Web Vitals monitoring and content optimization layer</value></data>
+  <data name="RealTimeMonitoringActive" xml:space="preserve"><value>Real-time Monitoring Active</value></data>
+  <data name="LCPTitle" xml:space="preserve"><value>Largest Contentful Paint (LCP)</value></data>
+  <data name="FIDTitle" xml:space="preserve"><value>First Input Delay (FID)</value></data>
+  <data name="CLSTitle" xml:space="preserve"><value>Cumulative Layout Shift (CLS)</value></data>
+  <data name="ms" xml:space="preserve"><value>ms</value></data>
+  <data name="GradeLabel" xml:space="preserve"><value>{0} Grade</value></data>
+  <data name="LCPDesc" xml:space="preserve"><value>Main content render speed</value></data>
+  <data name="FIDDesc" xml:space="preserve"><value>Responsiveness score</value></data>
+  <data name="CLSDesc" xml:space="preserve"><value>Visual stability metric</value></data>
+  <data name="RuntimeAnalysis" xml:space="preserve"><value>Runtime Analysis</value></data>
+  <data name="TargetURL" xml:space="preserve"><value>Target URL</value></data>
+  <data name="AnalyzePlaceholder" xml:space="preserve"><value>Enter URI to profile...</value></data>
+  <data name="Analyze" xml:space="preserve"><value>Analyze</value></data>
+  <data name="GenerateAudit" xml:space="preserve"><value>Generate Audit</value></data>
+  <data name="CriticalChain" xml:space="preserve"><value>Critical Chain</value></data>
+  <data name="AssetOptimization" xml:space="preserve"><value>Asset Optimization</value></data>
+  <data name="SourceImage" xml:space="preserve"><value>Source Image</value></data>
+  <data name="QualityLabel" xml:space="preserve"><value>Quality</value></data>
+  <data name="Engine" xml:space="preserve"><value>Engine</value></data>
+  <data name="Recommended" xml:space="preserve"><value>Recommended</value></data>
+  <data name="BestRatio" xml:space="preserve"><value>Best Ratio</value></data>
+  <data name="ExecuteOptimization" xml:space="preserve"><value>Execute Optimization</value></data>
+  <data name="IdentifiedBottlenecks" xml:space="preserve"><value>Identified Performance Bottlenecks</value></data>
+  <data name="FlagsRaising" xml:space="preserve"><value>{0} Flags Raising</value></data>
+  <data name="SeverityLabel" xml:space="preserve"><value>{0} Severity</value></data>
+  <data name="ImpactLabel" xml:space="preserve"><value>Impact: ~{0}s saving</value></data>
+  <data name="RecommendedCorrection" xml:space="preserve"><value>Recommended Correction</value></data>
+  <data name="NoIssuesDetected" xml:space="preserve"><value>No high-impact issues detected at this time.</value></data>
+  <data name="ProtocolAnalysisLog" xml:space="preserve"><value>Protocol Analysis Log</value></data>
+</root>

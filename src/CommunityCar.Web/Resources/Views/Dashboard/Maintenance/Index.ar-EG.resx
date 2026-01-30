@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="SystemMaintenanceControl" xml:space="preserve"><value>التحكم في صيانة النظام</value></data>
+  <data name="Protocol" xml:space="preserve"><value>بروتوكول</value></data>
+  <data name="SystemWideMaintenanceLockdown" xml:space="preserve"><value>إغلاق الصيانة على مستوى النظام</value></data>
+  <data name="Status" xml:space="preserve"><value>الحالة</value></data>
+  <data name="ActiveLockdown" xml:space="preserve"><value>إغلاق نشط</value></data>
+  <data name="GridOperational" xml:space="preserve"><value>الشبكة تعمل</value></data>
+  <data name="DeactivateLockdown" xml:space="preserve"><value>إلغاء تنشيط الإغلاق</value></data>
+  <data name="InitiateSystemShutdown" xml:space="preserve"><value>بدء إيقاف تشغيل النظام</value></data>
+  <data name="DeactivateLockdownDesc" xml:space="preserve"><value>سيؤدي تعطيل وضع الصيانة إلى استعادة الوصول العام للمنصة بأكملها. سيتم توجيه حركة المرور بالكامل إلى البروتوكولات القياسية.</value></data>
+  <data name="InitiateSystemShutdownDesc" xml:space="preserve"><value>سيؤدي تمكين وضع الصيانة إلى إعادة توجيه كل حركة المرور غير الإدارية إلى محطة الصيانة. هذا إجراء مدمر لجلسات المستخدمين.</value></data>
+  <data name="RestoreGridAccess" xml:space="preserve"><value>استعادة الوصول للشبكة</value></data>
+  <data name="ExecuteSystemKillSwitch" xml:space="preserve"><value>تنفيذ مفتاح قتل النظام</value></data>
+  <data name="TransmissionTelemetry" xml:space="preserve"><value>قياس الإرسال عن بعد</value></data>
+  <data name="PublicBroadcastMessage" xml:space="preserve"><value>رسالة البث العام</value></data>
+  <data name="MaintenanceMessagePlaceholder" xml:space="preserve"><value>أدخل الرسالة التي سيراها المستخدمون أثناء الصيانة...</value></data>
+  <data name="Standard" xml:space="preserve"><value>قياسي</value></data>
+  <data name="VerifiedAdminDesc" xml:space="preserve"><value>تم التحقق: أنت مسجل كمسؤول. ستظل جلستك الحالية نشطة أثناء الإغلاق.</value></data>
+  <data name="Node" xml:space="preserve"><value>عقدة</value></data>
+  <data name="Link" xml:space="preserve"><value>الارتباط</value></data>
+  <data name="Secure" xml:space="preserve"><value>آمن</value></data>
+  <data name="Standby" xml:space="preserve"><value>استعداد</value></data>
+  <data name="Active" xml:space="preserve"><value>نشط</value></data>
+</root>

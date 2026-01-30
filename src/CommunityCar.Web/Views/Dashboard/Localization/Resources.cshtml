@@ -2,7 +2,7 @@
 @model CommunityCar.Web.Models.Dashboard.Localization.ResourcesVM
 @{
     ViewData["Title"] = Localizer["DictionaryExplorerTitle"];
-    Layout = "~/ "~/Views/Shared/_DashboardLayout.cshtml";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
@@ -34,7 +34,14 @@
                         <option value="">@Localizer["GlobalDictionary"]</option>
                         @foreach (var c in Model.Cultures)
                         {
-                            <!option value="@c.Name" @(Model.SelectedCulture == c.Name ? "selected" : "")>@c.DisplayName (@c.Name)</!option>
+                            if (Model.SelectedCulture == c.Name)
+                            {
+                                <option value="@c.Name" selected>@c.DisplayName (@c.Name)</option>
+                            }
+                            else
+                            {
+                                <option value="@c.Name">@c.DisplayName (@c.Name)</option>
+                            }
                         }
                     </select>
                     <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
@@ -47,7 +54,14 @@
                         <option value="">@Localizer["AllResourceFiles"]</option>
                         @foreach (var g in Model.ResourceGroups)
                         {
-                            <!option value="@g" @(Model.SelectedGroup == g ? "selected" : "")>@g</!option>
+                            if (Model.SelectedGroup == g)
+                            {
+                                <option value="@g" selected>@g</option>
+                            }
+                            else
+                            {
+                                <option value="@g">@g</option>
+                            }
                         }
                     </select>
                     <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>

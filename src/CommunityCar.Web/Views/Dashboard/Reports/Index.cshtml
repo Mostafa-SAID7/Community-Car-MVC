@@ -1,6 +1,7 @@
+@inject IViewLocalizer Localizer
 @model IEnumerable<CommunityCar.Application.Features.Dashboard.ViewModels.SystemReportVM>
 @{
-    ViewData["Title"] = "Reports";
+    ViewData["Title"] = Localizer["ReportsTitle"];
     ViewData["PageType"] = "Reports";
     var currentPage = ViewBag.CurrentPage as int? ?? 1;
     var pageSize = ViewBag.PageSize as int? ?? 20;
@@ -11,15 +12,15 @@
         <!-- Header -->
         <div class="mb-8 flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Reports</h1>
-                <p class="mt-2 text-gray-600">Generate and manage system reports</p>
+                <h1 class="text-3xl font-bold text-gray-900">@Localizer["Reports"]</h1>
+                <p class="mt-2 text-gray-600">@Localizer["ReportsDesc"]</p>
             </div>
             <a href="@Url.Action("Generate", "Reports")" 
                class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
-                Generate Report
+                @Localizer["GenerateReport"]
             </a>
         </div>
 
@@ -40,7 +41,7 @@
         <!-- Reports List -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-900">Generated Reports</h2>
+                <h2 class="text-xl font-semibold text-gray-900">@Localizer["GeneratedReports"]</h2>
             </div>
 
             <div class="p-6">
@@ -58,19 +59,19 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Report Type
+                                        @Localizer["ReportType"]
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Date Range
+                                        @Localizer["DateRange"]
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
+                                        @Localizer["Status"]
                                     </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Created
+                                        @Localizer["Created"]
                                     </th>
                                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Actions
+                                        @Localizer["Actions"]
                                     </th>
                                 </tr>
                             </thead>
@@ -99,7 +100,7 @@
                                                 };
                                             }
                                             <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full @statusClass">
-                                                @report.Status
+                                                @Localizer[report.Status]
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -108,18 +109,18 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex items-center justify-end space-x-2">
                                                 <a href="@Url.Action("Details", "Reports", new { id = report.Id })" 
-                                                   class="text-primary-600 hover:text-primary-900">View</a>
+                                                   class="text-primary-600 hover:text-primary-900">@Localizer["View"]</a>
                                                 @if (report.Status.ToLower() == "generated")
                                                 {
                                                     <a href="@Url.Action("Download", "Reports", new { id = report.Id })" 
-                                                       class="text-primary-600 hover:text-primary-900">Download</a>
+                                                       class="text-primary-600 hover:text-primary-900">@Localizer["Download"]</a>
                                                 }
                                                 <form asp-action="Delete" asp-route-id="@report.Id" method="post" class="inline delete-report-form">
                                                     @Html.AntiForgeryToken()
                                                     <button type="button" 
                                                             class="text-red-600 hover:text-red-900"
                                                             data-action="confirm-delete-report">
-                                                        Delete
+                                                        @Localizer["Delete"]
                                                     </button>
                                                 </form>
                                             </div>
@@ -133,19 +134,19 @@
                     <!-- Pagination -->
                     <div class="mt-6 flex items-center justify-between">
                         <div class="text-sm text-gray-700">
-                            Showing page @currentPage of reports
+                            @string.Format(Localizer["ShowingPageOfReports"].Value, currentPage)
                         </div>
                         <div class="flex space-x-2">
                             @if (currentPage > 1)
                             {
                                 <a href="@Url.Action("Index", new { page = currentPage - 1, pageSize })" 
                                    class="px-3 py-2 bg-white border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50">
-                                    Previous
+                                    @Localizer["Previous"]
                                 </a>
                             }
                             <a href="@Url.Action("Index", new { page = currentPage + 1, pageSize })" 
                                class="px-3 py-2 bg-white border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50">
-                                Next
+                                @Localizer["Next"]
                             </a>
                         </div>
                     </div>
@@ -158,14 +159,14 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">No Reports Found</h3>
-                        <p class="text-gray-500 mb-4">You haven't generated any reports yet.</p>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">@Localizer["NoReportsFound"]</h3>
+                        <p class="text-gray-500 mb-4">@Localizer["NoReportsFoundDesc"]</p>
                         <a href="@Url.Action("Generate", "Reports")" 
                            class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
-                            Generate Your First Report
+                            @Localizer["GenerateYourFirstReport"]
                         </a>
                     </div>
                 }
