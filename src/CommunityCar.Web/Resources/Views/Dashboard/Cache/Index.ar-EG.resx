@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="CacheManagementTitle" xml:space="preserve"><value>إدارة التخزين المؤقت</value></data>
+  <data name="CacheManagementHeader" xml:space="preserve"><value>إدارة التخزين المؤقت</value></data>
+  <data name="CacheManagementDescription" xml:space="preserve"><value>مراقبة وإدارة التخزين المؤقت للتطبيق</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>لوحة التحكم</value></data>
+  <data name="CacheManagement" xml:space="preserve"><value>إدارة التخزين المؤقت</value></data>
+  <data name="Connected" xml:space="preserve"><value>متصل</value></data>
+  <data name="Disconnected" xml:space="preserve"><value>غير متصل</value></data>
+  <data name="CacheEngine" xml:space="preserve"><value>محرك {0}</value></data>
+  <data name="CacheManagementDesc" xml:space="preserve"><value>مراقبة أداء التخزين المؤقت، وإدارة المفاتيح، وتحسين أنماط الوصول إلى البيانات</value></data>
+  <data name="RefreshStats" xml:space="preserve"><value>تحديث الإحصائيات</value></data>
+  <data name="MemoryUsage" xml:space="preserve"><value>استخدام الذاكرة</value></data>
+  <data name="TotalKeys" xml:space="preserve"><value>إجمالي المفاتيح</value></data>
+  <data name="CacheOperations" xml:space="preserve"><value>عمليات التخزين المؤقت</value></data>
+  <data name="WarmUpCache" xml:space="preserve"><value>تهيئة التخزين المؤقت</value></data>
+  <data name="WarmUpCacheDesc" xml:space="preserve"><value>التحميل المسبق للبيانات التي يتم الوصول إليها بشكل متكرر</value></data>
+  <data name="Execute" xml:space="preserve"><value>تنفيذ</value></data>
+  <data name="ConfirmWarmUp" xml:space="preserve"><value>هل تريد تهيئة التخزين المؤقت الآن؟</value></data>
+  <data name="ClearAllCache" xml:space="preserve"><value>مسح كافة التخزين المؤقت</value></data>
+  <data name="ClearAllCacheDesc" xml:space="preserve"><value>إزالة كافة المدخلات المخزنة مؤقتاً</value></data>
+  <data name="ConfirmClearAll" xml:space="preserve"><value>مسح كافة التخزين المؤقت؟ لا يمكن التراجع عن هذا الإجراء.</value></data>
+  <data name="BrowseKeys" xml:space="preserve"><value>تصفح المفاتيح</value></data>
+  <data name="BrowseKeysDesc" xml:space="preserve"><value>فحص وإدارة مفاتيح التخزين المؤقت</value></data>
+  <data name="Browse" xml:space="preserve"><value>تصفح</value></data>
+  <data name="PatternClear" xml:space="preserve"><value>مسح بالنمط</value></data>
+  <data name="PatternClearDesc" xml:space="preserve"><value>المسح عن طريق مطابقة الأنماط</value></data>
+  <data name="Configure" xml:space="preserve"><value>إعداد</value></data>
+  <data name="PerformanceMetrics" xml:space="preserve"><value>مقاييس الأداء</value></data>
+  <data name="NoStatistics" xml:space="preserve"><value>لا توجد إحصائيات متاحة</value></data>
+  <data name="NoStatisticsDesc" xml:space="preserve"><value>ستظهر مقاييس التخزين المؤقت هنا</value></data>
+  <data name="ClearCachePattern" xml:space="preserve"><value>مسح نمط التخزين المؤقت</value></data>
+  <data name="Pattern" xml:space="preserve"><value>النمط</value></data>
+  <data name="PatternPlaceholder" xml:space="preserve"><value>user:*, feed:*, gamification:*</value></data>
+  <data name="PatternHelp" xml:space="preserve"><value>استخدم * كرمز عام. أمثلة: user:*، feed:trending:*</value></data>
+  <data name="Cancel" xml:space="preserve"><value>إلغاء</value></data>
+  <data name="ConfirmPatternClear" xml:space="preserve"><value>مسح مدخلات التخزين المؤقت التي تطابق هذا النمط؟</value></data>
+  <data name="ClearPattern" xml:space="preserve"><value>مسح النمط</value></data>
+  <data name="StatsRefreshedJS" xml:space="preserve"><value>تم تحديث الإحصائيات بنجاح</value></data>
+  <data name="StatsRefreshFailedJS" xml:space="preserve"><value>فشل تحديث الإحصائيات</value></data>
+</root>

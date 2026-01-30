@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="ErrorDetailsTitle" xml:space="preserve"><value>تفاصيل الخطأ</value></data>
+  <data name="SystemFailureArchive" xml:space="preserve"><value>أرشيف_فشل_النظام</value></data>
+  <data name="ErrorDetails" xml:space="preserve"><value>تفاصيل الخطأ</value></data>
+  <data name="ID" xml:space="preserve"><value>المعرف: {0}</value></data>
+  <data name="BackToLogs" xml:space="preserve"><value>العودة إلى السجلات</value></data>
+  <data name="PurgeEntry" xml:space="preserve"><value>تطهير المدخل</value></data>
+  <data name="CriticalExceptionMessage" xml:space="preserve"><value>رسالة_استثناء_حرجة</value></data>
+  <data name="SevPrefix" xml:space="preserve"><value>خطورة_{0}</value></data>
+  <data name="SrcPrefix" xml:space="preserve"><value>مصدر_{0}</value></data>
+  <data name="ExceptionDetails" xml:space="preserve"><value>تفاصيل الاستثناء</value></data>
+  <data name="StackTrace" xml:space="preserve"><value>تتبع المكدس</value></data>
+  <data name="RequestInformation" xml:space="preserve"><value>معلومات الطلب</value></data>
+  <data name="RequestPath" xml:space="preserve"><value>مسار الطلب</value></data>
+  <data name="HTTPMethod" xml:space="preserve"><value>طريقة HTTP</value></data>
+  <data name="UserAgent" xml:space="preserve"><value>وكيل المستخدم</value></data>
+  <data name="AdditionalData" xml:space="preserve"><value>بيانات إضافية</value></data>
+  <data name="MetadataExtract" xml:space="preserve"><value>استخراج_البيانات_الواصفة</value></data>
+  <data name="SystemID" xml:space="preserve"><value>معرف_النظام</value></data>
+  <data name="SeverityLevel" xml:space="preserve"><value>مستوى_الخطورة</value></data>
+  <data name="RegistryStamp" xml:space="preserve"><value>ختم_السجل</value></data>
+  <data name="ActionProtocols" xml:space="preserve"><value>بروتوكولات_الإجراء</value></data>
+  <data name="CloneData" xml:space="preserve"><value>نسخ_البيانات</value></data>
+  <data name="ExportArchive" xml:space="preserve"><value>تصدير_الأرشيف</value></data>
+  <data name="FlagResolved" xml:space="preserve"><value>تحديد_كمحلول</value></data>
+  <data name="ConfirmDeleteJS" xml:space="preserve"><value>هل أنت متأكد من رغبتك في حذف سجل الخطأ هذا؟ لا يمكن التراجع عن هذا الإجراء.</value></data>
+  <data name="DeletedSuccessJS" xml:space="preserve"><value>تم حذف سجل الخطأ بنجاح</value></data>
+  <data name="DeleteFailedJS" xml:space="preserve"><value>فشل حذف سجل الخطأ</value></data>
+  <data name="NetworkErrorJS" xml:space="preserve"><value>خطأ في الشبكة. يرجى المحاولة مرة أخرى.</value></data>
+  <data name="MarkedResolvedJS" xml:space="preserve"><value>تم تحديد الخطأ كمحلول</value></data>
+  <data name="MarkResolvedFailedJS" xml:space="preserve"><value>فشل تحديد الخطأ كمحلول</value></data>
+  <data name="ErrorIDJS" xml:space="preserve"><value>معرف الخطأ</value></data>
+  <data name="LevelJS" xml:space="preserve"><value>المستوى</value></data>
+  <data name="SourceJS" xml:space="preserve"><value>المصدر</value></data>
+  <data name="TimestampJS" xml:space="preserve"><value>الطابع الزمني</value></data>
+  <data name="MessageJS" xml:space="preserve"><value>الرسالة</value></data>
+  <data name="RequestPathJS" xml:space="preserve"><value>مسار الطلب</value></data>
+  <data name="ExceptionJS" xml:space="preserve"><value>الاستثناء</value></data>
+  <data name="StackTraceJS" xml:space="preserve"><value>تتبع المكدس</value></data>
+  <data name="CopiedSuccessJS" xml:space="preserve"><value>تم نسخ تفاصيل الخطأ إلى الحافظة</value></data>
+  <data name="CopyFailedJS" xml:space="preserve"><value>فشل نسخ تفاصيل الخطأ</value></data>
+  <data name="ExportedSuccessJS" xml:space="preserve"><value>تم تصدير الخطأ بنجاح</value></data>
+</root>

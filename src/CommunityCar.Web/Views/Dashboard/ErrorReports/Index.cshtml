@@ -1,5 +1,6 @@
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Error Reports";
+    ViewData["Title"] = Localizer["ErrorReportsTitle"];
     Layout = "_DashboardLayout";
 }
 
@@ -9,25 +10,25 @@
         <div>
             <h1 class="text-2xl font-black text-foreground tracking-tight flex items-center gap-3">
                 <i data-lucide="flag" class="w-6 h-6 text-primary"></i>
-                Error Reports
+                @Localizer["ErrorReports"]
             </h1>
-            <p class="text-sm text-muted-foreground mt-1">Manage user-submitted error reports and issues</p>
+            <p class="text-sm text-muted-foreground mt-1">@Localizer["ErrorReportsDesc"]</p>
         </div>
         
         <div class="flex items-center gap-4">
             <select id="statusFilter" class="px-4 py-2 border border-border rounded-lg bg-background text-foreground">
-                <option value="">All Status</option>
-                <option value="new">New</option>
-                <option value="in-progress">In Progress</option>
-                <option value="resolved">Resolved</option>
-                <option value="closed">Closed</option>
+                <option value="">@Localizer["AllStatus"]</option>
+                <option value="new">@Localizer["StatusNew"]</option>
+                <option value="in-progress">@Localizer["StatusInProgress"]</option>
+                <option value="resolved">@Localizer["StatusResolved"]</option>
+                <option value="closed">@Localizer["StatusClosed"]</option>
             </select>
             <select id="priorityFilter" class="px-4 py-2 border border-border rounded-lg bg-background text-foreground">
-                <option value="">All Priority</option>
-                <option value="Critical">Critical</option>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
+                <option value="">@Localizer["AllPriority"]</option>
+                <option value="Critical">@Localizer["PriorityCritical"]</option>
+                <option value="High">@Localizer["PriorityHigh"]</option>
+                <option value="Medium">@Localizer["PriorityMedium"]</option>
+                <option value="Low">@Localizer["PriorityLow"]</option>
             </select>
         </div>
     </div>
@@ -44,7 +45,7 @@
         <div class="bg-gradient-to-br from-red-500/10 to-red-600/10 border border-red-500/20 rounded-2xl p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-red-600 font-bold text-sm">Critical Issues</p>
+                    <p class="text-red-600 font-bold text-sm">@Localizer["CriticalIssues"]</p>
                     <p class="text-2xl font-black text-foreground" id="criticalCount">0</p>
                 </div>
                 <i data-lucide="alert-triangle" class="w-8 h-8 text-red-500"></i>
@@ -53,7 +54,7 @@
         <div class="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border border-orange-500/20 rounded-2xl p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-orange-600 font-bold text-sm">High Priority</p>
+                    <p class="text-orange-600 font-bold text-sm">@Localizer["HighPriority"]</p>
                     <p class="text-2xl font-black text-foreground" id="highCount">0</p>
                 </div>
                 <i data-lucide="alert-circle" class="w-8 h-8 text-orange-500"></i>
@@ -62,7 +63,7 @@
         <div class="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border border-blue-500/20 rounded-2xl p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-blue-600 font-bold text-sm">In Progress</p>
+                    <p class="text-blue-600 font-bold text-sm">@Localizer["InProgress"]</p>
                     <p class="text-2xl font-black text-foreground" id="inProgressCount">0</p>
                 </div>
                 <i data-lucide="clock" class="w-8 h-8 text-blue-500"></i>
@@ -71,7 +72,7 @@
         <div class="bg-gradient-to-br from-green-500/10 to-green-600/10 border border-green-500/20 rounded-2xl p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-green-600 font-bold text-sm">Resolved</p>
+                    <p class="text-green-600 font-bold text-sm">@Localizer["Resolved"]</p>
                     <p class="text-2xl font-black text-foreground" id="resolvedCount">0</p>
                 </div>
                 <i data-lucide="check-circle" class="w-8 h-8 text-green-500"></i>
@@ -84,7 +85,7 @@
         <div class="p-6 border-b border-border">
             <h3 class="text-lg font-bold text-foreground flex items-center gap-2">
                 <i data-lucide="list" class="w-5 h-5 text-primary"></i>
-                Recent Error Reports
+                @Localizer["RecentErrorReports"]
             </h3>
         </div>
         
@@ -92,13 +93,13 @@
             <table class="w-full">
                 <thead class="bg-muted/20">
                     <tr>
-                        <th class="text-left p-4 font-bold text-foreground">Ticket ID</th>
-                        <th class="text-left p-4 font-bold text-foreground">User</th>
-                        <th class="text-left p-4 font-bold text-foreground">Priority</th>
-                        <th class="text-left p-4 font-bold text-foreground">Status</th>
-                        <th class="text-left p-4 font-bold text-foreground">Description</th>
-                        <th class="text-left p-4 font-bold text-foreground">Date</th>
-                        <th class="text-left p-4 font-bold text-foreground">Actions</th>
+                        <th class="text-left p-4 font-bold text-foreground">@Localizer["TicketID"]</th>
+                        <th class="text-left p-4 font-bold text-foreground">@Localizer["User"]</th>
+                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Priority"]</th>
+                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Status"]</th>
+                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Description"]</th>
+                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Date"]</th>
+                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Actions"]</th>
                     </tr>
                 </thead>
                 <tbody id="reportsTableBody">
@@ -134,13 +135,13 @@
                         <td class="p-4 text-muted-foreground text-sm">2 hours ago</td>
                         <td class="p-4">
                             <div class="flex items-center gap-2">
-                                <button class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" title="View Details">
+                                <button class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" title="@Localizer["ViewDetails"]">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </button>
-                                <button class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300" title="Mark Resolved">
+                                <button class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300" title="@Localizer["MarkResolved"]">
                                     <i data-lucide="check" class="w-4 h-4"></i>
                                 </button>
-                                <button class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" title="Delete">
+                                <button class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" title="@Localizer["Delete"]">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -168,13 +169,13 @@
                         <td class="p-4 text-muted-foreground text-sm">5 hours ago</td>
                         <td class="p-4">
                             <div class="flex items-center gap-2">
-                                <button class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" title="View Details">
+                                <button class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" title="@Localizer["ViewDetails"]">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </button>
-                                <button class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300" title="Mark Resolved">
+                                <button class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300" title="@Localizer["MarkResolved"]">
                                     <i data-lucide="check" class="w-4 h-4"></i>
                                 </button>
-                                <button class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" title="Delete">
+                                <button class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" title="@Localizer["Delete"]">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -187,8 +188,8 @@
         <!-- Empty State -->
         <div id="emptyState" class="hidden p-12 text-center">
             <i data-lucide="inbox" class="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-30"></i>
-            <h3 class="text-lg font-bold text-foreground mb-2">No Error Reports</h3>
-            <p class="text-sm text-muted-foreground">No error reports match your current filters.</p>
+            <h3 class="text-lg font-bold text-foreground mb-2">@Localizer["NoErrorReports"]</h3>
+            <p class="text-sm text-muted-foreground">@Localizer["NoErrorReportsDesc"]</p>
         </div>
     </div>
 </div>

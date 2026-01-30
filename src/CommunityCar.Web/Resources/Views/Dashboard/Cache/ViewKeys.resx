@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="CacheRegistryTitle" xml:space="preserve"><value>Cache Registry - Key Explorer</value></data>
+  <data name="CacheRegistryHeader" xml:space="preserve"><value>Cache Registry</value></data>
+  <data name="CacheRegistryDescription" xml:space="preserve"><value>Browse and manage cache key infrastructure</value></data>
+  <data name="CacheManagement" xml:space="preserve"><value>Cache Management</value></data>
+  <data name="KeyRegistryExplorer" xml:space="preserve"><value>Key Registry Explorer</value></data>
+  <data name="PatternSearch" xml:space="preserve"><value>Pattern Search</value></data>
+  <data name="CacheKeyRegistry" xml:space="preserve"><value>Cache Key Registry</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>Initialize pattern search protocol (e.g., user:*, feed:*, *)</value></data>
+  <data name="ExecuteSearch" xml:space="preserve"><value>Execute Search</value></data>
+  <data name="PatternExamples" xml:space="preserve"><value>Pattern Examples</value></data>
+  <data name="KeysLocated" xml:space="preserve"><value>Keys Located</value></data>
+  <data name="ActivePattern" xml:space="preserve"><value>Active Pattern</value></data>
+  <data name="RegistryEntries" xml:space="preserve"><value>Registry Entries</value></data>
+  <data name="PatternFilter" xml:space="preserve"><value>Pattern Filter</value></data>
+  <data name="Namespace" xml:space="preserve"><value>{0} NAMESPACE</value></data>
+  <data name="CacheRegistryEntry" xml:space="preserve"><value>Cache Registry Entry</value></data>
+  <data name="InspectProtocol" xml:space="preserve"><value>Inspect Protocol</value></data>
+  <data name="PurgeEntry" xml:space="preserve"><value>Purge Entry</value></data>
+  <data name="RegistryLimitReached" xml:space="preserve"><value>Registry Limit Reached</value></data>
+  <data name="RegistryLimitReachedDesc" xml:space="preserve"><value>Displaying first 100 entries. Refine pattern for targeted results.</value></data>
+  <data name="NoRegistryEntries" xml:space="preserve"><value>No Registry Entries Located</value></data>
+  <data name="NoRegistryEntriesDesc" xml:space="preserve"><value>Pattern "{0}" returned zero matches. Adjust search parameters.</value></data>
+  <data name="RegistryInspectorProtocol" xml:space="preserve"><value>Registry Inspector Protocol</value></data>
+  <data name="RegistryKey" xml:space="preserve"><value>Registry Key</value></data>
+  <data name="CachedPayload" xml:space="preserve"><value>Cached Payload</value></data>
+  <data name="TTLStatus" xml:space="preserve"><value>TTL Status</value></data>
+  <data name="CloseInspector" xml:space="preserve"><value>Close Inspector</value></data>
+  <data name="LoadingPayloadJS" xml:space="preserve"><value>Loading cache payload...</value></data>
+  <data name="AnalyzingTTLJS" xml:space="preserve"><value>Analyzing TTL status...</value></data>
+  <data name="FailedToRetrieveJS" xml:space="preserve"><value>Failed to retrieve cache payload</value></data>
+  <data name="ConfirmPurgeJS" xml:space="preserve"><value>Confirm purge operation for registry key</value></data>
+  <data name="PurgedSuccessJS" xml:space="preserve"><value>Registry entry purged successfully</value></data>
+  <data name="PurgeFailedJS" xml:space="preserve"><value>Purge operation failed</value></data>
+</root>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="ErrorReportsTitle" xml:space="preserve"><value>تقارير الأخطاء</value></data>
+  <data name="ErrorReports" xml:space="preserve"><value>تقارير الأخطاء</value></data>
+  <data name="ErrorReportsDesc" xml:space="preserve"><value>إدارة تقارير الأخطاء والمشكلات المقدمة من المستخدمين</value></data>
+  <data name="AllStatus" xml:space="preserve"><value>جميع الحالات</value></data>
+  <data name="StatusNew" xml:space="preserve"><value>جديد</value></data>
+  <data name="StatusInProgress" xml:space="preserve"><value>قيد المعالجة</value></data>
+  <data name="StatusResolved" xml:space="preserve"><value>تم الحل</value></data>
+  <data name="StatusClosed" xml:space="preserve"><value>مغلق</value></data>
+  <data name="AllPriority" xml:space="preserve"><value>جميع الأولويات</value></data>
+  <data name="PriorityCritical" xml:space="preserve"><value>حرج</value></data>
+  <data name="PriorityHigh" xml:space="preserve"><value>عالٍ</value></data>
+  <data name="PriorityMedium" xml:space="preserve"><value>متوسط</value></data>
+  <data name="PriorityLow" xml:space="preserve"><value>منخفض</value></data>
+  <data name="CriticalIssues" xml:space="preserve"><value>مشكلات حرجة</value></data>
+  <data name="HighPriority" xml:space="preserve"><value>أولوية عالية</value></data>
+  <data name="InProgress" xml:space="preserve"><value>قيد المعالجة</value></data>
+  <data name="Resolved" xml:space="preserve"><value>تم الحل</value></data>
+  <data name="RecentErrorReports" xml:space="preserve"><value>تقارير الأخطاء الأخيرة</value></data>
+  <data name="TicketID" xml:space="preserve"><value>رقم التذكرة</value></data>
+  <data name="User" xml:space="preserve"><value>المستخدم</value></data>
+  <data name="Priority" xml:space="preserve"><value>الأولوية</value></data>
+  <data name="Status" xml:space="preserve"><value>الحالة</value></data>
+  <data name="Description" xml:space="preserve"><value>الوصف</value></data>
+  <data name="Date" xml:space="preserve"><value>التاريخ</value></data>
+  <data name="Actions" xml:space="preserve"><value>الإجراءات</value></data>
+  <data name="ViewDetails" xml:space="preserve"><value>عرض التفاصيل</value></data>
+  <data name="MarkResolved" xml:space="preserve"><value>تحديد كمحلولة</value></data>
+  <data name="Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="NoErrorReports" xml:space="preserve"><value>لا توجد تقارير أخطاء</value></data>
+  <data name="NoErrorReportsDesc" xml:space="preserve"><value>لا توجد تقارير أخطاء تطابق الفلاتر الحالية.</value></data>
+</root>

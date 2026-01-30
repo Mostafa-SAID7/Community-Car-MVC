@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="ErrorManagementDashboard" xml:space="preserve"><value>لوحة تحكم إدارة الأخطاء</value></data>
+  <data name="ErrorManagement" xml:space="preserve"><value>إدارة الأخطاء</value></data>
+  <data name="ErrorManagementDesc" xml:space="preserve"><value>مراقبة وإدارة أخطاء التطبيق</value></data>
+  <data name="CleanupOldErrors" xml:space="preserve"><value>تنظيف الأخطاء القديمة</value></data>
+  <data name="UpdateStats" xml:space="preserve"><value>تحديث الإحصائيات</value></data>
+  <data name="TotalErrors" xml:space="preserve"><value>إجمالي الأخطاء</value></data>
+  <data name="Resolved" xml:space="preserve"><value>تم الحل</value></data>
+  <data name="Unresolved" xml:space="preserve"><value>لم يتم الحل</value></data>
+  <data name="Critical" xml:space="preserve"><value>حرج</value></data>
+  <data name="Category" xml:space="preserve"><value>الفئة</value></data>
+  <data name="AllCategories" xml:space="preserve"><value>جميع الفئات</value></data>
+  <data name="CatGeneral" xml:space="preserve"><value>عام</value></data>
+  <data name="CatDatabase" xml:space="preserve"><value>قاعدة البيانات</value></data>
+  <data name="CatNetwork" xml:space="preserve"><value>الشبكة</value></data>
+  <data name="CatValidation" xml:space="preserve"><value>التحقق من البيانات</value></data>
+  <data name="CatBusiness" xml:space="preserve"><value>الأعمال</value></data>
+  <data name="CatSecurity" xml:space="preserve"><value>الأمن</value></data>
+  <data name="Severity" xml:space="preserve"><value>الخطورة</value></data>
+  <data name="AllSeverities" xml:space="preserve"><value>جميع مستويات الخطورة</value></data>
+  <data name="SevCritical" xml:space="preserve"><value>حرج</value></data>
+  <data name="SevError" xml:space="preserve"><value>خطأ</value></data>
+  <data name="SevWarning" xml:space="preserve"><value>تحذير</value></data>
+  <data name="SevInfo" xml:space="preserve"><value>معلومات</value></data>
+  <data name="Status" xml:space="preserve"><value>الحالة</value></data>
+  <data name="AllStatus" xml:space="preserve"><value>جميع الحالات</value></data>
+  <data name="Filter" xml:space="preserve"><value>تصفية</value></data>
+  <data name="Clear" xml:space="preserve"><value>مسح</value></data>
+  <data name="RecentErrors" xml:space="preserve"><value>الأخطاء الأخيرة</value></data>
+  <data name="Occurrences" xml:space="preserve"><value>{0} حالات تكرار</value></data>
+  <data name="Path" xml:space="preserve"><value>المسار</value></data>
+  <data name="Details" xml:space="preserve"><value>التفاصيل</value></data>
+  <data name="NoErrorsFound" xml:space="preserve"><value>لم يتم العثور على أخطاء</value></data>
+  <data name="NoErrorsFoundDesc" xml:space="preserve"><value>رائع! لا توجد أخطاء تطابق الفلاتر الحالية.</value></data>
+  <data name="ErrorStatistics" xml:space="preserve"><value>إحصائيات الأخطاء</value></data>
+  <data name="ViewDetailedErrorAnalytics" xml:space="preserve"><value>عرض تحليلات الأخطاء المفصلة</value></data>
+  <data name="ErrorBoundaries" xml:space="preserve"><value>حدود الأخطاء</value></data>
+  <data name="ManageComponentErrors" xml:space="preserve"><value>إدارة أخطاء المكونات</value></data>
+  <data name="SystemHealth" xml:space="preserve"><value>صحة النظام</value></data>
+  <data name="HealthHealthy" xml:space="preserve"><value>سليم بنسبة 100%</value></data>
+</root>

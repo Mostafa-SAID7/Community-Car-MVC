@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="CacheRegistryTitle" xml:space="preserve"><value>سجل التخزين المؤقت - مستكشف المفاتيح</value></data>
+  <data name="CacheRegistryHeader" xml:space="preserve"><value>سجل التخزين المؤقت</value></data>
+  <data name="CacheRegistryDescription" xml:space="preserve"><value>تصفح وإدارة بنية مفاتيح التخزين المؤقت</value></data>
+  <data name="CacheManagement" xml:space="preserve"><value>إدارة التخزين المؤقت</value></data>
+  <data name="KeyRegistryExplorer" xml:space="preserve"><value>مستكشف سجل المفاتيح</value></data>
+  <data name="PatternSearch" xml:space="preserve"><value>البحث بالنمط</value></data>
+  <data name="CacheKeyRegistry" xml:space="preserve"><value>سجل مفاتيح التخزين المؤقت</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>بدء بروتوكول البحث بالنمط (مثلاً user:*، feed:*، *)</value></data>
+  <data name="ExecuteSearch" xml:space="preserve"><value>تنفيذ البحث</value></data>
+  <data name="PatternExamples" xml:space="preserve"><value>أمثلة الأنماط</value></data>
+  <data name="KeysLocated" xml:space="preserve"><value>المفاتيح الموجودة</value></data>
+  <data name="ActivePattern" xml:space="preserve"><value>النمط النشط</value></data>
+  <data name="RegistryEntries" xml:space="preserve"><value>مدخلات السجل</value></data>
+  <data name="PatternFilter" xml:space="preserve"><value>فلتر النمط</value></data>
+  <data name="Namespace" xml:space="preserve"><value>مجال الأسماء {0}</value></data>
+  <data name="CacheRegistryEntry" xml:space="preserve"><value>مدخل سجل التخزين المؤقت</value></data>
+  <data name="InspectProtocol" xml:space="preserve"><value>بروتوكول الفحص</value></data>
+  <data name="PurgeEntry" xml:space="preserve"><value>تطهير المدخل</value></data>
+  <data name="RegistryLimitReached" xml:space="preserve"><value>تم الوصول إلى حد السجل</value></data>
+  <data name="RegistryLimitReachedDesc" xml:space="preserve"><value>يتم عرض أول 100 مدخل. قم بتصفية النمط للحصول على نتائج أكثر دقة.</value></data>
+  <data name="NoRegistryEntries" xml:space="preserve"><value>لم يتم العثور على مدخلات في السجل</value></data>
+  <data name="NoRegistryEntriesDesc" xml:space="preserve"><value>النمط "{0}" لم يرجع أي نتائج. اضبط معايير البحث.</value></data>
+  <data name="RegistryInspectorProtocol" xml:space="preserve"><value>بروتوكول مفتش السجل</value></data>
+  <data name="RegistryKey" xml:space="preserve"><value>مفتاح السجل</value></data>
+  <data name="CachedPayload" xml:space="preserve"><value>الحمولة المخزنة مؤقتاً</value></data>
+  <data name="TTLStatus" xml:space="preserve"><value>حالة وقت البقاء (TTL)</value></data>
+  <data name="CloseInspector" xml:space="preserve"><value>إغلاق المفتش</value></data>
+  <data name="LoadingPayloadJS" xml:space="preserve"><value>جاري تحميل الحمولة...</value></data>
+  <data name="AnalyzingTTLJS" xml:space="preserve"><value>جاري تحليل حالة TTL...</value></data>
+  <data name="FailedToRetrieveJS" xml:space="preserve"><value>فشل في استرداد الحمولة</value></data>
+  <data name="ConfirmPurgeJS" xml:space="preserve"><value>تأكيد عملية التطهير لمفتاح السجل</value></data>
+  <data name="PurgedSuccessJS" xml:space="preserve"><value>تم تطهير مدخل السجل بنجاح</value></data>
+  <data name="PurgeFailedJS" xml:space="preserve"><value>فشلت عملية التطهير</value></data>
+</root>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="ErrorDetailsTitle" xml:space="preserve"><value>Error Details</value></data>
+  <data name="SystemFailureArchive" xml:space="preserve"><value>SYSTEM_FAILURE_ARCHIVE</value></data>
+  <data name="ErrorDetails" xml:space="preserve"><value>Error Details</value></data>
+  <data name="ID" xml:space="preserve"><value>ID: {0}</value></data>
+  <data name="BackToLogs" xml:space="preserve"><value>Back to Logs</value></data>
+  <data name="PurgeEntry" xml:space="preserve"><value>Purge Entry</value></data>
+  <data name="CriticalExceptionMessage" xml:space="preserve"><value>CRITICAL_EXCEPTION_MESSAGE</value></data>
+  <data name="SevPrefix" xml:space="preserve"><value>SEV_{0}</value></data>
+  <data name="SrcPrefix" xml:space="preserve"><value>SRC_{0}</value></data>
+  <data name="ExceptionDetails" xml:space="preserve"><value>Exception Details</value></data>
+  <data name="StackTrace" xml:space="preserve"><value>Stack Trace</value></data>
+  <data name="RequestInformation" xml:space="preserve"><value>Request Information</value></data>
+  <data name="RequestPath" xml:space="preserve"><value>Request Path</value></data>
+  <data name="HTTPMethod" xml:space="preserve"><value>HTTP Method</value></data>
+  <data name="UserAgent" xml:space="preserve"><value>User Agent</value></data>
+  <data name="AdditionalData" xml:space="preserve"><value>Additional Data</value></data>
+  <data name="MetadataExtract" xml:space="preserve"><value>METADATA_EXTRACT</value></data>
+  <data name="SystemID" xml:space="preserve"><value>SYSTEM_ID</value></data>
+  <data name="SeverityLevel" xml:space="preserve"><value>SEVERITY_LEVEL</value></data>
+  <data name="RegistryStamp" xml:space="preserve"><value>REGISTRY_STAMP</value></data>
+  <data name="ActionProtocols" xml:space="preserve"><value>ACTION_PROTOCOLS</value></data>
+  <data name="CloneData" xml:space="preserve"><value>CLONE_DATA</value></data>
+  <data name="ExportArchive" xml:space="preserve"><value>EXPORT_ARCHIVE</value></data>
+  <data name="FlagResolved" xml:space="preserve"><value>FLAG_RESOLVED</value></data>
+  <data name="ConfirmDeleteJS" xml:space="preserve"><value>Are you sure you want to delete this error log? This action cannot be undone.</value></data>
+  <data name="DeletedSuccessJS" xml:space="preserve"><value>Error log deleted successfully</value></data>
+  <data name="DeleteFailedJS" xml:space="preserve"><value>Failed to delete error log</value></data>
+  <data name="NetworkErrorJS" xml:space="preserve"><value>Network error. Please try again.</value></data>
+  <data name="MarkedResolvedJS" xml:space="preserve"><value>Error marked as resolved</value></data>
+  <data name="MarkResolvedFailedJS" xml:space="preserve"><value>Failed to mark error as resolved</value></data>
+  <data name="ErrorIDJS" xml:space="preserve"><value>Error ID</value></data>
+  <data name="LevelJS" xml:space="preserve"><value>Level</value></data>
+  <data name="SourceJS" xml:space="preserve"><value>Source</value></data>
+  <data name="TimestampJS" xml:space="preserve"><value>Timestamp</value></data>
+  <data name="MessageJS" xml:space="preserve"><value>Message</value></data>
+  <data name="RequestPathJS" xml:space="preserve"><value>Request Path</value></data>
+  <data name="ExceptionJS" xml:space="preserve"><value>Exception</value></data>
+  <data name="StackTraceJS" xml:space="preserve"><value>Stack Trace</value></data>
+  <data name="CopiedSuccessJS" xml:space="preserve"><value>Error details copied to clipboard</value></data>
+  <data name="CopyFailedJS" xml:space="preserve"><value>Failed to copy error details</value></data>
+  <data name="ExportedSuccessJS" xml:space="preserve"><value>Error exported successfully</value></data>
+</root>

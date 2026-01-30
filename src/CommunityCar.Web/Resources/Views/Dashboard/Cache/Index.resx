@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="CacheManagementTitle" xml:space="preserve"><value>Cache Management</value></data>
+  <data name="CacheManagementHeader" xml:space="preserve"><value>Cache Management</value></data>
+  <data name="CacheManagementDescription" xml:space="preserve"><value>Monitor and manage application cache</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>Dashboard</value></data>
+  <data name="CacheManagement" xml:space="preserve"><value>Cache Management</value></data>
+  <data name="Connected" xml:space="preserve"><value>Connected</value></data>
+  <data name="Disconnected" xml:space="preserve"><value>Disconnected</value></data>
+  <data name="CacheEngine" xml:space="preserve"><value>{0} Engine</value></data>
+  <data name="CacheManagementDesc" xml:space="preserve"><value>Monitor cache performance, manage keys, and optimize data access patterns</value></data>
+  <data name="RefreshStats" xml:space="preserve"><value>Refresh Stats</value></data>
+  <data name="MemoryUsage" xml:space="preserve"><value>Memory Usage</value></data>
+  <data name="TotalKeys" xml:space="preserve"><value>Total Keys</value></data>
+  <data name="CacheOperations" xml:space="preserve"><value>Cache Operations</value></data>
+  <data name="WarmUpCache" xml:space="preserve"><value>Warm Up Cache</value></data>
+  <data name="WarmUpCacheDesc" xml:space="preserve"><value>Pre-load frequently accessed data</value></data>
+  <data name="Execute" xml:space="preserve"><value>Execute</value></data>
+  <data name="ConfirmWarmUp" xml:space="preserve"><value>Warm up cache now?</value></data>
+  <data name="ClearAllCache" xml:space="preserve"><value>Clear All Cache</value></data>
+  <data name="ClearAllCacheDesc" xml:space="preserve"><value>Remove all cached entries</value></data>
+  <data name="ConfirmClearAll" xml:space="preserve"><value>Clear all cache? This action cannot be undone.</value></data>
+  <data name="BrowseKeys" xml:space="preserve"><value>Browse Keys</value></data>
+  <data name="BrowseKeysDesc" xml:space="preserve"><value>Inspect and manage cache keys</value></data>
+  <data name="Browse" xml:space="preserve"><value>Browse</value></data>
+  <data name="PatternClear" xml:space="preserve"><value>Pattern Clear</value></data>
+  <data name="PatternClearDesc" xml:space="preserve"><value>Clear by pattern matching</value></data>
+  <data name="Configure" xml:space="preserve"><value>Configure</value></data>
+  <data name="PerformanceMetrics" xml:space="preserve"><value>Performance Metrics</value></data>
+  <data name="NoStatistics" xml:space="preserve"><value>No Statistics Available</value></data>
+  <data name="NoStatisticsDesc" xml:space="preserve"><value>Cache metrics will appear here</value></data>
+  <data name="ClearCachePattern" xml:space="preserve"><value>Clear Cache Pattern</value></data>
+  <data name="Pattern" xml:space="preserve"><value>Pattern</value></data>
+  <data name="PatternPlaceholder" xml:space="preserve"><value>user:*, feed:*, gamification:*</value></data>
+  <data name="PatternHelp" xml:space="preserve"><value>Use * as wildcard. Examples: user:*, feed:trending:*</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="ConfirmPatternClear" xml:space="preserve"><value>Clear cache entries matching this pattern?</value></data>
+  <data name="ClearPattern" xml:space="preserve"><value>Clear Pattern</value></data>
+  <data name="StatsRefreshedJS" xml:space="preserve"><value>Statistics refreshed successfully</value></data>
+  <data name="StatsRefreshFailedJS" xml:space="preserve"><value>Failed to refresh statistics</value></data>
+</root>

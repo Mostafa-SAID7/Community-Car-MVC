@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="ErrorManagementDashboard" xml:space="preserve"><value>Error Management Dashboard</value></data>
+  <data name="ErrorManagement" xml:space="preserve"><value>Error Management</value></data>
+  <data name="ErrorManagementDesc" xml:space="preserve"><value>Monitor and manage application errors</value></data>
+  <data name="CleanupOldErrors" xml:space="preserve"><value>Cleanup Old Errors</value></data>
+  <data name="UpdateStats" xml:space="preserve"><value>Update Stats</value></data>
+  <data name="TotalErrors" xml:space="preserve"><value>Total Errors</value></data>
+  <data name="Resolved" xml:space="preserve"><value>Resolved</value></data>
+  <data name="Unresolved" xml:space="preserve"><value>Unresolved</value></data>
+  <data name="Critical" xml:space="preserve"><value>Critical</value></data>
+  <data name="Category" xml:space="preserve"><value>Category</value></data>
+  <data name="AllCategories" xml:space="preserve"><value>All Categories</value></data>
+  <data name="CatGeneral" xml:space="preserve"><value>General</value></data>
+  <data name="CatDatabase" xml:space="preserve"><value>Database</value></data>
+  <data name="CatNetwork" xml:space="preserve"><value>Network</value></data>
+  <data name="CatValidation" xml:space="preserve"><value>Validation</value></data>
+  <data name="CatBusiness" xml:space="preserve"><value>Business</value></data>
+  <data name="CatSecurity" xml:space="preserve"><value>Security</value></data>
+  <data name="Severity" xml:space="preserve"><value>Severity</value></data>
+  <data name="AllSeverities" xml:space="preserve"><value>All Severities</value></data>
+  <data name="SevCritical" xml:space="preserve"><value>Critical</value></data>
+  <data name="SevError" xml:space="preserve"><value>Error</value></data>
+  <data name="SevWarning" xml:space="preserve"><value>Warning</value></data>
+  <data name="SevInfo" xml:space="preserve"><value>Info</value></data>
+  <data name="Status" xml:space="preserve"><value>Status</value></data>
+  <data name="AllStatus" xml:space="preserve"><value>All Status</value></data>
+  <data name="Filter" xml:space="preserve"><value>Filter</value></data>
+  <data name="Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="RecentErrors" xml:space="preserve"><value>Recent Errors</value></data>
+  <data name="Occurrences" xml:space="preserve"><value>{0} occurrences</value></data>
+  <data name="Path" xml:space="preserve"><value>Path</value></data>
+  <data name="Details" xml:space="preserve"><value>Details</value></data>
+  <data name="NoErrorsFound" xml:space="preserve"><value>No Errors Found</value></data>
+  <data name="NoErrorsFoundDesc" xml:space="preserve"><value>Great! No errors match your current filters.</value></data>
+  <data name="ErrorStatistics" xml:space="preserve"><value>Error Statistics</value></data>
+  <data name="ViewDetailedErrorAnalytics" xml:space="preserve"><value>View detailed error analytics</value></data>
+  <data name="ErrorBoundaries" xml:space="preserve"><value>Error Boundaries</value></data>
+  <data name="ManageComponentErrors" xml:space="preserve"><value>Manage component errors</value></data>
+  <data name="SystemHealth" xml:space="preserve"><value>System Health</value></data>
+  <data name="HealthHealthy" xml:space="preserve"><value>100% healthy</value></data>
+</root>
