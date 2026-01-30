@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="LocalizationHubTitle" xml:space="preserve"><value>مركز التعريب</value></data>
+  <data name="LocalizationHub" xml:space="preserve"><value>مركز التعريب</value></data>
+  <data name="LocalizationHubDesc" xml:space="preserve"><value>تنسيق اللغات المتعددة وإعدادات الثقافة</value></data>
+  <data name="SyncFiles" xml:space="preserve"><value>مزامنة الملفات</value></data>
+  <data name="Dictionary" xml:space="preserve"><value>القاموس</value></data>
+  <data name="AddCulture" xml:space="preserve"><value>إضافة ثقافة</value></data>
+  <data name="CultureCode" xml:space="preserve"><value>رمز الثقافة</value></data>
+  <data name="IdentityName" xml:space="preserve"><value>اسم الهوية</value></data>
+  <data name="Protocol" xml:space="preserve"><value>البروتوكول</value></data>
+  <data name="Priority" xml:space="preserve"><value>الأولوية</value></data>
+  <data name="Health" xml:space="preserve"><value>الصحة</value></data>
+  <data name="Actions" xml:space="preserve"><value>الإجراءات</value></data>
+  <data name="RTLBase" xml:space="preserve"><value>أساس RTL</value></data>
+  <data name="LTRBase" xml:space="preserve"><value>أساس LTR</value></data>
+  <data name="Default" xml:space="preserve"><value>افتراضي</value></data>
+  <data name="Operational" xml:space="preserve"><value>يعمل</value></data>
+  <data name="Offline" xml:space="preserve"><value>متوقف</value></data>
+</root>

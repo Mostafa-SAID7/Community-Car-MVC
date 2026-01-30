@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="LocalizationHubTitle" xml:space="preserve"><value>Localization Hub</value></data>
+  <data name="LocalizationHub" xml:space="preserve"><value>Localization Hub</value></data>
+  <data name="LocalizationHubDesc" xml:space="preserve"><value>Multi-language orchestration and culture settings</value></data>
+  <data name="SyncFiles" xml:space="preserve"><value>Sync Files</value></data>
+  <data name="Dictionary" xml:space="preserve"><value>Dictionary</value></data>
+  <data name="AddCulture" xml:space="preserve"><value>Add Culture</value></data>
+  <data name="CultureCode" xml:space="preserve"><value>Culture Code</value></data>
+  <data name="IdentityName" xml:space="preserve"><value>Identity Name</value></data>
+  <data name="Protocol" xml:space="preserve"><value>Protocol</value></data>
+  <data name="Priority" xml:space="preserve"><value>Priority</value></data>
+  <data name="Health" xml:space="preserve"><value>Health</value></data>
+  <data name="Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="RTLBase" xml:space="preserve"><value>RTL Base</value></data>
+  <data name="LTRBase" xml:space="preserve"><value>LTR Base</value></data>
+  <data name="Default" xml:space="preserve"><value>Default</value></data>
+  <data name="Operational" xml:space="preserve"><value>Operational</value></data>
+  <data name="Offline" xml:space="preserve"><value>Offline</value></data>
+</root>
