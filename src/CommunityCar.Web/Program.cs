@@ -71,6 +71,9 @@ app.MapStaticAssets();
 app.MapHub<ChatHub>("/hubs/chat");
 app.MapHub<NotificationHub>("/hubs/notifications");
 
+// Map attribute-routed controllers FIRST (QA, Posts, etc. with [Route] attributes)
+app.MapControllers();
+
 // Authentication Routes (for backward compatibility)
 app.MapControllerRoute(
     name: "login",
@@ -87,16 +90,16 @@ app.MapControllerRoute(
     pattern: "Logout",
     defaults: new { controller = "Account", action = "Logout" });
 
+// Dashboard area route for all Dashboard controllers
 app.MapControllerRoute(
     name: "dashboard",
-    pattern: "Dashboard/{controller}/{action=Index}/{id?}");
+    pattern: "Dashboard/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-app.MapControllers();
 
 app.Run();
 

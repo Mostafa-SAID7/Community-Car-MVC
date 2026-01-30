@@ -1,18 +1,19 @@
+@inject IViewLocalizer Localizer
 @model CommunityCar.Web.Models.Dashboard.System.BackgroundJobs.BackgroundJobsViewModel
 @{
-    ViewData["Title"] = "Background Jobs - System Management";
-    ViewData["PageHeader"] = "Background Jobs";
-    ViewData["PageDescription"] = "Monitor and manage system background job processing";
+    ViewData["Title"] = Localizer["BackgroundJobsSystemManagement"];
+    ViewData["PageHeader"] = Localizer["BackgroundJobs"];
+    ViewData["PageDescription"] = Localizer["BackgroundJobsDesc"];
 }
 
 <div class="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-700">
     <!-- Breadcrumb Protocol -->
     <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
         <a href="@Url.Action("Index", "Overview")" class="hover:text-primary transition-colors flex items-center gap-2">
-            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Dashboard
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> @Localizer["Dashboard"]
         </a>
         <span class="opacity-20">/</span>
-        <span class="text-foreground/40">System Background Jobs</span>
+        <span class="text-foreground/40">@Localizer["SystemBackgroundJobs"]</span>
     </nav>
 
     <!-- Job Statistics Overview -->
@@ -22,17 +23,17 @@
                 <div class="space-y-4">
                     <div class="flex flex-wrap gap-2">
                         <span class="px-3 py-1 rounded-2xl text-[9px] font-black uppercase tracking-widest bg-green-500/10 text-green-600 border border-green-500/20 flex items-center gap-1.5 shadow-sm">
-                            <i data-lucide="activity" class="w-3.5 h-3.5"></i> System Active
+                            <i data-lucide="activity" class="w-3.5 h-3.5"></i> @Localizer["SystemActive"]
                         </span>
                     </div>
-                    <h1 class="text-4xl md:text-5xl font-black text-foreground tracking-tighter leading-[1.1]">Background Job System</h1>
-                    <p class="text-sm font-medium text-muted-foreground/80 leading-relaxed">Monitor job queues, manage recurring tasks, and optimize system processing</p>
+                    <h1 class="text-4xl md:text-5xl font-black text-foreground tracking-tighter leading-[1.1]">@Localizer["BackgroundJobSystem"]</h1>
+                    <p class="text-sm font-medium text-muted-foreground/80 leading-relaxed">@Localizer["BackgroundJobSystemDesc"]</p>
                 </div>
 
                 <div class="flex items-center gap-6 pt-4">
                     <button onclick="refreshStatistics()" class="flex items-center gap-3 px-6 py-3 bg-primary/10 text-primary border border-primary/20 rounded-2xl hover:bg-primary/20 transition-all active:scale-95 group/btn">
                         <i data-lucide="refresh-cw" class="w-4 h-4 group-hover/btn:rotate-180 transition-transform duration-500"></i>
-                        <span class="text-xs font-black uppercase tracking-widest">Refresh Stats</span>
+                        <span class="text-xs font-black uppercase tracking-widest">@Localizer["RefreshStats"]</span>
                     </button>
                 </div>
             </div>
@@ -42,11 +43,11 @@
                 <div class="grid grid-cols-2 gap-8 lg:grid-cols-1">
                     <div class="space-y-1">
                         <span class="eng-stat-value text-[32px] leading-none tracking-tighter">@Model.JobStatistics.ProcessingCount.ToString("D2")</span>
-                        <span class="eng-stat-label tracking-[0.2em] opacity-50">Processing</span>
+                        <span class="eng-stat-label tracking-[0.2em] opacity-50">@Localizer["Processing"]</span>
                     </div>
                     <div class="space-y-1">
                         <span class="eng-stat-value text-[32px] leading-none tracking-tighter">@Model.JobStatistics.EnqueuedCount.ToString("D2")</span>
-                        <span class="eng-stat-label tracking-[0.2em] opacity-50">Queued</span>
+                        <span class="eng-stat-label tracking-[0.2em] opacity-50">@Localizer["Queued"]</span>
                     </div>
                 </div>
             </div>
@@ -63,13 +64,13 @@
                         <i data-lucide="wrench" class="w-6 h-6"></i>
                     </div>
                     <div>
-                        <h4 class="text-sm font-black text-foreground mb-2">Run Maintenance</h4>
-                        <p class="text-xs text-muted-foreground/80 leading-relaxed">Execute system maintenance tasks</p>
+                        <h4 class="text-sm font-black text-foreground mb-2">@Localizer["RunMaintenance"]</h4>
+                        <p class="text-xs text-muted-foreground/80 leading-relaxed">@Localizer["RunMaintenanceDesc"]</p>
                     </div>
                     <form asp-action="RunMaintenance" method="post" class="w-full">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="w-full px-4 py-3 bg-blue-500/10 text-blue-600 border border-blue-500/20 rounded-2xl hover:bg-blue-500/20 transition-all active:scale-95 text-xs font-black uppercase tracking-widest" onclick="return confirm('Run maintenance tasks now?')">
-                            Execute
+                        <button type="submit" class="w-full px-4 py-3 bg-blue-500/10 text-blue-600 border border-blue-500/20 rounded-2xl hover:bg-blue-500/20 transition-all active:scale-95 text-xs font-black uppercase tracking-widest" onclick="return confirm('@Localizer["RunMaintenanceConfirm"]')">
+                            @Localizer["Execute"]
                         </button>
                     </form>
                 </div>
@@ -84,13 +85,13 @@
                         <i data-lucide="rss" class="w-6 h-6"></i>
                     </div>
                     <div>
-                        <h4 class="text-sm font-black text-foreground mb-2">Update Feeds</h4>
-                        <p class="text-xs text-muted-foreground/80 leading-relaxed">Refresh community feed data</p>
+                        <h4 class="text-sm font-black text-foreground mb-2">@Localizer["UpdateFeeds"]</h4>
+                        <p class="text-xs text-muted-foreground/80 leading-relaxed">@Localizer["UpdateFeedsDesc"]</p>
                     </div>
                     <form asp-action="UpdateFeeds" method="post" class="w-full">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="w-full px-4 py-3 bg-green-500/10 text-green-600 border border-green-500/20 rounded-2xl hover:bg-green-500/20 transition-all active:scale-95 text-xs font-black uppercase tracking-widest" onclick="return confirm('Update feeds now?')">
-                            Execute
+                        <button type="submit" class="w-full px-4 py-3 bg-green-500/10 text-green-600 border border-green-500/20 rounded-2xl hover:bg-green-500/20 transition-all active:scale-95 text-xs font-black uppercase tracking-widest" onclick="return confirm('@Localizer["UpdateFeedsConfirm"]')">
+                            @Localizer["Execute"]
                         </button>
                     </form>
                 </div>
@@ -105,13 +106,13 @@
                         <i data-lucide="trophy" class="w-6 h-6"></i>
                     </div>
                     <div>
-                        <h4 class="text-sm font-black text-foreground mb-2">Process Gamification</h4>
-                        <p class="text-xs text-muted-foreground/80 leading-relaxed">Update badges and achievements</p>
+                        <h4 class="text-sm font-black text-foreground mb-2">@Localizer["ProcessGamification"]</h4>
+                        <p class="text-xs text-muted-foreground/80 leading-relaxed">@Localizer["ProcessGamificationDesc"]</p>
                     </div>
                     <form asp-action="ProcessGamification" method="post" class="w-full">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="w-full px-4 py-3 bg-purple-500/10 text-purple-600 border border-purple-500/20 rounded-2xl hover:bg-purple-500/20 transition-all active:scale-95 text-xs font-black uppercase tracking-widest" onclick="return confirm('Process gamification now?')">
-                            Execute
+                        <button type="submit" class="w-full px-4 py-3 bg-purple-500/10 text-purple-600 border border-purple-500/20 rounded-2xl hover:bg-purple-500/20 transition-all active:scale-95 text-xs font-black uppercase tracking-widest" onclick="return confirm('@Localizer["ProcessGamificationConfirm"]')">
+                            @Localizer["Execute"]
                         </button>
                     </form>
                 </div>
@@ -126,13 +127,13 @@
                         <i data-lucide="mail" class="w-6 h-6"></i>
                     </div>
                     <div>
-                        <h4 class="text-sm font-black text-foreground mb-2">Send Email Digest</h4>
-                        <p class="text-xs text-muted-foreground/80 leading-relaxed">Send daily email notifications</p>
+                        <h4 class="text-sm font-black text-foreground mb-2">@Localizer["SendEmailDigest"]</h4>
+                        <p class="text-xs text-muted-foreground/80 leading-relaxed">@Localizer["SendEmailDigestDesc"]</p>
                     </div>
                     <form asp-action="SendEmailDigest" method="post" class="w-full">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="w-full px-4 py-3 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-2xl hover:bg-amber-500/20 transition-all active:scale-95 text-xs font-black uppercase tracking-widest" onclick="return confirm('Send email digest now?')">
-                            Execute
+                        <button type="submit" class="w-full px-4 py-3 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-2xl hover:bg-amber-500/20 transition-all active:scale-95 text-xs font-black uppercase tracking-widest" onclick="return confirm('@Localizer["SendEmailDigestConfirm"]')">
+                            @Localizer["Execute"]
                         </button>
                     </form>
                 </div>
@@ -144,7 +145,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="eng-card p-6">
             <div class="flex items-center justify-between mb-4">
-                <h4 class="text-sm font-black text-foreground">Succeeded Jobs</h4>
+                <h4 class="text-sm font-black text-foreground">@Localizer["SucceededJobs"]</h4>
                 <div class="w-8 h-8 bg-green-500/10 rounded-xl flex items-center justify-center text-green-600">
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
                 </div>
@@ -159,7 +160,7 @@
 
         <div class="eng-card p-6">
             <div class="flex items-center justify-between mb-4">
-                <h4 class="text-sm font-black text-foreground">Failed Jobs</h4>
+                <h4 class="text-sm font-black text-foreground">@Localizer["FailedJobs"]</h4>
                 <div class="w-8 h-8 bg-red-500/10 rounded-xl flex items-center justify-center text-red-600">
                     <i data-lucide="x-circle" class="w-4 h-4"></i>
                 </div>
@@ -174,7 +175,7 @@
 
         <div class="eng-card p-6">
             <div class="flex items-center justify-between mb-4">
-                <h4 class="text-sm font-black text-foreground">Scheduled Jobs</h4>
+                <h4 class="text-sm font-black text-foreground">@Localizer["ScheduledJobs"]</h4>
                 <div class="w-8 h-8 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-600">
                     <i data-lucide="clock" class="w-4 h-4"></i>
                 </div>
@@ -193,11 +194,11 @@
         <div class="flex items-center justify-between mb-8">
             <h3 class="text-xl font-black text-foreground tracking-tighter flex items-center gap-3">
                 <span class="flex items-center justify-center w-8 h-8 rounded-2xl bg-primary text-primary-foreground text-xs leading-none">@Model.RecentJobs.Count</span>
-                Recent Job Activity
+                @Localizer["RecentJobActivity"]
             </h3>
             <a href="@Url.Action("RecurringJobs")" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
                 <i data-lucide="calendar" class="w-4 h-4"></i>
-                View Recurring Jobs
+                @Localizer["ViewRecurringJobs"]
             </a>
         </div>
 
@@ -217,7 +218,7 @@
                             </div>
                             <div class="flex items-center gap-4 mt-1">
                                 <span class="px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-@(job.State == "Succeeded" ? "green-500" : "red-500")/10 text-@(job.State == "Succeeded" ? "green-500" : "red-500")">
-                                    @job.State
+                                    @Localizer[job.State]
                                 </span>
                                 @if (job.Duration.HasValue)
                                 {
@@ -235,8 +236,8 @@
                 <div class="w-16 h-16 bg-muted/40 rounded-2xl flex items-center justify-center mb-6">
                     <i data-lucide="activity" class="w-8 h-8 text-muted-foreground opacity-20"></i>
                 </div>
-                <h4 class="text-xl font-black text-foreground tracking-tight mb-3">No Recent Activity</h4>
-                <p class="text-xs font-medium text-muted-foreground uppercase tracking-widest opacity-60">Job activity will appear here</p>
+                <h4 class="text-xl font-black text-foreground tracking-tight mb-3">@Localizer["NoRecentActivity"]</h4>
+                <p class="text-xs font-medium text-muted-foreground uppercase tracking-widest opacity-60">@Localizer["NoRecentActivityDesc"]</p>
             </div>
         }
     </div>

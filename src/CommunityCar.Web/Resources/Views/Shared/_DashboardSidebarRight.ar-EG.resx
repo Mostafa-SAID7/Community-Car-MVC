@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="SystemStatus" xml:space="preserve"><value>حالة النظام</value></data>
+  <data name="Operational" xml:space="preserve"><value>يعمل بكفاءة</value></data>
+  <data name="CoreEngine" xml:space="preserve"><value>المحرك الرئيسي</value></data>
+  <data name="LoadFactor" xml:space="preserve"><value>عامل التحميل</value></data>
+  <data name="QuickActions" xml:space="preserve"><value>إجراءات سريعة</value></data>
+  <data name="NewReport" xml:space="preserve"><value>تقرير جديد</value></data>
+  <data name="SEOAudit" xml:space="preserve"><value>تدقيق SEO</value></data>
+  <data name="FlushCache" xml:space="preserve"><value>مسح الذاكرة</value></data>
+  <data name="JobQueue" xml:space="preserve"><value>قائمة المهام</value></data>
+  <data name="SystemLogs" xml:space="preserve"><value>سجلات النظام</value></data>
+  <data name="FullDiagnostics" xml:space="preserve"><value>التشخيصات الكاملة</value></data>
+</root>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="BackgroundJobsSystemManagement" xml:space="preserve"><value>المهام الخلفية - إدارة النظام</value></data>
+  <data name="BackgroundJobs" xml:space="preserve"><value>المهام الخلفية</value></data>
+  <data name="BackgroundJobsDesc" xml:space="preserve"><value>مراقبة وإدارة معالجة المهام الخلفية للنظام</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>لوحة التحكم</value></data>
+  <data name="SystemBackgroundJobs" xml:space="preserve"><value>المهام الخلفية للنظام</value></data>
+  <data name="SystemActive" xml:space="preserve"><value>النظام نشط</value></data>
+  <data name="BackgroundJobSystem" xml:space="preserve"><value>نظام المهام الخلفية</value></data>
+  <data name="BackgroundJobSystemDesc" xml:space="preserve"><value>مراقبة قوائم انتظار المهام، وإدارة المهام المتكررة، وتحسين معالجة النظام</value></data>
+  <data name="RefreshStats" xml:space="preserve"><value>تحديث الإحصائيات</value></data>
+  <data name="Processing" xml:space="preserve"><value>جاري المعالجة</value></data>
+  <data name="Queued" xml:space="preserve"><value>في الانتظار</value></data>
+  <data name="RunMaintenance" xml:space="preserve"><value>تشغيل الصيانة</value></data>
+  <data name="RunMaintenanceDesc" xml:space="preserve"><value>تنفيذ مهام صيانة النظام</value></data>
+  <data name="RunMaintenanceConfirm" xml:space="preserve"><value>تشغيل مهام الصيانة الآن؟</value></data>
+  <data name="Execute" xml:space="preserve"><value>تنفيذ</value></data>
+  <data name="UpdateFeeds" xml:space="preserve"><value>تحديث الخلاصات</value></data>
+  <data name="UpdateFeedsDesc" xml:space="preserve"><value>تحديث بيانات خلاصات المجتمع</value></data>
+  <data name="UpdateFeedsConfirm" xml:space="preserve"><value>تحديث الخلاصات الآن؟</value></data>
+  <data name="ProcessGamification" xml:space="preserve"><value>معالجة التلعيب</value></data>
+  <data name="ProcessGamificationDesc" xml:space="preserve"><value>تحديث الشارات والإنجازات</value></data>
+  <data name="ProcessGamificationConfirm" xml:space="preserve"><value>معالجة التلعيب الآن؟</value></data>
+  <data name="SendEmailDigest" xml:space="preserve"><value>إرسال ملخص البريد</value></data>
+  <data name="SendEmailDigestDesc" xml:space="preserve"><value>إرسال إشعارات البريد الإلكتروني اليومية</value></data>
+  <data name="SendEmailDigestConfirm" xml:space="preserve"><value>إرسال ملخص البريد الآن؟</value></data>
+  <data name="SucceededJobs" xml:space="preserve"><value>المهام الناجحة</value></data>
+  <data name="FailedJobs" xml:space="preserve"><value>المهام الفاشلة</value></data>
+  <data name="ScheduledJobs" xml:space="preserve"><value>المهام المجدولة</value></data>
+  <data name="RecentJobActivity" xml:space="preserve"><value>نشاط المهام الأخير</value></data>
+  <data name="ViewRecurringJobs" xml:space="preserve"><value>عرض المهام المتكررة</value></data>
+  <data name="NoRecentActivity" xml:space="preserve"><value>لا يوجد نشاط أخير</value></data>
+  <data name="NoRecentActivityDesc" xml:space="preserve"><value>سيظهر نشاط المهام هنا</value></data>
+  <data name="Succeeded" xml:space="preserve"><value>نجح</value></data>
+  <data name="Failed" xml:space="preserve"><value>فشل</value></data>
+
+  <!-- Recurring Jobs -->
+  <data name="RecurringJobsTitle" xml:space="preserve"><value>المهام المتكررة - إدارة النظام</value></data>
+  <data name="RecurringJobs" xml:space="preserve"><value>المهام المتكررة</value></data>
+  <data name="RecurringJobsDesc" xml:space="preserve"><value>إدارة المهام المؤتمتة والمتكررة للنظام</value></data>
+  <data name="BackToOverview" xml:space="preserve"><value>العودة لنظرة عامة</value></data>
+  <data name="JobId" xml:space="preserve"><value>معرف المهمة</value></data>
+  <data name="CronExpression" xml:space="preserve"><value>تعبير Cron</value></data>
+  <data name="NextExecution" xml:space="preserve"><value>التنفيذ القادم</value></data>
+  <data name="LastExecution" xml:space="preserve"><value>آخر تنفيذ</value></data>
+  <data name="Actions" xml:space="preserve"><value>الإجراءات</value></data>
+  <data name="TriggerNow" xml:space="preserve"><value>تشغيل الآن</value></data>
+  <data name="NoRecurringJobs" xml:space="preserve"><value>لا توجد مهام متكررة</value></data>
+  <data name="NoRecurringJobsDesc" xml:space="preserve"><value>لا توجد مهام متكررة مسجلة حالياً</value></data>
+  <data name="RecurringJobsHeader" xml:space="preserve"><value>المهام المتكررة</value></data>
+  <data name="RecurringJobsDescription" xml:space="preserve"><value>إدارة المهام المؤتمتة والمتكررة للنظام</value></data>
+  <data name="RecurringSchedulerEngine" xml:space="preserve"><value>محرك الجدولة المتكررة</value></data>
+  <data name="SchedulerActive" xml:space="preserve"><value>المجدول نشط</value></data>
+  <data name="RecurringJobRegistry" xml:space="preserve"><value>سجل المهام المتكررة</value></data>
+  <data name="AutomatedScheduler" xml:space="preserve"><value>مجدول مؤتمت</value></data>
+  <data name="CronBasedEngine" xml:space="preserve"><value>محرك يعتمد على Cron</value></data>
+  <data name="HealthyJobs" xml:space="preserve"><value>مهام سليمة</value></data>
+  <data name="ScheduledJobEntries" xml:space="preserve"><value>مدخلات المهام المجدولة</value></data>
+  <data name="ErrorDetected" xml:space="preserve"><value>تم اكتشاف خطأ</value></data>
+  <data name="JobID" xml:space="preserve"><value>معرف المهمة</value></data>
+  <data name="Healthy" xml:space="preserve"><value>سليم</value></data>
+  <data name="ErrorState" xml:space="preserve"><value>حالة خطأ</value></data>
+  <data name="NotScheduled" xml:space="preserve"><value>غير مجدول</value></data>
+  <data name="NeverExecuted" xml:space="preserve"><value>لم يتم التنفيذ أبداً</value></data>
+  <data name="LastState" xml:space="preserve"><value>الحالة الأخيرة</value></data>
+  <data name="NoHistory" xml:space="preserve"><value>لا يوجد تاريخ</value></data>
+  <data name="ConfirmTrigger" xml:space="preserve"><value>هل أنت متأكد من رغبتك في تشغيل هذه المهمة يدوياً؟</value></data>
+  <data name="TriggerExecution" xml:space="preserve"><value>تشغيل التنفيذ</value></data>
+  <data name="ViewErrorDetails" xml:space="preserve"><value>عرض تفاصيل الخطأ</value></data>
+  <data name="InspectDetails" xml:space="preserve"><value>فحص التفاصيل</value></data>
+  <data name="NoRecurringJobsConfigDesc" xml:space="preserve"><value>قم بتهيئة المهام المتكررة في إعدادات النظام لرؤيتها هنا.</value></data>
+  <data name="JobConfigDetails" xml:space="preserve"><value>تفاصيل تهيئة المهمة</value></data>
+  <data name="JobIdentifier" xml:space="preserve"><value>معرف المهمة</value></data>
+  <data name="ScheduleDescription" xml:space="preserve"><value>وصف الجدول الزمني</value></data>
+  <data name="CloseDetails" xml:space="preserve"><value>إغلاق التفاصيل</value></data>
+  <data name="JobErrorAnalysis" xml:space="preserve"><value>تحليل خطأ المهمة</value></data>
+  <data name="ErrorDetails" xml:space="preserve"><value>تفاصيل الخطأ</value></data>
+  <data name="CloseAnalysis" xml:space="preserve"><value>إغلاق التحليل</value></data>
+  <data name="NotScheduledJS" xml:space="preserve"><value>غير مجدول</value></data>
+  <data name="NeverExecutedJS" xml:space="preserve"><value>لم يتم التنفيذ أبداً</value></data>
+  <data name="Daily2AM" xml:space="preserve"><value>يومياً الساعة 2:00 صباحاً</value></data>
+  <data name="EveryHour" xml:space="preserve"><value>كل ساعة</value></data>
+  <data name="Every15Min" xml:space="preserve"><value>كل 15 دقيقة</value></data>
+  <data name="Every30Min" xml:space="preserve"><value>كل 30 دقيقة</value></data>
+  <data name="WeeklySunday3AM" xml:space="preserve"><value>أسبوعياً يوم الأحد الساعة 3:00 صباحاً</value></data>
+  <data name="Daily8AM" xml:space="preserve"><value>يومياً الساعة 8:00 صباحاً</value></data>
+  <data name="Every4Hours" xml:space="preserve"><value>كل 4 ساعات</value></data>
+  <data name="CustomScheduleJS" xml:space="preserve"><value>جدول مخصص</value></data>
+  <data name="CustomSchedule" xml:space="preserve"><value>جدول مخصص</value></data>
+  <data name="LessMin" xml:space="preserve"><value>أقل من دقيقة</value></data>
+  <data name="InMinutes" xml:space="preserve"><value>فِي غضون {0} دقيقة</value></data>
+  <data name="InHours" xml:space="preserve"><value>فِي غضون {0} ساعة</value></data>
+  <data name="InDays" xml:space="preserve"><value>فِي غضون {0} يوم</value></data>
+  <data name="JustNow" xml:space="preserve"><value>الآن فقط</value></data>
+  <data name="MinutesAgo" xml:space="preserve"><value>منذ {0} دقيقة</value></data>
+  <data name="HoursAgo" xml:space="preserve"><value>منذ {0} ساعة</value></data>
+  <data name="DaysAgo" xml:space="preserve"><value>منذ {0} يوم</value></data>
+</root>

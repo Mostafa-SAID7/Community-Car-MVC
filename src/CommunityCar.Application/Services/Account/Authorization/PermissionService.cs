@@ -209,16 +209,22 @@ public class PermissionService : IPermissionService
 
     public async Task<bool> GrantUserPermissionsAsync(Guid userId, IEnumerable<string> permissions, string? grantedBy = null, string? reason = null)
     {
-        var tasks = permissions.Select(p => GrantUserPermissionAsync(userId, p, grantedBy, reason));
-        var results = await Task.WhenAll(tasks);
-        return results.All(r => r);
+        var success = true;
+        foreach (var permission in permissions)
+        {
+            success &= await GrantUserPermissionAsync(userId, permission, grantedBy, reason);
+        }
+        return success;
     }
 
     public async Task<bool> RevokeUserPermissionsAsync(Guid userId, IEnumerable<string> permissions, string? revokedBy = null, string? reason = null)
     {
-        var tasks = permissions.Select(p => RevokeUserPermissionAsync(userId, p, revokedBy, reason));
-        var results = await Task.WhenAll(tasks);
-        return results.All(r => r);
+        var success = true;
+        foreach (var permission in permissions)
+        {
+            success &= await RevokeUserPermissionAsync(userId, permission, revokedBy, reason);
+        }
+        return success;
     }
 
     #endregion
@@ -297,16 +303,22 @@ public class PermissionService : IPermissionService
 
     public async Task<bool> GrantRolePermissionsAsync(string roleName, IEnumerable<string> permissions, string? grantedBy = null, string? reason = null)
     {
-        var tasks = permissions.Select(p => GrantRolePermissionAsync(roleName, p, grantedBy, reason));
-        var results = await Task.WhenAll(tasks);
-        return results.All(r => r);
+        var success = true;
+        foreach (var permission in permissions)
+        {
+            success &= await GrantRolePermissionAsync(roleName, permission, grantedBy, reason);
+        }
+        return success;
     }
 
     public async Task<bool> RevokeRolePermissionsAsync(string roleName, IEnumerable<string> permissions, string? revokedBy = null, string? reason = null)
     {
-        var tasks = permissions.Select(p => RevokeRolePermissionAsync(roleName, p, revokedBy, reason));
-        var results = await Task.WhenAll(tasks);
-        return results.All(r => r);
+        var success = true;
+        foreach (var permission in permissions)
+        {
+            success &= await RevokeRolePermissionAsync(roleName, permission, revokedBy, reason);
+        }
+        return success;
     }
 
     #endregion

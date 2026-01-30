@@ -47,18 +47,11 @@ public class ProfileService : IProfileService
 
         var profile = MapToProfileVM(user);
         
-        // Fetch counts in parallel for better performance
-        var followingCountTask = _followingRepository.GetFollowingCountAsync(userId);
-        var followersCountTask = _followingRepository.GetFollowerCountAsync(userId);
-        var postsCountTask = _postsRepository.GetUserPostsCountAsync(userId);
-        var statsTask = GetProfileStatsAsync(userId);
-
-        await Task.WhenAll(followingCountTask, followersCountTask, postsCountTask, statsTask);
-
-        profile.FollowingCount = await followingCountTask;
-        profile.FollowersCount = await followersCountTask;
-        profile.PostsCount = await postsCountTask;
-        profile.Stats = await statsTask;
+        // Fetch counts sequentially to avoid DbContext concurrency issues
+        profile.FollowingCount = await _followingRepository.GetFollowingCountAsync(userId);
+        profile.FollowersCount = await _followingRepository.GetFollowerCountAsync(userId);
+        profile.PostsCount = await _postsRepository.GetUserPostsCountAsync(userId);
+        profile.Stats = await GetProfileStatsAsync(userId);
 
         return profile;
     }

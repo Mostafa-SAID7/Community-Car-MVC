@@ -218,11 +218,11 @@
 
     /* Sidebar Responsiveness */
     .app-container {
-        @apply transition-all duration-300;
+        /* Removed transition for sidebar animations */
     }
 
     .sidebar-backdrop {
-        @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-[35] opacity-0 pointer-events-none transition-opacity duration-300;
+        @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-[35] opacity-0 pointer-events-none;
     }
 
     .sidebar-visible .sidebar-backdrop,
@@ -231,27 +231,34 @@
         @apply opacity-100 pointer-events-auto;
     }
 
-    /* Left sidebar drawer behavior */
+    /* Left sidebar - visible on md+ screens, drawer on mobile */
     .sidebar {
+        /* Mobile: hidden off-screen by default */
         transform: translateX(-100%);
-        transition: transform 300ms;
+        transition: transform 300ms ease-in-out;
     }
 
     @media (min-width: 768px) {
         .sidebar {
-            transform: translateX(0);
+            /* Desktop: always visible, no transform needed */
+            transform: none;
+            transition: none;
         }
     }
 
-    .sidebar-visible .sidebar,
-    .left-sidebar-visible .sidebar {
-        transform: translateX(0);
+    /* Mobile drawer behavior - only toggle transform on mobile */
+    @media (max-width: 767px) {
+
+        .sidebar-visible .sidebar,
+        .left-sidebar-visible .sidebar {
+            transform: translateX(0);
+        }
     }
 
     /* Right sidebar drawer behavior */
     .sidebar-right {
         transform: translateX(100%);
-        transition: transform 300ms;
+        /* Removed transition for animations */
     }
 
     @media (min-width: 1280px) {
@@ -264,6 +271,17 @@
     .right-sidebar-visible .sidebar-right {
         transform: translateX(0);
         display: block;
+    }
+
+    /* Ensure right sidebar has proper scrolling */
+    .sidebar-right {
+        max-height: calc(100vh - 8rem);
+        overflow-y: auto;
+    }
+
+    .sidebar-right .force-ltr {
+        min-height: 100%;
+        padding-bottom: 1rem;
     }
 
     /* Ensure main content has consistent width in both LTR and RTL */
@@ -305,6 +323,14 @@
             margin-left: 0 !important;
             margin-right: 15rem !important;
         }
+    }
+
+    /* Prevent duplicate scrollbars - main content should flow naturally with page scroll */
+    #main-content,
+    #main-content>div {
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: visible !important;
     }
 
     /* Mobile-specific improvements */
@@ -504,11 +530,26 @@
     .rtl .sidebar {
         left: auto;
         right: 0;
+        /* Mobile: hidden off-screen by default */
         transform: translateX(100%);
+        transition: transform 300ms ease-in-out;
     }
 
-    .rtl .sidebar.translate-x-0 {
-        transform: translateX(0);
+    @media (min-width: 768px) {
+        .rtl .sidebar {
+            /* Desktop: always visible, no transform needed */
+            transform: none;
+            transition: none;
+        }
+    }
+
+    /* Mobile drawer behavior for RTL */
+    @media (max-width: 767px) {
+
+        .rtl .sidebar-visible .sidebar,
+        .rtl .left-sidebar-visible .sidebar {
+            transform: translateX(0);
+        }
     }
 
     .rtl .sidebar-right {
@@ -1410,6 +1451,45 @@
     animation: zoomIn 0.3s ease-out;
 }
 
+/* Sidebar Animation Overrides - Removed to restore mobile functionality */
+/* 
+.sidebar {
+    transition: none !important;
+    animation: none !important;
+}
+*/
+
+/* Ensure sidebar is always visible on desktop */
+@media (min-width: 768px) {
+    .sidebar {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+    }
+}
+
+/* Disable all sidebar-related transitions and animations globally */
+.sidebar,
+.sidebar-backdrop,
+.sidebar-right,
+aside.sidebar,
+aside.sidebar-right {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Override any transform classes on sidebar */
+.sidebar[class*="translate"] {
+    transform: translateX(0) !important;
+}
+
+/* Ensure mobile sidebar appears instantly */
+@media (max-width: 767px) {
+    .sidebar:not(.hidden) {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+    }
+}
+
 /* Print Styles */
 @media print {
 
@@ -1752,28 +1832,72 @@ input:checked+.toggle-slider:before {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Custom scrollbar for chat messages */
+/* Custom scrollbar for sidebars and chat - matches main scrollbar style */
 .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: var(--muted-foreground) transparent;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+    width: 12px;
+    height: 12px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
+    border-radius: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--muted-foreground);
-    border-radius: 3px;
-    opacity: 0.5;
+    background-color: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 6px;
+    border: 2px solid transparent;
+    background-clip: content-box;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    opacity: 0.8;
+    background-color: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Enhanced scrollbar for right sidebar specifically */
+.sidebar-right.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.4) hsl(var(--muted) / 0.1);
+}
+
+.sidebar-right.custom-scrollbar::-webkit-scrollbar {
+    width: 14px;
+}
+
+.sidebar-right.custom-scrollbar::-webkit-scrollbar-track {
+    background: hsl(var(--muted) / 0.1);
+    border-radius: 8px;
+    margin: 4px;
+}
+
+.sidebar-right.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.4);
+    border-radius: 8px;
+    border: 2px solid hsl(var(--muted) / 0.1);
+}
+
+.sidebar-right.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.6);
+}
+
+/* Utility classes for direction control */
+.force-rtl {
+    direction: rtl;
+}
+
+.force-ltr {
+    direction: ltr;
+}
+
+/* RTL scrollbar positioning for right sidebar */
+.rtl .custom-scrollbar::-webkit-scrollbar {
+    /* In RTL, scrollbar should appear on the left side of the content */
+    /* Handled by direction: rtl on container */
 }
 
 /* Chat message animations */
@@ -1893,4 +2017,52 @@ input:checked+.toggle-slider:before {
 [dir="rtl"] .ms-auto {
     margin-right: auto !important;
     margin-left: 0 !important;
+}
+
+/* Mobile Sidebar Toggle Styles */
+.sidebar-mobile-open span.sidebar-mobile-open\:inline {
+    display: inline !important;
+}
+
+.main-sidebar-mobile-open span.main-sidebar-mobile-open\:inline {
+    display: inline !important;
+}
+
+@media (max-width: 767px) {
+    .sidebar-mobile-open span.md\:hidden {
+        display: inline !important;
+    }
+    
+    .main-sidebar-mobile-open span.md\:hidden {
+        display: inline !important;
+    }
+}
+
+/* Toggle Switch Component */
+.toggle-switch {
+    @apply relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+}
+
+.toggle-switch input[type="checkbox"] {
+    @apply sr-only;
+}
+
+.toggle-slider {
+    @apply inline-block h-4 w-4 transform rounded-full bg-white transition-transform;
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-slider {
+    @apply translate-x-5;
+}
+
+.toggle-switch {
+    background-color: hsl(var(--muted));
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-slider {
+    background-color: hsl(var(--primary));
+}
+
+.toggle-switch:has(input[type="checkbox"]:checked) {
+    background-color: hsl(var(--primary) / 0.2);
 }

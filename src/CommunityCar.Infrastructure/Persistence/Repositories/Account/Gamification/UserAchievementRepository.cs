@@ -22,7 +22,7 @@ public class UserAchievementRepository : BaseRepository<UserAchievement>, IUserA
     {
         return await Context.UserAchievements
             .Where(ua => ua.UserId == userId)
-            .OrderByDescending(ua => ua.UnlockedAt)
+            .OrderByDescending(ua => ua.CompletedAt)
             .ToListAsync();
     }
 
@@ -37,7 +37,7 @@ public class UserAchievementRepository : BaseRepository<UserAchievement>, IUserA
     {
         var achievementIdString = achievementId.ToString();
         return await Context.UserAchievements
-            .AnyAsync(ua => ua.UserId == userId && ua.AchievementId == achievementIdString && ua.IsUnlocked);
+            .AnyAsync(ua => ua.UserId == userId && ua.AchievementId == achievementIdString && ua.IsCompleted);
     }
 
     public async Task<bool> GrantAchievementAsync(Guid userId, Guid achievementId, DateTime? unlockedAt = null)
@@ -46,7 +46,7 @@ public class UserAchievementRepository : BaseRepository<UserAchievement>, IUserA
         
         if (existingAchievement != null)
         {
-            if (!existingAchievement.IsUnlocked)
+            if (!existingAchievement.IsCompleted)
             {
                 existingAchievement.Unlock(unlockedAt ?? DateTime.UtcNow);
                 await UpdateAsync(existingAchievement);
@@ -76,15 +76,15 @@ public class UserAchievementRepository : BaseRepository<UserAchievement>, IUserA
     public async Task<int> GetAchievementCountAsync(Guid userId)
     {
         return await Context.UserAchievements
-            .Where(ua => ua.UserId == userId && ua.IsUnlocked)
+            .Where(ua => ua.UserId == userId && ua.IsCompleted)
             .CountAsync();
     }
 
     public async Task<IEnumerable<UserAchievement>> GetRecentAchievementsAsync(Guid userId, int count = 10)
     {
         return await Context.UserAchievements
-            .Where(ua => ua.UserId == userId && ua.IsUnlocked)
-            .OrderByDescending(ua => ua.UnlockedAt)
+            .Where(ua => ua.UserId == userId && ua.IsCompleted)
+            .OrderByDescending(ua => ua.CompletedAt)
             .Take(count)
             .ToListAsync();
     }
@@ -92,15 +92,15 @@ public class UserAchievementRepository : BaseRepository<UserAchievement>, IUserA
     public async Task<IEnumerable<UserAchievement>> GetAchievementsByTypeAsync(Guid userId, string achievementType)
     {
         return await Context.UserAchievements
-            .Where(ua => ua.UserId == userId && ua.AchievementType == achievementType && ua.IsUnlocked)
-            .OrderByDescending(ua => ua.UnlockedAt)
+            .Where(ua => ua.UserId == userId && ua.AchievementType == achievementType && ua.IsCompleted)
+            .OrderByDescending(ua => ua.CompletedAt)
             .ToListAsync();
     }
 
     public async Task<Dictionary<Guid, int>> GetAchievementStatisticsAsync()
     {
         var stats = await Context.UserAchievements
-            .Where(ua => ua.IsUnlocked)
+            .Where(ua => ua.IsCompleted)
             .GroupBy(ua => ua.AchievementId)
             .Select(g => new { AchievementId = g.Key, Count = g.Count() })
             .ToListAsync();
@@ -114,8 +114,8 @@ public class UserAchievementRepository : BaseRepository<UserAchievement>, IUserA
     {
         var achievementIdString = achievementId.ToString();
         return await Context.UserAchievements
-            .Where(ua => ua.AchievementId == achievementIdString && ua.IsUnlocked)
-            .OrderBy(ua => ua.UnlockedAt)
+            .Where(ua => ua.AchievementId == achievementIdString && ua.IsCompleted)
+            .OrderBy(ua => ua.CompletedAt)
             .Take(count)
             .Select(ua => ua.UserId)
             .ToListAsync();
@@ -152,16 +152,16 @@ public class UserAchievementRepository : BaseRepository<UserAchievement>, IUserA
     public async Task<IEnumerable<UserAchievement>> GetInProgressAchievementsAsync(Guid userId)
     {
         return await Context.UserAchievements
-            .Where(ua => ua.UserId == userId && !ua.IsUnlocked && ua.Progress > 0)
-            .OrderByDescending(ua => ua.Progress)
+            .Where(ua => ua.UserId == userId && !ua.IsCompleted && ua.CurrentProgress > 0)
+            .OrderByDescending(ua => ua.CurrentProgress)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<UserAchievement>> GetCompletedAchievementsAsync(Guid userId)
     {
         return await Context.UserAchievements
-            .Where(ua => ua.UserId == userId && ua.IsUnlocked)
-            .OrderByDescending(ua => ua.UnlockedAt)
+            .Where(ua => ua.UserId == userId && ua.IsCompleted)
+            .OrderByDescending(ua => ua.CompletedAt)
             .ToListAsync();
     }
 

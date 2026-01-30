@@ -96,7 +96,7 @@ public class ProfileController : Controller
             // LikesReceived = profile.LikesReceived
         };
 
-        return View(viewModel);
+        return View("~/Views/Account/Profile/Index.cshtml", viewModel);
     }
 
     [HttpGet("view/{id:guid}")]
@@ -144,7 +144,7 @@ public class ProfileController : Controller
             // LikesReceived = profile.LikesReceived
         };
 
-        return View("Index", viewModel);
+        return View("~/Views/Account/Profile/Index.cshtml", viewModel);
     }
 
     // Settings actions moved to ProfileSettingsController
@@ -268,7 +268,7 @@ public class ProfileController : Controller
 
         await SetProfileHeaderDataAsync(userId);
         ViewBag.CurrentUserId = userId;
-        return View();
+        return View("~/Views/Account/Profile/Interests.cshtml");
     }
 
     [HttpGet("gallery")]
@@ -287,7 +287,7 @@ public class ProfileController : Controller
         ViewBag.GalleryItems = galleryItems;
         ViewBag.GamificationStats = gamificationStats;
 
-        return View();
+        return View("~/Views/Account/Profile/Gallery.cshtml");
     }
 
     [HttpPost("gallery/upload")]
@@ -356,7 +356,7 @@ public class ProfileController : Controller
         ViewBag.Achievements = achievements;
         ViewBag.GamificationStats = stats;
 
-        return View();
+        return View("~/Views/Account/Profile/Badges.cshtml");
     }
 
     [HttpPost("gallery/toggle-visibility/{itemId}")]

@@ -60,7 +60,7 @@ public class AdminProfileController : Controller
         };
 
         ViewData["Title"] = "Admin Profile";
-        return View(viewModel);
+        return View("~/Views/Account/AdminProfile/Index.cshtml", viewModel);
     }
 
     [HttpGet("settings")]
@@ -101,7 +101,7 @@ public class AdminProfileController : Controller
         };
 
         ViewData["Title"] = "Admin Profile Settings";
-        return View(viewModel);
+        return View("~/Views/Account/AdminProfile/Settings.cshtml", viewModel);
     }
 
     [HttpPost("update")]

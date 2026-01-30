@@ -60,13 +60,15 @@ public class SharedSearchService : ISharedSearchService
             var searchTasks = new List<Task>();
             var searchResults = new List<SearchItemVM>();
 
-            // Search across all entity types if not specified
-            var entityTypes = request.EntityTypes ?? Enum.GetValues<EntityType>().ToList();
+            // Define entity types to search - use request types or default to all
+            var entityTypes = request.EntityTypes?.Any() == true 
+                ? request.EntityTypes 
+                : Enum.GetValues<EntityType>().ToList();
 
-            // Parallel search across different entity types
-            var tasks = entityTypes.Select(async entityType =>
+            // Search across entity types sequentially to avoid DbContext concurrency issues
+            foreach (var entityType in entityTypes)
             {
-                return entityType switch
+                var typeResults = entityType switch
                 {
                     EntityType.Bookmark => await SearchBookmarksInternalAsync(request),
                     EntityType.Comment => await SearchCommentsInternalAsync(request),
@@ -79,10 +81,8 @@ public class SharedSearchService : ISharedSearchService
                     EntityType.View => await SearchViewsInternalAsync(request),
                     _ => new List<SearchItemVM>()
                 };
-            });
-
-            var allResults = await Task.WhenAll(tasks);
-            searchResults = allResults.SelectMany(r => r).ToList();
+                searchResults.AddRange(typeResults);
+            }
 
             // Calculate relevance scores and sort
             searchResults = CalculateRelevanceScores(searchResults, request.Query)

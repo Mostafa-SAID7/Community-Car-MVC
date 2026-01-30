@@ -10,9 +10,9 @@
     var gamificationStats = ViewBag.GamificationStats as ProfileStatsVM;
 }
 
-@await Html.PartialAsync("_ProfileHeader")
+@await Html.PartialAsync("~/Views/Account/Profile/_ProfileHeader.cshtml")
 
-@await Html.PartialAsync("_ProfileNavigation")
+@await Html.PartialAsync("~/Views/Account/Profile/_ProfileNavigation.cshtml")
 
 <div class="space-y-8 animate-in fade-in duration-700">
     <!-- Gallery Header -->

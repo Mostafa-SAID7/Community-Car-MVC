@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="SystemStatus" xml:space="preserve"><value>System Status</value></data>
+  <data name="Operational" xml:space="preserve"><value>Operational</value></data>
+  <data name="CoreEngine" xml:space="preserve"><value>Core Engine</value></data>
+  <data name="LoadFactor" xml:space="preserve"><value>Load Factor</value></data>
+  <data name="QuickActions" xml:space="preserve"><value>Quick Actions</value></data>
+  <data name="NewReport" xml:space="preserve"><value>New Report</value></data>
+  <data name="SEOAudit" xml:space="preserve"><value>SEO Audit</value></data>
+  <data name="FlushCache" xml:space="preserve"><value>Flush Cache</value></data>
+  <data name="JobQueue" xml:space="preserve"><value>Job Queue</value></data>
+  <data name="SystemLogs" xml:space="preserve"><value>System Logs</value></data>
+  <data name="FullDiagnostics" xml:space="preserve"><value>Full Diagnostics</value></data>
+</root>

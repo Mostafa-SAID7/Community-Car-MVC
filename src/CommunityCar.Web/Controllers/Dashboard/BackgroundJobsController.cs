@@ -50,7 +50,7 @@ public class BackgroundJobsController : Controller
                 RecentJobs = GetRecentJobs()
             };
 
-            return View(model);
+            return View("~/Views/Dashboard/BackgroundJobs/Index.cshtml", model);
         }
         catch (Exception ex)
         {
@@ -180,7 +180,7 @@ public class BackgroundJobsController : Controller
                 Jobs = GetRecurringJobs()
             };
 
-            return View(model);
+            return View("~/Views/Dashboard/BackgroundJobs/RecurringJobs.cshtml", model);
         }
         catch (Exception ex)
         {

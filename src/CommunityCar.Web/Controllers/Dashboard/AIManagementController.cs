@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using CommunityCar.AI.Services;
 using CommunityCar.AI.Models;
 using CommunityCar.Application.Services.AI;
+using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
+using CommunityCar.Application.Common.Interfaces.Services.Communication;
 
 namespace CommunityCar.Web.Controllers.Dashboard;
 
@@ -12,6 +15,10 @@ public class AIManagementController : Controller
     private readonly ISentimentAnalysisService _sentimentService;
     private readonly IPredictionService _predictionService;
     private readonly IAIManagementService _aiManagementService;
+    private readonly IUserAnalyticsService _userAnalyticsService;
+    private readonly IConversationRepository _conversationRepository;
+    private readonly IMessageRepository _messageRepository;
+    private readonly IChatService _communicationChatService;
     private readonly ILogger<AIManagementController> _logger;
 
     public AIManagementController(
@@ -19,12 +26,20 @@ public class AIManagementController : Controller
         ISentimentAnalysisService sentimentService,
         IPredictionService predictionService,
         IAIManagementService aiManagementService,
+        IUserAnalyticsService userAnalyticsService,
+        IConversationRepository conversationRepository,
+        IMessageRepository messageRepository,
+        IChatService communicationChatService,
         ILogger<AIManagementController> logger)
     {
         _chatService = chatService;
         _sentimentService = sentimentService;
         _predictionService = predictionService;
         _aiManagementService = aiManagementService;
+        _userAnalyticsService = userAnalyticsService;
+        _conversationRepository = conversationRepository;
+        _messageRepository = messageRepository;
+        _communicationChatService = communicationChatService;
         _logger = logger;
     }
 
@@ -39,25 +54,23 @@ public class AIManagementController : Controller
             var trainingQueue = await _aiManagementService.GetTrainingQueueAsync();
             var recentTraining = await _aiManagementService.GetRecentTrainingHistoryAsync(3);
 
-            var totalConversations = 156; // This would come from chat service in real implementation
-            var activeUsers = 89; // This would come from user analytics service
-            var todayMessages = 234; // This would come from chat service
+            // Get real conversation data
+            var totalConversations = await GetTotalConversationsAsync();
+            var activeUsers = await _userAnalyticsService.GetActiveUsersCountAsync();
+            var todayMessages = await GetTodayMessagesCountAsync();
+            var weeklyGrowth = await GetWeeklyGrowthAsync();
+            var recentActivity = await GetRecentActivityAsync();
             
             var model = new
             {
                 TotalConversations = totalConversations,
                 ActiveUsers = activeUsers,
-                ResponseTime = "1.2s",
-                SatisfactionRate = 94.5,
+                ResponseTime = "1.2s", // This could be calculated from AI service metrics
+                SatisfactionRate = 94.5, // This could come from sentiment analysis
                 TodayMessages = todayMessages,
-                WeeklyGrowth = 12.3,
+                WeeklyGrowth = weeklyGrowth,
                 TopIntents = new[] { "Car Maintenance", "Insurance", "Troubleshooting", "Recommendations" },
-                RecentActivity = new[]
-                {
-                    new { Time = "2 min ago", User = "User123", Message = "Asked about oil change intervals" },
-                    new { Time = "5 min ago", User = "User456", Message = "Requested car insurance advice" },
-                    new { Time = "8 min ago", User = "User789", Message = "Troubleshooting engine noise" }
-                },
+                RecentActivity = recentActivity,
                 ActiveModels = models.Count(m => m.IsActive),
                 TrainingJobs = trainingQueue.Count(),
                 RecentTrainingCount = recentTraining.Count()
@@ -77,7 +90,7 @@ public class AIManagementController : Controller
     {
         try
         {
-            // Get real analytics data from AI services
+            // Get real analytics data from services
             var totalConversations = await GetTotalConversationsAsync();
             var weeklyConversations = await GetWeeklyConversationsAsync();
             var avgConversationLength = await GetAverageConversationLengthAsync();
@@ -141,12 +154,12 @@ public class AIManagementController : Controller
     {
         try
         {
-            // In a real implementation, this would query the database for total conversations
-            // For now, return a calculated value based on available data
-            return await Task.FromResult(1250);
+            var conversations = await _conversationRepository.GetAllAsync();
+            return conversations.Count();
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error getting total conversations count");
             return 0;
         }
     }
@@ -155,24 +168,126 @@ public class AIManagementController : Controller
     {
         try
         {
-            // In a real implementation, this would query conversations from the last 7 days
-            return await Task.FromResult(89);
+            var weekAgo = DateTime.UtcNow.AddDays(-7);
+            var conversations = await _conversationRepository.GetAllAsync();
+            return conversations.Count(c => c.CreatedAt >= weekAgo);
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error getting weekly conversations count");
             return 0;
         }
+    }
+
+    private async Task<int> GetTodayMessagesCountAsync()
+    {
+        try
+        {
+            var today = DateTime.UtcNow.Date;
+            var messages = await _messageRepository.GetAllAsync();
+            return messages.Count(m => m.CreatedAt.Date == today);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting today's messages count");
+            return 0;
+        }
+    }
+
+    private async Task<double> GetWeeklyGrowthAsync()
+    {
+        try
+        {
+            var thisWeek = DateTime.UtcNow.AddDays(-7);
+            var lastWeek = DateTime.UtcNow.AddDays(-14);
+            
+            var conversations = await _conversationRepository.GetAllAsync();
+            var thisWeekCount = conversations.Count(c => c.CreatedAt >= thisWeek);
+            var lastWeekCount = conversations.Count(c => c.CreatedAt >= lastWeek && c.CreatedAt < thisWeek);
+            
+            if (lastWeekCount == 0) return thisWeekCount > 0 ? 100.0 : 0.0;
+            
+            return ((double)(thisWeekCount - lastWeekCount) / lastWeekCount) * 100.0;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error calculating weekly growth");
+            return 0.0;
+        }
+    }
+
+    private async Task<object[]> GetRecentActivityAsync()
+    {
+        try
+        {
+            var recentMessages = await _messageRepository.GetAllAsync();
+            var recent = recentMessages
+                .OrderByDescending(m => m.CreatedAt)
+                .Take(3)
+                .Select(m => new
+                {
+                    Time = GetTimeAgo(m.CreatedAt),
+                    User = $"User{m.SenderId.ToString()[..8]}", // Anonymized user ID
+                    Message = TruncateMessage(m.Content)
+                })
+                .ToArray();
+
+            return recent.Length > 0 ? recent : new[]
+            {
+                new { Time = "No recent activity", User = "", Message = "" }
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting recent activity");
+            return new[]
+            {
+                new { Time = "Error loading", User = "", Message = "Unable to load recent activity" }
+            };
+        }
+    }
+
+    private static string GetTimeAgo(DateTime dateTime)
+    {
+        var timeSpan = DateTime.UtcNow - dateTime;
+        
+        if (timeSpan.TotalMinutes < 1) return "Just now";
+        if (timeSpan.TotalMinutes < 60) return $"{(int)timeSpan.TotalMinutes} min ago";
+        if (timeSpan.TotalHours < 24) return $"{(int)timeSpan.TotalHours}h ago";
+        if (timeSpan.TotalDays < 7) return $"{(int)timeSpan.TotalDays}d ago";
+        
+        return dateTime.ToString("MMM dd");
+    }
+
+    private static string TruncateMessage(string message)
+    {
+        if (string.IsNullOrEmpty(message)) return "No message content";
+        
+        const int maxLength = 50;
+        if (message.Length <= maxLength) return message;
+        
+        return message[..maxLength] + "...";
     }
 
     private async Task<double> GetAverageConversationLengthAsync()
     {
         try
         {
-            // In a real implementation, this would calculate average messages per conversation
-            return await Task.FromResult(8.5);
+            var conversations = await _conversationRepository.GetAllAsync();
+            if (!conversations.Any()) return 0.0;
+
+            var totalMessages = 0;
+            foreach (var conversation in conversations)
+            {
+                var messages = await _messageRepository.GetConversationMessagesAsync(conversation.Id);
+                totalMessages += messages.Count();
+            }
+
+            return (double)totalMessages / conversations.Count();
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error calculating average conversation length");
             return 0.0;
         }
     }
@@ -181,11 +296,23 @@ public class AIManagementController : Controller
     {
         try
         {
-            // In a real implementation, this would calculate percentage of successfully resolved conversations
-            return await Task.FromResult(92.3);
+            var conversations = await _conversationRepository.GetAllAsync();
+            if (!conversations.Any()) return 0.0;
+
+            // For now, consider conversations with messages as "completed"
+            // In a real implementation, you might have a status field
+            var completedCount = 0;
+            foreach (var conversation in conversations)
+            {
+                var messages = await _messageRepository.GetConversationMessagesAsync(conversation.Id);
+                if (messages.Any()) completedCount++;
+            }
+
+            return ((double)completedCount / conversations.Count()) * 100.0;
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error calculating completion rate");
             return 0.0;
         }
     }
@@ -194,33 +321,43 @@ public class AIManagementController : Controller
     {
         try
         {
-            // In a real implementation, this would use the sentiment analysis service
-            // to get actual sentiment distribution from conversations
-            var sampleTexts = new[] { "I love this car service!", "This is okay", "I hate this experience" };
-            var sentimentResults = await _sentimentService.BatchPredictAsync(sampleTexts);
+            // Get recent messages for sentiment analysis
+            var messages = await _messageRepository.GetAllAsync();
+            var recentMessages = messages
+                .OrderByDescending(m => m.CreatedAt)
+                .Take(100)
+                .Select(m => m.Content)
+                .Where(content => !string.IsNullOrEmpty(content))
+                .ToArray();
+
+            if (recentMessages.Length == 0)
+            {
+                return new { Positive = 50.0, Neutral = 40.0, Negative = 10.0 };
+            }
+
+            var sentimentResults = await _sentimentService.BatchPredictAsync(recentMessages);
             
-            // Calculate percentages based on real data
             var total = sentimentResults.Count;
-            var positive = sentimentResults.Count(s => s.Label == "Positive");
-            var negative = sentimentResults.Count(s => s.Label == "Negative");
+            if (total == 0)
+            {
+                return new { Positive = 50.0, Neutral = 40.0, Negative = 10.0 };
+            }
+
+            var positive = sentimentResults.Count(s => s.Label?.ToLower() == "positive");
+            var negative = sentimentResults.Count(s => s.Label?.ToLower() == "negative");
             var neutral = total - positive - negative;
             
             return new
             {
-                Positive = total > 0 ? (positive * 100.0 / total) : 68.5,
-                Neutral = total > 0 ? (neutral * 100.0 / total) : 25.2,
-                Negative = total > 0 ? (negative * 100.0 / total) : 6.3
+                Positive = (positive * 100.0 / total),
+                Neutral = (neutral * 100.0 / total),
+                Negative = (negative * 100.0 / total)
             };
         }
-        catch
+        catch (Exception ex)
         {
-            // Return fallback data if sentiment analysis fails
-            return new
-            {
-                Positive = 68.5,
-                Neutral = 25.2,
-                Negative = 6.3
-            };
+            _logger.LogError(ex, "Error performing sentiment analysis");
+            return new { Positive = 50.0, Neutral = 40.0, Negative = 10.0 };
         }
     }
 
@@ -228,18 +365,50 @@ public class AIManagementController : Controller
     {
         try
         {
-            // In a real implementation, this would analyze conversation topics
-            // and return the most frequently discussed automotive topics
-            return await Task.FromResult(new[]
+            // Analyze message content for common topics
+            var messages = await _messageRepository.GetAllAsync();
+            var recentMessages = messages
+                .OrderByDescending(m => m.CreatedAt)
+                .Take(1000)
+                .Select(m => m.Content?.ToLower() ?? "")
+                .Where(content => !string.IsNullOrEmpty(content))
+                .ToList();
+
+            if (!recentMessages.Any())
             {
-                new { Topic = "Car Maintenance", Count = 345, Percentage = 27.6 },
-                new { Topic = "Insurance", Count = 289, Percentage = 23.1 },
-                new { Topic = "Troubleshooting", Count = 234, Percentage = 18.7 },
-                new { Topic = "Recommendations", Count = 198, Percentage = 15.8 }
-            });
+                return new object[0];
+            }
+
+            // Simple keyword-based topic analysis
+            var topics = new Dictionary<string, int>
+            {
+                ["Car Maintenance"] = recentMessages.Count(m => 
+                    m.Contains("maintenance") || m.Contains("service") || m.Contains("oil") || m.Contains("repair")),
+                ["Insurance"] = recentMessages.Count(m => 
+                    m.Contains("insurance") || m.Contains("coverage") || m.Contains("claim") || m.Contains("policy")),
+                ["Troubleshooting"] = recentMessages.Count(m => 
+                    m.Contains("problem") || m.Contains("issue") || m.Contains("error") || m.Contains("trouble")),
+                ["Recommendations"] = recentMessages.Count(m => 
+                    m.Contains("recommend") || m.Contains("suggest") || m.Contains("advice") || m.Contains("best"))
+            };
+
+            var totalTopicMentions = topics.Values.Sum();
+            if (totalTopicMentions == 0) return new object[0];
+
+            return topics
+                .Where(t => t.Value > 0)
+                .OrderByDescending(t => t.Value)
+                .Select(t => new
+                {
+                    Topic = t.Key,
+                    Count = t.Value,
+                    Percentage = (t.Value * 100.0 / totalTopicMentions)
+                })
+                .ToArray();
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error analyzing topics");
             return new object[0];
         }
     }
@@ -248,16 +417,32 @@ public class AIManagementController : Controller
     {
         try
         {
-            // In a real implementation, this would query user activity data
-            return await Task.FromResult(new
+            var activeUsers = await _userAnalyticsService.GetActiveUsersCountAsync();
+            var totalUsers = await _userAnalyticsService.GetTotalUsersCountAsync();
+            
+            // Calculate return rate (users who have had multiple conversations)
+            var conversations = await _conversationRepository.GetAllAsync();
+            var userConversationCounts = conversations
+                .SelectMany(c => c.Participants?.Select(p => p.UserId) ?? new List<Guid>())
+                .GroupBy(userId => userId)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var returningUsers = userConversationCounts.Count(kvp => kvp.Value > 1);
+            var returnRate = totalUsers > 0 ? (returningUsers * 100.0 / totalUsers) : 0.0;
+
+            // Calculate average session time (simplified)
+            var avgSessionTime = "12m 34s"; // This would require session tracking
+
+            return new
             {
-                ActiveUsers = 456,
-                ReturnRate = 78.9,
-                AvgSessionTime = "12m 34s"
-            });
+                ActiveUsers = activeUsers,
+                ReturnRate = returnRate,
+                AvgSessionTime = avgSessionTime
+            };
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error calculating user engagement");
             return new
             {
                 ActiveUsers = 0,
@@ -435,49 +620,68 @@ public class AIManagementController : Controller
         }
     }
 
-    public IActionResult Conversations(int page = 1, int pageSize = 20)
+    public async Task<IActionResult> Conversations(int page = 1, int pageSize = 20)
     {
         try
         {
-            // Sample conversation data - in real implementation, this would come from database
-            var conversations = new[]
+            var conversations = await _conversationRepository.GetAllAsync();
+            var totalCount = conversations.Count();
+            
+            var paginatedConversations = conversations
+                .OrderByDescending(c => c.UpdatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var conversationData = new List<object>();
+            
+            foreach (var conversation in paginatedConversations)
             {
-                new {
-                    Id = Guid.NewGuid(),
-                    UserId = Guid.NewGuid(),
-                    Title = "Car maintenance schedule inquiry",
-                    MessageCount = 12,
-                    LastActivity = DateTime.UtcNow.AddMinutes(-15),
-                    Status = "Completed",
-                    Sentiment = "Positive"
-                },
-                new {
-                    Id = Guid.NewGuid(),
-                    UserId = Guid.NewGuid(),
-                    Title = "Insurance coverage questions",
-                    MessageCount = 8,
-                    LastActivity = DateTime.UtcNow.AddHours(-2),
-                    Status = "Active",
-                    Sentiment = "Neutral"
-                },
-                new {
-                    Id = Guid.NewGuid(),
-                    UserId = Guid.NewGuid(),
-                    Title = "Engine troubleshooting help",
-                    MessageCount = 15,
-                    LastActivity = DateTime.UtcNow.AddHours(-4),
-                    Status = "Resolved",
-                    Sentiment = "Negative"
+                var messages = await _messageRepository.GetConversationMessagesAsync(conversation.Id);
+                var messageCount = messages.Count();
+                var lastMessage = messages.OrderByDescending(m => m.CreatedAt).FirstOrDefault();
+                
+                // Get a participant (excluding system/AI participants if any)
+                var participant = conversation.Participants?.FirstOrDefault();
+                var userId = participant?.UserId ?? Guid.Empty;
+                
+                // Determine conversation status based on recent activity
+                var status = GetConversationStatus(conversation, lastMessage);
+                
+                // Simple sentiment analysis of the last message
+                var sentiment = "Neutral";
+                if (lastMessage != null && !string.IsNullOrEmpty(lastMessage.Content))
+                {
+                    try
+                    {
+                        var sentimentResult = await _sentimentService.AnalyzeSentimentAsync(lastMessage.Content);
+                        sentiment = sentimentResult?.Label ?? "Neutral";
+                    }
+                    catch
+                    {
+                        sentiment = "Neutral";
+                    }
                 }
-            };
+
+                conversationData.Add(new
+                {
+                    Id = conversation.Id,
+                    UserId = userId,
+                    Title = GetConversationTitle(lastMessage?.Content),
+                    MessageCount = messageCount,
+                    LastActivity = conversation.UpdatedAt,
+                    Status = status,
+                    Sentiment = sentiment
+                });
+            }
 
             var model = new
             {
-                Conversations = conversations,
-                TotalCount = conversations.Length,
+                Conversations = conversationData.ToArray(),
+                TotalCount = totalCount,
                 CurrentPage = page,
                 PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling(conversations.Length / (double)pageSize)
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
 
             return View("~/Views/Dashboard/AIManagement/Conversations.cshtml", model);
@@ -489,59 +693,101 @@ public class AIManagementController : Controller
         }
     }
 
-    public IActionResult ConversationDetails(Guid id)
+    private static string GetConversationStatus(Domain.Entities.Chats.Conversation conversation, Domain.Entities.Chats.Message? lastMessage)
+    {
+        if (lastMessage == null) return "Empty";
+        
+        var timeSinceLastMessage = DateTime.UtcNow - lastMessage.CreatedAt;
+        
+        if (timeSinceLastMessage.TotalHours < 1) return "Active";
+        if (timeSinceLastMessage.TotalDays < 1) return "Recent";
+        if (timeSinceLastMessage.TotalDays < 7) return "Completed";
+        
+        return "Archived";
+    }
+
+    private static string GetConversationTitle(string? lastMessageContent)
+    {
+        if (string.IsNullOrEmpty(lastMessageContent)) return "New conversation";
+        
+        // Extract a meaningful title from the message content
+        var words = lastMessageContent.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length == 0) return "New conversation";
+        
+        var title = string.Join(" ", words.Take(6));
+        if (title.Length > 50) title = title[..47] + "...";
+        
+        return title;
+    }
+
+    public async Task<IActionResult> ConversationDetails(Guid id)
     {
         try
         {
-            // Sample conversation details - in real implementation, this would come from database
-            var conversation = new
+            var conversation = await _conversationRepository.GetByIdAsync(id);
+            if (conversation == null)
             {
-                Id = id,
-                UserId = Guid.NewGuid(),
-                Title = "Car maintenance schedule inquiry",
-                CreatedAt = DateTime.UtcNow.AddDays(-2),
-                UpdatedAt = DateTime.UtcNow.AddMinutes(-15),
-                Status = "Completed",
-                Messages = new[]
+                return View("~/Views/Dashboard/AIManagement/ConversationDetails.cshtml", 
+                    new { Error = "Conversation not found" });
+            }
+
+            var messages = await _messageRepository.GetConversationMessagesAsync(id);
+            var messageList = new List<object>();
+
+            foreach (var message in messages.OrderBy(m => m.CreatedAt))
+            {
+                // Determine sentiment for each message
+                var sentiment = "Neutral";
+                if (!string.IsNullOrEmpty(message.Content))
                 {
-                    new {
-                        Id = Guid.NewGuid(),
-                        Content = "Hi, I need help with my car maintenance schedule",
-                        IsFromUser = true,
-                        Timestamp = DateTime.UtcNow.AddDays(-2),
-                        Sentiment = "Neutral"
-                    },
-                    new {
-                        Id = Guid.NewGuid(),
-                        Content = "I'd be happy to help you with your car maintenance schedule! What type of vehicle do you have and what's your current mileage?",
-                        IsFromUser = false,
-                        Timestamp = DateTime.UtcNow.AddDays(-2).AddMinutes(1),
-                        Sentiment = "Positive"
-                    },
-                    new {
-                        Id = Guid.NewGuid(),
-                        Content = "I have a 2020 Honda Civic with 35,000 miles",
-                        IsFromUser = true,
-                        Timestamp = DateTime.UtcNow.AddDays(-2).AddMinutes(2),
-                        Sentiment = "Neutral"
-                    },
-                    new {
-                        Id = Guid.NewGuid(),
-                        Content = "Great! For your 2020 Honda Civic at 35,000 miles, here's what you should consider: Oil changes every 5,000-7,500 miles, tire rotation every 5,000-7,500 miles, and brake inspection every 12,000 miles. You're also approaching the time for your 36,000-mile service which typically includes transmission fluid change and spark plug replacement.",
-                        IsFromUser = false,
-                        Timestamp = DateTime.UtcNow.AddDays(-2).AddMinutes(3),
-                        Sentiment = "Positive"
+                    try
+                    {
+                        var sentimentResult = await _sentimentService.AnalyzeSentimentAsync(message.Content);
+                        sentiment = sentimentResult?.Label ?? "Neutral";
+                    }
+                    catch
+                    {
+                        sentiment = "Neutral";
                     }
                 }
+
+                messageList.Add(new
+                {
+                    Id = message.Id,
+                    Content = message.Content ?? "",
+                    IsFromUser = !IsSystemMessage(message),
+                    Timestamp = message.CreatedAt,
+                    Sentiment = sentiment
+                });
+            }
+
+            var conversationDetails = new
+            {
+                Id = conversation.Id,
+                UserId = conversation.Participants?.FirstOrDefault()?.UserId ?? Guid.Empty,
+                Title = GetConversationTitle(messageList.FirstOrDefault()?.GetType().GetProperty("Content")?.GetValue(messageList.FirstOrDefault())?.ToString()),
+                CreatedAt = conversation.CreatedAt,
+                UpdatedAt = conversation.UpdatedAt,
+                Status = GetConversationStatus(conversation, messages.OrderByDescending(m => m.CreatedAt).FirstOrDefault()),
+                Messages = messageList.ToArray()
             };
 
-            return View("~/Views/Dashboard/AIManagement/ConversationDetails.cshtml", conversation);
+            return View("~/Views/Dashboard/AIManagement/ConversationDetails.cshtml", conversationDetails);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading conversation details for {ConversationId}", id);
-            return View("~/Views/Dashboard/AIManagement/ConversationDetails.cshtml", new { Error = "Unable to load conversation details" });
+            return View("~/Views/Dashboard/AIManagement/ConversationDetails.cshtml", 
+                new { Error = "Unable to load conversation details" });
         }
+    }
+
+    private static bool IsSystemMessage(Domain.Entities.Chats.Message message)
+    {
+        // In a real implementation, you might have a field to identify system/AI messages
+        // For now, we'll use a simple heuristic
+        return message.Content?.StartsWith("[System]") == true || 
+               message.Content?.StartsWith("[AI]") == true;
     }
 
     [Route("Training")]

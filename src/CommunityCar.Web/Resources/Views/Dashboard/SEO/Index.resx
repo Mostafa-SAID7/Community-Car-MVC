@@ -2,7 +2,7 @@
 <root>
   <data name="SEODashboard" xml:space="preserve"><value>SEO Dashboard</value></data>
   <data name="SearchOptimization" xml:space="preserve"><value>Search Optimization</value></data>
-  <data name="GlobalVisibilityManagement" xml:space="preserve"><value>Global visibility management and indexability metrics</value></data>
+  <data name="GlobalVisibilityManagement" xml:space="preserve"><value>Global Visibility Management</value></data>
   <data name="ProtocolHealthScore" xml:space="preserve"><value>Protocol Health Score</value></data>
   <data name="Percentile" xml:space="preserve"><value>Percentile</value></data>
   <data name="Optimized" xml:space="preserve"><value>Optimized</value></data>
@@ -15,7 +15,7 @@
   <data name="Sitemap" xml:space="preserve"><value>Sitemap</value></data>
   <data name="RSSFeed" xml:space="preserve"><value>RSS Feed</value></data>
   <data name="ProTip" xml:space="preserve"><value>Pro Tip</value></data>
-  <data name="ProTipText" xml:space="preserve"><value>Optimize your image ALT tags and ensure title lengths are between 50-60 characters for maximum CTR on search engines.</value></data>
+  <data name="ProTipText" xml:space="preserve"><value>Systematic keyword coverage across multiple cultures improves global ranking depth by ~40%.</value></data>
   <data name="TitleLength" xml:space="preserve"><value>Title Length</value></data>
   <data name="Optimal" xml:space="preserve"><value>Optimal</value></data>
   <data name="CheckRange" xml:space="preserve"><value>Check Range</value></data>

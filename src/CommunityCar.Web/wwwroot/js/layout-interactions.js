@@ -143,4 +143,160 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
+    // Dashboard Right Sidebar Toggle
+    const dashRightToggle = document.getElementById('dashboard-right-sidebar-toggle');
+    const dashRightSidebar = document.querySelector('aside.sidebar-right');
+
+    if (dashRightToggle && dashRightSidebar) {
+        dashRightToggle.addEventListener('click', function () {
+            dashRightSidebar.classList.toggle('hidden');
+            dashRightSidebar.classList.toggle('flex');
+            dashRightSidebar.classList.toggle('translate-x-0');
+        });
+    }
+
+    // Mobile Dashboard Sidebar Toggle
+    const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
+    const mobileSidebarClose = document.getElementById('mobile-sidebar-close');
+    const dashboardSidebar = document.getElementById('dashboard-sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+
+    function openMobileSidebar() {
+        if (dashboardSidebar && sidebarBackdrop) {
+            dashboardSidebar.classList.remove('-translate-x-[calc(100%+2rem)]');
+            dashboardSidebar.classList.add('translate-x-0');
+            dashboardSidebar.classList.add('w-56'); // Show full width on mobile
+            dashboardSidebar.classList.add('sidebar-mobile-open'); // Add class to show text labels
+            sidebarBackdrop.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+    }
+
+    function closeMobileSidebar() {
+        if (dashboardSidebar && sidebarBackdrop) {
+            dashboardSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
+            dashboardSidebar.classList.remove('translate-x-0');
+            dashboardSidebar.classList.remove('w-56');
+            dashboardSidebar.classList.remove('sidebar-mobile-open'); // Remove class to hide text labels
+            sidebarBackdrop.classList.add('hidden');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+    }
+
+    if (mobileSidebarToggle) {
+        mobileSidebarToggle.addEventListener('click', function () {
+            openMobileSidebar();
+        });
+    }
+
+    if (mobileSidebarClose) {
+        mobileSidebarClose.addEventListener('click', function () {
+            closeMobileSidebar();
+        });
+    }
+
+    if (sidebarBackdrop) {
+        sidebarBackdrop.addEventListener('click', function () {
+            closeMobileSidebar();
+        });
+    }
+
+    // Close mobile sidebar on escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && dashboardSidebar && !dashboardSidebar.classList.contains('-translate-x-[calc(100%+2rem)]')) {
+            closeMobileSidebar();
+        }
+    });
+
+    // Close mobile sidebar when clicking on navigation links (mobile only)
+    if (dashboardSidebar) {
+        const sidebarLinks = dashboardSidebar.querySelectorAll('a, button[type="submit"]');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                // Only close on mobile screens
+                if (window.innerWidth < 768) {
+                    closeMobileSidebar();
+                }
+            });
+        });
+    }
+
+    // Handle window resize to ensure proper sidebar state
+    window.addEventListener('resize', function () {
+        if (window.innerWidth >= 768 && dashboardSidebar) {
+            // On desktop, ensure sidebar is in correct state
+            closeMobileSidebar();
+        }
+        if (window.innerWidth >= 768 && mainSidebar) {
+            // On desktop, ensure main sidebar is in correct state
+            closeMainMobileSidebar();
+        }
+    });
+
+    // Main Layout Mobile Sidebar Toggle
+    const mainMobileSidebarToggle = document.getElementById('main-mobile-sidebar-toggle');
+    const mainMobileSidebarClose = document.getElementById('main-sidebar-close');
+    const mainSidebar = document.getElementById('main-sidebar');
+    const mainSidebarBackdrop = document.getElementById('main-sidebar-backdrop');
+
+    function openMainMobileSidebar() {
+        if (mainSidebar && mainSidebarBackdrop) {
+            mainSidebar.classList.remove('-translate-x-[calc(100%+2rem)]');
+            mainSidebar.classList.add('translate-x-0');
+            mainSidebar.classList.add('w-56'); // Show full width on mobile
+            mainSidebar.classList.add('main-sidebar-mobile-open'); // Add class to show text labels
+            mainSidebarBackdrop.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+    }
+
+    function closeMainMobileSidebar() {
+        if (mainSidebar && mainSidebarBackdrop) {
+            mainSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
+            mainSidebar.classList.remove('translate-x-0');
+            mainSidebar.classList.remove('w-56');
+            mainSidebar.classList.remove('main-sidebar-mobile-open'); // Remove class to hide text labels
+            mainSidebarBackdrop.classList.add('hidden');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+    }
+
+    if (mainMobileSidebarToggle) {
+        mainMobileSidebarToggle.addEventListener('click', function () {
+            openMainMobileSidebar();
+        });
+    }
+
+    if (mainMobileSidebarClose) {
+        mainMobileSidebarClose.addEventListener('click', function () {
+            closeMainMobileSidebar();
+        });
+    }
+
+    if (mainSidebarBackdrop) {
+        mainSidebarBackdrop.addEventListener('click', function () {
+            closeMainMobileSidebar();
+        });
+    }
+
+    // Close main mobile sidebar on escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && mainSidebar && !mainSidebar.classList.contains('-translate-x-[calc(100%+2rem)]')) {
+            closeMainMobileSidebar();
+        }
+    });
+
+    // Close main mobile sidebar when clicking on navigation links (mobile only)
+    if (mainSidebar) {
+        const mainSidebarLinks = mainSidebar.querySelectorAll('a, button[type="submit"]');
+        mainSidebarLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                // Only close on mobile screens
+                if (window.innerWidth < 768) {
+                    closeMainMobileSidebar();
+                }
+            });
+        });
+    }
 });

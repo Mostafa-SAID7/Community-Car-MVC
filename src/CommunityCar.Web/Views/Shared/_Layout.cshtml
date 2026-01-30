@@ -66,13 +66,18 @@
             var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
             var mainContentClass = hideRightSidebar ? "xl:mr-0 rtl:xl:mr-0 rtl:xl:ml-0" : "xl:mr-[21rem] rtl:xl:mr-0 rtl:xl:ml-[21rem] rtl:force-content-width";
         }
-        <main class="flex-1 transition-all duration-300 px-2 sm:px-3 md:px-4 mt-24 md:ml-20 xl:ml-60 rtl:md:ml-0 rtl:md:mr-20 rtl:xl:ml-0 rtl:xl:mr-60 @mainContentClass" id="main-content">
+        <main class="flex-1 px-2 sm:px-3 md:px-4 mt-24 md:ml-20 xl:ml-60 rtl:md:ml-0 rtl:md:mr-20 rtl:xl:ml-0 rtl:xl:mr-60 @mainContentClass" id="main-content">
             <div class="max-w-none w-full overflow-x-hidden">
                 <div class="bg-card/30 backdrop-blur-xl border border-border rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 w-full">
                     <!-- Header with sidebar toggles -->
                     <div class="flex items-center justify-between mb-4 sm:mb-6 xl:mb-0">
                         <!-- Mobile navigation and options (hidden on desktop) -->
                         <div class="flex items-center gap-2 md:hidden">
+                            <!-- Mobile sidebar toggle button -->
+                            <button id="main-mobile-sidebar-toggle" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Toggle Menu">
+                                <i data-lucide="menu" class="w-4 h-4"></i>
+                            </button>
+                            
                             <!-- Search icon for mobile -->
                             <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="mobile-search-toggle" aria-label="Search">
                                 <i data-lucide="search" class="w-4 h-4"></i>
@@ -142,7 +147,7 @@
                     </div>
                     
                     <!-- Mobile-optimized content wrapper -->
-                    <div class="w-full overflow-x-hidden">
+                    <div class="w-full" style="overflow-x: clip; overflow-y: visible;">
                         @RenderBody()
                     </div>
                 </div>
@@ -153,7 +158,7 @@
         {
             @if (IsSectionDefined("SidebarRight"))
             {
-                <div class="fixed right-4 rtl:right-auto rtl:left-4 top-24 bottom-8 w-80 hidden xl:block">
+                <div class="fixed right-4 rtl:right-auto rtl:left-4 top-24 bottom-8 w-80 hidden xl:block overflow-y-auto custom-scrollbar">
                     @RenderSection("SidebarRight")
                 </div>
             }

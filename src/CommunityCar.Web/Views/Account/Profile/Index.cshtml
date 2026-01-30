@@ -19,8 +19,8 @@
     </div>
 
     <div id="profile-content" class="space-y-8">
-        @await Html.PartialAsync("_ProfileHeader", Model)
-        @await Html.PartialAsync("_ProfileNavigation")
+        @await Html.PartialAsync("~/Views/Account/Profile/_ProfileHeader.cshtml", Model)
+        @await Html.PartialAsync("~/Views/Account/Profile/_ProfileNavigation.cshtml")
 
     <!-- Main Content Layout -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

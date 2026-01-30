@@ -1,103 +1,110 @@
 <!-- Dashboard Left Sidebar -->
-<aside
-    class="sidebar fixed left-4 rtl:left-auto rtl:right-4 top-24 bottom-20 w-16 xl:w-56 bg-card/40 backdrop-blur-xl border border-border rounded-xl shadow-2xl transition-all duration-300 z-40 -translate-x-[calc(100%+2rem)] rtl:translate-x-[calc(100%+2rem)] rtl:-translate-x-0 md:translate-x-0 rtl:md:translate-x-0">
+<aside id="dashboard-sidebar"
+    class="sidebar fixed left-4 rtl:left-auto rtl:right-4 top-24 bottom-20 w-16 xl:w-56 bg-card/95 backdrop-blur-xl border border-border rounded-xl shadow-2xl z-50 -translate-x-[calc(100%+2rem)] rtl:translate-x-[calc(100%+2rem)] rtl:-translate-x-0 md:translate-x-0 rtl:md:translate-x-0 transition-transform duration-300 ease-in-out">
     
     <!-- Sidebar backdrop for mobile -->
-    <div class="sidebar-backdrop md:hidden"></div>
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden md:hidden"></div>
     
     <div class="flex flex-col h-full overflow-y-auto overflow-x-hidden custom-scrollbar p-2">
+        <!-- Mobile close button -->
+        <div class="flex justify-end md:hidden mb-2">
+            <button id="mobile-sidebar-close" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground" aria-label="Close Menu">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+        
         <nav class="flex flex-col gap-1 mt-1">
             <a asp-controller="Overview" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="layout-dashboard" class="w-[18px] h-[18px] shrink-0 text-primary"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["Overview"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["Overview"]</span>
             </a>
             <a asp-controller="Analytics" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="bar-chart-3" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["Analytics"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["Analytics"]</span>
             </a>
             <a asp-controller="AIManagement" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="brain" class="w-[18px] h-[18px] shrink-0 text-purple-500"></i>
-                <span class="hidden xl:inline text-purple-500">AI Management</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline text-purple-500">AI Management</span>
             </a>
             <a asp-controller="Management" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="settings-2" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["AdminControl"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["AdminControl"]</span>
             </a>
             <a asp-controller="Errors" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="alert-triangle" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["ErrorLogs"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["ErrorLogs"]</span>
             </a>
             <a asp-controller="ErrorReports" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="flag" class="w-[18px] h-[18px] shrink-0 text-red-500"></i>
-                <span class="hidden xl:inline text-red-500">@SharedLocalizer["ErrorReports"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline text-red-500">@SharedLocalizer["ErrorReports"]</span>
             </a>
             <a asp-controller="Reports" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="file-text" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["SystemReports"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["SystemReports"]</span>
             </a>
             <a asp-controller="Monitoring" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="activity" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["Monitoring"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["Monitoring"]</span>
             </a>
             <a asp-controller="Settings" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="sliders" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["GlobalSettings"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["GlobalSettings"]</span>
             </a>
             <a asp-controller="Performance" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="gauge" class="w-[18px] h-[18px] shrink-0 text-blue-500"></i>
-                <span class="hidden xl:inline text-blue-500">@SharedLocalizer["Performance"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline text-blue-500">@SharedLocalizer["Performance"]</span>
             </a>
             <a asp-controller="Cache" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="database" class="w-[18px] h-[18px] shrink-0 text-cyan-500"></i>
-                <span class="hidden xl:inline text-cyan-500">Cache Management</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline text-cyan-500">Cache Management</span>
             </a>
             <a asp-controller="BackgroundJobs" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="clock" class="w-[18px] h-[18px] shrink-0 text-orange-500"></i>
-                <span class="hidden xl:inline text-orange-500">Background Jobs</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline text-orange-500">Background Jobs</span>
             </a>
             <a asp-controller="SEO" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="search-check" class="w-[18px] h-[18px] shrink-0 text-emerald-500"></i>
-                <span class="hidden xl:inline text-emerald-500">@SharedLocalizer["SEOAudit"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline text-emerald-500">@SharedLocalizer["SEOAudit"]</span>
             </a>
             <a asp-controller="Localization" asp-action="Index"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
                 <i data-lucide="languages" class="w-[18px] h-[18px] shrink-0 text-indigo-500"></i>
-                <span class="hidden xl:inline text-indigo-500">@SharedLocalizer["Localization"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline text-indigo-500">@SharedLocalizer["Localization"]</span>
             </a>
             <a asp-controller="Settings" asp-action="Maintenance"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-destructive/10 hover:text-destructive w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-destructive/10 hover:text-destructive w-full">
                 <i data-lucide="power" class="w-[18px] h-[18px] shrink-0 text-red-500"></i>
-                <span class="hidden xl:inline text-red-500 font-bold">@SharedLocalizer["Maintenance"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline text-red-500 font-bold">@SharedLocalizer["Maintenance"]</span>
             </a>
              @if (User.Identity?.IsAuthenticated == true)
         {
             <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="w-full mt-1">
                 <button type="submit"
-                    class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full text-left">
+                    class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full text-left">
                     <i data-lucide="log-out" class="w-[18px] h-[18px] shrink-0"></i>
-                    <span class="hidden xl:inline">@SharedLocalizer["Logout"]</span>
+                    <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["Logout"]</span>
                 </button>
             </form>
         }
         else
         {
             <a href="/"
-                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full mt-1">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full mt-1">
                 <i data-lucide="home" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline">@SharedLocalizer["BackToSite"]</span>
+                <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["BackToSite"]</span>
             </a>
         }
         </nav>
@@ -106,9 +113,9 @@
     <!-- Admin Profile Section at Bottom (same as main sidebar) -->
     <div class="p-2 border-t border-border">
         <a href="/Profile"
-            class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full">
+            class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
             <i data-lucide="user" class="w-[18px] h-[18px] shrink-0"></i>
-            <span class="hidden xl:inline">@SharedLocalizer["AdminProfile"]</span>
+            <span class="hidden xl:inline md:hidden sidebar-mobile-open:inline">@SharedLocalizer["AdminProfile"]</span>
         </a>
         
        

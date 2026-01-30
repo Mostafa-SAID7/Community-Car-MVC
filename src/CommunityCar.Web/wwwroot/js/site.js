@@ -226,7 +226,7 @@ if ((sidebarToggle || rightSidebarToggle) && mainContainer) {
     let backdrop = document.querySelector('.sidebar-backdrop');
     if (!backdrop) {
         backdrop = document.createElement('div');
-        backdrop.className = 'sidebar-backdrop fixed inset-0 bg-black/50 z-30 opacity-0 pointer-events-none transition-opacity duration-300';
+        backdrop.className = 'sidebar-backdrop fixed inset-0 bg-black/50 z-30 opacity-0 pointer-events-none';
         document.body.appendChild(backdrop);
     }
 
@@ -236,9 +236,12 @@ if ((sidebarToggle || rightSidebarToggle) && mainContainer) {
             e.stopPropagation();
 
             const isMobile = window.innerWidth < 768;
-            const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
 
+            // Only toggle on mobile - desktop sidebar is always visible via CSS
             if (isMobile) {
+                const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+
+                // Toggle sidebar visibility
                 if (isRtl) {
                     leftSidebar.classList.toggle('translate-x-full');
                     leftSidebar.classList.toggle('translate-x-0');
@@ -246,20 +249,13 @@ if ((sidebarToggle || rightSidebarToggle) && mainContainer) {
                     leftSidebar.classList.toggle('-translate-x-full');
                     leftSidebar.classList.toggle('translate-x-0');
                 }
-            } else {
-                if (isRtl) {
-                    leftSidebar.classList.toggle('md:translate-x-0');
-                    leftSidebar.classList.toggle('md:translate-x-[calc(100%+2rem)]');
-                } else {
-                    leftSidebar.classList.toggle('md:translate-x-0');
-                    leftSidebar.classList.toggle('md:-translate-x-[calc(100%+2rem)]');
-                }
-            }
 
-            backdrop.classList.toggle('opacity-0');
-            backdrop.classList.toggle('pointer-events-none');
-            backdrop.classList.toggle('opacity-100');
-            backdrop.classList.toggle('pointer-events-auto');
+                // Toggle backdrop
+                backdrop.classList.toggle('opacity-0');
+                backdrop.classList.toggle('pointer-events-none');
+                backdrop.classList.toggle('opacity-100');
+                backdrop.classList.toggle('pointer-events-auto');
+            }
         });
     }
 
@@ -291,30 +287,27 @@ if ((sidebarToggle || rightSidebarToggle) && mainContainer) {
     }
 
     function closeSidebar() {
-        const isMobile = window.innerWidth < 1280; // Corrected to xl breakpoint for right sidebar consistency
+        const isMobile = window.innerWidth < 768;
         const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
 
-        if (leftSidebar) {
-            if (window.innerWidth < 768) {
-                if (isRtl) {
-                    leftSidebar.classList.add('translate-x-full');
-                } else {
-                    leftSidebar.classList.add('-translate-x-full');
-                }
-                leftSidebar.classList.remove('translate-x-0');
+        // Only manage sidebar state on mobile - desktop is handled by CSS
+        if (leftSidebar && isMobile) {
+            if (isRtl) {
+                leftSidebar.classList.add('translate-x-full');
+            } else {
+                leftSidebar.classList.add('-translate-x-full');
             }
+            leftSidebar.classList.remove('translate-x-0');
         }
 
-        if (rightSidebar) {
-            if (window.innerWidth < 1280) {
-                rightSidebar.classList.add('hidden');
-                if (isRtl) {
-                    rightSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
-                } else {
-                    rightSidebar.classList.add('translate-x-[calc(100%+2rem)]');
-                }
-                rightSidebar.classList.remove('translate-x-0');
+        if (rightSidebar && window.innerWidth < 1280) {
+            rightSidebar.classList.add('hidden');
+            if (isRtl) {
+                rightSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
+            } else {
+                rightSidebar.classList.add('translate-x-[calc(100%+2rem)]');
             }
+            rightSidebar.classList.remove('translate-x-0');
         }
 
         backdrop.classList.add('opacity-0', 'pointer-events-none');
@@ -331,7 +324,7 @@ if ((sidebarToggle || rightSidebarToggle) && mainContainer) {
         }
     });
 
-    // Handle window resize to reset sidebar state
+    // Handle window resize - clean up mobile classes when resizing to desktop
     window.addEventListener('resize', () => {
         const width = window.innerWidth;
         const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
@@ -345,11 +338,12 @@ if ((sidebarToggle || rightSidebarToggle) && mainContainer) {
             backdrop.classList.remove('opacity-100', 'pointer-events-auto');
         }
 
-        if (width >= 768) { // md
+        if (width >= 768) { // md - left sidebar now always visible, just clean up mobile classes
             if (leftSidebar) {
                 leftSidebar.classList.remove('-translate-x-full', 'translate-x-0', 'translate-x-full');
-                leftSidebar.classList.add('md:translate-x-0');
             }
+            backdrop.classList.add('opacity-0', 'pointer-events-none');
+            backdrop.classList.remove('opacity-100', 'pointer-events-auto');
         }
     });
 }
