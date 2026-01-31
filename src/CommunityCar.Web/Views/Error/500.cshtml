@@ -1,71 +1,196 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "500 - Major Protocol Anomaly";
+    ViewData["Title"] = Localizer["ServerErrorTitle"];
+    ViewData["FullWidth"] = true;
     Layout = "_AuthLayout";
 }
 
-<div class="max-w-4xl mx-auto space-y-12 animate-in fade-in duration-1000 py-12">
-    <div class="text-center space-y-8">
-        <div class="relative inline-flex items-center justify-center group">
-            <!-- Destructive Anomaly Glow -->
-            <div class="absolute -inset-10 bg-destructive/10 rounded-full blur-3xl animate-pulse"></div>
-            <div class="absolute -inset-20 bg-destructive/5 rounded-full blur-3xl animate-pulse delay-150"></div>
+<!-- Responsive 500 Error Page - Mobile First Design -->
+<div class="w-full min-h-[calc(100vh-12rem)] flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12">
+    
+    <!-- Main 500 Content -->
+    <div class="w-full max-w-4xl mx-auto space-y-8 sm:space-y-10 md:space-y-12 animate-in fade-in duration-1000">
+        
+        <!-- 500 Visual Section -->
+        <div class="text-center space-y-6 sm:space-y-8">
+            <div class="relative inline-flex items-center justify-center group">
+                <!-- Destructive Anomaly Glow (Responsive) -->
+                <div class="absolute -inset-6 sm:-inset-8 md:-inset-10 bg-destructive/10 rounded-full blur-2xl sm:blur-3xl animate-pulse"></div>
+                <div class="absolute -inset-10 sm:-inset-12 md:-inset-20 bg-destructive/5 rounded-full blur-2xl sm:blur-3xl animate-pulse delay-150"></div>
+                
+                <!-- Error Icon Container (Responsive) -->
+                <div class="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl md:rounded-[3rem] bg-card border border-destructive/20 flex items-center justify-center text-destructive shadow-xl sm:shadow-2xl rotate-2 sm:rotate-3 group-hover:rotate-0 transition-transform duration-700">
+                    <i data-lucide="flame" class="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 animate-bounce"></i>
+                    <i data-lucide="alert-triangle" class="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 absolute -top-2 -right-2 sm:-top-3 sm:-right-3 md:-top-4 md:-right-4 text-destructive shadow-glow-destructive"></i>
+                </div>
+            </div>
             
-            <div class="relative w-40 h-40 rounded-[3rem] bg-card border border-destructive/20 flex items-center justify-center text-destructive shadow-2xl rotate-3 group-hover:rotate-0 transition-transform duration-700">
-                <i data-lucide="flame" class="w-20 h-20 animate-bounce"></i>
-                <i data-lucide="alert-triangle" class="w-10 h-10 absolute -top-4 -right-4 text-destructive shadow-glow-destructive"></i>
+            <!-- Status Badge and Title (Responsive) -->
+            <div class="space-y-3 sm:space-y-4 px-4 sm:px-6">
+                <div class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-destructive/10 border border-destructive/20 rounded-full text-destructive text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest">
+                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-destructive animate-ping"></span>
+                    @Localizer["SystemError"]
+                </div>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-foreground tracking-tighter leading-tight uppercase">
+                    @Localizer["ServerErrorHeading"]
+                </h1>
+                <p class="text-xs sm:text-sm font-medium text-muted-foreground max-w-xs sm:max-w-lg mx-auto uppercase tracking-wide sm:tracking-widest opacity-60 leading-relaxed">
+                    @Localizer["ServerErrorDescription"]
+                </p>
             </div>
         </div>
-        
-        <div class="space-y-4">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-destructive/10 border border-destructive/20 rounded-full text-destructive text-[10px] font-black uppercase tracking-widest">
-                <span class="w-2 h-2 rounded-full bg-destructive animate-ping"></span>
-                Registry Overload Fault
-            </div>
-            <h1 class="text-6xl font-black text-foreground tracking-tighter leading-none uppercase">PROTOCOL <br class="md:hidden"/> ANOMALY</h1>
-            <p class="text-sm font-medium text-muted-foreground max-w-lg mx-auto uppercase tracking-widest opacity-60 leading-relaxed px-4">An internal system conflict has disrupted the community registry handshake. Tactical recovery is underway.</p>
-        </div>
-    </div>
 
-    <!-- Fault Isolation Panel -->
-    <div class="bg-black/95 rounded-[2.5rem] border border-white/5 p-12 shadow-2xl relative overflow-hidden group/console">
-        <div class="absolute inset-0 bg-gradient-to-br from-destructive/[0.03] to-transparent pointer-events-none"></div>
-        <div class="flex items-center justify-between mb-10 border-b border-white/10 pb-6">
-            <span class="text-[10px] font-black uppercase tracking-widest text-destructive animate-pulse">Tactical Failover Active</span>
-            <div class="flex gap-2.5">
-                <div class="w-3 h-3 rounded-full bg-white/10"></div>
-                <div class="w-3 h-3 rounded-full bg-white/10"></div>
-                <div class="w-3 h-3 rounded-full bg-white/10"></div>
+        <!-- Fault Isolation Panel (Responsive) -->
+        <div class="bg-black/95 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] border border-white/5 p-4 sm:p-6 md:p-8 lg:p-12 shadow-xl sm:shadow-2xl relative overflow-hidden group/console mx-4 sm:mx-0">
+            <div class="absolute inset-0 bg-gradient-to-br from-destructive/[0.03] to-transparent pointer-events-none"></div>
+            
+            <!-- Console Header (Responsive) -->
+            <div class="flex items-center justify-between mb-6 sm:mb-8 md:mb-10 border-b border-white/10 pb-4 sm:pb-6">
+                <span class="text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-destructive animate-pulse">@Localizer["TacticalFailover"]</span>
+                <div class="flex gap-1.5 sm:gap-2.5">
+                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/10"></div>
+                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/10"></div>
+                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/10"></div>
+                </div>
+            </div>
+            
+            <!-- Console Content (Responsive) -->
+            <div class="space-y-4 sm:space-y-6 md:space-y-8 font-mono">
+                <div class="space-y-2 sm:space-y-3">
+                    <span class="block text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-white/30">@Localizer["FaultVector"]</span>
+                    <code class="block text-xs sm:text-sm text-destructive font-black break-all">@Localizer["ExceptionMessage"]</code>
+                </div>
+                <div class="space-y-2 sm:space-y-3">
+                    <span class="block text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-white/30">@Localizer["RecoveryProtocol"]</span>
+                    <code class="block text-xs sm:text-sm text-white/60 leading-relaxed">@Localizer["RecoveryMessage"]</code>
+                </div>
+            </div>
+            
+            <!-- Console Footer (Responsive) -->
+            <div class="mt-8 sm:mt-10 md:mt-12 pt-4 sm:pt-6 md:pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
+                <span class="text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-white/20 text-center sm:text-left">@Localizer["SystemArchive"]</span>
+                <button onclick="location.reload()" class="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-white/5 hover:bg-white/10 text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest transition-all border border-white/10 min-h-[44px] touch-manipulation">
+                    @Localizer["EmergencyRestart"]
+                </button>
             </div>
         </div>
-        
-        <div class="space-y-8 font-mono">
-            <div class="space-y-3">
-                <span class="block text-[10px] font-black uppercase tracking-widest text-white/30">Fault Vector</span>
-                <code class="block text-sm text-destructive font-black">EXCEPTION_CORE_REGISTRY_HANDSHAKE_TIMEOUT</code>
-            </div>
-            <div class="space-y-3">
-                <span class="block text-[10px] font-black uppercase tracking-widest text-white/30">Recovery Protocol</span>
-                <code class="block text-sm text-white/60 leading-relaxed">Initialized automatic sequence relay. Waiting for thermal stabilization of database cluster...</code>
-            </div>
-        </div>
-        
-        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">System Handled Archive 500-XJ</span>
-            <button data-action="reload-page" class="w-full md:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10">Attempt Emergency Restart</button>
-        </div>
-    </div>
 
-    <div class="flex flex-col md:flex-row items-center justify-center gap-6 pt-4">
-        <a asp-controller="Feed" asp-action="Index" class="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-            <i data-lucide="home" class="w-4 h-4"></i> Escape to Foundation
-        </a>
-        <div class="w-1.5 h-1.5 rounded-full bg-border md:block hidden"></div>
-        <a href="#" class="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-            <i data-lucide="message-square" class="w-4 h-4"></i> Notify Engineering Deck
-        </a>
+        <!-- Action Links (Responsive) -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-2 sm:pt-4 px-4 sm:px-0">
+            <a asp-controller="Feed" asp-action="Index" class="text-[9px] sm:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 min-h-[44px] touch-manipulation">
+                <i data-lucide="home" class="w-3 h-3 sm:w-4 sm:h-4"></i> @Localizer["EscapeToHome"]
+            </a>
+            <div class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-border hidden sm:block"></div>
+            <a href="/contact" class="text-[9px] sm:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 min-h-[44px] touch-manipulation">
+                <i data-lucide="message-square" class="w-3 h-3 sm:w-4 sm:h-4"></i> @Localizer["NotifySupport"]
+            </a>
+        </div>
     </div>
 </div>
 
+<!-- Custom Styles for 500 Page -->
+<style>
+    /* Enhanced responsive animations */
+    @@keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .animate-in.fade-in {
+        animation: fade-in 0.8s ease-out;
+    }
+    
+    /* Mobile-specific improvements */
+    @@media (max-width: 640px) {
+        /* Better text scaling */
+        .tracking-widest {
+            letter-spacing: 0.1em;
+        }
+        
+        /* Improve console readability */
+        code {
+            word-break: break-word;
+            hyphens: auto;
+        }
+    }
+    
+    /* Prevent horizontal scroll */
+    body {
+        overflow-x: hidden;
+    }
+    
+    /* Enhanced hover effects for desktop */
+    @@media (min-width: 1024px) {
+        .group:hover .animate-bounce {
+            animation-duration: 0.8s;
+        }
+    }
+    
+    /* RTL Support */
+    [dir="rtl"] .border-l-2,
+    [dir="rtl"] .border-l-4 {
+        border-left: none;
+        border-right: 2px solid hsl(var(--primary));
+        padding-left: 0;
+        padding-right: 0.75rem;
+    }
+    
+    /* Dark mode optimizations */
+    .dark .bg-black\/95 {
+        background-color: rgba(0, 0, 0, 0.98);
+    }
+    
+    .dark .shadow-glow-destructive {
+        filter: drop-shadow(0 0 8px hsl(var(--destructive) / 0.6));
+    }
+</style>
+
 @section Scripts {
-    <script src="~/js/error-handler.js" asp-append-version="true"></script>
+    <script>
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        
+        // Enhanced mobile interactions
+        if ('ontouchstart' in window) {
+            // Add touch feedback for buttons
+            document.querySelectorAll('button, a').forEach(element => {
+                element.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                element.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+        }
+        
+        // Accessibility improvements
+        document.addEventListener('keydown', function(e) {
+            // Allow Enter key to trigger reload
+            if (e.key === 'Enter' && e.target.tagName === 'BUTTON') {
+                e.target.click();
+            }
+            
+            // Allow Escape key to go home
+            if (e.key === 'Escape') {
+                window.location.href = '/';
+            }
+        });
+        
+        // Auto-refresh after 30 seconds (optional)
+        setTimeout(function() {
+            if (confirm('@Localizer["AutoRefreshConfirm"]')) {
+                location.reload();
+            }
+        }, 30000);
+    </script>
 }

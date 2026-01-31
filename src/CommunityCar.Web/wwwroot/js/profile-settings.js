@@ -54,10 +54,10 @@ class ProfileSettingsManager {
             content.classList.add('hidden');
         });
 
-        // Remove active class from all tab buttons
+        // Remove active class from all tab buttons (feed-style classes)
         document.querySelectorAll('[id$="Tab"]').forEach(btn => {
-            btn.classList.remove('bg-primary', 'text-primary-foreground');
-            btn.classList.add('bg-background', 'border', 'border-border', 'text-muted-foreground', 'hover:text-foreground');
+            btn.classList.remove('bg-background', 'text-foreground', 'shadow-lg', 'border', 'border-border');
+            btn.classList.add('text-muted-foreground/60', 'hover:text-foreground', 'hover:bg-muted/50');
         });
 
         // Show selected tab content
@@ -66,11 +66,11 @@ class ProfileSettingsManager {
             selectedContent.classList.remove('hidden');
         }
 
-        // Add active class to selected tab button
+        // Add active class to selected tab button (feed-style classes)
         const selectedTab = document.getElementById(`${tabName}Tab`);
         if (selectedTab) {
-            selectedTab.classList.add('bg-primary', 'text-primary-foreground');
-            selectedTab.classList.remove('bg-background', 'border', 'border-border', 'text-muted-foreground', 'hover:text-foreground');
+            selectedTab.classList.add('bg-background', 'text-foreground', 'shadow-lg', 'border', 'border-border');
+            selectedTab.classList.remove('text-muted-foreground/60', 'hover:text-foreground', 'hover:bg-muted/50');
         }
     }
 

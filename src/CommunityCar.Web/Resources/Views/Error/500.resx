@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ServerErrorTitle" xml:space="preserve">
+    <value>500 - Server Error</value>
+  </data>
+  <data name="SystemError" xml:space="preserve">
+    <value>System Error</value>
+  </data>
+  <data name="ServerErrorHeading" xml:space="preserve">
+    <value>Server Error</value>
+  </data>
+  <data name="ServerErrorDescription" xml:space="preserve">
+    <value>An internal server error has occurred. Our technical team has been notified and is working to resolve the issue.</value>
+  </data>
+  <data name="TacticalFailover" xml:space="preserve">
+    <value>Error Recovery Active</value>
+  </data>
+  <data name="FaultVector" xml:space="preserve">
+    <value>Error Details</value>
+  </data>
+  <data name="ExceptionMessage" xml:space="preserve">
+    <value>INTERNAL_SERVER_ERROR_500</value>
+  </data>
+  <data name="RecoveryProtocol" xml:space="preserve">
+    <value>Recovery Status</value>
+  </data>
+  <data name="RecoveryMessage" xml:space="preserve">
+    <value>Automatic recovery sequence initiated. System diagnostics in progress...</value>
+  </data>
+  <data name="SystemArchive" xml:space="preserve">
+    <value>Error ID: 500-ERR</value>
+  </data>
+  <data name="EmergencyRestart" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="EscapeToHome" xml:space="preserve">
+    <value>Go Home</value>
+  </data>
+  <data name="NotifySupport" xml:space="preserve">
+    <value>Contact Support</value>
+  </data>
+  <data name="AutoRefreshConfirm" xml:space="preserve">
+    <value>Would you like to refresh the page and try again?</value>
+  </data>
+</root>

@@ -253,6 +253,26 @@
         .left-sidebar-visible .sidebar {
             transform: translateX(0);
         }
+
+        /* Add subtle backdrop effect when sidebar is open on mobile */
+        .sidebar-visible #main-content,
+        .left-sidebar-visible #main-content {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* Ensure main content is fully interactive when sidebar is closed */
+        #main-content {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Better mobile spacing when sidebar is open */
+        .sidebar-visible body,
+        .left-sidebar-visible body {
+            overflow: hidden;
+            /* Prevent background scrolling */
+        }
     }
 
     /* Right sidebar drawer behavior */
@@ -284,7 +304,7 @@
         padding-bottom: 1rem;
     }
 
-    /* Ensure main content has consistent width in both LTR and RTL */
+    /* Ensure main content has consistent width and spacing in both LTR and RTL */
     #main-content {
         max-width: none;
         width: auto;
@@ -297,6 +317,169 @@
         width: 100%;
     }
 
+    /* ========================================
+     * SIMPLIFIED MAIN CONTENT LAYOUT
+     * ========================================
+     * 
+     * Simple, consistent layout across all screen sizes:
+     * - Mobile: Full width with padding
+     * - Tablet: Simple left padding for sidebar
+     * - Desktop: Simple padding, no complex margins
+     * 
+     * ======================================== */
+
+    /* Mobile screens - simple padding */
+    @media (max-width: 767px) {
+        #main-content,
+        main#main-content,
+        main[role="main"],
+        .main-content {
+            padding: 1rem;
+            margin: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+
+    /* Tablet screens - simple left padding for sidebar */
+    @media (min-width: 768px) and (max-width: 1279px) {
+        #main-content,
+        main#main-content,
+        main[role="main"],
+        .main-content {
+            padding-left: 6rem; /* Space for sidebar */
+            padding-right: 1rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            margin: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* RTL support */
+        .rtl #main-content,
+        .rtl main#main-content,
+        .rtl main[role="main"],
+        .rtl .main-content {
+            padding-left: 1rem;
+            padding-right: 6rem; /* Space for sidebar */
+        }
+    }
+
+    /* Large screens - simple padding like other screens */
+    @media (min-width: 1280px) {
+        #main-content,
+        main#main-content,
+        main[role="main"],
+        .main-content {
+            padding-left: 16rem; /* Space for left sidebar */
+            padding-right: 1rem; /* Simple right padding */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            margin: 0;
+            width: 100%;
+            max-width: 100%;
+            /* Always visible */
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: block !important;
+        }
+
+        /* When right sidebar is present, add more right padding */
+        .has-right-sidebar #main-content,
+        .has-right-sidebar main#main-content,
+        .has-right-sidebar main[role="main"],
+        .has-right-sidebar .main-content {
+            padding-right: 22rem; /* Space for right sidebar */
+        }
+
+        /* RTL support */
+        .rtl #main-content,
+        .rtl main#main-content,
+        .rtl main[role="main"],
+        .rtl .main-content {
+            padding-left: 1rem;
+            padding-right: 16rem; /* Space for left sidebar */
+        }
+
+        .rtl.has-right-sidebar #main-content,
+        .rtl.has-right-sidebar main#main-content,
+        .rtl.has-right-sidebar main[role="main"],
+        .rtl.has-right-sidebar .main-content {
+            padding-left: 22rem; /* Space for right sidebar */
+        }
+    }
+
+    /* Mobile screens - ensure proper spacing when sidebar is closed/open */
+    @media (max-width: 767px) {
+
+        /* Default mobile spacing - no sidebar interference */
+        #main-content,
+        #dashboard-container #main-content,
+        main#main-content,
+        main[role="main"],
+        .main-content {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        /* When sidebar is open on mobile, add more spacing to prevent overlap */
+        .sidebar-visible #main-content,
+        .left-sidebar-visible #main-content {
+            padding-left: 5rem !important;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* RTL support for mobile */
+        .rtl.sidebar-visible #main-content,
+        .rtl.left-sidebar-visible #main-content {
+            padding-left: 1rem !important;
+            padding-right: 1.5rem !important;
+        }
+
+        /* Ensure main content is fully interactive when sidebar is closed */
+        #main-content {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Prevent background scrolling when sidebar is open */
+        .sidebar-visible body,
+        .left-sidebar-visible body {
+            overflow: hidden;
+        }
+    }
+
+    /* Sidebar spacing utility class - provides visual indicator and consistent behavior */
+    .sidebar-spacing {
+        position: relative;
+    }
+
+    /* Subtle visual indicator for sidebar boundary */
+    .sidebar-spacing::before {
+        content: '';
+        position: absolute;
+        left: -1px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(to bottom,
+                rgba(0, 0, 0, 0.05) 0%,
+                rgba(0, 0, 0, 0.1) 50%,
+                rgba(0, 0, 0, 0.05) 100%);
+        border-radius: 0.5px;
+        opacity: 0.3;
+        z-index: 1;
+    }
+
+    .rtl .sidebar-spacing::before {
+        left: auto;
+        right: -1px;
+    }
+
     /* RTL-specific fixes for consistent layout */
     .rtl #main-content {
         /* Ensure RTL content doesn't expand to full width */
@@ -304,24 +487,37 @@
         max-width: none;
     }
 
-    /* Additional RTL content width control */
+    /* Main content container improvements */
+    #main-content {
+        /* Ensure main content has proper boundaries and is always visible */
+        min-width: 0; /* Allow content to shrink */
+        overflow-x: hidden; /* Prevent horizontal overflow */
+        opacity: 1 !important; /* Force visibility */
+        visibility: visible !important; /* Force visibility */
+        display: block !important; /* Force display */
+        box-sizing: border-box; /* Include padding in width calculations */
+    }
+
+    /* Content wrapper improvements */
+    #main-content > div {
+        width: 100%;
+        max-width: none;
+        min-width: 0; /* Allow content to shrink */
+    }
+
+    /* Ensure content cards don't overflow */
+    #main-content .bg-card {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Additional RTL content width control - Simplified */
     @media (min-width: 1280px) {
-
-        /* Force RTL main content to have same effective width as LTR */
+        /* Ensure RTL layout maintains proper spacing */
         .rtl #main-content {
-            /* Calculate: viewport - left sidebar (15rem) - right sidebar (21rem) - padding */
-            width: calc(100vw - 36rem) !important;
-            max-width: calc(100vw - 36rem) !important;
-            margin-left: 21rem !important;
-            margin-right: 15rem !important;
-        }
-
-        /* When right sidebar is hidden in RTL */
-        .rtl #main-content.xl\:mr-0 {
-            width: calc(100vw - 15rem) !important;
-            max-width: calc(100vw - 15rem) !important;
-            margin-left: 0 !important;
-            margin-right: 15rem !important;
+            /* Let the margin system handle the width */
+            width: auto !important;
+            max-width: none !important;
         }
     }
 
@@ -333,8 +529,84 @@
         overflow-y: visible !important;
     }
 
-    /* Mobile-specific improvements */
+    /* Main content positioning between sidebars */
+    @media (min-width: 1280px) {
+        #main-content {
+            /* Ensure content is properly positioned between sidebars */
+            position: relative;
+            z-index: 10; /* Below sidebars but above background */
+        }
+
+        /* Ensure sidebars don't interfere with main content */
+        .sidebar,
+        .sidebar-right {
+            z-index: 30; /* Above main content */
+        }
+
+        /* Main content should not overlap with fixed sidebars */
+        #main-content .bg-card {
+            /* Ensure content cards respect sidebar boundaries */
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Debug: Add visual indicators (remove in production) */
+        /*
+        #main-content {
+            border-left: 2px solid red;
+            border-right: 2px solid blue;
+        }
+        .sidebar {
+            border: 2px solid green;
+        }
+        .sidebar-right {
+            border: 2px solid orange;
+        }
+        */
+    }
+
+    /* Very small screens (mobile phones) - optimized spacing */
     @media (max-width: 640px) {
+
+        /* Tighter spacing for small screens */
+        #main-content,
+        #dashboard-container #main-content,
+        main#main-content,
+        main[role="main"],
+        .main-content {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
+        }
+
+        /* When sidebar is open on very small screens */
+        .sidebar-visible #main-content,
+        .left-sidebar-visible #main-content {
+            padding-left: 1rem !important;
+        }
+
+        /* RTL support for very small screens */
+        .rtl.sidebar-visible #main-content,
+        .rtl.left-sidebar-visible #main-content {
+            padding-right: 1rem !important;
+            padding-left: 0.75rem !important;
+        }
+
+        /* Content wrapper improvements */
+        #main-content>div {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+
+        /* Card spacing improvements */
+        #main-content .bg-card {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            border-radius: 0.75rem !important;
+        }
 
         /* Reduce padding on very small screens */
         .p-6 {
@@ -359,549 +631,531 @@
             /* Prevents zoom on iOS */
         }
 
-        /* Ensure main content is full width on mobile for both LTR and RTL */
-        #main-content,
-        .rtl #main-content {
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-            width: 100%;
-        }
-
         /* Prevent horizontal overflow */
         body {
             overflow-x: hidden;
         }
 
-        /* Make sure content containers don't exceed viewport */
         .max-w-none {
             max-width: 100vw;
         }
-
-        /* Mobile navigation styling */
-        .mobile-notification-dropdown,
-        .dashboard-notification-dropdown {
-            right: -50px;
-            width: 280px;
-        }
-
-        /* RTL mobile navigation positioning */
-        .rtl .mobile-notification-dropdown,
-        .rtl .dashboard-notification-dropdown {
-            left: -50px;
-            right: auto;
-            width: 280px;
-        }
-
-        /* Ensure mobile icons are properly sized */
-        .md\:hidden .h-8 {
-            height: 2rem;
-            width: 2rem;
-        }
-
-        /* Better spacing for mobile navigation */
-        .md\:hidden .gap-2>*+* {
-            margin-left: 0.5rem;
-        }
-
-        /* RTL mobile navigation spacing */
-        .rtl .md\:hidden .gap-2>*+* {
-            margin-left: 0;
-            margin-right: 0.5rem;
-        }
-
-        /* Mobile header navigation improvements */
-        header nav.md\:hidden a {
-            min-height: 48px;
-            min-width: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Ensure mobile navigation takes full width */
-        header .flex-1.max-w-2xl {
-            max-width: none;
-        }
-
-        /* Dashboard mobile navigation improvements */
-        .dashboard-notification-dropdown {
-            right: -20px;
-            width: 300px;
-        }
-
-        .rtl .dashboard-notification-dropdown {
-            left: -20px;
-            right: auto;
-            width: 300px;
-        }
-
-        /* Dashboard mobile navigation icons */
-        .md\:hidden a[asp-controller] {
-            min-height: 44px;
-            min-width: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
     }
 
-    /* Tablet-specific adjustments */
-    @media (min-width: 641px) and (max-width: 1279px) {
+    /* Tablet screens - balanced spacing between mobile and desktop */
+    @media (min-width: 641px) and (max-width: 767px) {
 
-        /* Ensure proper spacing on tablets */
-        #main-content {
+        /* Tablet spacing - no sidebar interference */
+        #main-content,
+        #dashboard-container #main-content,
+        main#main-content,
+        main[role="main"],
+        .main-content {
+            margin-left: 0 !important;
             margin-right: 0 !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        /* When sidebar is visible on tablet */
+        .sidebar-visible #main-content,
+        .left-sidebar-visible #main-content {
+            padding-left: 1.25rem !important;
+        }
+
+        /* RTL support for tablet */
+        .rtl.sidebar-visible #main-content,
+        .rtl.left-sidebar-visible #main-content {
+            padding-right: 1.25rem !important;
+            padding-left: 1rem !important;
         }
     }
 
-    /* Main content right sidebar spacing */
-    @media (min-width: 1280px) {
-        .main-content-with-right-sidebar {
-            margin-right: 22rem;
-            /* 352px for w-80 sidebar + gap */
-        }
-
-        /* Custom margin-right for xl:mr-84 (21rem = 336px) */
-        .xl\:mr-84 {
-            margin-right: 21rem;
-        }
+    /* Mobile navigation styling */
+    .mobile-notification-dropdown,
+    .dashboard-notification-dropdown {
+        right: -50px;
+        width: 280px;
     }
 
-    /* Feed page mobile optimizations */
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-        .space-y-8>* {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        /* Fix horizontal scrolling in stories section */
-        .overflow-x-auto {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .overflow-x-auto::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Ensure images don't cause overflow */
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Fix grid layouts on mobile */
-        .grid-cols-2 {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        /* Ensure flex containers wrap properly */
-        .flex-wrap {
-            flex-wrap: wrap;
-        }
-
-        /* Fix button groups on mobile */
-        .flex.gap-1,
-        .flex.gap-2,
-        .flex.gap-3,
-        .flex.gap-4 {
-            flex-wrap: wrap;
-        }
+    /* RTL mobile navigation positioning */
+    .rtl .mobile-notification-dropdown,
+    .rtl .dashboard-notification-dropdown {
+        left: -50px;
+        right: auto;
+        width: 280px;
     }
 
-    /* No scrollbar utility class */
-    .no-scrollbar {
+    /* Mobile profile dropdown positioning */
+    .mobile-profile-dropdown {
+        right: -50px;
+        width: 280px;
+    }
+
+    /* Profile dropdown specific styling */
+    .profile-dropdown,
+    .mobile-profile-dropdown {
+        min-width: 256px;
+        max-width: 280px;
+    }
+
+    .profile-dropdown .dropdown-item,
+    .mobile-profile-dropdown .dropdown-item {
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: hsl(var(--foreground));
+        transition: all 0.2s ease;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .profile-dropdown .dropdown-item:hover,
+    .mobile-profile-dropdown .dropdown-item:hover {
+        background-color: hsl(var(--accent));
+        color: hsl(var(--accent-foreground));
+    }
+
+    .profile-dropdown .dropdown-item.text-destructive:hover,
+    .mobile-profile-dropdown .dropdown-item.text-destructive:hover {
+        background-color: hsl(var(--destructive) / 0.1);
+        color: hsl(var(--destructive));
+    }
+
+    /* Profile avatar styling */
+    .profile-toggle .w-6,
+    .mobile-profile-toggle .w-5 {
+        transition: all 0.2s ease;
+    }
+
+    .profile-toggle:hover .w-6,
+    .mobile-profile-toggle:hover .w-5 {
+        transform: scale(1.05);
+    }
+
+    /* Ensure mobile icons are properly sized */
+    .md\:hidden .h-8 {
+        height: 2rem;
+        width: 2rem;
+    }
+
+    /* Better spacing for mobile navigation */
+    .md\:hidden .gap-2>*+* {
+        margin-left: 0.5rem;
+    }
+
+    /* RTL mobile navigation spacing */
+    .rtl .md\:hidden .gap-2>*+* {
+        margin-left: 0;
+        margin-right: 0.5rem;
+    }
+
+    /* Mobile header navigation improvements */
+    header nav.md\:hidden a {
+        min-height: 48px;
+        min-width: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Ensure mobile navigation takes full width */
+    header .flex-1.max-w-2xl {
+        max-width: none;
+    }
+
+    /* Dashboard mobile navigation improvements */
+    .dashboard-notification-dropdown {
+        right: -20px;
+        width: 300px;
+    }
+
+    .rtl .dashboard-notification-dropdown {
+        left: -20px;
+        right: auto;
+        width: 300px;
+    }
+
+    /* Dashboard mobile navigation icons */
+    .md\:hidden a[asp-controller] {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Tablet-specific adjustments */
+@media (min-width: 641px) and (max-width: 1279px) {
+
+    /* Ensure proper spacing on tablets */
+    #main-content {
+        margin-right: 0 !important;
+    }
+}
+
+/* Feed page mobile optimizations */
+@media (max-width: 640px) {
+
+    /* Ensure feed content doesn't overflow */
+    .space-y-8>* {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Fix horizontal scrolling in stories section */
+    .overflow-x-auto {
         scrollbar-width: none;
         -ms-overflow-style: none;
     }
 
-    .no-scrollbar::-webkit-scrollbar {
+    .overflow-x-auto::-webkit-scrollbar {
         display: none;
     }
 
-    /* RTL Support */
-    .rtl {
-        direction: rtl;
+    /* Ensure images don't cause overflow */
+    img {
+        max-width: 100%;
+        height: auto;
     }
 
-    /* RTL-specific sidebar positioning */
-    .rtl .sidebar {
-        left: auto;
-        right: 0;
-        /* Mobile: hidden off-screen by default */
-        transform: translateX(100%);
-        transition: transform 300ms ease-in-out;
+    /* Fix grid layouts on mobile */
+    .grid-cols-2 {
+        grid-template-columns: 1fr 1fr;
     }
 
-    @media (min-width: 768px) {
-        .rtl .sidebar {
-            /* Desktop: always visible, no transform needed */
-            transform: none;
-            transition: none;
-        }
+    /* Ensure flex containers wrap properly */
+    .flex-wrap {
+        flex-wrap: wrap;
     }
 
-    /* Mobile drawer behavior for RTL */
-    @media (max-width: 767px) {
-
-        .rtl .sidebar-visible .sidebar,
-        .rtl .left-sidebar-visible .sidebar {
-            transform: translateX(0);
-        }
-    }
-
-    .rtl .sidebar-right {
-        right: auto;
-        left: 0;
-        transform: translateX(-100%);
-    }
-
-    .rtl .sidebar-right.translate-x-0 {
-        transform: translateX(0);
-    }
-
-    /* RTL main content margins - maintain same width as LTR */
-    .rtl #main-content {
-        margin-left: 0;
-        margin-right: 0.5rem;
-        /* Same as LTR px-2 */
-    }
-
-    @media (min-width: 640px) {
-        .rtl #main-content {
-            margin-right: 0.75rem;
-            /* Same as LTR sm:px-3 */
-        }
-    }
-
-    @media (min-width: 768px) {
-        .rtl #main-content {
-            margin-right: 5rem;
-            /* Same as LTR md:ml-20 */
-            margin-left: 0;
-        }
-    }
-
-    @media (min-width: 1280px) {
-        .rtl #main-content {
-            margin-right: 15rem;
-            /* Same as LTR xl:ml-60 */
-            margin-left: 0;
-        }
-
-        /* RTL right sidebar spacing - maintain same content width */
-        .rtl .xl\:mr-84 {
-            margin-right: 0;
-            margin-left: 21rem;
-            /* Same spacing as LTR but on left side */
-        }
-
-        /* Ensure RTL main content with right sidebar has same width as LTR */
-        .rtl main[class*="xl:mr-[21rem]"] {
-            margin-left: 21rem !important;
-            margin-right: 15rem !important;
-        }
-
-        /* Handle the dynamic class for RTL with right sidebar */
-        .rtl main.rtl\:xl\:ml-\[21rem\] {
-            margin-left: 21rem !important;
-            margin-right: 15rem !important;
-        }
-    }
-
-    /* Dashboard-specific RTL fixes */
-    .rtl .dashboard-body #main-content {
-        /* Ensure dashboard content maintains same width in RTL */
-        width: auto;
-        max-width: none;
-    }
-
-    @media (min-width: 768px) {
-        .rtl .dashboard-body #main-content {
-            margin-right: 5rem;
-            /* Same as LTR md:ml-20 */
-            margin-left: 0;
-        }
-    }
-
-    @media (min-width: 1280px) {
-        .rtl .dashboard-body #main-content {
-            margin-right: 15rem;
-            /* Same as LTR xl:ml-60 */
-            margin-left: 0;
-            /* Force consistent width calculation for dashboard */
-            width: calc(100vw - 15rem - 2rem) !important;
-            /* Account for padding */
-            max-width: calc(100vw - 15rem - 2rem) !important;
-        }
-    }
-
-    /* Dashboard sidebar RTL positioning */
-    .rtl .dashboard-body .sidebar {
-        left: auto;
-        right: 1rem;
-    }
-
-    @media (max-width: 767px) {
-        .rtl .dashboard-body .sidebar {
-            transform: translateX(calc(100% + 2rem));
-        }
-
-        .rtl .dashboard-body .sidebar.translate-x-0 {
-            transform: translateX(0);
-        }
-    }
-
-    /* Ensure dashboard container behaves consistently */
-    .rtl .dashboard-body #dashboard-container {
-        direction: rtl;
-    }
-
-    .rtl .dashboard-body #dashboard-container #main-content {
-        direction: ltr;
-        /* Keep content direction normal */
-    }
-
-    /* Fix dashboard content wrapper */
-    .rtl .dashboard-body #main-content>div {
-        width: 100%;
-        max-width: none;
-    }
-
-    /* RTL text alignment */
-    .rtl .text-left {
-        text-align: right;
-    }
-
-    .rtl .text-right {
-        text-align: left;
-    }
-
-    /* RTL flex direction adjustments */
-    .rtl .flex-row-reverse {
-        flex-direction: row-reverse;
-    }
-
-    /* RTL border radius adjustments */
-    .rtl .rounded-l-lg {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        border-top-right-radius: 0.5rem;
-        border-bottom-right-radius: 0.5rem;
-    }
-
-    .rtl .rounded-r-lg {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border-top-left-radius: 0.5rem;
-        border-bottom-left-radius: 0.5rem;
-    }
-
-    /* RTL dropdown positioning */
-    .rtl .dropdown-menu {
-        left: auto;
-        right: 0;
-    }
-
-    /* RTL notification positioning */
-    .rtl .notification-dropdown,
-    .rtl .mobile-notification-dropdown {
-        left: 0;
-        right: auto;
-    }
-
-    /* RTL story container scroll direction */
-    .rtl .overflow-x-auto {
-        direction: ltr;
-    }
-
-    .rtl .overflow-x-auto>* {
-        direction: rtl;
-    }
-
-    /* AI Assistant Animation State */
-    #ai-chat-widget.active {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0) scale(1);
-    }
-
-    /* Chat History Modal */
-    #chat-history-modal {
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-    }
-
-    #chat-history-modal.opacity-100 {
-        pointer-events: auto;
-    }
-
-    #chat-history-modal.opacity-0 {
-        pointer-events: none;
-    }
-
-    /* Chat message animations */
-    .chat-message {
-        animation: fadeInUp 0.3s ease-out;
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Typing indicator animation */
-    .typing-indicator .animate-bounce:nth-child(1) {
-        animation-delay: 0s;
-    }
-
-    .typing-indicator .animate-bounce:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-
-    .typing-indicator .animate-bounce:nth-child(3) {
-        animation-delay: 0.4s;
-    }
-
-    /* Badge Components */
-    .badge {
-        @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
-    }
-
-    .badge-default {
-        @apply border-transparent bg-primary text-primary-foreground hover:bg-primary/80;
-    }
-
-    .badge-secondary {
-        @apply border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80;
-    }
-
-    .badge-destructive {
-        @apply border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80;
-    }
-
-    .badge-outline {
-        @apply text-foreground;
-    }
-
-    /* Avatar Components */
-    .avatar {
-        @apply relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full;
-    }
-
-    .avatar-image {
-        @apply aspect-square h-full w-full;
-    }
-
-    .avatar-fallback {
-        @apply flex h-full w-full items-center justify-center rounded-full bg-muted;
-    }
-
-    /* Input Components */
-    .input {
-        @apply flex h-12 w-full rounded-2xl border border-border/60 bg-background/40 px-6 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-sm hover:border-border hover:bg-background/60 focus:bg-background focus:border-primary/60;
-    }
-
-    .textarea {
-        @apply flex min-h-[120px] w-full rounded-2xl border border-border/60 bg-background/40 px-6 py-4 text-sm ring-offset-background placeholder:text-muted-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-sm hover:border-border hover:bg-background/60 focus:bg-background focus:border-primary/60;
-    }
-
-    /* Select Components */
-    .select-trigger {
-        @apply flex h-12 w-full items-center justify-between rounded-2xl border border-input bg-background/50 px-4 py-2 text-sm ring-offset-background placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all;
-    }
-
-    /* Dropdown Menus */
-    .dropdown-content {
-        @apply bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200;
-    }
-
-    .dropdown-item {
-        @apply flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-foreground/90 hover:text-primary hover:bg-primary/5 transition-all cursor-pointer;
-    }
-
-    /* Separator */
-    .separator {
-        @apply shrink-0 bg-border;
-    }
-
-    .separator-horizontal {
-        @apply h-[1px] w-full;
-    }
-
-    .separator-vertical {
-        @apply h-full w-[1px];
-    }
-
-    /* Engineering Design System (Dashboard/Details) */
-    .eng-card {
-        @apply bg-card border border-border/50 rounded-[2rem] shadow-xl transition-all duration-300 hover:border-primary/20 hover:shadow-2xl;
-        background-color: hsla(var(--card), 0.4);
-        backdrop-filter: blur(24px);
-    }
-
-    .eng-card-header {
-        @apply p-4 border-b border-border/30 bg-muted/20 flex justify-between items-center px-6;
-    }
-
-    .eng-card-title {
-        @apply text-xs font-black uppercase tracking-widest text-foreground;
-    }
-
-    .eng-card-content {
-        @apply p-6 md:p-8;
-    }
-
-    /* Stats & Metrics */
-    .eng-stat-group {
-        @apply flex items-center gap-4 p-6 border border-border/50 rounded-[2rem] shadow-xl transition-all duration-300 hover:border-primary/20 hover:shadow-2xl;
-        background-color: hsla(var(--card), 0.4);
-        backdrop-filter: blur(24px);
-    }
-
-    .eng-stat-icon-wrap {
-        @apply w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg transition-transform group-hover:rotate-6;
-    }
-
-    .eng-stat-label {
-        @apply text-[10px] font-black text-muted-foreground uppercase tracking-widest block;
-    }
-
-    .eng-stat-value {
-        @apply text-2xl font-black text-foreground tabular-nums block tracking-tight;
-    }
-
-    .eng-stat-delta {
-        @apply text-[9px] font-black uppercase mt-1 flex items-center gap-1;
-    }
-
-    /* Progress Indicators */
-    .eng-progress-container {
-        @apply h-2 bg-muted rounded-full overflow-hidden shadow-inner ring-1 ring-border/30;
-    }
-
-    .eng-progress-bar {
-        @apply h-full rounded-full transition-all duration-1000 shadow-lg;
+    /* Fix button groups on mobile */
+    .flex.gap-1,
+    .flex.gap-2,
+    .flex.gap-3,
+    .flex.gap-4 {
+        flex-wrap: wrap;
     }
 }
 
-@layer utilities {
+/* No scrollbar utility class */
+.no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
 
-    /* RTL-specific utilities to maintain consistent content width */
-    .rtl\:xl\:ml-60 {
-        @media (min-width: 1280px) {
-            margin-left: 15rem;
-        }
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* RTL Support */
+.rtl {
+    direction: rtl;
+}
+
+/* RTL-specific sidebar positioning */
+.rtl .sidebar {
+    left: auto;
+    right: 0;
+    /* Mobile: hidden off-screen by default */
+    transform: translateX(100%);
+    transition: transform 300ms ease-in-out;
+}
+
+@media (min-width: 768px) {
+    .rtl .sidebar {
+        /* Desktop: always visible, no transform needed */
+        transform: none;
+        transition: none;
     }
+}
+
+/* Mobile drawer behavior for RTL */
+@media (max-width: 767px) {
+
+    .rtl .sidebar-visible .sidebar,
+    .rtl .left-sidebar-visible .sidebar {
+        transform: translateX(0);
+    }
+}
+
+.rtl .sidebar-right {
+    right: auto;
+    left: 0;
+    transform: translateX(-100%);
+}
+
+.rtl .sidebar-right.translate-x-0 {
+    transform: translateX(0);
+}
+
+/* RTL styles are now handled in the main sidebar spacing section above */
+/* This section was removed to prevent conflicts with the consolidated spacing rules */
+
+/* Dashboard sidebar RTL positioning */
+.rtl .dashboard-body .sidebar {
+    left: auto;
+    right: 1rem;
+}
+
+@media (max-width: 767px) {
+    .rtl .dashboard-body .sidebar {
+        transform: translateX(calc(100% + 2rem));
+    }
+
+    .rtl .dashboard-body .sidebar.translate-x-0 {
+        transform: translateX(0);
+    }
+}
+
+/* Ensure dashboard container behaves consistently */
+.rtl .dashboard-body #dashboard-container {
+    direction: rtl;
+}
+
+.rtl .dashboard-body #dashboard-container #main-content {
+    direction: ltr;
+    /* Keep content direction normal */
+}
+
+/* Fix dashboard content wrapper */
+.rtl .dashboard-body #main-content>div {
+    width: 100%;
+    max-width: none;
+}
+
+/* RTL text alignment */
+.rtl .text-left {
+    text-align: right;
+}
+
+.rtl .text-right {
+    text-align: left;
+}
+
+/* RTL flex direction adjustments */
+.rtl .flex-row-reverse {
+    flex-direction: row-reverse;
+}
+
+/* RTL border radius adjustments */
+.rtl .rounded-l-lg {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.rtl .rounded-r-lg {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+/* RTL dropdown positioning */
+.rtl .dropdown-menu {
+    left: auto;
+    right: 0;
+}
+
+/* RTL notification positioning */
+.rtl .notification-dropdown,
+.rtl .mobile-notification-dropdown {
+    left: 0;
+    right: auto;
+}
+
+/* RTL story container scroll direction */
+.rtl .overflow-x-auto {
+    direction: ltr;
+}
+
+.rtl .overflow-x-auto>* {
+    direction: rtl;
+}
+
+/* AI Assistant Animation State */
+#ai-chat-widget.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+/* Chat History Modal */
+#chat-history-modal {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#chat-history-modal.opacity-100 {
+    pointer-events: auto;
+}
+
+#chat-history-modal.opacity-0 {
+    pointer-events: none;
+}
+
+/* Chat message animations */
+.chat-message {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Typing indicator animation */
+.typing-indicator .animate-bounce:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.typing-indicator .animate-bounce:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator .animate-bounce:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Badge Components */
+.badge {
+    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+}
+
+.badge-default {
+    @apply border-transparent bg-primary text-primary-foreground hover:bg-primary/80;
+}
+
+.badge-secondary {
+    @apply border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80;
+}
+
+.badge-destructive {
+    @apply border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80;
+}
+
+.badge-outline {
+    @apply text-foreground;
+}
+
+/* Avatar Components */
+.avatar {
+    @apply relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full;
+}
+
+.avatar-image {
+    @apply aspect-square h-full w-full;
+}
+
+.avatar-fallback {
+    @apply flex h-full w-full items-center justify-center rounded-full bg-muted;
+}
+
+/* Input Components */
+.input {
+    @apply flex h-12 w-full rounded-2xl border border-border/60 bg-background/40 px-6 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-sm hover:border-border hover:bg-background/60 focus:bg-background focus:border-primary/60;
+}
+
+.textarea {
+    @apply flex min-h-[120px] w-full rounded-2xl border border-border/60 bg-background/40 px-6 py-4 text-sm ring-offset-background placeholder:text-muted-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/50 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-sm hover:border-border hover:bg-background/60 focus:bg-background focus:border-primary/60;
+}
+
+/* Select Components */
+.select-trigger {
+    @apply flex h-12 w-full items-center justify-between rounded-2xl border border-input bg-background/50 px-4 py-2 text-sm ring-offset-background placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all;
+}
+
+/* Dropdown Menus */
+.dropdown-content {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200;
+}
+
+.dropdown-item {
+    @apply flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-foreground/90 hover:text-primary hover:bg-primary/5 transition-all cursor-pointer;
+}
+
+/* Separator */
+.separator {
+    @apply shrink-0 bg-border;
+}
+
+.separator-horizontal {
+    @apply h-[1px] w-full;
+}
+
+.separator-vertical {
+    @apply h-full w-[1px];
+}
+
+/* Engineering Design System (Dashboard/Details) */
+.eng-card {
+    @apply bg-card border border-border/50 rounded-[2rem] shadow-xl transition-all duration-300 hover:border-primary/20 hover:shadow-2xl;
+    background-color: hsla(var(--card), 0.4);
+    backdrop-filter: blur(24px);
+}
+
+.eng-card-header {
+    @apply p-4 border-b border-border/30 bg-muted/20 flex justify-between items-center px-6;
+}
+
+.eng-card-title {
+    @apply text-xs font-black uppercase tracking-widest text-foreground;
+}
+
+.eng-card-content {
+    @apply p-6 md:p-8;
+}
+
+/* Stats & Metrics */
+.eng-stat-group {
+    @apply flex items-center gap-4 p-6 border border-border/50 rounded-[2rem] shadow-xl transition-all duration-300 hover:border-primary/20 hover:shadow-2xl;
+    background-color: hsla(var(--card), 0.4);
+    backdrop-filter: blur(24px);
+}
+
+.eng-stat-icon-wrap {
+    @apply w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg transition-transform group-hover:rotate-6;
+}
+
+.eng-stat-label {
+    @apply text-[10px] font-black text-muted-foreground uppercase tracking-widest block;
+}
+
+.eng-stat-value {
+    @apply text-2xl font-black text-foreground tabular-nums block tracking-tight;
+}
+
+.eng-stat-delta {
+    @apply text-[9px] font-black uppercase mt-1 flex items-center gap-1;
+}
+
+/* Progress Indicators */
+.eng-progress-container {
+    @apply h-2 bg-muted rounded-full overflow-hidden shadow-inner ring-1 ring-border/30;
+}
+
+.eng-progress-bar {
+    @apply h-full rounded-full transition-all duration-1000 shadow-lg;
+}
+
+
+@layer utilities {
 
     /* Glow Utilities */
     .shadow-glow-primary {
@@ -918,34 +1172,6 @@
 
     .shadow-glow-amber {
         box-shadow: 0 0 15px -3px hsla(38, 92%, 50%, 0.5), 0 0 6px -2px hsla(38, 92%, 50%, 0.3);
-    }
-
-    .rtl\:xl\:mr-60 {
-        @media (min-width: 1280px) {
-            margin-right: 15rem;
-        }
-    }
-
-    .rtl\:xl\:ml-\[21rem\] {
-        @media (min-width: 1280px) {
-            margin-left: 21rem;
-        }
-    }
-
-    .rtl\:xl\:mr-\[21rem\] {
-        @media (min-width: 1280px) {
-            margin-right: 21rem;
-        }
-    }
-
-    /* Force consistent main content width in RTL */
-    .rtl\:force-content-width {
-        @media (min-width: 1280px) {
-            margin-left: 21rem !important;
-            margin-right: 15rem !important;
-            width: auto !important;
-            max-width: none !important;
-        }
     }
 
     /* Custom Animations for Premium UI */
@@ -1677,7 +1903,7 @@ input:checked+.toggle-slider:before {
     }
 }
 
-/* Error Page Specific Styles */
+/* Error Page Specific Styles - Enhanced Responsive Design */
 .error-page {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -1694,6 +1920,194 @@ input:checked+.toggle-slider:before {
 
 .dark .error-card:hover {
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced 404 Page Responsive Styles */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile-first responsive improvements for error pages */
+@media (max-width: 640px) {
+    .auth-container {
+        padding-top: 5rem;
+        padding-bottom: 2rem;
+        align-items: flex-start;
+    }
+
+    /* Improve readability on small screens */
+    .text-\[12rem\] {
+        font-size: 6rem;
+    }
+
+    .text-\[10px\] {
+        font-size: 10px;
+    }
+
+    .text-\[9px\] {
+        font-size: 9px;
+    }
+
+    .text-\[8px\] {
+        font-size: 8px;
+    }
+
+    /* Better spacing for mobile */
+    .space-y-12>*+* {
+        margin-top: 2rem;
+    }
+
+    .space-y-10>*+* {
+        margin-top: 2rem;
+    }
+
+    /* Improve button accessibility */
+    button,
+    a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Better touch targets */
+    .touch-manipulation {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .auth-container {
+        padding-top: 6rem;
+        padding-bottom: 3rem;
+    }
+
+    .text-\[12rem\] {
+        font-size: 8rem;
+    }
+}
+
+/* Desktop enhancements */
+@media (min-width: 1025px) {
+    .auth-container {
+        padding-top: 8rem;
+        padding-bottom: 4rem;
+    }
+
+    /* Enhanced hover effects */
+    .group:hover .animate-\[spin_12s_linear_infinite\] {
+        animation-duration: 8s;
+    }
+
+    /* Better visual hierarchy */
+    .text-\[12rem\] {
+        font-size: 12rem;
+    }
+}
+
+/* RTL-specific improvements for error pages */
+[dir="rtl"] .border-l-2,
+[dir="rtl"] .border-l-4 {
+    border-left: none;
+    border-right-width: 2px;
+    border-right-color: hsl(var(--primary));
+    padding-left: 0;
+    padding-right: 0.75rem;
+}
+
+[dir="rtl"] .sm\:border-l-4 {
+    border-right-width: 4px;
+    padding-right: 1rem;
+}
+
+[dir="rtl"] .pl-3,
+[dir="rtl"] .pl-4 {
+    padding-left: 0;
+    padding-right: 0.75rem;
+}
+
+[dir="rtl"] .sm\:pl-4 {
+    padding-right: 1rem;
+}
+
+/* Enhanced animations for error pages */
+@keyframes error-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.animate-in.fade-in {
+    animation: error-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    .animate-\[spin_12s_linear_infinite\] {
+        animation: none;
+    }
+
+    .animate-in {
+        animation: none;
+    }
+
+    .transition-all,
+    .transition-transform,
+    .transition-colors {
+        transition: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .bg-card\/30 {
+        background-color: hsl(var(--card));
+        border-width: 2px;
+    }
+
+    .text-foreground\/5 {
+        color: hsl(var(--foreground) / 0.2);
+    }
+
+    .opacity-40 {
+        opacity: 0.8;
+    }
+
+    .opacity-60 {
+        opacity: 0.9;
+    }
+}
+
+/* Print styles for error pages */
+@media print {
+    .auth-container {
+        padding: 2rem;
+    }
+
+    .bg-primary {
+        background-color: #000 !important;
+        color: #fff !important;
+    }
+
+    .shadow-xl,
+    .shadow-2xl,
+    .backdrop-blur-xl {
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+
+    .animate-\[spin_12s_linear_infinite\] {
+        animation: none !important;
+    }
 }
 
 /* Form Styling */
@@ -2032,9 +2446,77 @@ input:checked+.toggle-slider:before {
     .sidebar-mobile-open span.md\:hidden {
         display: inline !important;
     }
-    
+
     .main-sidebar-mobile-open span.md\:hidden {
         display: inline !important;
+    }
+}
+
+/* ========================================
+ * SIMPLIFIED DESKTOP LAYOUT - NO COMPLEX TOGGLE
+ * ========================================
+ * 
+ * Large screens now use the same simple padding approach as other screen sizes.
+ * No complex margin calculations or sidebar state management needed.
+ * The existing simplified main content layout section above handles all screen sizes consistently.
+ * 
+ * ======================================== */
+    
+    /* RTL when right sidebar is hidden - expanded state width */
+    .rtl body.sidebar-expanded main#main-content.xl\:mr-0,
+    .rtl body.sidebar-expanded #main-content.xl\:mr-0,
+    .rtl body.sidebar-expanded .main-content.xl\:mr-0 {
+        width: calc(100vw - 15rem) !important; /* Full width minus expanded sidebar and gap */
+        max-width: calc(100vw - 15rem) !important;
+    }
+    
+    /* RTL when right sidebar is hidden - collapsed state width */
+    .rtl body.sidebar-collapsed main#main-content.xl\:mr-0,
+    .rtl body.sidebar-collapsed #main-content.xl\:mr-0,
+    .rtl body.sidebar-collapsed .main-content.xl\:mr-0 {
+        width: calc(100vw - 5rem) !important; /* Full width minus collapsed sidebar and gap */
+        max-width: calc(100vw - 5rem) !important;
+    }
+
+
+/* Smooth transitions for desktop toggle */
+@media (min-width: 1280px) {
+    .sidebar {
+        transition: width 300ms ease-in-out !important;
+    }
+    
+    #main-content {
+        /* Removed transition for no animation */
+    }
+    
+    .sidebar-text {
+        transition: opacity 200ms ease-in-out;
+    }
+}
+
+/* Desktop Toggle Button States */
+@media (min-width: 768px) {
+    #desktop-sidebar-toggle {
+        transition: all 200ms ease-in-out;
+    }
+    
+    #desktop-sidebar-toggle:hover {
+        background-color: hsl(var(--accent));
+        color: hsl(var(--accent-foreground));
+        transform: scale(1.05);
+    }
+    
+    #desktop-sidebar-toggle:active {
+        transform: scale(0.95);
+    }
+    
+    /* Icon rotation for visual feedback */
+    #desktop-sidebar-toggle i {
+        transition: transform 200ms ease-in-out;
+    }
+    
+    .sidebar-collapsed #desktop-sidebar-toggle i {
+        transform: rotate(180deg);
     }
 }
 
@@ -2051,7 +2533,7 @@ input:checked+.toggle-slider:before {
     @apply inline-block h-4 w-4 transform rounded-full bg-white transition-transform;
 }
 
-.toggle-switch input[type="checkbox"]:checked + .toggle-slider {
+.toggle-switch input[type="checkbox"]:checked+.toggle-slider {
     @apply translate-x-5;
 }
 
@@ -2059,10 +2541,180 @@ input:checked+.toggle-slider:before {
     background-color: hsl(var(--muted));
 }
 
-.toggle-switch input[type="checkbox"]:checked + .toggle-slider {
+.toggle-switch input[type="checkbox"]:checked+.toggle-slider {
     background-color: hsl(var(--primary));
 }
 
 .toggle-switch:has(input[type="checkbox"]:checked) {
     background-color: hsl(var(--primary) / 0.2);
+}
+/* Gallery Styles */
+.gallery-item {
+  transition: all 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-2px);
+}
+
+.gallery-item img {
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+/* Upload form styles */
+#uploadForm {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Image view styles */
+.image-view-container {
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Gallery grid responsive */
+@media (max-width: 640px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .gallery-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Privacy indicators */
+.privacy-indicator {
+  backdrop-filter: blur(4px);
+}
+
+/* Action buttons */
+.gallery-actions {
+  backdrop-filter: blur(4px);
+}
+
+.gallery-actions button {
+  transition: all 0.2s ease;
+}
+
+.gallery-actions button:hover {
+  transform: scale(1.1);
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Scrollbar Hide Utility */
+.scrollbar-hide {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none; /* WebKit */
+}
+
+/* Responsive Navigation Tabs */
+@layer utilities {
+    /* Extra small breakpoint for showing text labels */
+    @media (min-width: 475px) {
+        .xs\:inline {
+            display: inline;
+        }
+    }
+    
+    /* Profile navigation responsive improvements */
+    .profile-nav-container {
+        /* Smooth scrolling for touch devices */
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+    
+    /* Ensure navigation tabs don't shrink too much on mobile */
+    .profile-nav-tab {
+        flex-shrink: 0;
+        min-width: 44px; /* Minimum touch target size */
+    }
+    
+    /* Mobile-first responsive padding for navigation tabs */
+    @media (max-width: 474px) {
+        .profile-nav-tab {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+    }
+    
+    @media (min-width: 475px) {
+        .profile-nav-tab {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+    
+    @media (min-width: 640px) {
+        .profile-nav-tab {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+    }
+}
+
+/* Profile Navigation Scroll Indicators */
+.profile-nav-scroll::before,
+.profile-nav-scroll::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.profile-nav-scroll::before {
+    left: 0;
+    background: linear-gradient(to right, hsl(var(--background)), transparent);
+}
+
+.profile-nav-scroll::after {
+    right: 0;
+    background: linear-gradient(to left, hsl(var(--background)), transparent);
+}
+
+/* Hide scroll indicators when not needed */
+.profile-nav-scroll.no-scroll::before,
+.profile-nav-scroll.no-scroll::after {
+    opacity: 0;
 }

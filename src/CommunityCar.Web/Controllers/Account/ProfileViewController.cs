@@ -11,15 +11,21 @@ namespace CommunityCar.Web.Controllers.Account;
 public class ProfileViewController : Controller
 {
     private readonly IProfileViewService _profileViewService;
+    private readonly IProfileService _profileService;
+    private readonly IGamificationService _gamificationService;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<ProfileViewController> _logger;
 
     public ProfileViewController(
         IProfileViewService profileViewService,
+        IProfileService profileService,
+        IGamificationService gamificationService,
         ICurrentUserService currentUserService,
         ILogger<ProfileViewController> logger)
     {
         _profileViewService = profileViewService;
+        _profileService = profileService;
+        _gamificationService = gamificationService;
         _currentUserService = currentUserService;
         _logger = logger;
     }
@@ -30,6 +36,7 @@ public class ProfileViewController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            await SetProfileHeaderDataAsync(currentUserId);
             
             var stats = await _profileViewService.GetProfileViewStatsAsync(currentUserId);
             var viewers = await _profileViewService.GetTopViewersAsync(currentUserId, pageSize, DateTime.Today.AddDays(-30));
@@ -61,6 +68,7 @@ public class ProfileViewController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            await SetProfileHeaderDataAsync(currentUserId);
             var start = startDate ?? DateTime.Today.AddDays(-30);
             var end = endDate ?? DateTime.Today;
 
@@ -97,6 +105,7 @@ public class ProfileViewController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            await SetProfileHeaderDataAsync(currentUserId);
             var viewHistory = await _profileViewService.GetUserViewHistoryAsync(currentUserId, page, pageSize);
 
             ViewBag.Page = page;
@@ -203,6 +212,41 @@ public class ProfileViewController : Controller
         {
             _logger.LogError(ex, "Error getting profile stats for user {UserId}", userId);
             return Json(new ProfileViewStatsVM());
+        }
+    }
+
+    private async Task SetProfileHeaderDataAsync(Guid userId)
+    {
+        try
+        {
+            var profile = await _profileService.GetProfileAsync(userId);
+            if (profile != null)
+            {
+                ViewBag.FullName = profile.FullName;
+                ViewBag.Email = profile.Email;
+                ViewBag.UserName = profile.UserName;
+                ViewBag.Bio = profile.Bio;
+                ViewBag.BioAr = profile.BioAr;
+                ViewBag.City = profile.City;
+                ViewBag.Country = profile.Country;
+                ViewBag.ProfilePictureUrl = profile.ProfilePictureUrl;
+                ViewBag.CreatedAt = profile.CreatedAt;
+                ViewBag.PostsCount = profile.PostsCount;
+                ViewBag.CommentsCount = profile.CommentsCount;
+                ViewBag.LikesReceived = profile.LikesReceived;
+                
+                var stats = await _gamificationService.GetUserStatsAsync(userId);
+                if (stats != null)
+                {
+                    ViewBag.Level = stats.Level;
+                    ViewBag.TotalPoints = stats.TotalPoints;
+                    ViewBag.Rank = stats.Rank;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to load profile header data for analytics");
         }
     }
 }

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Upload Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .upload-form {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="file"], input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .gallery-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .gallery-item-info {
+            padding: 10px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gallery Upload Test</h1>
+    
+    <div class="upload-form">
+        <h2>Upload Image</h2>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="imageFile">Select Image:</label>
+                <input type="file" id="imageFile" name="file" accept="image/jpeg,image/png,image/webp" required>
+                <small>Supported formats: JPEG, PNG, WebP (Max 5MB)</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="caption">Caption (Optional):</label>
+                <input type="text" id="caption" name="caption" placeholder="Enter image caption">
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="isPublic" name="isPublic" checked> Make Public
+                </label>
+            </div>
+            
+            <button type="submit">Upload Image</button>
+        </form>
+        
+        <div id="status"></div>
+    </div>
+    
+    <div>
+        <h2>Gallery</h2>
+        <button onclick="loadGallery()">Refresh Gallery</button>
+        <div id="gallery" class="gallery-grid"></div>
+    </div>
+
+    <script>
+        // Test configuration
+        const BASE_URL = 'https://localhost:7001'; // Adjust this to your app's URL
+        
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const fileInput = document.getElementById('imageFile');
+            const captionInput = document.getElementById('caption');
+            const isPublicInput = document.getElementById('isPublic');
+            
+            if (!fileInput.files[0]) {
+                showStatus('Please select a file', 'error');
+                return;
+            }
+            
+            // Validate file size (5MB)
+            if (fileInput.files[0].size > 5 * 1024 * 1024) {
+                showStatus('File size exceeds 5MB limit', 'error');
+                return;
+            }
+            
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(fileInput.files[0].type)) {
+                showStatus('Invalid file type. Only JPEG, PNG, and WebP are allowed.', 'error');
+                return;
+            }
+            
+            formData.append('file', fileInput.files[0]);
+            formData.append('caption', captionInput.value);
+            formData.append('isPublic', isPublicInput.checked);
+            
+            try {
+                showStatus('Uploading...', 'info');
+                
+                const response = await fetch(`${BASE_URL}/profile/gallery/upload`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include' // Include cookies for authentication
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showStatus('Image uploaded successfully!', 'success');
+                    document.getElementById('uploadForm').reset();
+                    loadGallery(); // Refresh gallery
+                } else {
+                    showStatus(`Upload failed: ${result.message}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`Upload error: ${error.message}`, 'error');
+            }
+        });
+        
+        async function loadGallery() {
+            try {
+                const response = await fetch(`${BASE_URL}/profile/gallery`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    // This would need to be adjusted based on your actual gallery endpoint
+                    // For now, just show a message
+                    showStatus('Gallery loaded (endpoint needs to return JSON)', 'info');
+                } else {
+                    showStatus('Failed to load gallery', 'error');
+                }
+            } catch (error) {
+                showStatus(`Gallery load error: ${error.message}`, 'error');
+            }
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            
+            // Clear status after 5 seconds
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Load gallery on page load
+        window.addEventListener('load', loadGallery);
+    </script>
+</body>
+</html>

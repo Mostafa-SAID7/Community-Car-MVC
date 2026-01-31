@@ -30,7 +30,6 @@ using CommunityCar.Infrastructure.Persistence.Repositories.Account.Social;
 using CommunityCar.Infrastructure.Persistence.Repositories.Account.Media;
 using CommunityCar.Infrastructure.Persistence.Repositories.Account.Management;
 using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
-using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
 using CommunityCar.Infrastructure.Persistence.Repositories.AI;
 using CommunityCar.Infrastructure.Persistence.Repositories.Chat;
 using CommunityCar.Infrastructure.Persistence.UnitOfWork;
@@ -59,7 +58,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using CommunityCar.Application.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Domain.Entities.Account.Authorization;
 using CommunityCar.Application.Common.Interfaces.Repositories.Authorization;
@@ -105,7 +103,7 @@ public static class DependencyInjection
             options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 
             // Email confirmation
-            options.SignIn.RequireConfirmedEmail = true;
+            options.SignIn.RequireConfirmedEmail = false; // Allow external logins without email confirmation
             options.SignIn.RequireConfirmedAccount = false;
 
             // Token settings
@@ -117,13 +115,34 @@ public static class DependencyInjection
 
         services.ConfigureApplicationCookie(options =>
         {
-            options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/auth/login");
-            options.LogoutPath = new Microsoft.AspNetCore.Http.PathString("/auth/logout");
-            options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/auth/access-denied");
+            options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/login");
+            options.LogoutPath = new Microsoft.AspNetCore.Http.PathString("/logout");
+            options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/access-denied");
             options.Cookie.HttpOnly = true;
             options.ExpireTimeSpan = TimeSpan.FromDays(30);
             options.SlidingExpiration = true;
         });
+
+        // Configure external authentication providers
+        services.AddAuthentication()
+            .AddGoogle(options =>
+            {
+                var googleSettings = configuration.GetSection("SocialAuth:Google");
+                options.ClientId = googleSettings["ClientId"] ?? "";
+                options.ClientSecret = googleSettings["ClientSecret"] ?? "";
+                options.SaveTokens = true;
+                options.Scope.Add("profile");
+                options.Scope.Add("email");
+            })
+            .AddFacebook(options =>
+            {
+                var facebookSettings = configuration.GetSection("SocialAuth:Facebook");
+                options.AppId = facebookSettings["AppId"] ?? "";
+                options.AppSecret = facebookSettings["AppSecret"] ?? "";
+                options.SaveTokens = true;
+                options.Scope.Add("email");
+                options.Scope.Add("public_profile");
+            });
 
         services.AddScoped<IConversationRepository, ConversationRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
@@ -195,6 +214,7 @@ public static class DependencyInjection
         services.AddScoped<ITrainingManagementService, TrainingManagementService>();
         services.AddScoped<ITrainingHistoryService, TrainingHistoryService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IEmailTemplateService, EmailTemplateService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IPermissionService, PermissionService>();
         services.AddScoped<INotificationService, NotificationService>();
@@ -255,21 +275,6 @@ public static class DependencyInjection
             services.AddHostedService<ScheduledJobsHostedService>();
         }
 
-        // Add Authentication (Cookie only)
-        services.AddAuthentication();
-
-        // Configure cookie authentication
-        services.ConfigureApplicationCookie(options =>
-        {
-            options.LoginPath = "/Login";
-            options.LogoutPath = "/Logout";
-            options.AccessDeniedPath = "/AccessDenied";
-            options.ExpireTimeSpan = TimeSpan.FromDays(30);
-            options.SlidingExpiration = true;
-            options.Cookie.HttpOnly = true;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            options.Cookie.SameSite = SameSiteMode.Strict;
-        });
 
         // Seeding
         services.AddScoped<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>(provider =>

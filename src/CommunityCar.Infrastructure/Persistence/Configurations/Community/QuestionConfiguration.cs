@@ -25,6 +25,13 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
         builder.Property(q => q.BodyAr)
             .HasMaxLength(5000);
 
+        builder.Property(q => q.Slug)
+            .IsRequired()
+            .HasMaxLength(150);
+
+        builder.HasIndex(q => q.Slug)
+            .IsUnique();
+
         builder.Property(q => q.Tags)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),

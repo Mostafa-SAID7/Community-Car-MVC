@@ -51,4 +51,12 @@ public class ReviewsRepository : BaseRepository<Review>, IReviewsRepository
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync();
     }
+    public async Task<IEnumerable<Review>> GetTopApprovedAsync(int count)
+    {
+        return await Context.Reviews
+            .Where(r => r.IsApproved)
+            .OrderByDescending(r => r.CreatedAt)
+            .Take(count)
+            .ToListAsync();
+    }
 }

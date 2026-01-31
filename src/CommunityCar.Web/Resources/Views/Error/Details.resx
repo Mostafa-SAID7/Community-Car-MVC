@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ErrorDetails" xml:space="preserve">
+    <value>Error Details</value>
+  </data>
+  <data name="SystemFailureArchive" xml:space="preserve">
+    <value>SYSTEM_FAILURE_ARCHIVE</value>
+  </data>
+  <data name="ApplicationError" xml:space="preserve">
+    <value>Application Error</value>
+  </data>
+  <data name="CriticalExceptionDetected" xml:space="preserve">
+    <value>CRITICAL_EXCEPTION_DETECTED</value>
+  </data>
+  <data name="RevertIndex" xml:space="preserve">
+    <value>REVERT_INDEX</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>BACK</value>
+  </data>
+  <data name="IncidentSummary" xml:space="preserve">
+    <value>INCIDENT_SUMMARY</value>
+  </data>
+  <data name="ErrorCode" xml:space="preserve">
+    <value>ERR_CODE</value>
+  </data>
+  <data name="LoadingIncidentTelemetry" xml:space="preserve">
+    <value>Loading incident telemetry...</value>
+  </data>
+  <data name="Timestamp" xml:space="preserve">
+    <value>TIMESTAMP</value>
+  </data>
+  <data name="SourceNode" xml:space="preserve">
+    <value>SOURCE_NODE</value>
+  </data>
+  <data name="LocatingNode" xml:space="preserve">
+    <value>LOCATING_NODE</value>
+  </data>
+  <data name="DiagnosticTraceMatrix" xml:space="preserve">
+    <value>DIAGNOSTIC_TRACE_MATRIX</value>
+  </data>
+  <data name="InitExtraction" xml:space="preserve">
+    <value>INIT_EXTRACTION</value>
+  </data>
+  <data name="ShowDetails" xml:space="preserve">
+    <value>SHOW_DETAILS</value>
+  </data>
+  <data name="ExceptionLog" xml:space="preserve">
+    <value>EXCEPTION_LOG</value>
+  </data>
+  <data name="AwaitingManualOverride" xml:space="preserve">
+    <value>Awaiting manual override...</value>
+  </data>
+  <data name="StackTelemetry" xml:space="preserve">
+    <value>STACK_TELEMETRY</value>
+  </data>
+  <data name="RegistryLocked" xml:space="preserve">
+    <value>Registry locked. Pending sequence.</value>
+  </data>
+  <data name="OperationalDirectives" xml:space="preserve">
+    <value>OPERATIONAL_DIRECTIVES</value>
+  </data>
+  <data name="ExecuteRetry" xml:space="preserve">
+    <value>EXECUTE_RETRY</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>RETRY</value>
+  </data>
+  <data name="AbortToBase" xml:space="preserve">
+    <value>ABORT_TO_BASE</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>HOME</value>
+  </data>
+  <data name="FileIncidentReport" xml:space="preserve">
+    <value>FILE_INCIDENT_REPORT</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>REPORT</value>
+  </data>
+  <data name="SystemIntelligence" xml:space="preserve">
+    <value>SYSTEM_INTELLIGENCE</value>
+  </data>
+  <data name="SystemIntelligenceDescription" xml:space="preserve">
+    <value>Redundant processors are analyzing this failure node. Diagnostic reports are transmitted to the engineering detachment automatically.</value>
+  </data>
+  <data name="UrgentRelay" xml:space="preserve">
+    <value>URGENT_RELAY</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>CONTACT</value>
+  </data>
+  <data name="ReportErrorIssue" xml:space="preserve">
+    <value>Report Error Issue</value>
+  </data>
+  <data name="YourName" xml:space="preserve">
+    <value>Your Name</value>
+  </data>
+  <data name="YourEmail" xml:space="preserve">
+    <value>Your Email</value>
+  </data>
+  <data name="PriorityLevel" xml:space="preserve">
+    <value>Priority Level</value>
+  </data>
+  <data name="PriorityLow" xml:space="preserve">
+    <value>Low - Minor inconvenience</value>
+  </data>
+  <data name="PriorityMedium" xml:space="preserve">
+    <value>Medium - Affects functionality</value>
+  </data>
+  <data name="PriorityHigh" xml:space="preserve">
+    <value>High - Blocks important features</value>
+  </data>
+  <data name="PriorityCritical" xml:space="preserve">
+    <value>Critical - System unusable</value>
+  </data>
+  <data name="DescribeProblem" xml:space="preserve">
+    <value>Describe the Problem</value>
+  </data>
+  <data name="DescribeProblemPlaceholder" xml:space="preserve">
+    <value>Please describe what went wrong...</value>
+  </data>
+  <data name="StepsToReproduce" xml:space="preserve">
+    <value>Steps to Reproduce</value>
+  </data>
+  <data name="StepsToReproducePlaceholder" xml:space="preserve">
+    <value>1. Go to...&#10;2. Click on...&#10;3. See error...</value>
+  </data>
+  <data name="ExpectedBehavior" xml:space="preserve">
+    <value>Expected Behavior</value>
+  </data>
+  <data name="ExpectedBehaviorPlaceholder" xml:space="preserve">
+    <value>What should have happened?</value>
+  </data>
+  <data name="ActualBehavior" xml:space="preserve">
+    <value>Actual Behavior</value>
+  </data>
+  <data name="ActualBehaviorPlaceholder" xml:space="preserve">
+    <value>What actually happened?</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="SubmitReport" xml:space="preserve">
+    <value>Submit Report</value>
+  </data>
+  <data name="ReportSubmitted" xml:space="preserve">
+    <value>Report Submitted!</value>
+  </data>
+  <data name="ReportSubmittedDescription" xml:space="preserve">
+    <value>Your error report has been submitted successfully.</value>
+  </data>
+  <data name="TicketId" xml:space="preserve">
+    <value>Ticket ID</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="NeedHelp" xml:space="preserve">
+    <value>Need Help?</value>
+  </data>
+  <data name="NeedHelpDescription" xml:space="preserve">
+    <value>If this error persists, please contact our support team with the error ID above.</value>
+  </data>
+  <data name="EmailSupport" xml:space="preserve">
+    <value>Email Support</value>
+  </data>
+  <data name="HelpCenter" xml:space="preserve">
+    <value>Help Center</value>
+  </data>
+  <data name="HideDetails" xml:space="preserve">
+    <value>Hide Details</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sending...</value>
+  </data>
+  <data name="SubmitFailed" xml:space="preserve">
+    <value>Failed to submit error report: </value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Failed to submit error report. Please try again later.</value>
+  </data>
+  <data name="MockMessage" xml:space="preserve">
+    <value>System connectivity interruption detected in sub-module sequence.</value>
+  </data>
+  <data name="MockDetails" xml:space="preserve">
+    <value>The requested view could not be located in the expected directories.</value>
+  </data>
+  <data name="MockStackTrace" xml:space="preserve">
+    <value>Mock stack trace for demonstration purposes...</value>
+  </data>
+</root>

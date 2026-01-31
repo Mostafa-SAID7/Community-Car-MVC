@@ -11,4 +11,5 @@ public interface IQARepository : IBaseRepository<Question>
     Task UpdateAnswerAsync(Answer answer);
     Task<Question?> GetQuestionByIdAsync(Guid id);
     Task<Question?> GetQuestionBySlugAsync(string slug);
+    Task<IEnumerable<Question>> GetTopQuestionsAsync(int count);
 }

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Width Fix Test</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .left-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            background: #2563eb;
+            color: white;
+            z-index: 30;
+            transition: width 300ms ease-in-out;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .right-sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 20rem;
+            height: 100vh;
+            background: #059669;
+            color: white;
+            z-index: 30;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        
+        /* Default expanded state */
+        .left-sidebar {
+            width: 14rem;
+        }
+        
+        /* Collapsed state */
+        body.sidebar-collapsed .left-sidebar {
+            width: 4rem;
+        }
+        
+        #main-content {
+            min-height: 100vh;
+            background: white;
+            padding: 2rem;
+            box-sizing: border-box;
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: block !important;
+            transition: margin-left 300ms ease-in-out, margin-right 300ms ease-in-out, width 300ms ease-in-out;
+        }
+        
+        /* Default expanded state - both sidebars visible */
+        #main-content {
+            margin-left: 15rem; /* 14rem sidebar + 1rem gap */
+            margin-right: 21rem; /* 20rem sidebar + 1rem gap */
+            width: calc(100vw - 36rem); /* Full width minus both sidebars and gaps */
+            max-width: calc(100vw - 36rem);
+        }
+        
+        /* Collapsed state - left sidebar collapsed, right sidebar visible */
+        body.sidebar-collapsed #main-content {
+            margin-left: 5rem; /* 4rem sidebar + 1rem gap */
+            margin-right: 21rem; /* 20rem sidebar + 1rem gap */
+            width: calc(100vw - 26rem); /* Full width minus collapsed sidebar, right sidebar and gaps */
+            max-width: calc(100vw - 26rem);
+        }
+        
+        /* When right sidebar is hidden - expanded state */
+        body:not(.sidebar-collapsed) #main-content.no-right-sidebar {
+            margin-right: 0;
+            width: calc(100vw - 15rem); /* Full width minus expanded sidebar and gap */
+            max-width: calc(100vw - 15rem);
+        }
+        
+        /* When right sidebar is hidden - collapsed state */
+        body.sidebar-collapsed #main-content.no-right-sidebar {
+            margin-right: 0;
+            width: calc(100vw - 5rem); /* Full width minus collapsed sidebar and gap */
+            max-width: calc(100vw - 5rem);
+        }
+        
+        .toggle-btn {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 40;
+            padding: 0.5rem 1rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .toggle-btn:hover {
+            background: #2563eb;
+        }
+        
+        .hide-right-btn {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 40;
+            padding: 0.5rem 1rem;
+            background: #059669;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .hide-right-btn:hover {
+            background: #047857;
+        }
+        
+        .content-card {
+            background: #f9fafb;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .status-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: #1e40af;
+        }
+        
+        .status-info p {
+            margin: 0.25rem 0;
+            font-size: 0.875rem;
+            color: #1e3a8a;
+        }
+        
+        .right-sidebar.hidden {
+            display: none;
+        }
+        
+        @media (max-width: 1279px) {
+            .left-sidebar {
+                width: 4rem !important;
+            }
+            
+            #main-content {
+                margin-left: 5rem !important;
+                margin-right: 0 !important;
+                width: calc(100vw - 5rem) !important;
+                max-width: calc(100vw - 5rem) !important;
+            }
+            
+            .right-sidebar {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .left-sidebar {
+                transform: translateX(-100%);
+            }
+            
+            #main-content {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="left-sidebar" id="left-sidebar">
+        <h3>Left Sidebar</h3>
+        <p>This sidebar toggles between expanded (14rem) and collapsed (4rem) states.</p>
+        <div style="margin-top: 2rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                <div style="width: 1.5rem; height: 1.5rem; background: rgba(255,255,255,0.2); border-radius: 0.25rem;"></div>
+                <span class="sidebar-text">Dashboard</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                <div style="width: 1.5rem; height: 1.5rem; background: rgba(255,255,255,0.2); border-radius: 0.25rem;"></div>
+                <span class="sidebar-text">Users</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                <div style="width: 1.5rem; height: 1.5rem; background: rgba(255,255,255,0.2); border-radius: 0.25rem;"></div>
+                <span class="sidebar-text">Settings</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="right-sidebar" id="right-sidebar">
+        <h3>Right Sidebar</h3>
+        <p>This sidebar is 20rem wide and can be hidden/shown.</p>
+        <div style="margin-top: 2rem;">
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 0.25rem; margin-bottom: 1rem;">
+                <h4 style="margin: 0 0 0.5rem 0;">Widget 1</h4>
+                <p style="margin: 0; font-size: 0.875rem;">Some content here</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 0.25rem; margin-bottom: 1rem;">
+                <h4 style="margin: 0 0 0.5rem 0;">Widget 2</h4>
+                <p style="margin: 0; font-size: 0.875rem;">More content here</p>
+            </div>
+        </div>
+    </div>
+    
+    <button class="toggle-btn" onclick="toggleLeftSidebar()">Toggle Left Sidebar</button>
+    <button class="hide-right-btn" onclick="toggleRightSidebar()">Toggle Right Sidebar</button>
+    
+    <main id="main-content">
+        <div class="status-info">
+            <h3>Current Status</h3>
+            <p><strong>Screen width:</strong> <span id="screen-width"></span>px</p>
+            <p><strong>Left sidebar state:</strong> <span id="sidebar-state">expanded</span></p>
+            <p><strong>Right sidebar:</strong> <span id="right-sidebar-state">visible</span></p>
+            <p><strong>Main content margin-left:</strong> <span id="margin-left"></span></p>
+            <p><strong>Main content margin-right:</strong> <span id="margin-right"></span></p>
+            <p><strong>Main content width:</strong> <span id="content-width"></span></p>
+            <p><strong>Body classes:</strong> <span id="body-classes"></span></p>
+        </div>
+        
+        <div class="content-card">
+            <h1>Main Content Width Fix Test</h1>
+            <p>This test demonstrates the fix for the main content visibility and width issues when the sidebar is toggled.</p>
+            
+            <h2>The Problem</h2>
+            <ul>
+                <li>Main content was hidden on large screens when sidebar classes were applied</li>
+                <li>When sidebar toggled between expanded/collapsed, main content width didn't adjust properly</li>
+                <li>Content would disappear or have incorrect margins</li>
+            </ul>
+            
+            <h2>The Solution</h2>
+            <ul>
+                <li><strong>Visibility enforcement:</strong> CSS rules with <code>opacity: 1 !important</code>, <code>visibility: visible !important</code>, <code>display: block !important</code></li>
+                <li><strong>Width calculations:</strong> Proper <code>calc(100vw - Xrem)</code> formulas for different states</li>
+                <li><strong>Smooth transitions:</strong> 300ms ease-in-out transitions for margin and width changes</li>
+                <li><strong>Multiple sidebar support:</strong> Handles both left and right sidebars correctly</li>
+            </ul>
+        </div>
+        
+        <div class="content-card">
+            <h2>Test Instructions</h2>
+            <ol>
+                <li><strong>Desktop (1280px+):</strong> Both sidebars should be visible, main content should be properly positioned between them</li>
+                <li><strong>Toggle Left Sidebar:</strong> Click "Toggle Left Sidebar" - content should smoothly adjust width and margin</li>
+                <li><strong>Toggle Right Sidebar:</strong> Click "Toggle Right Sidebar" - content should expand to fill the space</li>
+                <li><strong>Resize Window:</strong> Test different screen sizes to ensure responsive behavior</li>
+                <li><strong>Check Visibility:</strong> Main content should ALWAYS be visible, never hidden</li>
+            </ol>
+        </div>
+        
+        <div class="content-card">
+            <h2>Expected Behavior</h2>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                <thead>
+                    <tr style="background: #f3f4f6;">
+                        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e5e7eb;">State</th>
+                        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e5e7eb;">Left Margin</th>
+                        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e5e7eb;">Right Margin</th>
+                        <th style="padding: 0.75rem; text-align: left; border: 1px solid #e5e7eb;">Width</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Expanded + Right Sidebar</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">15rem</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">21rem</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">calc(100vw - 36rem)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Collapsed + Right Sidebar</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">5rem</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">21rem</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">calc(100vw - 26rem)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Expanded + No Right Sidebar</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">15rem</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">0</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">calc(100vw - 15rem)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">Collapsed + No Right Sidebar</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">5rem</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">0</td>
+                        <td style="padding: 0.75rem; border: 1px solid #e5e7eb;">calc(100vw - 5rem)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="content-card">
+            <h2>Fix Implementation</h2>
+            <p>The fix was implemented in the following files:</p>
+            <ul>
+                <li><strong>CSS:</strong> <code>src/CommunityCar.Web/Styles/app.css</code> - Width calculations and visibility enforcement</li>
+                <li><strong>JavaScript:</strong> <code>src/CommunityCar.Web/wwwroot/js/layout-interactions.js</code> - Early initialization and state management</li>
+                <li><strong>Compiled CSS:</strong> <code>src/CommunityCar.Web/wwwroot/css/app.min.css</code> - Production-ready styles</li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        let sidebarCollapsed = false;
+        let rightSidebarVisible = true;
+        
+        function toggleLeftSidebar() {
+            const body = document.body;
+            const mainContent = document.getElementById('main-content');
+            
+            if (sidebarCollapsed) {
+                body.classList.remove('sidebar-collapsed');
+                body.classList.add('sidebar-expanded');
+                sidebarCollapsed = false;
+            } else {
+                body.classList.add('sidebar-collapsed');
+                body.classList.remove('sidebar-expanded');
+                sidebarCollapsed = true;
+            }
+            
+            updateStatus();
+        }
+        
+        function toggleRightSidebar() {
+            const rightSidebar = document.getElementById('right-sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (rightSidebarVisible) {
+                rightSidebar.classList.add('hidden');
+                mainContent.classList.add('no-right-sidebar');
+                rightSidebarVisible = false;
+            } else {
+                rightSidebar.classList.remove('hidden');
+                mainContent.classList.remove('no-right-sidebar');
+                rightSidebarVisible = true;
+            }
+            
+            updateStatus();
+        }
+        
+        function updateStatus() {
+            const mainContent = document.getElementById('main-content');
+            const computedStyle = window.getComputedStyle(mainContent);
+            
+            document.getElementById('screen-width').textContent = window.innerWidth;
+            document.getElementById('sidebar-state').textContent = sidebarCollapsed ? 'collapsed' : 'expanded';
+            document.getElementById('right-sidebar-state').textContent = rightSidebarVisible ? 'visible' : 'hidden';
+            document.getElementById('margin-left').textContent = computedStyle.marginLeft;
+            document.getElementById('margin-right').textContent = computedStyle.marginRight;
+            document.getElementById('content-width').textContent = computedStyle.width;
+            document.getElementById('body-classes').textContent = document.body.className || 'none';
+        }
+        
+        // Initialize
+        document.body.classList.add('sidebar-expanded');
+        updateStatus();
+        
+        // Update on resize
+        window.addEventListener('resize', updateStatus);
+        
+        // Ensure main content is always visible
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.style.opacity = '1';
+            mainContent.style.visibility = 'visible';
+            mainContent.style.display = 'block';
+        }
+        
+        // Hide sidebar text when collapsed
+        function updateSidebarText() {
+            const sidebarTexts = document.querySelectorAll('.sidebar-text');
+            sidebarTexts.forEach(text => {
+                if (sidebarCollapsed) {
+                    text.style.display = 'none';
+                } else {
+                    text.style.display = 'inline';
+                }
+            });
+        }
+        
+        // Update sidebar text visibility when toggling
+        const originalToggle = toggleLeftSidebar;
+        toggleLeftSidebar = function() {
+            originalToggle();
+            updateSidebarText();
+        };
+        
+        // Initial sidebar text state
+        updateSidebarText();
+    </script>
+</body>
+</html>

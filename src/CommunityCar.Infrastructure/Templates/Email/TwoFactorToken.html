@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Two-Factor Authentication Code</title>
+    <style>
+        /* CSS Variables from app.css */
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 345 82% 51%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 47.4% 11.2%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --radius: 0.5rem;
+            --font-sans: 'Inter', 'Alexandria', system-ui, -apple-system, sans-serif;
+            --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Base styles from app.css */
+        body {
+            font-family: var(--font-sans);
+            margin: 0;
+            padding: 0;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.6;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Container using eng-card styles from app.css */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: hsla(var(--card), 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid hsl(var(--border) / 0.5);
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        /* Header with warm gradient */
+        .header {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 2.5rem 1.875rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            color: hsl(var(--foreground));
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Icon using glassmorphism from app.css */
+        .header .icon {
+            background: hsl(var(--card) / 0.8);
+            backdrop-filter: blur(16px);
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            margin: 0 auto 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid hsl(var(--border) / 0.3);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content using eng-card-content styles */
+        .content {
+            padding: 2.5rem 1.875rem;
+        }
+
+        .content h2 {
+            color: hsl(var(--foreground));
+            margin: 0 0 1.25rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .content p {
+            color: hsl(var(--foreground) / 0.9);
+            line-height: 1.8;
+            margin: 0 0 1.25rem;
+            font-size: 1rem;
+        }
+
+        .content h3 {
+            color: hsl(var(--foreground));
+            font-size: 1.125rem;
+            margin: 2rem 0 1rem;
+            font-weight: 600;
+        }
+
+        /* Token box using primary gradient with shimmer effect */
+        .token-box {
+            background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+            color: hsl(var(--primary-foreground));
+            padding: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 0.5rem;
+            border-radius: 1rem;
+            margin: 2rem 0;
+            box-shadow: 0 12px 24px hsl(var(--primary) / 0.4);
+            border: 1px solid hsl(var(--primary) / 0.3);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Footer using muted styling */
+        .footer {
+            background-color: hsl(var(--muted) / 0.5);
+            padding: 1.875rem;
+            text-align: center;
+            border-top: 1px solid hsl(var(--border));
+        }
+
+        .footer p {
+            color: hsl(var(--muted-foreground));
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+        /* Security note using amber colors */
+        .security-note {
+            background-color: hsl(38 92% 50% / 0.1);
+            border: 1px solid hsl(38 92% 50% / 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1.25rem 0;
+        }
+
+        .security-note p {
+            color: hsl(38 92% 30%);
+            margin: 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Warning note using destructive colors */
+        .warning-note {
+            background-color: hsl(var(--destructive) / 0.1);
+            border: 1px solid hsl(var(--destructive) / 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1.25rem 0;
+        }
+
+        .warning-note p {
+            color: hsl(var(--destructive));
+            margin: 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Tips list styling */
+        .tips-list {
+            color: hsl(var(--foreground) / 0.9);
+            line-height: 1.8;
+            padding-left: 1.25rem;
+        }
+
+        .tips-list li {
+            margin: 0.5rem 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 1rem;
+            }
+            
+            .header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .content {
+                padding: 2rem 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .content h2 {
+                font-size: 1.25rem;
+            }
+            
+            .token-box {
+                font-size: 1.5rem;
+                letter-spacing: 0.25rem;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .token-box {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <div class='icon'>
+                <svg width='40' height='40' fill='#2d3748' viewBox='0 0 24 24'>
+                    <path d='M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11.5C15.4,11.5 16,12.1 16,12.7V16.2C16,16.8 15.4,17.3 14.8,17.3H9.2C8.6,17.3 8,16.8 8,16.2V12.7C8,12.1 8.6,11.5 9.2,11.5V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,10V11.5H13.5V10C13.5,8.7 12.8,8.2 12,8.2Z'/>
+                </svg>
+            </div>
+            <h1>Security Code</h1>
+        </div>
+        
+        <div class='content'>
+            <h2>Two-Factor Authentication</h2>
+            <p>Your verification code for CommunityCar is:</p>
+            
+            <div class='token-box'>
+                {{TOKEN}}
+            </div>
+            
+            <div class='security-note'>
+                <p><strong>⏰ Time Sensitive:</strong> This code will expire in 5 minutes for security reasons.</p>
+            </div>
+            
+            <div class='warning-note'>
+                <p><strong>🛡️ Security Notice:</strong> If you didn't request this code, please ignore this email and consider changing your password immediately.</p>
+            </div>
+            
+            <p>Enter this code in the verification field to complete your login process.</p>
+            
+            <h3>Security Tips:</h3>
+            <ul class='tips-list'>
+                <li>🔐 Never share this code with anyone</li>
+                <li>📱 Only enter it on the official CommunityCar website</li>
+                <li>⚠️ Be cautious of phishing attempts</li>
+                <li>🔄 Contact support if you suspect unauthorized access</li>
+            </ul>
+        </div>
+        
+        <div class='footer'>
+            <p><strong>The CommunityCar Team</strong></p>
+            <p>Keeping your account safe and secure</p>
+        </div>
+    </div>
+</body>
+</html>

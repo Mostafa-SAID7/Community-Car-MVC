@@ -11,4 +11,5 @@ public interface IStoriesRepository : IBaseRepository<Story>
     Task DeleteExpiredAsync();
     Task<IEnumerable<string>> GetPopularTagsAsync(int count);
     Task<IEnumerable<string>> GetAvailableCarMakesAsync();
+    Task<IEnumerable<Story>> GetTopActiveAsync(int count);
 }

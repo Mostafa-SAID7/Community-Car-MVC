@@ -46,4 +46,12 @@ public class QARepository : BaseRepository<Question>, IQARepository
     {
         return await Context.Questions.FirstOrDefaultAsync(q => q.Slug == slug);
     }
+
+    public async Task<IEnumerable<Question>> GetTopQuestionsAsync(int count)
+    {
+        return await Context.Questions
+            .OrderByDescending(q => q.CreatedAt)
+            .Take(count)
+            .ToListAsync();
+    }
 }

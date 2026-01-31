@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ErrorDetails" xml:space="preserve">
+    <value>تفاصيل الخطأ</value>
+  </data>
+  <data name="SystemFailureArchive" xml:space="preserve">
+    <value>أرشيف_فشل_النظام</value>
+  </data>
+  <data name="ApplicationError" xml:space="preserve">
+    <value>خطأ في التطبيق</value>
+  </data>
+  <data name="CriticalExceptionDetected" xml:space="preserve">
+    <value>تم_اكتشاف_استثناء_حرج</value>
+  </data>
+  <data name="RevertIndex" xml:space="preserve">
+    <value>العودة_للفهرس</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>رجوع</value>
+  </data>
+  <data name="IncidentSummary" xml:space="preserve">
+    <value>ملخص_الحادث</value>
+  </data>
+  <data name="ErrorCode" xml:space="preserve">
+    <value>رمز_الخطأ</value>
+  </data>
+  <data name="LoadingIncidentTelemetry" xml:space="preserve">
+    <value>جاري تحميل بيانات الحادث...</value>
+  </data>
+  <data name="Timestamp" xml:space="preserve">
+    <value>الطابع_الزمني</value>
+  </data>
+  <data name="SourceNode" xml:space="preserve">
+    <value>عقدة_المصدر</value>
+  </data>
+  <data name="LocatingNode" xml:space="preserve">
+    <value>تحديد_موقع_العقدة</value>
+  </data>
+  <data name="DiagnosticTraceMatrix" xml:space="preserve">
+    <value>مصفوفة_التتبع_التشخيصي</value>
+  </data>
+  <data name="InitExtraction" xml:space="preserve">
+    <value>بدء_الاستخراج</value>
+  </data>
+  <data name="ShowDetails" xml:space="preserve">
+    <value>إظهار_التفاصيل</value>
+  </data>
+  <data name="ExceptionLog" xml:space="preserve">
+    <value>سجل_الاستثناءات</value>
+  </data>
+  <data name="AwaitingManualOverride" xml:space="preserve">
+    <value>في انتظار التدخل اليدوي...</value>
+  </data>
+  <data name="StackTelemetry" xml:space="preserve">
+    <value>بيانات_المكدس</value>
+  </data>
+  <data name="RegistryLocked" xml:space="preserve">
+    <value>السجل مقفل. في انتظار التسلسل.</value>
+  </data>
+  <data name="OperationalDirectives" xml:space="preserve">
+    <value>التوجيهات_التشغيلية</value>
+  </data>
+  <data name="ExecuteRetry" xml:space="preserve">
+    <value>تنفيذ_إعادة_المحاولة</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>إعادة_المحاولة</value>
+  </data>
+  <data name="AbortToBase" xml:space="preserve">
+    <value>إلغاء_للقاعدة</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="FileIncidentReport" xml:space="preserve">
+    <value>تقديم_تقرير_حادث</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>تقرير</value>
+  </data>
+  <data name="SystemIntelligence" xml:space="preserve">
+    <value>ذكاء_النظام</value>
+  </data>
+  <data name="SystemIntelligenceDescription" xml:space="preserve">
+    <value>المعالجات المتكررة تحلل عقدة الفشل هذه. يتم إرسال التقارير التشخيصية إلى فرقة الهندسة تلقائياً.</value>
+  </data>
+  <data name="UrgentRelay" xml:space="preserve">
+    <value>ترحيل_عاجل</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>اتصال</value>
+  </data>
+  <data name="ReportErrorIssue" xml:space="preserve">
+    <value>الإبلاغ عن مشكلة خطأ</value>
+  </data>
+  <data name="YourName" xml:space="preserve">
+    <value>اسمك</value>
+  </data>
+  <data name="YourEmail" xml:space="preserve">
+    <value>بريدك الإلكتروني</value>
+  </data>
+  <data name="PriorityLevel" xml:space="preserve">
+    <value>مستوى الأولوية</value>
+  </data>
+  <data name="PriorityLow" xml:space="preserve">
+    <value>منخفض - إزعاج بسيط</value>
+  </data>
+  <data name="PriorityMedium" xml:space="preserve">
+    <value>متوسط - يؤثر على الوظائف</value>
+  </data>
+  <data name="PriorityHigh" xml:space="preserve">
+    <value>عالي - يحجب ميزات مهمة</value>
+  </data>
+  <data name="PriorityCritical" xml:space="preserve">
+    <value>حرج - النظام غير قابل للاستخدام</value>
+  </data>
+  <data name="DescribeProblem" xml:space="preserve">
+    <value>وصف المشكلة</value>
+  </data>
+  <data name="DescribeProblemPlaceholder" xml:space="preserve">
+    <value>يرجى وصف ما حدث من خطأ...</value>
+  </data>
+  <data name="StepsToReproduce" xml:space="preserve">
+    <value>خطوات إعادة الإنتاج</value>
+  </data>
+  <data name="StepsToReproducePlaceholder" xml:space="preserve">
+    <value>1. اذهب إلى...&#10;2. انقر على...&#10;3. شاهد الخطأ...</value>
+  </data>
+  <data name="ExpectedBehavior" xml:space="preserve">
+    <value>السلوك المتوقع</value>
+  </data>
+  <data name="ExpectedBehaviorPlaceholder" xml:space="preserve">
+    <value>ما الذي كان يجب أن يحدث؟</value>
+  </data>
+  <data name="ActualBehavior" xml:space="preserve">
+    <value>السلوك الفعلي</value>
+  </data>
+  <data name="ActualBehaviorPlaceholder" xml:space="preserve">
+    <value>ما الذي حدث فعلاً؟</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="SubmitReport" xml:space="preserve">
+    <value>إرسال التقرير</value>
+  </data>
+  <data name="ReportSubmitted" xml:space="preserve">
+    <value>تم إرسال التقرير!</value>
+  </data>
+  <data name="ReportSubmittedDescription" xml:space="preserve">
+    <value>تم إرسال تقرير الخطأ بنجاح.</value>
+  </data>
+  <data name="TicketId" xml:space="preserve">
+    <value>رقم التذكرة</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="NeedHelp" xml:space="preserve">
+    <value>تحتاج مساعدة؟</value>
+  </data>
+  <data name="NeedHelpDescription" xml:space="preserve">
+    <value>إذا استمر هذا الخطأ، يرجى الاتصال بفريق الدعم مع رقم الخطأ أعلاه.</value>
+  </data>
+  <data name="EmailSupport" xml:space="preserve">
+    <value>دعم البريد الإلكتروني</value>
+  </data>
+  <data name="HelpCenter" xml:space="preserve">
+    <value>مركز المساعدة</value>
+  </data>
+  <data name="HideDetails" xml:space="preserve">
+    <value>إخفاء التفاصيل</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>جاري الإرسال...</value>
+  </data>
+  <data name="SubmitFailed" xml:space="preserve">
+    <value>فشل في إرسال تقرير الخطأ: </value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>فشل في إرسال تقرير الخطأ. يرجى المحاولة مرة أخرى لاحقاً.</value>
+  </data>
+  <data name="MockMessage" xml:space="preserve">
+    <value>تم اكتشاف انقطاع في اتصال النظام في تسلسل الوحدة الفرعية.</value>
+  </data>
+  <data name="MockDetails" xml:space="preserve">
+    <value>لا يمكن العثور على العرض المطلوب في الدلائل المتوقعة.</value>
+  </data>
+  <data name="MockStackTrace" xml:space="preserve">
+    <value>تتبع مكدس وهمي لأغراض العرض التوضيحي...</value>
+  </data>
+</root>

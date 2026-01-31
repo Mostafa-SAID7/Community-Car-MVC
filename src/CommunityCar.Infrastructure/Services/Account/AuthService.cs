@@ -4,6 +4,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Domain.Entities.Account.Core;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -43,7 +44,7 @@ public class AuthService : IAuthService
         if (!result.Succeeded) return result.ToApplicationResult();
 
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var link = GenerateLink("auth/confirm-email", user.Id.ToString(), token);
+        var link = GenerateLink("confirm-email", user.Id.ToString(), token);
         await _emailService.SendEmailConfirmationAsync(user.Email!, link);
 
         return Result.Success("Registration successful. Please check your email to confirm your account.");
@@ -61,6 +62,13 @@ public class AuthService : IAuthService
         {
             user.UpdateLastLogin();
             await _userManager.UpdateAsync(user);
+            
+            // Send login confirmation email
+            var httpContext = _httpContextAccessor.HttpContext;
+            var ipAddress = httpContext?.Connection?.RemoteIpAddress?.ToString() ?? "Unknown";
+            var userAgent = httpContext?.Request?.Headers["User-Agent"].ToString() ?? "Unknown";
+            await _emailService.SendLoginConfirmationAsync(user.Email!, user.Profile.FullName, ipAddress, userAgent);
+            
             return Result.Success("Login successful.");
         }
         
@@ -95,7 +103,7 @@ public class AuthService : IAuthService
         if (user.EmailConfirmed) return Result.Failure("Email is already confirmed.");
 
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var link = GenerateLink("auth/confirm-email", user.Id.ToString(), token);
+        var link = GenerateLink("confirm-email", user.Id.ToString(), token);
         await _emailService.SendEmailConfirmationAsync(user.Email!, link);
 
         return Result.Success("Confirmation email sent.");
@@ -113,7 +121,7 @@ public class AuthService : IAuthService
         if (user == null) return Result.Success("If an account exists, a reset link has been sent.");
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        var link = GenerateLink("auth/reset-password", user.Id.ToString(), token);
+        var link = GenerateLink("reset-password", user.Id.ToString(), token);
         await _emailService.SendPasswordResetAsync(user.Email!, link);
 
         return Result.Success("If an account exists, a reset link has been sent.");
@@ -127,6 +135,63 @@ public class AuthService : IAuthService
         var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
         return result.Succeeded ? Result.Success("Password reset successfully.") : result.ToApplicationResult();
     }
+
+    #region External Login
+
+    public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string? redirectUrl)
+    {
+        return _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+    }
+
+    public async Task<Microsoft.AspNetCore.Identity.SignInResult> ExternalLoginSignInAsync()
+    {
+        var info = await _signInManager.GetExternalLoginInfoAsync();
+        if (info == null)
+            return Microsoft.AspNetCore.Identity.SignInResult.Failed;
+
+        return await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+    }
+
+    public async Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo?> GetExternalLoginInfoAsync()
+    {
+        return await _signInManager.GetExternalLoginInfoAsync();
+    }
+
+    public async Task<Result> CreateUserWithExternalLoginAsync(Microsoft.AspNetCore.Identity.ExternalLoginInfo info)
+    {
+        var email = info.Principal.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+        var name = info.Principal.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+
+        if (string.IsNullOrEmpty(email))
+            return Result.Failure("Email not provided by external provider.");
+
+        var user = new User(email, email, name ?? email)
+        {
+            EmailConfirmed = true // External providers typically verify emails
+        };
+
+        var result = await _userManager.CreateAsync(user);
+        if (!result.Succeeded)
+            return result.ToApplicationResult();
+
+        var addLoginResult = await _userManager.AddLoginAsync(user, info);
+        if (!addLoginResult.Succeeded)
+            return addLoginResult.ToApplicationResult();
+
+        await _signInManager.SignInAsync(user, isPersistent: false);
+        user.UpdateLastLogin();
+        await _userManager.UpdateAsync(user);
+
+        // Send login confirmation email for new external login
+        var httpContext = _httpContextAccessor.HttpContext;
+        var ipAddress = httpContext?.Connection?.RemoteIpAddress?.ToString() ?? "Unknown";
+        var userAgent = httpContext?.Request?.Headers["User-Agent"].ToString() ?? "Unknown";
+        await _emailService.SendLoginConfirmationAsync(user.Email!, user.Profile.FullName, ipAddress, userAgent);
+
+        return Result.Success("Account created and signed in successfully.");
+    }
+
+    #endregion
 
     #region Helpers
 

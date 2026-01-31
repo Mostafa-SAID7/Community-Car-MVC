@@ -24,7 +24,7 @@ public class AccountController : Controller
 
     #region Registration
 
-    [HttpGet]
+    [HttpGet("register")]
     public IActionResult Register()
     {
         if (User.Identity?.IsAuthenticated == true)
@@ -33,7 +33,7 @@ public class AccountController : Controller
         return View("~/Views/Account/Register.cshtml");
     }
 
-    [HttpPost]
+    [HttpPost("register")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterVM model)
     {
@@ -56,7 +56,7 @@ public class AccountController : Controller
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = result.Message ?? "Registration successful! Please check your email to confirm your account.";
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login");
         }
 
         foreach (var error in result.Errors)
@@ -71,7 +71,7 @@ public class AccountController : Controller
 
     #region Login
 
-    [HttpGet]
+    [HttpGet("login")]
     public IActionResult Login(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true)
@@ -81,7 +81,7 @@ public class AccountController : Controller
         return View("~/Views/Account/Login.cshtml");
     }
 
-    [HttpPost]
+    [HttpPost("login")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginVM model, string? returnUrl = null)
     {
@@ -117,26 +117,26 @@ public class AccountController : Controller
 
     #region Logout
 
-    [HttpPost]
+    [HttpPost("logout")]
     [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         await _authService.LogoutAsync();
-        return RedirectToAction("Login", "Account");
+        return RedirectToAction("Login");
     }
 
     #endregion
 
     #region Email Confirmation
 
-    [HttpGet]
+    [HttpGet("confirm-email")]
     public async Task<IActionResult> ConfirmEmail(string userId, string token)
     {
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
         {
             TempData["ErrorMessage"] = "Invalid email confirmation link.";
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login");
         }
 
         var result = await _authService.ConfirmEmailAsync(userId, token);
@@ -149,14 +149,14 @@ public class AccountController : Controller
             TempData["ErrorMessage"] = result.Message ?? "Email confirmation failed.";
         }
 
-        return RedirectToAction("Login", "Account");
+        return RedirectToAction("Login");
     }
 
     #endregion
 
     #region Password Reset
 
-    [HttpGet]
+    [HttpGet("forgot-password")]
     public IActionResult ForgotPassword()
     {
         if (User.Identity?.IsAuthenticated == true)
@@ -165,7 +165,7 @@ public class AccountController : Controller
         return View();
     }
 
-    [HttpPost]
+    [HttpPost("forgot-password")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordVM model)
     {
@@ -179,10 +179,10 @@ public class AccountController : Controller
 
         // Always show success message for security reasons
         TempData["SuccessMessage"] = "If an account with that email exists, we've sent password reset instructions.";
-        return RedirectToAction("Login", "Account");
+        return RedirectToAction("Login");
     }
 
-    [HttpGet]
+    [HttpGet("reset-password")]
     public IActionResult ResetPassword(string userId, string token)
     {
         if (User.Identity?.IsAuthenticated == true)
@@ -191,7 +191,7 @@ public class AccountController : Controller
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
         {
             TempData["ErrorMessage"] = "Invalid password reset link.";
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login");
         }
 
         var model = new ResetPasswordVM
@@ -203,7 +203,7 @@ public class AccountController : Controller
         return View(model);
     }
 
-    [HttpPost]
+    [HttpPost("reset-password")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ResetPassword(ResetPasswordVM model)
     {
@@ -224,7 +224,7 @@ public class AccountController : Controller
         if (result.Succeeded)
         {
             TempData["SuccessMessage"] = result.Message ?? "Password reset successfully! You can now log in with your new password.";
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login");
         }
 
         foreach (var error in result.Errors)
@@ -237,9 +237,138 @@ public class AccountController : Controller
 
     #endregion
 
+    #region External Login
+
+    [HttpPost("external-login")]
+    [ValidateAntiForgeryToken]
+    public IActionResult ExternalLogin(string provider, string? returnUrl = null)
+    {
+        _logger.LogInformation("External login initiated. Provider: {Provider}, ReturnUrl: {ReturnUrl}", provider, returnUrl);
+        
+        // Validate provider
+        if (string.IsNullOrEmpty(provider))
+        {
+            _logger.LogError("External login provider is null or empty");
+            TempData["ErrorMessage"] = "Invalid login provider.";
+            return RedirectToAction("Login");
+        }
+
+        // Ensure we have the correct redirect URL
+        var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { returnUrl });
+        _logger.LogInformation("External login redirect URL: {RedirectUrl}", redirectUrl);
+        
+        try
+        {
+            var properties = _authService.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            _logger.LogInformation("External authentication properties configured for provider: {Provider}", provider);
+            return Challenge(properties, provider);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error configuring external authentication properties for provider: {Provider}", provider);
+            TempData["ErrorMessage"] = $"Error initiating {provider} login. Please try again.";
+            return RedirectToAction("Login");
+        }
+    }
+
+    [HttpGet("external-login-callback")]
+    public async Task<IActionResult> ExternalLoginCallback(string? returnUrl = null, string? remoteError = null)
+    {
+        _logger.LogInformation("External login callback started. ReturnUrl: {ReturnUrl}, RemoteError: {RemoteError}", returnUrl, remoteError);
+        
+        returnUrl = returnUrl ?? Url.Action("Index", "Feed") ?? "/";
+
+        if (remoteError != null)
+        {
+            _logger.LogError("External login failed with remote error: {RemoteError}", remoteError);
+            TempData["ErrorMessage"] = $"Google login failed: {remoteError}";
+            return RedirectToAction("Login");
+        }
+
+        try
+        {
+            // Get external login info first
+            var info = await _authService.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                _logger.LogError("External login info is null - this usually means the OAuth callback failed or was invalid");
+                TempData["ErrorMessage"] = "Error loading Google login information. Please try again.";
+                return RedirectToAction("Login");
+            }
+
+            _logger.LogInformation("External login info received. Provider: {Provider}, ProviderKey: {ProviderKey}, Email: {Email}", 
+                info.LoginProvider, info.ProviderKey, info.Principal.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value);
+
+            // Try to sign in with existing external login
+            var result = await _authService.ExternalLoginSignInAsync();
+            _logger.LogInformation("External login sign-in result: Succeeded={Succeeded}, IsLockedOut={IsLockedOut}, IsNotAllowed={IsNotAllowed}", 
+                result.Succeeded, result.IsLockedOut, result.IsNotAllowed);
+
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("External login successful, redirecting to: {ReturnUrl}", returnUrl);
+                TempData["SuccessMessage"] = "Successfully signed in with Google!";
+                return LocalRedirect(returnUrl);
+            }
+
+            if (result.IsLockedOut)
+            {
+                _logger.LogWarning("External login failed: Account is locked out");
+                TempData["ErrorMessage"] = "Your account is locked out. Please try again later.";
+                return RedirectToAction("Login");
+            }
+
+            if (result.IsNotAllowed)
+            {
+                _logger.LogWarning("External login failed: Account is not allowed to sign in");
+                TempData["ErrorMessage"] = "Your account is not allowed to sign in. Please contact support.";
+                return RedirectToAction("Login");
+            }
+
+            // If we get here, the user doesn't have an account yet, so create one
+            _logger.LogInformation("Creating new user with external login. Provider: {Provider}, Email: {Email}", 
+                info.LoginProvider, info.Principal.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value);
+
+            var createResult = await _authService.CreateUserWithExternalLoginAsync(info);
+            if (createResult.Succeeded)
+            {
+                _logger.LogInformation("Successfully created user with external login");
+                TempData["SuccessMessage"] = "Account created successfully! Welcome to CommunityCar!";
+                return LocalRedirect(returnUrl);
+            }
+
+            // Handle specific error cases
+            _logger.LogError("Failed to create user with external login. Errors: {Errors}", string.Join(", ", createResult.Errors));
+            var errorMessage = "Failed to create account with Google login.";
+            if (createResult.Errors.Any())
+            {
+                var firstError = createResult.Errors.First();
+                if (firstError.Contains("already exists") || firstError.Contains("email"))
+                {
+                    errorMessage = "An account with this email already exists. Please try logging in with your password instead.";
+                }
+                else if (firstError.Contains("DuplicateUserName"))
+                {
+                    errorMessage = "An account with this information already exists. Please try logging in with your password instead.";
+                }
+            }
+
+            TempData["ErrorMessage"] = errorMessage;
+            return RedirectToAction("Login");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception occurred during external login callback");
+            TempData["ErrorMessage"] = "An unexpected error occurred during Google login. Please try again.";
+            return RedirectToAction("Login");
+        }
+    }
+
+    #endregion
+
     #region OAuth
 
-    [HttpPost]
+    [HttpPost("google-signin")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> GoogleSignIn(GoogleSignInVM model)
     {
@@ -257,7 +386,7 @@ public class AccountController : Controller
         return BadRequest(new { success = false, message = result.Message, errors = result.Errors });
     }
 
-    [HttpPost]
+    [HttpPost("facebook-signin")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> FacebookSignIn(FacebookSignInVM model)
     {
@@ -273,6 +402,56 @@ public class AccountController : Controller
         }
 
         return BadRequest(new { success = false, message = result.Message, errors = result.Errors });
+    }
+
+    #endregion
+
+    #region OAuth Debug
+
+    [HttpGet("oauth-debug")]
+    public IActionResult OAuthDebug()
+    {
+        try
+        {
+            var configuration = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+            var googleClientId = configuration.GetSection("SocialAuth:Google")["ClientId"];
+            var googleClientSecret = configuration.GetSection("SocialAuth:Google")["ClientSecret"];
+            
+            var currentUrl = $"{Request.Scheme}://{Request.Host}";
+            var expectedRedirectUri = $"{currentUrl}/signin-google";
+            
+            var debugInfo = new
+            {
+                GoogleClientId = googleClientId,
+                GoogleClientSecretConfigured = !string.IsNullOrEmpty(googleClientSecret),
+                CurrentBaseUrl = currentUrl,
+                ExpectedRedirectUri = expectedRedirectUri,
+                ActualCallbackUrl = Url.Action("ExternalLoginCallback", "Account"),
+                IsHttps = Request.IsHttps,
+                Host = Request.Host.ToString(),
+                Scheme = Request.Scheme,
+                UserAgent = Request.Headers["User-Agent"].ToString(),
+                RemoteIpAddress = HttpContext.Connection.RemoteIpAddress?.ToString()
+            };
+            
+            _logger.LogInformation("OAuth Debug Info: {@DebugInfo}", debugInfo);
+            return Json(debugInfo);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in OAuth debug endpoint");
+            return Json(new { error = ex.Message });
+        }
+    }
+
+    #endregion
+
+    #region Access Denied
+
+    [HttpGet("access-denied")]
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 
     #endregion

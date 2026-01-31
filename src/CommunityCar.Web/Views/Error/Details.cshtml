@@ -1,257 +1,270 @@
 @model CommunityCar.Web.Models.Error.ErrorDetailsViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Error Details";
+    ViewData["Title"] = Localizer["ErrorDetails"];
     Layout = "_Layout";
 }
 
-<!-- Dark Mode Toggle -->
-<div class="fixed top-4 right-4 z-50">
-    <button data-action="toggle-dark-mode" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full p-3 shadow-lg hover:shadow-xl transition-all">
-        <i data-lucide="sun" class="w-5 h-5 text-yellow-500 dark:hidden"></i>
-        <i data-lucide="moon" class="w-5 h-5 text-blue-400 hidden dark:block"></i>
-    </button>
-</div>
-
-<div class="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 py-12 transition-colors duration-300">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Modern Engineering Header -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2 mb-12">
-            <div class="space-y-4">
-                <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-red-500 mb-6 font-mono">
-                    <i data-lucide="terminal" class="w-3.5 h-3.5 fill-current"></i> SYSTEM_FAILURE_ARCHIVE
-                </nav>
-                <h1 class="text-5xl font-black text-foreground tracking-tighter leading-none">Application Error</h1>
-                <p class="text-[10px] font-black text-muted-foreground opacity-50 mt-4 border-l-4 border-red-500/20 pl-4 py-1 tracking-[0.2em] font-mono leading-relaxed">
-                    CRITICAL_EXCEPTION_DETECTED :: @Model?.ErrorId
-                </p>
-            </div>
-            
-            <div class="flex gap-3">
-                <button data-action="go-back" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
-                    <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
-                    REVERT_INDEX
-                </button>
-            </div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+    <!-- Modern Engineering Header -->
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 px-2 mb-8 lg:mb-12">
+        <div class="space-y-3 lg:space-y-4">
+            <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-red-500 mb-4 lg:mb-6 font-mono">
+                <i data-lucide="terminal" class="w-3.5 h-3.5 fill-current"></i> @Localizer["SystemFailureArchive"]
+            </nav>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-foreground tracking-tighter leading-none">@Localizer["ApplicationError"]</h1>
+            <p class="text-[10px] font-black text-muted-foreground opacity-50 mt-3 lg:mt-4 border-l-4 rtl:border-r-4 rtl:border-l-0 border-red-500/20 pl-4 rtl:pr-4 rtl:pl-0 py-1 tracking-[0.2em] font-mono leading-relaxed">
+                @Localizer["CriticalExceptionDetected"] :: @Model?.ErrorId
+            </p>
         </div>
+        
+        <div class="flex gap-3">
+            <button data-action="go-back" class="inline-flex items-center justify-center gap-2.5 px-4 lg:px-6 py-2.5 bg-card border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 rtl:group-hover/back:translate-x-1 rtl:rotate-180 transition-transform"></i>
+                <span class="hidden sm:inline">@Localizer["RevertIndex"]</span>
+                <span class="sm:hidden">@Localizer["Back"]</span>
+            </button>
+        </div>
+    </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Main Error Registry -->
-            <div class="lg:col-span-2 space-y-8">
-                <!-- Error Summary Registry -->
-                <div class="eng-card relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
-                    
-                    <div class="p-10 flex items-start gap-8 relative z-10">
-                        <div class="w-20 h-20 rounded-[2.5rem] bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-600 shadow-2xl shadow-red-500/5 shrink-0">
-                            <i data-lucide="alert-octagon" class="w-10 h-10"></i>
-                        </div>
-                        <div class="flex-1 space-y-6">
-                            <div class="flex items-center justify-between">
-                                <div class="text-[10px] font-black uppercase tracking-widest text-red-500 opacity-60">INCIDENT_SUMMARY</div>
-                                <span class="px-3 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest">ERR_CODE: @Model?.RequestId</span>
-                            </div>
-                            <h2 class="text-3xl font-black text-foreground leading-tight tracking-tight" id="errorMessage">Loading incident telemetry...</h2>
-                            
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-6 pt-6 border-t border-border/20">
-                                <div class="space-y-1">
-                                    <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">TIMESTAMP</span>
-                                    <div class="text-[11px] font-bold text-foreground font-mono" id="errorTimestamp">--/--:--:--</div>
-                                </div>
-                                <div class="space-y-1">
-                                    <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">SOURCE_NODE</span>
-                                    <div class="text-[11px] font-bold text-foreground font-mono" id="errorPath">LOCATING_NODE</div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
+        <!-- Main Error Registry -->
+        <div class="xl:col-span-2 space-y-6 lg:space-y-8">
+            <!-- Error Summary Registry -->
+            <div class="bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2rem] shadow-xl transition-all duration-300 hover:border-primary/20 hover:shadow-2xl relative overflow-hidden group">
+                <div class="absolute top-0 right-0 rtl:right-auto rtl:left-0 w-32 sm:w-48 lg:w-64 h-32 sm:h-48 lg:h-64 bg-red-500/5 rounded-full blur-3xl -mr-16 sm:-mr-24 lg:-mr-32 rtl:-ml-16 rtl:sm:-ml-24 rtl:lg:-ml-32 rtl:mr-0 -mt-16 sm:-mt-24 lg:-mt-32"></div>
+                
+                <div class="p-6 sm:p-8 lg:p-10 flex flex-col sm:flex-row items-start gap-6 lg:gap-8 relative z-10">
+                    <div class="w-16 sm:w-20 h-16 sm:h-20 rounded-2xl sm:rounded-[2.5rem] bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-600 shadow-2xl shadow-red-500/5 shrink-0">
+                        <i data-lucide="alert-octagon" class="w-8 sm:w-10 h-8 sm:h-10"></i>
                     </div>
-                </div>
-
-                <!-- Technical Trace Matrix -->
-                <div class="eng-card">
-                    <div class="eng-card-header">
-                        <div class="flex items-center justify-between w-full">
-                            <div class="flex items-center gap-3">
-                                <div class="w-1.5 h-6 bg-red-500 rounded-full"></div>
-                                <h3 class="eng-card-title">DIAGNOSTIC_TRACE_MATRIX</h3>
-                            </div>
-                            <button data-action="toggle-details" class="text-[10px] font-black uppercase tracking-widest text-primary hover:opacity-80 transition-opacity">
-                                <span id="toggleText">INIT_EXTRACTION</span>
-                            </button>
+                    <div class="flex-1 space-y-4 lg:space-y-6 min-w-0">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="text-[10px] font-black uppercase tracking-widest text-red-500 opacity-60">@Localizer["IncidentSummary"]</div>
+                            <span class="px-3 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest break-all">@Localizer["ErrorCode"]: @Model?.RequestId</span>
                         </div>
-                    </div>
-                    
-                    <div class="p-6 hidden space-y-8" id="technicalDetails">
-                        <div class="space-y-4">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">EXCEPTION_LOG</label>
-                            <div class="bg-black/90 rounded-2xl p-6 border border-white/5">
-                                <pre class="text-xs text-red-400 font-mono whitespace-pre-wrap leading-relaxed" id="errorDetails">Awaiting manual override...</pre>
-                            </div>
-                        </div>
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-black text-foreground leading-tight tracking-tight" id="errorMessage">@Localizer["LoadingIncidentTelemetry"]</h2>
                         
-                        <div class="space-y-4">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">STACK_TELEMETRY</label>
-                            <div class="bg-black/90 rounded-2xl p-6 border border-white/5 overflow-x-auto custom-scrollbar">
-                                <pre class="text-[10px] text-white/60 font-mono whitespace-pre leading-relaxed" id="stackTrace">Registry locked. Pending sequence.</pre>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 pt-4 lg:pt-6 border-t border-border/20">
+                            <div class="space-y-1">
+                                <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Timestamp"]</span>
+                                <div class="text-[11px] font-bold text-foreground font-mono" id="errorTimestamp">--/--:--:--</div>
+                            </div>
+                            <div class="space-y-1">
+                                <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["SourceNode"]</span>
+                                <div class="text-[11px] font-bold text-foreground font-mono break-all" id="errorPath">@Localizer["LocatingNode"]</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Operational Sidebar -->
-            <div class="space-y-8">
-                <!-- Directives Card -->
-                <div class="eng-card">
-                    <div class="p-6">
-                        <div class="flex items-center gap-3 mb-8">
-                            <div class="w-1 h-4 bg-primary rounded-full"></div>
-                            <h3 class="text-sm font-black text-foreground tracking-widest uppercase">OPERATIONAL_DIRECTIVES</h3>
+            <!-- Technical Trace Matrix -->
+            <div class="bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2rem] shadow-xl transition-all duration-300 hover:border-primary/20 hover:shadow-2xl">
+                <div class="p-4 border-b border-border/30 bg-muted/20 flex justify-between items-center px-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-6 bg-red-500 rounded-full"></div>
+                            <h3 class="text-xs font-black uppercase tracking-[0.2em] text-foreground">@Localizer["DiagnosticTraceMatrix"]</h3>
                         </div>
-
-                        <div class="space-y-4">
-                            <button data-action="reload-page" class="inline-flex items-center justify-center w-full px-6 h-14 bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95 group/retry">
-                                <i data-lucide="refresh-cw" class="w-5 h-5 mr-4 group-hover/retry:rotate-180 transition-transform duration-700"></i> EXECUTE_RETRY
-                            </button>
-                            <a href="/" class="inline-flex items-center justify-center w-full px-6 h-14 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/home">
-                                <i data-lucide="home" class="w-5 h-5 mr-4 opacity-70 group-hover/home:scale-110 transition-transform"></i> ABORT_TO_BASE
-                            </a>
-                            <button data-action="report-error" class="inline-flex items-center justify-center w-full px-6 h-14 bg-background border border-red-500/20 text-red-500 hover:bg-red-500/10 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/report">
-                                <i data-lucide="flag" class="w-5 h-5 mr-4 group-hover/report:translate-y-0.5 transition-transform"></i> FILE_INCIDENT_REPORT
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- System Intelligence -->
-                <div class="eng-card">
-                    <div class="p-6 bg-primary/5">
-                        <h4 class="text-xs font-black uppercase tracking-widest text-primary mb-4">SYSTEM_INTELLIGENCE</h4>
-                        <p class="text-xs font-medium text-muted-foreground leading-relaxed opacity-80 mb-6">
-                            Redundant processors are analyzing this failure node. Diagnostic reports are transmitted to the engineering detachment automatically.
-                        </p>
-                        <div class="space-y-4">
-                            <a href="mailto:support@communitycar.com" class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
-                                <i data-lucide="mail" class="w-4 h-4"></i> URGENT_RELAY
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-
-        <!-- Error Reporting Modal -->
-        <div id="reportModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-300">
-                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="flag" class="w-5 h-5 text-red-500"></i>
-                            Report Error Issue
-                        </h3>
-                        <button data-action="close-report-modal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                            <i data-lucide="x" class="w-6 h-6"></i>
+                        <button data-action="toggle-details" class="text-[10px] font-black uppercase tracking-widest text-primary hover:opacity-80 transition-opacity self-start sm:self-center">
+                            <span id="toggleText">@Localizer["ShowDetails"]</span>
                         </button>
                     </div>
                 </div>
                 
-                <form id="errorReportForm" class="p-6 space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
-                            <input type="text" id="userName" name="userName" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Your Email</label>
-                            <input type="email" id="userEmail" name="userEmail" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                <div class="p-4 sm:p-6 hidden space-y-6 lg:space-y-8" id="technicalDetails">
+                    <div class="space-y-4">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["ExceptionLog"]</label>
+                        <div class="bg-black/90 rounded-2xl p-4 sm:p-6 border border-white/5 overflow-x-auto">
+                            <pre class="text-xs text-red-400 font-mono whitespace-pre-wrap leading-relaxed" id="errorDetails">@Localizer["AwaitingManualOverride"]</pre>
                         </div>
                     </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Priority Level</label>
-                        <select id="priority" name="priority" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
-                            <option value="Low">Low - Minor inconvenience</option>
-                            <option value="Medium" selected>Medium - Affects functionality</option>
-                            <option value="High">High - Blocks important features</option>
-                            <option value="Critical">Critical - System unusable</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Describe the Problem</label>
-                        <textarea id="description" name="description" rows="3" required placeholder="Please describe what went wrong..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Steps to Reproduce</label>
-                        <textarea id="stepsToReproduce" name="stepsToReproduce" rows="3" placeholder="1. Go to...\n2. Click on...\n3. See error..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"></textarea>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Expected Behavior</label>
-                            <textarea id="expectedBehavior" name="expectedBehavior" rows="2" placeholder="What should have happened?" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Actual Behavior</label>
-                            <textarea id="actualBehavior" name="actualBehavior" rows="2" placeholder="What actually happened?" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"></textarea>
+                    
+                    <div class="space-y-4">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["StackTelemetry"]</label>
+                        <div class="bg-black/90 rounded-2xl p-4 sm:p-6 border border-white/5 overflow-x-auto custom-scrollbar">
+                            <pre class="text-[10px] text-white/60 font-mono whitespace-pre leading-relaxed" id="stackTrace">@Localizer["RegistryLocked"]</pre>
                         </div>
                     </div>
-
-                    <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <button type="button" data-action="close-report-modal" class="px-6 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium">
-                            Cancel
-                        </button>
-                        <button type="submit" class="inline-flex items-center px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all">
-                            <i data-lucide="send" class="w-4 h-4 mr-2"></i>
-                            Submit Report
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
 
-        <!-- Success Modal -->
-        <div id="successModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full animate-in zoom-in-95 duration-300">
-                <div class="p-6 text-center">
-                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="check-circle" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+        <!-- Operational Sidebar -->
+        <div class="space-y-6 lg:space-y-8">
+            <!-- Directives Card -->
+            <div class="bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2rem] shadow-xl transition-all duration-300 hover:border-primary/20 hover:shadow-2xl">
+                <div class="p-4 sm:p-6">
+                    <div class="flex items-center gap-3 mb-6 lg:mb-8">
+                        <div class="w-1 h-4 bg-primary rounded-full"></div>
+                        <h3 class="text-xs sm:text-sm font-black text-foreground tracking-widest uppercase">@Localizer["OperationalDirectives"]</h3>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Report Submitted!</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">Your error report has been submitted successfully.</p>
-                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
-                        <p class="text-sm text-gray-700 dark:text-gray-300">
-                            <strong>Ticket ID:</strong> <span id="ticketId" class="font-mono"></span>
-                        </p>
+
+                    <div class="space-y-3 lg:space-y-4">
+                        <button data-action="reload-page" class="inline-flex items-center justify-center w-full px-4 sm:px-6 h-12 sm:h-14 bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95 group/retry">
+                            <i data-lucide="refresh-cw" class="w-4 sm:w-5 h-4 sm:h-5 mr-3 sm:mr-4 rtl:mr-0 rtl:ml-3 rtl:sm:ml-4 group-hover/retry:rotate-180 transition-transform duration-700"></i> 
+                            <span class="hidden sm:inline">@Localizer["ExecuteRetry"]</span>
+                            <span class="sm:hidden">@Localizer["Retry"]</span>
+                        </button>
+                        <a href="/" class="inline-flex items-center justify-center w-full px-4 sm:px-6 h-12 sm:h-14 bg-card border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/home">
+                            <i data-lucide="home" class="w-4 sm:w-5 h-4 sm:h-5 mr-3 sm:mr-4 rtl:mr-0 rtl:ml-3 rtl:sm:ml-4 opacity-70 group-hover/home:scale-110 transition-transform"></i> 
+                            <span class="hidden sm:inline">@Localizer["AbortToBase"]</span>
+                            <span class="sm:hidden">@Localizer["Home"]</span>
+                        </a>
+                        <button data-action="report-error" class="inline-flex items-center justify-center w-full px-4 sm:px-6 h-12 sm:h-14 bg-card border border-red-500/20 text-red-500 hover:bg-red-500/10 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/report">
+                            <i data-lucide="flag" class="w-4 sm:w-5 h-4 sm:h-5 mr-3 sm:mr-4 rtl:mr-0 rtl:ml-3 rtl:sm:ml-4 group-hover/report:translate-y-0.5 transition-transform"></i> 
+                            <span class="hidden sm:inline">@Localizer["FileIncidentReport"]</span>
+                            <span class="sm:hidden">@Localizer["Report"]</span>
+                        </button>
                     </div>
-                    <button data-action="close-success-modal" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-all">
-                        Close
+                </div>
+            </div>
+
+            <!-- System Intelligence -->
+            <div class="bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2rem] shadow-xl transition-all duration-300 hover:border-primary/20 hover:shadow-2xl">
+                <div class="p-4 sm:p-6 bg-primary/5">
+                    <h4 class="text-xs font-black uppercase tracking-widest text-primary mb-4">@Localizer["SystemIntelligence"]</h4>
+                    <p class="text-xs font-medium text-muted-foreground leading-relaxed opacity-80 mb-6">
+                        @Localizer["SystemIntelligenceDescription"]
+                    </p>
+                    <div class="space-y-4">
+                        <a href="mailto:support@communitycar.com" class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
+                            <i data-lucide="mail" class="w-4 h-4"></i> 
+                            <span class="hidden sm:inline">@Localizer["UrgentRelay"]</span>
+                            <span class="sm:hidden">@Localizer["Contact"]</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Reporting Modal -->
+    <div id="reportModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
+        <div class="bg-card border border-border rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-300">
+            <div class="p-4 sm:p-6 border-b border-border">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg sm:text-xl font-bold text-foreground flex items-center gap-2">
+                        <i data-lucide="flag" class="w-5 h-5 text-red-500"></i>
+                        @Localizer["ReportErrorIssue"]
+                    </h3>
+                    <button data-action="close-report-modal" class="text-muted-foreground hover:text-foreground">
+                        <i data-lucide="x" class="w-6 h-6"></i>
                     </button>
                 </div>
             </div>
-        </div>
-
-        <!-- Help Section -->
-        <div class="mt-12 text-center">
-            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
-                <h3 class="text-lg font-bold text-blue-900 dark:text-blue-100 mb-2">Need Help?</h3>
-                <p class="text-blue-700 dark:text-blue-300 mb-4">If this error persists, please contact our support team with the error ID above.</p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="mailto:support@communitycar.com" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
-                        <i data-lucide="mail" class="w-4 h-4 mr-2"></i>
-                        Email Support
-                    </a>
-                    <a href="/help" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
-                        <i data-lucide="help-circle" class="w-4 h-4 mr-2"></i>
-                        Help Center
-                    </a>
+            
+            <form id="errorReportForm" class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-foreground mb-2">@Localizer["YourName"]</label>
+                        <input type="text" id="userName" name="userName" required class="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-foreground">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-foreground mb-2">@Localizer["YourEmail"]</label>
+                        <input type="email" id="userEmail" name="userEmail" required class="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-foreground">
+                    </div>
                 </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-foreground mb-2">@Localizer["PriorityLevel"]</label>
+                    <select id="priority" name="priority" class="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-foreground">
+                        <option value="Low">@Localizer["PriorityLow"]</option>
+                        <option value="Medium" selected>@Localizer["PriorityMedium"]</option>
+                        <option value="High">@Localizer["PriorityHigh"]</option>
+                        <option value="Critical">@Localizer["PriorityCritical"]</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-foreground mb-2">@Localizer["DescribeProblem"]</label>
+                    <textarea id="description" name="description" rows="3" required placeholder="@Localizer["DescribeProblemPlaceholder"]" class="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-foreground resize-vertical"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-foreground mb-2">@Localizer["StepsToReproduce"]</label>
+                    <textarea id="stepsToReproduce" name="stepsToReproduce" rows="3" placeholder="@Localizer["StepsToReproducePlaceholder"]" class="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-foreground resize-vertical"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-foreground mb-2">@Localizer["ExpectedBehavior"]</label>
+                        <textarea id="expectedBehavior" name="expectedBehavior" rows="2" placeholder="@Localizer["ExpectedBehaviorPlaceholder"]" class="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-foreground resize-vertical"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-foreground mb-2">@Localizer["ActualBehavior"]</label>
+                        <textarea id="actualBehavior" name="actualBehavior" rows="2" placeholder="@Localizer["ActualBehaviorPlaceholder"]" class="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-card text-foreground resize-vertical"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-4 border-t border-border">
+                    <button type="button" data-action="close-report-modal" class="w-full sm:w-auto px-6 py-2 text-muted-foreground hover:text-foreground font-medium">
+                        @Localizer["Cancel"]
+                    </button>
+                    <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all">
+                        <i data-lucide="send" class="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2"></i>
+                        @Localizer["SubmitReport"]
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
+        <div class="bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full animate-in zoom-in-95 duration-300">
+            <div class="p-4 sm:p-6 text-center">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="check-circle" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="text-lg sm:text-xl font-bold text-foreground mb-2">@Localizer["ReportSubmitted"]</h3>
+                <p class="text-muted-foreground mb-4">@Localizer["ReportSubmittedDescription"]</p>
+                <div class="bg-muted rounded-lg p-4 mb-4">
+                    <p class="text-sm text-foreground">
+                        <strong>@Localizer["TicketId"]:</strong> <span id="ticketId" class="font-mono break-all"></span>
+                    </p>
+                </div>
+                <button data-action="close-success-modal" class="w-full sm:w-auto px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg transition-all">
+                    @Localizer["Close"]
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-8 lg:mt-12 text-center">
+        <div class="bg-blue-50/50 dark:bg-blue-900/20 border border-blue-200/50 dark:border-blue-800/50 rounded-xl p-4 sm:p-6 backdrop-blur-sm">
+            <h3 class="text-lg font-bold text-blue-900 dark:text-blue-100 mb-2">@Localizer["NeedHelp"]</h3>
+            <p class="text-blue-700 dark:text-blue-300 mb-4">@Localizer["NeedHelpDescription"]</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="mailto:support@communitycar.com" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+                    <i data-lucide="mail" class="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2"></i>
+                    @Localizer["EmailSupport"]
+                </a>
+                <a href="/help" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+                    <i data-lucide="help-circle" class="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2"></i>
+                    @Localizer["HelpCenter"]
+                </a>
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script>
+        // JavaScript localization object
+        window.errorHandlerLocalization = {
+            hideDetails: '@Localizer["HideDetails"]',
+            showDetails: '@Localizer["ShowDetails"]',
+            sending: '@Localizer["Sending"]',
+            submitFailed: '@Localizer["SubmitFailed"]',
+            submitError: '@Localizer["SubmitError"]',
+            mockMessage: '@Localizer["MockMessage"]',
+            mockDetails: '@Localizer["MockDetails"]',
+            mockStackTrace: '@Localizer["MockStackTrace"]'
+        };
+    </script>
     <script src="~/js/error-handler.js" asp-append-version="true"></script>
 }

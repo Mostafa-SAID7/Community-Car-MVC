@@ -587,10 +587,20 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
   animation-duration: 300ms;
+}
+
+    @media (prefers-reduced-motion: reduce) {
+
+    body {
+        transition: none;
+    }
+}
+
+    body {
         max-width: 100%;
         overflow-x: hidden;
         font-family: var(--font-sans);
-}
+    }
 
     html {
         max-width: 100%;
@@ -638,6 +648,11 @@ video {
     }
 
     
+    html[lang="ar"] .\!text-xs {
+        font-family: var(--font-arabic-body) !important;
+    }
+
+    
     html[lang="ar"] .\!btn {
         font-family: var(--font-arabic-body) !important;
     }
@@ -663,6 +678,10 @@ video {
 
     html[lang="ar"] .text-sm {
         line-height: 1.7;
+    }
+
+    html[lang="ar"] .\!text-xs {
+        line-height: 1.6 !important;
     }
 
     html[lang="ar"] .text-xs {
@@ -706,6 +725,13 @@ video {
         a {
     touch-action: manipulation;
   }
+@media (max-width: 640px) {
+    button,
+        a {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
 
         /* Improve scrolling on mobile */
         .overflow-y-auto {
@@ -721,10 +747,6 @@ video {
 
     /* Sidebar Responsiveness */
 
-    #chat-history-modal.sidebar-backdrop {
-        pointer-events: none;
-    }
-
     .sidebar-backdrop {
   pointer-events: none;
   position: fixed;
@@ -736,17 +758,21 @@ video {
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 
-    #chat-history-modal.sidebar-visible .sidebar-backdrop,#chat-history-modal
-    .left-sidebar-visible .sidebar-backdrop,#chat-history-modal
-    .right-sidebar-visible .sidebar-backdrop {
-        pointer-events: auto;
-    }
+    #chat-history-modal.sidebar-backdrop {
+    pointer-events: none;
+}
 
     .sidebar-visible .sidebar-backdrop,
     .left-sidebar-visible .sidebar-backdrop,
     .right-sidebar-visible .sidebar-backdrop {
   pointer-events: auto;
   opacity: 1;
+}
+
+    #chat-history-modal.sidebar-visible .sidebar-backdrop,#chat-history-modal
+    .left-sidebar-visible .sidebar-backdrop,#chat-history-modal
+    .right-sidebar-visible .sidebar-backdrop {
+    pointer-events: auto;
 }
 
     /* Left sidebar - visible on md+ screens, drawer on mobile */
@@ -771,12 +797,34 @@ video {
         .left-sidebar-visible .sidebar {
             transform: translateX(0);
         }
+
+        /* Add subtle backdrop effect when sidebar is open on mobile */
+        .sidebar-visible #main-content,
+        .left-sidebar-visible #main-content {
+            opacity: 0.7;
+            pointer-events: none;
+            transition: opacity 300ms ease-in-out;
+        }
+
+        /* Ensure main content is fully interactive when sidebar is closed */
+        #main-content {
+            opacity: 1;
+            pointer-events: auto;
+            transition: opacity 300ms ease-in-out;
+        }
+
+        /* Better mobile spacing when sidebar is open */
+        .sidebar-visible body,
+        .left-sidebar-visible body {
+            overflow: hidden;
+            /* Prevent background scrolling */
+        }
     }
 
     /* Right sidebar drawer behavior */
     .sidebar-right {
         transform: translateX(100%);
-        transition: transform 300ms;
+        /* Removed transition for animations */
     }
 
     @media (min-width: 1280px) {
@@ -791,7 +839,18 @@ video {
         display: block;
     }
 
-    /* Ensure main content has consistent width in both LTR and RTL */
+    /* Ensure right sidebar has proper scrolling */
+    .sidebar-right {
+        max-height: calc(100vh - 8rem);
+        overflow-y: auto;
+    }
+
+    .sidebar-right .force-ltr {
+        min-height: 100%;
+        padding-bottom: 1rem;
+    }
+
+    /* Ensure main content has consistent width and spacing in both LTR and RTL */
     #main-content {
         max-width: none;
         width: auto;
@@ -804,6 +863,245 @@ video {
         width: 100%;
     }
 
+    /* ========================================
+     * UNIVERSAL SIDEBAR SPACING SYSTEM
+     * ========================================
+     * 
+     * This system ensures consistent spacing between the left sidebar and main content
+     * across ALL pages in the application. It handles:
+     * 
+     * - Desktop spacing: 6rem sidebar + 1rem padding (md), 17rem + 1.5rem (xl)
+     * - Mobile spacing: Dynamic padding based on sidebar state
+     * - RTL support: Proper margin/padding reversal for Arabic users
+     * - Multiple fallbacks: Works across different browsers and scenarios
+     * 
+     * Screen size breakdowns:
+     * - Mobile (< 768px): No sidebar margin, responsive padding
+     * - Tablet (768px - 1279px): 6rem left margin + 1rem padding
+     * - Desktop (1280px+): 17rem left margin + 1.5rem padding
+     * 
+     * The system uses multiple CSS selectors to ensure coverage:
+     * - ID selectors: #main-content, #dashboard-container #main-content
+     * - Element selectors: main[role="main"], main.main-content
+     * - Class selectors: .main-content, .sidebar-spacing
+     * - Advanced selectors: body:has(.sidebar) main (modern browsers)
+     * 
+     * ======================================== */
+
+    /* CONSOLIDATED UNIVERSAL SIDEBAR SPACING - Applies to ALL pages globally */
+
+    /* Medium screens (768px - 1279px): Left sidebar spacing only */
+    @media (min-width: 768px) and (max-width: 1279px) {
+
+        /* Primary targeting - covers most cases */
+        main#main-content,
+        #main-content,
+        #dashboard-container #main-content,
+        main[role="main"],
+        .main-content {
+            margin-left: 5rem !important; /* 4rem sidebar + 1rem gap */
+            padding-left: 1rem !important;
+            margin-right: 0 !important; /* No right sidebar on medium screens */
+        }
+
+        /* RTL support */
+        .rtl main#main-content,
+        .rtl #main-content,
+        .rtl #dashboard-container #main-content,
+        .rtl main[role="main"],
+        .rtl .main-content {
+            margin-left: 0 !important;
+            margin-right: 5rem !important; /* 4rem sidebar + 1rem gap */
+            padding-left: 0 !important;
+            padding-right: 1rem !important;
+        }
+    }
+
+    /* Large screens (1280px+): Both sidebars spacing */
+    @media (min-width: 1280px) {
+
+        /* Default expanded state - matches existing universal spacing */
+        /* Only apply when NOT using desktop toggle (no sidebar-collapsed/expanded classes) */
+        body:not(.sidebar-collapsed):not(.sidebar-expanded) main#main-content,
+        body:not(.sidebar-collapsed):not(.sidebar-expanded) #main-content,
+        body:not(.sidebar-collapsed):not(.sidebar-expanded) #dashboard-container #main-content,
+        body:not(.sidebar-collapsed):not(.sidebar-expanded) main[role="main"],
+        body:not(.sidebar-collapsed):not(.sidebar-expanded) .main-content {
+            margin-left: 15rem !important; /* 14rem left sidebar + 1rem gap */
+            margin-right: 21rem !important; /* 20rem right sidebar + 1rem gap */
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+            width: calc(100vw - 36rem) !important; /* Full width minus both sidebars and gaps */
+            max-width: calc(100vw - 36rem) !important;
+            opacity: 1 !important; /* Ensure visibility */
+            visibility: visible !important; /* Ensure visibility */
+            display: block !important; /* Ensure display */
+            transition: margin-left 300ms ease-in-out, margin-right 300ms ease-in-out, width 300ms ease-in-out !important;
+        }
+
+        /* Fallback: Ensure main content is always visible regardless of sidebar state */
+        main#main-content,
+        #main-content,
+        #dashboard-container #main-content,
+        main[role="main"],
+        .main-content {
+            opacity: 1 !important; /* Force visibility */
+            visibility: visible !important; /* Force visibility */
+            display: block !important; /* Force display */
+            transition: margin-left 300ms ease-in-out, margin-right 300ms ease-in-out, width 300ms ease-in-out !important;
+        }
+
+        /* When right sidebar is hidden */
+        body:not(.sidebar-collapsed):not(.sidebar-expanded) main#main-content.xl\:mr-0,
+        body:not(.sidebar-collapsed):not(.sidebar-expanded) #main-content.xl\:mr-0,
+        body:not(.sidebar-collapsed):not(.sidebar-expanded) .main-content.xl\:mr-0 {
+            margin-right: 0 !important;
+            padding-right: 1rem !important;
+            width: calc(100vw - 15rem) !important; /* Full width minus left sidebar and gap */
+            max-width: calc(100vw - 15rem) !important;
+        }
+
+        /* RTL support */
+        .rtl body:not(.sidebar-collapsed):not(.sidebar-expanded) main#main-content,
+        .rtl body:not(.sidebar-collapsed):not(.sidebar-expanded) #main-content,
+        .rtl body:not(.sidebar-collapsed):not(.sidebar-expanded) #dashboard-container #main-content,
+        .rtl body:not(.sidebar-collapsed):not(.sidebar-expanded) main[role="main"],
+        .rtl body:not(.sidebar-collapsed):not(.sidebar-expanded) .main-content {
+            margin-left: 21rem !important; /* 20rem right sidebar + 1rem gap */
+            margin-right: 15rem !important; /* 14rem left sidebar + 1rem gap */
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+            width: calc(100vw - 36rem) !important; /* Full width minus both sidebars and gaps */
+            max-width: calc(100vw - 36rem) !important;
+            transition: margin-left 300ms ease-in-out, margin-right 300ms ease-in-out, width 300ms ease-in-out !important;
+        }
+
+        /* RTL when right sidebar is hidden */
+        .rtl body:not(.sidebar-collapsed):not(.sidebar-expanded) main#main-content.xl\:mr-0,
+        .rtl body:not(.sidebar-collapsed):not(.sidebar-expanded) #main-content.xl\:mr-0,
+        .rtl body:not(.sidebar-collapsed):not(.sidebar-expanded) .main-content.xl\:mr-0 {
+            margin-left: 0 !important;
+            padding-left: 1rem !important;
+            width: calc(100vw - 15rem) !important; /* Full width minus left sidebar and gap */
+            max-width: calc(100vw - 15rem) !important;
+        }
+    }
+
+    /* Advanced browser support with :has() selector */
+    @media (min-width: 768px) and (max-width: 1279px) {
+
+        body:has(.sidebar) main,
+        body:has(#main-sidebar) main,
+        body:has(#dashboard-sidebar) main {
+            margin-left: 5rem !important; /* 4rem sidebar + 1rem gap */
+            padding-left: 1rem !important;
+            margin-right: 0 !important;
+        }
+
+        body.rtl:has(.sidebar) main,
+        body.rtl:has(#main-sidebar) main,
+        body.rtl:has(#dashboard-sidebar) main {
+            margin-left: 0 !important;
+            margin-right: 5rem !important; /* 4rem sidebar + 1rem gap */
+            padding-left: 0 !important;
+            padding-right: 1rem !important;
+        }
+    }
+
+    @media (min-width: 1280px) {
+
+        body:not(.sidebar-collapsed):not(.sidebar-expanded):has(.sidebar) main,
+        body:not(.sidebar-collapsed):not(.sidebar-expanded):has(#main-sidebar) main,
+        body:not(.sidebar-collapsed):not(.sidebar-expanded):has(#dashboard-sidebar) main {
+            margin-left: 15rem !important; /* 14rem left sidebar + 1rem gap */
+            margin-right: 21rem !important; /* 20rem right sidebar + 1rem gap */
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        body.rtl:not(.sidebar-collapsed):not(.sidebar-expanded):has(.sidebar) main,
+        body.rtl:not(.sidebar-collapsed):not(.sidebar-expanded):has(#main-sidebar) main,
+        body.rtl:not(.sidebar-collapsed):not(.sidebar-expanded):has(#dashboard-sidebar) main {
+            margin-left: 21rem !important; /* 20rem right sidebar + 1rem gap */
+            margin-right: 15rem !important; /* 14rem left sidebar + 1rem gap */
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+    }
+
+    /* Mobile screens - ensure proper spacing when sidebar is closed/open */
+    @media (max-width: 767px) {
+
+        /* Default mobile spacing - no sidebar interference */
+        #main-content,
+        #dashboard-container #main-content,
+        main#main-content,
+        main[role="main"],
+        .main-content {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        /* When sidebar is open on mobile, add more spacing to prevent overlap */
+        .sidebar-visible #main-content,
+        .left-sidebar-visible #main-content {
+            padding-left: 5rem !important;
+            opacity: 0.7;
+            pointer-events: none;
+            transition: opacity 300ms ease-in-out, padding 300ms ease-in-out;
+        }
+
+        /* RTL support for mobile */
+        .rtl.sidebar-visible #main-content,
+        .rtl.left-sidebar-visible #main-content {
+            padding-left: 1rem !important;
+            padding-right: 1.5rem !important;
+        }
+
+        /* Ensure main content is fully interactive when sidebar is closed */
+        #main-content {
+            opacity: 1;
+            pointer-events: auto;
+            transition: opacity 300ms ease-in-out, padding 300ms ease-in-out;
+        }
+
+        /* Prevent background scrolling when sidebar is open */
+        .sidebar-visible body,
+        .left-sidebar-visible body {
+            overflow: hidden;
+        }
+    }
+
+    /* Sidebar spacing utility class - provides visual indicator and consistent behavior */
+    .sidebar-spacing {
+        transition: margin 300ms ease-in-out, padding 300ms ease-in-out;
+        position: relative;
+    }
+
+    /* Subtle visual indicator for sidebar boundary */
+    .sidebar-spacing::before {
+        content: '';
+        position: absolute;
+        left: -1px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(to bottom,
+                rgba(0, 0, 0, 0.05) 0%,
+                rgba(0, 0, 0, 0.1) 50%,
+                rgba(0, 0, 0, 0.05) 100%);
+        border-radius: 0.5px;
+        opacity: 0.3;
+        z-index: 1;
+    }
+
+    .rtl .sidebar-spacing::before {
+        left: auto;
+        right: -1px;
+    }
+
     /* RTL-specific fixes for consistent layout */
     .rtl #main-content {
         /* Ensure RTL content doesn't expand to full width */
@@ -811,24 +1109,37 @@ video {
         max-width: none;
     }
 
-    /* Additional RTL content width control */
+    /* Main content container improvements */
+    #main-content {
+        /* Ensure main content has proper boundaries and is always visible */
+        min-width: 0; /* Allow content to shrink */
+        overflow-x: hidden; /* Prevent horizontal overflow */
+        opacity: 1 !important; /* Force visibility */
+        visibility: visible !important; /* Force visibility */
+        display: block !important; /* Force display */
+        box-sizing: border-box; /* Include padding in width calculations */
+    }
+
+    /* Content wrapper improvements */
+    #main-content > div {
+        width: 100%;
+        max-width: none;
+        min-width: 0; /* Allow content to shrink */
+    }
+
+    /* Ensure content cards don't overflow */
+    #main-content .bg-card {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Additional RTL content width control - Simplified */
     @media (min-width: 1280px) {
-
-        /* Force RTL main content to have same effective width as LTR */
+        /* Ensure RTL layout maintains proper spacing */
         .rtl #main-content {
-            /* Calculate: viewport - left sidebar (15rem) - right sidebar (21rem) - padding */
-            width: calc(100vw - 36rem) !important;
-            max-width: calc(100vw - 36rem) !important;
-            margin-left: 21rem !important;
-            margin-right: 15rem !important;
-        }
-
-        /* When right sidebar is hidden in RTL */
-        .rtl #main-content.xl\:mr-0 {
-            width: calc(100vw - 15rem) !important;
-            max-width: calc(100vw - 15rem) !important;
-            margin-left: 0 !important;
-            margin-right: 15rem !important;
+            /* Let the margin system handle the width */
+            width: auto !important;
+            max-width: none !important;
         }
     }
 
@@ -840,8 +1151,84 @@ video {
         overflow-y: visible !important;
     }
 
-    /* Mobile-specific improvements */
+    /* Main content positioning between sidebars */
+    @media (min-width: 1280px) {
+        #main-content {
+            /* Ensure content is properly positioned between sidebars */
+            position: relative;
+            z-index: 10; /* Below sidebars but above background */
+        }
+
+        /* Ensure sidebars don't interfere with main content */
+        .sidebar,
+        .sidebar-right {
+            z-index: 30; /* Above main content */
+        }
+
+        /* Main content should not overlap with fixed sidebars */
+        #main-content .bg-card {
+            /* Ensure content cards respect sidebar boundaries */
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Debug: Add visual indicators (remove in production) */
+        /*
+        #main-content {
+            border-left: 2px solid red;
+            border-right: 2px solid blue;
+        }
+        .sidebar {
+            border: 2px solid green;
+        }
+        .sidebar-right {
+            border: 2px solid orange;
+        }
+        */
+    }
+
+    /* Very small screens (mobile phones) - optimized spacing */
     @media (max-width: 640px) {
+
+        /* Tighter spacing for small screens */
+        #main-content,
+        #dashboard-container #main-content,
+        main#main-content,
+        main[role="main"],
+        .main-content {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
+        }
+
+        /* When sidebar is open on very small screens */
+        .sidebar-visible #main-content,
+        .left-sidebar-visible #main-content {
+            padding-left: 1rem !important;
+        }
+
+        /* RTL support for very small screens */
+        .rtl.sidebar-visible #main-content,
+        .rtl.left-sidebar-visible #main-content {
+            padding-right: 1rem !important;
+            padding-left: 0.75rem !important;
+        }
+
+        /* Content wrapper improvements */
+        #main-content>div {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+
+        /* Card spacing improvements */
+        #main-content .bg-card {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            border-radius: 0.75rem !important;
+        }
 
         /* Reduce padding on very small screens */
         .p-6 {
@@ -876,1658 +1263,151 @@ video {
             /* Prevents zoom on iOS */
   }
 
-        /* Ensure main content is full width on mobile for both LTR and RTL */
-        #main-content,
-        .rtl #main-content {
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-            width: 100%;
-        }
-
         /* Prevent horizontal overflow */
         body {
             overflow-x: hidden;
         }
 
-        /* Make sure content containers don't exceed viewport */
         .max-w-none {
             max-width: 100vw;
         }
-
-        /* Mobile navigation styling */
-        .mobile-notification-dropdown,
-        .dashboard-notification-dropdown {
-            right: -50px;
-            width: 280px;
-        }
-
-        /* RTL mobile navigation positioning */
-        .rtl .mobile-notification-dropdown,
-        .rtl .dashboard-notification-dropdown {
-            left: -50px;
-            right: auto;
-            width: 280px;
-        }
-
-        /* Ensure mobile icons are properly sized */
-        .md\:hidden .h-8 {
-            height: 2rem;
-            width: 2rem;
-        }
-
-        /* Better spacing for mobile navigation */
-        .md\:hidden .gap-2>*+* {
-            margin-left: 0.5rem;
-        }
-
-        /* RTL mobile navigation spacing */
-        .rtl .md\:hidden .gap-2>*+* {
-            margin-left: 0;
-            margin-right: 0.5rem;
-        }
-
-        /* Mobile header navigation improvements */
-        header nav.md\:hidden a {
-            min-height: 48px;
-            min-width: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Ensure mobile navigation takes full width */
-        header .flex-1.max-w-2xl {
-            max-width: none;
-        }
-
-        /* Dashboard mobile navigation improvements */
-        .dashboard-notification-dropdown {
-            right: -20px;
-            width: 300px;
-        }
-
-        .rtl .dashboard-notification-dropdown {
-            left: -20px;
-            right: auto;
-            width: 300px;
-        }
-
-        /* Dashboard mobile navigation icons */
-        .md\:hidden a[asp-controller] {
-            min-height: 44px;
-            min-width: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
     }
 
-    /* Tablet-specific adjustments */
-    @media (min-width: 641px) and (max-width: 1279px) {
+    /* Tablet screens - balanced spacing between mobile and desktop */
+    @media (min-width: 641px) and (max-width: 767px) {
 
-        /* Ensure proper spacing on tablets */
-        #main-content {
+        /* Tablet spacing - no sidebar interference */
+        #main-content,
+        #dashboard-container #main-content,
+        main#main-content,
+        main[role="main"],
+        .main-content {
+            margin-left: 0 !important;
             margin-right: 0 !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        /* When sidebar is visible on tablet */
+        .sidebar-visible #main-content,
+        .left-sidebar-visible #main-content {
+            padding-left: 1.25rem !important;
+        }
+
+        /* RTL support for tablet */
+        .rtl.sidebar-visible #main-content,
+        .rtl.left-sidebar-visible #main-content {
+            padding-right: 1.25rem !important;
+            padding-left: 1rem !important;
         }
     }
 
-    /* Main content right sidebar spacing */
-
-    /* Feed page mobile optimizations */
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-        .space-y-8>* {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        /* Fix horizontal scrolling in stories section */
-        .overflow-x-auto {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .overflow-x-auto::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Ensure images don't cause overflow */
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Fix grid layouts on mobile */
-        .grid-cols-2 {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        /* Ensure flex containers wrap properly */
-        .flex-wrap {
-            flex-wrap: wrap;
-        }
-
-        /* Fix button groups on mobile */
-        .flex.gap-1,
-        .flex.gap-2,
-        .flex.gap-3,
-        .flex.gap-4 {
-            flex-wrap: wrap;
-        }
+    /* Mobile navigation styling */
+    .mobile-notification-dropdown,
+    .dashboard-notification-dropdown {
+        right: -50px;
+        width: 280px;
     }
 
-    /* No scrollbar utility class */
-    .no-scrollbar {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* RTL Support */
-    .rtl {
-        direction: rtl;
-    }
-
-    /* RTL-specific sidebar positioning */
-    .rtl .sidebar {
-        left: auto;
-        right: 0;
-        /* Mobile: hidden off-screen by default */
-        transform: translateX(100%);
-        transition: transform 300ms ease-in-out;
-    }
-
-    @media (min-width: 768px) {
-        .rtl .sidebar {
-            /* Desktop: always visible, no transform needed */
-            transform: none;
-            transition: none;
-        }
-    }
-
-    /* Mobile drawer behavior for RTL */
-    @media (max-width: 767px) {
-
-        .rtl .sidebar-visible .sidebar,
-        .rtl .left-sidebar-visible .sidebar {
-            transform: translateX(0);
-        }
-    }
-
-    .rtl .sidebar-right {
+    /* RTL mobile navigation positioning */
+    .rtl .mobile-notification-dropdown,
+    .rtl .dashboard-notification-dropdown {
+        left: -50px;
         right: auto;
-        left: 0;
-        transform: translateX(-100%);
+        width: 280px;
     }
 
-    .rtl .sidebar-right.translate-x-0 {
-        transform: translateX(0);
+    /* Mobile profile dropdown positioning */
+    .mobile-profile-dropdown {
+        right: -50px;
+        width: 280px;
     }
 
-    /* RTL main content margins - maintain same width as LTR */
-    .rtl #main-content {
+    /* Profile dropdown specific styling */
+    .profile-dropdown,
+    .mobile-profile-dropdown {
+        min-width: 256px;
+        max-width: 280px;
+    }
+
+    .profile-dropdown .dropdown-item,
+    .mobile-profile-dropdown .dropdown-item {
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: hsl(var(--foreground));
+        transition: all 0.2s ease;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .profile-dropdown .dropdown-item:hover,
+    .mobile-profile-dropdown .dropdown-item:hover {
+        background-color: hsl(var(--accent));
+        color: hsl(var(--accent-foreground));
+    }
+
+    .profile-dropdown .dropdown-item.text-destructive:hover,
+    .mobile-profile-dropdown .dropdown-item.text-destructive:hover {
+        background-color: hsl(var(--destructive) / 0.1);
+        color: hsl(var(--destructive));
+    }
+
+    /* Profile avatar styling */
+    .profile-toggle .w-6,
+    .mobile-profile-toggle .w-5 {
+        transition: all 0.2s ease;
+    }
+
+    .profile-toggle:hover .w-6,
+    .mobile-profile-toggle:hover .w-5 {
+        transform: scale(1.05);
+    }
+
+    /* Ensure mobile icons are properly sized */
+    .md\:hidden .h-8 {
+        height: 2rem;
+        width: 2rem;
+    }
+
+    /* Better spacing for mobile navigation */
+    .md\:hidden .gap-2>*+* {
+        margin-left: 0.5rem;
+    }
+
+    /* RTL mobile navigation spacing */
+    .rtl .md\:hidden .gap-2>*+* {
         margin-left: 0;
         margin-right: 0.5rem;
-        /* Same as LTR px-2 */
     }
 
-    @media (min-width: 640px) {
-        .rtl #main-content {
-            margin-right: 0.75rem;
-            /* Same as LTR sm:px-3 */
-        }
-    }
+    /* Mobile header navigation improvements */
 
-    @media (min-width: 768px) {
-        .rtl #main-content {
-            margin-right: 5rem;
-            /* Same as LTR md:ml-20 */
-            margin-left: 0;
-        }
-    }
-
-    @media (min-width: 1280px) {
-        .rtl #main-content {
-            margin-right: 15rem;
-            /* Same as LTR xl:ml-60 */
-            margin-left: 0;
-        }
-
-        /* RTL right sidebar spacing - maintain same content width */
-        .rtl .xl\:mr-84 {
-            margin-right: 0;
-            margin-left: 21rem;
-            /* Same spacing as LTR but on left side */
-        }
-
-        /* Ensure RTL main content with right sidebar has same width as LTR */
-        .rtl main[class*="xl:mr-[21rem]"] {
-            margin-left: 21rem !important;
-            margin-right: 15rem !important;
-        }
-
-        /* Handle the dynamic class for RTL with right sidebar */
-        .rtl main.rtl\:xl\:ml-\[21rem\] {
-            margin-left: 21rem !important;
-            margin-right: 15rem !important;
-        }
-    }
-
-    /* Dashboard-specific RTL fixes */
-    .rtl .dashboard-body #main-content {
-        /* Ensure dashboard content maintains same width in RTL */
-        width: auto;
+    /* Ensure mobile navigation takes full width */
+    header .flex-1.max-w-2xl {
         max-width: none;
     }
 
-    @media (min-width: 768px) {
-        .rtl .dashboard-body #main-content {
-            margin-right: 5rem;
-            /* Same as LTR md:ml-20 */
-            margin-left: 0;
-        }
+    /* Dashboard mobile navigation improvements */
+    .dashboard-notification-dropdown {
+        right: -20px;
+        width: 300px;
     }
 
-    @media (min-width: 1280px) {
-        .rtl .dashboard-body #main-content {
-            margin-right: 15rem;
-            /* Same as LTR xl:ml-60 */
-            margin-left: 0;
-            /* Force consistent width calculation for dashboard */
-            width: calc(100vw - 15rem - 2rem) !important;
-            /* Account for padding */
-            max-width: calc(100vw - 15rem - 2rem) !important;
-        }
-    }
-
-    /* Dashboard sidebar RTL positioning */
-    .rtl .dashboard-body .sidebar {
-        left: auto;
-        right: 1rem;
-    }
-
-    @media (max-width: 767px) {
-        .rtl .dashboard-body .sidebar {
-            transform: translateX(calc(100% + 2rem));
-        }
-
-        .rtl .dashboard-body .sidebar.translate-x-0 {
-            transform: translateX(0);
-        }
-    }
-
-    /* Ensure dashboard container behaves consistently */
-    .rtl .dashboard-body #dashboard-container {
-        direction: rtl;
-    }
-
-    .rtl .dashboard-body #dashboard-container #main-content {
-        direction: ltr;
-        /* Keep content direction normal */
-    }
-
-    /* Fix dashboard content wrapper */
-    .rtl .dashboard-body #main-content>div {
-        width: 100%;
-        max-width: none;
-    }
-
-    /* RTL text alignment */
-    .rtl .text-left {
-        text-align: right;
-    }
-
-    .rtl .text-right {
-        text-align: left;
-    }
-
-    /* RTL flex direction adjustments */
-    .rtl .flex-row-reverse {
-        flex-direction: row-reverse;
-    }
-
-    /* RTL border radius adjustments */
-    .rtl .rounded-l-lg {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        border-top-right-radius: 0.5rem;
-        border-bottom-right-radius: 0.5rem;
-    }
-
-    .rtl .rounded-r-lg {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border-top-left-radius: 0.5rem;
-        border-bottom-left-radius: 0.5rem;
-    }
-
-    /* RTL dropdown positioning */
-    .rtl .dropdown-menu {
-        left: auto;
-        right: 0;
-    }
-
-    /* RTL notification positioning */
-    .rtl .notification-dropdown,
-    .rtl .mobile-notification-dropdown {
-        left: 0;
+    .rtl .dashboard-notification-dropdown {
+        left: -20px;
         right: auto;
+        width: 300px;
     }
 
-    /* RTL story container scroll direction */
-    .rtl .overflow-x-auto {
-        direction: ltr;
-    }
-
-    .rtl .overflow-x-auto>* {
-        direction: rtl;
-    }
-
-    /* AI Assistant Animation State */
-    #ai-chat-widget.active {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0) scale(1);
-    }
-
-    /* Chat History Modal */
-    #chat-history-modal {
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-    }
-
-    #chat-history-modal.opacity-100 {
-        pointer-events: auto;
-    }
-
-    #chat-history-modal.opacity-0 {
-        pointer-events: none;
-    }
-
-    /* Chat message animations */
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Typing indicator animation */
-    .typing-indicator .animate-bounce:nth-child(1) {
-        animation-delay: 0s;
-    }
-
-    .typing-indicator .animate-bounce:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-
-    .typing-indicator .animate-bounce:nth-child(3) {
-        animation-delay: 0.4s;
-    }
-
-    /* Badge Components */
-    
-    html[lang="ar"] .badge {
-        font-family: var(--font-arabic-heading);
-        font-weight: 600;
-        font-family: var(--font-arabic-body);
-    }
-    html[lang="ar"] .badge {
-        line-height: 1.6;
-    }
-    .badge {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 9999px;
-  border-width: 1px;
-  padding-left: 0.625rem;
-  padding-right: 0.625rem;
-  padding-top: 0.125rem;
-  padding-bottom: 0.125rem;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 600;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-    .badge:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--ring));
-  --tw-ring-offset-width: 2px;
-}
-
-    /* Avatar Components */
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .avatar.gap-1,.avatar.gap-2,.avatar.gap-3,.avatar.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .avatar.gap-1,.avatar.gap-2,.avatar.gap-3,.avatar.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .avatar.gap-1,.avatar.gap-2,.avatar.gap-3,.avatar.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .avatar.gap-1,.avatar.gap-2,.avatar.gap-3,.avatar.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-    .avatar {
-  position: relative;
-  display: flex;
-  height: 2.5rem;
-  width: 2.5rem;
-  flex-shrink: 0;
-  overflow: hidden;
-  border-radius: 9999px;
-}
-
-    /* Input Components */
-    
-    html[lang="ar"] .input {
-        font-family: var(--font-arabic-body);
-    }
-    html[lang="ar"] .input {
-        line-height: 1.7;
-    }
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .input.gap-1,.input.gap-2,.input.gap-3,.input.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .input.gap-1,.input.gap-2,.input.gap-3,.input.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .input.gap-1,.input.gap-2,.input.gap-3,.input.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .input.gap-1,.input.gap-2,.input.gap-3,.input.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-    .input {
-  display: flex;
-  height: 3rem;
-  width: 100%;
-  border-radius: 1rem;
-  border-width: 1px;
-  border-color: hsl(var(--border) / 0.6);
-  background-color: hsl(var(--background) / 0.4);
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  --tw-ring-offset-color: hsl(var(--background));
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-    
-    html[lang="ar"] .input::file-selector-button {
-        font-family: var(--font-arabic-body);
-    }
-    html[lang="ar"] .input::file-selector-button {
-        line-height: 1.7;
-    }
-    .input::file-selector-button {
-  border-width: 0px;
-  background-color: transparent;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 500;
-}
-    .input::-moz-placeholder {
-  color: hsl(var(--muted-foreground) / 0.3);
-}
-    .input::placeholder {
-  color: hsl(var(--muted-foreground) / 0.3);
-}
-    .input:hover {
-  border-color: hsl(var(--border));
-  background-color: hsl(var(--background) / 0.6);
-}
-    .input:focus {
-  border-color: hsl(var(--primary) / 0.6);
-  background-color: hsl(var(--background));
-}
-    .input:focus-visible {
-  border-color: hsl(var(--primary) / 0.5);
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--primary) / 0.3);
-}
-    .input:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-    
-    html[lang="ar"] .\!textarea {
-        font-family: var(--font-arabic-body);
-    }
-
-    html[lang="ar"] .\!textarea {
-        line-height: 1.7;
-    }
-
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .\!textarea.gap-1,.\!textarea.gap-2,.\!textarea.gap-3,.\!textarea.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .\!textarea.gap-1,.\!textarea.gap-2,.\!textarea.gap-3,.\!textarea.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .\!textarea.gap-1,.\!textarea.gap-2,.\!textarea.gap-3,.\!textarea.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .\!textarea.gap-1,.\!textarea.gap-2,.\!textarea.gap-3,.\!textarea.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-
-    .\!textarea {
-  display: flex;
-  min-height: 120px;
-  width: 100%;
-  border-radius: 1rem;
-  border-width: 1px;
-  border-color: hsl(var(--border) / 0.6);
-  background-color: hsl(var(--background) / 0.4);
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  --tw-ring-offset-color: hsl(var(--background));
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-    .\!textarea::-moz-placeholder {
-  color: hsl(var(--muted-foreground) / 0.3);
-}
-
-    .\!textarea::placeholder {
-  color: hsl(var(--muted-foreground) / 0.3);
-}
-
-    .\!textarea:hover {
-  border-color: hsl(var(--border));
-  background-color: hsl(var(--background) / 0.6);
-}
-
-    .\!textarea:focus {
-  border-color: hsl(var(--primary) / 0.6);
-  background-color: hsl(var(--background));
-}
-
-    .\!textarea:focus-visible {
-  border-color: hsl(var(--primary) / 0.5);
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--primary) / 0.3);
-}
-
-    .\!textarea:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-    
-    html[lang="ar"] .textarea {
-        font-family: var(--font-arabic-body);
-    }
-
-    html[lang="ar"] .textarea {
-        line-height: 1.7;
-    }
-
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .textarea.gap-1,.textarea.gap-2,.textarea.gap-3,.textarea.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .textarea.gap-1,.textarea.gap-2,.textarea.gap-3,.textarea.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .textarea.gap-1,.textarea.gap-2,.textarea.gap-3,.textarea.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .textarea.gap-1,.textarea.gap-2,.textarea.gap-3,.textarea.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-
-    .textarea {
-  display: flex;
-  min-height: 120px;
-  width: 100%;
-  border-radius: 1rem;
-  border-width: 1px;
-  border-color: hsl(var(--border) / 0.6);
-  background-color: hsl(var(--background) / 0.4);
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  --tw-ring-offset-color: hsl(var(--background));
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-    .textarea::-moz-placeholder {
-  color: hsl(var(--muted-foreground) / 0.3);
-}
-
-    .textarea::placeholder {
-  color: hsl(var(--muted-foreground) / 0.3);
-}
-
-    .textarea:hover {
-  border-color: hsl(var(--border));
-  background-color: hsl(var(--background) / 0.6);
-}
-
-    .textarea:focus {
-  border-color: hsl(var(--primary) / 0.6);
-  background-color: hsl(var(--background));
-}
-
-    .textarea:focus-visible {
-  border-color: hsl(var(--primary) / 0.5);
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--primary) / 0.3);
-}
-
-    .textarea:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-    /* Select Components */
-    
-    html[lang="ar"] .select-trigger {
-        font-family: var(--font-arabic-body);
-    }
-    html[lang="ar"] .select-trigger {
-        line-height: 1.7;
-    }
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .select-trigger.gap-1,.select-trigger.gap-2,.select-trigger.gap-3,.select-trigger.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .select-trigger.gap-1,.select-trigger.gap-2,.select-trigger.gap-3,.select-trigger.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .select-trigger.gap-1,.select-trigger.gap-2,.select-trigger.gap-3,.select-trigger.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .select-trigger.gap-1,.select-trigger.gap-2,.select-trigger.gap-3,.select-trigger.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-    .select-trigger {
-  display: flex;
-  height: 3rem;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 1rem;
-  border-width: 1px;
-  border-color: hsl(var(--input));
-  background-color: hsl(var(--background) / 0.5);
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  --tw-ring-offset-color: hsl(var(--background));
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-    .select-trigger::-moz-placeholder {
-  color: hsl(var(--muted-foreground) / 0.4);
-}
-    .select-trigger::placeholder {
-  color: hsl(var(--muted-foreground) / 0.4);
-}
-    .select-trigger:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--primary) / 0.5);
-  --tw-ring-offset-width: 2px;
-}
-    .select-trigger:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-    /* Dropdown Menus */
-    .dropdown-content {
-  overflow: hidden;
-  border-radius: 1rem;
-  border-width: 1px;
-  border-color: hsl(var(--border) / 0.5);
-  background-color: hsl(var(--card) / 0.8);
-  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  --tw-backdrop-blur: blur(24px);
-  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-  transition-duration: 200ms;
-  animation-name: enter;
-  --tw-enter-opacity: initial;
-  --tw-enter-scale: initial;
-  --tw-enter-rotate: initial;
-  --tw-enter-translate-x: initial;
-  --tw-enter-translate-y: initial;
-  --tw-enter-scale: .95;
-  animation-duration: 200ms;
-}
-
-    
-    html[lang="ar"] .dropdown-item {
-        font-family: var(--font-arabic-body);
-    }
-
-    html[lang="ar"] .dropdown-item {
-        line-height: 1.7;
-    }
-
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .dropdown-item.gap-1,.dropdown-item.gap-2,.dropdown-item.gap-3,.dropdown-item.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .dropdown-item.gap-1,.dropdown-item.gap-2,.dropdown-item.gap-3,.dropdown-item.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .dropdown-item.gap-1,.dropdown-item.gap-2,.dropdown-item.gap-3,.dropdown-item.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        
-        .flex.dropdown-item {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .dropdown-item.gap-1,.dropdown-item.gap-2,.dropdown-item.gap-3,.dropdown-item.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-
-    .dropdown-item {
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  gap: 0.75rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 500;
-  color: hsl(var(--foreground) / 0.9);
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-    .dropdown-item:hover {
-  background-color: hsl(var(--primary) / 0.05);
-  color: hsl(var(--primary));
-}
-
-    /* Separator */
-    .separator {
-  flex-shrink: 0;
-  background-color: hsl(var(--border));
-}
-
-    /* Engineering Design System (Dashboard/Details) */
-    .eng-card {
-  border-radius: 2rem;
-  border-width: 1px;
-  border-color: hsl(var(--border) / 0.5);
-  background-color: hsl(var(--card));
-  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-  animation-duration: 300ms;
-}
-    @media (max-width: 640px) {
-
-    #chat-history-modal .eng-card {
-        margin: 1rem;
-        max-height: calc(100vh - 2rem);
-    }
-}
-    .eng-card:hover {
-  border-color: hsl(var(--primary) / 0.2);
-  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-    .eng-card {
-        background-color: hsla(var(--card), 0.4);
-        backdrop-filter: blur(24px);
-    }
-
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-card-header.gap-1,.eng-card-header.gap-2,.eng-card-header.gap-3,.eng-card-header.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-card-header.gap-1,.eng-card-header.gap-2,.eng-card-header.gap-3,.eng-card-header.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-card-header.gap-1,.eng-card-header.gap-2,.eng-card-header.gap-3,.eng-card-header.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-card-header.gap-1,.eng-card-header.gap-2,.eng-card-header.gap-3,.eng-card-header.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-
-    .eng-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom-width: 1px;
-  border-color: hsl(var(--border) / 0.3);
-  background-color: hsl(var(--muted) / 0.2);
-  padding: 1rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-
-    
-    html[lang="ar"] .eng-card-title {
-        font-family: var(--font-arabic-heading);
-        font-weight: 600;
-        font-family: var(--font-arabic-body);
-    }
-
-    html[lang="ar"] .eng-card-title {
-        line-height: 1.6;
-    }
-
-    .eng-card-title {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: hsl(var(--foreground));
-}
-
-    /* Stats & Metrics */
-    @media (max-width: 640px) {
-
-        /* Reduce padding on very small screens */
-        .eng-stat-group {
-    padding: 0.75rem;
-  }
-
-        /* Improve button sizes for touch */
-
-        /* Better form inputs on mobile */
-
-        /* Ensure main content is full width on mobile for both LTR and RTL */
-
-        /* Prevent horizontal overflow */
-
-        /* Make sure content containers don't exceed viewport */
-
-        /* Mobile navigation styling */
-
-        /* RTL mobile navigation positioning */
-
-        /* Ensure mobile icons are properly sized */
-
-        /* Better spacing for mobile navigation */
-
-        /* RTL mobile navigation spacing */
-
-        /* Mobile header navigation improvements */
-
-        /* Ensure mobile navigation takes full width */
-
-        /* Dashboard mobile navigation improvements */
-
-        /* Dashboard mobile navigation icons */
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-group.gap-1,.eng-stat-group.gap-2,.eng-stat-group.gap-3,.eng-stat-group.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-group.gap-1,.eng-stat-group.gap-2,.eng-stat-group.gap-3,.eng-stat-group.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-group.gap-1,.eng-stat-group.gap-2,.eng-stat-group.gap-3,.eng-stat-group.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-group.gap-1,.eng-stat-group.gap-2,.eng-stat-group.gap-3,.eng-stat-group.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        
-        .flex.eng-stat-group {
-            flex-wrap: wrap;
-        }
-    }
-    .eng-stat-group {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  border-radius: 2rem;
-  border-width: 1px;
-  border-color: hsl(var(--border) / 0.5);
-  padding: 1.5rem;
-  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-  animation-duration: 300ms;
-}
-    .eng-stat-group:hover {
-  border-color: hsl(var(--primary) / 0.2);
-  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-    .eng-stat-group {
-        background-color: hsla(var(--card), 0.4);
-        backdrop-filter: blur(24px);
-    }
-
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-icon-wrap.gap-1,.eng-stat-icon-wrap.gap-2,.eng-stat-icon-wrap.gap-3,.eng-stat-icon-wrap.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-icon-wrap.gap-1,.eng-stat-icon-wrap.gap-2,.eng-stat-icon-wrap.gap-3,.eng-stat-icon-wrap.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-icon-wrap.gap-1,.eng-stat-icon-wrap.gap-2,.eng-stat-icon-wrap.gap-3,.eng-stat-icon-wrap.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-icon-wrap.gap-1,.eng-stat-icon-wrap.gap-2,.eng-stat-icon-wrap.gap-3,.eng-stat-icon-wrap.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-
-    .eng-stat-icon-wrap {
-  display: flex;
-  height: 3rem;
-  width: 3rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 1rem;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  transition-property: transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-    .group:hover .eng-stat-icon-wrap {
-  --tw-rotate: 6deg;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-    
-    html[lang="ar"] .eng-stat-label {
-        font-family: var(--font-arabic-heading);
-        font-weight: 600;
-    }
-
-    .eng-stat-label {
-  display: block;
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: hsl(var(--muted-foreground));
-}
-
-    
-    html[lang="ar"] .eng-stat-value {
-        font-family: var(--font-arabic-heading);
-        font-weight: 600;
-    }
-
-    .eng-stat-value {
-  display: block;
-  font-size: 1.5rem;
-  line-height: 2rem;
-  font-weight: 900;
-  --tw-numeric-spacing: tabular-nums;
-  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
-  letter-spacing: -0.025em;
-  color: hsl(var(--foreground));
-}
-
-    
-    html[lang="ar"] .eng-stat-delta {
-        font-family: var(--font-arabic-heading);
-        font-weight: 600;
-    }
-
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-delta.gap-1,.eng-stat-delta.gap-2,.eng-stat-delta.gap-3,.eng-stat-delta.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .flex.eng-stat-delta {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-delta.gap-1,.eng-stat-delta.gap-2,.eng-stat-delta.gap-3,.eng-stat-delta.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-delta.gap-1,.eng-stat-delta.gap-2,.eng-stat-delta.gap-3,.eng-stat-delta.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .eng-stat-delta.gap-1,.eng-stat-delta.gap-2,.eng-stat-delta.gap-3,.eng-stat-delta.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-
-    .eng-stat-delta {
-  margin-top: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 9px;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-    /* Progress Indicators */
-    .eng-progress-container {
-  height: 0.5rem;
-  overflow: hidden;
-  border-radius: 9999px;
-  background-color: hsl(var(--muted));
-  --tw-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
-  --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--border) / 0.3);
-}
-
-    .eng-progress-bar {
-  height: 100%;
-  border-radius: 9999px;
-  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 1000ms;
-  animation-duration: 1000ms;
-}
+    /* Dashboard mobile navigation icons */
 .\!container {
   width: 100% !important;
   margin-right: auto !important;
@@ -2702,6 +1582,12 @@ html {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+@media (prefers-reduced-motion: reduce) {
+
+    .prose a {
+        transition: none;
+    }
+}
 .prose a:hover {
   color: hsl(var(--primary) / 0.8);
 }
@@ -2711,6 +1597,14 @@ html {
   padding-left: 1rem;
   font-style: italic;
   color: hsl(var(--muted-foreground));
+}
+
+[dir="rtl"] .prose blockquote {
+    border-left: none;
+    border-right-width: 2px;
+    border-right-color: hsl(var(--primary));
+    padding-left: 0;
+    padding-right: 0.75rem;
 }
 
     html[lang="ar"] .prose code {
@@ -2730,59 +1624,27 @@ html[lang="ar"] .prose code {
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
-@media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-        .prose pre {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .prose pre::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-        .prose pre {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .prose pre::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-    }
-.rtl .prose pre {
-        direction: ltr;
-    }
-.rtl .prose pre>* {
-        direction: rtl;
-    }
 .prose pre {
   overflow-x: auto;
   border-radius: var(--radius);
   background-color: hsl(var(--muted));
   padding: 1rem;
+}
+@media (max-width: 640px) {
+    .prose pre {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .prose pre::-webkit-scrollbar {
+        display: none;
+    }
+}
+.rtl .prose pre {
+    direction: ltr;
+}
+.rtl .prose pre>* {
+    direction: rtl;
 }
 .prose img {
   border-radius: var(--radius);
@@ -2864,9 +1726,6 @@ html[lang="ar"] .prose code {
 .-inset-12 {
   inset: -3rem;
 }
-.-inset-20 {
-  inset: -5rem;
-}
 .-inset-4 {
   inset: -1rem;
 }
@@ -2916,6 +1775,9 @@ html[lang="ar"] .prose code {
 }
 .-top-1 {
   top: -0.25rem;
+}
+.-top-2 {
+  top: -0.5rem;
 }
 .-top-20 {
   top: -5rem;
@@ -2979,6 +1841,9 @@ html[lang="ar"] .prose code {
 }
 .left-6 {
   left: 1.5rem;
+}
+.left-full {
+  left: 100%;
 }
 .right-0 {
   right: 0px;
@@ -3101,6 +1966,9 @@ html[lang="ar"] .prose code {
 }
 .-mr-8 {
   margin-right: -2rem;
+}
+.-mt-0\.5 {
+  margin-top: -0.125rem;
 }
 .-mt-16 {
   margin-top: -4rem;
@@ -3465,6 +2333,9 @@ html[lang="ar"] .prose code {
 .min-h-\[160px\] {
   min-height: 160px;
 }
+.min-h-\[200px\] {
+  min-height: 200px;
+}
 .min-h-\[22px\] {
   min-height: 22px;
 }
@@ -3477,8 +2348,14 @@ html[lang="ar"] .prose code {
 .min-h-\[400px\] {
   min-height: 400px;
 }
+.min-h-\[44px\] {
+  min-height: 44px;
+}
 .min-h-\[500px\] {
   min-height: 500px;
+}
+.min-h-\[calc\(100vh-12rem\)\] {
+  min-height: calc(100vh - 12rem);
 }
 .min-h-screen {
   min-height: 100vh;
@@ -3579,6 +2456,9 @@ html[lang="ar"] .prose code {
 .w-52 {
   width: 13rem;
 }
+.w-56 {
+  width: 14rem;
+}
 .w-6 {
   width: 1.5rem;
 }
@@ -3606,14 +2486,8 @@ html[lang="ar"] .prose code {
 .w-\[18px\] {
   width: 18px;
 }
-.w-\[20\%\] {
-  width: 20%;
-}
 .w-\[20px\] {
   width: 20px;
-}
-.w-\[30\%\] {
-  width: 30%;
 }
 .w-\[45\%\] {
   width: 45%;
@@ -3704,6 +2578,9 @@ html[lang="ar"] .prose code {
 }
 .max-w-7xl {
   max-width: 80rem;
+}
+.max-w-\[100px\] {
+  max-width: 100px;
 }
 .max-w-\[280px\] {
   max-width: 280px;
@@ -3798,8 +2675,8 @@ html[lang="ar"] .prose code {
   --tw-translate-y: 2.5rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
-.translate-y-4 {
-  --tw-translate-y: 1rem;
+.translate-y-2 {
+  --tw-translate-y: 0.5rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .-rotate-12 {
@@ -3816,6 +2693,10 @@ html[lang="ar"] .prose code {
 }
 .rotate-12 {
   --tw-rotate: 12deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.rotate-2 {
+  --tw-rotate: 2deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .rotate-3 {
@@ -3911,6 +2792,9 @@ html[lang="ar"] .prose code {
 .cursor-zoom-in {
   cursor: zoom-in;
 }
+.touch-manipulation {
+  touch-action: manipulation;
+}
 .select-none {
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -3932,6 +2816,9 @@ html[lang="ar"] .prose code {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
+}
+.\!grid-cols-\[repeat\(53\2c 8px\)\] {
+  grid-template-columns: repeat(53,8px) !important;
 }
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -4129,6 +3016,9 @@ html[lang="ar"] .prose code {
   --tw-divide-opacity: 1;
   border-color: rgb(229 231 235 / var(--tw-divide-opacity, 1));
 }
+.self-start {
+  align-self: flex-start;
+}
 .overflow-auto {
   overflow: auto;
 }
@@ -4191,9 +3081,6 @@ html[lang="ar"] .prose code {
 .rounded-\[2rem\] {
   border-radius: 2rem;
 }
-.rounded-\[3\.5rem\] {
-  border-radius: 3.5rem;
-}
 .rounded-\[3rem\] {
   border-radius: 3rem;
 }
@@ -4205,6 +3092,9 @@ html[lang="ar"] .prose code {
 }
 .rounded-md {
   border-radius: calc(var(--radius) - 2px);
+}
+.rounded-sm {
+  border-radius: calc(var(--radius) - 4px);
 }
 .rounded-xl {
   border-radius: 0.75rem;
@@ -4271,6 +3161,9 @@ html[lang="ar"] .prose code {
 .border-blue-200 {
   --tw-border-opacity: 1;
   border-color: rgb(191 219 254 / var(--tw-border-opacity, 1));
+}
+.border-blue-200\/50 {
+  border-color: rgb(191 219 254 / 0.5);
 }
 .border-blue-500\/10 {
   border-color: rgb(59 130 246 / 0.1);
@@ -4425,6 +3318,13 @@ html[lang="ar"] .prose code {
 .border-t-transparent {
   border-top-color: transparent;
 }
+.\!bg-primary {
+  background-color: hsl(var(--primary)) !important;
+}
+.bg-\[\#1877F2\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(24 119 242 / var(--tw-bg-opacity, 1));
+}
 .bg-accent {
   background-color: hsl(var(--accent));
 }
@@ -4505,6 +3405,9 @@ html[lang="ar"] .prose code {
   --tw-bg-opacity: 1;
   background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1));
 }
+.bg-blue-50\/50 {
+  background-color: rgb(239 246 255 / 0.5);
+}
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
@@ -4545,6 +3448,9 @@ html[lang="ar"] .prose code {
 }
 .bg-card {
   background-color: hsl(var(--card));
+}
+.bg-card\/20 {
+  background-color: hsl(var(--card) / 0.2);
 }
 .bg-card\/30 {
   background-color: hsl(var(--card) / 0.3);
@@ -4699,6 +3605,9 @@ html[lang="ar"] .prose code {
 .bg-orange-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(234 88 12 / var(--tw-bg-opacity, 1));
+}
+.bg-popover {
+  background-color: hsl(var(--popover));
 }
 .bg-popover\/90 {
   background-color: hsl(var(--popover) / 0.9);
@@ -4944,21 +3853,6 @@ html[lang="ar"] .prose code {
   --tw-gradient-to: hsl(var(--primary) / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-.from-purple-500\/10 {
-  --tw-gradient-from: rgb(168 85 247 / 0.1) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(168 85 247 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.from-purple-500\/20 {
-  --tw-gradient-from: rgb(168 85 247 / 0.2) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(168 85 247 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.from-red-50 {
-  --tw-gradient-from: #fef2f2 var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(254 242 242 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
 .from-red-500\/10 {
   --tw-gradient-from: rgb(225 29 72 / 0.1) var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(225 29 72 / 0) var(--tw-gradient-to-position);
@@ -4977,11 +3871,6 @@ html[lang="ar"] .prose code {
 .from-transparent {
   --tw-gradient-from: transparent var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-.from-yellow-500\/10 {
-  --tw-gradient-from: rgb(234 179 8 / 0.1) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(234 179 8 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 .via-black\/20 {
@@ -5043,9 +3932,6 @@ html[lang="ar"] .prose code {
 .to-indigo-600 {
   --tw-gradient-to: #4f46e5 var(--tw-gradient-to-position);
 }
-.to-orange-50 {
-  --tw-gradient-to: #fff7ed var(--tw-gradient-to-position);
-}
 .to-orange-600 {
   --tw-gradient-to: #ea580c var(--tw-gradient-to-position);
 }
@@ -5064,12 +3950,6 @@ html[lang="ar"] .prose code {
 .to-primary\/80 {
   --tw-gradient-to: hsl(var(--primary) / 0.8) var(--tw-gradient-to-position);
 }
-.to-purple-600\/10 {
-  --tw-gradient-to: rgb(147 51 234 / 0.1) var(--tw-gradient-to-position);
-}
-.to-purple-600\/20 {
-  --tw-gradient-to: rgb(147 51 234 / 0.2) var(--tw-gradient-to-position);
-}
 .to-red-600\/10 {
   --tw-gradient-to: rgb(190 18 60 / 0.1) var(--tw-gradient-to-position);
 }
@@ -5078,9 +3958,6 @@ html[lang="ar"] .prose code {
 }
 .to-transparent {
   --tw-gradient-to: transparent var(--tw-gradient-to-position);
-}
-.to-yellow-600\/10 {
-  --tw-gradient-to: rgb(202 138 4 / 0.1) var(--tw-gradient-to-position);
 }
 .fill-current {
   fill: currentColor;
@@ -5120,9 +3997,6 @@ html[lang="ar"] .prose code {
 .p-12 {
   padding: 3rem;
 }
-.p-16 {
-  padding: 4rem;
-}
 .p-2 {
   padding: 0.5rem;
 }
@@ -5150,6 +4024,10 @@ html[lang="ar"] .prose code {
 .p-\[2px\] {
   padding: 2px;
 }
+.\!py-2 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
 .px-0 {
   padding-left: 0px;
   padding-right: 0px;
@@ -5165,10 +4043,6 @@ html[lang="ar"] .prose code {
 .px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
-}
-.px-12 {
-  padding-left: 3rem;
-  padding-right: 3rem;
 }
 .px-16 {
   padding-left: 4rem;
@@ -5262,9 +4136,6 @@ html[lang="ar"] .prose code {
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
-.pb-10 {
-  padding-bottom: 2.5rem;
-}
 .pb-3 {
   padding-bottom: 0.75rem;
 }
@@ -5313,11 +4184,14 @@ html[lang="ar"] .prose code {
 .pt-10 {
   padding-top: 2.5rem;
 }
+.pt-16 {
+  padding-top: 4rem;
+}
 .pt-2 {
   padding-top: 0.5rem;
 }
-.pt-24 {
-  padding-top: 6rem;
+.pt-20 {
+  padding-top: 5rem;
 }
 .pt-3 {
   padding-top: 0.75rem;
@@ -5349,6 +4223,10 @@ html[lang="ar"] .prose code {
 .font-sans {
   font-family: Alexandria, ui-sans-serif, system-ui;
 }
+.\!text-xs {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -5374,9 +4252,6 @@ html[lang="ar"] .prose code {
 }
 .text-\[11px\] {
   font-size: 11px;
-}
-.text-\[12rem\] {
-  font-size: 12rem;
 }
 .text-\[13px\] {
   font-size: 13px;
@@ -5503,6 +4378,10 @@ html[lang="ar"] .prose code {
 }
 .tracking-widest {
   letter-spacing: 0.1em;
+}
+.\!text-white {
+  --tw-text-opacity: 1 !important;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important;
 }
 .text-accent-foreground {
   color: hsl(var(--accent-foreground));
@@ -5684,11 +4563,17 @@ html[lang="ar"] .prose code {
   --tw-text-opacity: 1;
   color: rgb(154 52 18 / var(--tw-text-opacity, 1));
 }
+.text-popover-foreground {
+  color: hsl(var(--popover-foreground));
+}
 .text-primary {
   color: hsl(var(--primary));
 }
 .text-primary-foreground {
   color: hsl(var(--primary-foreground));
+}
+.text-primary-foreground\/70 {
+  color: hsl(var(--primary-foreground) / 0.7);
 }
 .text-primary\/30 {
   color: hsl(var(--primary) / 0.3);
@@ -5854,6 +4739,9 @@ html[lang="ar"] .prose code {
 .decoration-4 {
   text-decoration-thickness: 4px;
 }
+.underline-offset-2 {
+  text-underline-offset: 2px;
+}
 .underline-offset-4 {
   text-underline-offset: 4px;
 }
@@ -5931,6 +4819,11 @@ html[lang="ar"] .prose code {
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
+.shadow-none {
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
 .shadow-sm {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
@@ -5977,6 +4870,10 @@ html[lang="ar"] .prose code {
   --tw-shadow-color: rgb(99 102 241 / 0.2);
   --tw-shadow: var(--tw-shadow-colored);
 }
+.shadow-primary {
+  --tw-shadow-color: hsl(var(--primary));
+  --tw-shadow: var(--tw-shadow-colored);
+}
 .shadow-primary\/10 {
   --tw-shadow-color: hsl(var(--primary) / 0.1);
   --tw-shadow: var(--tw-shadow-colored);
@@ -6020,6 +4917,9 @@ html[lang="ar"] .prose code {
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+.outline {
+  outline-style: solid;
 }
 .ring-1 {
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
@@ -6083,6 +4983,10 @@ html[lang="ar"] .prose code {
 }
 .blur-sm {
   --tw-blur: blur(4px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+.drop-shadow {
+  --tw-drop-shadow: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 .grayscale {
@@ -6413,6 +5317,1122 @@ html[lang="ar"] .prose code {
   animation-delay: 400ms;
 }
 
+/* Tablet-specific adjustments */
+@media (min-width: 641px) and (max-width: 1279px) {
+
+    /* Ensure proper spacing on tablets */
+    #main-content {
+        margin-right: 0 !important;
+    }
+}
+
+/* Main content right sidebar spacing */
+@media (min-width: 1280px) {
+    .main-content-with-right-sidebar {
+        margin-right: 22rem;
+        /* 352px for w-80 sidebar + gap */
+    }
+
+    /* Custom margin-right for xl:mr-84 (21rem = 336px) */
+    .xl\:mr-84 {
+        margin-right: 21rem;
+    }
+}
+
+/* Feed page mobile optimizations */
+@media (max-width: 640px) {
+
+    /* Ensure feed content doesn't overflow */
+    .space-y-8>* {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Fix horizontal scrolling in stories section */
+    .overflow-x-auto {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .overflow-x-auto::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Ensure images don't cause overflow */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Fix grid layouts on mobile */
+    .grid-cols-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Ensure flex containers wrap properly */
+    .flex-wrap {
+        flex-wrap: wrap;
+    }
+
+    /* Fix button groups on mobile */
+    .flex.gap-1,
+    .flex.gap-2,
+    .flex.gap-3,
+    .flex.gap-4 {
+        flex-wrap: wrap;
+    }
+}
+
+/* No scrollbar utility class */
+.no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* RTL Support */
+.rtl {
+    direction: rtl;
+}
+
+/* RTL-specific sidebar positioning */
+.rtl .sidebar {
+    left: auto;
+    right: 0;
+    /* Mobile: hidden off-screen by default */
+    transform: translateX(100%);
+    transition: transform 300ms ease-in-out;
+}
+
+@media (min-width: 768px) {
+    .rtl .sidebar {
+        /* Desktop: always visible, no transform needed */
+        transform: none;
+        transition: none;
+    }
+}
+
+/* Mobile drawer behavior for RTL */
+@media (max-width: 767px) {
+
+    .rtl .sidebar-visible .sidebar,
+    .rtl .left-sidebar-visible .sidebar {
+        transform: translateX(0);
+    }
+}
+
+.rtl .sidebar-right {
+    right: auto;
+    left: 0;
+    transform: translateX(-100%);
+}
+
+.rtl .sidebar-right.translate-x-0 {
+    transform: translateX(0);
+}
+
+/* RTL styles are now handled in the main sidebar spacing section above */
+/* This section was removed to prevent conflicts with the consolidated spacing rules */
+
+/* Dashboard sidebar RTL positioning */
+.rtl .dashboard-body .sidebar {
+    left: auto;
+    right: 1rem;
+}
+
+@media (max-width: 767px) {
+    .rtl .dashboard-body .sidebar {
+        transform: translateX(calc(100% + 2rem));
+    }
+
+    .rtl .dashboard-body .sidebar.translate-x-0 {
+        transform: translateX(0);
+    }
+}
+
+/* Ensure dashboard container behaves consistently */
+.rtl .dashboard-body #dashboard-container {
+    direction: rtl;
+}
+
+.rtl .dashboard-body #dashboard-container #main-content {
+    direction: ltr;
+    /* Keep content direction normal */
+}
+
+/* Fix dashboard content wrapper */
+.rtl .dashboard-body #main-content>div {
+    width: 100%;
+    max-width: none;
+}
+
+/* RTL text alignment */
+.rtl .text-left {
+    text-align: right;
+}
+
+.rtl .text-right {
+    text-align: left;
+}
+
+/* RTL flex direction adjustments */
+.rtl .flex-row-reverse {
+    flex-direction: row-reverse;
+}
+
+/* RTL border radius adjustments */
+.rtl .rounded-l-lg {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.rtl .rounded-r-lg {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+/* RTL dropdown positioning */
+.rtl .dropdown-menu {
+    left: auto;
+    right: 0;
+}
+
+/* RTL notification positioning */
+.rtl .notification-dropdown,
+.rtl .mobile-notification-dropdown {
+    left: 0;
+    right: auto;
+}
+
+/* RTL story container scroll direction */
+.rtl .overflow-x-auto {
+    direction: ltr;
+}
+
+.rtl .overflow-x-auto>* {
+    direction: rtl;
+}
+
+/* AI Assistant Animation State */
+#ai-chat-widget.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+/* Chat History Modal */
+#chat-history-modal {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#chat-history-modal.opacity-100 {
+    pointer-events: auto;
+}
+
+#chat-history-modal.opacity-0 {
+    pointer-events: none;
+}
+
+/* Chat message animations */
+.chat-message {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Typing indicator animation */
+.typing-indicator .animate-bounce:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.typing-indicator .animate-bounce:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator .animate-bounce:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Badge Components */
+
+    html[lang="ar"] .badge {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+        font-family: var(--font-arabic-body);
+    }
+html[lang="ar"] .badge {
+        line-height: 1.6;
+    }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border-width: 1px;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+@media (prefers-reduced-motion: reduce) {
+
+    .badge {
+        transition: none;
+    }
+}
+.badge:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: hsl(var(--ring));
+  --tw-ring-offset-width: 2px;
+}
+
+.badge-default {
+  border-color: transparent;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+@media print {
+
+    .badge-default {
+        background-color: #000;
+        color: #fff;
+    }
+}
+
+.badge-default:hover {
+  background-color: hsl(var(--primary) / 0.8);
+}
+
+.badge-secondary {
+  border-color: transparent;
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.badge-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+}
+
+.badge-destructive {
+  border-color: transparent;
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+
+.badge-destructive:hover {
+  background-color: hsl(var(--destructive) / 0.8);
+}
+
+.badge-outline {
+  color: hsl(var(--foreground));
+}
+
+/* Avatar Components */
+.avatar {
+  position: relative;
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+}
+@media (max-width: 640px) {
+    .avatar.gap-1,.avatar.gap-2,.avatar.gap-3,.avatar.gap-4 {
+        flex-wrap: wrap;
+    }
+}
+
+.avatar-image {
+  aspect-ratio: 1 / 1;
+  height: 100%;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+
+    .gallery-item.list-view .avatar-image {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+.avatar-fallback {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: hsl(var(--muted));
+}
+
+@media (max-width: 640px) {
+    .avatar-fallback.gap-1,.avatar-fallback.gap-2,.avatar-fallback.gap-3,.avatar-fallback.gap-4 {
+        flex-wrap: wrap;
+    }
+}
+
+/* Input Components */
+
+    html[lang="ar"] .input {
+        font-family: var(--font-arabic-body);
+    }
+html[lang="ar"] .input {
+        line-height: 1.7;
+    }
+.input {
+  display: flex;
+  height: 3rem;
+  width: 100%;
+  border-radius: 1rem;
+  border-width: 1px;
+  border-color: hsl(var(--border) / 0.6);
+  background-color: hsl(var(--background) / 0.4);
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --tw-ring-offset-color: hsl(var(--background));
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+@media (max-width: 640px) {
+    .input.gap-1,.input.gap-2,.input.gap-3,.input.gap-4 {
+        flex-wrap: wrap;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+
+    .input {
+        transition: none;
+    }
+}
+
+    html[lang="ar"] .input::file-selector-button {
+        font-family: var(--font-arabic-body);
+    }
+html[lang="ar"] .input::file-selector-button {
+        line-height: 1.7;
+    }
+.input::file-selector-button {
+  border-width: 0px;
+  background-color: transparent;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+.input::-moz-placeholder {
+  color: hsl(var(--muted-foreground) / 0.3);
+}
+.input::placeholder {
+  color: hsl(var(--muted-foreground) / 0.3);
+}
+.input:hover {
+  border-color: hsl(var(--border));
+  background-color: hsl(var(--background) / 0.6);
+}
+.input:focus {
+  border-color: hsl(var(--primary) / 0.6);
+  background-color: hsl(var(--background));
+}
+.input:focus-visible {
+  border-color: hsl(var(--primary) / 0.5);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: hsl(var(--primary) / 0.3);
+}
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
+    html[lang="ar"] .textarea {
+        font-family: var(--font-arabic-body);
+    }
+
+html[lang="ar"] .textarea {
+        line-height: 1.7;
+    }
+
+.textarea {
+  display: flex;
+  min-height: 120px;
+  width: 100%;
+  border-radius: 1rem;
+  border-width: 1px;
+  border-color: hsl(var(--border) / 0.6);
+  background-color: hsl(var(--background) / 0.4);
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --tw-ring-offset-color: hsl(var(--background));
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+@media (max-width: 640px) {
+    .textarea.gap-1,.textarea.gap-2,.textarea.gap-3,.textarea.gap-4 {
+        flex-wrap: wrap;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .textarea {
+        transition: none;
+    }
+}
+
+.textarea::-moz-placeholder {
+  color: hsl(var(--muted-foreground) / 0.3);
+}
+
+.textarea::placeholder {
+  color: hsl(var(--muted-foreground) / 0.3);
+}
+
+.textarea:hover {
+  border-color: hsl(var(--border));
+  background-color: hsl(var(--background) / 0.6);
+}
+
+.textarea:focus {
+  border-color: hsl(var(--primary) / 0.6);
+  background-color: hsl(var(--background));
+}
+
+.textarea:focus-visible {
+  border-color: hsl(var(--primary) / 0.5);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: hsl(var(--primary) / 0.3);
+}
+
+.textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Select Components */
+
+    html[lang="ar"] .select-trigger {
+        font-family: var(--font-arabic-body);
+    }
+html[lang="ar"] .select-trigger {
+        line-height: 1.7;
+    }
+.select-trigger {
+  display: flex;
+  height: 3rem;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 1rem;
+  border-width: 1px;
+  border-color: hsl(var(--input));
+  background-color: hsl(var(--background) / 0.5);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-ring-offset-color: hsl(var(--background));
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+@media (max-width: 640px) {
+    .select-trigger.gap-1,.select-trigger.gap-2,.select-trigger.gap-3,.select-trigger.gap-4 {
+        flex-wrap: wrap;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+
+    .select-trigger {
+        transition: none;
+    }
+}
+.select-trigger::-moz-placeholder {
+  color: hsl(var(--muted-foreground) / 0.4);
+}
+.select-trigger::placeholder {
+  color: hsl(var(--muted-foreground) / 0.4);
+}
+.select-trigger:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: hsl(var(--primary) / 0.5);
+  --tw-ring-offset-width: 2px;
+}
+.select-trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Dropdown Menus */
+.dropdown-content {
+  overflow: hidden;
+  border-radius: 1rem;
+  border-width: 1px;
+  border-color: hsl(var(--border) / 0.5);
+  background-color: hsl(var(--card) / 0.8);
+  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --tw-backdrop-blur: blur(24px);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+  transition-duration: 200ms;
+  animation-name: enter;
+  --tw-enter-opacity: initial;
+  --tw-enter-scale: initial;
+  --tw-enter-rotate: initial;
+  --tw-enter-translate-x: initial;
+  --tw-enter-translate-y: initial;
+  --tw-enter-scale: .95;
+  animation-duration: 200ms;
+}
+.dropdown-content.fade-in {
+    animation: error-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+
+    .dropdown-content {
+        animation: none;
+    }
+}
+@media print {
+
+    .dropdown-content {
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+}
+
+
+    html[lang="ar"] .dropdown-item {
+        font-family: var(--font-arabic-body);
+    }
+
+html[lang="ar"] .dropdown-item {
+        line-height: 1.7;
+    }
+
+.dropdown-item {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: hsl(var(--foreground) / 0.9);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+@media (max-width: 640px) {
+    .dropdown-item.gap-1,.dropdown-item.gap-2,.dropdown-item.gap-3,.dropdown-item.gap-4 {
+        flex-wrap: wrap;
+    }
+    
+    .flex.dropdown-item {
+        flex-wrap: wrap;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .dropdown-item {
+        transition: none;
+    }
+}
+
+.dropdown-item:hover {
+  background-color: hsl(var(--primary) / 0.05);
+  color: hsl(var(--primary));
+}
+
+/* Separator */
+.separator {
+  flex-shrink: 0;
+  background-color: hsl(var(--border));
+}
+
+.separator-horizontal {
+  height: 1px;
+  width: 100%;
+}
+
+.separator-vertical {
+  height: 100%;
+  width: 1px;
+}
+
+/* Engineering Design System (Dashboard/Details) */
+#main-content .eng-card {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+@media (min-width: 1280px) {
+
+        /* Ensure sidebars don't interfere with main content */
+
+        /* Main content should not overlap with fixed sidebars */
+        #main-content .eng-card {
+            /* Ensure content cards respect sidebar boundaries */
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Debug: Add visual indicators (remove in production) */
+        /*
+        #main-content {
+            border-left: 2px solid red;
+            border-right: 2px solid blue;
+        }
+        .sidebar {
+            border: 2px solid green;
+        }
+        .sidebar-right {
+            border: 2px solid orange;
+        }
+        */
+    }
+@media (max-width: 640px) {
+
+        /* Tighter spacing for small screens */
+
+        /* When sidebar is open on very small screens */
+
+        /* RTL support for very small screens */
+
+        /* Content wrapper improvements */
+
+        /* Card spacing improvements */
+        #main-content .eng-card {
+            margin-left: 0;
+            margin-right: 0;
+            border-radius: 0.75rem;
+        }
+
+        /* Reduce padding on very small screens */
+
+        /* Improve button sizes for touch */
+
+        /* Better form inputs on mobile */
+
+        /* Prevent horizontal overflow */
+    }
+.eng-card {
+  border-radius: 2rem;
+  border-width: 1px;
+  border-color: hsl(var(--border) / 0.5);
+  background-color: hsl(var(--card));
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+  animation-duration: 300ms;
+}
+@media (prefers-reduced-motion: reduce) {
+
+    .eng-card {
+        transition: none;
+    }
+}
+@media print {
+
+    .eng-card {
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+}
+@media (max-width: 640px) {
+
+    #chat-history-modal .eng-card {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
+}
+.eng-card:hover {
+  border-color: hsl(var(--primary) / 0.2);
+  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.eng-card {
+    background-color: hsla(var(--card), 0.4);
+    backdrop-filter: blur(24px);
+}
+
+.eng-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom-width: 1px;
+  border-color: hsl(var(--border) / 0.3);
+  background-color: hsl(var(--muted) / 0.2);
+  padding: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (max-width: 640px) {
+    .eng-card-header.gap-1,.eng-card-header.gap-2,.eng-card-header.gap-3,.eng-card-header.gap-4 {
+        flex-wrap: wrap;
+    }
+}
+
+
+    html[lang="ar"] .eng-card-title {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+        font-family: var(--font-arabic-body);
+    }
+
+html[lang="ar"] .eng-card-title {
+        line-height: 1.6;
+    }
+
+.eng-card-title {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: hsl(var(--foreground));
+}
+
+@media (max-width: 640px) {
+
+        /* Tighter spacing for small screens */
+
+        /* When sidebar is open on very small screens */
+
+        /* RTL support for very small screens */
+
+        /* Content wrapper improvements */
+
+        /* Card spacing improvements */
+
+        /* Reduce padding on very small screens */
+        .eng-card-content {
+    padding: 0.75rem;
+  }
+
+        /* Improve button sizes for touch */
+
+        /* Better form inputs on mobile */
+
+        /* Prevent horizontal overflow */
+    }
+
+.eng-card-content {
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    @media (max-width: 640px) {
+
+        /* Tighter spacing for small screens */
+
+        /* When sidebar is open on very small screens */
+
+        /* RTL support for very small screens */
+
+        /* Content wrapper improvements */
+
+        /* Card spacing improvements */
+
+        /* Reduce padding on very small screens */
+
+        .eng-card-content {
+      padding: 1rem;
+    }
+
+        /* Improve button sizes for touch */
+
+        /* Better form inputs on mobile */
+
+        /* Prevent horizontal overflow */
+    }
+    .eng-card-content {
+    padding: 2rem;
+  }
+}
+
+/* Stats & Metrics */
+@media (max-width: 640px) {
+
+        /* Tighter spacing for small screens */
+
+        /* When sidebar is open on very small screens */
+
+        /* RTL support for very small screens */
+
+        /* Content wrapper improvements */
+
+        /* Card spacing improvements */
+
+        /* Reduce padding on very small screens */
+        .eng-stat-group {
+    padding: 0.75rem;
+  }
+
+        /* Improve button sizes for touch */
+
+        /* Better form inputs on mobile */
+
+        /* Prevent horizontal overflow */
+    }
+.eng-stat-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 2rem;
+  border-width: 1px;
+  border-color: hsl(var(--border) / 0.5);
+  padding: 1.5rem;
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+  animation-duration: 300ms;
+}
+@media (max-width: 640px) {
+    .eng-stat-group.gap-1,.eng-stat-group.gap-2,.eng-stat-group.gap-3,.eng-stat-group.gap-4 {
+        flex-wrap: wrap;
+    }
+    
+    .flex.eng-stat-group {
+        flex-wrap: wrap;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+
+    .eng-stat-group {
+        transition: none;
+    }
+}
+@media print {
+
+    .eng-stat-group {
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+}
+.eng-stat-group:hover {
+  border-color: hsl(var(--primary) / 0.2);
+  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.eng-stat-group {
+    background-color: hsla(var(--card), 0.4);
+    backdrop-filter: blur(24px);
+}
+
+.eng-stat-icon-wrap {
+  display: flex;
+  height: 3rem;
+  width: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+@media (max-width: 640px) {
+    .eng-stat-icon-wrap.gap-1,.eng-stat-icon-wrap.gap-2,.eng-stat-icon-wrap.gap-3,.eng-stat-icon-wrap.gap-4 {
+        flex-wrap: wrap;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .eng-stat-icon-wrap {
+        transition: none;
+    }
+}
+
+.group:hover .eng-stat-icon-wrap {
+  --tw-rotate: 6deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+
+    html[lang="ar"] .eng-stat-label {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+.eng-stat-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: hsl(var(--muted-foreground));
+}
+
+@media (max-width: 640px) {
+
+    .eng-stat-label {
+        font-size: 10px;
+    }
+}
+
+
+    html[lang="ar"] .eng-stat-value {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+.eng-stat-value {
+  display: block;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 900;
+  --tw-numeric-spacing: tabular-nums;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+  letter-spacing: -0.025em;
+  color: hsl(var(--foreground));
+}
+
+
+    html[lang="ar"] .eng-stat-delta {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+.eng-stat-delta {
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+    .eng-stat-delta.gap-1,.eng-stat-delta.gap-2,.eng-stat-delta.gap-3,.eng-stat-delta.gap-4 {
+        flex-wrap: wrap;
+    }
+    .flex.eng-stat-delta {
+        flex-wrap: wrap;
+    }
+
+    .eng-stat-delta {
+        font-size: 9px;
+    }
+}
+
+/* Progress Indicators */
+.eng-progress-container {
+  height: 0.5rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background-color: hsl(var(--muted));
+  --tw-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: hsl(var(--border) / 0.3);
+}
+
+.eng-progress-bar {
+  height: 100%;
+  border-radius: 9999px;
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 1000ms;
+  animation-duration: 1000ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .eng-progress-bar {
+        transition: none;
+    }
+}
+
 /* News Article Enhancements */
 
 /* Animation Keyframes */
@@ -6691,7 +6711,7 @@ input:checked+.toggle-slider:before {
     }
 }
 
-/* Error Page Specific Styles */
+/* Error Page Specific Styles - Enhanced Responsive Design */
 .error-page {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -6708,6 +6728,194 @@ input:checked+.toggle-slider:before {
 
 .dark .error-card:hover {
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced 404 Page Responsive Styles */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile-first responsive improvements for error pages */
+@media (max-width: 640px) {
+    .auth-container {
+        padding-top: 5rem;
+        padding-bottom: 2rem;
+        align-items: flex-start;
+    }
+
+    /* Improve readability on small screens */
+    .text-\[12rem\] {
+        font-size: 6rem;
+    }
+
+    .text-\[10px\] {
+        font-size: 10px;
+    }
+
+    .text-\[9px\] {
+        font-size: 9px;
+    }
+
+    .text-\[8px\] {
+        font-size: 8px;
+    }
+
+    /* Better spacing for mobile */
+    .space-y-12>*+* {
+        margin-top: 2rem;
+    }
+
+    .space-y-10>*+* {
+        margin-top: 2rem;
+    }
+
+    /* Improve button accessibility */
+    button,
+    a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Better touch targets */
+    .touch-manipulation {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .auth-container {
+        padding-top: 6rem;
+        padding-bottom: 3rem;
+    }
+
+    .text-\[12rem\] {
+        font-size: 8rem;
+    }
+}
+
+/* Desktop enhancements */
+@media (min-width: 1025px) {
+    .auth-container {
+        padding-top: 8rem;
+        padding-bottom: 4rem;
+    }
+
+    /* Enhanced hover effects */
+    .group:hover .animate-\[spin_12s_linear_infinite\] {
+        animation-duration: 8s;
+    }
+
+    /* Better visual hierarchy */
+    .text-\[12rem\] {
+        font-size: 12rem;
+    }
+}
+
+/* RTL-specific improvements for error pages */
+[dir="rtl"] .border-l-2,
+[dir="rtl"] .border-l-4 {
+    border-left: none;
+    border-right-width: 2px;
+    border-right-color: hsl(var(--primary));
+    padding-left: 0;
+    padding-right: 0.75rem;
+}
+
+[dir="rtl"] .sm\:border-l-4 {
+    border-right-width: 4px;
+    padding-right: 1rem;
+}
+
+[dir="rtl"] .pl-3,
+[dir="rtl"] .pl-4 {
+    padding-left: 0;
+    padding-right: 0.75rem;
+}
+
+[dir="rtl"] .sm\:pl-4 {
+    padding-right: 1rem;
+}
+
+/* Enhanced animations for error pages */
+@keyframes error-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.animate-in.fade-in {
+    animation: error-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    .animate-\[spin_12s_linear_infinite\] {
+        animation: none;
+    }
+
+    .animate-in {
+        animation: none;
+    }
+
+    .transition-all,
+    .transition-transform,
+    .transition-colors {
+        transition: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .bg-card\/30 {
+        background-color: hsl(var(--card));
+        border-width: 2px;
+    }
+
+    .text-foreground\/5 {
+        color: hsl(var(--foreground) / 0.2);
+    }
+
+    .opacity-40 {
+        opacity: 0.8;
+    }
+
+    .opacity-60 {
+        opacity: 0.9;
+    }
+}
+
+/* Print styles for error pages */
+@media print {
+    .auth-container {
+        padding: 2rem;
+    }
+
+    .bg-primary {
+        background-color: #000 !important;
+        color: #fff !important;
+    }
+
+    .shadow-xl,
+    .shadow-2xl,
+    .backdrop-blur-xl {
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+
+    .animate-\[spin_12s_linear_infinite\] {
+        animation: none !important;
+    }
 }
 
 /* Form Styling */
@@ -7068,91 +7276,408 @@ input:checked+.toggle-slider:before {
     margin-left: 0 !important;
 }
 
+/* Mobile Sidebar Toggle Styles */
+.sidebar-mobile-open span.sidebar-mobile-open\:inline {
+    display: inline !important;
+}
+
+.main-sidebar-mobile-open span.main-sidebar-mobile-open\:inline {
+    display: inline !important;
+}
+
+@media (max-width: 767px) {
+    .sidebar-mobile-open span.md\:hidden {
+        display: inline !important;
+    }
+
+    .main-sidebar-mobile-open span.md\:hidden {
+        display: inline !important;
+    }
+}
+
+/* ========================================
+ * DESKTOP SIDEBAR TOGGLE FUNCTIONALITY
+ * ========================================
+ * 
+ * This system handles desktop sidebar toggle between:
+ * - Expanded state: Full width with icons + text (default)
+ * - Collapsed state: Narrow width with icons only + tooltips
+ * 
+ * Screen behavior:
+ * - Mobile (< 768px): Existing mobile drawer behavior (unchanged)
+ * - Tablet (768px - 1279px): Always show icons only (no toggle)
+ * - Desktop (1280px+): Toggle between expanded/collapsed states
+ * 
+ * ======================================== */
+
+/* Desktop Sidebar States */
+@media (min-width: 1280px) {
+    /* Default expanded state - full width with text */
+    .sidebar-expanded {
+        width: 14rem !important; /* 224px - matches xl:w-56 */
+    }
+    
+    /* Collapsed state - narrow width, icons only */
+    .sidebar-collapsed {
+        width: 4rem !important; /* 64px - matches w-16 */
+    }
+    
+    /* Text visibility in different states */
+    .sidebar-expanded .sidebar-text {
+        display: inline !important;
+        opacity: 1;
+        transition: opacity 300ms ease-in-out;
+    }
+    
+    .sidebar-collapsed .sidebar-text {
+        display: none !important;
+        opacity: 0;
+    }
+    
+    /* Tooltip visibility - show only when collapsed */
+    .sidebar-expanded .sidebar-tooltip {
+        display: none !important;
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    .sidebar-collapsed .sidebar-tooltip {
+        display: block !important;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 200ms ease-in-out;
+        z-index: 60;
+    }
+    
+    /* Show tooltip on hover when collapsed */
+    .sidebar-collapsed .group:hover .sidebar-tooltip {
+        opacity: 1 !important;
+        pointer-events: auto;
+    }
+}
+
+/* Tablet behavior - always show icons only, no toggle */
+@media (min-width: 768px) and (max-width: 1279px) {
+    .sidebar {
+        width: 4rem !important; /* Always narrow on tablet */
+    }
+    
+    .sidebar .sidebar-text {
+        display: none !important; /* Always hide text on tablet */
+    }
+    
+    .sidebar .sidebar-tooltip {
+        display: block !important;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 200ms ease-in-out;
+        z-index: 60;
+    }
+    
+    .sidebar .group:hover .sidebar-tooltip {
+        opacity: 1 !important;
+        pointer-events: auto;
+    }
+}
+
+/* Main Content Margin Adjustments for Desktop Toggle */
+@media (min-width: 1280px) {
+    /* When sidebar is expanded (default) - use existing universal spacing */
+    body.sidebar-expanded main#main-content,
+    body.sidebar-expanded #main-content,
+    body.sidebar-expanded #dashboard-container #main-content,
+    body.sidebar-expanded main[role="main"],
+    body.sidebar-expanded .main-content,
+    .sidebar-expanded ~ main,
+    body:has(.sidebar-expanded) main,
+    body:has(.sidebar-expanded) #main-content {
+        margin-left: 15rem !important; /* 14rem sidebar + 1rem gap - matches universal spacing */
+        margin-right: 21rem !important; /* 20rem right sidebar + 1rem gap */
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        width: calc(100vw - 36rem) !important; /* Full width minus both sidebars and gaps */
+        max-width: calc(100vw - 36rem) !important;
+        opacity: 1 !important; /* Ensure visibility */
+        visibility: visible !important; /* Ensure visibility */
+        display: block !important; /* Ensure display */
+        transition: margin-left 300ms ease-in-out, margin-right 300ms ease-in-out, width 300ms ease-in-out !important;
+    }
+    
+    /* When sidebar is collapsed - override universal spacing */
+    body.sidebar-collapsed main#main-content,
+    body.sidebar-collapsed #main-content,
+    body.sidebar-collapsed #dashboard-container #main-content,
+    body.sidebar-collapsed main[role="main"],
+    body.sidebar-collapsed .main-content,
+    .sidebar-collapsed ~ main,
+    body:has(.sidebar-collapsed) main,
+    body:has(.sidebar-collapsed) #main-content {
+        margin-left: 5rem !important; /* 4rem sidebar + 1rem gap */
+        margin-right: 21rem !important; /* 20rem right sidebar + 1rem gap */
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        width: calc(100vw - 26rem) !important; /* Full width minus collapsed sidebar, right sidebar and gaps */
+        max-width: calc(100vw - 26rem) !important;
+        opacity: 1 !important; /* Ensure visibility */
+        visibility: visible !important; /* Ensure visibility */
+        display: block !important; /* Ensure display */
+        transition: margin-left 300ms ease-in-out, margin-right 300ms ease-in-out, width 300ms ease-in-out !important;
+    }
+    
+    /* When right sidebar is hidden - both expanded and collapsed states */
+    body.sidebar-expanded main#main-content.xl\:mr-0,
+    body.sidebar-expanded #main-content.xl\:mr-0,
+    body.sidebar-expanded .main-content.xl\:mr-0,
+    body.sidebar-collapsed main#main-content.xl\:mr-0,
+    body.sidebar-collapsed #main-content.xl\:mr-0,
+    body.sidebar-collapsed .main-content.xl\:mr-0 {
+        margin-right: 0 !important;
+        padding-right: 1rem !important;
+    }
+    
+    /* When right sidebar is hidden - expanded state width */
+    body.sidebar-expanded main#main-content.xl\:mr-0,
+    body.sidebar-expanded #main-content.xl\:mr-0,
+    body.sidebar-expanded .main-content.xl\:mr-0 {
+        width: calc(100vw - 15rem) !important; /* Full width minus expanded sidebar and gap */
+        max-width: calc(100vw - 15rem) !important;
+    }
+    
+    /* When right sidebar is hidden - collapsed state width */
+    body.sidebar-collapsed main#main-content.xl\:mr-0,
+    body.sidebar-collapsed #main-content.xl\:mr-0,
+    body.sidebar-collapsed .main-content.xl\:mr-0 {
+        width: calc(100vw - 5rem) !important; /* Full width minus collapsed sidebar and gap */
+        max-width: calc(100vw - 5rem) !important;
+    }
+    
+    /* RTL support for desktop toggle */
+    .rtl body.sidebar-expanded main#main-content,
+    .rtl body.sidebar-expanded #main-content,
+    .rtl body.sidebar-expanded #dashboard-container #main-content,
+    .rtl body.sidebar-expanded main[role="main"],
+    .rtl body.sidebar-expanded .main-content,
+    .rtl .sidebar-expanded ~ main,
+    .rtl body:has(.sidebar-expanded) main,
+    .rtl body:has(.sidebar-expanded) #main-content {
+        margin-left: 21rem !important; /* 20rem right sidebar + 1rem gap */
+        margin-right: 15rem !important; /* 14rem sidebar + 1rem gap */
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        width: calc(100vw - 36rem) !important; /* Full width minus both sidebars and gaps */
+        max-width: calc(100vw - 36rem) !important;
+        transition: margin-left 300ms ease-in-out, margin-right 300ms ease-in-out, width 300ms ease-in-out !important;
+    }
+    
+    .rtl body.sidebar-collapsed main#main-content,
+    .rtl body.sidebar-collapsed #main-content,
+    .rtl body.sidebar-collapsed #dashboard-container #main-content,
+    .rtl body.sidebar-collapsed main[role="main"],
+    .rtl body.sidebar-collapsed .main-content,
+    .rtl .sidebar-collapsed ~ main,
+    .rtl body:has(.sidebar-collapsed) main,
+    .rtl body:has(.sidebar-collapsed) #main-content {
+        margin-left: 21rem !important; /* 20rem right sidebar + 1rem gap */
+        margin-right: 5rem !important; /* 4rem sidebar + 1rem gap */
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        width: calc(100vw - 26rem) !important; /* Full width minus collapsed sidebar, right sidebar and gaps */
+        max-width: calc(100vw - 26rem) !important;
+        transition: margin-left 300ms ease-in-out, margin-right 300ms ease-in-out, width 300ms ease-in-out !important;
+    }
+    
+    /* RTL when right sidebar is hidden - both expanded and collapsed states */
+    .rtl body.sidebar-expanded main#main-content.xl\:mr-0,
+    .rtl body.sidebar-expanded #main-content.xl\:mr-0,
+    .rtl body.sidebar-expanded .main-content.xl\:mr-0,
+    .rtl body.sidebar-collapsed main#main-content.xl\:mr-0,
+    .rtl body.sidebar-collapsed #main-content.xl\:mr-0,
+    .rtl body.sidebar-collapsed .main-content.xl\:mr-0 {
+        margin-left: 0 !important;
+        padding-left: 1rem !important;
+    }
+    
+    /* RTL when right sidebar is hidden - expanded state width */
+    .rtl body.sidebar-expanded main#main-content.xl\:mr-0,
+    .rtl body.sidebar-expanded #main-content.xl\:mr-0,
+    .rtl body.sidebar-expanded .main-content.xl\:mr-0 {
+        width: calc(100vw - 15rem) !important; /* Full width minus expanded sidebar and gap */
+        max-width: calc(100vw - 15rem) !important;
+    }
+    
+    /* RTL when right sidebar is hidden - collapsed state width */
+    .rtl body.sidebar-collapsed main#main-content.xl\:mr-0,
+    .rtl body.sidebar-collapsed #main-content.xl\:mr-0,
+    .rtl body.sidebar-collapsed .main-content.xl\:mr-0 {
+        width: calc(100vw - 5rem) !important; /* Full width minus collapsed sidebar and gap */
+        max-width: calc(100vw - 5rem) !important;
+    }
+}
+
+/* Smooth transitions for desktop toggle */
+@media (min-width: 1280px) {
+    .sidebar {
+        transition: width 300ms ease-in-out !important;
+    }
+    
+    #main-content {
+        transition: margin-left 300ms ease-in-out, margin-right 300ms ease-in-out !important;
+    }
+    
+    .sidebar-text {
+        transition: opacity 200ms ease-in-out;
+    }
+}
+
+/* Desktop Toggle Button States */
+@media (min-width: 768px) {
+    #desktop-sidebar-toggle {
+        transition: all 200ms ease-in-out;
+    }
+    
+    #desktop-sidebar-toggle:hover {
+        background-color: hsl(var(--accent));
+        color: hsl(var(--accent-foreground));
+        transform: scale(1.05);
+    }
+    
+    #desktop-sidebar-toggle:active {
+        transform: scale(0.95);
+    }
+    
+    /* Icon rotation for visual feedback */
+    #desktop-sidebar-toggle i {
+        transition: transform 200ms ease-in-out;
+    }
+    
+    .sidebar-collapsed #desktop-sidebar-toggle i {
+        transform: rotate(180deg);
+    }
+}
+
+/* Toggle Switch Component */
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  height: 1.5rem;
+  width: 2.75rem;
+  align-items: center;
+  border-radius: 9999px;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+@media (prefers-reduced-motion: reduce) {
+
+    .toggle-switch {
+        transition: none;
+    }
+}
+.toggle-switch:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: hsl(var(--primary));
+  --tw-ring-offset-width: 2px;
+}
+
+.toggle-switch input[type="checkbox"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.toggle-slider {
+  display: inline-block;
+  height: 1rem;
+  width: 1rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  border-radius: 9999px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .toggle-slider {
+        transition: none;
+    }
+}
+
+.toggle-switch input[type="checkbox"]:checked+.toggle-slider {
+  --tw-translate-x: 1.25rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.toggle-switch {
+    background-color: hsl(var(--muted));
+}
+
+.toggle-switch input[type="checkbox"]:checked+.toggle-slider {
+    background-color: hsl(var(--primary));
+}
+
+.toggle-switch:has(input[type="checkbox"]:checked) {
+    background-color: hsl(var(--primary) / 0.2);
+}
+
 
     html[lang="ar"] .file\:font-black::file-selector-button {
         font-family: var(--font-arabic-heading);
         font-weight: 600;
     }
 
-.hover\:opacity-100:hover#chat-history-modal {
-        pointer-events: auto;
+
+    .mobile-profile-toggle .after\:w-5::after {
+        content: var(--tw-content);
+        transition: all 0.2s ease;
     }
 
-.focus\:opacity-100:focus#chat-history-modal {
-        pointer-events: auto;
+
+    .mobile-profile-toggle:hover .after\:w-5::after {
+        content: var(--tw-content);
+        transform: scale(1.05);
     }
 
-.group\/field:focus-within .group-focus-within\/field\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group\/form:focus-within .group-focus-within\/form\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group\/input:focus-within .group-focus-within\/input\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.rtl .group\/counts:hover .group-hover\/counts\:translate-x-0.sidebar-right {
-        transform: translateX(0);
-    }
-
-.rtl .group:hover .group-hover\:translate-x-0.sidebar-right {
-        transform: translateX(0);
-    }
-
-@media (max-width: 767px) {
-
-        .rtl .dashboard-body .group\/counts:hover .group-hover\/counts\:translate-x-0.sidebar {
-            transform: translateX(0);
-        }
-
-        .rtl .dashboard-body .group:hover .group-hover\:translate-x-0.sidebar {
-            transform: translateX(0);
-        }
-    }
-
-.group\/btn:hover .group-hover\/btn\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group\/card:hover .group-hover\/card\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group\/conv:hover .group-hover\/conv\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group\/feed-item:hover .group-hover\/feed-item\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group\/map:hover .group-hover\/map\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group\/photo:hover .group-hover\/photo\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group\/post:hover .group-hover\/post\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group\/story:hover .group-hover\/story\:opacity-100#chat-history-modal {
-        pointer-events: auto;
-    }
-
-.group:hover .group-hover\:opacity-100#chat-history-modal {
-        pointer-events: auto;
+.profile-dropdown .hover\:text-destructive:hover.dropdown-item:hover,
+    .mobile-profile-dropdown .hover\:text-destructive:hover.dropdown-item:hover {
+        background-color: hsl(var(--destructive) / 0.1);
+        color: hsl(var(--destructive));
     }
 
 @media (min-width: 640px) {
 
     
+    html[lang="ar"] .sm\:text-xl {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+    
     html[lang="ar"] .sm\:text-2xl {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+    
+    html[lang="ar"] .sm\:text-3xl {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+    
+    html[lang="ar"] .sm\:text-4xl {
         font-family: var(--font-arabic-heading);
         font-weight: 600;
     }
@@ -7167,6 +7692,16 @@ input:checked+.toggle-slider:before {
     }
     @media (max-width: 640px) {
 
+        /* Tighter spacing for small screens */
+
+        /* When sidebar is open on very small screens */
+
+        /* RTL support for very small screens */
+
+        /* Content wrapper improvements */
+
+        /* Card spacing improvements */
+
         /* Reduce padding on very small screens */
         .sm\:p-6 {
       padding: 0.75rem;
@@ -7176,104 +7711,45 @@ input:checked+.toggle-slider:before {
 
         /* Better form inputs on mobile */
 
-        /* Ensure main content is full width on mobile for both LTR and RTL */
-
         /* Prevent horizontal overflow */
 
-        /* Make sure content containers don't exceed viewport */
+        /* Tighter spacing for small screens */
 
-        /* Mobile navigation styling */
+        /* When sidebar is open on very small screens */
 
-        /* RTL mobile navigation positioning */
+        /* RTL support for very small screens */
 
-        /* Ensure mobile icons are properly sized */
+        /* Content wrapper improvements */
 
-        /* Better spacing for mobile navigation */
+        /* Card spacing improvements */
 
-        /* RTL mobile navigation spacing */
+        /* Reduce padding on very small screens */
 
-        /* Mobile header navigation improvements */
+        .sm\:p-8 {
+      padding: 1rem;
+    }
 
-        /* Ensure mobile navigation takes full width */
+        /* Improve button sizes for touch */
 
-        /* Dashboard mobile navigation improvements */
+        /* Better form inputs on mobile */
 
-        /* Dashboard mobile navigation icons */
+        /* Prevent horizontal overflow */
+    }
+    .profile-toggle .sm\:w-6 {
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-profile-toggle .sm\:w-5 {
+        transition: all 0.2s ease;
+    }
 
-        /* Ensure feed content doesn't overflow */
+    .profile-toggle:hover .sm\:w-6 {
+        transform: scale(1.05);
+    }
 
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-        .sm\:grid-cols-2 {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .sm\:flex.gap-1,.sm\:flex.gap-2,.sm\:flex.gap-3,.sm\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .sm\:flex.gap-1,.sm\:flex.gap-2,.sm\:flex.gap-3,.sm\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .sm\:flex.gap-1,.sm\:flex.gap-2,.sm\:flex.gap-3,.sm\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .sm\:flex.gap-1,.sm\:flex.gap-2,.sm\:flex.gap-3,.sm\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
+    
+    .mobile-profile-toggle:hover .sm\:w-5 {
+        transform: scale(1.05);
     }
 }
 
@@ -7296,7 +7772,26 @@ input:checked+.toggle-slider:before {
         font-family: var(--font-arabic-heading);
         font-weight: 600;
     }
+
+    
+    html[lang="ar"] .md\:text-xs {
+        font-family: var(--font-arabic-body);
+    }
+
+    html[lang="ar"] .md\:text-xs {
+        line-height: 1.6;
+    }
     @media (max-width: 640px) {
+
+        /* Tighter spacing for small screens */
+
+        /* When sidebar is open on very small screens */
+
+        /* RTL support for very small screens */
+
+        /* Content wrapper improvements */
+
+        /* Card spacing improvements */
 
         /* Reduce padding on very small screens */
         .md\:p-6 {
@@ -7307,29 +7802,17 @@ input:checked+.toggle-slider:before {
 
         /* Better form inputs on mobile */
 
-        /* Ensure main content is full width on mobile for both LTR and RTL */
-
         /* Prevent horizontal overflow */
 
-        /* Make sure content containers don't exceed viewport */
+        /* Tighter spacing for small screens */
 
-        /* Mobile navigation styling */
+        /* When sidebar is open on very small screens */
 
-        /* RTL mobile navigation positioning */
+        /* RTL support for very small screens */
 
-        /* Ensure mobile icons are properly sized */
+        /* Content wrapper improvements */
 
-        /* Better spacing for mobile navigation */
-
-        /* RTL mobile navigation spacing */
-
-        /* Mobile header navigation improvements */
-
-        /* Ensure mobile navigation takes full width */
-
-        /* Dashboard mobile navigation improvements */
-
-        /* Dashboard mobile navigation icons */
+        /* Card spacing improvements */
 
         /* Reduce padding on very small screens */
 
@@ -7341,133 +7824,50 @@ input:checked+.toggle-slider:before {
 
         /* Better form inputs on mobile */
 
-        /* Ensure main content is full width on mobile for both LTR and RTL */
-
         /* Prevent horizontal overflow */
-
-        /* Make sure content containers don't exceed viewport */
-
-        /* Mobile navigation styling */
-
-        /* RTL mobile navigation positioning */
-
-        /* Ensure mobile icons are properly sized */
-
-        /* Better spacing for mobile navigation */
-
-        /* RTL mobile navigation spacing */
-
-        /* Mobile header navigation improvements */
-
-        /* Ensure mobile navigation takes full width */
-
-        /* Dashboard mobile navigation improvements */
-
-        /* Dashboard mobile navigation icons */
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-        .md\:grid-cols-2 {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .md\:flex.gap-1,.md\:flex.gap-2,.md\:flex.gap-3,.md\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .md\:flex.gap-1,.md\:flex.gap-2,.md\:flex.gap-3,.md\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .md\:flex.gap-1,.md\:flex.gap-2,.md\:flex.gap-3,.md\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .md\:flex.gap-1,.md\:flex.gap-2,.md\:flex.gap-3,.md\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
     }
-
-    .rtl .md\:translate-x-0.sidebar-right {
-        transform: translateX(0);
-    }
-
-    @media (max-width: 767px) {
-
-        .rtl .dashboard-body .md\:translate-x-0.sidebar {
-            transform: translateX(0);
-        }
-    }
-    .rtl .md\:text-left {
-        text-align: right;
-    }
-
-    .rtl .md\:text-right {
-        text-align: left;
+    .md\:hidden .md\:h-8 {
+        height: 2rem;
+        width: 2rem;
     }
 }
 
 @media (min-width: 1024px) {
 
     
+    html[lang="ar"] .lg\:text-3xl {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+    
     html[lang="ar"] .lg\:text-4xl {
         font-family: var(--font-arabic-heading);
         font-weight: 600;
     }
+
+    
+    html[lang="ar"] .lg\:text-5xl {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+    
+    html[lang="ar"] .lg\:text-6xl {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
     @media (max-width: 640px) {
+
+        /* Tighter spacing for small screens */
+
+        /* When sidebar is open on very small screens */
+
+        /* RTL support for very small screens */
+
+        /* Content wrapper improvements */
+
+        /* Card spacing improvements */
 
         /* Reduce padding on very small screens */
 
@@ -7479,211 +7879,7 @@ input:checked+.toggle-slider:before {
 
         /* Better form inputs on mobile */
 
-        /* Ensure main content is full width on mobile for both LTR and RTL */
-
         /* Prevent horizontal overflow */
-
-        /* Make sure content containers don't exceed viewport */
-
-        /* Mobile navigation styling */
-
-        /* RTL mobile navigation positioning */
-
-        /* Ensure mobile icons are properly sized */
-
-        /* Better spacing for mobile navigation */
-
-        /* RTL mobile navigation spacing */
-
-        /* Mobile header navigation improvements */
-
-        /* Ensure mobile navigation takes full width */
-
-        /* Dashboard mobile navigation improvements */
-
-        /* Dashboard mobile navigation icons */
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-        .lg\:grid-cols-2 {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .lg\:flex.gap-1,.lg\:flex.gap-2,.lg\:flex.gap-3,.lg\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .lg\:flex.gap-1,.lg\:flex.gap-2,.lg\:flex.gap-3,.lg\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .lg\:flex.gap-1,.lg\:flex.gap-2,.lg\:flex.gap-3,.lg\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .lg\:flex.gap-1,.lg\:flex.gap-2,.lg\:flex.gap-3,.lg\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-}
-
-@media (min-width: 1280px) {
-    @media (max-width: 640px) {
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .xl\:flex.gap-1,.xl\:flex.gap-2,.xl\:flex.gap-3,.xl\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .xl\:flex.gap-1,.xl\:flex.gap-2,.xl\:flex.gap-3,.xl\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .xl\:flex.gap-1,.xl\:flex.gap-2,.xl\:flex.gap-3,.xl\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-
-        /* Ensure feed content doesn't overflow */
-
-        /* Fix horizontal scrolling in stories section */
-
-        /* Ensure images don't cause overflow */
-
-        /* Fix grid layouts on mobile */
-
-        /* Ensure flex containers wrap properly */
-
-        /* Fix button groups on mobile */
-        .xl\:flex.gap-1,.xl\:flex.gap-2,.xl\:flex.gap-3,.xl\:flex.gap-4 {
-            flex-wrap: wrap;
-        }
-    }
-
-    .rtl .xl\:translate-x-0.sidebar-right {
-        transform: translateX(0);
-    }
-
-    @media (max-width: 767px) {
-
-        .rtl .dashboard-body .xl\:translate-x-0.sidebar {
-            transform: translateX(0);
-        }
-    }
-}
-
-@media (max-width: 767px) {
-    }
-
-@media (min-width: 768px) {
-
-    .rtl .rtl\:md\:translate-x-0:where([dir="rtl"], [dir="rtl"] *).sidebar-right {
-        transform: translateX(0);
-    }
-
-    @media (max-width: 767px) {
-
-        .rtl .dashboard-body .rtl\:md\:translate-x-0:where([dir="rtl"], [dir="rtl"] *).sidebar {
-            transform: translateX(0);
-        }
-    }
-}
-
-@media (min-width: 1280px) {
-
-    .rtl .rtl\:xl\:translate-x-0:where([dir="rtl"], [dir="rtl"] *).sidebar-right {
-        transform: translateX(0);
-    }
-
-    @media (max-width: 767px) {
-
-        .rtl .dashboard-body .rtl\:xl\:translate-x-0:where([dir="rtl"], [dir="rtl"] *).sidebar {
-            transform: translateX(0);
-        }
     }
 }
 
@@ -8020,6 +8216,14 @@ input:checked+.toggle-slider:before {
   border-left-color: hsl(var(--primary));
 }
 
+.hover\:\!bg-primary\/90:hover {
+  background-color: hsl(var(--primary) / 0.9) !important;
+}
+
+.hover\:bg-\[\#1877F2\]\/90:hover {
+  background-color: rgb(24 119 242 / 0.9);
+}
+
 .hover\:bg-accent:hover {
   background-color: hsl(var(--accent));
 }
@@ -8084,6 +8288,10 @@ input:checked+.toggle-slider:before {
 
 .hover\:bg-destructive\/10:hover {
   background-color: hsl(var(--destructive) / 0.1);
+}
+
+.hover\:bg-destructive\/5:hover {
+  background-color: hsl(var(--destructive) / 0.05);
 }
 
 .hover\:bg-gray-100:hover {
@@ -8160,6 +8368,10 @@ input:checked+.toggle-slider:before {
 
 .hover\:bg-muted\/60:hover {
   background-color: hsl(var(--muted) / 0.6);
+}
+
+.hover\:bg-muted\/70:hover {
+  background-color: hsl(var(--muted) / 0.7);
 }
 
 .hover\:bg-muted\/80:hover {
@@ -8287,11 +8499,6 @@ input:checked+.toggle-slider:before {
   color: hsl(var(--accent-foreground));
 }
 
-.hover\:text-amber-500:hover {
-  --tw-text-opacity: 1;
-  color: rgb(245 158 11 / var(--tw-text-opacity, 1));
-}
-
 .hover\:text-amber-600:hover {
   --tw-text-opacity: 1;
   color: rgb(217 119 6 / var(--tw-text-opacity, 1));
@@ -8320,19 +8527,9 @@ input:checked+.toggle-slider:before {
   color: hsl(var(--foreground));
 }
 
-.hover\:text-gray-600:hover {
-  --tw-text-opacity: 1;
-  color: rgb(75 85 99 / var(--tw-text-opacity, 1));
-}
-
 .hover\:text-gray-700:hover {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity, 1));
-}
-
-.hover\:text-gray-800:hover {
-  --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity, 1));
 }
 
 .hover\:text-gray-900:hover {
@@ -8431,10 +8628,6 @@ input:checked+.toggle-slider:before {
 
 .hover\:decoration-primary:hover {
   text-decoration-color: hsl(var(--primary));
-}
-
-.hover\:opacity-100:hover {
-  opacity: 1;
 }
 
 .hover\:opacity-80:hover {
@@ -8571,11 +8764,6 @@ input:checked+.toggle-slider:before {
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 
-.focus\:ring-blue-500:focus {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity, 1));
-}
-
 .focus\:ring-blue-500\/10:focus {
   --tw-ring-color: rgb(59 130 246 / 0.1);
 }
@@ -8693,23 +8881,8 @@ input:checked+.toggle-slider:before {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.group\/btn:hover .group-hover\/btn\:-translate-y-0\.5 {
-  --tw-translate-y: -0.125rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
 .group\/btn:hover .group-hover\/btn\:translate-x-1 {
   --tw-translate-x: 0.25rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-.group\/btn:hover .group-hover\/btn\:translate-x-2 {
-  --tw-translate-x: 0.5rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-.group\/btn:hover .group-hover\/btn\:translate-y-0\.5 {
-  --tw-translate-y: 0.125rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -8758,18 +8931,13 @@ input:checked+.toggle-slider:before {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.group\/tool:hover .group-hover\/tool\:-translate-y-0\.5 {
-  --tw-translate-y: -0.125rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
 .group:hover .group-hover\:-translate-x-1 {
   --tw-translate-x: -0.25rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.group:hover .group-hover\:-translate-y-2 {
-  --tw-translate-y: -0.5rem;
+.group:hover .group-hover\:-translate-y-1 {
+  --tw-translate-y: -0.25rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -9042,12 +9210,6 @@ input:checked+.toggle-slider:before {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.group\/stat:hover .group-hover\/stat\:scale-110 {
-  --tw-scale-x: 1.1;
-  --tw-scale-y: 1.1;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
 .group\/story:hover .group-hover\/story\:scale-105 {
   --tw-scale-x: 1.05;
   --tw-scale-y: 1.05;
@@ -9129,22 +9291,6 @@ input:checked+.toggle-slider:before {
 }
 
 .group\/create:hover .group-hover\/create\:bg-primary\/10 {
-  background-color: hsl(var(--primary) / 0.1);
-}
-
-.group\/field:hover .group-hover\/field\:bg-amber-500\/10 {
-  background-color: rgb(245 158 11 / 0.1);
-}
-
-.group\/field:hover .group-hover\/field\:bg-green-500\/10 {
-  background-color: rgb(34 197 94 / 0.1);
-}
-
-.group\/field:hover .group-hover\/field\:bg-primary\/10 {
-  background-color: hsl(var(--primary) / 0.1);
-}
-
-.group\/input:hover .group-hover\/input\:bg-primary\/10 {
   background-color: hsl(var(--primary) / 0.1);
 }
 
@@ -9233,20 +9379,6 @@ input:checked+.toggle-slider:before {
 .group\/content:hover .group-hover\/content\:text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(225 29 72 / var(--tw-text-opacity, 1));
-}
-
-.group\/field:hover .group-hover\/field\:text-amber-600 {
-  --tw-text-opacity: 1;
-  color: rgb(217 119 6 / var(--tw-text-opacity, 1));
-}
-
-.group\/field:hover .group-hover\/field\:text-green-600 {
-  --tw-text-opacity: 1;
-  color: rgb(22 163 74 / var(--tw-text-opacity, 1));
-}
-
-.group\/field:hover .group-hover\/field\:text-primary {
-  color: hsl(var(--primary));
 }
 
 .group\/item:hover .group-hover\/item\:text-primary {
@@ -9431,27 +9563,18 @@ input:checked+.toggle-slider:before {
   --tw-ring-color: hsl(var(--primary) / 0.2);
 }
 
-.dark\:block:is(.dark *) {
-  display: block;
-}
-
-.dark\:hidden:is(.dark *) {
-  display: none;
-}
-
 .dark\:border-blue-800:is(.dark *) {
   --tw-border-opacity: 1;
   border-color: rgb(30 64 175 / var(--tw-border-opacity, 1));
 }
 
+.dark\:border-blue-800\/50:is(.dark *) {
+  border-color: rgb(30 64 175 / 0.5);
+}
+
 .dark\:border-gray-600:is(.dark *) {
   --tw-border-opacity: 1;
   border-color: rgb(75 85 99 / var(--tw-border-opacity, 1));
-}
-
-.dark\:border-gray-700:is(.dark *) {
-  --tw-border-opacity: 1;
-  border-color: rgb(55 65 81 / var(--tw-border-opacity, 1));
 }
 
 .dark\:border-green-800:is(.dark *) {
@@ -9567,16 +9690,6 @@ input:checked+.toggle-slider:before {
 
 .dark\:bg-yellow-900\/30:is(.dark *) {
   background-color: rgb(113 63 18 / 0.3);
-}
-
-.dark\:from-red-950\/20:is(.dark *) {
-  --tw-gradient-from: rgb(76 5 25 / 0.2) var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(76 5 25 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
-.dark\:to-orange-950\/20:is(.dark *) {
-  --tw-gradient-to: rgb(67 20 7 / 0.2) var(--tw-gradient-to-position);
 }
 
 .dark\:text-amber-400:is(.dark *) {
@@ -9714,16 +9827,6 @@ input:checked+.toggle-slider:before {
   color: rgb(147 197 253 / var(--tw-text-opacity, 1));
 }
 
-.dark\:hover\:text-gray-200:hover:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(229 231 235 / var(--tw-text-opacity, 1));
-}
-
-.dark\:hover\:text-gray-300:hover:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
-}
-
 .dark\:hover\:text-green-300:hover:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(134 239 172 / var(--tw-text-opacity, 1));
@@ -9746,9 +9849,50 @@ input:checked+.toggle-slider:before {
 
 @media (min-width: 640px) {
 
+  .sm\:-inset-12 {
+    inset: -3rem;
+  }
+
+  .sm\:-inset-6 {
+    inset: -1.5rem;
+  }
+
+  .sm\:-inset-8 {
+    inset: -2rem;
+  }
+
+  .sm\:-right-3 {
+    right: -0.75rem;
+  }
+
+  .sm\:-top-3 {
+    top: -0.75rem;
+  }
+
+  .sm\:right-4 {
+    right: 1rem;
+  }
+
+  .sm\:top-4 {
+    top: 1rem;
+  }
+
   .sm\:-mx-4 {
     margin-left: -1rem;
     margin-right: -1rem;
+  }
+
+  .sm\:mx-0 {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .sm\:-mr-24 {
+    margin-right: -6rem;
+  }
+
+  .sm\:-mt-24 {
+    margin-top: -6rem;
   }
 
   .sm\:-mt-4 {
@@ -9759,12 +9903,32 @@ input:checked+.toggle-slider:before {
     margin-bottom: 1.5rem;
   }
 
+  .sm\:mb-8 {
+    margin-bottom: 2rem;
+  }
+
+  .sm\:mr-4 {
+    margin-right: 1rem;
+  }
+
+  .sm\:mt-10 {
+    margin-top: 2.5rem;
+  }
+
+  .sm\:mt-3 {
+    margin-top: 0.75rem;
+  }
+
   .sm\:mt-5 {
     margin-top: 1.25rem;
   }
 
   .sm\:mt-6 {
     margin-top: 1.5rem;
+  }
+
+  .sm\:block {
+    display: block;
   }
 
   .sm\:inline-block {
@@ -9783,8 +9947,134 @@ input:checked+.toggle-slider:before {
     display: grid;
   }
 
+  .sm\:hidden {
+    display: none;
+  }
+
+  .sm\:h-1\.5 {
+    height: 0.375rem;
+  }
+
+  .sm\:h-10 {
+    height: 2.5rem;
+  }
+
+  .sm\:h-12 {
+    height: 3rem;
+  }
+
+  .sm\:h-14 {
+    height: 3.5rem;
+  }
+
+  .sm\:h-16 {
+    height: 4rem;
+  }
+
+  .sm\:h-2 {
+    height: 0.5rem;
+  }
+
+  .sm\:h-20 {
+    height: 5rem;
+  }
+
+  .sm\:h-3 {
+    height: 0.75rem;
+  }
+
+  .sm\:h-32 {
+    height: 8rem;
+  }
+
+  .sm\:h-4 {
+    height: 1rem;
+  }
+
+  .sm\:h-48 {
+    height: 12rem;
+  }
+
+  .sm\:h-5 {
+    height: 1.25rem;
+  }
+
+  .sm\:h-6 {
+    height: 1.5rem;
+  }
+
   .sm\:h-72 {
     height: 18rem;
+  }
+
+  .sm\:w-1\.5 {
+    width: 0.375rem;
+  }
+
+  .sm\:w-10 {
+    width: 2.5rem;
+  }
+
+  .sm\:w-12 {
+    width: 3rem;
+  }
+
+  .sm\:w-16 {
+    width: 4rem;
+  }
+
+  .sm\:w-2 {
+    width: 0.5rem;
+  }
+
+  .sm\:w-20 {
+    width: 5rem;
+  }
+
+  .sm\:w-3 {
+    width: 0.75rem;
+  }
+
+  .sm\:w-32 {
+    width: 8rem;
+  }
+
+  .sm\:w-4 {
+    width: 1rem;
+  }
+
+  .sm\:w-48 {
+    width: 12rem;
+  }
+
+  .sm\:w-5 {
+    width: 1.25rem;
+  }
+
+  .sm\:w-6 {
+    width: 1.5rem;
+  }
+
+  .sm\:w-auto {
+    width: auto;
+  }
+
+  .sm\:max-w-lg {
+    max-width: 32rem;
+  }
+
+  .sm\:max-w-md {
+    max-width: 28rem;
+  }
+
+  .sm\:translate-y-3 {
+    --tw-translate-y: 0.75rem;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
+  .sm\:rotate-3 {
+    --tw-rotate: 3deg;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 
   .sm\:grid-cols-2 {
@@ -9803,12 +10093,76 @@ input:checked+.toggle-slider:before {
     align-items: center;
   }
 
+  .sm\:gap-2\.5 {
+    gap: 0.625rem;
+  }
+
+  .sm\:gap-3 {
+    gap: 0.75rem;
+  }
+
+  .sm\:gap-4 {
+    gap: 1rem;
+  }
+
+  .sm\:gap-6 {
+    gap: 1.5rem;
+  }
+
   .sm\:gap-y-2 {
     row-gap: 0.5rem;
   }
 
+  .sm\:space-y-10 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(2.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(2.5rem * var(--tw-space-y-reverse));
+  }
+
+  .sm\:space-y-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+  }
+
+  .sm\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
+  }
+
+  .sm\:space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+  }
+
+  .sm\:space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+  }
+
+  .sm\:space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(2rem * var(--tw-space-y-reverse));
+  }
+
+  .sm\:self-center {
+    align-self: center;
+  }
+
+  .sm\:rounded-2xl {
+    border-radius: 1rem;
+  }
+
   .sm\:rounded-3xl {
     border-radius: 1.5rem;
+  }
+
+  .sm\:rounded-\[2\.5rem\] {
+    border-radius: 2.5rem;
   }
 
   .sm\:rounded-xl {
@@ -9818,6 +10172,10 @@ input:checked+.toggle-slider:before {
   .sm\:rounded-b-3xl {
     border-bottom-right-radius: 1.5rem;
     border-bottom-left-radius: 1.5rem;
+  }
+
+  .sm\:border-l-4 {
+    border-left-width: 4px;
   }
 
   .sm\:p-10 {
@@ -9836,6 +10194,15 @@ input:checked+.toggle-slider:before {
     padding: 1.5rem;
   }
 
+  .sm\:p-8 {
+    padding: 2rem;
+  }
+
+  .sm\:px-0 {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
   .sm\:px-3 {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
@@ -9851,12 +10218,52 @@ input:checked+.toggle-slider:before {
     padding-right: 1.5rem;
   }
 
+  .sm\:px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .sm\:py-12 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .sm\:py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .sm\:py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .sm\:pb-10 {
+    padding-bottom: 2.5rem;
+  }
+
   .sm\:pb-6 {
     padding-bottom: 1.5rem;
   }
 
-  .sm\:pt-32 {
-    padding-top: 8rem;
+  .sm\:pl-4 {
+    padding-left: 1rem;
+  }
+
+  .sm\:pt-20 {
+    padding-top: 5rem;
+  }
+
+  .sm\:pt-4 {
+    padding-top: 1rem;
+  }
+
+  .sm\:pt-6 {
+    padding-top: 1.5rem;
+  }
+
+  .sm\:text-left {
+    text-align: left;
   }
 
   .sm\:text-2xl {
@@ -9864,9 +10271,49 @@ input:checked+.toggle-slider:before {
     line-height: 2rem;
   }
 
+  .sm\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  .sm\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  .sm\:text-8xl {
+    font-size: 6rem;
+    line-height: 1;
+  }
+
+  .sm\:text-\[10px\] {
+    font-size: 10px;
+  }
+
+  .sm\:text-\[9px\] {
+    font-size: 9px;
+  }
+
   .sm\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
+  }
+
+  .sm\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .sm\:tracking-\[0\.2em\] {
+    letter-spacing: 0.2em;
+  }
+
+  .sm\:tracking-\[0\.3em\] {
+    letter-spacing: 0.3em;
+  }
+
+  .sm\:tracking-widest {
+    letter-spacing: 0.1em;
   }
 
   .sm\:shadow-2xl {
@@ -9874,12 +10321,44 @@ input:checked+.toggle-slider:before {
     --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
+
+  .sm\:shadow-xl {
+    --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  .sm\:blur-3xl {
+    --tw-blur: blur(64px);
+    filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+  }
+
+  .group:hover .sm\:group-hover\:-translate-y-2 {
+    --tw-translate-y: -0.5rem;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
 }
 
 @media (min-width: 768px) {
 
-  .md\:left-4 {
-    left: 1rem;
+  .md\:-inset-10 {
+    inset: -2.5rem;
+  }
+
+  .md\:-inset-20 {
+    inset: -5rem;
+  }
+
+  .md\:-inset-8 {
+    inset: -2rem;
+  }
+
+  .md\:-right-4 {
+    right: -1rem;
+  }
+
+  .md\:-top-4 {
+    top: -1rem;
   }
 
   .md\:left-6 {
@@ -9888,6 +10367,10 @@ input:checked+.toggle-slider:before {
 
   .md\:right-6 {
     right: 1.5rem;
+  }
+
+  .md\:top-6 {
+    top: 1.5rem;
   }
 
   .md\:col-span-2 {
@@ -9907,12 +10390,20 @@ input:checked+.toggle-slider:before {
     margin-top: -1.5rem;
   }
 
+  .md\:mb-10 {
+    margin-bottom: 2.5rem;
+  }
+
   .md\:ml-16 {
     margin-left: 4rem;
   }
 
-  .md\:ml-20 {
-    margin-left: 5rem;
+  .md\:mt-12 {
+    margin-top: 3rem;
+  }
+
+  .md\:mt-4 {
+    margin-top: 1rem;
   }
 
   .md\:block {
@@ -9923,12 +10414,32 @@ input:checked+.toggle-slider:before {
     display: flex;
   }
 
+  .md\:inline-flex {
+    display: inline-flex;
+  }
+
   .md\:hidden {
     display: none;
   }
 
   .md\:aspect-\[21\/9\] {
     aspect-ratio: 21/9;
+  }
+
+  .md\:h-16 {
+    height: 4rem;
+  }
+
+  .md\:h-20 {
+    height: 5rem;
+  }
+
+  .md\:h-40 {
+    height: 10rem;
+  }
+
+  .md\:h-8 {
+    height: 2rem;
   }
 
   .md\:h-80 {
@@ -9951,8 +10462,16 @@ input:checked+.toggle-slider:before {
     width: 4rem;
   }
 
-  .md\:w-24 {
-    width: 6rem;
+  .md\:w-20 {
+    width: 5rem;
+  }
+
+  .md\:w-40 {
+    width: 10rem;
+  }
+
+  .md\:w-8 {
+    width: 2rem;
   }
 
   .md\:w-96 {
@@ -9969,6 +10488,11 @@ input:checked+.toggle-slider:before {
 
   .md\:translate-x-0 {
     --tw-translate-x: 0px;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
+  .md\:translate-y-4 {
+    --tw-translate-y: 1rem;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 
@@ -10024,6 +10548,36 @@ input:checked+.toggle-slider:before {
     gap: 2rem;
   }
 
+  .md\:space-y-10 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(2.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(2.5rem * var(--tw-space-y-reverse));
+  }
+
+  .md\:space-y-12 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(3rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(3rem * var(--tw-space-y-reverse));
+  }
+
+  .md\:space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(2rem * var(--tw-space-y-reverse));
+  }
+
+  .md\:rounded-\[2\.5rem\] {
+    border-radius: 2.5rem;
+  }
+
+  .md\:rounded-\[3\.5rem\] {
+    border-radius: 3.5rem;
+  }
+
+  .md\:rounded-\[3rem\] {
+    border-radius: 3rem;
+  }
+
   .md\:p-10 {
     padding: 2.5rem;
   }
@@ -10044,6 +10598,11 @@ input:checked+.toggle-slider:before {
     padding: 2rem;
   }
 
+  .md\:px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
   .md\:px-12 {
     padding-left: 3rem;
     padding-right: 3rem;
@@ -10059,12 +10618,25 @@ input:checked+.toggle-slider:before {
     padding-right: 1rem;
   }
 
+  .md\:py-5 {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
   .md\:pb-8 {
     padding-bottom: 2rem;
   }
 
   .md\:pl-8 {
     padding-left: 2rem;
+  }
+
+  .md\:pt-24 {
+    padding-top: 6rem;
+  }
+
+  .md\:pt-8 {
+    padding-top: 2rem;
   }
 
   .md\:text-left {
@@ -10088,6 +10660,20 @@ input:checked+.toggle-slider:before {
   .md\:text-5xl {
     font-size: 3rem;
     line-height: 1;
+  }
+
+  .md\:text-9xl {
+    font-size: 8rem;
+    line-height: 1;
+  }
+
+  .md\:text-\[10px\] {
+    font-size: 10px;
+  }
+
+  .md\:text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
   }
 }
 
@@ -10114,20 +10700,80 @@ input:checked+.toggle-slider:before {
     margin-right: -2rem;
   }
 
+  .lg\:-mr-32 {
+    margin-right: -8rem;
+  }
+
+  .lg\:-mt-32 {
+    margin-top: -8rem;
+  }
+
   .lg\:-mt-8 {
     margin-top: -2rem;
+  }
+
+  .lg\:mb-12 {
+    margin-bottom: 3rem;
+  }
+
+  .lg\:mb-6 {
+    margin-bottom: 1.5rem;
+  }
+
+  .lg\:mb-8 {
+    margin-bottom: 2rem;
+  }
+
+  .lg\:mt-12 {
+    margin-top: 3rem;
+  }
+
+  .lg\:mt-4 {
+    margin-top: 1rem;
   }
 
   .lg\:flex {
     display: flex;
   }
 
+  .lg\:h-10 {
+    height: 2.5rem;
+  }
+
+  .lg\:h-20 {
+    height: 5rem;
+  }
+
+  .lg\:h-24 {
+    height: 6rem;
+  }
+
+  .lg\:h-48 {
+    height: 12rem;
+  }
+
+  .lg\:h-64 {
+    height: 16rem;
+  }
+
+  .lg\:w-10 {
+    width: 2.5rem;
+  }
+
   .lg\:w-20 {
     width: 5rem;
   }
 
+  .lg\:w-24 {
+    width: 6rem;
+  }
+
   .lg\:w-48 {
     width: 12rem;
+  }
+
+  .lg\:w-64 {
+    width: 16rem;
   }
 
   .lg\:w-72 {
@@ -10190,6 +10836,36 @@ input:checked+.toggle-slider:before {
     justify-content: space-between;
   }
 
+  .lg\:gap-6 {
+    gap: 1.5rem;
+  }
+
+  .lg\:gap-8 {
+    gap: 2rem;
+  }
+
+  .lg\:space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+  }
+
+  .lg\:space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+  }
+
+  .lg\:space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(2rem * var(--tw-space-y-reverse));
+  }
+
+  .lg\:p-10 {
+    padding: 2.5rem;
+  }
+
   .lg\:p-12 {
     padding: 3rem;
   }
@@ -10198,25 +10874,53 @@ input:checked+.toggle-slider:before {
     padding: 2rem;
   }
 
+  .lg\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+
+  .lg\:pt-6 {
+    padding-top: 1.5rem;
+  }
+
+  .lg\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
   }
 
   .lg\:text-4xl {
     font-size: 2.25rem;
     line-height: 2.5rem;
   }
+
+  .lg\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .lg\:text-6xl {
+    font-size: 3.75rem;
+    line-height: 1;
+  }
+
+  .lg\:text-\[12rem\] {
+    font-size: 12rem;
+  }
 }
 
 @media (min-width: 1280px) {
 
-  .xl\:mb-0 {
-    margin-bottom: 0px;
+  .xl\:col-span-2 {
+    grid-column: span 2 / span 2;
   }
 
-  .xl\:ml-60 {
-    margin-left: 15rem;
+  .xl\:mb-0 {
+    margin-bottom: 0px;
   }
 
   .xl\:mr-0 {
@@ -10225,10 +10929,6 @@ input:checked+.toggle-slider:before {
 
   .xl\:mr-80 {
     margin-right: 20rem;
-  }
-
-  .xl\:mr-\[21rem\] {
-    margin-right: 21rem;
   }
 
   .xl\:block {
@@ -10260,6 +10960,10 @@ input:checked+.toggle-slider:before {
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 
+  .xl\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .xl\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -10281,16 +10985,28 @@ input:checked+.toggle-slider:before {
   left: auto;
 }
 
-.rtl\:right-0:where([dir="rtl"], [dir="rtl"] *) {
-  right: 0px;
-}
-
 .rtl\:right-4:where([dir="rtl"], [dir="rtl"] *) {
   right: 1rem;
 }
 
 .rtl\:right-auto:where([dir="rtl"], [dir="rtl"] *) {
   right: auto;
+}
+
+.rtl\:-ml-16:where([dir="rtl"], [dir="rtl"] *) {
+  margin-left: -4rem;
+}
+
+.rtl\:ml-2:where([dir="rtl"], [dir="rtl"] *) {
+  margin-left: 0.5rem;
+}
+
+.rtl\:ml-3:where([dir="rtl"], [dir="rtl"] *) {
+  margin-left: 0.75rem;
+}
+
+.rtl\:mr-0:where([dir="rtl"], [dir="rtl"] *) {
+  margin-right: 0px;
 }
 
 .rtl\:origin-top-left:where([dir="rtl"], [dir="rtl"] *) {
@@ -10312,27 +11028,59 @@ input:checked+.toggle-slider:before {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.rtl\:rotate-180:where([dir="rtl"], [dir="rtl"] *) {
+  --tw-rotate: 180deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .rtl\:space-x-reverse:where([dir="rtl"], [dir="rtl"] *) > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 1;
 }
 
+.rtl\:border-l-0:where([dir="rtl"], [dir="rtl"] *) {
+  border-left-width: 0px;
+}
+
+.rtl\:border-r-4:where([dir="rtl"], [dir="rtl"] *) {
+  border-right-width: 4px;
+}
+
+.rtl\:pl-0:where([dir="rtl"], [dir="rtl"] *) {
+  padding-left: 0px;
+}
+
+.rtl\:pr-4:where([dir="rtl"], [dir="rtl"] *) {
+  padding-right: 1rem;
+}
+
+.group\/back:hover .rtl\:group-hover\/back\:translate-x-1:where([dir="rtl"], [dir="rtl"] *) {
+  --tw-translate-x: 0.25rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+@media (min-width: 640px) {
+
+  .rtl\:sm\:-ml-24:where([dir="rtl"], [dir="rtl"] *) {
+    margin-left: -6rem;
+  }
+
+  .rtl\:sm\:ml-4:where([dir="rtl"], [dir="rtl"] *) {
+    margin-left: 1rem;
+  }
+}
+
 @media (min-width: 768px) {
-
-  .rtl\:md\:right-4:where([dir="rtl"], [dir="rtl"] *) {
-    right: 1rem;
-  }
-
-  .rtl\:md\:ml-0:where([dir="rtl"], [dir="rtl"] *) {
-    margin-left: 0px;
-  }
-
-  .rtl\:md\:mr-20:where([dir="rtl"], [dir="rtl"] *) {
-    margin-right: 5rem;
-  }
 
   .rtl\:md\:translate-x-0:where([dir="rtl"], [dir="rtl"] *) {
     --tw-translate-x: 0px;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+}
+
+@media (min-width: 1024px) {
+
+  .rtl\:lg\:-ml-32:where([dir="rtl"], [dir="rtl"] *) {
+    margin-left: -8rem;
   }
 }
 
@@ -10346,16 +11094,8 @@ input:checked+.toggle-slider:before {
     margin-left: 20rem;
   }
 
-  .rtl\:xl\:ml-\[21rem\]:where([dir="rtl"], [dir="rtl"] *) {
-    margin-left: 21rem;
-  }
-
   .rtl\:xl\:mr-0:where([dir="rtl"], [dir="rtl"] *) {
     margin-right: 0px;
-  }
-
-  .rtl\:xl\:mr-60:where([dir="rtl"], [dir="rtl"] *) {
-    margin-right: 15rem;
   }
 
   .rtl\:xl\:translate-x-0:where([dir="rtl"], [dir="rtl"] *) {

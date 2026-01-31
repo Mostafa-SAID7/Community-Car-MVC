@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Welcome to CommunityCar</title>
+    <style>
+        :root {
+            --primary: 345 82% 51%;
+            --primary-foreground: 210 40% 98%;
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --border: 214.3 31.8% 91.4%;
+            --font-sans: 'Inter', 'Alexandria', system-ui, -apple-system, sans-serif;
+        }
+        
+        body { 
+            font-family: var(--font-sans); 
+            margin: 0; 
+            padding: 20px; 
+            background-color: hsl(var(--muted)); 
+            color: hsl(var(--foreground));
+            line-height: 1.6;
+        }
+        
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background-color: hsl(var(--card));
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header { 
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+            padding: 3rem 2rem; 
+            text-align: center;
+        }
+        
+        .header h1 { 
+            color: hsl(var(--foreground)); 
+            margin: 0; 
+            font-size: 2rem; 
+            font-weight: 700;
+        }
+        
+        .header .icon { 
+            background-color: rgba(255,255,255,0.3); 
+            width: 5rem; 
+            height: 5rem; 
+            border-radius: 50%; 
+            margin: 0 auto 1.5rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+        
+        .content { 
+            padding: 3rem 2rem;
+        }
+        
+        .content h2 { 
+            color: hsl(var(--foreground)); 
+            margin: 0 0 1.5rem; 
+            font-size: 1.75rem; 
+            font-weight: 700;
+        }
+        
+        .content p { 
+            color: hsl(var(--muted-foreground)); 
+            line-height: 1.8; 
+            margin: 0 0 1.5rem; 
+            font-size: 1rem;
+        }
+        
+        .button { 
+            display: inline-block; 
+            background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.9)); 
+            color: hsl(var(--primary-foreground)); 
+            padding: 1rem 2rem; 
+            text-decoration: none; 
+            border-radius: 2rem; 
+            font-weight: 600; 
+            font-size: 1rem; 
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 15px hsl(var(--primary) / 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px hsl(var(--primary) / 0.4);
+        }
+        
+        .features { 
+            background-color: hsl(var(--muted)); 
+            border-radius: 1rem; 
+            padding: 1.5rem; 
+            margin: 1.5rem 0;
+        }
+        
+        .features h3 { 
+            color: hsl(var(--foreground)); 
+            margin: 0 0 1rem; 
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .features ul {
+            margin: 0;
+            padding-left: 1.5rem;
+            color: hsl(var(--muted-foreground));
+            line-height: 1.8;
+        }
+        
+        .features li {
+            margin: 0.5rem 0;
+        }
+        
+        .footer { 
+            background-color: hsl(var(--muted)); 
+            padding: 2rem; 
+            text-align: center; 
+            border-top: 1px solid hsl(var(--border));
+        }
+        
+        .footer p { 
+            color: hsl(var(--muted-foreground)); 
+            margin: 0; 
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 640px) {
+            body { padding: 10px; }
+            .container { border-radius: 1rem; }
+            .header { padding: 2rem 1.5rem; }
+            .content { padding: 2rem 1.5rem; }
+            .header h1 { font-size: 1.5rem; }
+            .content h2 { font-size: 1.5rem; }
+            .button { padding: 0.875rem 1.5rem; font-size: 0.875rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <div class='icon'>
+                <svg width='40' height='40' fill='#2d3748' viewBox='0 0 24 24'>
+                    <path d='M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z'/>
+                </svg>
+            </div>
+            <h1>Welcome to CommunityCar!</h1>
+        </div>
+        
+        <div class='content'>
+            <h2>Welcome {{FULL_NAME}}!</h2>
+            <p>Your email has been confirmed and your account is now active. We're thrilled to have you join our automotive community!</p>
+            
+            <div class='features'>
+                <h3>🚗 What You Can Do Now:</h3>
+                <ul>
+                    <li>Connect with other car enthusiasts worldwide</li>
+                    <li>Share your car stories and experiences</li>
+                    <li>Ask questions and get answers from experts</li>
+                    <li>Discover local car events and meetups</li>
+                    <li>Access maintenance tips and guides</li>
+                    <li>Join discussions about your favorite car brands</li>
+                </ul>
+            </div>
+            
+            <div style='text-align: center; margin: 30px 0;'>
+                <a href='{{GET_STARTED_LINK}}' class='button'>Get Started Now</a>
+            </div>
+            
+            <p>Ready to dive in? Start by completing your profile, joining some groups, or sharing your first post with the community!</p>
+        </div>
+        
+        <div class='footer'>
+            <p><strong>Happy driving!</strong></p>
+            <p><strong>The CommunityCar Team</strong></p>
+        </div>
+    </div>
+</body>
+</html>

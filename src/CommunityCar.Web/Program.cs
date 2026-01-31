@@ -74,21 +74,6 @@ app.MapHub<NotificationHub>("/hubs/notifications");
 // Map attribute-routed controllers FIRST (QA, Posts, etc. with [Route] attributes)
 app.MapControllers();
 
-// Authentication Routes (for backward compatibility)
-app.MapControllerRoute(
-    name: "login",
-    pattern: "Login",
-    defaults: new { controller = "Account", action = "Login" });
-
-app.MapControllerRoute(
-    name: "register",
-    pattern: "Register",
-    defaults: new { controller = "Account", action = "Register" });
-
-app.MapControllerRoute(
-    name: "logout",
-    pattern: "Logout",
-    defaults: new { controller = "Account", action = "Logout" });
 
 // Dashboard area route for all Dashboard controllers
 app.MapControllerRoute(

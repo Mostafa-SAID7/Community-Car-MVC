@@ -20,6 +20,15 @@ public class StoriesRepository : BaseRepository<Story>, IStoriesRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<Story>> GetTopActiveAsync(int count)
+    {
+        return await Context.Stories
+            .Where(s => s.IsActive && !s.IsArchived)
+            .OrderByDescending(s => s.CreatedAt)
+            .Take(count)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<Story>> GetExpiredAsync()
     {
         return await Context.Stories

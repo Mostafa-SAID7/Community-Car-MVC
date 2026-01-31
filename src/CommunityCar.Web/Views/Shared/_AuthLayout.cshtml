@@ -36,10 +36,10 @@
 <body class="font-sans antialiased auth-gradient-bg">
     <partial name="_Header" />
     
-    <!-- Main container -->
-    <div class="flex items-start justify-center w-full auth-container px-0 sm:px-4 pt-24 sm:pt-32 pb-10">
-        <main class="w-full @(ViewData["FullWidth"] != null ? "max-w-6xl" : "max-w-md") auth-view-transition">
-            <div class="glass-card rounded-b-3xl sm:rounded-3xl shadow-2xl overflow-hidden shadow-primary/10 border-white/20">
+    <!-- Main container - Enhanced responsive design -->
+    <div class="flex items-start justify-center w-full auth-container px-0 sm:px-4 pt-16 sm:pt-20 md:pt-24 pb-6 sm:pb-10 min-h-screen">
+        <main class="w-full @(ViewData["FullWidth"] != null ? "max-w-none" : "max-w-md") auth-view-transition">
+            <div class="@(ViewData["FullWidth"] != null ? "bg-transparent border-0 shadow-none" : "glass-card") rounded-b-3xl sm:rounded-3xl shadow-2xl overflow-hidden shadow-primary/10 border-white/20">
                 @RenderBody()
             </div>
         </main>

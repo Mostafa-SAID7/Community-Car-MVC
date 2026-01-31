@@ -112,10 +112,10 @@ class ErrorHandler {
 
         if (details.classList.contains('hidden')) {
             details.classList.remove('hidden');
-            toggleText.textContent = 'Hide Details';
+            toggleText.textContent = window.errorHandlerLocalization?.hideDetails || 'Hide Details';
         } else {
             details.classList.add('hidden');
-            toggleText.textContent = 'Show Details';
+            toggleText.textContent = window.errorHandlerLocalization?.showDetails || 'Show Details';
         }
     }
 
@@ -180,7 +180,7 @@ class ErrorHandler {
 
         if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="animate-spin mr-2">⏳</span> Sending...';
+            submitBtn.innerHTML = `<span class="animate-spin mr-2">⏳</span> ${window.errorHandlerLocalization?.sending || 'Sending...'}`;
         }
 
         try {
@@ -200,17 +200,17 @@ class ErrorHandler {
                 form.reset();
             } else {
                 if (window.AlertModal) {
-                    window.AlertModal.error('Failed to submit error report: ' + result.message);
+                    window.AlertModal.error((window.errorHandlerLocalization?.submitFailed || 'Failed to submit error report: ') + result.message);
                 } else {
-                    alert('Failed to submit error report: ' + result.message);
+                    alert((window.errorHandlerLocalization?.submitFailed || 'Failed to submit error report: ') + result.message);
                 }
             }
         } catch (error) {
             console.error('Error submitting report:', error);
             if (window.AlertModal) {
-                window.AlertModal.error('Failed to submit error report. Please try again later.');
+                window.AlertModal.error(window.errorHandlerLocalization?.submitError || 'Failed to submit error report. Please try again later.');
             } else {
-                alert('Failed to submit error report. Please try again later.');
+                alert(window.errorHandlerLocalization?.submitError || 'Failed to submit error report. Please try again later.');
             }
         } finally {
             if (submitBtn) {
@@ -241,11 +241,11 @@ class ErrorHandler {
         if (errorMsg && errorMsg.textContent.includes('Loading')) {
             const mockData = {
                 errorId: 'ERR-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
-                message: 'System connectivity interruption detected in sub-module sequence.',
+                message: window.errorHandlerLocalization?.mockMessage || 'System connectivity interruption detected in sub-module sequence.',
                 timestamp: new Date().toISOString(),
                 path: '/system/core/navigation',
-                details: 'The requested view could not be located in the expected directories.',
-                stackTrace: 'Mock stack trace for demonstration purposes...'
+                details: window.errorHandlerLocalization?.mockDetails || 'The requested view could not be located in the expected directories.',
+                stackTrace: window.errorHandlerLocalization?.mockStackTrace || 'Mock stack trace for demonstration purposes...'
             };
             this.displayErrorData(mockData);
         }

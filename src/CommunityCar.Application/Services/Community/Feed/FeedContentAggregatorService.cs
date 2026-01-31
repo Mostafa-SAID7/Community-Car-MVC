@@ -134,10 +134,10 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
 
     private async Task<List<FeedItemVM>> GetPersonalizedNewsAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)
     {
-        var news = await _unitOfWork.News.GetPublishedAsync();
+        var news = await _unitOfWork.News.GetTopPublishedAsync(20);
         var feedItems = new List<FeedItemVM>();
 
-        foreach (var item in news.Take(10))
+        foreach (var item in news)
         {
             var relevanceScore = CalculateRelevanceScore(item.Tags.ToList(), item.CarMake, userInterests);
             
@@ -194,10 +194,10 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
 
     private async Task<List<FeedItemVM>> GetPersonalizedReviewsAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)
     {
-        var reviews = await _unitOfWork.Reviews.GetApprovedAsync();
+        var reviews = await _unitOfWork.Reviews.GetTopApprovedAsync(20);
         var feedItems = new List<FeedItemVM>();
 
-        foreach (var item in reviews.Take(10))
+        foreach (var item in reviews)
         {
             var relevanceScore = CalculateRelevanceScore(new List<string>(), item.CarMake, userInterests);
             
@@ -248,10 +248,10 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
 
     private async Task<List<FeedItemVM>> GetPersonalizedQAAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)
     {
-        var questions = await _unitOfWork.QA.GetAllAsync();
+        var questions = await _unitOfWork.QA.GetTopQuestionsAsync(20);
         var feedItems = new List<FeedItemVM>();
 
-        foreach (var item in questions.Take(10))
+        foreach (var item in questions)
         {
             var relevanceScore = CalculateRelevanceScore(item.Tags.ToList(), item.CarMake, userInterests);
             
@@ -303,10 +303,10 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
 
     private async Task<List<FeedItemVM>> GetPersonalizedStoriesAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)
     {
-        var stories = await _unitOfWork.Stories.GetActiveAsync();
+        var stories = await _unitOfWork.Stories.GetTopActiveAsync(20);
         var feedItems = new List<FeedItemVM>();
 
-        foreach (var item in stories.Take(5))
+        foreach (var item in stories)
         {
             var relevanceScore = CalculateRelevanceScore(item.Tags.ToList(), item.CarMake, userInterests);
             

@@ -15,7 +15,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2 mb-10">
         <div class="space-y-4">
             <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">
-                <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i> @Localizer["ReviewBy"] @Model.ReviewerName
+                <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i> @Localizer["ReviewBy"] @(Model.ReviewerName ?? "Anonymous")
             </nav>
             <h1 class="text-5xl font-black text-foreground tracking-tighter leading-none">@displayTitle</h1>
             <p class="text-sm font-medium text-muted-foreground opacity-70 mt-4 border-l-4 border-primary/20 pl-4 py-1 max-w-2xl">@Model.CarDisplayName</p>
@@ -52,11 +52,11 @@
 
                     <div class="flex items-center gap-6">
                         <div class="w-16 h-16 rounded-2xl bg-muted/20 border border-border/50 flex items-center justify-center font-black text-2xl text-foreground">
-                            @Model.ReviewerName.Substring(0, 1).ToUpper()
+                            @(string.IsNullOrEmpty(Model.ReviewerName) ? "?" : Model.ReviewerName.Substring(0, 1).ToUpper())
                         </div>
                         <div>
                             <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40 mb-1">@Localizer["ReviewAuthor"]</div>
-                            <div class="text-xl font-black text-foreground">@Model.ReviewerName</div>
+                            <div class="text-xl font-black text-foreground">@(Model.ReviewerName ?? "Anonymous")</div>
                         </div>
                     </div>
                 </div>

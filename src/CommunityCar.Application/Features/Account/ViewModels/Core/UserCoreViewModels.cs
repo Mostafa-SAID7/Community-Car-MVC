@@ -175,6 +175,18 @@ public class UpdateProfileVM
     [Display(Name = "Country")]
     public string? Country { get; set; }
 
+    [StringLength(500)]
+    [Display(Name = "Bio (Arabic)")]
+    public string? BioAr { get; set; }
+
+    [StringLength(100)]
+    [Display(Name = "City (Arabic)")]
+    public string? CityAr { get; set; }
+
+    [StringLength(100)]
+    [Display(Name = "Country (Arabic)")]
+    public string? CountryAr { get; set; }
+
     [Url(ErrorMessage = "Please enter a valid URL")]
     public string? Website { get; set; }
 

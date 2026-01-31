@@ -40,30 +40,48 @@ public class UserGalleryService : IUserGalleryService
 
     public async Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId)
     {
-        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
-        var galleryItems = (currentUserId != userId) 
-            ? await _galleryRepository.GetPublicGalleryAsync(userId)
-            : await _galleryRepository.GetUserGalleryAsync(userId);
-        
-        return galleryItems.Select(item => new UserGalleryItemVM
+        try
         {
-            Id = item.Id,
-            UserId = item.UserId,
-            ImageUrl = item.MediaUrl,
-            ThumbnailUrl = item.ThumbnailUrl ?? item.MediaUrl,
-            Caption = item.Description ?? item.Title,
-            CreatedAt = item.UploadedAt,
-            ViewCount = item.ViewCount,
-            // LikeCount = item.LikeCount, // Not in VM
-            IsPublic = item.IsPublic,
-            // IsFeatured = item.IsFeatured // Not in VM
-        });
+            var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
+            _logger.LogInformation("Getting gallery for user {UserId}, current user {CurrentUserId}", userId, currentUserId);
+            
+            var galleryItems = (currentUserId != userId) 
+                ? await _galleryRepository.GetPublicGalleryAsync(userId)
+                : await _galleryRepository.GetUserGalleryAsync(userId);
+            
+            _logger.LogInformation("Retrieved {Count} gallery items for user {UserId}", galleryItems?.Count() ?? 0, userId);
+            
+            if (galleryItems == null)
+            {
+                _logger.LogWarning("Gallery items returned null for user {UserId}", userId);
+                return Enumerable.Empty<UserGalleryItemVM>();
+            }
+            
+            return galleryItems.Select(item => new UserGalleryItemVM
+            {
+                Id = item.Id,
+                UserId = item.UserId,
+                ImageUrl = item.MediaUrl,
+                ThumbnailUrl = item.ThumbnailUrl ?? item.MediaUrl,
+                Caption = item.Description ?? item.Title,
+                CreatedAt = item.UploadedAt,
+                ViewCount = item.ViewCount,
+                // LikeCount = item.LikeCount, // Not in VM
+                IsPublic = item.IsPublic,
+                // IsFeatured = item.IsFeatured // Not in VM
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting gallery for user {UserId}", userId);
+            return Enumerable.Empty<UserGalleryItemVM>();
+        }
     }
 
     public async Task<UserGalleryItemVM?> GetGalleryItemAsync(Guid userId, Guid imageId)
     {
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : Guid.Empty;
-        var item = await _galleryRepository.GetGalleryItemAsync(imageId, currentUserId);
+        var item = await _galleryRepository.GetGalleryItemAsync(userId, imageId);
         if (item == null || item.UserId != userId) return null;
 
         return new UserGalleryItemVM
@@ -82,24 +100,51 @@ public class UserGalleryService : IUserGalleryService
     {
         try
         {
+            _logger.LogInformation("Starting image upload for user {UserId}, fileName: {FileName}", request.UserId, request.FileName);
+            
             var imageBytes = Convert.FromBase64String(request.ImageData);
-            if (imageBytes.Length > 5 * 1024 * 1024) return null; // 5MB limit
+            if (imageBytes.Length > 5 * 1024 * 1024) 
+            {
+                _logger.LogWarning("Image size {Size} exceeds 5MB limit for user {UserId}", imageBytes.Length, request.UserId);
+                return null; // 5MB limit
+            }
 
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(request.FileName)}";
-            var filePath = $"gallery/{request.UserId}/{fileName}";
+            // Create user-specific gallery directory structure
+            var userGalleryPath = Path.Combine("gallery", request.UserId.ToString());
+            var fileName = Path.Combine(userGalleryPath, $"{Guid.NewGuid()}{Path.GetExtension(request.FileName)}");
+            
+            _logger.LogInformation("Uploading file to path: {FilePath} for user {UserId}", fileName, request.UserId);
             
             using var stream = new MemoryStream(imageBytes);
-            var url = await _fileStorageService.UploadFileAsync(stream, filePath, request.ContentType);
-            if (string.IsNullOrEmpty(url)) return null;
+            var url = await _fileStorageService.UploadFileAsync(stream, fileName, request.ContentType);
+            
+            if (string.IsNullOrEmpty(url)) 
+            {
+                _logger.LogError("File storage service returned empty URL for user {UserId}, fileName: {FileName}", request.UserId, request.FileName);
+                return null;
+            }
+
+            _logger.LogInformation("File uploaded successfully, URL: {Url} for user {UserId}", url, request.UserId);
 
             var item = new UserGallery(request.UserId, request.Caption ?? "Untitled", url, MediaType.Image, request.IsPublic);
             await _galleryRepository.AddAsync(item);
 
-            return new UserGalleryItemVM { Id = item.Id, UserId = item.UserId, ImageUrl = item.MediaUrl, CreatedAt = item.UploadedAt };
+            _logger.LogInformation("Gallery item created successfully with ID: {ItemId} for user {UserId}", item.Id, request.UserId);
+
+            return new UserGalleryItemVM { 
+                Id = item.Id, 
+                UserId = item.UserId, 
+                ImageUrl = item.MediaUrl, 
+                ThumbnailUrl = item.ThumbnailUrl ?? item.MediaUrl,
+                Caption = item.Description ?? item.Title,
+                CreatedAt = item.UploadedAt,
+                IsPublic = item.IsPublic,
+                ViewCount = item.ViewCount
+            };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Gallery upload failed for user {UserId}", request.UserId);
+            _logger.LogError(ex, "Gallery upload failed for user {UserId}, fileName: {FileName}", request.UserId, request.FileName);
             return null;
         }
     }

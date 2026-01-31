@@ -10,4 +10,5 @@ public interface IReviewsRepository : IBaseRepository<Review>
     Task<IEnumerable<Review>> GetByTargetAsync(Guid targetId, string targetType);
     Task<IEnumerable<string>> GetAvailableCarMakesAsync();
     Task<IEnumerable<Review>> GetApprovedAsync();
+    Task<IEnumerable<Review>> GetTopApprovedAsync(int count);
 }

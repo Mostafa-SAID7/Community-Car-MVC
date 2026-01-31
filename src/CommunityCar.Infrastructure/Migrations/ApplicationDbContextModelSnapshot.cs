@@ -2958,7 +2958,8 @@ namespace CommunityCar.Infrastructure.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<DateTime?>("SolvedAt")
                         .HasColumnType("datetime2");
@@ -2990,6 +2991,9 @@ namespace CommunityCar.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
 
                     b.ToTable("Questions", (string)null);
                 });

@@ -70,16 +70,16 @@ public class OAuthService : IOAuthService
         }
     }
 
-    public async Task<IEnumerable<ExternalLoginInfo>> GetExternalLoginsAsync(string userId)
+    public async Task<IEnumerable<CommunityCar.Application.Common.Interfaces.Services.Account.ExternalLoginInfo>> GetExternalLoginsAsync(string userId)
     {
         var user = await _userRepository.GetByIdAsync(Guid.Parse(userId));
-        if (user == null) return Enumerable.Empty<ExternalLoginInfo>();
+        if (user == null) return Enumerable.Empty<CommunityCar.Application.Common.Interfaces.Services.Account.ExternalLoginInfo>();
 
-        var logins = new List<ExternalLoginInfo>();
+        var logins = new List<CommunityCar.Application.Common.Interfaces.Services.Account.ExternalLoginInfo>();
         if (!string.IsNullOrEmpty(user.OAuthInfo.GoogleId))
-            logins.Add(new ExternalLoginInfo { LoginProvider = "Google", ProviderDisplayName = "Google", ProviderKey = user.OAuthInfo.GoogleId });
+            logins.Add(new CommunityCar.Application.Common.Interfaces.Services.Account.ExternalLoginInfo { LoginProvider = "Google", ProviderDisplayName = "Google", ProviderKey = user.OAuthInfo.GoogleId });
         if (!string.IsNullOrEmpty(user.OAuthInfo.FacebookId))
-            logins.Add(new ExternalLoginInfo { LoginProvider = "Facebook", ProviderDisplayName = "Facebook", ProviderKey = user.OAuthInfo.FacebookId });
+            logins.Add(new CommunityCar.Application.Common.Interfaces.Services.Account.ExternalLoginInfo { LoginProvider = "Facebook", ProviderDisplayName = "Facebook", ProviderKey = user.OAuthInfo.FacebookId });
 
         return logins;
     }

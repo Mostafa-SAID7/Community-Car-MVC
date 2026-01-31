@@ -22,7 +22,7 @@ public class UserBadgeRepository : BaseRepository<UserBadge>, IUserBadgeReposito
     {
         return await Context.UserBadges
             .Where(ub => ub.UserId == userId)
-            .OrderByDescending(ub => ub.AwardedAt)
+            .OrderByDescending(ub => ub.EarnedAt)
             .ToListAsync();
     }
 
@@ -76,7 +76,7 @@ public class UserBadgeRepository : BaseRepository<UserBadge>, IUserBadgeReposito
     {
         return await Context.UserBadges
             .Where(ub => ub.UserId == userId)
-            .OrderByDescending(ub => ub.AwardedAt)
+            .OrderByDescending(ub => ub.EarnedAt)
             .Take(count)
             .ToListAsync();
     }
@@ -86,7 +86,7 @@ public class UserBadgeRepository : BaseRepository<UserBadge>, IUserBadgeReposito
         if (!Enum.TryParse<BadgeRarity>(rarity, true, out var rarityEnum)) return new List<UserBadge>();
         return await Context.UserBadges
             .Where(ub => ub.UserId == userId && ub.Rarity == rarityEnum)
-            .OrderByDescending(ub => ub.AwardedAt)
+            .OrderByDescending(ub => ub.EarnedAt)
             .ToListAsync();
     }
 
@@ -95,7 +95,7 @@ public class UserBadgeRepository : BaseRepository<UserBadge>, IUserBadgeReposito
         if (!Enum.TryParse<BadgeCategory>(category, true, out var categoryEnum)) return new List<UserBadge>();
         return await Context.UserBadges
             .Where(ub => ub.UserId == userId && ub.Category == categoryEnum)
-            .OrderByDescending(ub => ub.AwardedAt)
+            .OrderByDescending(ub => ub.EarnedAt)
             .ToListAsync();
     }
 
@@ -116,7 +116,7 @@ public class UserBadgeRepository : BaseRepository<UserBadge>, IUserBadgeReposito
         var badgeIdString = badgeId.ToString();
         return await Context.UserBadges
             .Where(ub => ub.BadgeId == badgeIdString)
-            .OrderBy(ub => ub.AwardedAt)
+            .OrderBy(ub => ub.EarnedAt)
             .Take(count)
             .Select(ub => ub.UserId)
             .ToListAsync();

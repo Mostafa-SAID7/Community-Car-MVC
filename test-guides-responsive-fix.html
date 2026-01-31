@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guides Details - Responsive Fix Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-8 animate-in fade-in duration-700 py-8">
+            
+            <!-- Navigation & Guide Strategy -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="space-y-4">
+                    <nav class="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-blue-600 mb-6">
+                        <i data-lucide="book-open" class="w-3.5 h-3.5 fill-current"></i> Guide Payload
+                    </nav>
+                    <h1 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tighter leading-none">How to Change Your Oil</h1>
+                    <p class="text-sm font-medium text-gray-600 opacity-70 mt-4 border-l-4 border-blue-200 pl-4 py-1 max-w-2xl">Learn the essential steps to change your car's oil safely and efficiently.</p>
+                </div>
+                
+                <div class="flex gap-3">
+                    <a href="/guides" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 text-xs font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group">
+                        <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+                        Return to Archives
+                    </a>
+                </div>
+            </div>
+
+            <!-- Guide Header & Image Payload -->
+            <div class="relative group">
+                <div class="absolute -inset-1.5 bg-gradient-to-r from-blue-500/20 via-blue-500/5 to-blue-500/20 rounded-2xl blur-3xl opacity-10 group-hover:opacity-30 transition duration-1000"></div>
+                
+                <div class="relative bg-white/40 backdrop-blur-2xl border border-gray-200/50 rounded-2xl shadow-2xl overflow-hidden">
+                    <div class="aspect-video md:aspect-[21/9] overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&h=400&fit=crop" alt="Car Oil Change" class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                        
+                        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                                <div class="flex-1">
+                                    <!-- Status Matrix -->
+                                    <div class="flex flex-wrap gap-3 mb-6">
+                                        <span class="px-4 py-1.5 rounded-2xl bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-xs font-black uppercase tracking-widest shadow-lg">
+                                            <i data-lucide="star" class="w-3.5 h-3.5 inline mr-1.5"></i>
+                                            FEATURED SIGNAL
+                                        </span>
+                                        <span class="px-4 py-1.5 rounded-2xl bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-black uppercase tracking-widest shadow-lg">
+                                            <i data-lucide="shield-check" class="w-3.5 h-3.5 inline mr-1.5"></i>
+                                            VERIFIED SOURCE
+                                        </span>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h1 class="text-2xl lg:text-4xl font-black text-white mb-4 leading-tight">
+                                        How to Change Your Oil
+                                    </h1>
+
+                                    <!-- Summary -->
+                                    <p class="text-lg text-white/90 font-medium leading-relaxed mb-6 max-w-3xl">
+                                        Learn the essential steps to change your car's oil safely and efficiently.
+                                    </p>
+
+                                    <!-- Author and Meta -->
+                                    <div class="flex items-center gap-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/20">
+                                                <div class="w-full h-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold">
+                                                    JD
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p class="text-white font-bold">Author: John Doe</p>
+                                                <p class="text-white/70 text-sm">Published on Jan 15, 2024 • 2 days ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="flex flex-wrap gap-3">
+                                    <div class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-xl text-white">
+                                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-current"></i>
+                                        <span class="font-bold">4.8</span>
+                                        <span class="text-sm opacity-70">(24 Ratings)</span>
+                                    </div>
+                                    <button class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-xl text-white transition-all">
+                                        <i data-lucide="bookmark" class="w-5 h-5"></i>
+                                        <span class="font-bold">Bookmark Guide</span>
+                                    </button>
+                                    <button class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-xl text-white transition-all">
+                                        <i data-lucide="share-2" class="w-5 h-5"></i>
+                                        <span class="font-bold">Share Guide</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guide Info and Content -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Main Content -->
+                <div class="lg:col-span-3 space-y-8">
+                    <!-- Guide Transmission Payload -->
+                    <div class="bg-white/40 backdrop-blur-2xl border border-gray-200/50 rounded-2xl shadow-xl p-6">
+                        <div class="prose prose-lg max-w-none font-medium leading-relaxed">
+                            <h2>Step 1: Gather Your Tools</h2>
+                            <p>Before you begin, make sure you have all the necessary tools and materials:</p>
+                            <ul>
+                                <li>Oil drain pan</li>
+                                <li>Socket wrench set</li>
+                                <li>Oil filter wrench</li>
+                                <li>New oil filter</li>
+                                <li>Fresh motor oil</li>
+                                <li>Funnel</li>
+                                <li>Jack and jack stands</li>
+                            </ul>
+                            
+                            <h2>Step 2: Prepare Your Vehicle</h2>
+                            <p>Park your car on a level surface and let the engine cool down for at least 30 minutes. This ensures the oil isn't too hot to handle safely.</p>
+                            
+                            <h2>Step 3: Drain the Old Oil</h2>
+                            <p>Locate the oil drain plug underneath your vehicle and carefully remove it with the appropriate socket wrench. Allow all the old oil to drain completely into your drain pan.</p>
+                        </div>
+                    </div>
+
+                    <!-- Rating Section -->
+                    <div class="bg-white/40 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-6">
+                        <h3 class="text-xl font-black text-gray-900 mb-6 flex items-center gap-2">
+                            <i data-lucide="star" class="w-6 h-6 text-yellow-500"></i>
+                            Rate Guide
+                        </h3>
+                        
+                        <div class="flex items-center gap-2 mb-4">
+                            <button class="w-8 h-8 text-2xl transition-all hover:scale-110 text-yellow-500">
+                                <i data-lucide="star" class="w-full h-full fill-current"></i>
+                            </button>
+                            <button class="w-8 h-8 text-2xl transition-all hover:scale-110 text-yellow-500">
+                                <i data-lucide="star" class="w-full h-full fill-current"></i>
+                            </button>
+                            <button class="w-8 h-8 text-2xl transition-all hover:scale-110 text-yellow-500">
+                                <i data-lucide="star" class="w-full h-full fill-current"></i>
+                            </button>
+                            <button class="w-8 h-8 text-2xl transition-all hover:scale-110 text-yellow-500">
+                                <i data-lucide="star" class="w-full h-full fill-current"></i>
+                            </button>
+                            <button class="w-8 h-8 text-2xl transition-all hover:scale-110 text-gray-400 hover:text-yellow-400">
+                                <i data-lucide="star" class="w-full h-full"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="text-sm text-gray-600">
+                            Average rating: 4.8 / 5.0 (24 Ratings)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Guide Info -->
+                    <div class="bg-white/40 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-6">
+                        <h3 class="text-lg font-black text-gray-900 mb-4 flex items-center gap-2">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-600"></i>
+                            Guide Information
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-600">Estimated Time:</span>
+                                <span class="text-sm font-bold text-gray-900">45 minutes</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-600">Views:</span>
+                                <span class="text-sm font-bold text-gray-900">1,234</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-600">Bookmarks:</span>
+                                <span class="text-sm font-bold text-gray-900">89</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prerequisites -->
+                    <div class="bg-white/40 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-6">
+                        <h3 class="text-lg font-black text-gray-900 mb-4 flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+                            Prerequisites
+                        </h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2 text-sm">
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0"></i>
+                                <span class="text-gray-900">Basic knowledge of car maintenance</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm">
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0"></i>
+                                <span class="text-gray-900">Access to a garage or driveway</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Required Tools -->
+                    <div class="bg-white/40 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-6">
+                        <h3 class="text-lg font-black text-gray-900 mb-4 flex items-center gap-2">
+                            <i data-lucide="wrench" class="w-5 h-5 text-orange-500"></i>
+                            Required Tools
+                        </h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2 text-sm">
+                                <i data-lucide="tool" class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0"></i>
+                                <span class="text-gray-900">Socket wrench set</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm">
+                                <i data-lucide="tool" class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0"></i>
+                                <span class="text-gray-900">Oil filter wrench</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm">
+                                <i data-lucide="tool" class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0"></i>
+                                <span class="text-gray-900">Jack and jack stands</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="bg-white/40 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-6">
+                        <h3 class="text-lg font-black text-gray-900 mb-4 flex items-center gap-2">
+                            <i data-lucide="hash" class="w-5 h-5 text-blue-600"></i>
+                            Tags
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="#" class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-blue-600 text-gray-600 rounded-lg text-sm font-medium transition-all">
+                                #maintenance
+                            </a>
+                            <a href="#" class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-blue-600 text-gray-600 rounded-lg text-sm font-medium transition-all">
+                                #oil-change
+                            </a>
+                            <a href="#" class="px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-blue-600 text-gray-600 rounded-lg text-sm font-medium transition-all">
+                                #diy
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

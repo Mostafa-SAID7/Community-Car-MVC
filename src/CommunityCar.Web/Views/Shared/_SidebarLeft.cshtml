@@ -3,7 +3,7 @@
 @inject IViewLocalizer Localizer
 <!-- Left Sidebar -->
 <aside id="main-sidebar"
-    class="sidebar fixed left-4 rtl:left-auto rtl:right-4 top-24 bottom-20 w-16 xl:w-56 bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl z-50 -translate-x-[calc(100%+2rem)] rtl:translate-x-[calc(100%+2rem)] rtl:-translate-x-0 md:translate-x-0 rtl:md:translate-x-0 transition-transform duration-300 ease-in-out">
+    class="sidebar fixed left-4 rtl:left-auto rtl:right-4 top-24 bottom-20 w-16 xl:w-56 bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl z-50 -translate-x-[calc(100%+2rem)] rtl:translate-x-[calc(100%+2rem)] rtl:-translate-x-0 md:translate-x-0 rtl:md:translate-x-0 transition-all duration-300 ease-in-out sidebar-expanded">
     
     <!-- Sidebar backdrop for mobile -->
     <div id="main-sidebar-backdrop" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden md:hidden"></div>
@@ -18,54 +18,84 @@
         
         <nav class="flex flex-col gap-1 mt-1">
             <a href="/"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="home" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["Home"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Home"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["Home"]
+                </div>
             </a>
             <a href="/qa"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="help-circle" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["QA"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["QA"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["QA"]
+                </div>
             </a>
             <a href="/posts"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="pen-tool" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["Posts"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Posts"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["Posts"]
+                </div>
             </a>
             <a href="/guides"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="book-open" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["Guides"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Guides"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["Guides"]
+                </div>
             </a>
             <a href="/groups"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="users" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["Groups"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Groups"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["Groups"]
+                </div>
             </a>
             <a href="/friends"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="user-plus" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["Friends"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Friends"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["Friends"]
+                </div>
             </a>
             <a href="/news"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="newspaper" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["News"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["News"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["News"]
+                </div>
             </a>
             <a href="/events"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="calendar" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["Events"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Events"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["Events"]
+                </div>
             </a>
             <a href="/reviews"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="star" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["Reviews"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Reviews"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["Reviews"]
+                </div>
             </a>
             <a href="/maps"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
                 <i data-lucide="map" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@Localizer["Maps"]</span>
+                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Maps"]</span>
+                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                    @Localizer["Maps"]
+                </div>
             </a>
         </nav>
     </div>
@@ -79,9 +109,12 @@
             var profileLabel = isStaff ? Localizer["AdminProfile"] : Localizer["MyProfile"];
         }
         <a href="/profile"
-            class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full">
+            class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
             <i data-lucide="user" class="w-[18px] h-[18px] shrink-0"></i>
-            <span class="hidden xl:inline md:hidden main-sidebar-mobile-open:inline">@profileLabel</span>
+            <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@profileLabel</span>
+            <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 hidden">
+                @profileLabel
+            </div>
         </a>
     </div>
 </aside>

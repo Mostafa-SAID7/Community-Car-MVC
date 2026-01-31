@@ -1,5 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
+using CommunityCar.Application.Features.Account.ViewModels.Media;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,11 +40,25 @@ public class ProfileController : Controller
             {
                 ViewBag.FullName = profile.FullName;
                 ViewBag.Email = profile.Email;
+                ViewBag.UserName = profile.UserName;
+                ViewBag.Bio = profile.Bio;
+                ViewBag.BioAr = profile.BioAr;
+                ViewBag.City = profile.City;
+                ViewBag.Country = profile.Country;
                 ViewBag.ProfilePictureUrl = profile.ProfilePictureUrl;
                 ViewBag.CreatedAt = profile.CreatedAt;
                 ViewBag.PostsCount = profile.PostsCount;
                 ViewBag.CommentsCount = profile.CommentsCount;
                 ViewBag.LikesReceived = profile.LikesReceived;
+                
+                // Gamification Stats
+                var stats = await _gamificationService.GetUserStatsAsync(userId);
+                if (stats != null)
+                {
+                    ViewBag.Level = stats.Level;
+                    ViewBag.TotalPoints = stats.TotalPoints;
+                    ViewBag.Rank = stats.Rank;
+                }
             }
         }
         catch (Exception ex)
@@ -67,39 +83,10 @@ public class ProfileController : Controller
             return RedirectToAction("Login", "Account", new { area = "" });
         }
 
-        var profile = await _profileService.GetProfileAsync(userId);
-        if (profile == null)
-        {
-            return RedirectToAction("Login", "Account", new { area = "" });
-        }
-
-        var viewModel = new ProfileIndexVM
-        {
-            Id = profile.Id,
-            FullName = profile.FullName,
-            Email = profile.Email,
-            PhoneNumber = profile.PhoneNumber,
-            Bio = profile.Bio,
-            City = profile.City,
-            Country = profile.Country,
-            ProfilePictureUrl = profile.ProfilePictureUrl,
-            CreatedAt = profile.CreatedAt,
-            // LastLoginAt = profile.LastLoginAt,
-            IsEmailConfirmed = profile.IsEmailConfirmed,
-            // IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
-            // IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
-            IsActive = profile.IsActive,
-            // HasGoogleAccount = profile.HasGoogleAccount,
-            // HasFacebookAccount = profile.HasFacebookAccount,
-            PostsCount = profile.PostsCount,
-            // CommentsCount = profile.CommentsCount,
-            // LikesReceived = profile.LikesReceived
-        };
-
-        return View("~/Views/Account/Profile/Index.cshtml", viewModel);
+        return RedirectToAction("ViewProfile", new { id = userId });
     }
 
-    [HttpGet("view/{id:guid}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> ViewProfile(Guid id)
     {
         var profile = await _profileService.GetProfileAsync(id);
@@ -118,8 +105,14 @@ public class ProfileController : Controller
                 CommentsCount = 0,
                 LikesReceived = 0
             };
-            return View("Index", fallbackVM);
+            return View("~/Views/Account/Profile/Index.cshtml", fallbackVM);
         }
+
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var currentId) ? currentId : Guid.Empty;
+        
+        await SetProfileHeaderDataAsync(id);
+        ViewBag.UserId = id;
+        ViewBag.IsOwner = currentUserId == id;
 
         var viewModel = new ProfileIndexVM
         {
@@ -132,16 +125,9 @@ public class ProfileController : Controller
             Country = profile.Country,
             ProfilePictureUrl = profile.ProfilePictureUrl,
             CreatedAt = profile.CreatedAt,
-            // LastLoginAt = profile.LastLoginAt,
             IsEmailConfirmed = profile.IsEmailConfirmed,
-            // IsPhoneNumberConfirmed = profile.IsPhoneNumberConfirmed,
-            // IsTwoFactorEnabled = profile.IsTwoFactorEnabled,
             IsActive = profile.IsActive,
-            // HasGoogleAccount = profile.HasGoogleAccount,
-            // HasFacebookAccount = profile.HasFacebookAccount,
             PostsCount = profile.PostsCount,
-            // CommentsCount = profile.CommentsCount,
-            // LikesReceived = profile.LikesReceived
         };
 
         return View("~/Views/Account/Profile/Index.cshtml", viewModel);
@@ -258,17 +244,35 @@ public class ProfileController : Controller
         return Json(new { success = true, data = stats });
     }
 
-    [HttpGet("interests")]
-    public async Task<IActionResult> Interests()
+    [HttpGet("{id:guid}/interests")]
+    public async Task<IActionResult> Interests(Guid id)
     {
-        if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-        {
-             return RedirectToAction("Login", "Account", new { area = "" });
-        }
-
-        await SetProfileHeaderDataAsync(userId);
-        ViewBag.CurrentUserId = userId;
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var currentId) ? currentId : Guid.Empty;
+        
+        await SetProfileHeaderDataAsync(id);
+        ViewBag.UserId = id;
+        ViewBag.IsOwner = currentUserId == id;
+        
         return View("~/Views/Account/Profile/Interests.cshtml");
+    }
+
+    [HttpGet("{id:guid}/badges")]
+    public async Task<IActionResult> Badges(Guid id)
+    {
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var currentId) ? currentId : Guid.Empty;
+        
+        var badges = await _gamificationService.GetUserBadgesAsync(id);
+        var achievements = await _gamificationService.GetUserAchievementsAsync(id);
+        var stats = await _gamificationService.GetUserStatsAsync(id);
+
+        await SetProfileHeaderDataAsync(id);
+        ViewBag.UserId = id;
+        ViewBag.IsOwner = currentUserId == id;
+        ViewBag.Badges = badges;
+        ViewBag.Achievements = achievements;
+        ViewBag.GamificationStats = stats;
+
+        return View("~/Views/Account/Profile/Badges.cshtml");
     }
 
     [HttpGet("gallery")]
@@ -279,15 +283,31 @@ public class ProfileController : Controller
              return RedirectToAction("Login", "Account", new { area = "" });
         }
 
-        var galleryItems = await _userGalleryService.GetUserGalleryAsync(userId);
-        var gamificationStats = await _gamificationService.GetUserStatsAsync(userId);
+        return RedirectToAction("Index", "Gallery", new { userId });
+    }
 
-        await SetProfileHeaderDataAsync(userId);
-        ViewBag.CurrentUserId = userId;
-        ViewBag.GalleryItems = galleryItems;
-        ViewBag.GamificationStats = gamificationStats;
+    [HttpGet("{id:guid}/gallery")]
+    public async Task<IActionResult> ViewUserGallery(Guid id)
+    {
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var currentId) ? currentId : Guid.Empty;
+        
+        // Check if user exists
+        var profile = await _profileService.GetProfileAsync(id);
+        if (profile == null)
+        {
+            return NotFound("User not found");
+        }
 
-        return View("~/Views/Account/Profile/Gallery.cshtml");
+        // Get gallery items for the specified user
+        var galleryItems = await _userGalleryService.GetUserGalleryAsync(id) ?? new List<UserGalleryItemVM>();
+        var imageCount = await _userGalleryService.GetImageCountAsync(id);
+
+        await SetProfileHeaderDataAsync(id);
+        ViewBag.UserId = id;
+        ViewBag.IsOwner = currentUserId == id;
+        ViewBag.ImageCount = imageCount;
+
+        return View("~/Views/Account/Profile/Gallery.cshtml", galleryItems);
     }
 
     [HttpPost("gallery/upload")]
@@ -338,26 +358,7 @@ public class ProfileController : Controller
         return RedirectToAction("Gallery");
     }
 
-    [HttpGet("badges")]
-    public async Task<IActionResult> Badges()
-    {
-        if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-        {
-             return RedirectToAction("Login", "Authentication", new { area = "" });
-        }
 
-        var badges = await _gamificationService.GetUserBadgesAsync(userId);
-        var achievements = await _gamificationService.GetUserAchievementsAsync(userId);
-        var stats = await _gamificationService.GetUserStatsAsync(userId);
-
-        await SetProfileHeaderDataAsync(userId);
-        ViewBag.CurrentUserId = userId;
-        ViewBag.Badges = badges;
-        ViewBag.Achievements = achievements;
-        ViewBag.GamificationStats = stats;
-
-        return View("~/Views/Account/Profile/Badges.cshtml");
-    }
 
     [HttpPost("gallery/toggle-visibility/{itemId}")]
     public async Task<IActionResult> ToggleGalleryItemVisibility(Guid itemId)

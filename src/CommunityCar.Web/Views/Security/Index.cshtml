@@ -1,0 +1,260 @@
+@model CommunityCar.Application.Features.Account.ViewModels.Security.SecurityVM
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = "Security Settings";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/profile-leetcode.css" asp-append-version="true" />
+}
+
+<div class="profile-container py-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-6">
+            
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground mb-4 shadow-lg">
+                    <i data-lucide="shield" class="w-8 h-8"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-foreground mb-2">Security Settings</h1>
+                <p class="text-muted-foreground">Manage your account security and privacy</p>
+            </div>
+
+            <!-- Security Overview -->
+            <div class="leetcode-card p-6">
+                <h2 class="text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-primary"></i>
+                    Security Overview
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Two-Factor Authentication -->
+                    <div class="bg-background border border-border rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 rounded-full @(Model.Overview.TwoFactorEnabled ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600") flex items-center justify-center">
+                                <i data-lucide="@(Model.Overview.TwoFactorEnabled ? "shield-check" : "shield-alert")" class="w-5 h-5"></i>
+                            </div>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium @(Model.Overview.TwoFactorEnabled ? "bg-green-100 text-green-800" : "bg-orange-100 text-orange-800")">
+                                @(Model.Overview.TwoFactorEnabled ? "Enabled" : "Disabled")
+                            </span>
+                        </div>
+                        <h3 class="font-medium text-foreground">Two-Factor Auth</h3>
+                        <p class="text-sm text-muted-foreground">
+                            @(Model.Overview.TwoFactorEnabled ? "Your account is protected" : "Add extra security")
+                        </p>
+                    </div>
+
+                    <!-- Active Sessions -->
+                    <div class="bg-background border border-border rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                <i data-lucide="monitor" class="w-5 h-5"></i>
+                            </div>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                @Model.ActiveSessions.Count Active
+                            </span>
+                        </div>
+                        <h3 class="font-medium text-foreground">Active Sessions</h3>
+                        <p class="text-sm text-muted-foreground">Devices signed in</p>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="bg-background border border-border rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
+                                <i data-lucide="key" class="w-5 h-5"></i>
+                            </div>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                @(Model.Overview.LastPasswordChange?.ToString("MMM dd") ?? "Never")
+                            </span>
+                        </div>
+                        <h3 class="font-medium text-foreground">Password</h3>
+                        <p class="text-sm text-muted-foreground">Last changed</p>
+                    </div>
+
+                    <!-- External Logins -->
+                    <div class="bg-background border border-border rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                                <i data-lucide="link" class="w-5 h-5"></i>
+                            </div>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                @(Model.Overview.HasExternalLogins ? "Connected" : "None")
+                            </span>
+                        </div>
+                        <h3 class="font-medium text-foreground">External Logins</h3>
+                        <p class="text-sm text-muted-foreground">Social accounts</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Actions -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Authentication Settings -->
+                <div class="leetcode-card p-6">
+                    <h3 class="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="lock" class="w-5 h-5 text-primary"></i>
+                        Authentication
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Change Password -->
+                        <div class="flex items-center justify-between p-4 bg-background border border-border rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                                    <i data-lucide="key" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-foreground">Change Password</h4>
+                                    <p class="text-sm text-muted-foreground">Update your account password</p>
+                                </div>
+                            </div>
+                            <a href="/account/security/change-password" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-sm font-medium transition-all">
+                                Change
+                            </a>
+                        </div>
+
+                        <!-- Two-Factor Authentication -->
+                        <div class="flex items-center justify-between p-4 bg-background border border-border rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full @(Model.Overview.TwoFactorEnabled ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600") flex items-center justify-center">
+                                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-foreground">Two-Factor Authentication</h4>
+                                    <p class="text-sm text-muted-foreground">
+                                        @(Model.Overview.TwoFactorEnabled ? "Currently enabled" : "Add extra security layer")
+                                    </p>
+                                </div>
+                            </div>
+                            <a href="/account/security/two-factor" class="inline-flex items-center gap-2 px-4 py-2 @(Model.Overview.TwoFactorEnabled ? "bg-secondary text-secondary-foreground hover:bg-secondary/80" : "bg-primary text-primary-foreground hover:bg-primary/90") rounded-lg text-sm font-medium transition-all">
+                                @(Model.Overview.TwoFactorEnabled ? "Manage" : "Enable")
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session Management -->
+                <div class="leetcode-card p-6">
+                    <h3 class="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="monitor" class="w-5 h-5 text-primary"></i>
+                        Active Sessions
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        @if (Model.ActiveSessions.Any())
+                        {
+                            @foreach (var session in Model.ActiveSessions.Take(3))
+                            {
+                                <div class="flex items-center justify-between p-3 bg-background border border-border rounded-lg">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                            <i data-lucide="@(session.IsCurrent ? "monitor" : "smartphone")" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-foreground text-sm">
+                                                @(session.IsCurrent ? "Current Session" : "Other Device")
+                                            </h4>
+                                            <p class="text-xs text-muted-foreground">
+                                                @session.IpAddress • @session.LastActivityAt.ToString("MMM dd, HH:mm")
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @if (!session.IsCurrent)
+                                    {
+                                        <button class="text-red-500 hover:text-red-600 text-sm font-medium">
+                                            Revoke
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                                            Current
+                                        </span>
+                                    }
+                                </div>
+                            }
+                            
+                            @if (Model.ActiveSessions.Count > 3)
+                            {
+                                <div class="text-center pt-2">
+                                    <button class="text-primary hover:text-primary/80 text-sm font-medium">
+                                        View All Sessions (@Model.ActiveSessions.Count)
+                                    </button>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center py-6 text-muted-foreground">
+                                <i data-lucide="monitor" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+                                <p class="text-sm">No active sessions found</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Security Activity -->
+            @if (Model.Overview.RecentActivity.Any())
+            {
+                <div class="leetcode-card p-6">
+                    <h3 class="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="activity" class="w-5 h-5 text-primary"></i>
+                        Recent Security Activity
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        @foreach (var activity in Model.Overview.RecentActivity.Take(5))
+                        {
+                            <div class="flex items-center gap-4 p-3 bg-background border border-border rounded-lg">
+                                <div class="w-8 h-8 rounded-full @(activity.IsSuccess ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600") flex items-center justify-center">
+                                    <i data-lucide="@(activity.IsSuccess ? "check" : "x")" class="w-4 h-4"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-foreground text-sm">@activity.Action</h4>
+                                    <p class="text-xs text-muted-foreground">
+                                        @activity.IpAddress • @activity.Location • @activity.Timestamp.ToString("MMM dd, HH:mm")
+                                    </p>
+                                </div>
+                                <div class="text-xs text-muted-foreground">
+                                    @activity.Device
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Back Button -->
+            <div class="text-center">
+                <a href="/profile/settings" class="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-lg font-medium transition-all">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    Back to Settings
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Handle TempData messages
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+            toastr.success('@Html.Raw(Html.Encode(TempData["SuccessMessage"].ToString()).Replace("'", "\\'"))');
+            </text>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+            toastr.error('@Html.Raw(Html.Encode(TempData["ErrorMessage"].ToString()).Replace("'", "\\'"))');
+            </text>
+        }
+    </script>
+}

@@ -1,8 +1,18 @@
 /**
  * Layout Interactions
  * Handles mobile sidebar, search, and UI synchronization between desktop and mobile elements.
+ * Simplified version - no complex desktop sidebar toggle functionality.
  */
+
 document.addEventListener('DOMContentLoaded', function () {
+    // Ensure main content is always visible on page load
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+        mainContent.style.opacity = '1';
+        mainContent.style.visibility = 'visible';
+        mainContent.style.display = 'block';
+    }
+    
     // Initialize Lucide icons if present
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
@@ -101,6 +111,50 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Profile Dropdown
+    const profileToggle = document.querySelector('.profile-toggle');
+    const profileDropdown = document.querySelector('.profile-dropdown');
+
+    if (profileToggle && profileDropdown) {
+        profileToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            // Close other dropdowns first
+            document.querySelectorAll('.dropdown-content:not(.profile-dropdown)').forEach(dropdown => {
+                dropdown.classList.add('hidden');
+            });
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        // Close profile dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.profile-wrapper')) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+    }
+
+    // Mobile Profile Dropdown
+    const mobileProfileToggle = document.querySelector('.mobile-profile-toggle');
+    const mobileProfileDropdown = document.querySelector('.mobile-profile-dropdown');
+
+    if (mobileProfileToggle && mobileProfileDropdown) {
+        mobileProfileToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            // Close other dropdowns first
+            document.querySelectorAll('.dropdown-content:not(.mobile-profile-dropdown)').forEach(dropdown => {
+                dropdown.classList.add('hidden');
+            });
+            mobileProfileDropdown.classList.toggle('hidden');
+        });
+
+        // Close mobile profile dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.mobile-profile-wrapper')) {
+                mobileProfileDropdown.classList.add('hidden');
+            }
+        });
+    }
+
     // Global Skeleton Handlers for common patterns
     const skeletonConfig = [
         { id: 'profile-skeleton', container: 'profile-content' },
@@ -170,6 +224,9 @@ document.addEventListener('DOMContentLoaded', function () {
             dashboardSidebar.classList.add('sidebar-mobile-open'); // Add class to show text labels
             sidebarBackdrop.classList.remove('hidden');
             document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.classList.add('sidebar-visible'); // Add class for CSS targeting
+            
+            // Mobile spacing is now handled by CSS - no need for JavaScript adjustments
         }
     }
 
@@ -181,6 +238,9 @@ document.addEventListener('DOMContentLoaded', function () {
             dashboardSidebar.classList.remove('sidebar-mobile-open'); // Remove class to hide text labels
             sidebarBackdrop.classList.add('hidden');
             document.body.style.overflow = ''; // Restore scrolling
+            document.body.classList.remove('sidebar-visible'); // Remove class
+            
+            // Mobile spacing is now handled by CSS - no need for JavaScript adjustments
         }
     }
 
@@ -222,20 +282,47 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Handle window resize to ensure proper sidebar state
+    // Handle window resize to ensure proper sidebar state and spacing
     window.addEventListener('resize', function () {
-        if (window.innerWidth >= 768 && dashboardSidebar) {
-            // On desktop, ensure sidebar is in correct state
-            closeMobileSidebar();
-        }
-        if (window.innerWidth >= 768 && mainSidebar) {
-            // On desktop, ensure main sidebar is in correct state
-            closeMainMobileSidebar();
+        const mainContent = document.getElementById('main-content');
+        
+        if (window.innerWidth >= 768) {
+            // On desktop, ensure sidebars are in correct state
+            if (dashboardSidebar) {
+                closeMobileSidebar();
+            }
+            if (mainSidebar) {
+                closeMainMobileSidebar();
+            }
+            
+            // Reset any mobile-specific spacing - let CSS handle desktop spacing
+            if (mainContent) {
+                mainContent.style.paddingLeft = '';
+                mainContent.style.paddingRight = '';
+                mainContent.style.marginLeft = '';
+                mainContent.style.marginRight = '';
+                // Ensure main content is always visible
+                mainContent.style.opacity = '1';
+                mainContent.style.visibility = 'visible';
+                mainContent.style.display = 'block';
+                mainContent.style.pointerEvents = '';
+            }
+            
+            // Reset body classes and overflow
+            document.body.classList.remove('sidebar-visible', 'left-sidebar-visible');
+            document.body.style.overflow = '';
+        } else {
+            // On mobile, ensure main content is visible
+            if (mainContent) {
+                mainContent.style.opacity = '1';
+                mainContent.style.visibility = 'visible';
+                mainContent.style.display = 'block';
+            }
         }
     });
 
     // Main Layout Mobile Sidebar Toggle
-    const mainMobileSidebarToggle = document.getElementById('main-mobile-sidebar-toggle');
+    const mainMobileSidebarToggle = document.getElementById('sidebar-toggle'); // Mobile button
     const mainMobileSidebarClose = document.getElementById('main-sidebar-close');
     const mainSidebar = document.getElementById('main-sidebar');
     const mainSidebarBackdrop = document.getElementById('main-sidebar-backdrop');
@@ -248,6 +335,9 @@ document.addEventListener('DOMContentLoaded', function () {
             mainSidebar.classList.add('main-sidebar-mobile-open'); // Add class to show text labels
             mainSidebarBackdrop.classList.remove('hidden');
             document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.classList.add('left-sidebar-visible'); // Add class for CSS targeting
+            
+            // Mobile spacing is now handled by CSS - no need for JavaScript adjustments
         }
     }
 
@@ -259,6 +349,9 @@ document.addEventListener('DOMContentLoaded', function () {
             mainSidebar.classList.remove('main-sidebar-mobile-open'); // Remove class to hide text labels
             mainSidebarBackdrop.classList.add('hidden');
             document.body.style.overflow = ''; // Restore scrolling
+            document.body.classList.remove('left-sidebar-visible'); // Remove class
+            
+            // Mobile spacing is now handled by CSS - no need for JavaScript adjustments
         }
     }
 
@@ -299,4 +392,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
+    // ========================================
+    // SIMPLIFIED LAYOUT - NO COMPLEX DESKTOP TOGGLE
+    // ========================================
+    // 
+    // Large screens now use the same simple approach as other screen sizes.
+    // No complex state management or margin calculations needed.
+    // 
+    // ========================================
 });

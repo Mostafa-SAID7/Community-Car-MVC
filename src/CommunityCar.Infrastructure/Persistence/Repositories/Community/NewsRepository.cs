@@ -25,6 +25,14 @@ public class NewsRepository : BaseRepository<NewsItem>, INewsRepository
             .OrderByDescending(n => n.CreatedAt)
             .ToListAsync();
     }
+    public async Task<IEnumerable<NewsItem>> GetTopPublishedAsync(int count)
+    {
+        return await Context.News
+            .Where(n => n.IsPublished)
+            .OrderByDescending(n => n.CreatedAt)
+            .Take(count)
+            .ToListAsync();
+    }
 
     public async Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date)
     {

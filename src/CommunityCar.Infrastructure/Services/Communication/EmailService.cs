@@ -10,96 +10,80 @@ public class EmailService : IEmailService
 {
     private readonly IConfiguration _configuration;
     private readonly ILogger<EmailService> _logger;
+    private readonly IEmailTemplateService _templateService;
 
-    public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
+    public EmailService(
+        IConfiguration configuration, 
+        ILogger<EmailService> logger,
+        IEmailTemplateService templateService)
     {
         _configuration = configuration;
         _logger = logger;
+        _templateService = templateService;
     }
 
     public async Task SendEmailConfirmationAsync(string email, string confirmationLink)
     {
         var subject = "Confirm Your Email - CommunityCar";
-        var body = $@"
-            <html>
-            <body>
-                <h2>Welcome to CommunityCar!</h2>
-                <p>Thank you for registering with us. Please confirm your email address by clicking the link below:</p>
-                <p><a href='{confirmationLink}' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Confirm Email</a></p>
-                <p>If the button doesn't work, copy and paste this link into your browser:</p>
-                <p>{confirmationLink}</p>
-                <p>This link will expire in 24 hours.</p>
-                <br>
-                <p>Best regards,<br>The CommunityCar Team</p>
-            </body>
-            </html>";
-
+        var replacements = new Dictionary<string, string>
+        {
+            { "CONFIRMATION_LINK", confirmationLink }
+        };
+        
+        var body = await _templateService.GetTemplateAsync("EmailConfirmation", replacements);
         await SendEmailAsync(email, subject, body);
     }
 
     public async Task SendPasswordResetAsync(string email, string resetLink)
     {
         var subject = "Reset Your Password - CommunityCar";
-        var body = $@"
-            <html>
-            <body>
-                <h2>Password Reset Request</h2>
-                <p>You have requested to reset your password. Click the link below to reset it:</p>
-                <p><a href='{resetLink}' style='background-color: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Reset Password</a></p>
-                <p>If the button doesn't work, copy and paste this link into your browser:</p>
-                <p>{resetLink}</p>
-                <p>This link will expire in 1 hour.</p>
-                <p>If you didn't request this password reset, please ignore this email.</p>
-                <br>
-                <p>Best regards,<br>The CommunityCar Team</p>
-            </body>
-            </html>";
+        var replacements = new Dictionary<string, string>
+        {
+            { "RESET_LINK", resetLink }
+        };
+        
+        var body = await _templateService.GetTemplateAsync("PasswordReset", replacements);
+        await SendEmailAsync(email, subject, body);
+    }
 
+    public async Task SendLoginConfirmationAsync(string email, string fullName, string ipAddress, string userAgent)
+    {
+        var subject = "New Login to Your Account - CommunityCar";
+        var loginTime = DateTime.UtcNow.ToString("MMM dd, yyyy 'at' HH:mm UTC");
+        var replacements = new Dictionary<string, string>
+        {
+            { "FULL_NAME", fullName },
+            { "LOGIN_TIME", loginTime },
+            { "IP_ADDRESS", ipAddress },
+            { "USER_AGENT", userAgent }
+        };
+        
+        var body = await _templateService.GetTemplateAsync("LoginConfirmation", replacements);
         await SendEmailAsync(email, subject, body);
     }
 
     public async Task SendWelcomeEmailAsync(string email, string fullName)
     {
         var subject = "Welcome to CommunityCar!";
-        var body = $@"
-            <html>
-            <body>
-                <h2>Welcome to CommunityCar, {fullName}!</h2>
-                <p>Your email has been confirmed and your account is now active.</p>
-                <p>You can now:</p>
-                <ul>
-                    <li>Connect with other car enthusiasts</li>
-                    <li>Share your car stories and experiences</li>
-                    <li>Ask questions and get answers from the community</li>
-                    <li>Discover local car events and meetups</li>
-                </ul>
-                <p><a href='#' style='background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Get Started</a></p>
-                <br>
-                <p>Happy driving!<br>The CommunityCar Team</p>
-            </body>
-            </html>";
-
+        var replacements = new Dictionary<string, string>
+        {
+            { "FULL_NAME", fullName },
+            { "GET_STARTED_LINK", GetBaseUrl() + "/feed" }
+        };
+        
+        var body = await _templateService.GetTemplateAsync("Welcome", replacements);
         await SendEmailAsync(email, subject, body);
     }
 
     public async Task SendTwoFactorTokenAsync(string email, string token)
     {
         var subject = "Your Two-Factor Authentication Code - CommunityCar";
-        var body = $@"
-            <html>
-            <body>
-                <h2>Two-Factor Authentication Code</h2>
-                <p>Your verification code is:</p>
-                <div style='background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; border-radius: 5px; margin: 20px 0;'>
-                    {token}
-                </div>
-                <p>This code will expire in 5 minutes.</p>
-                <p>If you didn't request this code, please ignore this email and consider changing your password.</p>
-                <br>
-                <p>Best regards,<br>The CommunityCar Team</p>
-            </body>
-            </html>";
-
+        var replacements = new Dictionary<string, string>
+        {
+            { "TOKEN", token }
+        };
+        
+        var body = await _templateService.GetTemplateAsync("TwoFactorToken", replacements);
         await SendEmailAsync(email, subject, body);
     }
 
@@ -152,5 +136,11 @@ public class EmailService : IEmailService
         // Implementation for sending notification digest
         _logger.LogInformation("Sending notification digest to {Email} for user {UserName}", email, userName);
         await Task.CompletedTask;
+    }
+
+    private string GetBaseUrl()
+    {
+        // Try to get base URL from configuration, fallback to localhost
+        return _configuration["BaseUrl"] ?? "https://localhost:5003";
     }
 }

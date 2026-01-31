@@ -14,5 +14,8 @@ public class UserBadgeConfiguration : IEntityTypeConfiguration<UserBadge>
         builder.Property(b => b.NameAr).HasMaxLength(100);
         builder.Property(b => b.Description).HasMaxLength(500);
         builder.Property(b => b.DescriptionAr).HasMaxLength(500);
+        
+        // Ignore the computed property AwardedAt since it's just an alias for EarnedAt
+        builder.Ignore(b => b.AwardedAt);
     }
 }

@@ -58,17 +58,41 @@
     <partial name="_Header" />
 
     <!-- Main container aligned with sidebar positioning -->
-    <div class="flex pb-4 sm:pb-6 md:pb-8 min-h-screen w-full overflow-x-hidden" id="main-container">
-        <partial name="_SidebarLeft" />
+    @{
+        var hideLeftSidebar = ViewData["HideLeftSidebar"] as bool? ?? false;
+        var hideMainContainer = ViewData["HideMainContainer"] as bool? ?? false;
+        var mainContainerAttributes = hideMainContainer ? "" : "id=\"main-container\"";
+    }
+    <div class="flex pb-4 sm:pb-6 md:pb-8 min-h-screen w-full overflow-x-hidden" @Html.Raw(mainContainerAttributes)>
+        
+        @if (!hideLeftSidebar)
+        {
+            <partial name="_SidebarLeft" />
+        }
 
         <!-- Main Content Area positioned between sidebars -->
         @{
             var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
-            var mainContentClass = hideRightSidebar ? "xl:mr-0 rtl:xl:mr-0 rtl:xl:ml-0" : "xl:mr-[21rem] rtl:xl:mr-0 rtl:xl:ml-[21rem] rtl:force-content-width";
+            var hideMainContentId = ViewData["HideMainContentId"] as bool? ?? false;
+            var marginClasses = "";
+            
+            // Apply proper margin classes based on sidebar visibility
+            if (!hideRightSidebar)
+            {
+                // Both sidebars visible - no additional margin needed (handled by CSS)
+                marginClasses += "";
+            }
+            else
+            {
+                // Right sidebar hidden - add class to remove right margin
+                marginClasses += "xl:mr-0";
+            }
+            
+            var mainContentAttributes = hideMainContentId ? "" : "id=\"main-content\"";
         }
-        <main class="flex-1 px-2 sm:px-3 md:px-4 mt-24 md:ml-20 xl:ml-60 rtl:md:ml-0 rtl:md:mr-20 rtl:xl:ml-0 rtl:xl:mr-60 @mainContentClass" id="main-content">
+        <main class="flex-1 px-2 sm:px-3 md:px-4 lg:px-6 mt-24 sidebar-spacing @marginClasses" @Html.Raw(mainContentAttributes)>
             <div class="max-w-none w-full overflow-x-hidden">
-                <div class="bg-card/30 backdrop-blur-xl border border-border rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 w-full">
+                <div class="bg-card/30 backdrop-blur-xl border border-border rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 w-full mx-auto">
                     <!-- Header with sidebar toggles -->
                     <div class="flex items-center justify-between mb-4 sm:mb-6 xl:mb-0">
                         <!-- Mobile navigation and options (hidden on desktop) -->

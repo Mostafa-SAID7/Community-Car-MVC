@@ -10,4 +10,5 @@ public interface INewsRepository : IBaseRepository<NewsItem>
     Task<IEnumerable<string>> GetAvailableCarMakesAsync();
     Task<NewsItem?> GetBySlugAsync(string slug);
     Task<IEnumerable<NewsItem>> GetPublishedAsync();
+    Task<IEnumerable<NewsItem>> GetTopPublishedAsync(int count);
 }
