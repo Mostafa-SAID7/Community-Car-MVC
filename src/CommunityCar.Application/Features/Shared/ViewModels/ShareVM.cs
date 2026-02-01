@@ -1,0 +1,16 @@
+using CommunityCar.Domain.Enums.Shared;
+
+namespace CommunityCar.Application.Features.Shared.ViewModels;
+
+public class ShareVM
+{
+    public Guid Id { get; set; }
+    public Guid EntityId { get; set; }
+    public EntityType EntityType { get; set; }
+    public Guid UserId { get; set; }
+    public string UserName { get; set; } = string.Empty;
+    public ShareType ShareType { get; set; }
+    public string? ShareMessage { get; set; }
+    public string? Platform { get; set; }
+    public DateTime CreatedAt { get; set; }
+}

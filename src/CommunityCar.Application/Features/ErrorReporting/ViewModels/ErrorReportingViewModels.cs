@@ -1,28 +1,18 @@
 namespace CommunityCar.Application.Features.ErrorReporting.ViewModels;
 
-public class ErrorReportVM
-{
-    public string ErrorId { get; set; } = string.Empty;
-    public string UserEmail { get; set; } = string.Empty;
-    public string UserName { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string StepsToReproduce { get; set; } = string.Empty;
-    public string ExpectedBehavior { get; set; } = string.Empty;
-    public string ActualBehavior { get; set; } = string.Empty;
-    public string BrowserInfo { get; set; } = string.Empty;
-    public string DeviceInfo { get; set; } = string.Empty;
-    public string Priority { get; set; } = "Medium";
-    public List<string> AttachmentUrls { get; set; } = new();
-    
-    // Response properties
-    public bool Success { get; set; }
-    public string Message { get; set; } = string.Empty;
-    public string TicketId { get; set; } = string.Empty;
-}
+/// <summary>
+/// Error Reporting ViewModels
+/// 
+/// This file has been reorganized for better maintainability. Each ViewModel class
+/// is now in its own separate file within this namespace. This improves code organization,
+/// reduces merge conflicts, and makes the codebase easier to navigate.
+/// 
+/// Individual files:
+/// - ErrorReportVM.cs - Error report with user details and response properties
+/// - ErrorReportResponseVM.cs - Response model for error report submission
+/// 
+/// All classes maintain their original functionality and public API.
+/// </summary>
 
-public class ErrorReportResponseVM
-{
-    public bool Success { get; set; }
-    public string Message { get; set; } = string.Empty;
-    public string TicketId { get; set; } = string.Empty;
-}
+// The individual classes are now in separate files within this namespace.
+// This file is kept for documentation and backward compatibility.

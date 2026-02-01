@@ -1,47 +1,24 @@
-using System.ComponentModel.DataAnnotations;
-using CommunityCar.Application.Features.Account.ViewModels.Authentication;
-
 namespace CommunityCar.Application.Features.Account.ViewModels.Security;
 
-public class SecurityOverviewVM
-{
-    public bool TwoFactorEnabled { get; set; }
-    public int ActiveSessionsCount { get; set; }
-    public DateTime? LastPasswordChange { get; set; }
-    public bool HasExternalLogins { get; set; }
-    public List<SecurityLogItemVM> RecentActivity { get; set; } = new();
-}
+/// <summary>
+/// Account Security ViewModels
+/// 
+/// This file has been reorganized for better maintainability. Each ViewModel class
+/// is now in its own separate file within this namespace. This improves code organization,
+/// reduces merge conflicts, and makes the codebase easier to navigate.
+/// 
+/// Individual files:
+/// - SecurityOverviewVM.cs - Security overview with two-factor, sessions, and activity
+/// - SecurityLogItemVM.cs - Individual security log entry
+/// - ChangeEmailVM.cs - Email change request with validation
+/// - SecurityVM.cs - Combined security view model
+/// - UpdateEmailVM.cs - Alias for ChangeEmailVM (compatibility)
+/// - SecurityOverviewWebVM.cs - Alias for SecurityOverviewVM (compatibility)
+/// - SecurityLogItemWebVM.cs - Alias for SecurityLogItemVM (compatibility)
+/// - UserSessionVM.cs - Alias for ActiveSessionVM (compatibility)
+/// 
+/// All classes maintain their original functionality and public API.
+/// </summary>
 
-public class SecurityLogItemVM
-{
-    public string Action { get; set; } = string.Empty;
-    public string IpAddress { get; set; } = string.Empty;
-    public string Location { get; set; } = string.Empty;
-    public string Device { get; set; } = string.Empty;
-    public DateTime Timestamp { get; set; }
-    public bool IsSuccess { get; set; }
-}
-
-public class ChangeEmailVM
-{
-    [Required]
-    [EmailAddress]
-    [Display(Name = "New Email")]
-    public string NewEmail { get; set; } = string.Empty;
-
-    [Required]
-    [DataType(DataType.Password)]
-    public string Password { get; set; } = string.Empty;
-}
-
-public class SecurityVM
-{
-    public SecurityOverviewVM Overview { get; set; } = new();
-    public List<ActiveSessionVM> ActiveSessions { get; set; } = new();
-}
-
-// Aliases for compatibility
-public class UpdateEmailVM : ChangeEmailVM { }
-public class SecurityOverviewWebVM : SecurityOverviewVM { }
-public class SecurityLogItemWebVM : SecurityLogItemVM { }
-public class UserSessionVM : ActiveSessionVM { }
+// The individual classes are now in separate files within this namespace.
+// This file is kept for documentation and backward compatibility.

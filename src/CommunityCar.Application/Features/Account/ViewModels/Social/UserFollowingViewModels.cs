@@ -2,119 +2,30 @@ using CommunityCar.Application.Common.Models;
 
 namespace CommunityCar.Application.Features.Account.ViewModels.Social;
 
-public class NetworkUserVM
-{
-    public Guid Id { get; set; }
-    public Guid FollowerId { get; set; }
-    public Guid FollowingId { get; set; }
-    public string FollowerName { get; set; } = string.Empty;
-    public string FollowingName { get; set; } = string.Empty;
-    public string? FollowerProfilePicture { get; set; }
-    public string? FollowingProfilePicture { get; set; }
-    public string? FollowerBio { get; set; }
-    public string? FollowingBio { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public string FollowedTimeAgo { get; set; } = string.Empty;
-    public bool IsMutual { get; set; }
-    public bool IsOnline { get; set; }
-    public DateTime? LastSeen { get; set; }
-}
+/// <summary>
+/// User Following and Social Network ViewModels
+/// 
+/// This file has been reorganized for better maintainability. Each ViewModel and Request model
+/// is now in its own separate file within this namespace. This improves code organization,
+/// reduces merge conflicts, and makes the codebase easier to navigate.
+/// 
+/// Individual files:
+/// - NetworkUserVM.cs - Network user with following relationship details
+/// - FollowingDashboardVM.cs - Dashboard view for following statistics
+/// - FollowingListVM.cs - List view for followers/following with pagination
+/// - FollowingVM.cs - Individual following user details
+/// - FollowStatsVM.cs - Following statistics and relationship status
+/// - UserFollowListVM.cs - User follow list with pagination
+/// - SuggestedUserVM.cs - Suggested user with mutual connections
+/// - FollowSuggestionsVM.cs - Container for follow suggestions
+/// - UserFollowingWebVM.cs - Web-specific alias for NetworkUserVM
+/// - FollowingDashboardWebVM.cs - Web-specific alias for FollowingDashboardVM
+/// - FollowingListWebVM.cs - Web-specific alias for FollowingListVM
+/// - FollowingAnalyticsVM.cs - Analytics view for following relationships
+/// - FollowUserRequest.cs - Request model for following a user
+/// 
+/// All classes maintain their original functionality and public API.
+/// </summary>
 
-public class FollowingDashboardVM
-{
-    public Guid UserId { get; set; }
-    public int FollowingCount { get; set; }
-    public int FollowerCount { get; set; }
-    public int MutualFollowingCount { get; set; }
-    public List<NetworkUserVM> RecentFollowers { get; set; } = new();
-    public List<NetworkUserVM> RecentFollowing { get; set; } = new();
-    public List<UserSuggestionVM> SuggestedFollowing { get; set; } = new();
-    public List<NetworkUserVM> MutualConnections { get; set; } = new();
-}
-
-public class FollowingListVM
-{
-    public Guid UserId { get; set; }
-    public string ListType { get; set; } = string.Empty; // "following" or "followers"
-    public List<NetworkUserVM> Users { get; set; } = new();
-    public int TotalCount { get; set; }
-    public int Page { get; set; }
-    public int PageSize { get; set; }
-    public int TotalPages { get; set; }
-    public bool HasMore { get; set; }
-    public string? SearchTerm { get; set; }
-}
-
-public class FollowingVM
-{
-    public Guid UserId { get; set; }
-    public string FullName { get; set; } = string.Empty;
-    public string? ProfilePictureUrl { get; set; }
-    public string? Bio { get; set; }
-    public string? City { get; set; }
-    public string? Country { get; set; }
-    public DateTime FollowedAt { get; set; }
-    public bool IsFollowingBack { get; set; }
-    public bool IsOnline { get; set; }
-    public DateTime? LastActiveAt { get; set; }
-    
-    // Statistics
-    public int FollowersCount { get; set; }
-    public int FollowingCount { get; set; }
-    public int PostsCount { get; set; }
-}
-
-public class FollowStatsVM
-{
-    public int FollowersCount { get; set; }
-    public int FollowingCount { get; set; }
-    public bool IsFollowing { get; set; }
-    public bool IsFollowedBy { get; set; }
-    public bool CanFollow { get; set; } = true;
-}
-
-public class UserFollowListVM
-{
-    public Guid ProfileUserId { get; set; }
-    public string ProfileUserName { get; set; } = string.Empty;
-    public string ListType { get; set; } = string.Empty;
-    public IEnumerable<FollowingVM> Users { get; set; } = new List<FollowingVM>();
-    public int TotalCount { get; set; }
-    public bool IsOwnProfile { get; set; }
-    public PaginationInfo Pagination { get; set; } = new();
-}
-
-public class SuggestedUserVM : FollowingVM
-{
-    public int MutualFollowersCount { get; set; }
-    public List<string> MutualFollowerNames { get; set; } = new();
-    public string SuggestionReason { get; set; } = string.Empty;
-}
-
-public class FollowSuggestionsVM
-{
-    public List<SuggestedUserVM> SuggestedUsers { get; set; } = new();
-}
-
-// Aliases
-public class UserFollowingWebVM : NetworkUserVM { }
-public class FollowingDashboardWebVM : FollowingDashboardVM { }
-public class FollowingListWebVM : FollowingListVM { }
-
-public class FollowingAnalyticsVM
-{
-    public Guid UserId { get; set; }
-    public int FollowingCount { get; set; }
-    public int FollowerCount { get; set; }
-    public int MutualFollowingCount { get; set; }
-    public List<NetworkUserVM> RecentFollowers { get; set; } = new();
-    public List<NetworkUserVM> RecentFollowing { get; set; } = new();
-    public List<UserSuggestionVM> SuggestedFollowing { get; set; } = new();
-}
-
-public class FollowUserRequest
-{
-    public Guid FollowerId { get; set; }
-    public Guid FollowingId { get; set; }
-}
-
+// The individual classes are now in separate files within this namespace.
+// This file is kept for documentation and backward compatibility.

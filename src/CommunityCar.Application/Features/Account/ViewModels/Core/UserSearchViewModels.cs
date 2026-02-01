@@ -1,35 +1,19 @@
 namespace CommunityCar.Application.Features.Account.ViewModels.Core;
 
-public class UserSearchVM
-{
-    public string SearchTerm { get; set; } = string.Empty;
-    public string? City { get; set; }
-    public string? Country { get; set; }
-    public bool ActiveOnly { get; set; } = true;
-    public int Page { get; set; } = 1;
-    public int PageSize { get; set; } = 20;
-    public List<UserCardVM> Results { get; set; } = new();
-    public int TotalCount { get; set; }
-    public int TotalPages { get; set; }
-    public bool HasMore { get; set; }
-}
+/// <summary>
+/// User Search ViewModels
+/// 
+/// This file has been reorganized for better maintainability. Each ViewModel class
+/// is now in its own separate file within this namespace. This improves code organization,
+/// reduces merge conflicts, and makes the codebase easier to navigate.
+/// 
+/// Individual files:
+/// - UserSearchVM.cs - User search with filters and pagination
+/// - UserSuggestionVM.cs - User suggestion with mutual connections and similarity
+/// - PeopleYouMayKnowVM.cs - Collection of user suggestions
+/// 
+/// All classes maintain their original functionality and public API.
+/// </summary>
 
-public class UserSuggestionVM
-{
-    public Guid UserId { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string? ProfilePicture { get; set; }
-    public string? Bio { get; set; }
-    public int MutualConnectionsCount { get; set; }
-    public List<string> MutualConnectionNames { get; set; } = new();
-    public string SuggestionReason { get; set; } = string.Empty;
-    public double SimilarityScore { get; set; }
-    public bool IsFollowing { get; set; }
-}
-
-public class PeopleYouMayKnowVM
-{
-    public List<UserSuggestionVM> Suggestions { get; set; } = new();
-    public int TotalSuggestions { get; set; }
-    public bool HasMore { get; set; }
-}
+// The individual classes are now in separate files within this namespace.
+// This file is kept for documentation and backward compatibility.

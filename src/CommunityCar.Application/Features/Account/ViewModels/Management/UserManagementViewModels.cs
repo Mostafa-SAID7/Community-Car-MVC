@@ -1,40 +1,19 @@
 namespace CommunityCar.Application.Features.Account.ViewModels.Management;
 
-public class ManagedUserVM
-{
-    public Guid Id { get; set; }
-    public Guid UserId { get; set; }
-    public Guid ManagerId { get; set; }
-    public string UserName { get; set; } = string.Empty;
-    public string UserEmail { get; set; } = string.Empty;
-    public string? UserProfilePicture { get; set; }
-    public string ManagerName { get; set; } = string.Empty;
-    public DateTime AssignedAt { get; set; }
-    public string AssignedTimeAgo { get; set; } = string.Empty;
-    public bool IsActive { get; set; }
-    public string Status { get; set; } = string.Empty;
-    public string StatusColor { get; set; } = string.Empty;
-}
+/// <summary>
+/// User Management ViewModels
+/// 
+/// This file has been reorganized for better maintainability. Each ViewModel class
+/// is now in its own separate file within this namespace. This improves code organization,
+/// reduces merge conflicts, and makes the codebase easier to navigate.
+/// 
+/// Individual files:
+/// - ManagedUserVM.cs - Managed user with manager assignment details
+/// - ManagementDashboardVM.cs - Management dashboard with hierarchy and statistics
+/// - ManagementHierarchyVM.cs - Management hierarchy level with managed users
+/// 
+/// All classes maintain their original functionality and public API.
+/// </summary>
 
-public class ManagementDashboardVM
-{
-    public Guid ManagerId { get; set; }
-    public string ManagerName { get; set; } = string.Empty;
-    public int TotalManagedUsers { get; set; }
-    public int DirectReports { get; set; }
-    public int IndirectReports { get; set; }
-    public List<ManagedUserVM> DirectManagedUsers { get; set; } = new();
-    public List<ManagementHierarchyVM> Hierarchy { get; set; } = new();
-    public Dictionary<string, int> ManagementStatistics { get; set; } = new();
-}
-
-public class ManagementHierarchyVM
-{
-    public Guid ManagerId { get; set; }
-    public string ManagerName { get; set; } = string.Empty;
-    public string? ManagerProfilePicture { get; set; }
-    public List<ManagedUserVM> ManagedUsers { get; set; } = new();
-    public int TotalManagedUsers { get; set; }
-    public int Level { get; set; }
-}
-
+// The individual classes are now in separate files within this namespace.
+// This file is kept for documentation and backward compatibility.

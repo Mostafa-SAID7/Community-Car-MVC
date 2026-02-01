@@ -1,19 +1,18 @@
 namespace CommunityCar.Application.Features.Account.ViewModels.Activity;
 
-public class ActivityAnalyticsVM
-{
-    public Guid UserId { get; set; }
-    public int TotalActivities { get; set; }
-    public Dictionary<string, int> ActivitiesByType { get; set; } = new();
-    public DateTime? LastActivityDate { get; set; }
-    public List<ActivityTrendVM> ActivityTrends { get; set; } = new();
-    public List<TimelineActivityVM> RecentActivities { get; set; } = new();
-}
+/// <summary>
+/// Activity Analytics ViewModels
+/// 
+/// This file has been reorganized for better maintainability. Each ViewModel class
+/// is now in its own separate file within this namespace. This improves code organization,
+/// reduces merge conflicts, and makes the codebase easier to navigate.
+/// 
+/// Individual files:
+/// - ActivityAnalyticsVM.cs - User activity analytics with trends and recent activities
+/// - ActivityTrendVM.cs - Activity trend data point with date and count
+/// 
+/// All classes maintain their original functionality and public API.
+/// </summary>
 
-public class ActivityTrendVM
-{
-    public DateTime Date { get; set; }
-    public int Count { get; set; }
-    public string ActivityType { get; set; } = string.Empty;
-    public string DateLabel { get; set; } = string.Empty;
-}
+// The individual classes are now in separate files within this namespace.
+// This file is kept for documentation and backward compatibility.

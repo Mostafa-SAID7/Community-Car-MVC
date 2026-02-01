@@ -2,180 +2,56 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CommunityCar.Application.Features.Account.ViewModels.Authentication;
 
-#region Authentication Models
+/*
+ * AUTHENTICATION VIEWMODELS REFERENCE FILE
+ * ========================================
+ * 
+ * This file originally contained 13 ViewModels that have been split into separate files for better organization.
+ * All ViewModels are now located in individual files within this same directory.
+ * 
+ * SPLIT FILES:
+ * ============
+ * 
+ * Authentication ViewModels:
+ * - RegisterVM.cs
+ * - LoginVM.cs
+ * - ResetPasswordVM.cs
+ * - ForgotPasswordVM.cs
+ * - ChangePasswordVM.cs
+ * 
+ * OAuth ViewModels:
+ * - OAuthConnectionsVM.cs
+ * - GoogleSignInRequest.cs
+ * - FacebookSignInRequest.cs
+ * - LinkExternalAccountRequest.cs
+ * - UnlinkExternalAccountRequest.cs
+ * - ExternalUserInfo.cs (includes GoogleUserInfo and FacebookUserInfo)
+ * 
+ * Token & Request ViewModels:
+ * - CreateTokenRequest.cs
+ * - CreateSessionRequest.cs
+ * 
+ * ALIASES:
+ * ========
+ * The following aliases are maintained for backward compatibility:
+ * - RegisterRequest : RegisterVM
+ * - LoginRequest : LoginVM
+ * - ResetPasswordRequest : ResetPasswordVM
+ * - ForgotPasswordRequest : ForgotPasswordVM
+ * - ChangePasswordRequest : ChangePasswordVM
+ * - GoogleSignInVM : GoogleSignInRequest
+ * - FacebookSignInVM : FacebookSignInRequest
+ * 
+ * USAGE:
+ * ======
+ * Import individual ViewModels as needed:
+ * using CommunityCar.Application.Features.Account.ViewModels.Authentication;
+ * 
+ * All ViewModels maintain the same namespace and functionality as before.
+ * This split improves code organization, maintainability, and reduces file size.
+ */
 
-public class RegisterVM
-{
-    [Required(ErrorMessage = "Full name is required")]
-    [StringLength(100, ErrorMessage = "Full name cannot exceed 100 characters")]
-    [Display(Name = "Full Name")]
-    public string FullName { get; set; } = string.Empty;
-
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress(ErrorMessage = "Please enter a valid email address")]
-    [Display(Name = "Email")]
-    public string Email { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "Password is required")]
-    [StringLength(100, ErrorMessage = "Password must be at least {2} characters long", MinimumLength = 8)]
-    [DataType(DataType.Password)]
-    [Display(Name = "Password")]
-    public string Password { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "Please confirm your password")]
-    [DataType(DataType.Password)]
-    [Display(Name = "Confirm Password")]
-    [Compare("Password", ErrorMessage = "Password and confirmation password do not match")]
-    public string ConfirmPassword { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "You must accept the terms and conditions")]
-    [Display(Name = "I accept the Terms and Conditions")]
-    public bool AcceptTerms { get; set; }
-
-    [Display(Name = "I want to receive marketing emails")]
-    public bool AcceptMarketing { get; set; }
-}
-
-public class LoginVM
-{
-    [Required(ErrorMessage = "Email, username, or phone number is required")]
-    [Display(Name = "Email, Username, or Phone")]
-    public string LoginIdentifier { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "Password is required")]
-    [DataType(DataType.Password)]
-    [Display(Name = "Password")]
-    public string Password { get; set; } = string.Empty;
-
-    [Display(Name = "Remember me")]
-    public bool RememberMe { get; set; }
-
-    public string? ReturnUrl { get; set; }
-}
-
-public class ResetPasswordVM
-{
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress]
-    public string Email { get; set; } = string.Empty;
-
-    public string? UserId { get; set; }
-
-    [Required(ErrorMessage = "Password is required")]
-    [StringLength(100, MinimumLength = 8)]
-    [DataType(DataType.Password)]
-    public string NewPassword { get; set; } = string.Empty;
-
-    [DataType(DataType.Password)]
-    [Compare("NewPassword")]
-    public string ConfirmPassword { get; set; } = string.Empty;
-
-    [Required]
-    public string Token { get; set; } = string.Empty;
-}
-
-public class ForgotPasswordVM
-{
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress]
-    public string Email { get; set; } = string.Empty;
-}
-
-public class ChangePasswordVM
-{
-    public Guid UserId { get; set; }
-    
-    [Required]
-    [DataType(DataType.Password)]
-    public string OldPassword { get; set; } = string.Empty;
-
-    [Required]
-    [StringLength(100, MinimumLength = 8)]
-    [DataType(DataType.Password)]
-    public string NewPassword { get; set; } = string.Empty;
-
-    [DataType(DataType.Password)]
-    [Compare("NewPassword")]
-    public string ConfirmPassword { get; set; } = string.Empty;
-}
-
-#endregion
-
-#region OAuth Models
-
-public class OAuthConnectionsVM
-{
-    public bool HasGoogleAccount { get; set; }
-    public bool HasFacebookAccount { get; set; }
-    public DateTime? GoogleLinkedAt { get; set; }
-    public DateTime? FacebookLinkedAt { get; set; }
-    public List<string> AvailableProviders { get; set; } = new();
-}
-
-public class GoogleSignInRequest
-{
-    public string IdToken { get; set; } = string.Empty;
-}
-
-public class FacebookSignInRequest
-{
-    public string AccessToken { get; set; } = string.Empty;
-}
-
-public class LinkExternalAccountRequest
-{
-    public string UserId { get; set; } = string.Empty;
-    public string ExternalToken { get; set; } = string.Empty;
-    public string Provider { get; set; } = string.Empty;
-    public string? ExternalId { get; set; }
-    public string? Email { get; set; }
-}
-
-public class UnlinkExternalAccountRequest
-{
-    public string UserId { get; set; } = string.Empty;
-    public string Provider { get; set; } = string.Empty;
-}
-
-public class ExternalUserInfo
-{
-    public string Provider { get; set; } = string.Empty;
-    public string ExternalId { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public string? ProfilePicture { get; set; }
-}
-
-public class GoogleUserInfo : ExternalUserInfo { }
-public class FacebookUserInfo : ExternalUserInfo { }
-
-#endregion
-
-#region Token & Requests
-
-public class CreateTokenRequest
-{
-    public string? Email { get; set; }
-    public string? UserName { get; set; }
-    public string? Password { get; set; }
-}
-
-public class CreateSessionRequest
-{
-    public Guid UserId { get; set; }
-    public string SessionId { get; set; } = string.Empty;
-    public string? DeviceInfo { get; set; }
-    public string? IpAddress { get; set; }
-    public string? UserAgent { get; set; }
-    public string? Location { get; set; }
-}
-
-#endregion
-
-#region Aliases
+#region Aliases for backward compatibility
 
 public class RegisterRequest : RegisterVM { }
 public class LoginRequest : LoginVM { }

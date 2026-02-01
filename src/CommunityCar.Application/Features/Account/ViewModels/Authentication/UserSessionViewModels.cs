@@ -1,63 +1,27 @@
 namespace CommunityCar.Application.Features.Account.ViewModels.Authentication;
 
-public class UserSessionVM
-{
-    public Guid Id { get; set; }
-    public string SessionId { get; set; } = string.Empty;
-    public string IpAddress { get; set; } = string.Empty;
-    public string UserAgent { get; set; } = string.Empty;
-    public string? Location { get; set; }
-    public string DeviceType { get; set; } = string.Empty;
-    public string Browser { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; }
-    public DateTime LastActivityAt { get; set; }
-    public DateTime? EndedAt { get; set; }
-    public DateTime ExpiresAt { get; set; }
-    public bool IsActive { get; set; }
-    public bool IsCurrent { get; set; }
-    public bool IsSuspicious { get; set; }
-    public string TimeAgo { get; set; } = string.Empty;
-    public string Duration { get; set; } = string.Empty;
-}
-
-public class SessionManagementVM
-{
-    public Guid UserId { get; set; }
-    public List<UserSessionVM> ActiveSessions { get; set; } = new();
-    public List<UserSessionVM> RecentSessions { get; set; } = new();
-    public int TotalActiveSessions { get; set; }
-    public DateTime? LastLoginAt { get; set; }
-    public string? LastLoginLocation { get; set; }
-}
-
-public class SecurityLogVM
-{
-    public DateTime Timestamp { get; set; }
-    public string Action { get; set; } = string.Empty;
-    public string IpAddress { get; set; } = string.Empty;
-    public string UserAgent { get; set; } = string.Empty;
-    public string Location { get; set; } = string.Empty;
-    public bool IsSuccessful { get; set; }
-    public string? FailureReason { get; set; }
-    public string TimeAgo { get; set; } = string.Empty;
-    public string StatusIcon { get; set; } = string.Empty;
-    public string StatusColor { get; set; } = string.Empty;
-}
-
-public class SecurityInfoVM
-{
-    public bool IsTwoFactorEnabled { get; set; }
-    public DateTime? LastPasswordChange { get; set; }
-    public int ActiveSessions { get; set; }
-    public bool HasOAuthLinked { get; set; }
-}
-
-public class ActiveSessionVM
-{
-    public string SessionId { get; set; } = string.Empty;
-    public string IpAddress { get; set; } = string.Empty;
-    public string UserAgent { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; }
-    public DateTime LastActivityAt { get; set; }
-    public bool IsCurrent { get; set; }
-}
+/*
+ * USER SESSION VIEWMODELS REFERENCE FILE
+ * =======================================
+ * 
+ * This file originally contained 5 ViewModels that have been split into separate files for better organization.
+ * All ViewModels are now located in individual files within this same directory.
+ * 
+ * SPLIT FILES:
+ * ============
+ * 
+ * Session ViewModels:
+ * - UserSessionVM.cs
+ * - SessionManagementVM.cs
+ * - SecurityLogVM.cs
+ * - SecurityInfoVM.cs
+ * - ActiveSessionVM.cs
+ * 
+ * USAGE:
+ * ======
+ * Import individual ViewModels as needed:
+ * using CommunityCar.Application.Features.Account.ViewModels.Authentication;
+ * 
+ * All ViewModels maintain the same namespace and functionality as before.
+ * This split improves code organization, maintainability, and reduces file size.
+ */

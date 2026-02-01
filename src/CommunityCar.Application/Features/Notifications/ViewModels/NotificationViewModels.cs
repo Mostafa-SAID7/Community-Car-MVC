@@ -2,24 +2,25 @@ using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Application.Features.Notifications.ViewModels;
 
-public class NotificationVM
-{
-    public Guid UserId { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Message { get; set; } = string.Empty;
-    public NotificationType Type { get; set; }
-    public string? ActionUrl { get; set; }
-    public string? IconClass { get; set; }
-    public Dictionary<string, object>? Data { get; set; }
-}
-
-public class BulkNotificationVM
-{
-    public List<Guid> UserIds { get; set; } = new();
-    public string Title { get; set; } = string.Empty;
-    public string Message { get; set; } = string.Empty;
-    public NotificationType Type { get; set; }
-    public string? ActionUrl { get; set; }
-    public string? IconClass { get; set; }
-    public Dictionary<string, object>? Data { get; set; }
-}
+/*
+ * NOTIFICATION VIEWMODELS REFERENCE FILE
+ * ======================================
+ * 
+ * This file originally contained 2 ViewModels that have been split into separate files for better organization.
+ * All ViewModels are now located in individual files within this same directory.
+ * 
+ * SPLIT FILES:
+ * ============
+ * 
+ * Notification ViewModels:
+ * - NotificationVM.cs
+ * - BulkNotificationVM.cs
+ * 
+ * USAGE:
+ * ======
+ * Import individual ViewModels as needed:
+ * using CommunityCar.Application.Features.Notifications.ViewModels;
+ * 
+ * All ViewModels maintain the same namespace and functionality as before.
+ * This split improves code organization, maintainability, and reduces file size.
+ */

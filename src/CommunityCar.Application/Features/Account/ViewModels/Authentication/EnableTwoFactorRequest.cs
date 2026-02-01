@@ -1,0 +1,8 @@
+namespace CommunityCar.Application.Features.Account.ViewModels.Authentication;
+
+public class EnableTwoFactorRequest
+{
+    public Guid UserId { get; set; }
+    public string Code { get; set; } = string.Empty;
+    public string Provider { get; set; } = "Authenticator";
+}
