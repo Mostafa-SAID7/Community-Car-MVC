@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
+using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Application.Features.Account.ViewModels.Management;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,7 @@ public class ProfileSettingsController : Controller
 {
     private readonly IProfileService _profileService;
     private readonly IAccountManagementService _accountManagementService;
+    private readonly IAccountSecurityService _accountSecurityService;
     private readonly ICurrentUserService _currentUserService;
     private readonly IFileStorageService _fileStorageService;
     private readonly ILogger<ProfileSettingsController> _logger;
@@ -23,6 +25,7 @@ public class ProfileSettingsController : Controller
     public ProfileSettingsController(
         IProfileService profileService,
         IAccountManagementService accountManagementService,
+        IAccountSecurityService accountSecurityService,
         IGamificationService gamificationService,
         ICurrentUserService currentUserService,
         IFileStorageService fileStorageService,
@@ -30,6 +33,7 @@ public class ProfileSettingsController : Controller
     {
         _profileService = profileService;
         _accountManagementService = accountManagementService;
+        _accountSecurityService = accountSecurityService;
         _gamificationService = gamificationService;
         _fileStorageService = fileStorageService;
         _currentUserService = currentUserService;
@@ -95,14 +99,20 @@ public class ProfileSettingsController : Controller
             
             // Privacy
             PublicProfile = privacy.ProfileVisible,
-            // EmailVisible = privacy.EmailVisible,
-            // PhoneVisible = privacy.PhoneVisible,
+            AllowMessages = privacy.AllowMessages,
+            AllowFriendRequests = privacy.AllowFriendRequests,
+            ShowActivityStatus = privacy.ShowActivityStatus,
+            ShowOnlineStatus = privacy.ShowOnlineStatus,
+            EmailVisible = privacy.EmailVisible,
+            PhoneVisible = privacy.PhoneVisible,
             
             // Notifications
             EmailNotifications = notifications.EmailNotifications,
             PushNotifications = notifications.PushNotifications,
             SmsNotifications = notifications.SmsNotifications,
-            MarketingEmails = notifications.MarketingEmails
+            MarketingEmails = notifications.MarketingEmails,
+            WeeklyDigest = notifications.WeeklyDigest,
+            SecurityAlerts = notifications.SecurityAlerts
         };
 
         return View("~/Views/Account/Profile/Settings.cshtml", viewModel);
@@ -134,9 +144,19 @@ public class ProfileSettingsController : Controller
 
         var result = await _accountManagementService.UpdatePrivacySettingsAsync(request);
         if (result.Succeeded)
-             return Ok(new { success = true, message = "Privacy settings updated." });
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return Ok(new { success = true, message = "Privacy settings updated." });
 
-        return BadRequest(new { success = false, message = "Failed to update privacy settings." });
+            TempData["SuccessMessage"] = "Privacy settings updated.";
+            return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+        }
+
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            return BadRequest(new { success = false, message = "Failed to update privacy settings." });
+
+        TempData["ErrorMessage"] = "Failed to update privacy settings.";
+        return RedirectToAction("Index");
     }
 
     [HttpPost("notifications")]
@@ -162,9 +182,57 @@ public class ProfileSettingsController : Controller
 
         var result = await _accountManagementService.UpdateNotificationSettingsAsync(request);
         if (result.Succeeded)
-             return Ok(new { success = true, message = "Notification settings updated." });
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return Ok(new { success = true, message = "Notification settings updated." });
 
-        return BadRequest(new { success = false, message = "Failed to update notification settings." });
+            TempData["SuccessMessage"] = "Notification settings updated.";
+            return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+        }
+
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            return BadRequest(new { success = false, message = "Failed to update notification settings." });
+
+        TempData["ErrorMessage"] = "Failed to update notification settings.";
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost("security")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateSecurity(ProfileSettingsVM model)
+    {
+        if (!Guid.TryParse(_currentUserService.UserId, out var userId))
+            return BadRequest(new { success = false, message = "User not authenticated" });
+
+        if (string.IsNullOrEmpty(model.CurrentPassword) || string.IsNullOrEmpty(model.NewPassword))
+        {
+            return BadRequest(new { success = false, message = "Current and new passwords are required." });
+        }
+
+        var request = new ChangePasswordRequest
+        {
+            UserId = userId,
+            OldPassword = model.CurrentPassword,
+            NewPassword = model.NewPassword,
+            ConfirmPassword = model.ConfirmPassword ?? string.Empty
+        };
+
+        var result = await _accountSecurityService.ChangePasswordAsync(userId, request);
+        if (result.Succeeded)
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return Ok(new { success = true, message = "Password updated successfully." });
+
+            TempData["SuccessMessage"] = "Password updated successfully.";
+            return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+        }
+
+        var message = result.Errors?.FirstOrDefault() ?? "Failed to update password.";
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            return BadRequest(new { success = false, message });
+
+        TempData["ErrorMessage"] = message;
+        return RedirectToAction("Index");
     }
 
     [HttpPost("profile")]
@@ -191,7 +259,7 @@ public class ProfileSettingsController : Controller
                 
                 // For regular form submission, return to the settings page with validation errors
                 TempData["ErrorMessage"] = "Please correct the validation errors and try again.";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
             }
 
             var updateRequest = new UpdateProfileRequest
@@ -228,7 +296,7 @@ public class ProfileSettingsController : Controller
                                 return BadRequest(new { success = false, message = "Profile updated but failed to upload picture." });
                             
                             TempData["ErrorMessage"] = "Profile updated but failed to upload picture.";
-                            return RedirectToAction("Index");
+                            return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
                         }
                     }
                 }
@@ -241,14 +309,14 @@ public class ProfileSettingsController : Controller
 
                 // For regular form submission, redirect with success message
                 TempData["SuccessMessage"] = "Profile updated successfully.";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
             }
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 return BadRequest(new { success = false, message = "Failed to update profile." });
 
             TempData["ErrorMessage"] = "Failed to update profile.";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
         }
         catch (Exception ex)
         {
@@ -258,7 +326,7 @@ public class ProfileSettingsController : Controller
                 return BadRequest(new { success = false, message = "An unexpected error occurred while updating profile." });
 
             TempData["ErrorMessage"] = "An unexpected error occurred while updating profile.";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
         }
     }
 }

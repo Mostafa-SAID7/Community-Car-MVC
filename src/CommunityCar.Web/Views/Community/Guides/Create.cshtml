@@ -20,7 +20,7 @@
             <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@SharedLocalizer["ShareYourKnowledge"]</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="/guides" class="btn-secondary">
+            <a asp-controller="Guides" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn-secondary">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 Back to Guides
             </a>
@@ -309,7 +309,7 @@ Wrap up with final thoughts and next steps.">@Model.Content</textarea>
                         <i data-lucide="file-text" class="w-4 h-4"></i>
                         Save as Draft
                     </button>
-                    <a href="/guides" class="w-full btn-outline block text-center">
+                    <a asp-controller="Guides" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="w-full btn-outline block text-center">
                         <i data-lucide="x" class="w-4 h-4"></i>
                         Cancel
                     </a>

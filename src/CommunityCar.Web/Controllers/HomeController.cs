@@ -6,8 +6,8 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
-        // Redirect to the feed URL
-        return Redirect("/feed");
+        // Redirect to the feed URL with default culture to avoid infinite loop
+        return Redirect("/en/feed");
     }
 }
 

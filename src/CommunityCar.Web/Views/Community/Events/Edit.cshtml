@@ -6,7 +6,7 @@
 <div class="space-y-8 animate-in fade-in duration-700">
     <!-- Back Button -->
     <div>
-        <a href="/events" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+        <a asp-controller="Events" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
             <i data-lucide="arrow-left" class="w-4 h-4"></i>
             @SharedLocalizer["BackToEvents"]
         </a>
@@ -213,7 +213,7 @@
                         <i data-lucide="save" class="w-4 h-4"></i>
                         Update Event
                     </button>
-                    <a href="/events" class="flex-1 inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                    <a asp-controller="Events" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="flex-1 inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
                         <i data-lucide="x" class="w-4 h-4"></i>
                         Cancel
                     </a>

@@ -211,7 +211,7 @@
 
         <!-- Action Buttons -->
         <div class="flex gap-4 justify-end">
-            <a href="/news" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+            <a asp-controller="News" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
                 <i data-lucide="x" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
                 @Localizer["Cancel"]
             </a>

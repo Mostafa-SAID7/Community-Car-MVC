@@ -212,139 +212,146 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Sidebar handling for mobile
+// ========================================
+// MAIN SIDEBAR HANDLING
+// ========================================
+// Unified sidebar toggle system for all screen sizes
+// Mobile (<768px): Toggle button opens/closes sidebar with backdrop
+// Desktop (>=768px): Sidebar always visible, button does nothing
+
 const sidebarToggle = document.getElementById('sidebar-toggle');
-const rightSidebarToggle = document.getElementById('right-sidebar-toggle');
-const mainContainer = document.getElementById('main-container');
-const leftSidebar = document.querySelector('.sidebar');
-const rightSidebar = document.querySelector('.sidebar-right');
+const sidebar = document.getElementById('main-sidebar');
+const sidebarBackdrop = document.getElementById('main-sidebar-backdrop');
+const sidebarCloseBtn = document.getElementById('main-sidebar-close');
 
-if ((sidebarToggle || rightSidebarToggle) && mainContainer) {
-    console.log('Sidebar system initialized');
-
-    // Create backdrop if it doesn't exist
-    let backdrop = document.querySelector('.sidebar-backdrop');
-    if (!backdrop) {
-        backdrop = document.createElement('div');
-        backdrop.className = 'sidebar-backdrop fixed inset-0 bg-black/50 z-30 opacity-0 pointer-events-none';
-        document.body.appendChild(backdrop);
-    }
-
-    if (sidebarToggle && leftSidebar) {
-        sidebarToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const isMobile = window.innerWidth < 768;
-
-            // Only toggle on mobile - desktop sidebar is always visible via CSS
-            if (isMobile) {
-                const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
-
-                // Toggle sidebar visibility
-                if (isRtl) {
-                    leftSidebar.classList.toggle('translate-x-full');
-                    leftSidebar.classList.toggle('translate-x-0');
-                } else {
-                    leftSidebar.classList.toggle('-translate-x-full');
-                    leftSidebar.classList.toggle('translate-x-0');
-                }
-
-                // Toggle backdrop
-                backdrop.classList.toggle('opacity-0');
-                backdrop.classList.toggle('pointer-events-none');
-                backdrop.classList.toggle('opacity-100');
-                backdrop.classList.toggle('pointer-events-auto');
-            }
-        });
-    }
-
-    if (rightSidebarToggle && rightSidebar) {
-        rightSidebarToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
-
-            // On mobile/tablet, the right sidebar is hidden with 'hidden xl:block'
-            // We need to override this
-            rightSidebar.classList.toggle('hidden');
-            rightSidebar.classList.toggle('flex'); // Assuming it's a flex container or just block
-
-            if (isRtl) {
-                rightSidebar.classList.toggle('-translate-x-[calc(100%+2rem)]');
-                rightSidebar.classList.toggle('translate-x-0');
-            } else {
-                rightSidebar.classList.toggle('translate-x-[calc(100%+2rem)]');
-                rightSidebar.classList.toggle('translate-x-0');
-            }
-
-            backdrop.classList.toggle('opacity-0');
-            backdrop.classList.toggle('pointer-events-none');
-            backdrop.classList.toggle('opacity-100');
-            backdrop.classList.toggle('pointer-events-auto');
-        });
-    }
-
-    function closeSidebar() {
+if (sidebar && sidebarToggle) {
+    // Toggle sidebar (mobile only)
+    function toggleSidebar() {
         const isMobile = window.innerWidth < 768;
+
+        // Only toggle on mobile screens
+        if (!isMobile) return;
+
+        const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+        const isOpen = sidebar.classList.contains('translate-x-0');
+
+        if (isOpen) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    }
+
+    // Open sidebar (mobile only)
+    function openSidebar() {
         const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
 
-        // Only manage sidebar state on mobile - desktop is handled by CSS
-        if (leftSidebar && isMobile) {
-            if (isRtl) {
-                leftSidebar.classList.add('translate-x-full');
-            } else {
-                leftSidebar.classList.add('-translate-x-full');
-            }
-            leftSidebar.classList.remove('translate-x-0');
+        // Show sidebar
+        if (isRtl) {
+            sidebar.classList.remove('rtl:translate-x-[calc(100%+2rem)]');
+        } else {
+            sidebar.classList.remove('-translate-x-[calc(100%+2rem)]');
+        }
+        sidebar.classList.add('translate-x-0');
+
+        // Show backdrop
+        if (sidebarBackdrop) {
+            sidebarBackdrop.classList.remove('hidden');
         }
 
-        if (rightSidebar && window.innerWidth < 1280) {
-            rightSidebar.classList.add('hidden');
-            if (isRtl) {
-                rightSidebar.classList.add('-translate-x-[calc(100%+2rem)]');
-            } else {
-                rightSidebar.classList.add('translate-x-[calc(100%+2rem)]');
-            }
-            rightSidebar.classList.remove('translate-x-0');
-        }
-
-        backdrop.classList.add('opacity-0', 'pointer-events-none');
-        backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
     }
 
-    // Close sidebar when clicking backdrop
-    backdrop.addEventListener('click', closeSidebar);
+    // Close sidebar (mobile only)
+    function closeSidebar() {
+        const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
 
-    // Close on escape
+        // Hide sidebar
+        sidebar.classList.remove('translate-x-0');
+        if (isRtl) {
+            sidebar.classList.add('rtl:translate-x-[calc(100%+2rem)]');
+        } else {
+            sidebar.classList.add('-translate-x-[calc(100%+2rem)]');
+        }
+
+        // Hide backdrop
+        if (sidebarBackdrop) {
+            sidebarBackdrop.classList.add('hidden');
+        }
+
+        // Restore body scroll
+        document.body.style.overflow = '';
+    }
+
+    // Toggle button click
+    sidebarToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleSidebar();
+    });
+
+    // Close button click (mobile only)
+    if (sidebarCloseBtn) {
+        sidebarCloseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeSidebar();
+        });
+    }
+
+    // Backdrop click
+    if (sidebarBackdrop) {
+        sidebarBackdrop.addEventListener('click', closeSidebar);
+    }
+
+    // Escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            closeSidebar();
+            const isMobile = window.innerWidth < 768;
+            const isOpen = sidebar.classList.contains('translate-x-0');
+            if (isMobile && isOpen) {
+                closeSidebar();
+            }
         }
     });
 
-    // Handle window resize - clean up mobile classes when resizing to desktop
+    // Close sidebar when clicking links (mobile only)
+    const sidebarLinks = sidebar.querySelectorAll('a');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const isMobile = window.innerWidth < 768;
+            if (isMobile) {
+                closeSidebar();
+            }
+        });
+    });
+
+    // Handle window resize
     window.addEventListener('resize', () => {
-        const width = window.innerWidth;
-        const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+        const isMobile = window.innerWidth < 768;
 
-        if (width >= 1280) { // xl
-            if (rightSidebar) {
-                rightSidebar.classList.remove('hidden', 'translate-x-0', 'translate-x-[calc(100%+2rem)]', '-translate-x-[calc(100%+2rem)]');
-                rightSidebar.classList.add('xl:block');
-            }
-            backdrop.classList.add('opacity-0', 'pointer-events-none');
-            backdrop.classList.remove('opacity-100', 'pointer-events-auto');
-        }
+        if (!isMobile) {
+            // On desktop, ensure sidebar is visible and clean up mobile state
+            sidebar.classList.remove('-translate-x-[calc(100%+2rem)]', 'rtl:translate-x-[calc(100%+2rem)]');
+            sidebar.classList.add('translate-x-0');
 
-        if (width >= 768) { // md - left sidebar now always visible, just clean up mobile classes
-            if (leftSidebar) {
-                leftSidebar.classList.remove('-translate-x-full', 'translate-x-0', 'translate-x-full');
+            // Hide backdrop
+            if (sidebarBackdrop) {
+                sidebarBackdrop.classList.add('hidden');
             }
-            backdrop.classList.add('opacity-0', 'pointer-events-none');
-            backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+
+            // Restore body scroll
+            document.body.style.overflow = '';
+        } else {
+            // On mobile, ensure sidebar is hidden by default
+            const isOpen = sidebar.classList.contains('translate-x-0') &&
+                !sidebar.classList.contains('-translate-x-[calc(100%+2rem)]') &&
+                !sidebar.classList.contains('rtl:translate-x-[calc(100%+2rem)]');
+
+            if (!isOpen) {
+                closeSidebar();
+            }
         }
     });
 }
-

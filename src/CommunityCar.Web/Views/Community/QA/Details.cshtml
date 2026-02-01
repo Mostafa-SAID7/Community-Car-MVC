@@ -31,7 +31,7 @@
                 <p class="text-sm font-medium text-muted-foreground opacity-70 mt-4 border-l-4 border-primary/20 pl-4 py-1 max-w-2xl">@Localizer["TransmissionDetail"]</p>
             </div>
             
-            <a href="@Url.Action("Index", "QA")" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+            <a asp-controller="QA" asp-action="Index" asp-route-culture="@currentCulture" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
                 @Localizer["QARegistry"]
             </a>
@@ -290,7 +290,7 @@
                     </h3>
                 </div>
                 
-                <form asp-action="Answer" asp-route-id="@Model.Id" method="post" class="p-6 sm:p-8 space-y-6">
+                <form asp-action="Answer" asp-route-id="@Model.Id" asp-route-culture="@currentCulture" method="post" class="p-6 sm:p-8 space-y-6">
                     <div class="space-y-2">
                         <label class="text-sm font-medium text-foreground">@Localizer["YourAnswer"]</label>
                         <div class="relative">

@@ -92,13 +92,13 @@
         }
         <main class="flex-1 px-2 sm:px-3 md:px-4 lg:px-6 mt-24 sidebar-spacing @marginClasses" @Html.Raw(mainContentAttributes)>
             <div class="max-w-none w-full overflow-x-hidden">
-                <div class="bg-card/30 backdrop-blur-xl border border-border rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 w-full mx-auto">
+                <div class="bg-card/30 backdrop-blur-xl   shadow-lg sm:shadow-2xl p-3  w-full mx-auto">
                     <!-- Header with sidebar toggles -->
-                    <div class="flex items-center justify-between mb-4 sm:mb-6 xl:mb-0">
+                    <div class="flex items-center justify-between border-border  lg:border-none rounded-lg mb-4 sm:mb-6 xl:mb-0 lg:hidden">
                         <!-- Mobile navigation and options (hidden on desktop) -->
                         <div class="flex items-center gap-2 md:hidden">
                             <!-- Mobile sidebar toggle button -->
-                            <button id="main-mobile-sidebar-toggle" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Toggle Menu">
+                            <button id="sidebar-toggle" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Toggle Menu">
                                 <i data-lucide="menu" class="w-4 h-4"></i>
                             </button>
                             
@@ -146,7 +146,7 @@
                         </div>
                         
                         <!-- Mobile search overlay (hidden by default) -->
-                        <div class="fixed inset-0 bg-background/95 backdrop-blur-md z-50 hidden" id="mobile-search-overlay">
+                        <div class="fixed inset-0  z-50 hidden" id="mobile-search-overlay">
                             <div class="flex items-center gap-3 p-4 border-b border-border">
                                 <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="mobile-search-close">
                                     <i data-lucide="arrow-left" class="w-4 h-4"></i>

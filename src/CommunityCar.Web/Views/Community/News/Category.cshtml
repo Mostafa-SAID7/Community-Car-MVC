@@ -34,7 +34,7 @@
 
     <!-- Category Navigation -->
     <div class="flex flex-wrap gap-2 justify-center">
-        <a href="/news" class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all @(category == null ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground")">
+        <a asp-controller="News" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all @(category == null ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground")">
             @Localizer["AllNews"]
         </a>
         @foreach (NewsCategory cat in Enum.GetValues<NewsCategory>())
@@ -171,7 +171,7 @@
             </div>
             <h3 class="text-xl font-bold text-foreground mb-2">@Localizer["NoArticlesFound"]</h3>
             <p class="text-muted-foreground mb-6">@string.Format(Localizer["NoArticlesInCategory"].Value, categoryName)</p>
-            <a href="/news" class="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-all">
+            <a asp-controller="News" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-all">
                 <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
                 @Localizer["BackToAllNews"]
             </a>

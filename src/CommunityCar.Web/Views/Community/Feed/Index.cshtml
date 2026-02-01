@@ -75,13 +75,16 @@
     <!-- Feed Navigation: Mirroring "Sorting Pulse" aesthetic -->
     <div class="flex justify-center mb-4">
         <div class="inline-flex items-center gap-4 bg-muted/30 backdrop-blur-md p-1.5 rounded-[1.5rem] border border-border/50 shadow-xl">
-            <a class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all @(feedType == "personalized" ? "bg-background text-foreground shadow-lg border border-border" : "text-muted-foreground/60 hover:text-foreground hover:bg-muted/50")" href="?feedType=personalized">
+            <a class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all @(feedType == "personalized" ? "bg-background text-foreground shadow-lg border border-border" : "text-muted-foreground/60 hover:text-foreground hover:bg-muted/50")" 
+               asp-controller="Feed" asp-action="Index" asp-route-culture="@currentCulture" asp-route-feedType="personalized">
                 <i class="fas fa-home text-[9px]"></i> @ViewLocalizer["ForYou"]
             </a>
-            <a class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all @(feedType == "trending" ? "bg-background text-foreground shadow-lg border border-border" : "text-muted-foreground/60 hover:text-foreground hover:bg-muted/50")" href="/feed/trending">
+            <a class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all @(feedType == "trending" ? "bg-background text-foreground shadow-lg border border-border" : "text-muted-foreground/60 hover:text-foreground hover:bg-muted/50")" 
+               asp-controller="Feed" asp-action="Trending" asp-route-culture="@currentCulture">
                 <i class="fas fa-fire text-[9px]"></i> @ViewLocalizer["Trending"]
             </a>
-            <a class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all @(feedType == "friends" ? "bg-background text-foreground shadow-lg border border-border" : "text-muted-foreground/60 hover:text-foreground hover:bg-muted/50")" href="/feed/friends">
+            <a class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all @(feedType == "friends" ? "bg-background text-foreground shadow-lg border border-border" : "text-muted-foreground/60 hover:text-foreground hover:bg-muted/50")" 
+               asp-controller="Feed" asp-action="Friends" asp-route-culture="@currentCulture">
                 <i class="fas fa-users text-[9px]"></i> @ViewLocalizer["Friends"]
             </a>
         </div>
@@ -151,7 +154,7 @@
                     <div class="flex items-center gap-5">
                         @if (item.AuthorId != Guid.Empty)
                         {
-                            <a href="/profile/view/@item.AuthorId" class="w-12 h-12 rounded-2xl bg-muted border border-border/50 flex items-center justify-center overflow-hidden shadow-inner ring-2 ring-primary/5 group-hover/feed-item:ring-primary/20 transition-all group/avatar cursor-pointer block">
+                            <a asp-controller="Profile" asp-action="ViewProfile" asp-route-id="@item.AuthorId" asp-route-culture="@currentCulture" class="w-12 h-12 rounded-2xl bg-muted border border-border/50 flex items-center justify-center overflow-hidden shadow-inner ring-2 ring-primary/5 group-hover/feed-item:ring-primary/20 transition-all group/avatar cursor-pointer block">
                                 <img src="@(item.AuthorAvatar ?? "/images/default-avatar.png")" alt="@item.AuthorName" class="w-full h-full object-cover transition-transform group-hover/avatar:scale-110" />
                                 @if (item.IsVerified)
                                 {
@@ -171,7 +174,7 @@
                             <div class="flex items-center gap-3">
                                 @if (item.AuthorId != Guid.Empty)
                                 {
-                                    <a href="/profile/view/@item.AuthorId" class="text-sm font-black text-foreground m-0 hover:text-primary transition-colors cursor-pointer block tracking-tight">@item.AuthorName</a>
+                                    <a asp-controller="Profile" asp-action="ViewProfile" asp-route-id="@item.AuthorId" asp-route-culture="@currentCulture" class="text-sm font-black text-foreground m-0 hover:text-primary transition-colors cursor-pointer block tracking-tight">@item.AuthorName</a>
                                 }
                                 else
                                 {
@@ -232,7 +235,7 @@
                                 @(string.IsNullOrEmpty(displaySummary) ? (displayContent.Length > 280 ? displayContent.Substring(0, 280) + "..." : displayContent) : displaySummary)
                                 @if (displayContent?.Length > 280)
                                 {
-                                    <button class="text-primary font-black ml-2 hover:underline text-[10px] uppercase tracking-widest" onclick="window.location.href='/posts/@item.Id'">@ViewLocalizer["ReadMore"]</button>
+                                    <button class="text-primary font-black ml-2 hover:underline text-[10px] uppercase tracking-widest" onclick="window.location.href='/@currentCulture/posts/@item.Id'">@ViewLocalizer["ReadMore"]</button>
                                 }
                             </div>
                         }
@@ -293,7 +296,7 @@
                         <div class="flex flex-wrap gap-4 mb-6">
                             @foreach (var tag in item.Tags.Take(6))
                             {
-                                <a href="/feed/trending?topic=@System.Net.WebUtility.UrlEncode(tag)" class="text-[9px] font-black uppercase tracking-widest text-primary/40 hover:text-primary transition-all cursor-pointer decoration-0">#@tag</a>
+                                <a asp-controller="Feed" asp-action="Trending" asp-route-culture="@currentCulture" asp-route-topic="@tag" class="text-[9px] font-black uppercase tracking-widest text-primary/40 hover:text-primary transition-all cursor-pointer decoration-0">#@tag</a>
                             }
                         </div>
                     }

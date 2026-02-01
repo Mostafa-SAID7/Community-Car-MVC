@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityCar.Web.Controllers.Community.Events;
 
-[Route("events")]
+[Route("{culture}/events")]
 public class EventsController : Controller
 {
     private readonly IEventsService _eventsService;

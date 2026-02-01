@@ -47,6 +47,64 @@ class ProfileSettingsManager {
         if (profilePictureInput) {
             profilePictureInput.addEventListener('change', (e) => this.previewImage(e.target));
         }
+
+        // AJAX Form submission handler
+        document.querySelectorAll('form[data-ajax="true"]').forEach(form => {
+            form.addEventListener('submit', (e) => this.handleAjaxSubmit(e));
+        });
+    }
+
+    async handleAjaxSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+
+        try {
+            // Set loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="flex items-center justify-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Updating...</span>';
+
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                if (window.AlertModal) {
+                    window.AlertModal.success(data.message || 'Settings updated successfully.');
+                } else {
+                    alert(data.message || 'Settings updated successfully.');
+                }
+
+                // If password form, clear inputs
+                if (form.action.toLowerCase().includes('security')) {
+                    form.reset();
+                }
+            } else {
+                if (window.AlertModal) {
+                    window.AlertModal.error(data.message || 'Failed to update settings.');
+                } else {
+                    alert(data.message || 'Failed to update settings.');
+                }
+            }
+        } catch (error) {
+            console.error('AJAX Submit Error:', error);
+            if (window.AlertModal) {
+                window.AlertModal.error('An unexpected error occurred. Please try again.');
+            } else {
+                alert('An unexpected error occurred. Please try again.');
+            }
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }
     }
 
     showTab(tabName) {

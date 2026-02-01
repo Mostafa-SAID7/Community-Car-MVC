@@ -212,11 +212,11 @@ public class ProfileController : Controller
         if (success)
         {
             TempData["SuccessMessage"] = "Profile updated successfully!";
-            return RedirectToAction(nameof(Index), new { culture });
+            return RedirectToAction(nameof(Index));
         }
 
         TempData["ErrorMessage"] = "Failed to update profile. Please try again.";
-        return RedirectToAction("Index", "ProfileSettings", new { culture });
+        return RedirectToAction("Index", "ProfileSettings");
     }
 
     [HttpPost("upload-picture")]

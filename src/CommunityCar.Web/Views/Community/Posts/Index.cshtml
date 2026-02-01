@@ -58,7 +58,7 @@
         <div class="flex flex-col gap-8" id="postsList">
             @foreach (var post in Model)
             {
-                <a href="@Url.Action("DetailsBySlug", "Posts", new { slug = post.Slug })" class="group/post block bg-card/40 backdrop-blur-md border border-border rounded-2xl overflow-hidden shadow-lg transition-all hover:border-primary/30 hover:shadow-2xl hover:-translate-y-1 relative">
+                <a asp-controller="Posts" asp-action="DetailsBySlug" asp-route-slug="@post.Slug" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="group/post block bg-card/40 backdrop-blur-md border border-border rounded-2xl overflow-hidden shadow-lg transition-all hover:border-primary/30 hover:shadow-2xl hover:-translate-y-1 relative">
                     <div class="p-8">
                         <div class="flex justify-between items-start mb-6">
                             <div class="flex items-center gap-4">
@@ -113,5 +113,5 @@
     </script>
 }
 @section SidebarRight {
-    <partial name="_PostsSidebar" />
+    <partial name="~/Views/Community/Posts/_PostsSidebar.cshtml" />
 }

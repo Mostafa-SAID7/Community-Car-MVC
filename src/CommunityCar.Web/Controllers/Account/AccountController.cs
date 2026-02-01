@@ -28,7 +28,7 @@ public class AccountController : Controller
     public IActionResult Register()
     {
         if (User.Identity?.IsAuthenticated == true)
-            return RedirectToAction("Index", "Feed");
+            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
         
         return View("Auth/Register");
     }
@@ -38,7 +38,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Register(RegisterVM model)
     {
         if (User.Identity?.IsAuthenticated == true)
-            return RedirectToAction("Index", "Feed");
+            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
 
         if (!ModelState.IsValid)
             return View("Auth/Register", model);
@@ -75,7 +75,7 @@ public class AccountController : Controller
     public IActionResult Login(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true)
-            return RedirectToAction("Index", "Feed");
+            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
 
         ViewData["ReturnUrl"] = returnUrl;
         return View("Auth/Login");
@@ -86,7 +86,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Login(LoginVM model, string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true)
-            return RedirectToAction("Index", "Feed");
+            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
 
         ViewData["ReturnUrl"] = returnUrl;
 
@@ -106,7 +106,7 @@ public class AccountController : Controller
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
             
-            return RedirectToAction("Index", "Feed");
+            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
         }
 
         ModelState.AddModelError(string.Empty, result.Message ?? "Invalid login attempt.");
@@ -276,7 +276,7 @@ public class AccountController : Controller
     {
         _logger.LogInformation("External login callback started. ReturnUrl: {ReturnUrl}, RemoteError: {RemoteError}", returnUrl, remoteError);
         
-        returnUrl = returnUrl ?? Url.Action("Index", "Feed") ?? "/";
+        returnUrl = returnUrl ?? Url.Action("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name }) ?? "/en/feed";
 
         if (remoteError != null)
         {

@@ -98,7 +98,7 @@
                 </a>
                 @* Return button handled in previous edit *@
             }
-            <a href="/news" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+            <a asp-controller="News" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
                 @Localizer["Return"]
             </a>

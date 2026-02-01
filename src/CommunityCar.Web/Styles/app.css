@@ -231,11 +231,16 @@
         @apply opacity-100 pointer-events-auto;
     }
 
-    /* Left sidebar - visible on md+ screens, drawer on mobile */
+    /* Left sidebar - hidden by default on mobile, visible on md+ screens */
     .sidebar {
         /* Mobile: hidden off-screen by default */
         transform: translateX(-100%);
         transition: transform 300ms ease-in-out;
+    }
+
+    /* RTL support for mobile sidebar */
+    .rtl .sidebar {
+        transform: translateX(100%);
     }
 
     @media (min-width: 768px) {
@@ -244,13 +249,21 @@
             transform: none;
             transition: none;
         }
+        
+        .rtl .sidebar {
+            transform: none;
+        }
     }
 
     /* Mobile drawer behavior - only toggle transform on mobile */
     @media (max-width: 767px) {
-
         .sidebar-visible .sidebar,
         .left-sidebar-visible .sidebar {
+            transform: translateX(0);
+        }
+        
+        .rtl .sidebar-visible .sidebar,
+        .rtl .left-sidebar-visible .sidebar {
             transform: translateX(0);
         }
 
@@ -270,8 +283,7 @@
         /* Better mobile spacing when sidebar is open */
         .sidebar-visible body,
         .left-sidebar-visible body {
-            overflow: hidden;
-            /* Prevent background scrolling */
+            overflow: hidden; /* Prevent background scrolling */
         }
     }
 
@@ -691,11 +703,24 @@
         width: 280px;
     }
 
+    /* RTL mobile profile dropdown positioning */
+    .rtl .mobile-profile-dropdown {
+        left: -50px;
+        right: auto;
+        width: 280px;
+    }
+
     /* Profile dropdown specific styling */
     .profile-dropdown,
     .mobile-profile-dropdown {
         min-width: 256px;
         max-width: 280px;
+    }
+
+    /* RTL Profile dropdown positioning */
+    .rtl .profile-dropdown {
+        left: 0;
+        right: auto;
     }
 
     .profile-dropdown .dropdown-item,
@@ -971,6 +996,69 @@
 .rtl .mobile-notification-dropdown {
     left: 0;
     right: auto;
+}
+
+/* RTL dropdown content positioning - general rule for all dropdowns */
+.rtl .dropdown-content {
+    left: 0;
+    right: auto;
+}
+
+/* RTL profile dropdown specific positioning */
+.rtl .profile-wrapper .dropdown-content {
+    left: 0;
+    right: auto;
+}
+
+.rtl .mobile-profile-wrapper .dropdown-content {
+    left: -50px;
+    right: auto;
+}
+
+/* RTL notification wrapper positioning */
+.rtl .notification-wrapper .dropdown-content {
+    left: 0;
+    right: auto;
+}
+
+/* RTL dropdown item alignment */
+.rtl .dropdown-item {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+.rtl .dropdown-item i {
+    margin-left: 0.75rem;
+    margin-right: 0;
+}
+
+/* RTL profile info alignment in dropdown */
+.rtl .profile-dropdown .flex.items-center.gap-3,
+.rtl .mobile-profile-dropdown .flex.items-center.gap-3 {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+.rtl .profile-dropdown .flex-1.min-w-0,
+.rtl .mobile-profile-dropdown .flex-1.min-w-0 {
+    text-align: right;
+}
+
+/* RTL Tailwind utility overrides for dropdowns */
+.rtl .rtl\:flex-row-reverse {
+    flex-direction: row-reverse;
+}
+
+.rtl .rtl\:text-right {
+    text-align: right;
+}
+
+.rtl .rtl\:right-auto {
+    right: auto;
+}
+
+.rtl .rtl\:left-0 {
+    left: 0;
 }
 
 /* RTL story container scroll direction */
@@ -2450,7 +2538,34 @@ input:checked+.toggle-slider:before {
     .main-sidebar-mobile-open span.md\:hidden {
         display: inline !important;
     }
+    
+    /* Ensure sidebar is properly hidden by default on mobile */
+    .sidebar {
+        transform: translateX(-100%) !important;
+    }
+    
+    .rtl .sidebar {
+        transform: translateX(100%) !important;
+    }
+    
+    /* Show sidebar when mobile open class is applied */
+    .main-sidebar-mobile-open.sidebar,
+    .sidebar-visible .sidebar,
+    .left-sidebar-visible .sidebar {
+        transform: translateX(0) !important;
+    }
+    
+    /* Ensure backdrop is properly positioned */
+    #main-sidebar-backdrop {
+        z-index: 45;
+    }
+    
+    /* Improve mobile sidebar appearance */
+    .main-sidebar-mobile-open {
+        width: 14rem !important; /* 56 = w-56 */
+    }
 }
+
 
 /* ========================================
  * SIMPLIFIED DESKTOP LAYOUT - NO COMPLEX TOGGLE

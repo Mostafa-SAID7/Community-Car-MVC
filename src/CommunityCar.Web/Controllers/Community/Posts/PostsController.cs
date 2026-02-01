@@ -6,7 +6,7 @@ using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Web.Controllers.Community.Post;
 
-[Route("posts")]
+[Route("{culture}/posts")]
 public class PostsController : Controller
 {
     private readonly IPostsService _postsService;

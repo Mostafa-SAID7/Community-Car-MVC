@@ -153,7 +153,31 @@ public class ProfileSettingsVM
     public bool PushNotifications { get; set; } = true;
     public bool SmsNotifications { get; set; } = true;
     public bool MarketingEmails { get; set; } = true;
+    public bool WeeklyDigest { get; set; } = false;
+    public bool SecurityAlerts { get; set; } = true;
+
     public bool PublicProfile { get; set; } = true;
+    public bool AllowMessages { get; set; } = true;
+    public bool AllowFriendRequests { get; set; } = true;
+    public bool ShowActivityStatus { get; set; } = true;
+    public bool ShowOnlineStatus { get; set; } = true;
+    public bool EmailVisible { get; set; } = false;
+    public bool PhoneVisible { get; set; } = false;
+
+    // Password change fields
+    [DataType(DataType.Password)]
+    [Display(Name = "Current Password")]
+    public string? CurrentPassword { get; set; }
+
+    [DataType(DataType.Password)]
+    [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+    [Display(Name = "New Password")]
+    public string? NewPassword { get; set; }
+
+    [DataType(DataType.Password)]
+    [Display(Name = "Confirm New Password")]
+    [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+    public string? ConfirmPassword { get; set; }
 }
 
 public class UpdateProfileVM

@@ -27,10 +27,9 @@ public static class LocalizationExtensions
             options.SupportedUICultures = cultures;
 
             // Optional: Configure how culture is detected
-            options.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider());
-            options.RequestCultureProviders.Insert(1, new QueryStringRequestCultureProvider());
-            options.RequestCultureProviders.Insert(2, new CookieRequestCultureProvider());
-            options.RequestCultureProviders.Insert(3, new AcceptLanguageHeaderRequestCultureProvider());
+            options.RequestCultureProviders.Insert(0, new QueryStringRequestCultureProvider());
+            options.RequestCultureProviders.Insert(1, new CookieRequestCultureProvider());
+            options.RequestCultureProviders.Insert(2, new AcceptLanguageHeaderRequestCultureProvider());
         });
 
         return services;

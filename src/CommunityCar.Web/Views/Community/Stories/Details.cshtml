@@ -39,7 +39,7 @@
                 <p class="text-sm font-medium text-muted-foreground opacity-70 mt-4 border-l-4 border-primary/20 pl-4 py-1 max-w-2xl">@Localizer["TransmissionBy"] @Model?.AuthorName</p>
             </div>
             
-            <a href="/stories" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+            <a asp-controller="Stories" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
                 @Localizer["ReturnToFeed"]
             </a>
@@ -286,7 +286,7 @@
                 </div>
                 <h2 class="text-2xl font-bold text-foreground mb-2">Story Not Found</h2>
                 <p class="text-muted-foreground mb-6">The story you're looking for doesn't exist or has been removed.</p>
-                <a href="/stories" 
+                <a asp-controller="Stories" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" 
                    class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     Back to Stories
@@ -306,7 +306,7 @@
         });
 
         function toggleLike(storyId) {
-            fetch(`/stories/${storyId}/like`, {
+            fetch(`/${'@System.Globalization.CultureInfo.CurrentCulture.Name'}/stories/${storyId}/like`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -389,7 +389,7 @@
         }
 
         function executeReportStory(storyId) {
-            fetch(`/stories/${storyId}/report`, {
+            fetch(`/${'@System.Globalization.CultureInfo.CurrentCulture.Name'}/stories/${storyId}/report`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -410,7 +410,7 @@
         function loadRelatedStories() {
             const container = document.getElementById('relatedStories');
             
-            fetch(`/stories/author/@Model?.AuthorId?pageSize=5`)
+            fetch(`/${'@System.Globalization.CultureInfo.CurrentCulture.Name'}/stories/author/@Model?.AuthorId?pageSize=5`)
                 .then(response => response.text())
                 .then(html => {
                     // In a real implementation, you would parse and display related stories

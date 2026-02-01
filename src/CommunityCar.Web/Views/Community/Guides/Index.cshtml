@@ -28,7 +28,7 @@
             <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@Localizer["PageDescription"]</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="/guides/create" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-sm font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
+            <a asp-controller="Guides" asp-action="Create" asp-route-culture="@currentCulture" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-sm font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
                 <i data-lucide="plus" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
                 @Localizer["CreateGuide"]
             </a>
@@ -91,7 +91,7 @@
                             <i data-lucide="filter" class="w-4 h-4"></i>
                             @Localizer["ApplyFilters"]
                         </button>
-                        <a href="/guides" class="px-6 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-sm active:scale-95 flex items-center gap-2">
+                        <a asp-controller="Guides" asp-action="Index" asp-route-culture="@currentCulture" class="px-6 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-sm active:scale-95 flex items-center gap-2">
                             <i data-lucide="x" class="w-4 h-4"></i>
                             @Localizer["ClearFilters"]
                         </a>
@@ -103,13 +103,13 @@
 
     <!-- Quick Categories -->
     <div class="flex flex-wrap gap-3">
-        <a href="/guides?category=" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all @(string.IsNullOrEmpty(Model.CurrentCategory) ? "bg-primary text-primary-foreground" : "bg-muted/30 text-muted-foreground hover:bg-muted/50 hover:text-foreground")">
+        <a asp-controller="Guides" asp-action="Index" asp-route-culture="@currentCulture" asp-route-category="" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all @(string.IsNullOrEmpty(Model.CurrentCategory) ? "bg-primary text-primary-foreground" : "bg-muted/30 text-muted-foreground hover:bg-muted/50 hover:text-foreground")">
             <i data-lucide="grid-3x3" class="w-4 h-4"></i>
             @Localizer["AllGuides"]
         </a>
         @foreach (var category in Model.Categories.Take(6))
         {
-            <a href="/guides?category=@category" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all @(Model.CurrentCategory == category ? "bg-primary text-primary-foreground" : "bg-muted/30 text-muted-foreground hover:bg-muted/50 hover:text-foreground")">
+            <a asp-controller="Guides" asp-action="Index" asp-route-culture="@currentCulture" asp-route-category="@category" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all @(Model.CurrentCategory == category ? "bg-primary text-primary-foreground" : "bg-muted/30 text-muted-foreground hover:bg-muted/50 hover:text-foreground")">
                 @Localizer[category]
             </a>
         }
@@ -235,7 +235,7 @@
 
                         <!-- Title -->
                         <h3 class="text-lg font-black text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                            <a href="/guides/@guide.Id">@GetLocalizedTitle(guide)</a>
+                            <a asp-controller="Guides" asp-action="Details" asp-route-id="@guide.Id" asp-route-culture="@currentCulture">@GetLocalizedTitle(guide)</a>
                         </h3>
 
                         <!-- Summary -->
@@ -286,7 +286,7 @@
                                     <span class="text-xs font-medium">@guide.BookmarkCount</span>
                                 </div>
                             </div>
-                            <a href="/guides/@guide.Id" class="text-primary hover:text-primary/80 text-sm font-bold">
+                            <a asp-controller="Guides" asp-action="Details" asp-route-id="@guide.Id" asp-route-culture="@currentCulture" class="text-primary hover:text-primary/80 text-sm font-bold">
                                 @Localizer["ReadGuide"] →
                             </a>
                         </div>
@@ -321,7 +321,7 @@
                 <nav class="flex items-center gap-2 p-1.5 bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl">
                     @if (Model.Pagination.HasPreviousPage)
                     {
-                        <a href="?page=@(Model.Pagination.CurrentPage - 1)&search=@Model.CurrentSearch&category=@Model.CurrentCategory&difficulty=@Model.CurrentDifficulty&sortBy=@Model.CurrentSortBy" 
+                        <a asp-controller="Guides" asp-action="Index" asp-route-culture="@currentCulture" asp-route-page="@(Model.Pagination.CurrentPage - 1)" asp-route-search="@Model.CurrentSearch" asp-route-category="@Model.CurrentCategory" asp-route-difficulty="@Model.CurrentDifficulty" asp-route-sortBy="@Model.CurrentSortBy" 
                            class="w-10 h-10 flex items-center justify-center rounded-2xl bg-background border border-border hover:border-primary hover:text-primary transition-all shadow-sm active:scale-95">
                             <i data-lucide="chevron-left" class="w-4 h-4"></i>
                         </a>
@@ -339,7 +339,7 @@
 
                     @if (Model.Pagination.HasNextPage)
                     {
-                        <a href="?page=@(Model.Pagination.CurrentPage + 1)&search=@Model.CurrentSearch&category=@Model.CurrentCategory&difficulty=@Model.CurrentDifficulty&sortBy=@Model.CurrentSortBy" 
+                        <a asp-controller="Guides" asp-action="Index" asp-route-culture="@currentCulture" asp-route-page="@(Model.Pagination.CurrentPage + 1)" asp-route-search="@Model.CurrentSearch" asp-route-category="@Model.CurrentCategory" asp-route-difficulty="@Model.CurrentDifficulty" asp-route-sortBy="@Model.CurrentSortBy" 
                            class="w-10 h-10 flex items-center justify-center rounded-2xl bg-background border border-border hover:border-primary hover:text-primary transition-all shadow-sm active:scale-95">
                             <i data-lucide="chevron-right" class="w-4 h-4"></i>
                         </a>
@@ -360,10 +360,10 @@
                 <h3 class="text-xl font-black text-foreground mb-2">@Localizer["NoResultsTitle"]</h3>
                 <p class="text-muted-foreground mb-6">@Localizer["NoResultsMessage"]</p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href="/guides" class="px-8 py-4 bg-background border border-border hover:border-primary hover:text-primary rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-sm active:scale-95">
+                    <a asp-controller="Guides" asp-action="Index" asp-route-culture="@currentCulture" class="px-8 py-4 bg-background border border-border hover:border-primary hover:text-primary rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-sm active:scale-95">
                         @Localizer["ClearFilters"]
                     </a>
-                    <a href="/guides/create" class="px-8 py-4 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
+                    <a asp-controller="Guides" asp-action="Create" asp-route-culture="@currentCulture" class="px-8 py-4 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
                         @Localizer["CreateYourFirstGuide"]
                     </a>
                 </div>
@@ -382,7 +382,7 @@
             <div class="flex flex-wrap gap-2">
                 @foreach (var tag in Model.PopularTags)
                 {
-                    <a href="/guides?tag=@tag" class="px-3 py-1 bg-muted/30 hover:bg-primary/10 hover:text-primary text-muted-foreground rounded-lg text-sm font-medium transition-all">
+                    <a asp-controller="Guides" asp-action="Index" asp-route-tag="@tag" asp-route-culture="@currentCulture" class="px-3 py-1 bg-muted/30 hover:bg-primary/10 hover:text-primary text-muted-foreground rounded-lg text-sm font-medium transition-all">
                         #@tag
                     </a>
                 }
@@ -448,5 +448,5 @@
     </script>
 }
 @section SidebarRight {
-    <partial name="_GuidesSidebar" />
+    <partial name="~/Views/Community/Guides/_GuidesSidebar.cshtml" />
 }

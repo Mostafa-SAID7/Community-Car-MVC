@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityCar.Web.Controllers.Community.Maps;
 
-[Route("maps")]
+[Route("{culture}/maps")]
 public class MapsController : Controller
 {
     private readonly IMapsService _mapsService;

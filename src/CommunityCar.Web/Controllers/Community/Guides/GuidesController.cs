@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace CommunityCar.Web.Controllers.Community.Guides;
 
-[Route("guides")]
+[Route("{culture}/guides")]
 public class GuidesController : Controller
 {
     private readonly IGuidesService _guidesService;

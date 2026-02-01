@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace CommunityCar.Web.Controllers.Community.Friends;
 
-[Route("friends")]
+[Route("{culture}/friends")]
 [Authorize]
 public class FriendsController : Controller
 {

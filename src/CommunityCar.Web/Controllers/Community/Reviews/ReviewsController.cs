@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace CommunityCar.Web.Controllers.Community.Reviews;
 
-[Route("reviews")]
+[Route("{culture}/reviews")]
 public class ReviewsController : Controller
 {
     private readonly IReviewsService _reviewsService;

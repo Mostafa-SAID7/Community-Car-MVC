@@ -29,7 +29,7 @@
             <p class="text-sm font-medium text-muted-foreground opacity-70 mt-4 border-l-4 border-primary/20 pl-4 py-1 max-w-2xl">@Localizer["HubTransmissionDescription"]</p>
         </div>
         
-        <a href="@Url.Action("Index", "Groups")" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
+        <a asp-controller="Groups" asp-action="Index" asp-route-culture="@currentCulture" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
             <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
             @Localizer["ReturnToDirectory"]
         </a>
@@ -94,7 +94,7 @@
 
                 <div class="lg:w-80 space-y-8">
                     <!-- Join Action Strategy -->
-                    <form method="post" action="@Url.Action("Join", "Groups", new { id = Model.Id })">
+                    <form method="post" asp-controller="Groups" asp-action="Join" asp-route-id="@Model.Id" asp-route-culture="@currentCulture">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="inline-flex items-center justify-center w-full py-4 bg-primary text-primary-foreground hover:bg-primary/90 font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95">
                             <i data-lucide="user-plus" class="w-5 h-5 mr-3"></i>

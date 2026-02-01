@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace CommunityCar.Web.Controllers.Community.News;
 
-[Route("news")]
+[Route("{culture}/news")]
 public class NewsController : Controller
 {
     private readonly INewsService _newsService;

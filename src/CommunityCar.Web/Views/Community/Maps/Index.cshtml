@@ -133,7 +133,7 @@
                 <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
                     <div class="flex items-center justify-between mb-6">
             <h5 class="text-[10px] font-black uppercase tracking-widest text-foreground">@Localizer["Hotspots"]</h5>
-            <a href="/maps/poi" class="text-[9px] font-black uppercase tracking-widest text-primary hover:underline">@Localizer["ViewAll"]</a>
+            <a asp-controller="Maps" asp-action="POI" asp-route-culture="@currentCulture" class="text-[9px] font-black uppercase tracking-widest text-primary hover:underline">@Localizer["ViewAll"]</a>
         </div>
                 </div>
                 <div class="p-2 space-y-1" id="hotspots-wrapper">
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <h6 class="text-[13px] font-black text-foreground leading-tight tracking-tight group-hover/poi:text-primary transition-colors truncate">
-                                        <a href="/maps/poi/@poi.Id" onclick="event.stopPropagation();">
+                                        <a asp-controller="Maps" asp-action="POIDetails" asp-route-id="@poi.Id" asp-route-culture="@currentCulture" onclick="event.stopPropagation();">
                                             @(isArabic && !string.IsNullOrEmpty(poi.NameAr) ? poi.NameAr : poi.Name)
                                         </a>
                                     </h6>
@@ -183,7 +183,7 @@
                 <div class="p-4 border-b border-border/50 bg-muted/20 px-6">
                     <div class="flex items-center justify-between mb-6">
                         <h5 class="text-[10px] font-black uppercase tracking-widest text-foreground">@Localizer["TopRoutes"]</h5>
-                        <a href="/maps/routes" class="text-[9px] font-black uppercase tracking-widest text-primary hover:underline">@Localizer["ViewAll"]</a>
+                        <a asp-controller="Maps" asp-action="PerformanceRoutes" asp-route-culture="@currentCulture" class="text-[9px] font-black uppercase tracking-widest text-primary hover:underline">@Localizer["ViewAll"]</a>
                     </div>
                 </div>
                 <div class="p-2 space-y-1">
@@ -197,7 +197,7 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <h6 class="text-[13px] font-black text-foreground leading-tight tracking-tight group-hover/route:text-primary transition-colors truncate">
-                                        <a href="/maps/routes/@route.Id" onclick="event.stopPropagation();">
+                                        <a asp-controller="Maps" asp-action="RouteDetails" asp-route-id="@route.Id" asp-route-culture="@currentCulture" onclick="event.stopPropagation();">
                                             @(isArabic && !string.IsNullOrEmpty(route.NameAr) ? route.NameAr : route.Name)
                                         </a>
                                     </h6>

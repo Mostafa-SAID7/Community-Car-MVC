@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Community.QA;
 
-[Route("qa")]
+[Route("{culture}/qa")]
 public class QAController : Controller
 {
     private readonly IQAService _qaService;

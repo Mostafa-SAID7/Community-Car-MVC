@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace CommunityCar.Web.Controllers.Community.Stories;
 
-[Route("stories")]
+[Route("{culture}/stories")]
 public class StoriesController : Controller
 {
     private readonly ILogger<StoriesController> _logger;

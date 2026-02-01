@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace CommunityCar.Web.Controllers.Community.Feed;
 
 [Authorize]
-[Route("feed")]
+[Route("{culture}/feed")]
 public class FeedController : Controller
 {
     private readonly ILogger<FeedController> _logger;

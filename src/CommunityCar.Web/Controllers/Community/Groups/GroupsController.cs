@@ -6,7 +6,7 @@ using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Web.Controllers.Community.Groups;
 
-[Route("groups")]
+[Route("{culture}/groups")]
 public class GroupsController : Controller
 {
     private readonly IGroupsService _groupsService;

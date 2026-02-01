@@ -12,7 +12,7 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between py-4">
                 <div class="flex items-center gap-3">
-                    <a href="/stories" class="flex items-center justify-center w-10 h-10 rounded-xl bg-muted hover:bg-accent transition-colors">
+                    <a asp-controller="Stories" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="flex items-center justify-center w-10 h-10 rounded-xl bg-muted hover:bg-accent transition-colors">
                         <i data-lucide="arrow-left" class="w-5 h-5 text-foreground"></i>
                     </a>
                     <div>
