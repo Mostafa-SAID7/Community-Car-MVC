@@ -2,8 +2,8 @@ using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Events.DTOs;
-using CommunityCar.Application.Features.Events.ViewModels;
+using CommunityCar.Application.Features.Community.Events.DTOs;
+using CommunityCar.Application.Features.Community.Events.ViewModels;
 using CommunityCar.Domain.Entities.Community.Events;
 
 namespace CommunityCar.Application.Services.Community;
@@ -39,7 +39,7 @@ public class EventsService : IEventsService
         
         var summaryItems = items.Select(eventEntity => 
         {
-            var summary = _mapper.Map<CommunityCar.Application.Features.Events.DTOs.EventSummaryVM>(eventEntity);
+            var summary = _mapper.Map<CommunityCar.Application.Features.Community.Events.DTOs.EventSummaryVM>(eventEntity);
             
             // Calculate distance if location provided
             if (request.Latitude.HasValue && request.Longitude.HasValue && 
@@ -225,8 +225,8 @@ public class EventsService : IEventsService
             UpcomingEvents = upcomingEvents.Count,
             ActiveEvents = activeEvents.Count,
             TotalAttendees = allEvents.Sum(e => e.AttendeeCount),
-            FeaturedEvents = _mapper.Map<List<CommunityCar.Application.Features.Events.DTOs.EventSummaryVM>>(upcomingEvents.OrderByDescending(e => e.AttendeeCount).Take(3)),
-            UpcomingEventsList = _mapper.Map<List<CommunityCar.Application.Features.Events.DTOs.EventSummaryVM>>(upcomingEvents.OrderBy(e => e.StartTime).Take(5)),
+            FeaturedEvents = _mapper.Map<List<CommunityCar.Application.Features.Community.Events.DTOs.EventSummaryVM>>(upcomingEvents.OrderByDescending(e => e.AttendeeCount).Take(3)),
+            UpcomingEventsList = _mapper.Map<List<CommunityCar.Application.Features.Community.Events.DTOs.EventSummaryVM>>(upcomingEvents.OrderBy(e => e.StartTime).Take(5)),
             EventsByTag = allEvents
                 .SelectMany(e => e.Tags)
                 .GroupBy(tag => tag)

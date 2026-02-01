@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
-using CommunityCar.Application.Features.Interactions.DTOs;
+using CommunityCar.Application.Features.Shared.Interactions.DTOs;
 using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Web.Controllers.Shared.Shares;

@@ -1,5 +1,5 @@
-using CommunityCar.Application.Features.Reviews.DTOs;
-using CommunityCar.Application.Features.Reviews.ViewModels;
+using CommunityCar.Application.Features.Community.Reviews.DTOs;
+using CommunityCar.Application.Features.Community.Reviews.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 

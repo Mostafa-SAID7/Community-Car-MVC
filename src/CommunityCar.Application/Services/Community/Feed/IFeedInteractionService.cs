@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Interactions.ViewModels;
+using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
 
 namespace CommunityCar.Application.Services.Community.Feed;
 
@@ -45,7 +45,7 @@ public interface IFeedInteractionService
     /// <summary>
     /// Loads initial comments for feed items
     /// </summary>
-    Task LoadInitialCommentsAsync(List<CommunityCar.Application.Features.Feed.ViewModels.FeedItemVM> feedItems, Guid? userId);
+    Task LoadInitialCommentsAsync(List<CommunityCar.Application.Features.Community.Feed.ViewModels.FeedItemVM> feedItems, Guid? userId);
 }
 
 

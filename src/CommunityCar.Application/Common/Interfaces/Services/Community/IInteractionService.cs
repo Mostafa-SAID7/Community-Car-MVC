@@ -1,6 +1,6 @@
 using CommunityCar.Domain.Enums.Shared;
-using CommunityCar.Application.Features.Interactions.ViewModels;
-using CommunityCar.Application.Features.Interactions.DTOs;
+using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
+using CommunityCar.Application.Features.Shared.Interactions.DTOs;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 

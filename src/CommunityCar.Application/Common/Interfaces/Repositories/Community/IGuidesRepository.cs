@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Base;
 using CommunityCar.Domain.Entities.Community.Guides;
-using CommunityCar.Application.Features.Guides.ViewModels;
+using CommunityCar.Application.Features.Community.Guides.ViewModels;
 using CommunityCar.Domain.Entities.Community.Stories; // This was accidentally added too? No, wait. 
 using CommunityCar.Domain.Entities.Community.News;
 

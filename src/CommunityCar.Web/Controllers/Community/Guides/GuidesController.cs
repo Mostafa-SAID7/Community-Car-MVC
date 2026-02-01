@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 
-using CommunityCar.Application.Features.Guides.ViewModels;
+using CommunityCar.Application.Features.Community.Guides.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Localization;
 

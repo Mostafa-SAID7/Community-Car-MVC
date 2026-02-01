@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Feed.ViewModels;
-using CommunityCar.Application.Features.Interactions.ViewModels;
+using CommunityCar.Application.Features.Community.Feed.ViewModels;
+using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
 using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Application.Services.Community.Feed;
@@ -144,7 +144,7 @@ public class FeedInteractionService : IFeedInteractionService
         }
     }
 
-    public async Task LoadInitialCommentsAsync(List<FeedItemVM> feedItems, Guid? userId)
+    public async Task LoadInitialCommentsAsync(List<CommunityCar.Application.Features.Community.Feed.ViewModels.FeedItemVM> feedItems, Guid? userId)
     {
         if (feedItems == null || !feedItems.Any())
             return;

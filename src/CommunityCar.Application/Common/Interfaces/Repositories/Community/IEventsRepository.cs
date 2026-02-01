@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Base;
 using CommunityCar.Domain.Entities.Community.Events;
-using CommunityCar.Application.Features.Events.DTOs;
+using CommunityCar.Application.Features.Community.Events.DTOs;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories.Community;
 

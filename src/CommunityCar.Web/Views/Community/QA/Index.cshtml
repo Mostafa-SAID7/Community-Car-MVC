@@ -1,9 +1,9 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-@model CommunityCar.Application.Features.QA.DTOs.QASearchResponse
+@model CommunityCar.Application.Features.Community.QA.DTOs.QASearchResponse
 @{
     ViewData["Title"] = Localizer["PageTitle"];
-    var searchRequest = ViewBag.SearchRequest as CommunityCar.Application.Features.QA.DTOs.QASearchRequest;
+    var searchRequest = ViewBag.SearchRequest as CommunityCar.Application.Features.Community.QA.DTOs.QASearchRequest;
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">

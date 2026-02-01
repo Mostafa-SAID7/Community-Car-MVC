@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Posts.DTOs;
+using CommunityCar.Application.Features.Community.Posts.DTOs;
 using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Web.Controllers.Community.Post;

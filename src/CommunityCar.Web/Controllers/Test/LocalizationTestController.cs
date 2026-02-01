@@ -43,7 +43,7 @@ namespace CommunityCar.Web.Controllers.Test
         public IActionResult ViewCheck()
         {
              // return the view that we will create to test IViewLocalizer directly
-             return View("~/Views/Community/Feed/Index.cshtml", new CommunityCar.Application.Features.Feed.DTOs.FeedResponse()); 
+             return View("~/Views/Community/Feed/Index.cshtml", new CommunityCar.Application.Features.Community.Feed.DTOs.FeedResponse()); 
         }
     }
 }

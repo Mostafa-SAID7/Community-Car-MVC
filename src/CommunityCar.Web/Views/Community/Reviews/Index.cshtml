@@ -1,10 +1,10 @@
 @using Microsoft.Extensions.Localization
-@model CommunityCar.Application.Features.Reviews.DTOs.ReviewsSearchResponse
+@model CommunityCar.Application.Features.Community.Reviews.DTOs.ReviewsSearchResponse
 @inject IViewLocalizer Localizer
 
 @{
     ViewData["Title"] = Localizer["VehicleReviews"];
-    var searchRequest = ViewBag.SearchRequest as CommunityCar.Application.Features.Reviews.DTOs.ReviewsSearchRequest;
+    var searchRequest = ViewBag.SearchRequest as CommunityCar.Application.Features.Community.Reviews.DTOs.ReviewsSearchRequest;
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">

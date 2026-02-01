@@ -1,5 +1,5 @@
-using CommunityCar.Application.Features.Maps.DTOs;
-using CommunityCar.Application.Features.Maps.ViewModels;
+using CommunityCar.Application.Features.Community.Maps.DTOs;
+using CommunityCar.Application.Features.Community.Maps.ViewModels;
 using CommunityCar.Domain.Entities.Community.Maps;
 using CommunityCar.Domain.Enums.Community;
 

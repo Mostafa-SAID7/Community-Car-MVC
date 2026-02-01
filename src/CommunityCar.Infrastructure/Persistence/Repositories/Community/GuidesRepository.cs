@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Features.Guides.ViewModels;
+using CommunityCar.Application.Features.Community.Guides.ViewModels;
 using CommunityCar.Domain.Entities.Community.Guides;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;

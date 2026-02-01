@@ -1,5 +1,5 @@
-﻿@using Microsoft.Extensions.Localization
-@model CommunityCar.Application.Features.Feed.DTOs.FeedResponse
+@using Microsoft.Extensions.Localization
+@model CommunityCar.Application.Features.Community.Feed.DTOs.FeedResponse
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer ViewLocalizer
 @{
     ViewData["Title"] = ViewLocalizer["PageTitle"];
@@ -189,7 +189,7 @@
                                 <span>@item.TimeAgo</span>
                                 @if (!string.IsNullOrEmpty(item.Location))
                                 {
-                                    <span class="opacity-20">•</span>
+                                    <span class="opacity-20">�</span>
                                     <span class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3 h-3"></i> @item.Location</span>
                                 }
                             </div>

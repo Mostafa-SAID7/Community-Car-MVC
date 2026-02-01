@@ -1,8 +1,8 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Feed.DTOs;
-using CommunityCar.Application.Features.Feed.ViewModels;
+using CommunityCar.Application.Features.Community.Feed.DTOs;
+using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using CommunityCar.Domain.Enums.Shared;
 

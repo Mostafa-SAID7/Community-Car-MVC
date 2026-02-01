@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Events.DTOs;
-using CommunityCar.Application.Features.Events.ViewModels;
+using CommunityCar.Application.Features.Community.Events.DTOs;
+using CommunityCar.Application.Features.Community.Events.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace CommunityCar.Web.Controllers.Community.Events;

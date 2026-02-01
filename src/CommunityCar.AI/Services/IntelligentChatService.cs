@@ -5,7 +5,7 @@ using CommunityCar.AI.Models;
 using System.Text.Json;
 using static CommunityCar.AI.Models.SentimentData;
 using CommunityCar.Application.Services.Community;
-using CommunityCar.Application.Features.News.DTOs;
+using CommunityCar.Application.Features.Community.News.DTOs;
 
 namespace CommunityCar.AI.Services;
 

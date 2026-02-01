@@ -40,13 +40,13 @@ public class TestController : Controller
             userId = parsedUserId;
             
         // For testing without authentication, create a mock summary
-        var summary = new CommunityCar.Application.Features.Interactions.ViewModels.InteractionSummaryVM
+        var summary = new CommunityCar.Application.Features.Shared.Interactions.ViewModels.InteractionSummaryVM
         {
-            Reactions = new CommunityCar.Application.Features.Interactions.ViewModels.ReactionSummaryVM
+            Reactions = new CommunityCar.Application.Features.Shared.Interactions.ViewModels.ReactionSummaryVM
             {
                 TotalReactions = 0,
                 ReactionCounts = new Dictionary<ReactionType, int>(),
-                AvailableReactions = new List<CommunityCar.Application.Features.Interactions.ViewModels.ReactionTypeInfoVM>
+                AvailableReactions = new List<CommunityCar.Application.Features.Shared.Interactions.ViewModels.ReactionTypeInfoVM>
                 {
                     new() { Type = ReactionType.Like, Display = "Like", Icon = "fas fa-thumbs-up", Count = 0 },
                     new() { Type = ReactionType.Love, Display = "Love", Icon = "fas fa-heart", Count = 0 },
@@ -54,7 +54,7 @@ public class TestController : Controller
                 }
             },
             CommentCount = 0,
-            Shares = new CommunityCar.Application.Features.Interactions.ViewModels.ShareSummaryVM
+            Shares = new CommunityCar.Application.Features.Shared.Interactions.ViewModels.ShareSummaryVM
             {
                 TotalShares = 0,
                 ShareTypeCounts = new Dictionary<ShareType, int>()

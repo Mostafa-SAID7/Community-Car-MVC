@@ -199,7 +199,7 @@ public class CacheWarmupService
                 var newsKey = CacheKeys.Community.News(category, 1);
                 await _cacheService.GetOrSetAsync(newsKey, async () =>
                 {
-                    var request = new CommunityCar.Application.Features.News.DTOs.NewsSearchRequest
+                    var request = new CommunityCar.Application.Features.Community.News.DTOs.NewsSearchRequest
                     {
                         Category = NewsCategory.General,
                         Page = 1,
@@ -215,7 +215,7 @@ public class CacheWarmupService
             var eventsKey = CacheKeys.Community.Events("all", DateTime.Today);
             await _cacheService.GetOrSetAsync(eventsKey, async () =>
             {
-                var request = new CommunityCar.Application.Features.Events.DTOs.EventsSearchRequest
+                var request = new CommunityCar.Application.Features.Community.Events.DTOs.EventsSearchRequest
                 {
                     Location = "all",
                     StartDate = DateTime.Today,
@@ -299,12 +299,12 @@ public class CacheWarmupService
             var feedKey = CacheKeys.Feed.PersonalizedFeed(userId, 1);
             await _cacheService.GetOrSetAsync(feedKey, async () =>
             {
-                var request = new CommunityCar.Application.Features.Feed.DTOs.FeedRequest
+                var request = new CommunityCar.Application.Features.Community.Feed.DTOs.FeedRequest
                 {
                     UserId = userId,
                     Page = 1,
                     PageSize = 20,
-                    SortBy = CommunityCar.Application.Features.Feed.DTOs.FeedSortBy.Newest
+                    SortBy = CommunityCar.Application.Features.Community.Feed.DTOs.FeedSortBy.Newest
                 };
                 return await _feedService.GetPersonalizedFeedAsync(request);
             }, CacheSettings.Feed.PersonalizedFeed);

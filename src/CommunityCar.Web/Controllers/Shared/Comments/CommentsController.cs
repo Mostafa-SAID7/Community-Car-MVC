@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
-using CommunityCar.Application.Features.Interactions.DTOs;
+using CommunityCar.Application.Features.Shared.Interactions.DTOs;
 using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Entities.Account;
 using Microsoft.AspNetCore.Identity;
@@ -113,7 +113,7 @@ public class CommentsController : Controller
             ViewBag.PageSize = pageSize;
             ViewBag.HasMore = totalCount > (page * pageSize);
             
-            return View(comments ?? new List<CommunityCar.Application.Features.Interactions.ViewModels.CommentVM>());
+            return View(comments ?? new List<CommunityCar.Application.Features.Shared.Interactions.ViewModels.CommentVM>());
         }
         catch (Exception ex)
         {
@@ -252,7 +252,7 @@ public class CommentsController : Controller
             var hasMore = totalCount > (page * pageSize);
             Response.Headers.Append("X-Has-More", hasMore.ToString().ToLower());
             
-            return PartialView("_CommentsList", comments ?? new List<CommunityCar.Application.Features.Interactions.ViewModels.CommentVM>());
+            return PartialView("_CommentsList", comments ?? new List<CommunityCar.Application.Features.Shared.Interactions.ViewModels.CommentVM>());
         }
         catch (Exception ex)
         {

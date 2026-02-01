@@ -1,8 +1,8 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Features.Interactions.ViewModels;
-using CommunityCar.Application.Features.Interactions.DTOs;
+using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
+using CommunityCar.Application.Features.Shared.Interactions.DTOs;
 using CommunityCar.Domain.Entities.Shared;
 using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Enums.Account;

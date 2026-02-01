@@ -1,5 +1,5 @@
-using CommunityCar.Application.Features.QA.ViewModels;
-using CommunityCar.Application.Features.QA.DTOs;
+using CommunityCar.Application.Features.Community.QA.ViewModels;
+using CommunityCar.Application.Features.Community.QA.DTOs;
 using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;

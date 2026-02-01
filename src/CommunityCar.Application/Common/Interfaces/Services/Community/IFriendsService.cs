@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Friends.ViewModels;
+using CommunityCar.Application.Features.Community.Friends.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 

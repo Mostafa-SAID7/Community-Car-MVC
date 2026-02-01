@@ -1,8 +1,8 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Reviews.DTOs;
-using CommunityCar.Application.Features.Reviews.ViewModels;
+using CommunityCar.Application.Features.Community.Reviews.DTOs;
+using CommunityCar.Application.Features.Community.Reviews.ViewModels;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Community.Reviews;
 

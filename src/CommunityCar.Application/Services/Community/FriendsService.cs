@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Features.Friends.ViewModels;
+using CommunityCar.Application.Features.Community.Friends.ViewModels;
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Community.Friends;
 using Microsoft.AspNetCore.Identity;

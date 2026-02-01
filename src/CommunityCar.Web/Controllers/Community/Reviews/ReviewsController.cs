@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Reviews.DTOs;
-using CommunityCar.Application.Features.Reviews.ViewModels;
+using CommunityCar.Application.Features.Community.Reviews.DTOs;
+using CommunityCar.Application.Features.Community.Reviews.ViewModels;
 using Microsoft.Extensions.Localization;
 
 namespace CommunityCar.Web.Controllers.Community.Reviews;

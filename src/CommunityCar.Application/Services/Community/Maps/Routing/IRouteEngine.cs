@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Maps.DTOs;
+using CommunityCar.Application.Features.Community.Maps.DTOs;
 using CommunityCar.Application.Services.Maps.Pricing;
 using CommunityCar.Domain.Enums.Community;
 

@@ -1,5 +1,5 @@
-using CommunityCar.Application.Features.Feed.DTOs;
-using CommunityCar.Application.Features.Feed.ViewModels;
+using CommunityCar.Application.Features.Community.Feed.DTOs;
+using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Application.Common.Models;
 
 namespace CommunityCar.Application.Services.Community.Feed;

@@ -1,5 +1,5 @@
-using CommunityCar.Application.Features.Events.DTOs;
-using CommunityCar.Application.Features.Events.ViewModels;
+using CommunityCar.Application.Features.Community.Events.DTOs;
+using CommunityCar.Application.Features.Community.Events.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 

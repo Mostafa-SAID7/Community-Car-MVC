@@ -2,8 +2,8 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Application.Common.Models.Caching;
 using Microsoft.Extensions.Logging;
-using CommunityCar.Application.Features.Feed.DTOs;
-using CommunityCar.Application.Features.Feed.ViewModels;
+using CommunityCar.Application.Features.Community.Feed.DTOs;
+using CommunityCar.Application.Features.Community.Feed.ViewModels;
 
 namespace CommunityCar.Application.Services.BackgroundJobs;
 

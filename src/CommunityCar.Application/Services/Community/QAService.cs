@@ -1,8 +1,8 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Features.QA.ViewModels;
-using CommunityCar.Application.Features.QA.DTOs;
+using CommunityCar.Application.Features.Community.QA.ViewModels;
+using CommunityCar.Application.Features.Community.QA.DTOs;
 using CommunityCar.Domain.Entities.Community.QA;
 using CommunityCar.Domain.Entities.Shared;
 using CommunityCar.Domain.Enums.Shared;
@@ -193,7 +193,7 @@ public class QAService : IQAService
 
         // Calculate pagination info
         var totalPages = (int)Math.Ceiling((double)totalCount / request.PageSize);
-        var pagination = new CommunityCar.Application.Features.QA.DTOs.PaginationInfo
+        var pagination = new CommunityCar.Application.Features.Community.QA.DTOs.PaginationInfo
         {
             CurrentPage = request.Page,
             PageSize = request.PageSize,

@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Features.Events.DTOs;
+using CommunityCar.Application.Features.Community.Events.DTOs;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;

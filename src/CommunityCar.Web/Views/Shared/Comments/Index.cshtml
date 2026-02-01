@@ -1,10 +1,10 @@
-@model IEnumerable<CommunityCar.Application.Features.Interactions.ViewModels.CommentVM>
+@model IEnumerable<CommunityCar.Application.Features.Shared.Interactions.ViewModels.CommentVM>
 @{
     ViewData["Title"] = "Comments";
     var entityId = ViewBag.EntityId?.ToString() ?? "";
     var entityType = ViewBag.EntityType?.ToString() ?? "";
     var totalComments = Model?.Count() ?? 0;
-    var displayedComments = Model?.Take(3) ?? Enumerable.Empty<CommunityCar.Application.Features.Interactions.ViewModels.CommentVM>();
+    var displayedComments = Model?.Take(3) ?? Enumerable.Empty<CommunityCar.Application.Features.Shared.Interactions.ViewModels.CommentVM>();
     var hasMoreComments = totalComments > 3;
 }
 

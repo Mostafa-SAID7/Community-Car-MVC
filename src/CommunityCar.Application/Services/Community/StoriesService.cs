@@ -1,11 +1,11 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Stories.DTOs;
-using CommunityCar.Application.Features.Stories.ViewModels;
+using CommunityCar.Application.Features.Community.Stories.DTOs;
+using CommunityCar.Application.Features.Community.Stories.ViewModels;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Community.Stories;
-using StoriesSearchResponse = CommunityCar.Application.Features.Stories.DTOs.StoriesSearchResponse;
+using StoriesSearchResponse = CommunityCar.Application.Features.Community.Stories.DTOs.StoriesSearchResponse;
 
 namespace CommunityCar.Application.Services.Community;
 

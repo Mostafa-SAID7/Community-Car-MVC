@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Features.Maps.DTOs;
+using CommunityCar.Application.Features.Community.Maps.DTOs;
 using CommunityCar.Domain.Entities.Community.Maps;
 using CommunityCar.Domain.Enums.Community;
 using CommunityCar.Infrastructure.Persistence.Data;

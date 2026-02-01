@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Models;
-using CommunityCar.Application.Features.Guides.ViewModels;
+using CommunityCar.Application.Features.Community.Guides.ViewModels;
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Community.Guides;
 using CommunityCar.Domain.Entities.Shared;
