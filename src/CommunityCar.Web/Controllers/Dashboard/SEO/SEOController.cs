@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.SEO;
-using CommunityCar.Application.Features.SEO.DTOs;
+using CommunityCar.Application.Features.SEO.ViewModels;
 
 namespace CommunityCar.Web.Controllers.Dashboard.SEO;
 
@@ -66,7 +66,7 @@ public class SEOController : Controller
     {
         try
         {
-            var request = new RSSFeedRequest { FeedType = feedType ?? "all" };
+            var request = new RSSFeedVM { FeedType = feedType ?? "all" };
             var xml = await _seoService.GenerateRSSXmlAsync(request);
             return Content(xml, "application/rss+xml");
         }

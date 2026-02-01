@@ -2,7 +2,6 @@ using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Community.Posts.DTOs;
 using CommunityCar.Application.Features.Community.Posts.ViewModels;
 using CommunityCar.Domain.Entities.Community.Posts;
 using CommunityCar.Domain.Enums.Community;
@@ -34,7 +33,7 @@ public class PostsService : IPostsService
         return post == null ? null : _mapper.Map<PostVM>(post);
     }
 
-    public async Task<PostsSearchResponse> SearchPostsAsync(PostsSearchRequest request, CancellationToken cancellationToken = default)
+    public async Task<PostsSearchVM> SearchPostsAsync(PostsSearchVM request, CancellationToken cancellationToken = default)
     {
         var (items, totalCount) = await _unitOfWork.Posts.SearchAsync(
             request.SearchTerm,
@@ -48,16 +47,16 @@ public class PostsService : IPostsService
 
         var summaryItems = _mapper.Map<IEnumerable<PostSummaryVM>>(items);
 
-        return new PostsSearchResponse
+        return new PostsSearchVM
         {
-            Items = summaryItems,
+            Items = summaryItems.ToList(),
             TotalCount = totalCount,
             Page = request.Page,
             PageSize = request.PageSize
         };
     }
 
-    public async Task<PostVM> CreatePostAsync(CreatePostRequest request, CancellationToken cancellationToken = default)
+    public async Task<PostVM> CreatePostAsync(CreatePostVM request, CancellationToken cancellationToken = default)
     {
         var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
         if (!Guid.TryParse(currentUserIdString, out var currentUserId))
@@ -77,7 +76,7 @@ public class PostsService : IPostsService
         return _mapper.Map<PostVM>(post);
     }
 
-    public async Task<PostVM> UpdatePostAsync(Guid id, UpdatePostRequest request, CancellationToken cancellationToken = default)
+    public async Task<PostVM> UpdatePostAsync(Guid id, UpdatePostVM request, CancellationToken cancellationToken = default)
     {
         var post = await _unitOfWork.Posts.GetByIdAsync(id);
         if (post == null) throw new ArgumentException("Post not found");

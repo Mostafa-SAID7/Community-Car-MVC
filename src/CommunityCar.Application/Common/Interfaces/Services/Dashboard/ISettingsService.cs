@@ -1,4 +1,3 @@
-using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
@@ -18,7 +17,7 @@ public interface ISettingsService
     Task<List<SettingsVM>> GetSettingsAsync(Guid userId);
     Task<List<SettingsVM>> GetSettingsByCategoryAsync(Guid userId, string category);
     Task<SettingsVM?> GetSettingAsync(Guid userId, string key);
-    Task<bool> UpdateSettingAsync(Guid userId, SettingsRequest request);
+    Task<bool> UpdateSettingAsync(Guid userId, SettingsVM request);
     Task<bool> ResetToDefaultAsync(Guid userId, string key);
     Task<bool> ResetAllToDefaultAsync(Guid userId);
 }

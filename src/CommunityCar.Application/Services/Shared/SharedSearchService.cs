@@ -1,6 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
-using CommunityCar.Application.Features.Shared.DTOs;
 using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Domain.Enums.Shared;
 using Microsoft.Extensions.Logging;
@@ -45,7 +44,7 @@ public class SharedSearchService : ISharedSearchService
         _logger = logger;
     }
 
-    public async Task<UniversalSearchResultVM> SearchAllAsync(UniversalSearchRequest request)
+    public async Task<UniversalSearchResultVM> SearchAllAsync(UniversalSearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         var result = new UniversalSearchResultVM
@@ -124,7 +123,7 @@ public class SharedSearchService : ISharedSearchService
         }
     }
 
-    public async Task<SearchResultVM<BookmarkVM>> SearchBookmarksAsync(BookmarkSearchRequest request)
+    public async Task<SearchResultVM<BookmarkVM>> SearchBookmarksAsync(BookmarkSearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -141,7 +140,7 @@ public class SharedSearchService : ISharedSearchService
                     (b.Note != null && b.Note.Contains(request.Query, StringComparison.OrdinalIgnoreCase)));
             }
 
-            if (request.HasNotes)
+            if (request.HasNotes == true)
             {
                 filteredBookmarks = filteredBookmarks.Where(b => !string.IsNullOrEmpty(b.Note));
             }
@@ -186,7 +185,7 @@ public class SharedSearchService : ISharedSearchService
         }
     }
 
-    public async Task<SearchResultVM<CommentVM>> SearchCommentsAsync(CommentSearchRequest request)
+    public async Task<SearchResultVM<CommentVM>> SearchCommentsAsync(CommentSearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -203,7 +202,7 @@ public class SharedSearchService : ISharedSearchService
                     c.Content.Contains(request.Query, StringComparison.OrdinalIgnoreCase));
             }
 
-            if (request.TopLevelOnly)
+            if (request.TopLevelOnly == true)
             {
                 filteredComments = filteredComments.Where(c => c.ParentCommentId == null);
             }
@@ -255,12 +254,12 @@ public class SharedSearchService : ISharedSearchService
         }
     }
 
-    public async Task<SearchResultVM<CategoryVM>> SearchCategoriesAsync(CategorySearchRequest request)
+    public async Task<SearchResultVM<CategoryVM>> SearchCategoriesAsync(CategorySearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         try
         {
-            var categories = request.RootCategoriesOnly
+            var categories = request.RootCategoriesOnly == true
                 ? await _categoryRepository.GetRootCategoriesAsync()
                 : await _categoryRepository.GetAllAsync();
 
@@ -317,12 +316,12 @@ public class SharedSearchService : ISharedSearchService
         }
     }
 
-    public async Task<SearchResultVM<TagVM>> SearchTagsAsync(TagSearchRequest request)
+    public async Task<SearchResultVM<TagVM>> SearchTagsAsync(TagSearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         try
         {
-            var tags = request.PopularOnly
+            var tags = request.PopularOnly == true
                 ? await _tagRepository.GetPopularTagsAsync(request.PageSize * 2)
                 : await _tagRepository.GetAllAsync();
 
@@ -388,7 +387,7 @@ public class SharedSearchService : ISharedSearchService
     }
 
     // Implement other search methods...
-    public async Task<SearchResultVM<ReactionVM>> SearchReactionsAsync(ReactionSearchRequest request)
+    public async Task<SearchResultVM<ReactionVM>> SearchReactionsAsync(ReactionSearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -448,7 +447,7 @@ public class SharedSearchService : ISharedSearchService
         }
     }
 
-    public async Task<SearchResultVM<ShareVM>> SearchSharesAsync(ShareSearchRequest request)
+    public async Task<SearchResultVM<ShareVM>> SearchSharesAsync(ShareSearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -517,7 +516,7 @@ public class SharedSearchService : ISharedSearchService
         }
     }
 
-    public async Task<SearchResultVM<RatingVM>> SearchRatingsAsync(RatingSearchRequest request)
+    public async Task<SearchResultVM<RatingVM>> SearchRatingsAsync(RatingSearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -538,12 +537,12 @@ public class SharedSearchService : ISharedSearchService
                 filteredRatings = filteredRatings.Where(r => r.Value <= request.MaxRating.Value);
             }
 
-            if (request.HasReview)
+            if (request.HasReview == true)
             {
                 filteredRatings = filteredRatings.Where(r => !string.IsNullOrEmpty(r.Review));
             }
 
-            if (!string.IsNullOrWhiteSpace(request.Query) && request.HasReview)
+            if (!string.IsNullOrWhiteSpace(request.Query) && request.HasReview == true)
             {
                 filteredRatings = filteredRatings.Where(r => 
                     r.Review != null && r.Review.Contains(request.Query, StringComparison.OrdinalIgnoreCase));
@@ -590,7 +589,7 @@ public class SharedSearchService : ISharedSearchService
         }
     }
 
-    public async Task<SearchResultVM<VoteVM>> SearchVotesAsync(VoteSearchRequest request)
+    public async Task<SearchResultVM<VoteVM>> SearchVotesAsync(VoteSearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -650,7 +649,7 @@ public class SharedSearchService : ISharedSearchService
         }
     }
 
-    public async Task<SearchResultVM<ViewVM>> SearchViewsAsync(ViewSearchRequest request)
+    public async Task<SearchResultVM<ViewVM>> SearchViewsAsync(ViewSearchVM request)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -666,12 +665,12 @@ public class SharedSearchService : ISharedSearchService
                 filteredViews = filteredViews.Where(v => v.IpAddress == request.IpAddress);
             }
 
-            if (request.AuthenticatedOnly)
+            if (request.AuthenticatedOnly == true)
             {
                 filteredViews = filteredViews.Where(v => v.UserId.HasValue);
             }
 
-            if (request.AnonymousOnly)
+            if (request.AnonymousOnly == true)
             {
                 filteredViews = filteredViews.Where(v => !v.UserId.HasValue);
             }
@@ -851,7 +850,7 @@ public class SharedSearchService : ISharedSearchService
     }
 
     // Private helper methods
-    private async Task<List<SearchItemVM>> SearchBookmarksInternalAsync(UniversalSearchRequest request)
+    private async Task<List<SearchItemVM>> SearchBookmarksInternalAsync(UniversalSearchVM request)
     {
         if (request.UserId == null) return new List<SearchItemVM>();
 
@@ -873,7 +872,7 @@ public class SharedSearchService : ISharedSearchService
             .ToList();
     }
 
-    private async Task<List<SearchItemVM>> SearchCommentsInternalAsync(UniversalSearchRequest request)
+    private async Task<List<SearchItemVM>> SearchCommentsInternalAsync(UniversalSearchVM request)
     {
         if (request.UserId == null) return new List<SearchItemVM>();
 
@@ -895,7 +894,7 @@ public class SharedSearchService : ISharedSearchService
             .ToList();
     }
 
-    private async Task<List<SearchItemVM>> SearchCategoriesInternalAsync(UniversalSearchRequest request)
+    private async Task<List<SearchItemVM>> SearchCategoriesInternalAsync(UniversalSearchVM request)
     {
         var categories = await _categoryRepository.GetAllAsync();
         return categories
@@ -915,7 +914,7 @@ public class SharedSearchService : ISharedSearchService
             .ToList();
     }
 
-    private async Task<List<SearchItemVM>> SearchTagsInternalAsync(UniversalSearchRequest request)
+    private async Task<List<SearchItemVM>> SearchTagsInternalAsync(UniversalSearchVM request)
     {
         var tags = string.IsNullOrWhiteSpace(request.Query)
             ? await _tagRepository.GetPopularTagsAsync(50)
@@ -933,7 +932,7 @@ public class SharedSearchService : ISharedSearchService
         }).ToList();
     }
 
-    private async Task<List<SearchItemVM>> SearchReactionsInternalAsync(UniversalSearchRequest request)
+    private async Task<List<SearchItemVM>> SearchReactionsInternalAsync(UniversalSearchVM request)
     {
         if (request.UserId == null) return new List<SearchItemVM>();
 
@@ -951,7 +950,7 @@ public class SharedSearchService : ISharedSearchService
         }).ToList();
     }
 
-    private async Task<List<SearchItemVM>> SearchSharesInternalAsync(UniversalSearchRequest request)
+    private async Task<List<SearchItemVM>> SearchSharesInternalAsync(UniversalSearchVM request)
     {
         if (request.UserId == null) return new List<SearchItemVM>();
 
@@ -973,13 +972,13 @@ public class SharedSearchService : ISharedSearchService
             .ToList();
     }
 
-    private async Task<List<SearchItemVM>> SearchRatingsInternalAsync(UniversalSearchRequest request)
+    private async Task<List<SearchItemVM>> SearchRatingsInternalAsync(UniversalSearchVM request)
     {
         // This would need a method to get user ratings
         return new List<SearchItemVM>();
     }
 
-    private async Task<List<SearchItemVM>> SearchVotesInternalAsync(UniversalSearchRequest request)
+    private async Task<List<SearchItemVM>> SearchVotesInternalAsync(UniversalSearchVM request)
     {
         if (request.UserId == null) return new List<SearchItemVM>();
 
@@ -997,7 +996,7 @@ public class SharedSearchService : ISharedSearchService
         }).ToList();
     }
 
-    private async Task<List<SearchItemVM>> SearchViewsInternalAsync(UniversalSearchRequest request)
+    private async Task<List<SearchItemVM>> SearchViewsInternalAsync(UniversalSearchVM request)
     {
         // Views are typically not searched by users
         return new List<SearchItemVM>();
@@ -1051,7 +1050,7 @@ public class SharedSearchService : ISharedSearchService
         return items;
     }
 
-    private List<SearchFacetVM> GenerateSearchFacets(List<SearchItemVM> items, UniversalSearchRequest request)
+    private List<SearchFacetVM> GenerateSearchFacets(List<SearchItemVM> items, UniversalSearchVM request)
     {
         var facets = new List<SearchFacetVM>();
 

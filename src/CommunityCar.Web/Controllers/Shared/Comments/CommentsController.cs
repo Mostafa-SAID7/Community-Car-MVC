@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
-using CommunityCar.Application.Features.Shared.Interactions.DTOs;
+using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
 using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Entities.Account;
 using Microsoft.AspNetCore.Identity;
@@ -38,7 +38,7 @@ public class CommentsController : Controller
     }
 
     [HttpPost("api/add")]
-    public async Task<IActionResult> AddApi([FromBody] CreateCommentRequest request)
+    public async Task<IActionResult> AddApi([FromBody] CreateCommentVM request)
     {
         try
         {
@@ -174,7 +174,7 @@ public class CommentsController : Controller
                 return Redirect(returnUrl ?? Request.Headers["Referer"].ToString());
             }
 
-            var request = new CreateCommentRequest
+            var request = new CreateCommentVM
             {
                 EntityId = parsedEntityId,
                 EntityType = parsedEntityType,

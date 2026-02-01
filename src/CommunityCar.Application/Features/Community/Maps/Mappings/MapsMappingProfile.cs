@@ -1,5 +1,4 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Community.Maps.DTOs;
 using CommunityCar.Application.Features.Community.Maps.ViewModels;
 using CommunityCar.Domain.Entities.Community.Maps;
 

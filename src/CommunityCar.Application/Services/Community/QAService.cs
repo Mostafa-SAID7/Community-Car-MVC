@@ -2,10 +2,10 @@ using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Features.Community.QA.ViewModels;
-using CommunityCar.Application.Features.Community.QA.DTOs;
 using CommunityCar.Domain.Entities.Community.QA;
 using CommunityCar.Domain.Entities.Shared;
 using CommunityCar.Domain.Enums.Shared;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Services.Community;
 
@@ -20,7 +20,7 @@ public class QAService : IQAService
         _mapper = mapper;
     }
 
-    public async Task<QASearchResponse> SearchQuestionsAsync(QASearchRequest request)
+    public async Task<QASearchVM> SearchQuestionsAsync(QASearchVM request)
     {
         var questions = await _unitOfWork.QA.GetAllAsync();
         var queryable = questions.AsQueryable();
@@ -193,7 +193,7 @@ public class QAService : IQAService
 
         // Calculate pagination info
         var totalPages = (int)Math.Ceiling((double)totalCount / request.PageSize);
-        var pagination = new CommunityCar.Application.Features.Community.QA.DTOs.PaginationInfo
+        var pagination = new CommunityCar.Application.Features.Shared.ViewModels.PaginationVM
         {
             CurrentPage = request.Page,
             PageSize = request.PageSize,
@@ -212,7 +212,7 @@ public class QAService : IQAService
         var availableTags = await GetPopularTagsAsync(50);
         var availableCarMakes = await GetAvailableCarMakesAsync();
 
-        return new QASearchResponse
+        return new QASearchVM
         {
             Questions = questionVMs,
             Pagination = pagination,
@@ -260,7 +260,7 @@ public class QAService : IQAService
 
     public async Task<IEnumerable<QuestionVM>> GetAllQuestionsAsync()
     {
-        var request = new QASearchRequest
+        var request = new QASearchVM
         {
             Page = 1,
             PageSize = 1000,

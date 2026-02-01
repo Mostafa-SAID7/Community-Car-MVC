@@ -1,4 +1,3 @@
-using CommunityCar.Application.Features.Community.Feed.DTOs;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 
 namespace CommunityCar.Application.Services.Community.Feed;
@@ -11,22 +10,22 @@ public interface IFeedContentAggregatorService
     /// <summary>
     /// Gets personalized content based on user interests and friends
     /// </summary>
-    Task<List<FeedItemVM>> GetPersonalizedContentAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds);
+    Task<List<FeedItemVM>> GetPersonalizedContentAsync(FeedVM request, List<string> userInterests, List<Guid> friendIds);
 
     /// <summary>
     /// Gets trending content across all sources
     /// </summary>
-    Task<List<FeedItemVM>> GetTrendingContentAsync(FeedRequest request);
+    Task<List<FeedItemVM>> GetTrendingContentAsync(FeedVM request);
 
     /// <summary>
     /// Gets content from user's friends only
     /// </summary>
-    Task<List<FeedItemVM>> GetFriendsContentAsync(FeedRequest request, List<Guid> friendIds);
+    Task<List<FeedItemVM>> GetFriendsContentAsync(FeedVM request, List<Guid> friendIds);
 
     /// <summary>
     /// Gets content from specific sources (news, reviews, QA, stories)
     /// </summary>
-    Task<List<FeedItemVM>> GetContentFromSourceAsync(FeedRequest request, string contentType, List<string> userInterests, List<Guid> friendIds);
+    Task<List<FeedItemVM>> GetContentFromSourceAsync(FeedVM request, string contentType, List<string> userInterests, List<Guid> friendIds);
     Task<List<FeedItemVM>> GetPopularContentAsync(int hours);
 }
 

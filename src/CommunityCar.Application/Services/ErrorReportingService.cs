@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Features.ErrorReporting.DTOs;
+using CommunityCar.Application.Features.ErrorReporting.ViewModels;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
@@ -10,7 +10,7 @@ public class ErrorReportingService : IErrorReportingService
 {
     private readonly ILogger<ErrorReportingService> _logger;
     private readonly IEmailService _emailService;
-    private readonly List<ErrorReportResponse> _reports = new(); // In-memory storage for demo
+    private readonly List<ErrorReportVM> _reports = new(); // In-memory storage for demo
 
     public ErrorReportingService(
         ILogger<ErrorReportingService> logger,
@@ -20,13 +20,13 @@ public class ErrorReportingService : IErrorReportingService
         _emailService = emailService;
     }
 
-    public async Task<ErrorReportResponse> SubmitErrorReportAsync(ErrorReportRequest request)
+    public async Task<ErrorReportResponseVM> SubmitErrorReportAsync(ErrorReportVM request)
     {
         try
         {
             var ticketId = $"ERR-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString("N")[..8].ToUpper()}";
             
-            var response = new ErrorReportResponse
+            var response = new ErrorReportResponseVM
             {
                 Success = true,
                 Message = "Error report submitted successfully. You will receive updates via email.",
@@ -34,7 +34,11 @@ public class ErrorReportingService : IErrorReportingService
             };
 
             // Store the report (in real app, this would go to database)
-            _reports.Add(response);
+            var reportWithResponse = request;
+            reportWithResponse.Success = true;
+            reportWithResponse.Message = response.Message;
+            reportWithResponse.TicketId = ticketId;
+            _reports.Add(reportWithResponse);
 
             // Send email notification to admin
             await SendErrorReportEmailAsync(request, ticketId);
@@ -47,7 +51,7 @@ public class ErrorReportingService : IErrorReportingService
         {
             _logger.LogError(ex, "Failed to submit error report for error ID: {ErrorId}", request.ErrorId);
             
-            return new ErrorReportResponse
+            return new ErrorReportResponseVM
             {
                 Success = false,
                 Message = "Failed to submit error report. Please try again later.",
@@ -56,7 +60,7 @@ public class ErrorReportingService : IErrorReportingService
         }
     }
 
-    public async Task<bool> SendErrorReportEmailAsync(ErrorReportRequest request, string ticketId)
+    public async Task<bool> SendErrorReportEmailAsync(ErrorReportVM request, string ticketId)
     {
         try
         {
@@ -131,16 +135,16 @@ public class ErrorReportingService : IErrorReportingService
         }
     }
 
-    public async Task<List<ErrorReportResponse>> GetUserErrorReportsAsync(string userId)
+    public async Task<List<ErrorReportVM>> GetUserErrorReportsAsync(string userId)
     {
         // In real app, filter by userId from database
         return await Task.FromResult(_reports.ToList());
     }
 
-    public async Task<ErrorReportResponse> GetErrorReportByTicketIdAsync(string ticketId)
+    public async Task<ErrorReportVM> GetErrorReportByTicketIdAsync(string ticketId)
     {
         var report = _reports.FirstOrDefault(r => r.TicketId == ticketId);
-        return await Task.FromResult(report ?? new ErrorReportResponse());
+        return await Task.FromResult(report ?? new ErrorReportVM());
     }
 }
 

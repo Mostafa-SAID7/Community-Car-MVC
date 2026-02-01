@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Features.Chat.DTOs;
+using CommunityCar.Application.Features.Chat.ViewModels;
 using System.Security.Claims;
 
 namespace CommunityCar.Web.Controllers.Chats;
@@ -58,7 +58,7 @@ public class ChatsController : Controller
     }
 
     [HttpPost("conversations")]
-    public async Task<IActionResult> CreateConversation([FromBody] CreateConversationRequest request)
+    public async Task<IActionResult> CreateConversation([FromBody] CreateConversationVM request)
     {
         request.CreatedBy = GetCurrentUserId();
         var conversation = await _chatService.CreateConversationAsync(request);
@@ -66,7 +66,7 @@ public class ChatsController : Controller
     }
 
     [HttpPost("messages")]
-    public async Task<IActionResult> SendMessage([FromBody] SendMessageRequest request)
+    public async Task<IActionResult> SendMessage([FromBody] SendMessageVM request)
     {
         request.SenderId = GetCurrentUserId();
         var message = await _chatService.SendMessageAsync(request);

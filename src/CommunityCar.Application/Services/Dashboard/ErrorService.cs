@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
 using CommunityCar.Domain.Entities.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -165,7 +166,7 @@ public class ErrorService : IErrorService
         }
     }
 
-    public async Task<ErrorStatsDto> GetErrorStatsAsync(DateTime? date = null)
+    public async Task<ErrorStatsVM> GetErrorStatsAsync(DateTime? date = null)
     {
         var targetDate = date ?? DateTime.UtcNow.Date;
         var nextDay = targetDate.AddDays(1);
@@ -174,7 +175,7 @@ public class ErrorService : IErrorService
             .Where(e => e.CreatedAt >= targetDate && e.CreatedAt < nextDay)
             .ToListAsync();
 
-        var stats = new ErrorStatsDto
+        var stats = new ErrorStatsVM
         {
             Date = targetDate,
             TotalErrors = errors.Sum(e => e.OccurrenceCount),
@@ -210,9 +211,9 @@ public class ErrorService : IErrorService
         return stats;
     }
 
-    public async Task<IEnumerable<ErrorStatsDto>> GetErrorStatsRangeAsync(DateTime startDate, DateTime endDate, string? category = null)
+    public async Task<IEnumerable<ErrorStatsVM>> GetErrorStatsRangeAsync(DateTime startDate, DateTime endDate, string? category = null)
     {
-        var stats = new List<ErrorStatsDto>();
+        var stats = new List<ErrorStatsVM>();
         var currentDate = startDate.Date;
 
         while (currentDate <= endDate.Date)
@@ -225,11 +226,11 @@ public class ErrorService : IErrorService
         return stats;
     }
 
-    public async Task<IEnumerable<ErrorBoundaryDto>> GetBoundaryErrorsAsync(string? boundaryName = null, bool? isRecovered = null)
+    public async Task<IEnumerable<ErrorBoundaryVM>> GetBoundaryErrorsAsync(string? boundaryName = null, bool? isRecovered = null)
     {
         // This is a placeholder implementation
         // In a real application, you would have a separate ErrorBoundary entity
-        var boundaries = new List<ErrorBoundaryDto>();
+        var boundaries = new List<ErrorBoundaryVM>();
 
         var errors = await _context.ErrorLogs
             .Where(e => e.Severity == "Critical")
@@ -239,7 +240,7 @@ public class ErrorService : IErrorService
 
         foreach (var error in errors)
         {
-            boundaries.Add(new ErrorBoundaryDto
+            boundaries.Add(new ErrorBoundaryVM
             {
                 Id = error.Id.ToString(),
                 BoundaryName = error.Category,

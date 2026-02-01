@@ -1,7 +1,6 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.News.DTOs;
 using CommunityCar.Application.Features.Community.News.ViewModels;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Community.News;
@@ -22,7 +21,7 @@ public class NewsService : INewsService
         _newsNotificationService = newsNotificationService;
     }
 
-    public async Task<NewsSearchResponse> SearchNewsAsync(NewsSearchRequest request)
+    public async Task<NewsSearchResponse> SearchNewsAsync(NewsSearchVM request)
     {
         var newsItems = await _unitOfWork.News.GetAllAsync();
         var queryable = newsItems.AsQueryable();

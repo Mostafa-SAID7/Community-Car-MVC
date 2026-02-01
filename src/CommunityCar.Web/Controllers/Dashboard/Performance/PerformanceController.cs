@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.SEO;
-using CommunityCar.Application.Features.SEO.DTOs;
+using CommunityCar.Application.Features.SEO.ViewModels;
 using SystemIO = System.IO;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Performance;
@@ -63,7 +63,7 @@ public class PerformanceController : Controller
     }
 
     [HttpPost("optimize-image")]
-    public async Task<IActionResult> OptimizeImage(IFormFile image, [FromForm] ImageOptimizationOptions options)
+    public async Task<IActionResult> OptimizeImage(IFormFile image, [FromForm] ImageOptimizationOptionsVM options)
     {
         try
         {

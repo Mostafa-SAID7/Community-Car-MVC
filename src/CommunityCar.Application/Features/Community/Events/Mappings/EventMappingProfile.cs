@@ -1,5 +1,4 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Community.Events.DTOs;
 using CommunityCar.Application.Features.Community.Events.ViewModels;
 using CommunityCar.Domain.Entities.Community.Events;
 
@@ -11,7 +10,7 @@ public class EventMappingProfile : AutoMapper.Profile
     {
         CreateMap<Event, EventSummaryVM>()
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.ToList()))
-            .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.ImageUrls.ToList()))
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrls.FirstOrDefault()))
             .ForMember(dest => dest.OrganizerName, opt => opt.Ignore())
             .ForMember(dest => dest.DistanceKm, opt => opt.Ignore());
 
@@ -20,7 +19,7 @@ public class EventMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.ImageUrls.ToList()))
             .ForMember(dest => dest.OrganizerName, opt => opt.Ignore());
 
-        CreateMap<CreateEventRequest, Event>()
+        CreateMap<CreateEventVM, Event>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
@@ -33,7 +32,7 @@ public class EventMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.ImageUrls, opt => opt.Ignore())
             .ForMember(dest => dest.IsCancelled, opt => opt.Ignore());
 
-        CreateMap<UpdateEventRequest, Event>()
+        CreateMap<UpdateEventVM, Event>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.OrganizerId, opt => opt.Ignore())

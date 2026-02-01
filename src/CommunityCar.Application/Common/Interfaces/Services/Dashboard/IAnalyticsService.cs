@@ -1,15 +1,14 @@
-using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
 public interface IAnalyticsService
 {
-    Task<List<UserAnalyticsVM>> GetUserAnalyticsAsync(AnalyticsRequest request);
-    Task<List<ContentAnalyticsVM>> GetContentAnalyticsAsync(AnalyticsRequest request);
+    Task<List<UserAnalyticsVM>> GetUserAnalyticsAsync(AnalyticsVM request);
+    Task<List<ContentAnalyticsVM>> GetContentAnalyticsAsync(AnalyticsVM request);
     Task<UserAnalyticsVM?> GetUserAnalyticsByIdAsync(Guid userId, DateTime date);
     Task<ContentAnalyticsVM?> GetContentAnalyticsByIdAsync(Guid contentId, string contentType, DateTime date);
-    Task<List<ChartDataVM>> GetAnalyticsChartAsync(AnalyticsRequest request);
+    Task<List<ChartDataVM>> GetAnalyticsChartAsync(AnalyticsVM request);
     Task UpdateUserAnalyticsAsync(Guid userId, string action);
     Task UpdateContentAnalyticsAsync(Guid contentId, string contentType, string action);
 
@@ -18,7 +17,7 @@ public interface IAnalyticsService
     Task<List<ChartDataVM>> GetUserGrowthChartAsync(int days);
     Task<List<ChartDataVM>> GetEngagementChartAsync(int days);
     Task<List<ChartDataVM>> GetContentCreationChartAsync(int days);
-    Task<bool> UpdateAnalyticsAsync(AnalyticsRequest request);
+    Task<bool> UpdateAnalyticsAsync(AnalyticsVM request);
 }
 
 

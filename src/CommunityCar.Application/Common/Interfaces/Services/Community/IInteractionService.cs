@@ -1,6 +1,5 @@
 using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
-using CommunityCar.Application.Features.Shared.Interactions.DTOs;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 
@@ -14,17 +13,17 @@ public interface IInteractionService
     Task<List<ReactionVM>> GetEntityReactionsAsync(Guid entityId, EntityType entityType);
 
     // Comment methods
-    Task<CommentVM> AddCommentAsync(CreateCommentRequest request);
+    Task<CommentVM> AddCommentAsync(CreateCommentVM request);
     Task<CommentVM> UpdateCommentAsync(Guid commentId, string newContent, Guid userId);
     Task<bool> DeleteCommentAsync(Guid commentId, Guid userId);
-    Task<CommentVM> AddReplyAsync(CreateReplyRequest request);
+    Task<CommentVM> AddReplyAsync(CreateReplyVM request);
     Task<List<CommentVM>> GetEntityCommentsAsync(Guid entityId, EntityType entityType, int page = 1, int pageSize = 10);
     Task<List<CommentVM>> GetCommentRepliesAsync(Guid parentCommentId);
     Task<int> GetEntityCommentCountAsync(Guid entityId, EntityType entityType);
     Task<int> GetTotalTopLevelCommentCountAsync(Guid entityId, EntityType entityType);
 
     // Share methods
-    Task<ShareResultVM> ShareEntityAsync(ShareEntityRequest request);
+    Task<ShareResultVM> ShareEntityAsync(ShareEntityVM request);
     Task<ShareSummaryVM> GetShareSummaryAsync(Guid entityId, EntityType entityType);
     Task<List<ShareVM>> GetEntitySharesAsync(Guid entityId, EntityType entityType);
     Task<string> GenerateShareUrlAsync(Guid entityId, EntityType entityType);

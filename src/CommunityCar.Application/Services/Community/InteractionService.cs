@@ -2,7 +2,6 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
-using CommunityCar.Application.Features.Shared.Interactions.DTOs;
 using CommunityCar.Domain.Entities.Shared;
 using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Enums.Account;
@@ -168,7 +167,7 @@ public partial class InteractionService : IInteractionService
 
     #region Comments
 
-    public async Task<CommentVM> AddCommentAsync(CreateCommentRequest request)
+    public async Task<CommentVM> AddCommentAsync(CreateCommentVM request)
     {
         var filteredContent = await _moderationService.FilterToxicContentAsync(request.Content);
         var comment = new Comment(filteredContent, request.EntityId, request.EntityType, request.AuthorId, request.ParentCommentId);
@@ -215,7 +214,7 @@ public partial class InteractionService : IInteractionService
         return true;
     }
 
-    public async Task<CommentVM> AddReplyAsync(CreateReplyRequest request)
+    public async Task<CommentVM> AddReplyAsync(CreateReplyVM request)
     {
         var parentComment = await _unitOfWork.Comments.GetByIdAsync(request.ParentCommentId);
         if (parentComment == null)
@@ -285,7 +284,7 @@ public partial class InteractionService : IInteractionService
 
     #region Shares
 
-    public async Task<ShareResultVM> ShareEntityAsync(ShareEntityRequest request)
+    public async Task<ShareResultVM> ShareEntityAsync(ShareEntityVM request)
     {
         try
         {

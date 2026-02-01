@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Dashboard.DTOs;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard;
@@ -31,12 +31,12 @@ public class DashboardController : Controller
         try
         {
             // Get overview data for the last 30 days
-            var overviewRequest = new OverviewRequest
+            var OverviewVM = new OverviewVM
             {
                 TimeRange = "month"
             };
 
-            var overview = await _overviewService.GetOverviewAsync(overviewRequest);
+            var overview = await _overviewService.GetOverviewAsync(OverviewVM);
             var quickStats = await _overviewService.GetQuickStatsAsync();
             var systemHealth = await _monitoringService.GetSystemHealthAsync();
             var isSystemHealthy = await _monitoringService.IsSystemHealthyAsync();

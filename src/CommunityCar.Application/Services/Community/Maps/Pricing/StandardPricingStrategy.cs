@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Community.Maps.DTOs;
+using CommunityCar.Application.Features.Community.Maps.ViewModels;
 
 namespace CommunityCar.Application.Services.Maps.Pricing;
 

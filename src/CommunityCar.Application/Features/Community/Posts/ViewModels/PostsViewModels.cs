@@ -1,73 +1,35 @@
-using CommunityCar.Application.Features.Community.Posts.DTOs;
 using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Features.Community.Posts.ViewModels;
 
-public class PostVM
-{
-    public Guid Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
-    public string Slug { get; set; } = string.Empty;
-    public string? TitleAr { get; set; }
-    public string? ContentAr { get; set; }
-    public PostType Type { get; set; }
-    public string? Category { get; set; }
-    public Guid AuthorId { get; set; }
-    public string AuthorName { get; set; } = string.Empty;
-    public Guid? GroupId { get; set; }
-    public string? GroupName { get; set; }
-    public bool IsPinned { get; set; }
-    public bool AllowComments { get; set; } = true;
-    public List<string> Tags { get; set; } = new();
-    public List<string> ImageUrls { get; set; } = new();
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
-    
-    // Helper properties
-    public string TypeText => Type.ToString();
-    public string TypeIcon => Type switch
-    {
-        PostType.Text => "file-text",
-        PostType.Image => "image",
-        PostType.Video => "video",
-        PostType.Link => "link",
-        PostType.Poll => "bar-chart-3",
-        _ => "file-text"
-    };
-    
-    public string TimeAgo
-    {
-        get
-        {
-            var timeAgo = DateTime.UtcNow - CreatedAt;
-            return timeAgo.TotalDays > 7 ? CreatedAt.ToString("MMM dd, yyyy") :
-                   timeAgo.TotalDays >= 1 ? $"{(int)timeAgo.TotalDays} days ago" :
-                   timeAgo.TotalHours >= 1 ? $"{(int)timeAgo.TotalHours} hours ago" :
-                   "Just now";
-        }
-    }
-    
-    public bool IsEdited => UpdatedAt.HasValue && UpdatedAt > CreatedAt.AddMinutes(5);
-}
-
-public class PostsStatsVM
-{
-    public int TotalPosts { get; set; }
-    public int TextPosts { get; set; }
-    public int ImagePosts { get; set; }
-    public int VideoPosts { get; set; }
-    public int LinkPosts { get; set; }
-    public int PollPosts { get; set; }
-    public List<PostSummaryVM> RecentPosts { get; set; } = new();
-    public Dictionary<string, int> PostsByType { get; set; } = new();
-}
-
-public class PostsIndexVM
-{
-    public PostsSearchRequest SearchRequest { get; set; } = new();
-    public PostsSearchResponse SearchResponse { get; set; } = new();
-    public PostsStatsVM Stats { get; set; } = new();
-}
+/*
+ * POSTS VIEWMODELS REFERENCE FILE
+ * ===============================
+ * 
+ * This file originally contained 7 ViewModels that have been split into separate files for better organization.
+ * All ViewModels are now located in individual files within this same directory.
+ * 
+ * SPLIT FILES:
+ * ============
+ * 
+ * Core ViewModels:
+ * - PostVM.cs
+ * - PostSummaryVM.cs
+ * - PostsStatsVM.cs
+ * - PostsIndexVM.cs
+ * - PostsSearchVM.cs
+ * 
+ * CRUD ViewModels:
+ * - CreatePostVM.cs
+ * - UpdatePostVM.cs
+ * 
+ * USAGE:
+ * ======
+ * Import individual ViewModels as needed:
+ * using CommunityCar.Application.Features.Community.Posts.ViewModels;
+ * 
+ * All ViewModels maintain the same namespace and functionality as before.
+ * This split improves code organization, maintainability, and reduces file size.
+ */
 
 

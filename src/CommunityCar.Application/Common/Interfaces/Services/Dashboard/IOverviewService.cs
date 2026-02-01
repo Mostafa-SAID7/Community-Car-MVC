@@ -1,11 +1,10 @@
-using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 
 public interface IOverviewService
 {
-    Task<OverviewVM> GetOverviewAsync(OverviewRequest? request = null);
+    Task<OverviewVM> GetOverviewAsync(OverviewVM? request = null);
     Task<List<StatsVM>> GetQuickStatsAsync();
     Task<List<ChartDataVM>> GetUserGrowthChartAsync(DateTime startDate, DateTime endDate);
     Task<List<ChartDataVM>> GetContentChartAsync(DateTime startDate, DateTime endDate);

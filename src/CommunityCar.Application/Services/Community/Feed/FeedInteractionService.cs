@@ -159,13 +159,21 @@ public class FeedInteractionService : IFeedInteractionService
                     
                 // Load first 3 comments
                 var comments = await _interactionService.GetEntityCommentsAsync(item.Id, entityType, page: 1, pageSize: 3);
-                item.InitialComments = comments?.ToList() ?? new List<CommentVM>();
+                item.InitialComments = comments?.Select(c => new CommentItemVM
+                {
+                    Id = c.Id,
+                    Content = c.Content,
+                    AuthorName = c.AuthorName,
+                    AuthorAvatar = c.AuthorAvatar,
+                    CreatedAt = c.CreatedAt,
+                    LikeCount = c.LikeCount
+                }).ToList() ?? new List<CommentItemVM>();
             }
             catch (Exception ex)
             {
                 // Log error but don't fail the whole feed
                 Console.WriteLine($"Error loading comments for feed item {item.Id}: {ex.Message}");
-                item.InitialComments = new List<CommentVM>();
+                item.InitialComments = new List<CommentItemVM>();
             }
         }
     }

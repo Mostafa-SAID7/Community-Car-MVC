@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Dashboard.DTOs;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Settings;
@@ -74,7 +74,7 @@ public class SettingsController : Controller
 
     [HttpPost("update")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateSetting(SettingsRequest request)
+    public async Task<IActionResult> UpdateSetting(SettingsVM request)
     {
         if (!ModelState.IsValid)
         {
@@ -221,7 +221,7 @@ public class SettingsController : Controller
 
     [HttpPost("update-api")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateSettingApi([FromBody] SettingsRequest request)
+    public async Task<IActionResult> UpdateSettingApi([FromBody] SettingsVM request)
     {
         if (!ModelState.IsValid)
         {

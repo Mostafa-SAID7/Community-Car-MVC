@@ -1,14 +1,13 @@
-using CommunityCar.Application.Features.Community.Reviews.DTOs;
 using CommunityCar.Application.Features.Community.Reviews.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 
 public interface IReviewsService
 {
-    Task<ReviewsSearchResponse> SearchReviewsAsync(ReviewsSearchRequest request);
+    Task<ReviewsSearchVM> SearchReviewsAsync(ReviewsSearchVM request);
     Task<ReviewVM?> GetByIdAsync(Guid id);
-    Task<ReviewVM> CreateAsync(CreateReviewRequest request);
-    Task<ReviewVM> UpdateAsync(Guid id, UpdateReviewRequest request);
+    Task<ReviewVM> CreateAsync(CreateReviewVM request);
+    Task<ReviewVM> UpdateAsync(Guid id, UpdateReviewVM request);
     Task<bool> DeleteAsync(Guid id);
     Task<bool> ApproveAsync(Guid id);
     Task<bool> FlagAsync(Guid id);

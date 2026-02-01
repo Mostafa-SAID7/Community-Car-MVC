@@ -81,15 +81,15 @@
         
         <div class="flex flex-wrap gap-4">
             <label class="flex items-center gap-2 text-sm font-medium">
-                <input type="checkbox" name="IsUpcomingOnly" value="true" @(Model.SearchRequest.IsUpcomingOnly ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
+                <input type="checkbox" name="IsUpcomingOnly" value="true" @(Model.SearchRequest.IsUpcomingOnly == true ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
                 @Localizer["UpcomingOnly"]
             </label>
             <label class="flex items-center gap-2 text-sm font-medium">
-                <input type="checkbox" name="IsFreeOnly" value="true" @(Model.SearchRequest.IsFreeOnly ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
+                <input type="checkbox" name="IsFreeOnly" value="true" @(Model.SearchRequest.IsFreeOnly == true ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
                 @Localizer["FreeEvents"]
             </label>
             <label class="flex items-center gap-2 text-sm font-medium">
-                <input type="checkbox" name="HasAvailableSpots" value="true" @(Model.SearchRequest.HasAvailableSpots ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
+                <input type="checkbox" name="HasAvailableSpots" value="true" @(Model.SearchRequest.HasAvailableSpots == true ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
                 @Localizer["AvailableSpots"]
             </label>
         </div>

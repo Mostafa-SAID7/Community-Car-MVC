@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.Maps.DTOs;
+using CommunityCar.Application.Features.Community.Maps.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.AspNetCore.Authorization;
 
@@ -25,7 +25,7 @@ public class MapsController : Controller
     }
 
     [HttpGet("poi")]
-    public async Task<IActionResult> POIList([FromQuery] MapsSearchRequest request)
+    public async Task<IActionResult> POIList([FromQuery] MapsSearchVM request)
     {
         var result = await _mapsService.SearchPointsOfInterestAsync(request);
         
@@ -40,7 +40,7 @@ public class MapsController : Controller
     }
 
     [HttpGet("routes")]
-    public async Task<IActionResult> RouteList([FromQuery] MapsRouteSearchRequest request)
+    public async Task<IActionResult> RouteList([FromQuery] MapsRouteSearchVM request)
     {
         var result = await _mapsService.SearchRoutesAsync(request);
         
@@ -99,14 +99,14 @@ public class MapsController : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] MapsSearchRequest request)
+    public async Task<IActionResult> Search([FromQuery] MapsSearchVM request)
     {
         var result = await _mapsService.SearchPointsOfInterestAsync(request);
         return Json(result);
     }
 
     [HttpGet("routes/search")]
-    public async Task<IActionResult> SearchRoutes([FromQuery] MapsRouteSearchRequest request)
+    public async Task<IActionResult> SearchRoutes([FromQuery] MapsRouteSearchVM request)
     {
         var result = await _mapsService.SearchRoutesAsync(request);
         return Json(result);
@@ -155,7 +155,7 @@ public class MapsController : Controller
 
     [HttpPost("poi")]
     [Authorize]
-    public async Task<IActionResult> CreatePointOfInterest([FromBody] CreatePointOfInterestRequest request)
+    public async Task<IActionResult> CreatePointOfInterest([FromBody] CreatePointOfInterestVM request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -177,7 +177,7 @@ public class MapsController : Controller
 
     [HttpPut("poi/{id}")]
     [Authorize]
-    public async Task<IActionResult> UpdatePointOfInterest(Guid id, [FromBody] UpdatePointOfInterestRequest request)
+    public async Task<IActionResult> UpdatePointOfInterest(Guid id, [FromBody] UpdatePointOfInterestVM request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -221,7 +221,7 @@ public class MapsController : Controller
 
     [HttpPost("poi/{id}/checkin")]
     [Authorize]
-    public async Task<IActionResult> CheckIn(Guid id, [FromBody] CreateCheckInRequest request)
+    public async Task<IActionResult> CheckIn(Guid id, [FromBody] CreateCheckInVM request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -254,7 +254,7 @@ public class MapsController : Controller
 
     [HttpPost("routes")]
     [Authorize]
-    public async Task<IActionResult> CreateRoute([FromBody] CreateRouteRequest request)
+    public async Task<IActionResult> CreateRoute([FromBody] CreateRouteVM request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -276,7 +276,7 @@ public class MapsController : Controller
 
     [HttpPut("routes/{id}")]
     [Authorize]
-    public async Task<IActionResult> UpdateRoute(Guid id, [FromBody] UpdateRouteRequest request)
+    public async Task<IActionResult> UpdateRoute(Guid id, [FromBody] UpdateRouteVM request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);

@@ -1,6 +1,6 @@
-using CommunityCar.Application.Features.Community.Feed.DTOs;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Application.Common.Models;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Services.Community.Feed;
 
@@ -52,7 +52,7 @@ public interface IFeedUtilityService
     /// <summary>
     /// Creates pagination information
     /// </summary>
-    PaginationInfo CreatePaginationInfo(int currentPage, int pageSize, int totalItems);
+    CommunityCar.Application.Common.Models.PaginationInfo CreatePaginationInfo(int currentPage, int pageSize, int totalItems);
 
     /// <summary>
     /// Calculates time remaining for stories

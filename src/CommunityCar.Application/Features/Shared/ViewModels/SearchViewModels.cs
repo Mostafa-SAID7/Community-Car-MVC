@@ -2,6 +2,18 @@ using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Application.Features.Shared.ViewModels;
 
+public class PaginationVM
+{
+    public int CurrentPage { get; set; }
+    public int PageSize { get; set; }
+    public int TotalItems { get; set; }
+    public int TotalPages { get; set; }
+    public bool HasPreviousPage { get; set; }
+    public bool HasNextPage { get; set; }
+    public int StartItem { get; set; }
+    public int EndItem { get; set; }
+}
+
 public class SearchResultVM<T>
 {
     public List<T> Items { get; set; } = new();
@@ -152,6 +164,7 @@ public class CommentVM
     public DateTime? UpdatedAt { get; set; }
     public List<CommentVM> Replies { get; set; } = new();
     public int ReplyCount { get; set; }
+    public int LikeCount { get; set; }
 }
 
 public class CategoryVM
@@ -233,6 +246,236 @@ public class ViewVM
     public string IpAddress { get; set; } = string.Empty;
     public string UserAgent { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
+}
+
+// Search ViewModels
+public class UniversalSearchVM
+{
+    public string? Query { get; set; }
+    public List<EntityType> EntityTypes { get; set; } = new();
+    public List<string> Categories { get; set; } = new();
+    public List<string> Tags { get; set; } = new();
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "Relevance";
+    public string SortOrder { get; set; } = "desc";
+    
+    // Additional search properties
+    public Guid? UserId { get; set; }
+    
+    // Results
+    public List<SearchItemVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+}
+
+public class BookmarkSearchVM
+{
+    public string? Query { get; set; }
+    public EntityType? EntityType { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "CreatedAt";
+    public string SortOrder { get; set; } = "desc";
+    
+    // Additional search properties
+    public Guid? UserId { get; set; }
+    public bool? HasNotes { get; set; }
+    
+    // Results
+    public List<BookmarkVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+}
+
+public class CommentSearchVM
+{
+    public string? Query { get; set; }
+    public EntityType? EntityType { get; set; }
+    public Guid? EntityId { get; set; }
+    public Guid? AuthorId { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "CreatedAt";
+    public string SortOrder { get; set; } = "desc";
+    
+    // Additional search properties
+    public Guid? UserId { get; set; }
+    public bool? TopLevelOnly { get; set; }
+    public int? MinLength { get; set; }
+    public int? MaxLength { get; set; }
+    
+    // Results
+    public List<CommentVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+}
+
+public class CategorySearchVM
+{
+    public string? Query { get; set; }
+    public Guid? ParentCategoryId { get; set; }
+    public int? MinItemCount { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "Name";
+    public string SortOrder { get; set; } = "asc";
+    
+    // Additional search properties
+    public bool? RootCategoriesOnly { get; set; }
+    
+    // Results
+    public List<CategoryVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+}
+
+public class TagSearchVM
+{
+    public string? Query { get; set; }
+    public int? MinUsageCount { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "UsageCount";
+    public string SortOrder { get; set; } = "desc";
+    
+    // Additional search properties
+    public bool? PopularOnly { get; set; }
+    public string? StartsWith { get; set; }
+    public int? MaxUsageCount { get; set; }
+    
+    // Results
+    public List<TagVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+}
+
+public class ReactionSearchVM
+{
+    public EntityType? EntityType { get; set; }
+    public Guid? EntityId { get; set; }
+    public Guid? UserId { get; set; }
+    public ReactionType? Type { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "CreatedAt";
+    public string SortOrder { get; set; } = "desc";
+    
+    // Additional search properties
+    public string? Query { get; set; }
+    public ReactionType? ReactionType { get; set; }
+    public List<ReactionType>? ReactionTypes { get; set; }
+    
+    // Results
+    public List<ReactionVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+}
+
+public class ShareSearchVM
+{
+    public EntityType? EntityType { get; set; }
+    public Guid? EntityId { get; set; }
+    public Guid? UserId { get; set; }
+    public ShareType? ShareType { get; set; }
+    public string? Platform { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "CreatedAt";
+    public string SortOrder { get; set; } = "desc";
+    
+    // Additional search properties
+    public string? Query { get; set; }
+    public List<string>? Platforms { get; set; }
+    
+    // Results
+    public List<ShareVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+}
+
+public class RatingSearchVM
+{
+    public EntityType? EntityType { get; set; }
+    public Guid? EntityId { get; set; }
+    public Guid? UserId { get; set; }
+    public int? MinValue { get; set; }
+    public int? MaxValue { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "CreatedAt";
+    public string SortOrder { get; set; } = "desc";
+    
+    // Additional search properties
+    public string? Query { get; set; }
+    public int? MinRating { get; set; }
+    public int? MaxRating { get; set; }
+    public bool? HasReview { get; set; }
+    
+    // Results
+    public List<RatingVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+}
+
+public class VoteSearchVM
+{
+    public EntityType? EntityType { get; set; }
+    public Guid? EntityId { get; set; }
+    public Guid? UserId { get; set; }
+    public VoteType? Type { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "CreatedAt";
+    public string SortOrder { get; set; } = "desc";
+    
+    // Additional search properties
+    public string? Query { get; set; }
+    public VoteType? VoteType { get; set; }
+    public List<VoteType>? VoteTypes { get; set; }
+    
+    // Results
+    public List<VoteVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+}
+
+public class ViewSearchVM
+{
+    public EntityType? EntityType { get; set; }
+    public Guid? EntityId { get; set; }
+    public Guid? UserId { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 20;
+    public string SortBy { get; set; } = "CreatedAt";
+    public string SortOrder { get; set; } = "desc";
+    
+    // Additional search properties
+    public string? Query { get; set; }
+    public string? IpAddress { get; set; }
+    public bool? AuthenticatedOnly { get; set; }
+    public bool? AnonymousOnly { get; set; }
+    
+    // Results
+    public List<ViewVM> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
 }
 
 

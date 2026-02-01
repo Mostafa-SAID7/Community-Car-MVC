@@ -1,5 +1,4 @@
 using AutoMapper;
-using CommunityCar.Application.Features.Community.Posts.DTOs;
 using CommunityCar.Application.Features.Community.Posts.ViewModels;
 using CommunityCar.Domain.Entities.Community.Posts;
 
@@ -26,7 +25,7 @@ public class PostsMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => new List<string>()))
             .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => new List<string>()));
 
-        CreateMap<CreatePostRequest, Post>()
+        CreateMap<CreatePostVM, Post>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
@@ -35,7 +34,7 @@ public class PostsMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.DeletedAt, opt => opt.Ignore())
             .ForMember(dest => dest.DeletedBy, opt => opt.Ignore());
 
-        CreateMap<UpdatePostRequest, Post>()
+        CreateMap<UpdatePostVM, Post>()
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.AuthorId, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())

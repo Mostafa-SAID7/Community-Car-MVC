@@ -1,12 +1,12 @@
-using CommunityCar.Application.Common.Models.Notifications;
+using CommunityCar.Application.Features.Notifications.ViewModels;
 using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Communication;
 
 public interface INotificationService
 {
-    Task SendNotificationAsync(NotificationRequest request);
-    Task SendBulkNotificationAsync(BulkNotificationRequest request);
+    Task SendNotificationAsync(NotificationVM request);
+    Task SendBulkNotificationAsync(BulkNotificationVM request);
     Task SendToUserAsync(Guid userId, string title, string message, NotificationType type, string? actionUrl = null);
     Task SendToUsersAsync(List<Guid> userIds, string title, string message, NotificationType type, string? actionUrl = null);
     Task NotifyNewMessageAsync(Guid userId, string senderName, string conversationId);

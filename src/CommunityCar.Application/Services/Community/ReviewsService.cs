@@ -1,10 +1,11 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.Reviews.DTOs;
 using CommunityCar.Application.Features.Community.Reviews.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Community.Reviews;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Services.Community;
 
@@ -19,7 +20,7 @@ public class ReviewsService : IReviewsService
         _mapper = mapper;
     }
 
-    public async Task<ReviewsSearchResponse> SearchReviewsAsync(ReviewsSearchRequest request)
+    public async Task<ReviewsSearchVM> SearchReviewsAsync(ReviewsSearchVM request)
     {
         var reviews = await _unitOfWork.Reviews.GetAllAsync();
         var queryable = reviews.AsQueryable();
@@ -140,12 +141,22 @@ public class ReviewsService : IReviewsService
         var stats = await GetReviewsStatsAsync();
         var availableCarMakes = await GetAvailableCarMakesAsync();
 
-        return new ReviewsSearchResponse
+        return new ReviewsSearchVM
         {
             Reviews = reviewVMs,
-            Pagination = pagination,
+            Pagination = new PaginationVM
+            {
+                CurrentPage = pagination.CurrentPage,
+                PageSize = pagination.PageSize,
+                TotalItems = pagination.TotalItems,
+                TotalPages = pagination.TotalPages,
+                HasPreviousPage = pagination.HasPreviousPage,
+                HasNextPage = pagination.HasNextPage,
+                StartItem = pagination.StartItem,
+                EndItem = pagination.EndItem
+            },
             Stats = stats,
-            AvailableCarMakes = availableCarMakes
+            AvailableCarMakes = availableCarMakes.ToList()
         };
     }
 
@@ -159,7 +170,7 @@ public class ReviewsService : IReviewsService
         return vm;
     }
 
-    public async Task<ReviewVM> CreateAsync(CreateReviewRequest request)
+    public async Task<ReviewVM> CreateAsync(CreateReviewVM request)
     {
         var review = new Review(request.TargetId, request.TargetType, request.Rating, request.Title, request.Comment, request.ReviewerId);
         
@@ -170,7 +181,7 @@ public class ReviewsService : IReviewsService
         
         review.SetPurchaseInfo(request.IsVerifiedPurchase, request.PurchaseDate, request.PurchasePrice);
         review.SetRecommendation(request.IsRecommended);
-        review.SetCarInfo(request.CarMake, request.CarModel, request.CarYear, request.Mileage, request.OwnershipDuration);
+        review.SetCarInfo(request.CarMake, request.CarModel, request.CarYear, request.Mileage, request.OwnershipDuration?.ToString());
         review.SetDetailedRatings(request.QualityRating, request.ValueRating, request.ReliabilityRating, request.PerformanceRating, request.ComfortRating);
 
         foreach (var imageUrl in request.ImageUrls)
@@ -188,7 +199,7 @@ public class ReviewsService : IReviewsService
         return _mapper.Map<ReviewVM>(review);
     }
 
-    public async Task<ReviewVM> UpdateAsync(Guid id, UpdateReviewRequest request)
+    public async Task<ReviewVM> UpdateAsync(Guid id, UpdateReviewVM request)
     {
         var review = await _unitOfWork.Reviews.GetByIdAsync(id);
         if (review == null)
@@ -202,7 +213,7 @@ public class ReviewsService : IReviewsService
         }
         review.UpdateRating(request.Rating);
         review.SetRecommendation(request.IsRecommended);
-        review.SetCarInfo(request.CarMake, request.CarModel, request.CarYear, request.Mileage, request.OwnershipDuration);
+        review.SetCarInfo(request.CarMake, request.CarModel, request.CarYear, request.Mileage, request.OwnershipDuration?.ToString());
         review.SetDetailedRatings(request.QualityRating, request.ValueRating, request.ReliabilityRating, request.PerformanceRating, request.ComfortRating);
 
         // Update images, pros, and cons

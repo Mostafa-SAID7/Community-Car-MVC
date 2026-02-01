@@ -2,7 +2,6 @@ using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Community.Groups.DTOs;
 using CommunityCar.Application.Features.Community.Groups.ViewModels;
 using CommunityCar.Domain.Entities.Community.Groups;
 using CommunityCar.Domain.Enums.Community;
@@ -34,7 +33,7 @@ public class GroupsService : IGroupsService
         return group == null ? null : _mapper.Map<GroupVM>(group);
     }
 
-    public async Task<GroupsSearchResponse> SearchGroupsAsync(GroupsSearchRequest request, CancellationToken cancellationToken = default)
+    public async Task<GroupsSearchVM> SearchGroupsAsync(GroupsSearchVM request, CancellationToken cancellationToken = default)
     {
         var (items, totalCount) = await _unitOfWork.Groups.SearchAsync(
             request.SearchTerm,
@@ -47,16 +46,16 @@ public class GroupsService : IGroupsService
 
         var summaryItems = _mapper.Map<IEnumerable<GroupSummaryVM>>(items);
 
-        return new GroupsSearchResponse
+        return new GroupsSearchVM
         {
-            Items = summaryItems,
+            Items = summaryItems.ToList(),
             TotalCount = totalCount,
             Page = request.Page,
             PageSize = request.PageSize
         };
     }
 
-    public async Task<GroupVM> CreateGroupAsync(CreateGroupRequest request, CancellationToken cancellationToken = default)
+    public async Task<GroupVM> CreateGroupAsync(CreateGroupVM request, CancellationToken cancellationToken = default)
     {
         var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
         if (!Guid.TryParse(currentUserIdString, out var currentUserId))
@@ -101,7 +100,7 @@ public class GroupsService : IGroupsService
         return _mapper.Map<GroupVM>(group);
     }
 
-    public async Task<GroupVM> UpdateGroupAsync(Guid id, UpdateGroupRequest request, CancellationToken cancellationToken = default)
+    public async Task<GroupVM> UpdateGroupAsync(Guid id, UpdateGroupVM request, CancellationToken cancellationToken = default)
     {
         var group = await _unitOfWork.Groups.GetByIdAsync(id);
         if (group == null) throw new ArgumentException("Group not found");

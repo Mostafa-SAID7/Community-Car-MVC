@@ -190,7 +190,7 @@
             }
 
             <!-- Vehicle Details -->
-            @if (Model.Mileage.HasValue || !string.IsNullOrEmpty(Model.OwnershipDuration) || Model.PurchaseDate.HasValue)
+            @if (Model.Mileage.HasValue || Model.OwnershipDuration.HasValue || Model.PurchaseDate.HasValue)
             {
                 <div class="bg-background/50 rounded-2xl p-6 mb-8">
                     <h4 class="text-lg font-black text-foreground mb-4">@Localizer["VehicleDetails"]</h4>
@@ -202,11 +202,11 @@
                                 <div class="font-semibold">@Model.Mileage.Value.ToString("N0") @Localizer["Miles"]</div>
                             </div>
                         }
-                        @if (!string.IsNullOrEmpty(Model.OwnershipDuration))
+                        @if (Model.OwnershipDuration.HasValue)
                         {
                             <div>
                                 <div class="text-muted-foreground">@Localizer["OwnershipDuration"]</div>
-                                <div class="font-semibold">@Model.OwnershipDuration</div>
+                                <div class="font-semibold">@Model.OwnershipDuration.Value @Localizer["Months"]</div>
                             </div>
                         }
                         @if (Model.PurchaseDate.HasValue)

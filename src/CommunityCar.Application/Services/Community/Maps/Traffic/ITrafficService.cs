@@ -1,18 +1,18 @@
-using CommunityCar.Application.Services.Maps.Routing;
+using CommunityCar.Application.Features.Community.Maps.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Services.Maps.Traffic;
 
 public interface ITrafficService
 {
-    Task<List<TrafficConditionDto>> GetLiveTrafficAsync(double latitude, double longitude, double radiusKm = 10);
-    Task<List<TrafficConditionDto>> GetTrafficOnRouteAsync(string routeGeometry);
+    Task<List<TrafficConditionVM>> GetLiveTrafficAsync(double latitude, double longitude, double radiusKm = 10);
+    Task<List<TrafficConditionVM>> GetTrafficOnRouteAsync(string routeGeometry);
     Task UpdateTrafficConditionsAsync();
-    Task<bool> ReportTrafficConditionAsync(ReportTrafficConditionRequest request);
-    Task<List<TrafficConditionDto>> GetTrafficAlertsAsync(Guid userId);
+    Task<bool> ReportTrafficConditionAsync(ReportTrafficConditionVM request);
+    Task<List<TrafficConditionVM>> GetTrafficAlertsAsync(Guid userId);
 }
 
-public class ReportTrafficConditionRequest
+public class ReportTrafficConditionVM
 {
     public Guid UserId { get; set; }
     public double Latitude { get; set; }

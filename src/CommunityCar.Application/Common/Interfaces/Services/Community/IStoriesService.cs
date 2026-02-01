@@ -1,15 +1,14 @@
-using CommunityCar.Application.Features.Community.Stories.DTOs;
 using CommunityCar.Application.Features.Community.Stories.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 
 public interface IStoriesService
 {
-    Task<StoriesSearchResponse> SearchStoriesAsync(StoriesSearchRequest request);
+    Task<StoriesSearchVM> SearchStoriesAsync(StoriesSearchVM request);
     Task<StoryVM?> GetByIdAsync(Guid id);
     Task<StoryVM?> GetBySlugAsync(string slug);
-    Task<StoryVM> CreateAsync(CreateStoryRequest request);
-    Task<StoryVM> UpdateAsync(Guid id, UpdateStoryRequest request);
+    Task<StoryVM> CreateAsync(CreateStoryVM request);
+    Task<StoryVM> UpdateAsync(Guid id, UpdateStoryVM request);
     Task<bool> DeleteAsync(Guid id);
     Task<bool> ArchiveAsync(Guid id);
     Task<bool> RestoreAsync(Guid id);

@@ -1,5 +1,4 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
@@ -71,7 +70,7 @@ public class SettingsService : ISettingsService
         return await GetSettingAsync(key);
     }
 
-    public async Task<bool> UpdateSettingAsync(Guid userId, SettingsRequest request)
+    public async Task<bool> UpdateSettingAsync(Guid userId, SettingsVM request)
     {
         await Task.CompletedTask;
         return true;

@@ -1,5 +1,4 @@
 using CommunityCar.Domain.Enums.Shared;
-using CommunityCar.Application.Features.Shared.DTOs;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Shared;
@@ -7,18 +6,18 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Shared;
 public interface ISharedSearchService
 {
     // Universal search across all shared entities
-    Task<UniversalSearchResultVM> SearchAllAsync(UniversalSearchRequest request);
+    Task<UniversalSearchResultVM> SearchAllAsync(UniversalSearchVM request);
     
     // Entity-specific searches
-    Task<SearchResultVM<BookmarkVM>> SearchBookmarksAsync(BookmarkSearchRequest request);
-    Task<SearchResultVM<CommentVM>> SearchCommentsAsync(CommentSearchRequest request);
-    Task<SearchResultVM<CategoryVM>> SearchCategoriesAsync(CategorySearchRequest request);
-    Task<SearchResultVM<TagVM>> SearchTagsAsync(TagSearchRequest request);
-    Task<SearchResultVM<ReactionVM>> SearchReactionsAsync(ReactionSearchRequest request);
-    Task<SearchResultVM<ShareVM>> SearchSharesAsync(ShareSearchRequest request);
-    Task<SearchResultVM<RatingVM>> SearchRatingsAsync(RatingSearchRequest request);
-    Task<SearchResultVM<VoteVM>> SearchVotesAsync(VoteSearchRequest request);
-    Task<SearchResultVM<ViewVM>> SearchViewsAsync(ViewSearchRequest request);
+    Task<SearchResultVM<BookmarkVM>> SearchBookmarksAsync(BookmarkSearchVM request);
+    Task<SearchResultVM<CommentVM>> SearchCommentsAsync(CommentSearchVM request);
+    Task<SearchResultVM<CategoryVM>> SearchCategoriesAsync(CategorySearchVM request);
+    Task<SearchResultVM<TagVM>> SearchTagsAsync(TagSearchVM request);
+    Task<SearchResultVM<ReactionVM>> SearchReactionsAsync(ReactionSearchVM request);
+    Task<SearchResultVM<ShareVM>> SearchSharesAsync(ShareSearchVM request);
+    Task<SearchResultVM<RatingVM>> SearchRatingsAsync(RatingSearchVM request);
+    Task<SearchResultVM<VoteVM>> SearchVotesAsync(VoteSearchVM request);
+    Task<SearchResultVM<ViewVM>> SearchViewsAsync(ViewSearchVM request);
     
     // Advanced search features
     Task<List<SearchSuggestionVM>> GetSearchSuggestionsAsync(string query, int maxResults = 10);

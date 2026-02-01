@@ -50,4 +50,21 @@ public class TypingIndicatorVM
     public bool IsTyping { get; set; }
 }
 
+public class CreateConversationVM
+{
+    public string Title { get; set; } = string.Empty;
+    public bool IsGroupChat { get; set; }
+    public List<Guid> ParticipantIds { get; set; } = new();
+    public string? InitialMessage { get; set; }
+    public Guid CreatedBy { get; set; }
+}
+
+public class SendMessageVM
+{
+    public Guid ConversationId { get; set; }
+    public string Content { get; set; } = string.Empty;
+    public List<string>? Attachments { get; set; }
+    public Guid SenderId { get; set; }
+}
+
 

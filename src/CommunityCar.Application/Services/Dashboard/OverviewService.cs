@@ -1,12 +1,11 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
 
 public class OverviewService : IOverviewService
 {
-    public async Task<OverviewVM> GetOverviewAsync(OverviewRequest? request = null)
+    public async Task<OverviewVM> GetOverviewAsync(OverviewVM? request = null)
     {
         var startDate = request?.StartDate ?? DateTime.UtcNow.AddDays(-30);
         var endDate = request?.EndDate ?? DateTime.UtcNow;
@@ -67,7 +66,11 @@ public class OverviewService : IOverviewService
 
     public async Task<StatsVM> GetStatsAsync(DateTime? startDate, DateTime? endDate)
     {
-        var overview = await GetOverviewAsync(new OverviewRequest { StartDate = startDate, EndDate = endDate });
+        var overview = await GetOverviewAsync(new OverviewVM 
+        { 
+            StartDate = startDate ?? DateTime.UtcNow.AddDays(-30), 
+            EndDate = endDate ?? DateTime.UtcNow 
+        });
         return overview.Stats;
     }
 

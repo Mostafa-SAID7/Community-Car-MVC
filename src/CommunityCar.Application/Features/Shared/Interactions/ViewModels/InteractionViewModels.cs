@@ -56,6 +56,7 @@ public class CommentVM
     public Guid? ParentCommentId { get; set; }
     public List<CommentVM> Replies { get; set; } = new();
     public int ReplyCount { get; set; }
+    public int LikeCount { get; set; }
     public ReactionSummaryVM Reactions { get; set; } = new();
 }
 
@@ -107,6 +108,33 @@ public class InteractionSummaryVM
     public bool CanComment { get; set; }
     public bool CanShare { get; set; }
     public bool CanReact { get; set; }
+}
+
+public class CreateCommentVM
+{
+    public Guid EntityId { get; set; }
+    public EntityType EntityType { get; set; }
+    public Guid AuthorId { get; set; }
+    public string Content { get; set; } = string.Empty;
+    public Guid? ParentCommentId { get; set; }
+}
+
+public class CreateReplyVM
+{
+    public Guid CommentId { get; set; }
+    public Guid ParentCommentId { get; set; }
+    public Guid AuthorId { get; set; }
+    public string Content { get; set; } = string.Empty;
+}
+
+public class ShareEntityVM
+{
+    public Guid EntityId { get; set; }
+    public EntityType EntityType { get; set; }
+    public Guid UserId { get; set; }
+    public ShareType ShareType { get; set; }
+    public string? ShareMessage { get; set; }
+    public string? Platform { get; set; }
 }
 
 

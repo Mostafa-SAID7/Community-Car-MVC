@@ -2,7 +2,6 @@ using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Community.Events.DTOs;
 using CommunityCar.Application.Features.Community.Events.ViewModels;
 using CommunityCar.Domain.Entities.Community.Events;
 
@@ -33,13 +32,13 @@ public class EventsService : IEventsService
         return eventEntity == null ? null : _mapper.Map<EventVM>(eventEntity);
     }
 
-    public async Task<EventsSearchResponse> SearchEventsAsync(EventsSearchRequest request, CancellationToken cancellationToken = default)
+    public async Task<EventsSearchVM> SearchEventsAsync(EventsSearchVM request, CancellationToken cancellationToken = default)
     {
         var (items, totalCount) = await _unitOfWork.Events.SearchAsync(request, cancellationToken);
         
         var summaryItems = items.Select(eventEntity => 
         {
-            var summary = _mapper.Map<CommunityCar.Application.Features.Community.Events.DTOs.EventSummaryVM>(eventEntity);
+            var summary = _mapper.Map<CommunityCar.Application.Features.Community.Events.ViewModels.EventSummaryVM>(eventEntity);
             
             // Calculate distance if location provided
             if (request.Latitude.HasValue && request.Longitude.HasValue && 
@@ -53,16 +52,16 @@ public class EventsService : IEventsService
             return summary;
         });
 
-        return new EventsSearchResponse
+        return new EventsSearchVM
         {
-            Items = summaryItems,
+            Items = summaryItems.ToList(),
             TotalCount = totalCount,
             Page = request.Page,
             PageSize = request.PageSize
         };
     }
 
-    public async Task<EventVM> CreateEventAsync(CreateEventRequest request, CancellationToken cancellationToken = default)
+    public async Task<EventVM> CreateEventAsync(CreateEventVM request, CancellationToken cancellationToken = default)
     {
         var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
         if (!Guid.TryParse(currentUserIdString, out var currentUserId))
@@ -124,7 +123,7 @@ public class EventsService : IEventsService
         return _mapper.Map<EventVM>(eventEntity);
     }
 
-    public async Task<EventVM> UpdateEventAsync(Guid id, UpdateEventRequest request, CancellationToken cancellationToken = default)
+    public async Task<EventVM> UpdateEventAsync(Guid id, UpdateEventVM request, CancellationToken cancellationToken = default)
     {
         var eventEntity = await _unitOfWork.Events.GetByIdAsync(id);
         if (eventEntity == null) throw new ArgumentException("Event not found");
@@ -225,8 +224,8 @@ public class EventsService : IEventsService
             UpcomingEvents = upcomingEvents.Count,
             ActiveEvents = activeEvents.Count,
             TotalAttendees = allEvents.Sum(e => e.AttendeeCount),
-            FeaturedEvents = _mapper.Map<List<CommunityCar.Application.Features.Community.Events.DTOs.EventSummaryVM>>(upcomingEvents.OrderByDescending(e => e.AttendeeCount).Take(3)),
-            UpcomingEventsList = _mapper.Map<List<CommunityCar.Application.Features.Community.Events.DTOs.EventSummaryVM>>(upcomingEvents.OrderBy(e => e.StartTime).Take(5)),
+            FeaturedEvents = _mapper.Map<List<CommunityCar.Application.Features.Community.Events.ViewModels.EventSummaryVM>>(upcomingEvents.OrderByDescending(e => e.AttendeeCount).Take(3)),
+            UpcomingEventsList = _mapper.Map<List<CommunityCar.Application.Features.Community.Events.ViewModels.EventSummaryVM>>(upcomingEvents.OrderBy(e => e.StartTime).Take(5)),
             EventsByTag = allEvents
                 .SelectMany(e => e.Tags)
                 .GroupBy(tag => tag)

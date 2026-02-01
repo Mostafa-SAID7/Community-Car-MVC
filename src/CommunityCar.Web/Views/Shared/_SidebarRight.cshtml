@@ -1,5 +1,6 @@
+@using CommunityCar.Application.Features.Community.Feed.ViewModels
 @{
-    var feedData = ViewData["FeedSidebarData"] as FeedResponse;
+    var feedData = ViewData["FeedSidebarData"] as FeedResponseVM;
     var currentUserId = ViewBag.CurrentUserId as Guid?;
 }
 

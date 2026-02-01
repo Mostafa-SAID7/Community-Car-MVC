@@ -1,13 +1,13 @@
-using CommunityCar.Application.Features.ErrorReporting.DTOs;
+using CommunityCar.Application.Features.ErrorReporting.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services;
 
 public interface IErrorReportingService
 {
-    Task<ErrorReportResponse> SubmitErrorReportAsync(ErrorReportRequest request);
-    Task<bool> SendErrorReportEmailAsync(ErrorReportRequest request, string ticketId);
-    Task<List<ErrorReportResponse>> GetUserErrorReportsAsync(string userId);
-    Task<ErrorReportResponse> GetErrorReportByTicketIdAsync(string ticketId);
+    Task<ErrorReportResponseVM> SubmitErrorReportAsync(ErrorReportVM request);
+    Task<bool> SendErrorReportEmailAsync(ErrorReportVM request, string ticketId);
+    Task<List<ErrorReportVM>> GetUserErrorReportsAsync(string userId);
+    Task<ErrorReportVM> GetErrorReportByTicketIdAsync(string ticketId);
 }
 
 

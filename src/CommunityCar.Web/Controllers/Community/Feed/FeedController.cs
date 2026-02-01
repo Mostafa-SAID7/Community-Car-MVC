@@ -1,9 +1,10 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
-using CommunityCar.Application.Features.Community.Feed.DTOs;
-using CommunityCar.Application.Features.Analytics.DTOs;
+using CommunityCar.Application.Features.Community.Feed.ViewModels;
+using CommunityCar.Application.Features.Analytics.ViewModels;
 using CommunityCar.Application.Features.Error.ViewModels;
+using CommunityCar.Domain.Enums.Community;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -44,10 +45,10 @@ public class FeedController : Controller
             pageSize = page == 1 ? 20 : 10;
         }
         
-        var request = new FeedRequest
+        var request = new FeedVM
         {
             UserId = userId,
-            FeedType = Enum.TryParse<FeedType>(feedType, true, out var type) ? type : FeedType.Personalized,
+            FeedType = feedType,
             Page = page,
             PageSize = pageSize
         };
@@ -60,12 +61,13 @@ public class FeedController : Controller
             // If topic is selected, we might want to default to Trending algorithm if not specified
             if (feedType == "personalized") 
             {
-               request.FeedType = FeedType.Trending;
+               request.FeedType = "trending";
                feedType = "trending";
             }
         }
 
-        var feedResponse = request.FeedType switch
+        var feedTypeEnum = Enum.TryParse<FeedType>(feedType, true, out var type) ? type : FeedType.Personalized;
+        var FeedVM = feedTypeEnum switch
         {
             FeedType.Trending => await _feedService.GetTrendingFeedAsync(request),
             FeedType.Friends => await _feedService.GetFriendsFeedAsync(request),
@@ -76,7 +78,7 @@ public class FeedController : Controller
         ViewBag.CurrentUserId = userId;
         
         // Pass feed data to sidebar
-        ViewData["FeedSidebarData"] = feedResponse;
+        ViewData["FeedSidebarData"] = FeedVM;
         
         // Track user activity
         // TODO: Update to use LogUserActivityAsync from IUserAnalyticsService
@@ -116,7 +118,7 @@ public class FeedController : Controller
         }
         */
         
-        return View("~/Views/Community/Feed/Index.cshtml", feedResponse);
+        return View("~/Views/Community/Feed/Index.cshtml", FeedVM);
     }
 
     [HttpGet("trending")]
@@ -130,10 +132,10 @@ public class FeedController : Controller
             pageSize = page == 1 ? 20 : 10;
         }
         
-        var request = new FeedRequest
+        var request = new FeedVM
         {
             UserId = userId,
-            FeedType = FeedType.Trending,
+            FeedType = "trending",
             Page = page,
             PageSize = pageSize
         };
@@ -145,16 +147,16 @@ public class FeedController : Controller
             ViewBag.CurrentTopic = topic;
         }
 
-        var feedResponse = await _feedService.GetTrendingFeedAsync(request);
+        var FeedVM = await _feedService.GetTrendingFeedAsync(request);
 
         ViewBag.FeedType = "trending";
         ViewBag.CurrentUserId = userId;
         ViewBag.Topic = topic;
         
         // Pass feed data to sidebar
-        ViewData["FeedSidebarData"] = feedResponse;
+        ViewData["FeedSidebarData"] = FeedVM;
         
-        return View("~/Views/Community/Feed/Trending.cshtml", feedResponse);
+        return View("~/Views/Community/Feed/Trending.cshtml", FeedVM);
     }
 
     [HttpGet("friends")]
@@ -260,7 +262,7 @@ public class FeedController : Controller
     {
         var userId = GetCurrentUserId();
         // GetFeedStatsAsync requires userId (nullable or not? checked service, it takes Guid?)
-        // FeedService line 74: await GetFeedStatsAsync(request.UserId) -> FeedRequest.UserId is Guid?
+        // FeedService line 74: await GetFeedStatsAsync(request.UserId) -> FeedVM.UserId is Guid?
         var stats = await _feedService.GetFeedStatsAsync(userId);
         return Ok(stats);
     }

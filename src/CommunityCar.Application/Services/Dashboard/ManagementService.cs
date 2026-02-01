@@ -1,6 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
@@ -56,7 +55,7 @@ public class ManagementService : IManagementService
                         .ToList();
     }
 
-    public async Task<bool> PerformUserActionAsync(UserManagementRequest request)
+    public async Task<bool> PerformUserActionAsync(UserManagementVM request)
     {
         await Task.CompletedTask;
         return true;
@@ -188,7 +187,7 @@ public class ManagementService : IManagementService
         };
     }
 
-    public async Task<bool> ModerateContentAsync(ModerateContentRequest request)
+    public async Task<bool> ModerateContentAsync(ModerateContentVM request)
     {
         await Task.CompletedTask;
         return true;

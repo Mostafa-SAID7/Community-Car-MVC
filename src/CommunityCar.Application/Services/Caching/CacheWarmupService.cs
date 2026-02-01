@@ -2,6 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Models.Caching;
+using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Logging;
 
@@ -199,7 +200,7 @@ public class CacheWarmupService
                 var newsKey = CacheKeys.Community.News(category, 1);
                 await _cacheService.GetOrSetAsync(newsKey, async () =>
                 {
-                    var request = new CommunityCar.Application.Features.Community.News.DTOs.NewsSearchRequest
+                    var request = new CommunityCar.Application.Features.Community.News.ViewModels.NewsSearchVM
                     {
                         Category = NewsCategory.General,
                         Page = 1,
@@ -215,7 +216,7 @@ public class CacheWarmupService
             var eventsKey = CacheKeys.Community.Events("all", DateTime.Today);
             await _cacheService.GetOrSetAsync(eventsKey, async () =>
             {
-                var request = new CommunityCar.Application.Features.Community.Events.DTOs.EventsSearchRequest
+                var request = new CommunityCar.Application.Features.Community.Events.ViewModels.EventsSearchVM
                 {
                     Location = "all",
                     StartDate = DateTime.Today,
@@ -299,12 +300,12 @@ public class CacheWarmupService
             var feedKey = CacheKeys.Feed.PersonalizedFeed(userId, 1);
             await _cacheService.GetOrSetAsync(feedKey, async () =>
             {
-                var request = new CommunityCar.Application.Features.Community.Feed.DTOs.FeedRequest
+                var request = new CommunityCar.Application.Features.Community.Feed.ViewModels.FeedVM
                 {
                     UserId = userId,
                     Page = 1,
                     PageSize = 20,
-                    SortBy = CommunityCar.Application.Features.Community.Feed.DTOs.FeedSortBy.Newest
+                    SortBy = FeedSortBy.Newest
                 };
                 return await _feedService.GetPersonalizedFeedAsync(request);
             }, CacheSettings.Feed.PersonalizedFeed);

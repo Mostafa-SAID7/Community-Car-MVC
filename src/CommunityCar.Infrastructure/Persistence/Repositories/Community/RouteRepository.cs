@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Features.Community.Maps.DTOs;
+using CommunityCar.Application.Features.Community.Maps.ViewModels;
 using CommunityCar.Domain.Entities.Community.Maps;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
@@ -13,12 +13,12 @@ public class RouteRepository : BaseRepository<Route>, IRouteRepository
     {
     }
 
-    public async Task<(IEnumerable<Route> Items, int TotalCount)> SearchAsync(MapsRouteSearchRequest request, CancellationToken cancellationToken = default)
+    public async Task<(IEnumerable<Route> Items, int TotalCount)> SearchAsync(MapsRouteSearchVM request, CancellationToken cancellationToken = default)
     {
         var query = Context.Routes.AsQueryable();
 
-        if (!string.IsNullOrEmpty(request.SearchTerm))
-            query = query.Where(r => r.Name.Contains(request.SearchTerm));
+        if (!string.IsNullOrEmpty(request.Query))
+            query = query.Where(r => r.Name.Contains(request.Query));
 
         if (request.Type.HasValue)
             query = query.Where(r => r.Type == request.Type.Value);

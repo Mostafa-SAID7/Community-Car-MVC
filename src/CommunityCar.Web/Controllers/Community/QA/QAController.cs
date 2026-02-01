@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Features.Community.QA.ViewModels;
-using CommunityCar.Application.Features.Community.QA.DTOs;
+using CommunityCar.Application.Features.Community.QA.ViewModels;
 using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Entities.Community.QA;
 using Microsoft.AspNetCore.Authorization;
@@ -27,9 +27,9 @@ public class QAController : Controller
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index([FromQuery] QASearchRequest? request)
+    public async Task<IActionResult> Index([FromQuery] QASearchVM? request)
     {
-        request ??= new QASearchRequest();
+        request ??= new QASearchVM();
         
         // Set default values if not provided
         if (request.Page <= 0) request.Page = 1;
@@ -49,7 +49,7 @@ public class QAController : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] QASearchRequest request)
+    public async Task<IActionResult> Search([FromQuery] QASearchVM request)
     {
         var response = await _qaService.SearchQuestionsAsync(request);
         return View("~/Views/Community/QA/SearchResults.cshtml", response);

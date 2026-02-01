@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Common.Models.Notifications;
+using CommunityCar.Application.Features.Notifications.ViewModels;
 using CommunityCar.Infrastructure.Hubs;
 using CommunityCar.Domain.Enums.Account;
 using System.Collections.Concurrent;
@@ -27,7 +27,7 @@ public class NotificationService : INotificationService
         }
     }
 
-    public async Task SendNotificationAsync(NotificationRequest request)
+    public async Task SendNotificationAsync(NotificationVM request)
     {
         var notification = new
         {
@@ -48,7 +48,7 @@ public class NotificationService : INotificationService
         AddToHistory(request.UserId, notification);
     }
 
-    public async Task SendBulkNotificationAsync(BulkNotificationRequest request)
+    public async Task SendBulkNotificationAsync(BulkNotificationVM request)
     {
         var notification = new
         {
@@ -77,7 +77,7 @@ public class NotificationService : INotificationService
 
     public async Task SendToUserAsync(Guid userId, string title, string message, NotificationType type, string? actionUrl = null)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = title,
@@ -89,7 +89,7 @@ public class NotificationService : INotificationService
 
     public async Task SendToUsersAsync(List<Guid> userIds, string title, string message, NotificationType type, string? actionUrl = null)
     {
-        await SendBulkNotificationAsync(new BulkNotificationRequest
+        await SendBulkNotificationAsync(new BulkNotificationVM
         {
             UserIds = userIds,
             Title = title,
@@ -101,7 +101,7 @@ public class NotificationService : INotificationService
 
     public async Task NotifyNewMessageAsync(Guid userId, string senderName, string conversationId)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = "New Message",
@@ -114,7 +114,7 @@ public class NotificationService : INotificationService
 
     public async Task NotifyNewAnswerAsync(Guid userId, string questionTitle, Guid questionId)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = "New Answer",
@@ -127,7 +127,7 @@ public class NotificationService : INotificationService
 
     public async Task NotifyQuestionSolvedAsync(Guid userId, string questionTitle, Guid questionId)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = "Question Solved",
@@ -140,7 +140,7 @@ public class NotificationService : INotificationService
 
     public async Task NotifyVoteReceivedAsync(Guid userId, string itemTitle, bool isUpvote)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = isUpvote ? "Upvote Received" : "Downvote Received",
@@ -152,7 +152,7 @@ public class NotificationService : INotificationService
 
     public async Task NotifyCommentReceivedAsync(Guid userId, string itemTitle, string commenterName)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = "New Comment",
@@ -164,7 +164,7 @@ public class NotificationService : INotificationService
 
     public async Task NotifyFriendRequestAsync(Guid userId, string requesterName, Guid requesterId)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = "Friend Request",
@@ -177,7 +177,7 @@ public class NotificationService : INotificationService
 
     public async Task NotifyFriendRequestAcceptedAsync(Guid userId, string accepterName, Guid accepterId)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = "Friend Request Accepted",
@@ -190,7 +190,7 @@ public class NotificationService : INotificationService
 
     public async Task NotifyFriendRequestDeclinedAsync(Guid userId, string declinerName)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = "Friend Request Declined",
@@ -202,7 +202,7 @@ public class NotificationService : INotificationService
 
     public async Task NotifyFriendRemovedAsync(Guid userId, string removerName)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = "Friend Removed",
@@ -305,7 +305,7 @@ public class NotificationService : INotificationService
 
     public async Task SendTestNotificationAsync(Guid userId, string message)
     {
-        await SendNotificationAsync(new NotificationRequest
+        await SendNotificationAsync(new NotificationVM
         {
             UserId = userId,
             Title = "Test Notification",

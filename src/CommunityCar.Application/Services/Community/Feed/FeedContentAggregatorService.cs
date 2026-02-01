@@ -1,7 +1,6 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.Feed.DTOs;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using CommunityCar.Domain.Enums.Shared;
@@ -22,7 +21,7 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
         _mapper = mapper;
     }
 
-    public async Task<List<FeedItemVM>> GetPersonalizedContentAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)
+    public async Task<List<FeedItemVM>> GetPersonalizedContentAsync(FeedVM request, List<string> userInterests, List<Guid> friendIds)
     {
         var feedItems = new List<FeedItemVM>();
 
@@ -54,7 +53,7 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
         return feedItems;
     }
 
-    public async Task<List<FeedItemVM>> GetTrendingContentAsync(FeedRequest request)
+    public async Task<List<FeedItemVM>> GetTrendingContentAsync(FeedVM request)
     {
         var feedItems = new List<FeedItemVM>();
 
@@ -72,7 +71,7 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
         return feedItems.OrderByDescending(x => x.RelevanceScore).ToList();
     }
 
-    public async Task<List<FeedItemVM>> GetFriendsContentAsync(FeedRequest request, List<Guid> friendIds)
+    public async Task<List<FeedItemVM>> GetFriendsContentAsync(FeedVM request, List<Guid> friendIds)
     {
         var feedItems = new List<FeedItemVM>();
 
@@ -90,7 +89,7 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
         return feedItems.OrderByDescending(x => x.CreatedAt).ToList();
     }
 
-    public async Task<List<FeedItemVM>> GetContentFromSourceAsync(FeedRequest request, string contentType, List<string> userInterests, List<Guid> friendIds)
+    public async Task<List<FeedItemVM>> GetContentFromSourceAsync(FeedVM request, string contentType, List<string> userInterests, List<Guid> friendIds)
     {
         return contentType.ToLower() switch
         {
@@ -132,7 +131,7 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
 
     #region Private Helper Methods
 
-    private async Task<List<FeedItemVM>> GetPersonalizedNewsAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)
+    private async Task<List<FeedItemVM>> GetPersonalizedNewsAsync(FeedVM request, List<string> userInterests, List<Guid> friendIds)
     {
         var news = await _unitOfWork.News.GetTopPublishedAsync(20);
         var feedItems = new List<FeedItemVM>();
@@ -192,7 +191,7 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
         return feedItems;
     }
 
-    private async Task<List<FeedItemVM>> GetPersonalizedReviewsAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)
+    private async Task<List<FeedItemVM>> GetPersonalizedReviewsAsync(FeedVM request, List<string> userInterests, List<Guid> friendIds)
     {
         var reviews = await _unitOfWork.Reviews.GetTopApprovedAsync(20);
         var feedItems = new List<FeedItemVM>();
@@ -246,7 +245,7 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
         return feedItems;
     }
 
-    private async Task<List<FeedItemVM>> GetPersonalizedQAAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)
+    private async Task<List<FeedItemVM>> GetPersonalizedQAAsync(FeedVM request, List<string> userInterests, List<Guid> friendIds)
     {
         var questions = await _unitOfWork.QA.GetTopQuestionsAsync(20);
         var feedItems = new List<FeedItemVM>();
@@ -301,7 +300,7 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
         return feedItems;
     }
 
-    private async Task<List<FeedItemVM>> GetPersonalizedStoriesAsync(FeedRequest request, List<string> userInterests, List<Guid> friendIds)
+    private async Task<List<FeedItemVM>> GetPersonalizedStoriesAsync(FeedVM request, List<string> userInterests, List<Guid> friendIds)
     {
         var stories = await _unitOfWork.Stories.GetTopActiveAsync(20);
         var feedItems = new List<FeedItemVM>();
@@ -357,28 +356,28 @@ public class FeedContentAggregatorService : IFeedContentAggregatorService
     }
 
     // Simplified implementations for trending and friends feeds
-    private async Task<List<FeedItemVM>> GetTrendingNewsAsync(FeedRequest request) => 
+    private async Task<List<FeedItemVM>> GetTrendingNewsAsync(FeedVM request) => 
         await GetPersonalizedNewsAsync(request, new List<string>(), new List<Guid>());
     
-    private async Task<List<FeedItemVM>> GetTrendingReviewsAsync(FeedRequest request) => 
+    private async Task<List<FeedItemVM>> GetTrendingReviewsAsync(FeedVM request) => 
         await GetPersonalizedReviewsAsync(request, new List<string>(), new List<Guid>());
     
-    private async Task<List<FeedItemVM>> GetTrendingQAAsync(FeedRequest request) => 
+    private async Task<List<FeedItemVM>> GetTrendingQAAsync(FeedVM request) => 
         await GetPersonalizedQAAsync(request, new List<string>(), new List<Guid>());
     
-    private async Task<List<FeedItemVM>> GetTrendingStoriesAsync(FeedRequest request) => 
+    private async Task<List<FeedItemVM>> GetTrendingStoriesAsync(FeedVM request) => 
         await GetPersonalizedStoriesAsync(request, new List<string>(), new List<Guid>());
 
-    private async Task<List<FeedItemVM>> GetFriendsNewsAsync(FeedRequest request, List<Guid> friendIds) => 
+    private async Task<List<FeedItemVM>> GetFriendsNewsAsync(FeedVM request, List<Guid> friendIds) => 
         await GetPersonalizedNewsAsync(request, new List<string>(), friendIds);
     
-    private async Task<List<FeedItemVM>> GetFriendsReviewsAsync(FeedRequest request, List<Guid> friendIds) => 
+    private async Task<List<FeedItemVM>> GetFriendsReviewsAsync(FeedVM request, List<Guid> friendIds) => 
         await GetPersonalizedReviewsAsync(request, new List<string>(), friendIds);
     
-    private async Task<List<FeedItemVM>> GetFriendsQAAsync(FeedRequest request, List<Guid> friendIds) => 
+    private async Task<List<FeedItemVM>> GetFriendsQAAsync(FeedVM request, List<Guid> friendIds) => 
         await GetPersonalizedQAAsync(request, new List<string>(), friendIds);
     
-    private async Task<List<FeedItemVM>> GetFriendsStoriesAsync(FeedRequest request, List<Guid> friendIds) => 
+    private async Task<List<FeedItemVM>> GetFriendsStoriesAsync(FeedVM request, List<Guid> friendIds) => 
         await GetPersonalizedStoriesAsync(request, new List<string>(), friendIds);
 
     private double CalculateRelevanceScore(List<string> contentTags, string? carMake, List<string> userInterests)

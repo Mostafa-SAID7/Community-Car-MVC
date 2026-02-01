@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Community.News.DTOs;
+using CommunityCar.Application.Features.Community.News.ViewModels;
 using CommunityCar.Application.Features.Community.News.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Localization;
@@ -51,7 +51,7 @@ public class NewsController : Controller
         {
             var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
             
-            var request = new NewsSearchRequest
+            var request = new NewsSearchVM
             {
                 SearchTerm = search,
                 Category = category,
@@ -323,7 +323,7 @@ public class NewsController : Controller
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
             
-            var request = new NewsSearchRequest
+            var request = new NewsSearchVM
             {
                 AuthorId = currentUserId,
                 Page = page,
@@ -347,7 +347,7 @@ public class NewsController : Controller
     {
         try
         {
-            var request = new NewsSearchRequest
+            var request = new NewsSearchVM
             {
                 Category = category,
                 Page = page,
@@ -382,7 +382,7 @@ public class NewsController : Controller
             }
 
             // Get related news based on category, tags, and car make/model
-            var request = new NewsSearchRequest
+            var request = new NewsSearchVM
             {
                 Category = newsItem.Category,
                 CarMake = newsItem.CarMake,

@@ -1,11 +1,12 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.Stories.DTOs;
 using CommunityCar.Application.Features.Community.Stories.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Community.Stories;
-using StoriesSearchResponse = CommunityCar.Application.Features.Community.Stories.DTOs.StoriesSearchResponse;
+using CommunityCar.Domain.Enums.Community;
+using StoriesSearchVM = CommunityCar.Application.Features.Community.Stories.ViewModels.StoriesSearchVM;
 
 namespace CommunityCar.Application.Services.Community;
 
@@ -20,7 +21,7 @@ public class StoriesService : IStoriesService
         _mapper = mapper;
     }
 
-    public async Task<StoriesSearchResponse> SearchStoriesAsync(StoriesSearchRequest request)
+    public async Task<StoriesSearchVM> SearchStoriesAsync(StoriesSearchVM request)
     {
         var stories = await _unitOfWork.Stories.GetAllAsync();
         var queryable = stories.AsQueryable();
@@ -116,20 +117,20 @@ public class StoriesService : IStoriesService
         var totalCount = queryable.Count();
 
         // Apply sorting
-        queryable = request.SortBy switch
+        queryable = request.SortBy.ToLower() switch
         {
-            StoriesSortBy.Newest => queryable.OrderByDescending(s => s.CreatedAt),
-            StoriesSortBy.Oldest => queryable.OrderBy(s => s.CreatedAt),
-            StoriesSortBy.MostViews => queryable.OrderByDescending(s => s.ViewCount),
-            StoriesSortBy.LeastViews => queryable.OrderBy(s => s.ViewCount),
-            StoriesSortBy.MostLikes => queryable.OrderByDescending(s => s.LikeCount),
-            StoriesSortBy.LeastLikes => queryable.OrderBy(s => s.LikeCount),
-            StoriesSortBy.ExpiringFirst => queryable.OrderBy(s => s.ExpiresAt),
-            StoriesSortBy.ExpiringLast => queryable.OrderByDescending(s => s.ExpiresAt),
-            StoriesSortBy.Relevance => !string.IsNullOrWhiteSpace(request.SearchTerm) 
-                ? queryable.OrderByDescending(s => CalculateRelevanceScore(s, request.SearchTerm))
+            "newest" => queryable.OrderByDescending(s => s.CreatedAt),
+            "oldest" => queryable.OrderBy(s => s.CreatedAt),
+            "mostviews" => queryable.OrderByDescending(s => s.ViewCount),
+            "mostlikes" => queryable.OrderByDescending(s => s.LikeCount),
+            "mostcomments" => queryable.OrderByDescending(s => s.ReplyCount), // Fixed: CommentCount -> ReplyCount
+            "trending" => queryable.OrderByDescending(s => s.ViewCount + s.LikeCount),
+            "popular" => queryable.OrderByDescending(s => s.LikeCount + s.ReplyCount), // Fixed: CommentCount -> ReplyCount
+            "engagement" => queryable.OrderByDescending(s => s.LikeCount + s.ReplyCount + s.ShareCount), // Fixed: CommentCount -> ReplyCount
+            "relevance" => !string.IsNullOrWhiteSpace(request.SearchTerm) 
+                ? queryable.OrderByDescending(s => s.Caption.Contains(request.SearchTerm) ? 2 : 1) // Fixed: Title -> Caption
                 : queryable.OrderByDescending(s => s.CreatedAt),
-            _ => queryable.OrderByDescending(s => s.IsFeatured).ThenByDescending(s => s.IsHighlighted).ThenByDescending(s => s.CreatedAt)
+            _ => queryable.OrderByDescending(s => s.CreatedAt)
         };
 
         // Apply pagination
@@ -158,13 +159,19 @@ public class StoriesService : IStoriesService
         var availableTags = await GetPopularTagsAsync(50);
         var availableCarMakes = await GetAvailableCarMakesAsync();
 
-        return new StoriesSearchResponse
+        return new StoriesSearchVM
         {
             Stories = storyVMs,
-            Pagination = pagination,
+            Pagination = new PaginationVM
+            {
+                CurrentPage = request.Page,
+                PageSize = request.PageSize,
+                TotalItems = totalCount,
+                TotalPages = (int)Math.Ceiling((double)totalCount / request.PageSize)
+            },
             Stats = stats,
-            AvailableTags = availableTags,
-            AvailableCarMakes = availableCarMakes
+            AvailableTags = availableTags.ToList(),
+            AvailableCarMakes = availableCarMakes.ToList()
         };
     }
 
@@ -180,7 +187,7 @@ public class StoriesService : IStoriesService
         return story != null ? _mapper.Map<StoryVM>(story) : null;
     }
 
-    public async Task<StoryVM> CreateAsync(CreateStoryRequest request)
+    public async Task<StoryVM> CreateAsync(CreateStoryVM request)
     {
         var story = new Story(request.MediaUrl, request.AuthorId, request.Type, request.Duration);
         
@@ -197,11 +204,14 @@ public class StoriesService : IStoriesService
         story.SetFeatured(request.IsFeatured);
         story.SetHighlighted(request.IsHighlighted);
 
-        foreach (var tag in request.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()))
+        foreach (var tag in request.Tags)
             story.AddTag(tag);
 
-        foreach (var userId in request.MentionedUsers)
-            story.MentionUser(userId);
+        foreach (var userIdStr in request.MentionedUsers)
+        {
+            if (Guid.TryParse(userIdStr, out var userId))
+                story.MentionUser(userId);
+        }
 
         foreach (var mediaUrl in request.AdditionalMediaUrls)
             story.AddMedia(mediaUrl);
@@ -212,7 +222,7 @@ public class StoriesService : IStoriesService
         return _mapper.Map<StoryVM>(story);
     }
 
-    public async Task<StoryVM> UpdateAsync(Guid id, UpdateStoryRequest request)
+    public async Task<StoryVM> UpdateAsync(Guid id, UpdateStoryVM request)
     {
         var story = await _unitOfWork.Stories.GetByIdAsync(id);
         if (story == null)
@@ -235,8 +245,11 @@ public class StoriesService : IStoriesService
         foreach (var tag in request.Tags)
             story.AddTag(tag);
 
-        foreach (var userId in request.MentionedUsers)
-            story.MentionUser(userId);
+        foreach (var userIdStr in request.MentionedUsers)
+        {
+            if (Guid.TryParse(userIdStr, out var userId))
+                story.MentionUser(userId);
+        }
 
         foreach (var mediaUrl in request.AdditionalMediaUrls)
             story.AddMedia(mediaUrl);

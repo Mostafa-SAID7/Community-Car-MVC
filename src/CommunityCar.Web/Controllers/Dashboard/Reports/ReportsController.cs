@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Dashboard.DTOs;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Reports;
@@ -48,7 +48,7 @@ public class ReportsController : Controller
 
     [HttpPost("generate")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Generate(ReportGenerationRequest request)
+    public async Task<IActionResult> Generate(ReportGenerationVM request)
     {
         if (!ModelState.IsValid)
         {

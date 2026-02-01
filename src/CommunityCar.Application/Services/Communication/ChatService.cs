@@ -1,7 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Features.Chat.ViewModels;
-using CommunityCar.Application.Features.Chat.DTOs;
 using CommunityCar.Domain.Entities.Chats;
 using CommunityCar.Domain.Entities.Account.Core;
 using Microsoft.AspNetCore.Identity;
@@ -83,7 +82,7 @@ public class ChatService : IChatService
         return result.OrderByDescending(c => c.LastActivity).ToList();
     }
 
-    public async Task<ConversationVM> CreateConversationAsync(CreateConversationRequest request)
+    public async Task<ConversationVM> CreateConversationAsync(CreateConversationVM request)
     {
         var conversation = new Conversation(request.Title, request.IsGroupChat);
         
@@ -113,7 +112,7 @@ public class ChatService : IChatService
         };
     }
 
-    public async Task<MessageVM> SendMessageAsync(SendMessageRequest request)
+    public async Task<MessageVM> SendMessageAsync(SendMessageVM request)
     {
         var message = new Message(request.Content, request.ConversationId, request.SenderId);
         

@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Dashboard.DTOs;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Overview;
@@ -27,7 +27,7 @@ public class OverviewController : Controller
     {
         try
         {
-            var request = new OverviewRequest
+            var request = new OverviewVM
             {
                 TimeRange = timeRange
             };

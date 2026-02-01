@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Community.Reviews.DTOs;
 using CommunityCar.Application.Features.Community.Reviews.ViewModels;
+using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Localization;
 
 namespace CommunityCar.Web.Controllers.Community.Reviews;
@@ -37,7 +37,7 @@ public class ReviewsController : Controller
         int? carYear = null,
         bool? isVerifiedPurchase = null,
         bool? isRecommended = null,
-        ReviewsSortBy sortBy = ReviewsSortBy.Default,
+        ReviewsSortBy sortBy = ReviewsSortBy.Newest,
         int page = 1,
         int pageSize = 12)
     {
@@ -45,7 +45,7 @@ public class ReviewsController : Controller
         {
             var currentUserId = _currentUserService.UserId != null ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
             
-            var request = new ReviewsSearchRequest
+            var request = new ReviewsSearchVM
             {
                 SearchTerm = search,
                 Rating = rating,
@@ -75,7 +75,7 @@ public class ReviewsController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading reviews index");
-            return View("~/Views/Community/Reviews/Index.cshtml", new ReviewsSearchResponse());
+            return View("~/Views/Community/Reviews/Index.cshtml", new ReviewsSearchVM());
         }
     }
 
@@ -132,7 +132,7 @@ public class ReviewsController : Controller
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
             
-            var request = new CreateReviewRequest
+            var request = new CreateReviewVM
             {
                 TargetId = model.TargetId,
                 TargetType = model.TargetType,
@@ -237,7 +237,7 @@ public class ReviewsController : Controller
 
         try
         {
-            var request = new UpdateReviewRequest
+            var request = new UpdateReviewVM
             {
                 Rating = model.Rating,
                 Title = model.Title,
@@ -356,7 +356,7 @@ public class ReviewsController : Controller
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
             
-            var request = new ReviewsSearchRequest
+            var request = new ReviewsSearchVM
             {
                 ReviewerId = currentUserId,
                 Page = page,
@@ -371,7 +371,7 @@ public class ReviewsController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading user's reviews");
-            return View("~/Views/Community/Reviews/MyReviews.cshtml", new ReviewsSearchResponse());
+            return View("~/Views/Community/Reviews/MyReviews.cshtml", new ReviewsSearchVM());
         }
     }
 
@@ -380,7 +380,7 @@ public class ReviewsController : Controller
     {
         try
         {
-            var request = new ReviewsSearchRequest
+            var request = new ReviewsSearchVM
             {
                 TargetId = targetId,
                 TargetType = targetType,
@@ -399,7 +399,7 @@ public class ReviewsController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading reviews for target: {TargetId}", targetId);
-            return View("~/Views/Community/Reviews/ByTarget.cshtml", new ReviewsSearchResponse());
+            return View("~/Views/Community/Reviews/ByTarget.cshtml", new ReviewsSearchVM());
         }
     }
 }

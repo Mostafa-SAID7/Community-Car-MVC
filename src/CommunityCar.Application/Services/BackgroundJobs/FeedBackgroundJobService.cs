@@ -1,9 +1,9 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Caching;
 using CommunityCar.Application.Common.Models.Caching;
-using Microsoft.Extensions.Logging;
-using CommunityCar.Application.Features.Community.Feed.DTOs;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
+using CommunityCar.Domain.Enums.Community;
+using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Application.Services.BackgroundJobs;
 
@@ -40,7 +40,7 @@ public class FeedBackgroundJobService
                 try
                 {
                     // Generate feed for first page
-                    var personalizedFeedRequest = new FeedRequest
+                    var personalizedFeedRequest = new FeedVM
                     {
                         UserId = userId,
                         Page = 1,

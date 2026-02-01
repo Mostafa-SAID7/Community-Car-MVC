@@ -2,7 +2,6 @@ using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Community.Maps.DTOs;
 using CommunityCar.Application.Features.Community.Maps.ViewModels;
 using CommunityCar.Domain.Entities.Community.Maps;
 using CommunityCar.Domain.Enums.Community;
@@ -53,7 +52,7 @@ public class MapsService : IMapsService
         }
     }
 
-    public async Task<MapsSearchResponse> SearchPointsOfInterestAsync(MapsSearchRequest request, CancellationToken cancellationToken = default)
+    public async Task<MapsSearchVM> SearchPointsOfInterestAsync(MapsSearchVM request, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -77,9 +76,9 @@ public class MapsService : IMapsService
                 return summary;
             });
 
-            return new MapsSearchResponse
+            return new MapsSearchVM
             {
-                Items = summaryItems,
+                Items = summaryItems.ToList(),
                 TotalCount = totalCount,
                 Page = request.Page,
                 PageSize = request.PageSize
@@ -92,7 +91,7 @@ public class MapsService : IMapsService
         }
     }
 
-    public async Task<PointOfInterestVM> CreatePointOfInterestAsync(CreatePointOfInterestRequest request, CancellationToken cancellationToken = default)
+    public async Task<PointOfInterestVM> CreatePointOfInterestAsync(CreatePointOfInterestVM request, CancellationToken cancellationToken = default)
     {
         var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
         if (!Guid.TryParse(currentUserIdString, out var currentUserId))
@@ -187,7 +186,7 @@ public class MapsService : IMapsService
         return _mapper.Map<PointOfInterestVM>(poi);
     }
 
-    public async Task<PointOfInterestVM> UpdatePointOfInterestAsync(Guid id, UpdatePointOfInterestRequest request, CancellationToken cancellationToken = default)
+    public async Task<PointOfInterestVM> UpdatePointOfInterestAsync(Guid id, UpdatePointOfInterestVM request, CancellationToken cancellationToken = default)
     {
         var poi = await _unitOfWork.PointsOfInterest.GetByIdAsync(id);
         if (poi == null) throw new ArgumentException("Point of interest not found");
@@ -266,7 +265,7 @@ public class MapsService : IMapsService
         return true;
     }
 
-    public async Task<CheckInVM> CheckInAsync(Guid pointOfInterestId, CreateCheckInRequest request, CancellationToken cancellationToken = default)
+    public async Task<CheckInVM> CheckInAsync(Guid pointOfInterestId, CreateCheckInVM request, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -334,22 +333,22 @@ public class MapsService : IMapsService
         return route == null ? null : _mapper.Map<RouteVM>(route);
     }
 
-    public async Task<MapsRouteSearchResponse> SearchRoutesAsync(MapsRouteSearchRequest request, CancellationToken cancellationToken = default)
+    public async Task<MapsRouteSearchVM> SearchRoutesAsync(MapsRouteSearchVM request, CancellationToken cancellationToken = default)
     {
         var (items, totalCount) = await _unitOfWork.Routes.SearchAsync(request, cancellationToken);
         
         var summaryItems = _mapper.Map<IEnumerable<RouteSummaryVM>>(items);
 
-        return new MapsRouteSearchResponse
+        return new MapsRouteSearchVM
         {
-            Items = summaryItems,
+            Items = summaryItems.ToList(),
             TotalCount = totalCount,
             Page = request.Page,
             PageSize = request.PageSize
         };
     }
 
-    public async Task<RouteVM> CreateRouteAsync(CreateRouteRequest request, CancellationToken cancellationToken = default)
+    public async Task<RouteVM> CreateRouteAsync(CreateRouteVM request, CancellationToken cancellationToken = default)
     {
         var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
         if (!Guid.TryParse(currentUserIdString, out var currentUserId))
@@ -398,7 +397,7 @@ public class MapsService : IMapsService
         return _mapper.Map<RouteVM>(route);
     }
 
-    public async Task<RouteVM> UpdateRouteAsync(Guid id, UpdateRouteRequest request, CancellationToken cancellationToken = default)
+    public async Task<RouteVM> UpdateRouteAsync(Guid id, UpdateRouteVM request, CancellationToken cancellationToken = default)
     {
         var route = await _unitOfWork.Routes.GetByIdAsync(id);
         if (route == null) throw new ArgumentException("Route not found");

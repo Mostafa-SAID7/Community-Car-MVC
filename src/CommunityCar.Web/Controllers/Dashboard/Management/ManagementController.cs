@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Dashboard.DTOs;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Management;
@@ -67,7 +67,7 @@ public class ManagementController : Controller
 
     [HttpPost("action")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> PerformAction(UserManagementRequest request)
+    public async Task<IActionResult> PerformAction(UserManagementVM request)
     {
         if (!ModelState.IsValid)
         {
@@ -154,7 +154,7 @@ public class ManagementController : Controller
 
     [HttpPost("action-api")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> PerformActionApi([FromBody] UserManagementRequest request)
+    public async Task<IActionResult> PerformActionApi([FromBody] UserManagementVM request)
     {
         if (!ModelState.IsValid)
         {

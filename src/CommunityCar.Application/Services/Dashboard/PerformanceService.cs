@@ -1,7 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.SEO;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.SEO.ViewModels;
-using CommunityCar.Application.Features.SEO.DTOs;
 
 namespace CommunityCar.Application.Services.SEO;
 
@@ -47,7 +46,7 @@ public class PerformanceService : IPerformanceService
         };
     }
 
-    public async Task<ImageOptimizationVM> OptimizeImageAsync(string imagePath, ImageOptimizationOptions options)
+    public async Task<ImageOptimizationVM> OptimizeImageAsync(string imagePath, ImageOptimizationOptionsVM options)
     {
         await Task.CompletedTask;
 
@@ -103,7 +102,7 @@ public class PerformanceService : IPerformanceService
         };
     }
 
-    public async Task UpdatePerformanceMetricsAsync(string url, CoreWebVitalsRequest metrics)
+    public async Task UpdatePerformanceMetricsAsync(string url, CoreWebVitalsVM metrics)
     {
         // In real implementation, save metrics to database
         await Task.CompletedTask;
@@ -146,7 +145,7 @@ public class PerformanceService : IPerformanceService
         };
     }
 
-    public async Task OptimizeImagesInDirectoryAsync(string directoryPath, ImageOptimizationOptions options)
+    public async Task OptimizeImagesInDirectoryAsync(string directoryPath, ImageOptimizationOptionsVM options)
     {
         await Task.CompletedTask;
         // In real implementation, process all images in directory

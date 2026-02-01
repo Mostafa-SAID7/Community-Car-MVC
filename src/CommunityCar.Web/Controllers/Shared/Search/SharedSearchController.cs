@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Shared.DTOs;
+using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Web.Controllers.Shared.Search;
@@ -29,7 +29,7 @@ public class SharedSearchController : Controller
     /// Universal search across all shared entities
     /// </summary>
     [HttpGet("universal")]
-    public async Task<IActionResult> UniversalSearch([FromQuery] UniversalSearchRequest request)
+    public async Task<IActionResult> UniversalSearch([FromQuery] UniversalSearchVM request)
     {
         try
         {
@@ -51,7 +51,7 @@ public class SharedSearchController : Controller
     /// </summary>
     [HttpGet("bookmarks")]
     [Authorize]
-    public async Task<IActionResult> SearchBookmarks([FromQuery] BookmarkSearchRequest request)
+    public async Task<IActionResult> SearchBookmarks([FromQuery] BookmarkSearchVM request)
     {
         try
         {
@@ -73,7 +73,7 @@ public class SharedSearchController : Controller
     /// Search comments
     /// </summary>
     [HttpGet("comments")]
-    public async Task<IActionResult> SearchComments([FromQuery] CommentSearchRequest request)
+    public async Task<IActionResult> SearchComments([FromQuery] CommentSearchVM request)
     {
         try
         {
@@ -94,7 +94,7 @@ public class SharedSearchController : Controller
     /// Search categories
     /// </summary>
     [HttpGet("categories")]
-    public async Task<IActionResult> SearchCategories([FromQuery] CategorySearchRequest request)
+    public async Task<IActionResult> SearchCategories([FromQuery] CategorySearchVM request)
     {
         try
         {
@@ -112,7 +112,7 @@ public class SharedSearchController : Controller
     /// Search tags
     /// </summary>
     [HttpGet("tags")]
-    public async Task<IActionResult> SearchTags([FromQuery] TagSearchRequest request)
+    public async Task<IActionResult> SearchTags([FromQuery] TagSearchVM request)
     {
         try
         {
@@ -130,7 +130,7 @@ public class SharedSearchController : Controller
     /// Search reactions
     /// </summary>
     [HttpGet("reactions")]
-    public async Task<IActionResult> SearchReactions([FromQuery] ReactionSearchRequest request)
+    public async Task<IActionResult> SearchReactions([FromQuery] ReactionSearchVM request)
     {
         try
         {
@@ -151,7 +151,7 @@ public class SharedSearchController : Controller
     /// Search shares
     /// </summary>
     [HttpGet("shares")]
-    public async Task<IActionResult> SearchShares([FromQuery] ShareSearchRequest request)
+    public async Task<IActionResult> SearchShares([FromQuery] ShareSearchVM request)
     {
         try
         {
@@ -172,7 +172,7 @@ public class SharedSearchController : Controller
     /// Search ratings
     /// </summary>
     [HttpGet("ratings")]
-    public async Task<IActionResult> SearchRatings([FromQuery] RatingSearchRequest request)
+    public async Task<IActionResult> SearchRatings([FromQuery] RatingSearchVM request)
     {
         try
         {
@@ -193,7 +193,7 @@ public class SharedSearchController : Controller
     /// Search votes
     /// </summary>
     [HttpGet("votes")]
-    public async Task<IActionResult> SearchVotes([FromQuery] VoteSearchRequest request)
+    public async Task<IActionResult> SearchVotes([FromQuery] VoteSearchVM request)
     {
         try
         {
@@ -215,7 +215,7 @@ public class SharedSearchController : Controller
     /// </summary>
     [HttpGet("views")]
     [Authorize(Roles = "Admin,Moderator")]
-    public async Task<IActionResult> SearchViews([FromQuery] ViewSearchRequest request)
+    public async Task<IActionResult> SearchViews([FromQuery] ViewSearchVM request)
     {
         try
         {
@@ -335,7 +335,7 @@ public class SharedSearchController : Controller
     /// Advanced search with multiple filters
     /// </summary>
     [HttpPost("advanced")]
-    public async Task<IActionResult> AdvancedSearch([FromBody] UniversalSearchRequest request)
+    public async Task<IActionResult> AdvancedSearch([FromBody] UniversalSearchVM request)
     {
         try
         {

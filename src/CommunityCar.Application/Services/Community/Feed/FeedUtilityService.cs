@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Features.Community.Feed.DTOs;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Application.Common.Models;
+using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Application.Services.Community.Feed;
 
@@ -45,7 +45,7 @@ public class FeedUtilityService : IFeedUtilityService
                 Id = story.Id,
                 MediaUrl = story.MediaUrl,
                 ThumbnailUrl = story.ThumbnailUrl,
-                Type = story.Type,
+                Type = story.Type.ToString(),
                 Caption = story.Caption,
                 CaptionAr = story.CaptionAr,
                 AuthorId = story.AuthorId,
@@ -196,12 +196,12 @@ public class FeedUtilityService : IFeedUtilityService
         return items.Skip(skip).Take(pageSize).ToList();
     }
 
-    public PaginationInfo CreatePaginationInfo(int currentPage, int pageSize, int totalItems)
+    public CommunityCar.Application.Common.Models.PaginationInfo CreatePaginationInfo(int currentPage, int pageSize, int totalItems)
     {
         var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
         var skip = (currentPage - 1) * pageSize;
 
-        return new PaginationInfo
+        return new CommunityCar.Application.Common.Models.PaginationInfo
         {
             CurrentPage = currentPage,
             PageSize = pageSize,

@@ -1,13 +1,12 @@
-using CommunityCar.Application.Features.Community.Feed.DTOs;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 
 public interface IFeedService
 {
-    Task<FeedResponse> GetPersonalizedFeedAsync(FeedRequest request);
-    Task<FeedResponse> GetTrendingFeedAsync(FeedRequest request);
-    Task<FeedResponse> GetFriendsFeedAsync(FeedRequest request);
+    Task<FeedVM> GetPersonalizedFeedAsync(FeedVM request);
+    Task<FeedVM> GetTrendingFeedAsync(FeedVM request);
+    Task<FeedVM> GetFriendsFeedAsync(FeedVM request);
     Task<IEnumerable<StoryFeedVM>> GetActiveStoriesAsync(Guid? userId = null);
     Task<IEnumerable<TrendingTopicVM>> GetTrendingTopicsAsync(int count = 10);
     Task<IEnumerable<SuggestedFriendVM>> GetSuggestedFriendsAsync(Guid userId, int count = 5);

@@ -36,6 +36,7 @@ public class SitemapUrlVM
 
 public class RSSFeedVM
 {
+    public string FeedType { get; set; } = "RSS";
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Link { get; set; } = string.Empty;
@@ -198,6 +199,40 @@ public class PerformanceReportVM
     public DateTime RunAt { get; set; }
     public PerformanceMetricsVM Metrics { get; set; } = new();
     public List<string> OptimizationTips { get; set; } = new();
+}
+
+public class SEOMetricsRequestVM
+{
+    public string Url { get; set; } = string.Empty;
+    public bool IncludePerformance { get; set; } = true;
+    public bool IncludeSEO { get; set; } = true;
+    public bool IncludeAccessibility { get; set; } = false;
+    public string Device { get; set; } = "desktop"; // "desktop" or "mobile"
+}
+
+public class SitemapGenerationVM
+{
+    public List<string> IncludeUrls { get; set; } = new();
+    public List<string> ExcludeUrls { get; set; } = new();
+    public string ChangeFrequency { get; set; } = "monthly";
+    public double Priority { get; set; } = 0.5;
+    public bool IncludeImages { get; set; } = true;
+    public bool IncludeNews { get; set; } = false;
+    public bool IncludeVideos { get; set; } = false;
+}
+
+public class ImageOptimizationOptionsVM
+{
+    public string Format { get; set; } = "webp";
+    public int Quality { get; set; } = 85;
+    public int MaxWidth { get; set; } = 1920;
+    public int MaxHeight { get; set; } = 1080;
+    public bool GenerateWebP { get; set; } = true;
+    public bool GenerateAvif { get; set; } = false;
+    public bool GenerateResponsiveSizes { get; set; } = true;
+    public List<int> ResponsiveSizes { get; set; } = new() { 320, 640, 768, 1024, 1280, 1920 };
+    public bool PreserveMetadata { get; set; } = false;
+    public bool Progressive { get; set; } = true;
 }
 
 

@@ -1,5 +1,4 @@
 using CommunityCar.Application.Features.Community.QA.ViewModels;
-using CommunityCar.Application.Features.Community.QA.DTOs;
 using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
@@ -7,7 +6,7 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 public interface IQAService
 {
     // Enhanced search and filtering
-    Task<QASearchResponse> SearchQuestionsAsync(QASearchRequest request);
+    Task<QASearchVM> SearchQuestionsAsync(QASearchVM request);
     Task<IEnumerable<QuestionVM>> GetAllQuestionsAsync();
     Task<QuestionVM?> GetQuestionByIdAsync(Guid id);
     Task<QuestionVM?> GetQuestionBySlugAsync(string slug);

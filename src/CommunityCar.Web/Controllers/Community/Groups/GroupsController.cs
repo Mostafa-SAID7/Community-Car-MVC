@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.Groups.DTOs;
+using CommunityCar.Application.Features.Community.Groups.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Web.Controllers.Community.Groups;
@@ -28,7 +28,7 @@ public class GroupsController : Controller
     {
         try
         {
-            var request = new GroupsSearchRequest
+            var request = new GroupsSearchVM
             {
                 SearchTerm = search,
                 SortBy = sortBy,
@@ -130,7 +130,7 @@ public class GroupsController : Controller
 
         try
         {
-            var request = new CreateGroupRequest
+            var request = new CreateGroupVM
             {
                 Name = name,
                 Description = description,
@@ -240,7 +240,7 @@ public class GroupsController : Controller
 
         try
         {
-            var request = new UpdateGroupRequest
+            var request = new UpdateGroupVM
             {
                 Id = id,
                 Name = name,

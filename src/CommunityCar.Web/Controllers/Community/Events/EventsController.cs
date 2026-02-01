@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.Events.DTOs;
+using CommunityCar.Application.Features.Community.Events.ViewModels;
 using CommunityCar.Application.Features.Community.Events.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
@@ -17,7 +17,7 @@ public class EventsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index([FromQuery] EventsSearchRequest request)
+    public async Task<IActionResult> Index([FromQuery] EventsSearchVM request)
     {
         request.Page = Math.Max(1, request.Page);
         request.PageSize = Math.Min(50, Math.Max(1, request.PageSize == 0 ? 12 : request.PageSize));
@@ -63,7 +63,7 @@ public class EventsController : Controller
     [Authorize]
     public IActionResult Create()
     {
-        var viewModel = new CreateEventRequest
+        var viewModel = new CreateEventVM
         {
             StartTime = DateTime.Now.AddDays(1),
             EndTime = DateTime.Now.AddDays(1).AddHours(2),
@@ -77,7 +77,7 @@ public class EventsController : Controller
     [HttpPost("create")]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CreateEventRequest request)
+    public async Task<IActionResult> Create(CreateEventVM request)
     {
         if (!ModelState.IsValid)
         {
@@ -107,7 +107,7 @@ public class EventsController : Controller
             return NotFound();
         }
 
-        var request = new UpdateEventRequest
+        var request = new UpdateEventVM
         {
             Title = eventItem.Title,
             Description = eventItem.Description,
@@ -132,7 +132,7 @@ public class EventsController : Controller
     [HttpPost("{id:guid}/edit")]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, UpdateEventRequest request)
+    public async Task<IActionResult> Edit(Guid id, UpdateEventVM request)
     {
         if (!ModelState.IsValid)
         {

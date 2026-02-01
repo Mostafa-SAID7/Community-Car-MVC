@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Dashboard.DTOs;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +28,7 @@ public class AnalyticsController : Controller
     {
         try
         {
-            var request = new AnalyticsRequest
+            var request = new AnalyticsVM
             {
                 StartDate = startDate ?? DateTime.UtcNow.AddDays(-30),
                 EndDate = endDate ?? DateTime.UtcNow
@@ -86,7 +86,7 @@ public class AnalyticsController : Controller
     {
         try
         {
-            var request = new AnalyticsRequest
+            var request = new AnalyticsVM
             {
                 StartDate = startDate ?? DateTime.UtcNow.AddDays(-30),
                 EndDate = endDate ?? DateTime.UtcNow
@@ -108,7 +108,7 @@ public class AnalyticsController : Controller
     {
         try
         {
-            var request = new AnalyticsRequest
+            var request = new AnalyticsVM
             {
                 StartDate = startDate ?? DateTime.UtcNow.AddDays(-30),
                 EndDate = endDate ?? DateTime.UtcNow,
@@ -128,7 +128,7 @@ public class AnalyticsController : Controller
     }
 
     [HttpGet("users-data")]
-    public async Task<IActionResult> GetUserAnalytics([FromQuery] AnalyticsRequest request)
+    public async Task<IActionResult> GetUserAnalytics([FromQuery] AnalyticsVM request)
     {
         try
         {
@@ -143,7 +143,7 @@ public class AnalyticsController : Controller
     }
 
     [HttpGet("content-data")]
-    public async Task<IActionResult> GetContentAnalytics([FromQuery] AnalyticsRequest request)
+    public async Task<IActionResult> GetContentAnalytics([FromQuery] AnalyticsVM request)
     {
         try
         {
@@ -158,7 +158,7 @@ public class AnalyticsController : Controller
     }
 
     [HttpGet("chart-data")]
-    public async Task<IActionResult> GetAnalyticsChart([FromQuery] AnalyticsRequest request)
+    public async Task<IActionResult> GetAnalyticsChart([FromQuery] AnalyticsVM request)
     {
         try
         {

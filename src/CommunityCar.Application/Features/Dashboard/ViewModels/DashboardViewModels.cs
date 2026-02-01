@@ -2,6 +2,7 @@ namespace CommunityCar.Application.Features.Dashboard.ViewModels;
 
 public class OverviewVM
 {
+    public string TimeRange { get; set; } = "Last 30 days";
     public StatsVM Stats { get; set; } = new();
     public List<RecentActivityVM> RecentActivity { get; set; } = new();
     public List<TopContentVM> TopContent { get; set; } = new();
@@ -10,6 +11,10 @@ public class OverviewVM
     public List<ChartDataVM> ContentChart { get; set; } = new();
     public List<ChartDataVM> EngagementChart { get; set; } = new();
     public SystemHealthVM SystemHealth { get; set; } = new();
+    
+    // Date range properties
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 }
 
 public class StatsVM
@@ -267,9 +272,93 @@ public class SystemReportVM
 public class SettingsVM
 {
     public string Key { get; set; } = string.Empty;
+    public string SettingKey { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
 }
 
+public class AnalyticsVM
+{
+    public string ContentType { get; set; } = "All";
+    public UserAnalyticsVM UserAnalytics { get; set; } = new();
+    public ContentAnalyticsVM ContentAnalytics { get; set; } = new();
+    public TrafficAnalyticsVM TrafficAnalytics { get; set; } = new();
+    public List<ChartDataVM> OverviewCharts { get; set; } = new();
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public DateTime DateFrom { get; set; }
+    public DateTime DateTo { get; set; }
+}
 
+public class ModerateContentVM
+{
+    public Guid ContentId { get; set; }
+    public string ContentType { get; set; } = string.Empty;
+    public string Action { get; set; } = string.Empty; // "approve", "reject", "flag"
+    public string? Reason { get; set; }
+    public string? Notes { get; set; }
+    public bool NotifyUser { get; set; } = true;
+}
+
+public class CreateReportVM
+{
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
+    public string ReportType { get; set; } = string.Empty;
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public string Format { get; set; } = "PDF";
+    public bool IsPublic { get; set; }
+    public List<string> IncludeMetrics { get; set; } = new();
+}
+
+public class ReportGenerationVM
+{
+    public string ReportType { get; set; } = string.Empty;
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public string Format { get; set; } = "PDF";
+    public List<string> Metrics { get; set; } = new();
+    public Dictionary<string, object> Parameters { get; set; } = new();
+}
+
+public class ReportScheduleVM
+{
+    public string Name { get; set; } = string.Empty;
+    public string ReportType { get; set; } = string.Empty;
+    public string Schedule { get; set; } = string.Empty; // "daily", "weekly", "monthly"
+    public string Format { get; set; } = "PDF";
+    public List<string> Recipients { get; set; } = new();
+    public bool IsActive { get; set; } = true;
+}
+
+
+// Error Management ViewModels (converted from DTOs)
+public class ErrorStatsVM
+{
+    public DateTime Date { get; set; }
+    public int TotalErrors { get; set; }
+    public int CriticalErrors { get; set; }
+    public int WarningErrors { get; set; }
+    public int InfoErrors { get; set; }
+    public int ResolvedErrors { get; set; }
+    public int UnresolvedErrors { get; set; }
+    public string? MostCommonError { get; set; }
+    public int MostCommonErrorCount { get; set; }
+    public Dictionary<string, int> ErrorsByCategory { get; set; } = new();
+    public Dictionary<string, int> ErrorsBySeverity { get; set; } = new();
+}
+
+public class ErrorBoundaryVM
+{
+    public string Id { get; set; } = string.Empty;
+    public string BoundaryName { get; set; } = string.Empty;
+    public string ErrorMessage { get; set; } = string.Empty;
+    public DateTime OccurredAt { get; set; }
+    public bool IsRecovered { get; set; }
+    public string? RecoveryAction { get; set; }
+    public DateTime? RecoveredAt { get; set; }
+    public int FailureCount { get; set; }
+}

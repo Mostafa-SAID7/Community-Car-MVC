@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
-using CommunityCar.Application.Features.Shared.Interactions.DTOs;
+using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
 using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Web.Controllers.Shared.Shares;
@@ -40,7 +40,7 @@ public class SharesController : Controller
             if (Guid.TryParse(_currentUserService.UserId, out var parsedUserId))
                 userId = parsedUserId;
 
-            var request = new ShareEntityRequest
+            var request = new ShareEntityVM
             {
                 EntityId = parsedEntityId,
                 EntityType = parsedEntityType,
@@ -61,7 +61,7 @@ public class SharesController : Controller
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Share(ShareEntityRequest request)
+    public async Task<IActionResult> Share(ShareEntityVM request)
     {
         try
         {

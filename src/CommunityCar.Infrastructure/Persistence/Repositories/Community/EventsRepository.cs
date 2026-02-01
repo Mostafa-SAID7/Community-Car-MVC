@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Features.Community.Events.DTOs;
+using CommunityCar.Application.Features.Community.Events.ViewModels;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
@@ -19,12 +19,12 @@ public class EventsRepository : BaseRepository<Event>, IEventsRepository
             .FirstOrDefaultAsync(e => e.Slug == slug, cancellationToken);
     }
 
-    public async Task<(IEnumerable<Event> Items, int TotalCount)> SearchAsync(EventsSearchRequest request, CancellationToken cancellationToken = default)
+    public async Task<(IEnumerable<Event> Items, int TotalCount)> SearchAsync(EventsSearchVM request, CancellationToken cancellationToken = default)
     {
         var query = Context.Events.AsQueryable();
 
-        if (!string.IsNullOrEmpty(request.SearchTerm))
-            query = query.Where(e => e.Title.Contains(request.SearchTerm));
+        if (!string.IsNullOrEmpty(request.Query))
+            query = query.Where(e => e.Title.Contains(request.Query));
 
         var totalCount = await query.CountAsync(cancellationToken);
 

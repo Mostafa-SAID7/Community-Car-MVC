@@ -1,7 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.SEO;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.SEO.ViewModels;
-using CommunityCar.Application.Features.SEO.DTOs;
 using System.Text;
 
 namespace CommunityCar.Application.Services.SEO;
@@ -89,7 +88,7 @@ public class SEOService : ISEOService
         };
     }
 
-    public async Task<SitemapVM> GenerateSitemapAsync(SitemapGenerationRequest? request = null)
+    public async Task<SitemapVM> GenerateSitemapAsync(SitemapGenerationVM? request = null)
     {
         await Task.CompletedTask;
 
@@ -114,7 +113,7 @@ public class SEOService : ISEOService
         return sitemap;
     }
 
-    public async Task<RSSFeedVM> GenerateRSSFeedAsync(RSSFeedRequest? request = null)
+    public async Task<RSSFeedVM> GenerateRSSFeedAsync(RSSFeedVM? request = null)
     {
         await Task.CompletedTask;
 
@@ -208,13 +207,13 @@ public class SEOService : ISEOService
         return analysis;
     }
 
-    public async Task UpdateSEOMetricsAsync(string url, SEOMetricsRequest metrics)
+    public async Task UpdateSEOMetricsAsync(string url, SEOMetricsVM metrics)
     {
         // In real implementation, save metrics to database
         await Task.CompletedTask;
     }
 
-    public async Task<string> GenerateSitemapXmlAsync(SitemapGenerationRequest? request = null)
+    public async Task<string> GenerateSitemapXmlAsync(SitemapGenerationVM? request = null)
     {
         var sitemap = await GenerateSitemapAsync(request);
         
@@ -236,7 +235,7 @@ public class SEOService : ISEOService
         return xml.ToString();
     }
 
-    public async Task<string> GenerateRSSXmlAsync(RSSFeedRequest? request = null)
+    public async Task<string> GenerateRSSXmlAsync(RSSFeedVM? request = null)
     {
         var feed = await GenerateRSSFeedAsync(request);
         

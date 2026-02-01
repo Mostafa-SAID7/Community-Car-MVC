@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Community.Maps.DTOs;
+using CommunityCar.Application.Features.Community.Maps.ViewModels;
 using CommunityCar.Application.Services.Maps.Pricing;
 using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Domain.Enums.Community;
@@ -19,9 +19,9 @@ public class RouteEngine : IRouteEngine
         _pricingStrategies = pricingStrategies.ToDictionary(s => s.StrategyName, s => s);
     }
 
-    public async Task<List<RouteOptionDto>> GetRouteOptionsAsync(RouteRequestDto request)
+    public async Task<List<RouteOptionVM>> GetRouteOptionsAsync(RouteRequestVM request)
     {
-        var routes = new List<RouteOptionDto>();
+        var routes = new List<RouteOptionVM>();
 
         // Generate different route types
         var routeTypes = new[] { RouteType.Fastest, RouteType.Shortest, RouteType.Cheapest, RouteType.EcoFriendly };
@@ -58,7 +58,7 @@ public class RouteEngine : IRouteEngine
                     .ToList();
     }
 
-    public async Task<RouteOptionDto> GetOptimalRouteAsync(RouteRequestDto request, RouteType routeType)
+    public async Task<RouteOptionVM> GetOptimalRouteAsync(RouteRequestVM request, RouteType routeType)
     {
         var route = await GenerateRouteAsync(request, routeType);
         if (route == null) return null!;
@@ -71,17 +71,17 @@ public class RouteEngine : IRouteEngine
         return route;
     }
 
-    public async Task<List<RouteOptionDto>> GetAlternativeRoutesAsync(RouteRequestDto request)
+    public async Task<List<RouteOptionVM>> GetAlternativeRoutesAsync(RouteRequestVM request)
     {
         // Generate up to 3 alternative routes with different characteristics
-        var alternatives = new List<RouteOptionDto>();
+        var alternatives = new List<RouteOptionVM>();
 
         // Main route (fastest)
         var mainRoute = await GenerateRouteAsync(request, RouteType.Fastest);
         if (mainRoute != null) alternatives.Add(mainRoute);
 
         // Alternative 1: Avoid highways
-        var noHighwayRequest = new RouteRequestDto
+        var noHighwayRequest = new RouteRequestVM
         {
             StartLocation = request.StartLocation,
             EndLocation = request.EndLocation,
@@ -106,7 +106,7 @@ public class RouteEngine : IRouteEngine
         }
 
         // Alternative 2: Avoid tolls
-        var noTollRequest = new RouteRequestDto
+        var noTollRequest = new RouteRequestVM
         {
             StartLocation = request.StartLocation,
             EndLocation = request.EndLocation,
@@ -133,11 +133,11 @@ public class RouteEngine : IRouteEngine
         return alternatives;
     }
 
-    public async Task<RouteOptionDto> RecalculateRouteAsync(Guid routeId, TrafficConditionDto[] trafficConditions)
+    public async Task<RouteOptionVM> RecalculateRouteAsync(Guid routeId, TrafficConditionVM[] trafficConditions)
     {
         // Since we don't have RouteOptions entity, we'll simulate recalculation
         // In a real implementation, this would fetch from cache or external API
-        var routeDto = new RouteOptionDto
+        var routeDto = new RouteOptionVM
         {
             Id = routeId,
             RouteType = RouteType.Fastest,
@@ -150,12 +150,12 @@ public class RouteEngine : IRouteEngine
         return routeDto;
     }
 
-    private async Task<RouteOptionDto> GenerateRouteAsync(RouteRequestDto request, RouteType routeType)
+    private async Task<RouteOptionVM> GenerateRouteAsync(RouteRequestVM request, RouteType routeType)
     {
         // This would integrate with external routing APIs (Google Maps, OpenStreetMap, etc.)
         // For now, we'll simulate route generation
         
-        var route = new RouteOptionDto
+        var route = new RouteOptionVM
         {
             Id = Guid.NewGuid(),
             RouteType = routeType,
@@ -200,12 +200,12 @@ public class RouteEngine : IRouteEngine
             VehicleType = request.VehicleType,
             FuelType = request.FuelType,
             HasTolls = route.HasTolls,
-            IsPeakHour = IsPeakHour(request.DepartureTime),
+            IsPeakHour = IsPeakHour(request.DepartureTime ?? DateTime.UtcNow),
             Region = "Default",
-            TripDateTime = request.DepartureTime
+            TripDateTime = request.DepartureTime ?? DateTime.UtcNow
         };
 
-        route.CostBreakdown = await pricingStrategy.CalculateCostAsync(costRequest);
+        route.CostBreakdown = ConvertToViewModel(await pricingStrategy.CalculateCostAsync(costRequest));
 
         // Generate sample instructions
         route.Instructions = GenerateSampleInstructions(request, route);
@@ -213,27 +213,28 @@ public class RouteEngine : IRouteEngine
         return route;
     }
 
-    private async Task<TrafficConditionDto[]> GetTrafficConditionsAsync(
+    private async Task<TrafficConditionVM[]> GetTrafficConditionsAsync(
         double startLat, double startLng, double endLat, double endLng)
     {
         // Since we don't have TrafficConditions entity, we'll simulate traffic data
         // In a real implementation, this would integrate with traffic APIs
         await Task.Delay(1); // Simulate async operation
         
-        var conditions = new List<TrafficConditionDto>();
+        var conditions = new List<TrafficConditionVM>();
         
         // Simulate some traffic conditions based on time of day
         var currentHour = DateTime.Now.Hour;
         if (currentHour >= 7 && currentHour <= 9 || currentHour >= 17 && currentHour <= 19)
         {
-            conditions.Add(new TrafficConditionDto
+            conditions.Add(new TrafficConditionVM
             {
                 Id = Guid.NewGuid(),
                 Location = "Main Highway",
                 Latitude = (startLat + endLat) / 2,
                 Longitude = (startLng + endLng) / 2,
                 Type = TrafficConditionType.HeavyTraffic,
-                Severity = TrafficSeverity.Moderate,
+                TrafficSeverity = TrafficSeverity.Moderate,
+                Severity = "Moderate",
                 Description = "Heavy traffic during rush hour",
                 StartTime = DateTime.Now.AddHours(-1),
                 EndTime = DateTime.Now.AddHours(1),
@@ -245,7 +246,7 @@ public class RouteEngine : IRouteEngine
         return conditions.ToArray();
     }
 
-    private void ApplyTrafficConditions(RouteOptionDto route, TrafficConditionDto[] trafficConditions)
+    private void ApplyTrafficConditions(RouteOptionVM route, TrafficConditionVM[] trafficConditions)
     {
         route.TrafficConditions = trafficConditions.ToList();
         
@@ -260,7 +261,7 @@ public class RouteEngine : IRouteEngine
             else
             {
                 // Estimate delay based on severity
-                totalDelay += condition.Severity switch
+                totalDelay += condition.TrafficSeverity switch
                 {
                     TrafficSeverity.Low => 2,
                     TrafficSeverity.Moderate => 5,
@@ -274,7 +275,7 @@ public class RouteEngine : IRouteEngine
         route.TrafficDelayMinutes = totalDelay;
     }
 
-    private RouteOptionDto? DetermineRecommendedRoute(List<RouteOptionDto> routes)
+    private RouteOptionVM? DetermineRecommendedRoute(List<RouteOptionVM> routes)
     {
         if (!routes.Any()) return null;
 
@@ -288,7 +289,7 @@ public class RouteEngine : IRouteEngine
         return scoredRoutes.First().Route;
     }
 
-    private double CalculateRouteScore(RouteOptionDto route)
+    private double CalculateRouteScore(RouteOptionVM route)
     {
         // Scoring algorithm considering time, cost, and traffic
         var timeScore = Math.Max(0, 100 - (route.EstimatedTimeMinutes + route.TrafficDelayMinutes) / 2);
@@ -299,7 +300,7 @@ public class RouteEngine : IRouteEngine
         return (timeScore * 0.4) + (costScore * 0.3) + (trafficScore * 0.2) + (ecoScore * 0.1);
     }
 
-    private bool IsSimilarRoute(RouteOptionDto newRoute, List<RouteOptionDto> existingRoutes)
+    private bool IsSimilarRoute(RouteOptionVM newRoute, List<RouteOptionVM> existingRoutes)
     {
         return existingRoutes.Any(r => 
             Math.Abs(r.DistanceKm - newRoute.DistanceKm) < 2.0 &&
@@ -377,14 +378,33 @@ public class RouteEngine : IRouteEngine
         };
     }
 
-    private List<RouteInstructionDto> GenerateSampleInstructions(RouteRequestDto request, RouteOptionDto route)
+    private List<RouteInstructionVM> GenerateSampleInstructions(RouteRequestVM request, RouteOptionVM route)
     {
         // This would normally come from the routing API
-        return new List<RouteInstructionDto>
+        return new List<RouteInstructionVM>
         {
             new() { Step = 1, Instruction = $"Head towards {request.EndLocation}", DistanceKm = route.DistanceKm * 0.1, TimeMinutes = 5 },
             new() { Step = 2, Instruction = "Continue straight", DistanceKm = route.DistanceKm * 0.7, TimeMinutes = route.EstimatedTimeMinutes - 10 },
             new() { Step = 3, Instruction = $"Arrive at {request.EndLocation}", DistanceKm = route.DistanceKm * 0.2, TimeMinutes = 5 }
+        };
+    }
+
+    private TripCostBreakdownVM ConvertToViewModel(TripCostBreakdown breakdown)
+    {
+        return new TripCostBreakdownVM
+        {
+            FuelCost = breakdown.FuelCost,
+            TollCost = breakdown.TollCost,
+            ParkingCost = breakdown.ParkingCost,
+            ServiceFee = breakdown.SurgeCost,
+            TotalCost = breakdown.TotalCost,
+            Currency = breakdown.Currency,
+            CostItems = breakdown.AdditionalCosts.Select(kvp => new CostItemVM
+            {
+                Name = kvp.Key,
+                Amount = kvp.Value,
+                Description = $"{kvp.Key} cost"
+            }).ToList()
         };
     }
 }

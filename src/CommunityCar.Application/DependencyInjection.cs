@@ -77,10 +77,7 @@ public static class DependencyInjection
         // Background Job Services
         services.AddScoped<BackgroundJobSchedulerService>();
 
-        // Orchestrators (Commented out as they may be missing or need refactoring)
-        // services.AddScoped<IAuthOrchestrator, AuthOrchestrator>();
-        // services.AddScoped<IAccountOrchestrator, AccountOrchestrator>();
-        // services.AddScoped<IProfileOrchestrator, ProfileOrchestrator>();
+
 
         return services;
     }

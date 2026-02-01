@@ -2,7 +2,7 @@ using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Application.Common.Models.Notifications;
 
-public class NotificationRequest
+public class NotificationVM
 {
     public Guid UserId { get; set; }
     public string Title { get; set; } = string.Empty;
@@ -13,7 +13,7 @@ public class NotificationRequest
     public Dictionary<string, object>? Data { get; set; }
 }
 
-public class BulkNotificationRequest
+public class BulkNotificationVM
 {
     public List<Guid> UserIds { get; set; } = new();
     public string Title { get; set; } = string.Empty;

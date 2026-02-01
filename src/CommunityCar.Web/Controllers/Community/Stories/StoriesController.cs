@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.Stories.DTOs;
+using CommunityCar.Application.Features.Community.Stories.ViewModels;
 using CommunityCar.Application.Features.Error.ViewModels;
+using CommunityCar.Domain.Enums.Community;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -24,13 +25,13 @@ public class StoriesController : Controller
     {
         var userId = GetCurrentUserId();
         
-        var request = new StoriesSearchRequest
+        var request = new StoriesSearchVM
         {
             SearchTerm = searchTerm,
             Page = page,
             PageSize = pageSize,
             IsActive = true,
-            SortBy = StoriesSortBy.Default
+            SortBy = StoriesSortBy.Newest.ToString()
         };
 
         var response = await _storiesService.SearchStoriesAsync(request);
@@ -97,7 +98,7 @@ public class StoriesController : Controller
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> Create(CreateStoryRequest request)
+    public async Task<IActionResult> Create(CreateStoryVM request)
     {
         var userId = GetCurrentUserId();
         if (!userId.HasValue)
@@ -131,13 +132,13 @@ public class StoriesController : Controller
     [HttpGet("author/{authorId:guid}")]
     public async Task<IActionResult> ByAuthor(Guid authorId, int page = 1, int pageSize = 20)
     {
-        var request = new StoriesSearchRequest
+        var request = new StoriesSearchVM
         {
             AuthorId = authorId,
             Page = page,
             PageSize = pageSize,
             IsActive = true,
-            SortBy = StoriesSortBy.Newest
+            SortBy = StoriesSortBy.Newest.ToString()
         };
 
         var response = await _storiesService.SearchStoriesAsync(request);

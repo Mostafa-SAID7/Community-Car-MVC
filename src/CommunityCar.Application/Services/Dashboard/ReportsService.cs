@@ -1,6 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
@@ -62,7 +61,7 @@ public class ReportsService : IReportsService
         return reports.FirstOrDefault(r => r.Id == reportId);
     }
 
-    public async Task<Guid> GenerateReportAsync(ReportGenerationRequest request)
+    public async Task<Guid> GenerateReportAsync(ReportGenerationVM request)
     {
         // In real implementation, queue report generation job
         await Task.CompletedTask;
@@ -92,7 +91,7 @@ public class ReportsService : IReportsService
                         .ToList();
     }
 
-    public async Task<bool> ScheduleReportAsync(ReportScheduleRequest request)
+    public async Task<bool> ScheduleReportAsync(ReportScheduleVM request)
     {
         // In real implementation, schedule report generation
         await Task.CompletedTask;

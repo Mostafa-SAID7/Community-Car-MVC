@@ -1,11 +1,10 @@
-using CommunityCar.Application.Features.Community.News.DTOs;
 using CommunityCar.Application.Features.Community.News.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 
 public interface INewsService
 {
-    Task<NewsSearchResponse> SearchNewsAsync(NewsSearchRequest request);
+    Task<NewsSearchResponse> SearchNewsAsync(NewsSearchVM request);
     Task<NewsItemVM?> GetByIdAsync(Guid id, Guid? currentUserId = null);
     Task<NewsItemVM?> GetBySlugAsync(string slug);
     Task<Guid> CreateAsync(NewsCreateVM model, Guid authorId);

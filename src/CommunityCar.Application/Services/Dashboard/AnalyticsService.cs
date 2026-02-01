@@ -1,12 +1,11 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using CommunityCar.Application.Features.Dashboard.DTOs;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard;
 
 public class AnalyticsService : IAnalyticsService
 {
-    public async Task<List<UserAnalyticsVM>> GetUserAnalyticsAsync(AnalyticsRequest request)
+    public async Task<List<UserAnalyticsVM>> GetUserAnalyticsAsync(AnalyticsVM request)
     {
         var analytics = new List<UserAnalyticsVM>();
         var random = new Random();
@@ -29,7 +28,7 @@ public class AnalyticsService : IAnalyticsService
         return await Task.FromResult(analytics);
     }
 
-    public async Task<List<ContentAnalyticsVM>> GetContentAnalyticsAsync(AnalyticsRequest request)
+    public async Task<List<ContentAnalyticsVM>> GetContentAnalyticsAsync(AnalyticsVM request)
     {
         var analytics = new List<ContentAnalyticsVM>();
         var random = new Random();
@@ -88,7 +87,7 @@ public class AnalyticsService : IAnalyticsService
         });
     }
 
-    public async Task<List<ChartDataVM>> GetAnalyticsChartAsync(AnalyticsRequest request)
+    public async Task<List<ChartDataVM>> GetAnalyticsChartAsync(AnalyticsVM request)
     {
         var data = new List<ChartDataVM>();
         var random = new Random();
@@ -127,7 +126,7 @@ public class AnalyticsService : IAnalyticsService
             UniquePageViews = random.Next(5000, 20000),
             BounceRate = (decimal)(0.35 + random.NextDouble() * 0.2),
             AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 10)),
-            TrafficData = await GetAnalyticsChartAsync(new AnalyticsRequest { StartDate = startDate, EndDate = endDate }),
+            TrafficData = await GetAnalyticsChartAsync(new AnalyticsVM { StartDate = startDate, EndDate = endDate }),
             TopPages = new List<TopPageVM>
             {
                 new() { Path = "/", Title = "Home", Views = 5000, UniqueViews = 3000, BounceRate = 0.4m },
@@ -138,7 +137,7 @@ public class AnalyticsService : IAnalyticsService
 
     public async Task<List<ChartDataVM>> GetUserGrowthChartAsync(int days)
     {
-        return await GetAnalyticsChartAsync(new AnalyticsRequest
+        return await GetAnalyticsChartAsync(new AnalyticsVM
         {
             StartDate = DateTime.UtcNow.AddDays(-days),
             EndDate = DateTime.UtcNow
@@ -147,7 +146,7 @@ public class AnalyticsService : IAnalyticsService
 
     public async Task<List<ChartDataVM>> GetEngagementChartAsync(int days)
     {
-        return await GetAnalyticsChartAsync(new AnalyticsRequest
+        return await GetAnalyticsChartAsync(new AnalyticsVM
         {
             StartDate = DateTime.UtcNow.AddDays(-days),
             EndDate = DateTime.UtcNow
@@ -156,14 +155,14 @@ public class AnalyticsService : IAnalyticsService
 
     public async Task<List<ChartDataVM>> GetContentCreationChartAsync(int days)
     {
-        return await GetAnalyticsChartAsync(new AnalyticsRequest
+        return await GetAnalyticsChartAsync(new AnalyticsVM
         {
             StartDate = DateTime.UtcNow.AddDays(-days),
             EndDate = DateTime.UtcNow
         });
     }
 
-    public async Task<bool> UpdateAnalyticsAsync(AnalyticsRequest request)
+    public async Task<bool> UpdateAnalyticsAsync(AnalyticsVM request)
     {
         await Task.CompletedTask;
         return true;

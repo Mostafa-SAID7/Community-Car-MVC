@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.Posts.DTOs;
+using CommunityCar.Application.Features.Community.Posts.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 
 namespace CommunityCar.Web.Controllers.Community.Post;
@@ -28,7 +28,7 @@ public class PostsController : Controller
     {
         try
         {
-            var request = new PostsSearchRequest
+            var request = new PostsSearchVM
             {
                 SearchTerm = search,
                 SortBy = sortBy,
@@ -119,7 +119,7 @@ public class PostsController : Controller
 
         try
         {
-            var request = new CreatePostRequest
+            var request = new CreatePostVM
             {
                 Title = title,
                 Content = content,
@@ -247,7 +247,7 @@ public class PostsController : Controller
 
         try
         {
-            var request = new UpdatePostRequest
+            var request = new UpdatePostVM
             {
                 Id = id,
                 Title = title,
