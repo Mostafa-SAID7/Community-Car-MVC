@@ -73,7 +73,7 @@
                         <div class="settings-content">
                             <!-- Profile Settings Tab -->
                             <div id="profileSettings" class="tab-content">
-                                <form action="/profile/settings/profile" method="post" enctype="multipart/form-data">
+                                <form asp-controller="ProfileSettings" asp-action="UpdateProfile" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" enctype="multipart/form-data">
                                     @Html.AntiForgeryToken()
                                     <div class="mb-10 text-center relative group/photo">
                                         <div class="w-32 h-32 mx-auto mb-6 rounded-2xl overflow-hidden border-4 border-primary/10 shadow-lg relative">
@@ -220,7 +220,7 @@
                             <div class="settings-content">
                                 <!-- Profile Settings Tab -->
                                 <div id="profileSettings" class="tab-content">
-                                    <form action="/profile/settings/profile" method="post" enctype="multipart/form-data">
+                                    <form asp-controller="ProfileSettings" asp-action="UpdateProfile" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" enctype="multipart/form-data">
                                         @Html.AntiForgeryToken()
                                         <div class="mb-10 text-center relative group/photo">
                                             <div class="w-32 h-32 mx-auto mb-6 rounded-2xl overflow-hidden border-4 border-primary/10 shadow-lg relative">
