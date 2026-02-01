@@ -74,6 +74,29 @@ public class PostsController : Controller
         }
     }
 
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> DetailsBySlug(string slug)
+    {
+        try
+        {
+            var postVM = await _postsService.GetPostBySlugAsync(slug);
+            if (postVM == null)
+            {
+                return NotFound();
+            }
+
+            // Convert ViewModel to simple model for the view
+            var post = postVM;
+
+            return View("~/Views/Community/Posts/Details.cshtml", post);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading post details for slug {Slug}", slug);
+            return NotFound();
+        }
+    }
+
     [HttpGet("create")]
     [Authorize]
     public IActionResult Create()

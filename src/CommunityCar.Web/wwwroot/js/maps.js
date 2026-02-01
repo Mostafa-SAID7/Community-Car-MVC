@@ -6,7 +6,48 @@ let searchResults = [];
 document.addEventListener('DOMContentLoaded', function () {
     initializeMaps();
     initializeModals();
+    setupModalLinks();
 });
+
+function setupModalLinks() {
+    // Global listener for modal toggle buttons
+    document.addEventListener('click', function (e) {
+        const toggleBtn = e.target.closest('[data-bs-toggle="modal"]');
+        if (toggleBtn) {
+            e.preventDefault();
+            const targetId = toggleBtn.getAttribute('data-bs-target').replace('#', '');
+            showModal(targetId);
+        }
+
+        // Global listener for modal dismiss buttons
+        const dismissBtn = e.target.closest('[data-bs-dismiss="modal"]');
+        if (dismissBtn) {
+            e.preventDefault();
+            const modal = dismissBtn.closest('.modal');
+            if (modal) {
+                hideModal(modal.id);
+            }
+        }
+    });
+}
+
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+
+        // Re-initialize Lucide icons in the modal
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
+        // Trigger 'shown.bs.modal' for any custom logic (like auto-populating coordinates)
+        const event = new CustomEvent('shown.bs.modal');
+        modal.dispatchEvent(event);
+    }
+}
 
 function initializeMaps() {
     // Initialize any map-related functionality
@@ -41,6 +82,7 @@ function initializeModals() {
     // Auto-populate coordinates when modals open
     const addPOIModal = document.getElementById('addPOIModal');
     const addRouteModal = document.getElementById('addRouteModal');
+    const addReviewModal = document.getElementById('addReviewModal');
 
     if (addPOIModal) {
         addPOIModal.addEventListener('shown.bs.modal', function () {
@@ -49,6 +91,65 @@ function initializeModals() {
                 document.getElementById('poiLongitude').value = currentLocation.longitude.toFixed(6);
             }
         });
+    }
+
+    if (addReviewModal) {
+        // Handle star rating clicks
+        const starBtns = addReviewModal.querySelectorAll('.star-btn');
+        const ratingInput = document.getElementById('reviewRating');
+
+        starBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const rating = this.getAttribute('data-rating');
+                ratingInput.value = rating;
+
+                // Update stars visual state
+                starBtns.forEach(s => {
+                    const sRating = s.getAttribute('data-rating');
+                    if (sRating <= rating) {
+                        s.classList.remove('text-muted-foreground/30');
+                        s.classList.add('text-amber-500');
+                    } else {
+                        s.classList.add('text-muted-foreground/30');
+                        s.classList.remove('text-amber-500');
+                    }
+                });
+            });
+        });
+
+        // Set target info when modal opens
+        addReviewModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            // Get target info from URL or page context if not on button
+            let targetId = button?.getAttribute('data-target-id');
+            let targetType = button?.getAttribute('data-target-type');
+
+            if (!targetId) {
+                // Fallback: try to find Model ID from page
+                const pathParts = window.location.pathname.split('/');
+                targetId = pathParts[pathParts.length - 1];
+                targetType = window.location.pathname.includes('/poi/') ? 'POI' : 'Route';
+            }
+
+            document.getElementById('reviewTargetId').value = targetId;
+            document.getElementById('reviewTargetType').value = targetType;
+
+            // Reset form
+            document.getElementById('addReviewForm').reset();
+            ratingInput.value = '';
+            starBtns.forEach(s => {
+                s.classList.add('text-muted-foreground/30');
+                s.classList.remove('text-amber-500');
+            });
+        });
+
+        const addReviewForm = document.getElementById('addReviewForm');
+        if (addReviewForm) {
+            addReviewForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                submitReview();
+            });
+        }
     }
 }
 
@@ -379,6 +480,250 @@ function showLocationDetails(poiId) {
         });
 }
 
+// Show route details
+function showRouteDetails(routeId) {
+    fetch(`/maps/routes/${routeId}/json`)
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return response.json();
+        })
+        .then(route => {
+            let detailsPanel = document.getElementById('locationDetailsPanel');
+            const isRtl = document.documentElement.dir === 'rtl';
+
+            if (!detailsPanel) {
+                detailsPanel = document.createElement('div');
+                detailsPanel.id = 'locationDetailsPanel';
+                detailsPanel.className = `fixed top-4 ${isRtl ? 'left-4' : 'right-4'} w-80 bg-card border border-border rounded-2xl shadow-2xl p-6 z-50 max-h-[80vh] overflow-auto animate-in slide-in-from-right duration-300`;
+                detailsPanel.dir = isRtl ? 'rtl' : 'ltr';
+                document.body.appendChild(detailsPanel);
+            }
+
+            let html = `
+                <div class="flex justify-between items-start mb-4">
+                    <h5 class="text-lg font-black text-foreground">${route.name}</h5>
+                    <button type="button" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all" onclick="closeLocationDetails()">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <p class="text-sm text-muted-foreground">${route.description}</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-background/50 rounded-xl p-3 text-center border border-border/40">
+                            <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground block mb-1">Distance</span>
+                            <span class="text-sm font-bold text-foreground">${route.distanceKm.toFixed(1)} KM</span>
+                        </div>
+                        <div class="bg-background/50 rounded-xl p-3 text-center border border-border/40">
+                            <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground block mb-1">Duration</span>
+                            <span class="text-sm font-bold text-foreground">${Math.floor(route.estimatedDurationMinutes / 60)}h ${route.estimatedDurationMinutes % 60}m</span>
+                        </div>
+                    </div>
+                    <div class="bg-background/50 rounded-xl p-4 space-y-2 text-sm">
+                        <div class="flex justify-between"><span>Difficulty</span><span class="font-bold text-primary">${route.difficulty}</span></div>
+                        <div class="flex justify-between"><span>Type</span><span class="font-bold">${route.type}</span></div>
+                        <div class="flex justify-between pt-2 border-t border-border/40"><span>Rating</span><div class="flex items-center gap-1">${Array.from({ length: 5 }, (_, i) => `<i data-lucide="star" class="w-3 h-3 ${i < route.averageRating ? 'text-amber-500 fill-current' : 'text-muted-foreground opacity-30'}"></i>`).join('')}</div></div>
+                    </div>
+                    <div class="space-y-2 pt-2">
+                        <a href="/maps/routes/${route.id}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-glow-primary">
+                            <i data-lucide="navigation" class="w-4 h-4"></i> Start Navigator
+                        </a>
+                    </div>
+                </div>`;
+            detailsPanel.innerHTML = html;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        })
+        .catch(error => { console.error('Error loading route details:', error); showToast('Error loading route details', 'error'); });
+}
+
+// Hotspots Infinite Scroll logic
+let hotspotPage = 1;
+const hotspotPageSize = 3;
+let isLoadingHotspots = false;
+let hasMoreHotspots = true;
+
+function initHotspotsInfiniteScroll() {
+    const sentinel = document.getElementById('hotspots-sentinel');
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !isLoadingHotspots && hasMoreHotspots) {
+            loadMoreHotspots();
+        }
+    }, { threshold: 0.1 });
+
+    observer.observe(sentinel);
+}
+
+function loadMoreHotspots() {
+    if (isLoadingHotspots || !hasMoreHotspots) return;
+    
+    isLoadingHotspots = true;
+    hotspotPage++;
+    
+    const container = document.getElementById('hotspots-content');
+    const sentinel = document.getElementById('hotspots-sentinel');
+    if (!container || !sentinel) return;
+
+    // Show skeletons
+    const skeletons = document.createElement('div');
+    skeletons.id = 'loading-skeletons';
+    skeletons.innerHTML = `
+        <div class="animate-pulse space-y-4 p-4">
+            <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-xl bg-muted"></div><div class="flex-1 space-y-2"><div class="h-4 bg-muted rounded w-3/4"></div><div class="h-3 bg-muted rounded w-1/2"></div></div></div>
+            <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-xl bg-muted"></div><div class="flex-1 space-y-2"><div class="h-4 bg-muted rounded w-3/4"></div><div class="h-3 bg-muted rounded w-1/2"></div></div></div>
+            <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-xl bg-muted"></div><div class="flex-1 space-y-2"><div class="h-4 bg-muted rounded w-3/4"></div><div class="h-3 bg-muted rounded w-1/2"></div></div></div>
+        </div>
+    `;
+    container.insertBefore(skeletons, sentinel);
+
+    fetch(`/maps/search?page=${hotspotPage}&pageSize=${hotspotPageSize}&sortBy=rating&sortDescending=true`)
+        .then(response => response.json())
+        .then(data => {
+            skeletons.remove();
+            if (!data.items || data.items.length === 0) {
+                hasMoreHotspots = false;
+                sentinel.innerHTML = '<div class="p-4 text-center text-[10px] text-muted-foreground opacity-30">No more hotspots found.</div>';
+                return;
+            }
+
+            const isArabic = document.documentElement.lang === 'ar';
+            data.items.forEach(poi => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center gap-4 p-4 hover:bg-muted/30 rounded-xl transition-all group/poi cursor-pointer border border-transparent hover:border-border/40';
+                item.onclick = () => showLocationDetails(poi.id);
+                
+                const name = isArabic && poi.nameAr ? poi.nameAr : poi.name;
+                
+                item.innerHTML = `
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shrink-0 group-hover/poi:scale-110 transition-transform">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h6 class="text-[13px] font-black text-foreground leading-tight tracking-tight group-hover/poi:text-primary transition-colors truncate">
+                            <a href="/maps/poi/${poi.id}" onclick="event.stopPropagation();">${name}</a>
+                        </h6>
+                        <div class="flex items-center gap-2 mt-1">
+                            <div class="flex items-center text-amber-500 text-[8px]">
+                                ${Array.from({ length: 5 }, (_, i) => `<i data-lucide="star" class="w-2.5 h-2.5 ${i < Math.round(poi.averageRating) ? 'fill-current' : 'opacity-30'}"></i>`).join('')}
+                            </div>
+                            <span class="text-[9px] font-black uppercase text-muted-foreground opacity-50">${poi.checkInCount} Check-ins</span>
+                        </div>
+                    </div>
+                `;
+                container.insertBefore(item, sentinel);
+            });
+
+            if (data.page >= data.totalPages) {
+                hasMoreHotspots = false;
+                sentinel.innerHTML = '<div class="p-4 text-center text-[10px] text-muted-foreground opacity-30">All hotspots loaded.</div>';
+            }
+            
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            isLoadingHotspots = false;
+        })
+        .catch(err => {
+            console.error('Error loading more hotspots:', err);
+            skeletons.remove();
+            isLoadingHotspots = false;
+        });
+}
+
+// Show route details
+function showRouteDetails(routeId) {
+    fetch(`/maps/routes/${routeId}/json`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(route => {
+            // Create or update details panel (reusing the same panel ID as POI)
+            let detailsPanel = document.getElementById('locationDetailsPanel');
+            const isRtl = document.documentElement.dir === 'rtl';
+
+            if (!detailsPanel) {
+                detailsPanel = document.createElement('div');
+                detailsPanel.id = 'locationDetailsPanel';
+                detailsPanel.className = `fixed top-4 ${isRtl ? 'left-4' : 'right-4'} w-80 bg-card border border-border rounded-2xl shadow-2xl p-6 z-50 max-h-[80vh] overflow-auto animate-in slide-in-from-right duration-300`;
+                detailsPanel.dir = isRtl ? 'rtl' : 'ltr';
+                document.body.appendChild(detailsPanel);
+            }
+
+            let html = `
+                <div class="flex justify-between items-start mb-4">
+                    <h5 class="text-lg font-black text-foreground">${route.name}</h5>
+                    <button type="button" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all" onclick="closeLocationDetails()">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <p class="text-sm text-muted-foreground">${route.description}</p>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-background/50 rounded-xl p-3 text-center border border-border/40">
+                            <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground block mb-1">Distance</span>
+                            <span class="text-sm font-bold text-foreground">${route.distanceKm.toFixed(1)} KM</span>
+                        </div>
+                        <div class="bg-background/50 rounded-xl p-3 text-center border border-border/40">
+                            <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground block mb-1">Duration</span>
+                            <span class="text-sm font-bold text-foreground">${Math.floor(route.estimatedDurationMinutes / 60)}h ${route.estimatedDurationMinutes % 60}m</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-background/50 rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="font-medium">Difficulty</span>
+                            <span class="font-bold text-primary">${route.difficulty}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="font-medium">Type</span>
+                            <span class="font-bold">${route.type}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm pt-2 border-t border-border/40">
+                            <span class="font-medium">Rating</span>
+                            <div class="flex items-center gap-1">
+                                ${Array.from({ length: 5 }, (_, i) =>
+                `<i data-lucide="star" class="w-3 h-3 ${i < route.averageRating ? 'text-amber-500 fill-current' : 'text-muted-foreground opacity-30'}"></i>`
+            ).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5">
+                        ${route.isScenic ? '<span class="px-2 py-1 bg-amber-500/10 text-amber-600 rounded-lg text-[10px] font-black uppercase tracking-widest border border-amber-500/20">Scenic</span>' : ''}
+                        ${route.isOffRoad ? '<span class="px-2 py-1 bg-orange-500/10 text-orange-600 rounded-lg text-[10px] font-black uppercase tracking-widest border border-orange-500/20">Off-Road</span>' : ''}
+                        ${route.hasTolls ? '<span class="px-2 py-1 bg-red-500/10 text-red-600 rounded-lg text-[10px] font-black uppercase tracking-widest border border-red-500/20">Tolls</span>' : ''}
+                    </div>
+
+                    <div class="space-y-2 pt-2">
+                        <a href="/maps/routes/${route.id}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-glow-primary">
+                            <i data-lucide="navigation" class="w-4 h-4"></i>
+                            Start Navigator
+                        </a>
+                        <button type="button" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all" onclick="showToast('Route saved to library', 'success')">
+                            <i data-lucide="bookmark" class="w-4 h-4"></i>
+                            Save Route
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            detailsPanel.innerHTML = html;
+
+            // Re-initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        })
+        .catch(error => {
+            console.error('Error loading route details:', error);
+            showToast('Error loading route details', 'error');
+        });
+}
+
 // Close location details
 function closeLocationDetails() {
     const detailsPanel = document.getElementById('locationDetailsPanel');
@@ -553,6 +898,65 @@ function submitRoute() {
         });
 }
 
+// Submit new review
+function submitReview() {
+    const form = document.getElementById('addReviewForm');
+    if (!form) return;
+
+    const formData = new FormData(form);
+    const reviewData = {
+        targetId: formData.get('targetId'),
+        targetType: formData.get('targetType'),
+        rating: parseInt(formData.get('rating')),
+        title: formData.get('title'),
+        comment: formData.get('comment'),
+        isRecommended: formData.get('isRecommended') === 'on'
+    };
+
+    // Validate
+    if (!reviewData.rating) {
+        showToast('Please select a rating', 'error');
+        return;
+    }
+    if (!reviewData.title || !reviewData.comment) {
+        showToast('Please fill in both title and comment', 'error');
+        return;
+    }
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnHtml = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Submitting...';
+    submitBtn.disabled = true;
+
+    fetch('/reviews', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+        },
+        body: JSON.stringify(reviewData)
+    })
+        .then(response => {
+            if (response.ok) return response.json();
+            if (response.status === 401) throw new Error('Please log in to submit a review');
+            return response.text().then(text => { throw new Error(text || 'Failed to submit review'); });
+        })
+        .then(review => {
+            showToast('Review submitted successfully!', 'success');
+            hideModal('addReviewModal');
+            form.reset();
+            // Refresh page to show new review
+            setTimeout(() => location.reload(), 1500);
+        })
+        .catch(error => {
+            console.error('Error submitting review:', error);
+            showToast(error.message || 'Error submitting review. Please try again.', 'error');
+            submitBtn.innerHTML = originalBtnHtml;
+            submitBtn.disabled = false;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+}
+
 // Show toast notification
 function showToast(message, type = 'info') {
     // Use the global notification system if available
@@ -567,9 +971,9 @@ function showToast(message, type = 'info') {
         const isRtl = document.documentElement.dir === 'rtl';
 
         toast.className = `fixed top-4 ${isRtl ? 'left-4' : 'right-4'} z-50 px-6 py-3 rounded-xl shadow-lg text-white font-medium transition-all ${type === 'success' ? 'bg-green-600' :
-                type === 'error' ? 'bg-red-600' :
-                    type === 'warning' ? 'bg-amber-600' :
-                        'bg-blue-600'
+            type === 'error' ? 'bg-red-600' :
+                type === 'warning' ? 'bg-amber-600' :
+                    'bg-blue-600'
             }`;
         toast.textContent = message;
         toast.dir = isRtl ? 'rtl' : 'ltr';

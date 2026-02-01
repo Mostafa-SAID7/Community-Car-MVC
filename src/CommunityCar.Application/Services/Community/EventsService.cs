@@ -27,6 +27,12 @@ public class EventsService : IEventsService
         return eventEntity == null ? null : _mapper.Map<EventVM>(eventEntity);
     }
 
+    public async Task<EventVM?> GetEventBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        var eventEntity = await _unitOfWork.Events.GetBySlugAsync(slug, cancellationToken);
+        return eventEntity == null ? null : _mapper.Map<EventVM>(eventEntity);
+    }
+
     public async Task<EventsSearchResponse> SearchEventsAsync(EventsSearchRequest request, CancellationToken cancellationToken = default)
     {
         var (items, totalCount) = await _unitOfWork.Events.SearchAsync(request, cancellationToken);

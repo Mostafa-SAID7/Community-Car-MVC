@@ -3,7 +3,6 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Features.Guides.ViewModels;
-using CommunityCar.Application.Features.Guides.ViewModels;
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Community.Guides;
 using CommunityCar.Domain.Entities.Shared;
@@ -63,6 +62,14 @@ public class GuidesService : IGuidesService
             CanVerify = currentUserId.HasValue && await IsAdminAsync(currentUserId.Value),
             CanFeature = currentUserId.HasValue && await IsAdminAsync(currentUserId.Value)
         };
+    }
+
+    public async Task<GuideDetailVM?> GetGuideBySlugAsync(string slug, Guid? currentUserId = null)
+    {
+        var guide = await _guidesRepository.GetBySlugAsync(slug);
+        if (guide == null) return null;
+
+        return await GetGuideAsync(guide.Id, currentUserId);
     }
 
     public async Task<GuideListVM> GetGuidesAsync(GuideFilterVM filter, Guid? currentUserId = null)

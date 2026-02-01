@@ -6,6 +6,7 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 public interface IEventsService
 {
     Task<EventVM?> GetEventByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<EventVM?> GetEventBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<EventsSearchResponse> SearchEventsAsync(EventsSearchRequest request, CancellationToken cancellationToken = default);
     Task<EventVM> CreateEventAsync(CreateEventRequest request, CancellationToken cancellationToken = default);
     Task<EventVM> UpdateEventAsync(Guid id, UpdateEventRequest request, CancellationToken cancellationToken = default);

@@ -28,6 +28,12 @@ public class GroupsService : IGroupsService
         return group == null ? null : _mapper.Map<GroupVM>(group);
     }
 
+    public async Task<GroupVM?> GetGroupBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        var group = await _unitOfWork.Groups.GetBySlugAsync(slug, cancellationToken);
+        return group == null ? null : _mapper.Map<GroupVM>(group);
+    }
+
     public async Task<GroupsSearchResponse> SearchGroupsAsync(GroupsSearchRequest request, CancellationToken cancellationToken = default)
     {
         var (items, totalCount) = await _unitOfWork.Groups.SearchAsync(

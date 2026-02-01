@@ -7,6 +7,7 @@ public interface IStoriesService
 {
     Task<StoriesSearchResponse> SearchStoriesAsync(StoriesSearchRequest request);
     Task<StoryVM?> GetByIdAsync(Guid id);
+    Task<StoryVM?> GetBySlugAsync(string slug);
     Task<StoryVM> CreateAsync(CreateStoryRequest request);
     Task<StoryVM> UpdateAsync(Guid id, UpdateStoryRequest request);
     Task<bool> DeleteAsync(Guid id);

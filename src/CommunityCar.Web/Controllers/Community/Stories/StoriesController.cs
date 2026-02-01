@@ -62,6 +62,27 @@ public class StoriesController : Controller
         return View("~/Views/Community/Stories/Details.cshtml", story);
     }
 
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> DetailsBySlug(string slug)
+    {
+        var story = await _storiesService.GetBySlugAsync(slug);
+        if (story == null)
+        {
+            return NotFound();
+        }
+
+        var userId = GetCurrentUserId();
+        ViewBag.CurrentUserId = userId;
+
+        // Increment view count
+        if (userId.HasValue)
+        {
+            await _storiesService.IncrementViewCountAsync(story.Id);
+        }
+
+        return View("~/Views/Community/Stories/Details.cshtml", story);
+    }
+
     [HttpGet("create")]
     public IActionResult Create()
     {

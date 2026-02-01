@@ -174,6 +174,12 @@ public class StoriesService : IStoriesService
         return story != null ? _mapper.Map<StoryVM>(story) : null;
     }
 
+    public async Task<StoryVM?> GetBySlugAsync(string slug)
+    {
+        var story = await _unitOfWork.Stories.GetBySlugAsync(slug);
+        return story != null ? _mapper.Map<StoryVM>(story) : null;
+    }
+
     public async Task<StoryVM> CreateAsync(CreateStoryRequest request)
     {
         var story = new Story(request.MediaUrl, request.AuthorId, request.Type, request.Duration);

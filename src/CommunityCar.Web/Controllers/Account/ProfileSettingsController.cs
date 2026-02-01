@@ -200,6 +200,9 @@ public class ProfileSettingsController : Controller
                 Bio = model.Bio,
                 City = model.City,
                 Country = model.Country,
+                BioAr = model.BioAr,
+                CityAr = model.CityAr,
+                CountryAr = model.CountryAr,
                 PhoneNumber = model.PhoneNumber,
                 Website = null // ProfileSettingsVM doesn't have Website, so set to null
             };

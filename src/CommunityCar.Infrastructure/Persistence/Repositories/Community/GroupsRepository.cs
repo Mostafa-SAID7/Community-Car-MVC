@@ -13,6 +13,12 @@ public class GroupsRepository : BaseRepository<Group>, IGroupsRepository
     {
     }
 
+    public async Task<Group?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        return await Context.Groups
+            .FirstOrDefaultAsync(g => g.Slug == slug, cancellationToken);
+    }
+
     public async Task<(IEnumerable<Group> Items, int TotalCount)> SearchAsync(
         string? searchTerm, 
         GroupPrivacy? privacy, 

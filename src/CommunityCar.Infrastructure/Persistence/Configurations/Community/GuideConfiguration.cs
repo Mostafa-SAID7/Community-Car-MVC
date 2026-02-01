@@ -11,6 +11,13 @@ public class GuideConfiguration : IEntityTypeConfiguration<Guide>
     {
         builder.ToTable("Guides");
 
+        builder.Property(g => g.Slug)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.HasIndex(g => g.Slug)
+            .IsUnique();
+
         builder.Property(g => g.Tags)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),

@@ -10,6 +10,7 @@ public class Story : AggregateRoot
     public string MediaUrl { get; private set; }
     public Guid AuthorId { get; private set; }
     public DateTime ExpiresAt { get; private set; }
+    public string Slug { get; private set; } = string.Empty;
     
     // Enhanced properties
     public string? Caption { get; private set; }
@@ -63,6 +64,7 @@ public class Story : AggregateRoot
         Type = type;
         Duration = duration;
         ExpiresAt = DateTime.UtcNow.AddHours(duration);
+        Slug = GenerateSlug($"story-{DateTime.UtcNow:yyyyMMdd}-{authorId.ToString()[..8]}");
         IsActive = true;
         IsArchived = false;
         IsFeatured = false;
@@ -81,6 +83,10 @@ public class Story : AggregateRoot
     public void UpdateCaption(string? caption)
     {
         Caption = caption;
+        if (!string.IsNullOrWhiteSpace(caption))
+        {
+            Slug = GenerateSlug(caption);
+        }
         Audit(UpdatedBy);
     }
 
@@ -259,4 +265,45 @@ public class Story : AggregateRoot
     public bool IsMultiMedia => _additionalMediaUrls.Any();
 
     public int TotalMediaCount => 1 + _additionalMediaUrls.Count;
+
+    private static string GenerateSlug(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return $"story-{Guid.NewGuid().ToString("N")[..8]}";
+
+        var slug = input.ToLowerInvariant()
+            .Replace(" ", "-")
+            .Replace("'", "")
+            .Replace("\"", "")
+            .Replace(".", "")
+            .Replace(",", "")
+            .Replace("!", "")
+            .Replace("?", "")
+            .Replace(":", "")
+            .Replace(";", "")
+            .Replace("(", "")
+            .Replace(")", "")
+            .Replace("[", "")
+            .Replace("]", "")
+            .Replace("{", "")
+            .Replace("}", "")
+            .Replace("/", "-")
+            .Replace("\\", "-")
+            .Replace("&", "and");
+
+        // Remove multiple consecutive dashes
+        while (slug.Contains("--"))
+            slug = slug.Replace("--", "-");
+
+        // Remove leading and trailing dashes
+        slug = slug.Trim('-');
+
+        // Ensure slug is not empty and not too long
+        if (string.IsNullOrWhiteSpace(slug))
+            slug = $"story-{Guid.NewGuid().ToString("N")[..8]}";
+        else if (slug.Length > 100)
+            slug = slug[..100].TrimEnd('-');
+
+        return slug;
+    }
 }

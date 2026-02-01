@@ -25,7 +25,18 @@ public class QASeeder
 
     public async Task SeedAsync()
     {
-        if (await _context.Questions.AnyAsync()) return;
+        // Clear existing questions if they have empty slugs
+        var existingQuestions = await _context.Questions.ToListAsync();
+        var questionsWithEmptySlugs = existingQuestions.Where(q => string.IsNullOrEmpty(q.Slug)).ToList();
+        
+        if (questionsWithEmptySlugs.Any())
+        {
+            _logger.LogInformation($"Found {questionsWithEmptySlugs.Count} questions with empty slugs. Removing them to reseed...");
+            _context.Questions.RemoveRange(questionsWithEmptySlugs);
+            await _context.SaveChangesAsync();
+        }
+        
+        if (await _context.Questions.CountAsync() >= 5) return;
 
         _logger.LogInformation("Seeding Q&A data...");
 

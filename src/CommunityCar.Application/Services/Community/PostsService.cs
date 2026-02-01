@@ -28,6 +28,12 @@ public class PostsService : IPostsService
         return post == null ? null : _mapper.Map<PostVM>(post);
     }
 
+    public async Task<PostVM?> GetPostBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        var post = await _unitOfWork.Posts.GetBySlugAsync(slug, cancellationToken);
+        return post == null ? null : _mapper.Map<PostVM>(post);
+    }
+
     public async Task<PostsSearchResponse> SearchPostsAsync(PostsSearchRequest request, CancellationToken cancellationToken = default)
     {
         var (items, totalCount) = await _unitOfWork.Posts.SearchAsync(

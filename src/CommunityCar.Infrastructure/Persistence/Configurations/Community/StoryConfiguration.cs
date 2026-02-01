@@ -11,6 +11,13 @@ public class StoryConfiguration : IEntityTypeConfiguration<Story>
     {
         builder.ToTable("Stories");
 
+        builder.Property(s => s.Slug)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.HasIndex(s => s.Slug)
+            .IsUnique();
+
         builder.Property(s => s.Tags)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),

@@ -47,6 +47,18 @@ public class EventsController : Controller
         return View("~/Views/Community/Events/Details.cshtml", eventItem);
     }
 
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> DetailsBySlug(string slug)
+    {
+        var eventItem = await _eventsService.GetEventBySlugAsync(slug);
+        if (eventItem == null)
+        {
+            return NotFound();
+        }
+
+        return View("~/Views/Community/Events/Details.cshtml", eventItem);
+    }
+
     [HttpGet("create")]
     [Authorize]
     public IActionResult Create()

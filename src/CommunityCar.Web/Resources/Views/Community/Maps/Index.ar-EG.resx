@@ -139,4 +139,16 @@
   <data name="TopRoutes" xml:space="preserve">
     <value>أبرز الطرق</value>
   </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>عرض الكل</value>
+  </data>
+  <data name="CommunityMaps" xml:space="preserve">
+    <value>خرائط المجتمع</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>إضافة موقع</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>تصفية</value>
+  </data>
 </root>

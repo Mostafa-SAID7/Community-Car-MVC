@@ -6,6 +6,7 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 public interface IGroupsService
 {
     Task<GroupVM?> GetGroupByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<GroupVM?> GetGroupBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<GroupsSearchResponse> SearchGroupsAsync(GroupsSearchRequest request, CancellationToken cancellationToken = default);
     Task<GroupVM> CreateGroupAsync(CreateGroupRequest request, CancellationToken cancellationToken = default);
     Task<GroupVM> UpdateGroupAsync(Guid id, UpdateGroupRequest request, CancellationToken cancellationToken = default);

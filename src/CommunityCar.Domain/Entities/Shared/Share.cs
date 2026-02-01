@@ -35,17 +35,17 @@ public class Share : BaseEntity
 
     private void GenerateShareUrl()
     {
-        // Generate appropriate share URL based on entity type
+        // Generate appropriate share URL based on entity type using slugs where available
         ShareUrl = EntityType switch
         {
-            EntityType.Post => $"/posts/{EntityId}",
-            EntityType.Question => $"/qa/{EntityId}",
-            EntityType.Answer => $"/qa/{EntityId}#answer-{Id}",
-            EntityType.Story => $"/feed#story-{EntityId}",
+            EntityType.Post => $"/posts/{EntityId}", // Will be updated to use slug in controller
+            EntityType.Question => $"/qa/{EntityId}", // Will be updated to use slug in controller
+            EntityType.Answer => $"/qa/{EntityId}#answer-{Id}", // Will be updated to use slug in controller
+            EntityType.Story => $"/stories/{EntityId}", // Will be updated to use slug in controller
             EntityType.Review => $"/reviews/{EntityId}",
-            EntityType.Event => $"/events/{EntityId}",
-            EntityType.Guide => $"/guides/{EntityId}",
-            EntityType.Group => $"/groups/{EntityId}",
+            EntityType.Event => $"/events/{EntityId}", // Will be updated to use slug in controller
+            EntityType.Guide => $"/guides/{EntityId}", // Will be updated to use slug in controller
+            EntityType.Group => $"/groups/{EntityId}", // Will be updated to use slug in controller
             _ => $"/{EntityType.ToString().ToLower()}/{EntityId}"
         };
     }

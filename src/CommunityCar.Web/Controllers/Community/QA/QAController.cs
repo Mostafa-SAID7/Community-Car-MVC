@@ -1,8 +1,10 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Features.QA.ViewModels;
 using CommunityCar.Application.Features.QA.DTOs;
 using CommunityCar.Domain.Enums.Shared;
+using CommunityCar.Domain.Entities.Community.QA;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +16,14 @@ public class QAController : Controller
     private readonly IQAService _qaService;
     private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<QAController> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public QAController(IQAService qaService, ICurrentUserService currentUserService, ILogger<QAController> logger)
+    public QAController(IQAService qaService, ICurrentUserService currentUserService, ILogger<QAController> logger, IUnitOfWork unitOfWork)
     {
         _qaService = qaService;
         _currentUserService = currentUserService;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     [HttpGet("")]
@@ -307,6 +311,88 @@ public class QAController : Controller
     {
         var makes = await _qaService.GetAvailableCarMakesAsync();
         return Json(makes);
+    }
+    
+    [HttpGet("debug")]
+    public async Task<IActionResult> Debug()
+    {
+        try
+        {
+            var questions = await _qaService.GetAllQuestionsAsync();
+            var result = new
+            {
+                QuestionsCount = questions.Count(),
+                Questions = questions.Take(5).Select(q => new
+                {
+                    q.Id,
+                    q.Title,
+                    q.Slug,
+                    q.CreatedAt,
+                    q.AuthorId,
+                    DetailsUrl = Url.Action("Details", "QA", new { slug = q.Slug })
+                }).ToList(),
+                Success = true
+            };
+            
+            return Json(result);
+        }
+        catch (Exception ex)
+        {
+            return Json(new { Error = ex.Message, StackTrace = ex.StackTrace, Success = false });
+        }
+    }
+    
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+        return Json(new { Message = "QA Controller is working!", Controller = "QA", Action = "Test" });
+    }
+    
+    [HttpGet("fix-slugs")]
+    public async Task<IActionResult> FixSlugs()
+    {
+        try
+        {
+            // Get all questions directly from the database
+            var questions = await _unitOfWork.QA.GetAllAsync();
+            var fixedCount = 0;
+            
+            foreach (var question in questions)
+            {
+                if (string.IsNullOrEmpty(question.Slug))
+                {
+                    // Use reflection to set the slug since it has a private setter
+                    var slugProperty = typeof(Question).GetProperty("Slug");
+                    var generateSlugMethod = typeof(Question).GetMethod("GenerateSlug", 
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                    
+                    if (generateSlugMethod != null)
+                    {
+                        var newSlug = (string)generateSlugMethod.Invoke(null, new object[] { question.Title });
+                        
+                        // Update the question content to trigger slug regeneration
+                        question.UpdateContent(question.Title, question.Body);
+                        await _unitOfWork.QA.UpdateAsync(question);
+                        fixedCount++;
+                    }
+                }
+            }
+            
+            if (fixedCount > 0)
+            {
+                await _unitOfWork.SaveChangesAsync();
+            }
+            
+            return Json(new { 
+                Message = $"Fixed {fixedCount} questions with empty slugs", 
+                TotalQuestions = questions.Count(),
+                Success = true 
+            });
+        }
+        catch (Exception ex)
+        {
+            return Json(new { Error = ex.Message, StackTrace = ex.StackTrace, Success = false });
+        }
     }
 }
 public class CreateQuestionRequest

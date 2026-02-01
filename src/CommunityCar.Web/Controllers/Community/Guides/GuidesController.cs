@@ -92,6 +92,31 @@ public class GuidesController : Controller
         }
     }
 
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> DetailsBySlug(string slug)
+    {
+        try
+        {
+            var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
+            
+            var guide = await _guidesService.GetGuideBySlugAsync(slug, currentUserId);
+            if (guide == null)
+            {
+                return NotFound();
+            }
+
+            // Increment view count
+            await _guidesService.IncrementViewCountAsync(guide.Guide.Id);
+
+            return View("~/Views/Community/Guides/Details.cshtml", guide);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading guide by slug {Slug}", slug);
+            return NotFound();
+        }
+    }
+
     [HttpGet("create")]
     [Authorize]
     public async Task<IActionResult> Create()

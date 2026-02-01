@@ -98,9 +98,9 @@ public class ProfileService : IProfileService
             request.Bio ?? currentProfile.Bio,
             request.City ?? currentProfile.City,
             request.Country ?? currentProfile.Country,
-            currentProfile.BioAr,
-            currentProfile.CityAr,
-            currentProfile.CountryAr,
+            request.BioAr ?? currentProfile.BioAr,
+            request.CityAr ?? currentProfile.CityAr,
+            request.CountryAr ?? currentProfile.CountryAr,
             request.Website ?? currentProfile.Website,
             currentProfile.ProfilePictureUrl,
             currentProfile.CoverImageUrl);

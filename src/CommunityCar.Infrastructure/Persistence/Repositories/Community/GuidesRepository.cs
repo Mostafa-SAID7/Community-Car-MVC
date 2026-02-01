@@ -13,6 +13,12 @@ public class GuidesRepository : BaseRepository<Guide>, IGuidesRepository
     {
     }
 
+    public async Task<Guide?> GetBySlugAsync(string slug)
+    {
+        return await Context.Guides
+            .FirstOrDefaultAsync(g => g.Slug == slug);
+    }
+
     public async Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date)
     {
         return await Context.Guides

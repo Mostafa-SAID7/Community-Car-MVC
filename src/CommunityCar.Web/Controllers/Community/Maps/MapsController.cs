@@ -10,10 +10,12 @@ namespace CommunityCar.Web.Controllers.Community.Maps;
 public class MapsController : Controller
 {
     private readonly IMapsService _mapsService;
+    private readonly IReviewsService _reviewsService;
 
-    public MapsController(IMapsService mapsService)
+    public MapsController(IMapsService mapsService, IReviewsService reviewsService)
     {
         _mapsService = mapsService;
+        _reviewsService = reviewsService;
     }
 
     public async Task<IActionResult> Index()
@@ -60,6 +62,10 @@ public class MapsController : Controller
         if (poi == null)
             return NotFound();
 
+        // Fetch reviews
+        var reviews = await _reviewsService.GetReviewsByTargetAsync(id, "POI");
+        poi.Reviews = reviews.ToList();
+
         return View("~/Views/Community/Maps/POIDetails.cshtml", poi);
     }
 
@@ -69,6 +75,10 @@ public class MapsController : Controller
         var route = await _mapsService.GetRouteByIdAsync(id);
         if (route == null)
             return NotFound();
+
+        // Fetch reviews
+        var reviews = await _reviewsService.GetReviewsByTargetAsync(id, "Route");
+        route.Reviews = reviews.ToList();
 
         return View("~/Views/Community/Maps/RouteDetails.cshtml", route);
     }

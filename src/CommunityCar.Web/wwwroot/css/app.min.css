@@ -1391,7 +1391,7 @@ video {
     /* Mobile header navigation improvements */
 
     /* Ensure mobile navigation takes full width */
-    header .flex-1.max-w-2xl {
+    header .max-w-2xl {
         max-width: none;
     }
 

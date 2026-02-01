@@ -6,6 +6,7 @@ namespace CommunityCar.Application.Common.Interfaces.Repositories.Community;
 
 public interface IPostsRepository : IBaseRepository<Post>
 {
+    Task<Post?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<(IEnumerable<Post> Items, int TotalCount)> SearchAsync(
         string? searchTerm, 
         PostType? type, 

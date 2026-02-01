@@ -139,4 +139,16 @@
   <data name="TopRoutes" xml:space="preserve">
     <value>Top Routes</value>
   </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>View All</value>
+  </data>
+  <data name="CommunityMaps" xml:space="preserve">
+    <value>Community Maps</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>Add Location</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
 </root>

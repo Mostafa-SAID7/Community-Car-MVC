@@ -13,6 +13,12 @@ public class EventsRepository : BaseRepository<Event>, IEventsRepository
     {
     }
 
+    public async Task<Event?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        return await Context.Events
+            .FirstOrDefaultAsync(e => e.Slug == slug, cancellationToken);
+    }
+
     public async Task<(IEnumerable<Event> Items, int TotalCount)> SearchAsync(EventsSearchRequest request, CancellationToken cancellationToken = default)
     {
         var query = Context.Events.AsQueryable();

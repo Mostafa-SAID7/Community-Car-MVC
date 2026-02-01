@@ -24,6 +24,13 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
         builder.Property(p => p.ContentAr)
             .HasMaxLength(10000);
 
+        builder.Property(p => p.Slug)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.HasIndex(p => p.Slug)
+            .IsUnique();
+
         builder.Property(p => p.Type)
             .IsRequired()
             .HasConversion<string>();

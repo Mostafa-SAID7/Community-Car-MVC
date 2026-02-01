@@ -11,6 +11,7 @@ public class Post : AggregateRoot
 {
     public string Title { get; private set; }
     public string Content { get; private set; }
+    public string Slug { get; private set; } = string.Empty;
     
     // Arabic Localization
     public string? TitleAr { get; private set; }
@@ -45,6 +46,7 @@ public class Post : AggregateRoot
     {
         Title = title;
         Content = content;
+        Slug = GenerateSlug(title);
         Type = type;
         AuthorId = authorId;
         CategoryId = categoryId;
@@ -60,6 +62,13 @@ public class Post : AggregateRoot
     public void UpdateContent(string newContent)
     {
         Content = newContent;
+        Audit(UpdatedBy ?? "System");
+    }
+
+    public void UpdateTitle(string newTitle)
+    {
+        Title = newTitle;
+        Slug = GenerateSlug(newTitle);
         Audit(UpdatedBy ?? "System");
     }
 
@@ -142,4 +151,45 @@ public class Post : AggregateRoot
     // {
     //     _comments.Add(comment);
     // }
+
+    private static string GenerateSlug(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            return Guid.NewGuid().ToString("N")[..8];
+
+        var slug = title.ToLowerInvariant()
+            .Replace(" ", "-")
+            .Replace("'", "")
+            .Replace("\"", "")
+            .Replace(".", "")
+            .Replace(",", "")
+            .Replace("!", "")
+            .Replace("?", "")
+            .Replace(":", "")
+            .Replace(";", "")
+            .Replace("(", "")
+            .Replace(")", "")
+            .Replace("[", "")
+            .Replace("]", "")
+            .Replace("{", "")
+            .Replace("}", "")
+            .Replace("/", "-")
+            .Replace("\\", "-")
+            .Replace("&", "and");
+
+        // Remove multiple consecutive dashes
+        while (slug.Contains("--"))
+            slug = slug.Replace("--", "-");
+
+        // Remove leading and trailing dashes
+        slug = slug.Trim('-');
+
+        // Ensure slug is not empty and not too long
+        if (string.IsNullOrWhiteSpace(slug))
+            slug = Guid.NewGuid().ToString("N")[..8];
+        else if (slug.Length > 100)
+            slug = slug[..100].TrimEnd('-');
+
+        return slug;
+    }
 }

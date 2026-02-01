@@ -6,6 +6,7 @@ namespace CommunityCar.Application.Common.Interfaces.Repositories.Community;
 
 public interface IGroupsRepository : IBaseRepository<Group>
 {
+    Task<Group?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<(IEnumerable<Group> Items, int TotalCount)> SearchAsync(
         string? searchTerm, 
         GroupPrivacy? privacy, 

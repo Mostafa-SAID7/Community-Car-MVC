@@ -287,6 +287,63 @@
                     </div>
                 </div>
             }
+
+            <!-- Reviews Section -->
+            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-black text-foreground tracking-tight">@Localizer["Reviews"]</h3>
+                    <button type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95" data-bs-toggle="modal" data-bs-target="#addReviewModal">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        @Localizer["AddReview"]
+                    </button>
+                </div>
+
+                @if (Model.Reviews.Any())
+                {
+                    <div class="space-y-6">
+                        @foreach (var review in Model.Reviews.Take(5))
+                        {
+                            <div class="pb-6 border-b border-border/30 last:border-0 last:pb-0">
+                                <div class="flex items-start justify-between gap-4 mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-muted/20 flex items-center justify-center text-muted-foreground border border-border">
+                                            <i data-lucide="user" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-foreground">@review.ReviewerName</p>
+                                            <p class="text-xs text-muted-foreground">@review.CreatedAt.ToString("MMM dd, yyyy")</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i data-lucide="star" class="w-3.5 h-3.5 @(i <= review.Rating ? "text-amber-500 fill-current" : "text-muted-foreground/30")"></i>
+                                        }
+                                    </div>
+                                </div>
+                                <h4 class="text-sm font-bold text-foreground mb-1">@(isArabic && !string.IsNullOrEmpty(review.TitleAr) ? review.TitleAr : review.Title)</h4>
+                                <p class="text-sm text-muted-foreground leading-relaxed">@(isArabic && !string.IsNullOrEmpty(review.CommentAr) ? review.CommentAr : review.Comment)</p>
+                            </div>
+                        }
+                        
+                        @if (Model.Reviews.Count > 5)
+                        {
+                            <div class="text-center pt-4">
+                                <a href="/reviews/route/@Model.Id" class="text-xs font-black uppercase tracking-widest text-primary hover:underline">@Localizer["ViewAllReviews"] (@Model.Reviews.Count)</a>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="py-8 text-center">
+                        <div class="w-12 h-12 rounded-full bg-muted/20 flex items-center justify-center mx-auto mb-3">
+                            <i data-lucide="message-square" class="w-6 h-6 text-muted-foreground/50"></i>
+                        </div>
+                        <p class="text-sm text-muted-foreground">@Localizer["NoReviewsYet"]</p>
+                    </div>
+                }
+            </div>
         </div>
 
         <!-- Right Column - Stats & Actions -->
@@ -383,7 +440,7 @@
         </div>
     </div>
     </div> <!-- End route-content -->
-</div>
+<partial name="~/Views/Community/Maps/_MapsModals.cshtml" />
 
 @section Scripts {
     <script src="~/js/maps.js"></script>

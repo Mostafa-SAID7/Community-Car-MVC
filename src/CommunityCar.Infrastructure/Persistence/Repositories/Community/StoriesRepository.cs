@@ -12,6 +12,12 @@ public class StoriesRepository : BaseRepository<Story>, IStoriesRepository
     {
     }
 
+    public async Task<Story?> GetBySlugAsync(string slug)
+    {
+        return await Context.Stories
+            .FirstOrDefaultAsync(s => s.Slug == slug);
+    }
+
     public async Task<IEnumerable<Story>> GetActiveAsync()
     {
         return await Context.Stories

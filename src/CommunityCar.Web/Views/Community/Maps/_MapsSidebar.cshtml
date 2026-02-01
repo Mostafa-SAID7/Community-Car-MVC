@@ -9,6 +9,17 @@
         </h3>
         
         <div class="space-y-6">
+            <div class="grid grid-cols-1 gap-3 mb-6 pb-6 border-b border-border/40">
+                <button type="button" class="w-full inline-flex items-center gap-2.5 px-4 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-glow-primary active:scale-95" data-bs-toggle="modal" data-bs-target="#addPOIModal">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    @Localizer["AddLocation"]
+                </button>
+                <button type="button" class="w-full inline-flex items-center gap-2.5 px-4 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg active:scale-95" data-bs-toggle="modal" data-bs-target="#addRouteModal">
+                    <i data-lucide="route" class="w-4 h-4"></i>
+                    @Localizer["AddRoute"]
+                </button>
+            </div>
+
             <div class="space-y-4">
                 <h4 class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Nearby Workshops</h4>
                 @for (int i = 1; i <= 3; i++)

@@ -13,6 +13,12 @@ public class PostsRepository : BaseRepository<Post>, IPostsRepository
     {
     }
 
+    public async Task<Post?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        return await Context.Posts
+            .FirstOrDefaultAsync(p => p.Slug == slug, cancellationToken);
+    }
+
     public async Task<(IEnumerable<Post> Items, int TotalCount)> SearchAsync(
         string? searchTerm, 
         PostType? type, 

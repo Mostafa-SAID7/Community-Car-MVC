@@ -5,6 +5,7 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 public interface IGuidesService
 {
     Task<GuideDetailVM?> GetGuideAsync(Guid id, Guid? currentUserId = null);
+    Task<GuideDetailVM?> GetGuideBySlugAsync(string slug, Guid? currentUserId = null);
     Task<GuideListVM> GetGuidesAsync(GuideFilterVM filter, Guid? currentUserId = null);
     Task<IEnumerable<GuideVM>> GetFeaturedGuidesAsync(int count = 10, Guid? currentUserId = null);
     Task<IEnumerable<GuideVM>> GetVerifiedGuidesAsync(int count = 10, Guid? currentUserId = null);

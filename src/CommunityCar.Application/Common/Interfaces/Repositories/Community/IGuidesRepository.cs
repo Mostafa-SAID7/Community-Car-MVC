@@ -8,6 +8,7 @@ namespace CommunityCar.Application.Common.Interfaces.Repositories.Community;
 
 public interface IGuidesRepository : IBaseRepository<Guide>
 {
+    Task<Guide?> GetBySlugAsync(string slug);
     Task<int> GetCountByUserAndDateAsync(Guid userId, DateTime date);
     Task<Guide?> GetGuideWithAuthorAsync(Guid id);
     Task<IEnumerable<Guide>> GetRelatedGuidesAsync(Guid guideId, int count);

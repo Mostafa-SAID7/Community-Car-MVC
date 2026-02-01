@@ -84,6 +84,29 @@ public class GroupsController : Controller
         }
     }
 
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> DetailsBySlug(string slug)
+    {
+        try
+        {
+            var groupVM = await _groupsService.GetGroupBySlugAsync(slug);
+            if (groupVM == null)
+            {
+                return NotFound();
+            }
+
+            // Convert ViewModel to a simple model for the view
+            var group = groupVM;
+
+            return View("~/Views/Community/Groups/Details.cshtml", group);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading group details for slug {Slug}", slug);
+            return NotFound();
+        }
+    }
+
     [HttpGet("create")]
     [Authorize]
     public IActionResult Create()

@@ -6,6 +6,7 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Community;
 public interface IPostsService
 {
     Task<PostVM?> GetPostByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<PostVM?> GetPostBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<PostsSearchResponse> SearchPostsAsync(PostsSearchRequest request, CancellationToken cancellationToken = default);
     Task<PostVM> CreatePostAsync(CreatePostRequest request, CancellationToken cancellationToken = default);
     Task<PostVM> UpdatePostAsync(Guid id, UpdatePostRequest request, CancellationToken cancellationToken = default);

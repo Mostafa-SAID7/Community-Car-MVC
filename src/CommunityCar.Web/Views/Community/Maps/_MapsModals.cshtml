@@ -1,0 +1,235 @@
+@using Microsoft.Extensions.Localization
+@inject IViewLocalizer Localizer
+
+<!-- Add Location Modal -->
+<div class="modal fade fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm" id="addPOIModal" tabindex="-1" aria-labelledby="addPOIModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-card border border-border rounded-2xl shadow-2xl">
+            <div class="modal-header border-b border-border/30 p-6">
+                <h5 class="modal-title text-xl font-black text-foreground tracking-tight" id="addPOIModalLabel">@Localizer["AddNewLocation"]</h5>
+                <button type="button" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all" data-bs-dismiss="modal" aria-label="Close">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <form id="addPOIForm">
+                <div class="modal-body p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="poiName" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Name"] *</label>
+                            <input type="text" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiName" name="name" required>
+                        </div>
+                        <div>
+                            <label for="poiTypeModal" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Type"] *</label>
+                            <div class="relative">
+                                <select class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none" id="poiTypeModal" name="type" required>
+                                    <option value="">@Localizer["SelectType"]</option>
+                                    <option value="1">Workshop</option>
+                                    <option value="2">Fuel Station</option>
+                                    <option value="3">Showroom</option>
+                                    <option value="4">Paddock</option>
+                                    <option value="5">Track</option>
+                                    <option value="6">Photo Spot</option>
+                                    <option value="7">Meeting Point</option>
+                                    <option value="8">EV Charging</option>
+                                    <option value="9">Car Wash</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="poiDescription" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Description"] *</label>
+                        <textarea class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" id="poiDescription" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="poiLatitude" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Latitude"] *</label>
+                            <input type="number" step="any" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiLatitude" name="latitude" required>
+                        </div>
+                        <div>
+                            <label for="poiLongitude" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Longitude"] *</label>
+                            <input type="number" step="any" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiLongitude" name="longitude" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="poiAddress" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Address"]</label>
+                        <input type="text" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiAddress" name="address">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="poiPhone" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Phone"]</label>
+                            <input type="text" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiPhone" name="phoneNumber">
+                        </div>
+                        <div>
+                            <label for="poiWebsite" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Website"]</label>
+                            <input type="url" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="poiWebsite" name="website">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-t border-border/30 p-6 flex gap-4 justify-end">
+                    <button type="button" class="inline-flex items-center gap-2 px-6 py-3 bg-background border border-border hover:border-muted-foreground hover:text-muted-foreground rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95" data-bs-dismiss="modal">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                        @Localizer["Cancel"]
+                    </button>
+                    <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        @Localizer["SaveLocation"]
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Route Modal -->
+<div class="modal fade fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm" id="addRouteModal" tabindex="-1" aria-labelledby="addRouteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-card border border-border rounded-2xl shadow-2xl">
+            <div class="modal-header border-b border-border/30 p-6">
+                <h5 class="modal-title text-xl font-black text-foreground tracking-tight" id="addRouteModalLabel">@Localizer["AddNewRoute"]</h5>
+                <button type="button" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all" data-bs-dismiss="modal" aria-label="Close">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <form id="addRouteForm">
+                <div class="modal-body p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="routeName" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Name"] *</label>
+                            <input type="text" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="routeName" name="name" required>
+                        </div>
+                        <div>
+                            <label for="routeTypeModal" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Type"] *</label>
+                            <div class="relative">
+                                <select class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none" id="routeTypeModal" name="type" required>
+                                    <option value="">@Localizer["SelectType"]</option>
+                                    <option value="1">Scenic</option>
+                                    <option value="2">Performance</option>
+                                    <option value="3">Off-Road</option>
+                                    <option value="4">Touring</option>
+                                    <option value="5">Commute</option>
+                                    <option value="6">Track</option>
+                                    <option value="7">Rally</option>
+                                    <option value="8">Cruise</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="routeDescription" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Description"] *</label>
+                        <textarea class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" id="routeDescription" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="routeDifficulty" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Difficulty"]</label>
+                            <div class="relative">
+                                <select class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none" id="routeDifficulty" name="difficulty">
+                                    <option value="1">Beginner</option>
+                                    <option value="2">Intermediate</option>
+                                    <option value="3">Advanced</option>
+                                    <option value="4">Expert</option>
+                                </select>
+                                <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="routeDistance" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["DistanceKm"]</label>
+                            <input type="number" step="0.1" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="routeDistance" name="distanceKm">
+                        </div>
+                        <div>
+                            <label for="routeDuration" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["DurationMin"]</label>
+                            <input type="number" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="routeDuration" name="estimatedDurationMinutes">
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-6">
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20" id="routeScenic" name="isScenic">
+                            <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">@Localizer["Scenic"]</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20" id="routeTolls" name="hasTolls">
+                            <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">@Localizer["Tolls"]</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20" id="routeOffRoad" name="isOffRoad">
+                            <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">@Localizer["OffRoad"]</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer border-t border-border/30 p-6 flex gap-4 justify-end">
+                    <button type="button" class="inline-flex items-center gap-2 px-6 py-3 bg-background border border-border hover:border-muted-foreground hover:text-muted-foreground rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95" data-bs-dismiss="modal">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                        @Localizer["Cancel"]
+                    </button>
+                    <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        <i data-lucide="route" class="w-4 h-4"></i>
+                        @Localizer["SaveRoute"]
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Review Modal -->
+<div class="modal fade fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm" id="addReviewModal" tabindex="-1" aria-labelledby="addReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-card border border-border rounded-2xl shadow-2xl">
+            <div class="modal-header border-b border-border/30 p-6">
+                <h5 class="modal-title text-xl font-black text-foreground tracking-tight" id="addReviewModalLabel">@Localizer["WriteAReview"]</h5>
+                <button type="button" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all" data-bs-dismiss="modal" aria-label="Close">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <form id="addReviewForm">
+                <input type="hidden" id="reviewTargetId" name="targetId">
+                <input type="hidden" id="reviewTargetType" name="targetType">
+                
+                <div class="modal-body p-6 space-y-6">
+                    <!-- Rating -->
+                    <div>
+                        <label class="block text-sm font-black uppercase tracking-widest text-foreground mb-3">@Localizer["Rating"] *</label>
+                        <div class="flex items-center gap-2" id="star-rating-container">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <button type="button" class="star-btn p-1 text-muted-foreground/30 hover:text-amber-500 transition-colors" data-rating="@i">
+                                    <i data-lucide="star" class="w-8 h-8 fill-current"></i>
+                                </button>
+                            }
+                        </div>
+                        <input type="hidden" id="reviewRating" name="rating" required>
+                    </div>
+
+                    <div>
+                        <label for="reviewTitle" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Title"] *</label>
+                        <input type="text" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none" id="reviewTitle" name="title" required placeholder="@Localizer["ReviewTitlePlaceholder"]">
+                    </div>
+
+                    <div>
+                        <label for="reviewComment" class="block text-sm font-black uppercase tracking-widest text-foreground mb-2">@Localizer["Comment"] *</label>
+                        <textarea class="w-full bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" id="reviewComment" name="comment" rows="4" required placeholder="@Localizer["ReviewCommentPlaceholder"]"></textarea>
+                    </div>
+
+                    <div class="space-y-4 pt-2">
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20" name="isRecommended">
+                            <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">@Localizer["IRecommendThis"]</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-t border-border/30 p-6 flex gap-4 justify-end">
+                    <button type="button" class="inline-flex items-center gap-2 px-6 py-3 bg-background border border-border hover:border-muted-foreground hover:text-muted-foreground rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95" data-bs-dismiss="modal">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                        @Localizer["Cancel"]
+                    </button>
+                    <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        @Localizer["SubmitReview"]
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

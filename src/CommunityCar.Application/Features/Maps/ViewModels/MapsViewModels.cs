@@ -69,6 +69,9 @@ public class PointOfInterestVM
     // Images and media
     public List<string> ImageUrls { get; set; } = new();
     
+    // Reviews
+    public List<CommunityCar.Application.Features.Reviews.ViewModels.ReviewVM> Reviews { get; set; } = new();
+    
     // Timestamps
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
@@ -163,6 +166,9 @@ public class RouteVM
     
     // Images
     public List<string> ImageUrls { get; set; } = new();
+    
+    // Reviews
+    public List<CommunityCar.Application.Features.Reviews.ViewModels.ReviewVM> Reviews { get; set; } = new();
     
     // Timestamps
     public DateTime CreatedAt { get; set; }

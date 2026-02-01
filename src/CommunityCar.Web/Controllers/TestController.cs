@@ -160,6 +160,37 @@ public class TestController : Controller
     {
         return View();
     }
+    
+    [HttpGet("qa-debug")]
+    public async Task<IActionResult> QADebug()
+    {
+        try
+        {
+            // Check if questions exist in database
+            var questionsCount = await _context.Questions.CountAsync();
+            var questions = await _context.Questions.Take(5).ToListAsync();
+            
+            var result = new
+            {
+                QuestionsCount = questionsCount,
+                Questions = questions.Select(q => new
+                {
+                    q.Id,
+                    q.Title,
+                    q.Slug,
+                    q.CreatedAt,
+                    q.AuthorId
+                }).ToList(),
+                Success = true
+            };
+            
+            return Json(result);
+        }
+        catch (Exception ex)
+        {
+            return Json(new { Error = ex.Message, Success = false });
+        }
+    }
 }
 
 
