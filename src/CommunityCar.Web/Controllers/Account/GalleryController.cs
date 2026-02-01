@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Account.ViewModels.Media;
+using CommunityCar.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,8 +34,10 @@ public class GalleryController : Controller
         var galleryItems = await _galleryService.GetUserGalleryAsync(userId) ?? new List<UserGalleryItemVM>();
         var imageCount = await _galleryService.GetImageCountAsync(userId);
 
+        // Use ViewBagHelper to set consistent data
+        ViewBagHelper.SetPageMetadata(ViewBag, "Gallery", "Manage your photo gallery");
+        ViewBagHelper.SetUserStats(ViewBag, new { ImageCount = imageCount });
         ViewBag.UserId = userId.ToString();
-        ViewBag.ImageCount = imageCount;
 
         return View("~/Views/Account/Profile/Gallery.cshtml", galleryItems);
     }
@@ -48,32 +51,31 @@ public class GalleryController : Controller
             if (!Guid.TryParse(_currentUserService.UserId, out var userId))
             {
                 _logger.LogWarning("Upload attempt with invalid user ID: {UserId}", _currentUserService.UserId);
-                return BadRequest("User not authenticated");
+                return JsonResponseHelper.AuthenticationRequired();
             }
 
-            if (file == null || file.Length == 0)
+            // Use FileHelper for comprehensive file validation
+            var imageValidation = FileHelper.ValidateImageFile(file);
+            if (!imageValidation.IsValid)
             {
-                _logger.LogWarning("Upload attempt with no file provided by user {UserId}", userId);
-                return BadRequest("No file provided");
+                _logger.LogWarning("Upload attempt with invalid image file by user {UserId}: {Error}", userId, imageValidation.ErrorMessage);
+                return JsonResponseHelper.Error(imageValidation.ErrorMessage);
             }
 
-            // Validate file type
-            var allowedTypes = new[] { "image/jpeg", "image/png", "image/webp" };
-            if (!allowedTypes.Contains(file.ContentType))
+            // Additional file size validation using FileHelper
+            var maxSize = FileHelper.MaxFileSizes["image"]; // 5MB
+            var sizeValidation = ValidationHelper.ValidateFileUpload(file, FileHelper.ImageExtensions, maxSize);
+            if (!sizeValidation.IsValid)
             {
-                _logger.LogWarning("Upload attempt with invalid file type {ContentType} by user {UserId}", file.ContentType, userId);
-                return BadRequest("Invalid file type. Only JPEG, PNG, and WebP are allowed.");
+                _logger.LogWarning("Upload attempt failed validation by user {UserId}: {Errors}", userId, string.Join(", ", sizeValidation.Errors));
+                return JsonResponseHelper.Error(string.Join(", ", sizeValidation.Errors));
             }
 
-            // Validate file size (5MB limit)
-            if (file.Length > 5 * 1024 * 1024)
-            {
-                _logger.LogWarning("Upload attempt with file size {FileSize} exceeding limit by user {UserId}", file.Length, userId);
-                return BadRequest("File size exceeds 5MB limit");
-            }
-
+            // Generate secure filename using SecurityHelper
+            var secureFileName = SecurityHelper.GenerateSecureFileName(file.FileName);
+            
             _logger.LogInformation("Starting image upload for user {UserId}, file: {FileName}, size: {FileSize}, type: {ContentType}", 
-                userId, file.FileName, file.Length, file.ContentType);
+                userId, secureFileName, FileHelper.FormatFileSize(file.Length), file.ContentType);
 
             using var stream = new MemoryStream();
             await file.CopyToAsync(stream);
@@ -83,7 +85,7 @@ public class GalleryController : Controller
             {
                 UserId = userId,
                 ImageData = imageData,
-                FileName = file.FileName,
+                FileName = secureFileName,
                 ContentType = file.ContentType,
                 Caption = caption,
                 IsPublic = isPublic
@@ -98,9 +100,7 @@ public class GalleryController : Controller
                 var galleryItem = await _galleryService.GetGalleryItemAsync(userId, result.Id);
                 if (galleryItem != null)
                 {
-                    return Json(new { 
-                        success = true, 
-                        message = "Image uploaded successfully", 
+                    return JsonResponseHelper.Success("Image uploaded successfully", new {
                         imageId = result.Id,
                         galleryItem = new {
                             id = galleryItem.Id,
@@ -114,7 +114,7 @@ public class GalleryController : Controller
                     });
                 }
                 
-                return Json(new { success = true, message = "Image uploaded successfully", imageId = result.Id });
+                return JsonResponseHelper.Success("Image uploaded successfully", new { imageId = result.Id });
             }
 
             _logger.LogError("Gallery service returned null result for user {UserId}", userId);

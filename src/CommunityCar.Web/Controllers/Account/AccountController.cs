@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Web.Extensions;
+using CommunityCar.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,7 +30,14 @@ public class AccountController : Controller
     public IActionResult Register()
     {
         if (User.IsAuthenticated())
-            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+        {
+            var culture = CultureHelper.GetCurrentCulture().Name;
+            return RedirectToAction("Index", "Feed", new { culture });
+        }
+        
+        // Set page metadata using ViewBagHelper
+        ViewBagHelper.SetPageMetadata(ViewBag, "Register", "Create your Community Car account");
+        ViewBagHelper.SetFormData(ViewBag, isEdit: false);
         
         return View("Auth/Register");
     }
@@ -39,13 +47,45 @@ public class AccountController : Controller
     public async Task<IActionResult> Register(RegisterVM model)
     {
         if (User.IsAuthenticated())
-            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+        {
+            var culture = CultureHelper.GetCurrentCulture().Name;
+            return RedirectToAction("Index", "Feed", new { culture });
+        }
 
         if (!ModelState.IsValid)
         {
             if (Request.IsAjaxRequest())
-                return this.JsonError("Please correct the validation errors.", ModelState.GetValidationErrors());
+                return JsonResponseHelper.ValidationError(ValidationHelper.GetModelStateErrors(ModelState));
             
+            ViewBagHelper.SetPageMetadata(ViewBag, "Register", "Create your Community Car account");
+            ViewBagHelper.SetFormData(ViewBag, isEdit: false);
+            return View("Auth/Register", model);
+        }
+
+        // Additional validation using ValidationHelper
+        var emailValidation = ValidationHelper.IsValidEmail(model.Email);
+        var passwordValidation = ValidationHelper.ValidatePassword(model.Password);
+        
+        if (!emailValidation)
+        {
+            ModelState.AddModelError(nameof(model.Email), "Please enter a valid email address");
+        }
+        
+        if (!passwordValidation.IsValid)
+        {
+            foreach (var error in passwordValidation.Errors)
+            {
+                ModelState.AddModelError(nameof(model.Password), error);
+            }
+        }
+
+        if (!ModelState.IsValid)
+        {
+            if (Request.IsAjaxRequest())
+                return JsonResponseHelper.ValidationError(ValidationHelper.GetModelStateErrors(ModelState));
+            
+            ViewBagHelper.SetPageMetadata(ViewBag, "Register", "Create your Community Car account");
+            ViewBagHelper.SetFormData(ViewBag, isEdit: false);
             return View("Auth/Register", model);
         }
 
@@ -61,7 +101,10 @@ public class AccountController : Controller
         var result = await _authService.RegisterAsync(request);
         if (result.Succeeded)
         {
-            TempData["SuccessMessage"] = result.Message ?? "Registration successful! Please check your email to confirm your account.";
+            if (Request.IsAjaxRequest())
+                return JsonResponseHelper.Success("Registration successful! Please check your email to confirm your account.");
+            
+            this.SetSuccessMessage(result.Message ?? "Registration successful! Please check your email to confirm your account.");
             return RedirectToAction("Login");
         }
 
@@ -70,6 +113,11 @@ public class AccountController : Controller
             ModelState.AddModelError(string.Empty, error);
         }
 
+        if (Request.IsAjaxRequest())
+            return JsonResponseHelper.ValidationError(ValidationHelper.GetModelStateErrors(ModelState));
+
+        ViewBagHelper.SetPageMetadata(ViewBag, "Register", "Create your Community Car account");
+        ViewBagHelper.SetFormData(ViewBag, isEdit: false);
         return View("Auth/Register", model);
     }
 
@@ -81,9 +129,19 @@ public class AccountController : Controller
     public IActionResult Login(string? returnUrl = null)
     {
         if (User.IsAuthenticated())
-            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+        {
+            var culture = CultureHelper.GetCurrentCulture().Name;
+            return RedirectToAction("Index", "Feed", new { culture });
+        }
 
-        ViewData["ReturnUrl"] = returnUrl;
+        // Use UrlHelper to generate safe return URL
+        var safeReturnUrl = UrlHelper.GenerateReturnUrl(Url, returnUrl, "Index", "Feed");
+        ViewData["ReturnUrl"] = safeReturnUrl;
+        
+        // Set page metadata using ViewBagHelper
+        ViewBagHelper.SetPageMetadata(ViewBag, "Login", "Sign in to your Community Car account");
+        ViewBagHelper.SetFormData(ViewBag, isEdit: false);
+        
         return View("Auth/Login");
     }
 
@@ -92,9 +150,13 @@ public class AccountController : Controller
     public async Task<IActionResult> Login(LoginVM model, string? returnUrl = null)
     {
         if (User.IsAuthenticated())
-            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+        {
+            var culture = CultureHelper.GetCurrentCulture().Name;
+            return RedirectToAction("Index", "Feed", new { culture });
+        }
 
-        ViewData["ReturnUrl"] = returnUrl;
+        var safeReturnUrl = UrlHelper.GenerateReturnUrl(Url, returnUrl, "Index", "Feed");
+        ViewData["ReturnUrl"] = safeReturnUrl;
 
         if (!ModelState.IsValid)
         {
