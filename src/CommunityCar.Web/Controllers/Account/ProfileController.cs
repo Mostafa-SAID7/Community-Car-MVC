@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Account;
 
-[Route("profile")]
+[Route("{culture}/profile")]
 [Authorize]
 public class ProfileController : Controller
 {
@@ -76,18 +76,59 @@ public class ProfileController : Controller
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string culture)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
-            return RedirectToAction("Login", "Account", new { area = "" });
+            return RedirectToAction("Login", "Account", new { culture });
         }
 
-        return RedirectToAction("ViewProfile", new { id = userId });
+        var profile = await _profileService.GetProfileAsync(userId);
+        if (profile != null && !string.IsNullOrEmpty(profile.Slug))
+        {
+            return RedirectToAction(nameof(ViewProfileBySlug), new { culture, slug = profile.Slug });
+        }
+
+        return RedirectToAction(nameof(ViewProfile), new { culture, id = userId });
+    }
+
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> ViewProfileBySlug(string culture, string slug)
+    {
+        var profile = await _profileService.GetProfileBySlugAsync(slug);
+        if (profile == null)
+        {
+            return NotFound();
+        }
+
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var currentId) ? currentId : Guid.Empty;
+        
+        await SetProfileHeaderDataAsync(profile.Id);
+        ViewBag.UserId = profile.Id;
+        ViewBag.IsOwner = currentUserId == profile.Id;
+
+        var viewModel = new ProfileIndexVM
+        {
+            Id = profile.Id,
+            Slug = profile.Slug,
+            FullName = profile.FullName,
+            Email = profile.Email,
+            PhoneNumber = profile.PhoneNumber,
+            Bio = profile.Bio,
+            City = profile.City,
+            Country = profile.Country,
+            ProfilePictureUrl = profile.ProfilePictureUrl,
+            CreatedAt = profile.CreatedAt,
+            IsEmailConfirmed = profile.IsEmailConfirmed,
+            IsActive = profile.IsActive,
+            PostsCount = profile.PostsCount,
+        };
+
+        return View("~/Views/Account/Profile/Index.cshtml", viewModel);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> ViewProfile(Guid id)
+    public async Task<IActionResult> ViewProfile(string culture, Guid id)
     {
         var profile = await _profileService.GetProfileAsync(id);
         if (profile == null)
@@ -171,11 +212,11 @@ public class ProfileController : Controller
         if (success)
         {
             TempData["SuccessMessage"] = "Profile updated successfully!";
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { culture });
         }
 
         TempData["ErrorMessage"] = "Failed to update profile. Please try again.";
-        return RedirectToAction("Index", "ProfileSettings");
+        return RedirectToAction("Index", "ProfileSettings", new { culture });
     }
 
     [HttpPost("upload-picture")]
@@ -233,7 +274,7 @@ public class ProfileController : Controller
     }
 
     [HttpGet("stats")]
-    public async Task<IActionResult> GetStats()
+    public async Task<IActionResult> GetStats(string culture)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
@@ -245,7 +286,7 @@ public class ProfileController : Controller
     }
 
     [HttpGet("{id:guid}/interests")]
-    public async Task<IActionResult> Interests(Guid id)
+    public async Task<IActionResult> Interests(string culture, Guid id)
     {
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var currentId) ? currentId : Guid.Empty;
         
@@ -257,7 +298,7 @@ public class ProfileController : Controller
     }
 
     [HttpGet("{id:guid}/badges")]
-    public async Task<IActionResult> Badges(Guid id)
+    public async Task<IActionResult> Badges(string culture, Guid id)
     {
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var currentId) ? currentId : Guid.Empty;
         
@@ -276,18 +317,18 @@ public class ProfileController : Controller
     }
 
     [HttpGet("gallery")]
-    public async Task<IActionResult> Gallery()
+    public async Task<IActionResult> Gallery(string culture)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
         {
-             return RedirectToAction("Login", "Account", new { area = "" });
+             return RedirectToAction("Login", "Account", new { culture });
         }
 
-        return RedirectToAction("Index", "Gallery", new { userId });
+        return RedirectToAction("Index", "Gallery", new { culture, userId });
     }
 
     [HttpGet("{id:guid}/gallery")]
-    public async Task<IActionResult> ViewUserGallery(Guid id)
+    public async Task<IActionResult> ViewUserGallery(string culture, Guid id)
     {
         var currentUserId = Guid.TryParse(_currentUserService.UserId, out var currentId) ? currentId : Guid.Empty;
         
@@ -312,7 +353,7 @@ public class ProfileController : Controller
 
     [HttpPost("gallery/upload")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UploadGalleryItem(CommunityCar.Application.Features.Account.ViewModels.Media.UploadImageRequest request, IFormFile mediaFile)
+    public async Task<IActionResult> UploadGalleryItem(string culture, CommunityCar.Application.Features.Account.ViewModels.Media.UploadImageRequest request, IFormFile mediaFile)
     {
         if (mediaFile == null || mediaFile.Length == 0)
         {
@@ -355,7 +396,7 @@ public class ProfileController : Controller
             TempData["ErrorMessage"] = "Failed to upload media. Please try again.";
         }
 
-        return RedirectToAction("Gallery");
+        return RedirectToAction("Gallery", new { culture });
     }
 
 

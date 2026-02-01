@@ -44,7 +44,7 @@ public class SecurityController : Controller
             ActiveSessions = activeSessions.ToList()
         };
 
-        return View(model);
+        return View("Auth/SecurityIndex", model);
     }
 
     #region Password
@@ -52,7 +52,7 @@ public class SecurityController : Controller
     [HttpGet("change-password")]
     public IActionResult ChangePassword()
     {
-        return View();
+        return View("Auth/ChangePassword");
     }
 
     [HttpPost("change-password")]
@@ -63,7 +63,7 @@ public class SecurityController : Controller
             return RedirectToAction("Login", "Account");
 
         if (!ModelState.IsValid)
-            return View(model);
+            return View("Auth/ChangePassword", model);
 
         var request = new ChangePasswordRequest
         {
@@ -85,7 +85,7 @@ public class SecurityController : Controller
             ModelState.AddModelError(string.Empty, error);
         }
 
-        return View(model);
+        return View("Auth/ChangePassword", model);
     }
 
     #endregion
@@ -112,7 +112,7 @@ public class SecurityController : Controller
             model.AuthenticatorUri = setup.QrCodeUri;
         }
 
-        return View(model);
+        return View("Auth/TwoFactor", model);
     }
 
     [HttpPost("two-factor/enable")]

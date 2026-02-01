@@ -18,6 +18,7 @@ class ProfileSettingsManager {
 
         this.setupEventHandlers();
         this.showTab('profile'); // Show profile tab by default
+        this.restorePreview(); // Restore preview if available
     }
 
     setupEventHandlers() {
@@ -81,9 +82,23 @@ class ProfileSettingsManager {
                 const preview = document.getElementById('profile-preview');
                 if (preview) {
                     preview.src = e.target.result;
+                    // Store preview in session for persistence after form submit
+                    sessionStorage.setItem('profilePicturePreview', e.target.result);
                 }
             };
             reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    restorePreview() {
+        const preview = sessionStorage.getItem('profilePicturePreview');
+        if (preview) {
+            const img = document.getElementById('profile-preview');
+            if (img) {
+                img.src = preview;
+            }
+            // Clear after restoring so it doesn't persist forever
+            sessionStorage.removeItem('profilePicturePreview');
         }
     }
 

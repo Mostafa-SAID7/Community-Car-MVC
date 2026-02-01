@@ -24,6 +24,8 @@ public class User : IdentityUser<Guid>, IBaseEntity, ISoftDeletable
     public DateTime? UpdatedAt { get; set; }
     public string? UpdatedBy { get; set; }
     
+    public string? Slug { get; set; }
+    
     // Soft Delete Properties
     public bool IsDeleted { get; private set; } = false;
     public DateTime? DeletedAt { get; private set; }

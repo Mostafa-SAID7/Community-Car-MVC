@@ -108,7 +108,7 @@
                           User.IsInRole(Roles.DatabaseAdmin);
             var profileLabel = isStaff ? Localizer["AdminProfile"] : Localizer["MyProfile"];
         }
-        <a href="/profile"
+        <a asp-controller="Profile" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name"
             class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
             <i data-lucide="user" class="w-[18px] h-[18px] shrink-0"></i>
             <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@profileLabel</span>

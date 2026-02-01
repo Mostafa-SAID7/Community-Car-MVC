@@ -1,0 +1,158 @@
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    // Extract data from ViewBag - this makes the partial completely flexible
+    var userId = ViewBag.UserId?.ToString();
+    var fullName = ViewBag.FullName as string ?? "User";
+    var userName = ViewBag.UserName as string ?? "---";
+    var profilePictureUrl = ViewBag.ProfilePictureUrl as string ?? "/images/default-avatar.png";
+    var bio = ViewBag.Bio as string;
+    var bioAr = ViewBag.BioAr as string;
+    var city = ViewBag.City as string ?? "---";
+    var country = ViewBag.Country as string ?? "---";
+    var createdAt = ViewBag.CreatedAt is DateTime dt ? dt : DateTime.Now;
+    
+    // Stats from ViewBag
+    var rank = ViewBag.Rank as int? ?? 0;
+    var level = ViewBag.Level as int? ?? 0;
+    var points = ViewBag.TotalPoints as int? ?? 0;
+    var posts = ViewBag.PostsCount as int? ?? 0;
+    var comments = ViewBag.CommentsCount as int? ?? 0;
+    var likes = ViewBag.LikesReceived as int? ?? 0;
+    var badges = ViewBag.BadgesCount as int? ?? 0;
+
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var isArabic = currentCulture.StartsWith("ar");
+    var displayBio = isArabic && !string.IsNullOrEmpty(bioAr) ? bioAr : bio;
+    
+    var isOwnProfile = User.Identity?.IsAuthenticated == true && 
+                       User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == userId;
+}
+
+<!-- Profile Identity & Core Stats in Layout Sidebar -->
+<div class="relative group profile-container">
+    <!-- Structural Glow -->
+    <div class="absolute -inset-1 bg-gradient-to-br from-primary/10 via-transparent to-primary/5 rounded-[2.5rem] blur-3xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+
+    <div class="relative bg-card/40 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] shadow-2xl p-8 space-y-8 overflow-hidden">
+        
+        <!-- Avatar and Basic Info Section -->
+        <div class="flex flex-col items-center text-center space-y-6">
+            <div class="avatar-container shadow-2xl relative">
+                <div class="absolute -inset-2 bg-primary/20 rounded-2xl blur-xl opacity-0 hover:opacity-100 transition duration-500"></div>
+                <img src="@(profilePictureUrl)?v=@DateTime.Now.Ticks" alt="@fullName" class="relative w-32 h-32 object-cover rounded-2xl border-4 border-background/50 shadow-inner" />
+            </div>
+            
+            <!-- Name and Username -->
+            <div class="space-y-2 w-full">
+                <h2 class="text-2xl font-black leading-tight text-center tracking-tighter break-words underline decoration-primary/30 decoration-4 underline-offset-8 hover:decoration-primary transition-all cursor-default">@fullName</h2>
+                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 text-center break-all">@@@userName</p>
+            </div>
+            
+            <!-- Rank Badge -->
+            <div class="inline-flex items-center px-5 py-2 bg-primary/5 rounded-2xl border border-primary/10 shadow-sm transition-all hover:scale-105">
+                <span class="text-[9px] font-black uppercase tracking-widest text-primary/60 mr-2">PROTOCOL RANK</span>
+                <span class="text-sm font-black text-foreground">#@rank.ToString("N0")</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons Section -->
+        <div class="space-y-4 pt-4 border-t border-border/20">
+            @if (isOwnProfile)
+            {
+                <a asp-controller="ProfileSettings" asp-action="Index" asp-route-culture="@currentCulture" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg hover:bg-primary/90 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                    <span>@Localizer["EditProfile"]</span>
+                </a>
+            }
+
+            <!-- Bio Section -->
+            <div class="text-center px-4 py-4 bg-muted/10 rounded-2xl border border-border/10">
+                <p class="text-xs font-medium text-muted-foreground italic leading-relaxed break-words">
+                    "@(string.IsNullOrEmpty(displayBio) ? Localizer["NoBio"].Value : displayBio)"
+                </p>
+            </div>
+        </div>
+
+        <!-- Location and Join Date Section -->
+        <div class="space-y-4 pt-6 border-t border-border/20">
+            <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
+                <span class="text-muted-foreground opacity-40 flex items-center gap-2">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-primary"></i> 
+                    @Localizer["Location"]
+                </span>
+                <span class="text-foreground tracking-tight underline decoration-primary/20 decoration-2 underline-offset-4">@city</span>
+            </div>
+            <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
+                <span class="text-muted-foreground opacity-40 flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-primary"></i> 
+                    @Localizer["Joined"]
+                </span>
+                <span class="text-foreground tracking-tight">@createdAt.ToString("MMM yyyy")</span>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="pt-8 border-t border-border/20">
+            <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">
+                <i data-lucide="bar-chart-3" class="w-3.5 h-3.5 fill-current"></i> @Localizer["Statistics"]
+            </nav>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Points -->
+                <div class="p-4 rounded-2xl bg-muted/20 border border-border/50 flex items-center gap-4 transition-all hover:bg-muted/30 hover:border-primary/30 group/stat">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover/stat:scale-110 transition-transform">
+                        <i data-lucide="award" class="w-5 h-5"></i>
+                    </div>
+                    <div class="space-y-0.5">
+                        <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40 group-hover/stat:text-primary/60 transition-colors">@Localizer["Points"]</span>
+                        <span class="block text-lg font-black text-foreground tracking-tighter leading-none">@points.ToString("N0")</span>
+                    </div>
+                </div>
+                
+                <!-- Level -->
+                <div class="p-4 rounded-2xl bg-muted/20 border border-border/50 flex items-center gap-4 transition-all hover:bg-muted/30 hover:border-primary/30 group/stat">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover/stat:scale-110 transition-transform">
+                        <i data-lucide="trending-up" class="w-5 h-5"></i>
+                    </div>
+                    <div class="space-y-0.5">
+                        <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40 group-hover/stat:text-primary/60 transition-colors">@Localizer["Level"]</span>
+                        <span class="block text-lg font-black text-foreground tracking-tighter leading-none">@level</span>
+                    </div>
+                </div>
+                
+                <!-- Badges -->
+                <div class="p-4 rounded-2xl bg-muted/20 border border-border/50 flex items-center gap-4 transition-all hover:bg-muted/30 hover:border-primary/30 group/stat">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover/stat:scale-110 transition-transform">
+                        <i data-lucide="medal" class="w-5 h-5"></i>
+                    </div>
+                    <div class="space-y-0.5">
+                        <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40 group-hover/stat:text-primary/60 transition-colors">@Localizer["Badges"]</span>
+                        <span class="block text-lg font-black text-foreground tracking-tighter leading-none">@badges</span>
+                    </div>
+                </div>
+                
+                <!-- Posts -->
+                <div class="p-4 rounded-2xl bg-muted/20 border border-border/50 flex items-center gap-4 transition-all hover:bg-muted/30 hover:border-primary/30 group/stat">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover/stat:scale-110 transition-transform">
+                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                    </div>
+                    <div class="space-y-0.5">
+                        <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40 group-hover/stat:text-primary/60 transition-colors">@Localizer["Posts"]</span>
+                        <span class="block text-lg font-black text-foreground tracking-tighter leading-none">@posts</span>
+                    </div>
+                </div>
+                
+                <!-- Comments -->
+                <div class="p-4 rounded-2xl bg-muted/20 border border-border/50 flex items-center gap-4 transition-all hover:bg-muted/30 hover:border-primary/30 group/stat col-span-2">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover/stat:scale-110 transition-transform">
+                        <i data-lucide="message-square" class="w-5 h-5"></i>
+                    </div>
+                    <div class="space-y-0.5">
+                        <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40 group-hover/stat:text-primary/60 transition-colors">@Localizer["Comments"]</span>
+                        <span class="block text-lg font-black text-foreground tracking-tighter leading-none">@comments</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

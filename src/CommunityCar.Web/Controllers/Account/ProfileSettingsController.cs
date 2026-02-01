@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Account;
 
-[Route("profile/settings")]
+[Route("{culture}/profile/settings")]
 [Authorize]
 public class ProfileSettingsController : Controller
 {
@@ -62,6 +62,7 @@ public class ProfileSettingsController : Controller
         ViewBag.PostsCount = profile.PostsCount;
         ViewBag.CommentsCount = profile.CommentsCount;
         ViewBag.LikesReceived = profile.LikesReceived;
+        ViewBag.IsOwner = true; // This is always true for profile settings
 
         var stats = await _gamificationService.GetUserStatsAsync(userId);
         if (stats != null)

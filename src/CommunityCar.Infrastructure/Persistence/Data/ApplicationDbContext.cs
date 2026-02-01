@@ -159,6 +159,11 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, Role, Guid>, I
         
         // Configure Route entity to ignore RouteWaypoint as a separate entity
         builder.Ignore<RouteWaypoint>();
+
+        // User Slug Configuration
+        builder.Entity<UserEntity>()
+            .HasIndex(u => u.Slug)
+            .IsUnique();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

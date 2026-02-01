@@ -56,6 +56,22 @@ public class ProfileService : IProfileService
         return profile;
     }
 
+    public async Task<ProfileVM?> GetProfileBySlugAsync(string slug)
+    {
+        var user = await _userRepository.GetBySlugAsync(slug);
+        if (user == null) return null;
+
+        var profile = MapToProfileVM(user);
+        
+        // Fetch counts sequentially to avoid DbContext concurrency issues
+        profile.FollowingCount = await _followingRepository.GetFollowingCountAsync(user.Id);
+        profile.FollowersCount = await _followingRepository.GetFollowerCountAsync(user.Id);
+        profile.PostsCount = await _postsRepository.GetUserPostsCountAsync(user.Id);
+        profile.Stats = await GetProfileStatsAsync(user.Id);
+
+        return profile;
+    }
+
     public async Task<ProfileVM?> GetPublicProfileAsync(Guid userId)
     {
         var profile = await GetProfileAsync(userId);
@@ -143,6 +159,7 @@ public class ProfileService : IProfileService
         {
             Id = user.Id,
             UserName = user.UserName ?? string.Empty,
+            Slug = user.Slug,
             FullName = user.Profile.FullName,
             Email = user.Email ?? string.Empty,
             PhoneNumber = user.PhoneNumber,

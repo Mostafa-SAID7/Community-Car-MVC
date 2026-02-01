@@ -9,6 +9,7 @@ public interface IProfileService
 {
     // Profile Retrieval
     Task<ProfileVM?> GetProfileAsync(Guid userId);
+    Task<ProfileVM?> GetProfileBySlugAsync(string slug);
     Task<ProfileVM?> GetPublicProfileAsync(Guid userId);
     Task<IEnumerable<ProfileVM>> SearchProfilesAsync(string searchTerm, int page = 1, int pageSize = 20);
 

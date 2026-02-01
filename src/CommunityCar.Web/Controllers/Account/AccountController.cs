@@ -30,7 +30,7 @@ public class AccountController : Controller
         if (User.Identity?.IsAuthenticated == true)
             return RedirectToAction("Index", "Feed");
         
-        return View("~/Views/Account/Register.cshtml");
+        return View("Auth/Register");
     }
 
     [HttpPost("register")]
@@ -41,7 +41,7 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Feed");
 
         if (!ModelState.IsValid)
-            return View("~/Views/Account/Register.cshtml", model);
+            return View("Auth/Register", model);
 
         var request = new RegisterRequest
         {
@@ -64,7 +64,7 @@ public class AccountController : Controller
             ModelState.AddModelError(string.Empty, error);
         }
 
-        return View("~/Views/Account/Register.cshtml", model);
+        return View("Auth/Register", model);
     }
 
     #endregion
@@ -78,7 +78,7 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Feed");
 
         ViewData["ReturnUrl"] = returnUrl;
-        return View("~/Views/Account/Login.cshtml");
+        return View("Auth/Login");
     }
 
     [HttpPost("login")]
@@ -91,7 +91,7 @@ public class AccountController : Controller
         ViewData["ReturnUrl"] = returnUrl;
 
         if (!ModelState.IsValid)
-            return View("~/Views/Account/Login.cshtml", model);
+            return View("Auth/Login", model);
 
         var request = new LoginRequest
         {
@@ -110,7 +110,7 @@ public class AccountController : Controller
         }
 
         ModelState.AddModelError(string.Empty, result.Message ?? "Invalid login attempt.");
-        return View(model);
+        return View("Auth/Login", model);
     }
 
     #endregion
@@ -162,7 +162,7 @@ public class AccountController : Controller
         if (User.Identity?.IsAuthenticated == true)
             return RedirectToAction("Index", "Feed");
         
-        return View();
+        return View("Auth/ForgotPassword");
     }
 
     [HttpPost("forgot-password")]
@@ -173,7 +173,7 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Feed");
 
         if (!ModelState.IsValid)
-            return View(model);
+            return View("Auth/ForgotPassword", model);
 
         var result = await _authService.ForgotPasswordAsync(model.Email);
 
@@ -200,7 +200,7 @@ public class AccountController : Controller
             UserId = userId
         };
 
-        return View(model);
+        return View("Auth/ResetPassword", model);
     }
 
     [HttpPost("reset-password")]
@@ -211,7 +211,7 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Feed");
 
         if (!ModelState.IsValid)
-            return View(model);
+            return View("Auth/ResetPassword", model);
 
         var request = new ResetPasswordRequest
         {
@@ -232,7 +232,7 @@ public class AccountController : Controller
             ModelState.AddModelError(string.Empty, error);
         }
 
-        return View(model);
+        return View("Auth/ResetPassword", model);
     }
 
     #endregion
@@ -451,7 +451,7 @@ public class AccountController : Controller
     [HttpGet("access-denied")]
     public IActionResult AccessDenied()
     {
-        return View();
+        return View("Auth/AccessDenied");
     }
 
     #endregion

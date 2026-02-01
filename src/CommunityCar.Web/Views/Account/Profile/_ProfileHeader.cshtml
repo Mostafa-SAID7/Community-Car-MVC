@@ -33,7 +33,7 @@
         <div class="relative group/avatar shrink-0">
             <div class="w-40 h-40 rounded-3xl bg-background p-1.5 shadow-2xl ring-1 ring-border/50">
                 <div class="w-full h-full rounded-2xl overflow-hidden border-2 border-border/50">
-                    <img src="@(profilePictureUrl ?? "/images/default-avatar.png")" alt="@fullName" class="w-full h-full object-cover group-hover/avatar:scale-110 transition-transform duration-700" />
+                    <img src="@(profilePictureUrl ?? "/images/default-avatar.png")?v=@DateTime.Now.Ticks" alt="@fullName" class="w-full h-full object-cover group-hover/avatar:scale-110 transition-transform duration-700" />
                 </div>
             </div>
             <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-green-500 border-4 border-background rounded-full shadow-lg ring-1 ring-black/5 flex items-center justify-center text-white" title="Active Enthusiast">

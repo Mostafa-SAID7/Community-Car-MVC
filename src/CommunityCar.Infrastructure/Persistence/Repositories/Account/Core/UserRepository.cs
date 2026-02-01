@@ -31,6 +31,13 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
         return await _userManager.FindByNameAsync(userName);
     }
 
+    public async Task<UserEntity?> GetBySlugAsync(string slug)
+    {
+        return await Context.Users
+            .Include(u => u.Profile)
+            .FirstOrDefaultAsync(u => u.Slug == slug);
+    }
+
     public async Task<IEnumerable<UserEntity>> GetActiveUsersAsync()
     {
         return await Context.Users
@@ -132,6 +139,15 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
         user.Profile.UpdateCoverImage(string.Empty);
         await UpdateAsync(user);
         return true;
+    }
+
+    /// <summary>
+    /// Override base UpdateAsync to actually persist changes to database
+    /// </summary>
+    public new async Task UpdateAsync(UserEntity entity)
+    {
+        Context.Users.Update(entity);
+        await Context.SaveChangesAsync();
     }
 
     #endregion

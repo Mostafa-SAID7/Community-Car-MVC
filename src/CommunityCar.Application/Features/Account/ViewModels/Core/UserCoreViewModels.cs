@@ -12,6 +12,7 @@ public class ProfileVM
     
     public string Email { get; set; } = string.Empty;
     public string? UserName { get; set; }
+    public string? Slug { get; set; }
     
     [Display(Name = "Phone Number")]
     public string? PhoneNumber { get; set; }

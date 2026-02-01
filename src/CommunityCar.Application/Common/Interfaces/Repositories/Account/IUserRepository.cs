@@ -11,6 +11,7 @@ public interface IUserRepository : IBaseRepository<UserEntity>
     #region Basic User Operations
     Task<UserEntity?> GetByEmailAsync(string email);
     Task<UserEntity?> GetByUserNameAsync(string userName);
+    Task<UserEntity?> GetBySlugAsync(string slug);
     Task<IEnumerable<UserEntity>> GetActiveUsersAsync();
     Task<IEnumerable<UserEntity>> GetUsersByRoleAsync(string roleName);
     Task<bool> IsEmailUniqueAsync(string email, Guid? excludeUserId = null);
