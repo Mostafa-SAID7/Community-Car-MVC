@@ -9,9 +9,7 @@ namespace CommunityCar.Web.Extensions;
 /// </summary>
 public static class PermissionExtensions
 {
-    /// <summary>
-    /// Check if current user has a specific permission
-    /// </summary>
+   
     public static async Task<bool> HasPermissionAsync(this IHtmlHelper htmlHelper, string permission)
     {
         var httpContext = htmlHelper.ViewContext.HttpContext;
@@ -33,9 +31,6 @@ public static class PermissionExtensions
         }
     }
 
-    /// <summary>
-    /// Check if current user has any of the specified permissions
-    /// </summary>
     public static async Task<bool> HasAnyPermissionAsync(this IHtmlHelper htmlHelper, params string[] permissions)
     {
         var httpContext = htmlHelper.ViewContext.HttpContext;
@@ -57,9 +52,7 @@ public static class PermissionExtensions
         }
     }
 
-    /// <summary>
-    /// Check if current user has all of the specified permissions
-    /// </summary>
+
     public static async Task<bool> HasAllPermissionsAsync(this IHtmlHelper htmlHelper, params string[] permissions)
     {
         var httpContext = htmlHelper.ViewContext.HttpContext;
@@ -81,9 +74,7 @@ public static class PermissionExtensions
         }
     }
 
-    /// <summary>
-    /// Check if current user is in a specific role
-    /// </summary>
+
     public static async Task<bool> IsInRoleAsync(this IHtmlHelper htmlHelper, string roleName)
     {
         var httpContext = htmlHelper.ViewContext.HttpContext;
@@ -129,9 +120,7 @@ public static class PermissionExtensions
         }
     }
 
-    /// <summary>
-    /// Get current user's roles
-    /// </summary>
+
     public static async Task<IEnumerable<string>> GetUserRolesAsync(this IHtmlHelper htmlHelper)
     {
         var httpContext = htmlHelper.ViewContext.HttpContext;

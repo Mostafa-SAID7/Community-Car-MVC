@@ -1,4 +1,4 @@
-namespace CommunityCar.Web.Models.Shared.Notifications;
+namespace CommunityCar.Application.Features.Shared.ViewModels.Notifications;
 
 public class NewMessageNotificationRequest
 {
@@ -34,5 +34,3 @@ public class FriendRequestNotificationRequest
     public string RequesterName { get; set; } = string.Empty;
     public Guid RequesterId { get; set; }
 }
-
-

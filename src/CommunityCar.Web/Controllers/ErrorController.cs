@@ -1,4 +1,4 @@
-using CommunityCar.Web.Models.Error;
+using CommunityCar.Application.Features.Error.ViewModels;
 using CommunityCar.Web.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

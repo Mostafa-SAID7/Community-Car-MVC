@@ -10,14 +10,7 @@ namespace CommunityCar.Web.Extensions;
 /// </summary>
 public static class HtmlHelperExtensions
 {
-    /// <summary>
-    /// Renders a heading with appropriate font styling based on culture
-    /// </summary>
-    /// <param name="htmlHelper">HTML helper instance</param>
-    /// <param name="level">Heading level (1-6)</param>
-    /// <param name="text">Heading text</param>
-    /// <param name="htmlAttributes">Additional HTML attributes</param>
-    /// <returns>HTML string for the heading</returns>
+ 
     public static IHtmlContent CultureHeading(this IHtmlHelper htmlHelper, int level, string text, object? htmlAttributes = null)
     {
         if (level < 1 || level > 6)
@@ -70,13 +63,7 @@ public static class HtmlHelperExtensions
         return new HtmlString(writer.ToString());
     }
 
-    /// <summary>
-    /// Renders a paragraph with appropriate font styling based on culture
-    /// </summary>
-    /// <param name="htmlHelper">HTML helper instance</param>
-    /// <param name="text">Paragraph text</param>
-    /// <param name="htmlAttributes">Additional HTML attributes</param>
-    /// <returns>HTML string for the paragraph</returns>
+   
     public static IHtmlContent CultureParagraph(this IHtmlHelper htmlHelper, string text, object? htmlAttributes = null)
     {
         var fontClass = FontHelper.GetTypographyClasses("p");
@@ -110,54 +97,31 @@ public static class HtmlHelperExtensions
         return new HtmlString(writer.ToString());
     }
 
-    /// <summary>
-    /// Gets CSS classes for typography based on current culture
-    /// </summary>
-    /// <param name="htmlHelper">HTML helper instance</param>
-    /// <param name="elementType">Type of element</param>
-    /// <returns>CSS classes string</returns>
+
     public static string GetCultureFontClasses(this IHtmlHelper htmlHelper, string elementType)
     {
         return FontHelper.GetTypographyClasses(elementType);
     }
 
-    /// <summary>
-    /// Checks if current culture is Arabic
-    /// </summary>
-    /// <param name="htmlHelper">HTML helper instance</param>
-    /// <returns>True if Arabic culture</returns>
+
     public static bool IsArabicCulture(this IHtmlHelper htmlHelper)
     {
         return FontHelper.IsArabicCulture();
     }
 
-    /// <summary>
-    /// Renders font preload links for current culture
-    /// </summary>
-    /// <param name="htmlHelper">HTML helper instance</param>
-    /// <returns>HTML string with font preload links</returns>
+
     public static IHtmlContent FontPreloadLinks(this IHtmlHelper htmlHelper)
     {
         return new HtmlString(FontHelper.GetFontPreloadLinks());
     }
 
-    /// <summary>
-    /// Renders font optimization CSS for current culture
-    /// </summary>
-    /// <param name="htmlHelper">HTML helper instance</param>
-    /// <returns>HTML string with optimization CSS</returns>
+
     public static IHtmlContent FontOptimizationCSS(this IHtmlHelper htmlHelper)
     {
         return new HtmlString(FontHelper.GetFontOptimizationCSS());
     }
 
-    /// <summary>
-    /// Renders a button with appropriate font styling based on culture
-    /// </summary>
-    /// <param name="htmlHelper">HTML helper instance</param>
-    /// <param name="text">Button text</param>
-    /// <param name="htmlAttributes">Additional HTML attributes</param>
-    /// <returns>HTML string for the button</returns>
+  
     public static IHtmlContent CultureButton(this IHtmlHelper htmlHelper, string text, object? htmlAttributes = null)
     {
         var fontClass = FontHelper.GetTypographyClasses("button");
@@ -192,13 +156,7 @@ public static class HtmlHelperExtensions
         return new HtmlString(writer.ToString());
     }
 
-    /// <summary>
-    /// Renders a label with appropriate font styling based on culture
-    /// </summary>
-    /// <param name="htmlHelper">HTML helper instance</param>
-    /// <param name="text">Label text</param>
-    /// <param name="htmlAttributes">Additional HTML attributes</param>
-    /// <returns>HTML string for the label</returns>
+
     public static IHtmlContent CultureLabel(this IHtmlHelper htmlHelper, string text, object? htmlAttributes = null)
     {
         var fontClass = FontHelper.GetTypographyClasses("label");

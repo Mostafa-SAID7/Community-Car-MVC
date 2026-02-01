@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Localization;
 
-namespace CommunityCar.Web.Models.Dashboard.Localization;
+namespace CommunityCar.Application.Features.Dashboard.ViewModels.Localization;
 
 public class ResourcesVM
 {
@@ -15,6 +15,3 @@ public class ResourcesVM
     
     public PaginationInfo Pagination { get; set; } = new();
 }
-
-
-

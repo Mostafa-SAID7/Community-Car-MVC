@@ -1,4 +1,4 @@
-namespace CommunityCar.Web.Models.Dashboard.System.BackgroundJobs;
+namespace CommunityCar.Application.Features.Dashboard.ViewModels.BackgroundJobs;
 
 public class RecentJobInfo
 {

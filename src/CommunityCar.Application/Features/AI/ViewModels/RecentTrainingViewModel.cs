@@ -1,6 +1,6 @@
 using System;
 
-namespace CommunityCar.Web.Models.AI;
+namespace CommunityCar.Application.Features.AI.ViewModels;
 
 public class RecentTrainingViewModel
 {

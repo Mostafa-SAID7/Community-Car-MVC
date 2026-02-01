@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Features.Community.Stories.DTOs;
-using CommunityCar.Web.Models.Error;
+using CommunityCar.Application.Features.Error.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;

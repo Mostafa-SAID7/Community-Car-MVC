@@ -3,7 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Features.Community.Feed.DTOs;
 using CommunityCar.Application.Features.Analytics.DTOs;
-using CommunityCar.Web.Models.Error;
+using CommunityCar.Application.Features.Error.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;

@@ -1,4 +1,4 @@
-namespace CommunityCar.Web.Models.Dashboard.Cache;
+namespace CommunityCar.Application.Features.Dashboard.ViewModels.Cache;
 
 public class CacheManagementViewModel
 {
