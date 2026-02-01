@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
+using CommunityCar.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -27,7 +28,7 @@ public class AccountController : Controller
     [HttpGet("register")]
     public IActionResult Register()
     {
-        if (User.Identity?.IsAuthenticated == true)
+        if (User.IsAuthenticated())
             return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
         
         return View("Auth/Register");
@@ -37,11 +38,16 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterVM model)
     {
-        if (User.Identity?.IsAuthenticated == true)
+        if (User.IsAuthenticated())
             return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
 
         if (!ModelState.IsValid)
+        {
+            if (Request.IsAjaxRequest())
+                return this.JsonError("Please correct the validation errors.", ModelState.GetValidationErrors());
+            
             return View("Auth/Register", model);
+        }
 
         var request = new RegisterRequest
         {
@@ -74,7 +80,7 @@ public class AccountController : Controller
     [HttpGet("login")]
     public IActionResult Login(string? returnUrl = null)
     {
-        if (User.Identity?.IsAuthenticated == true)
+        if (User.IsAuthenticated())
             return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
 
         ViewData["ReturnUrl"] = returnUrl;
@@ -85,13 +91,18 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginVM model, string? returnUrl = null)
     {
-        if (User.Identity?.IsAuthenticated == true)
+        if (User.IsAuthenticated())
             return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
 
         ViewData["ReturnUrl"] = returnUrl;
 
         if (!ModelState.IsValid)
+        {
+            if (Request.IsAjaxRequest())
+                return this.JsonError("Please correct the validation errors.", ModelState.GetValidationErrors());
+            
             return View("Auth/Login", model);
+        }
 
         var request = new LoginRequest
         {
@@ -103,13 +114,21 @@ public class AccountController : Controller
         var result = await _authService.LoginAsync(request);
         if (result.Succeeded)
         {
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                return Redirect(returnUrl);
+            var redirectUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) 
+                ? returnUrl 
+                : Url.Action("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+
+            if (Request.IsAjaxRequest())
+                return this.JsonSuccess("Login successful", redirectUrl);
             
-            return RedirectToAction("Index", "Feed", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+            return Redirect(redirectUrl!);
         }
 
-        ModelState.AddModelError(string.Empty, result.Message ?? "Invalid login attempt.");
+        var errorMessage = result.Message ?? "Invalid login attempt.";
+        if (Request.IsAjaxRequest())
+            return this.JsonError(errorMessage);
+
+        ModelState.AddModelError(string.Empty, errorMessage);
         return View("Auth/Login", model);
     }
 

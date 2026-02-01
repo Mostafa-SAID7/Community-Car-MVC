@@ -1,4 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Web.Extensions;
 using System.Net;
 using System.Text.Json;
 
@@ -91,9 +92,7 @@ public class ErrorHandlingMiddleware
         }
 
         // Check if this is an API request or browser request
-        var isApiRequest = context.Request.Path.StartsWithSegments("/api") || 
-                          context.Request.Headers.Accept.Any(h => h?.Contains("application/json", StringComparison.OrdinalIgnoreCase) == true) ||
-                          context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+        var isApiRequest = context.Request.IsApiRequest();
 
         if (isApiRequest)
         {

@@ -4,6 +4,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Application.Features.Account.ViewModels.Management;
+using CommunityCar.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -145,15 +146,15 @@ public class ProfileSettingsController : Controller
         var result = await _accountManagementService.UpdatePrivacySettingsAsync(request);
         if (result.Succeeded)
         {
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                return Ok(new { success = true, message = "Privacy settings updated." });
+            if (Request.IsAjaxRequest())
+                return this.JsonSuccess("Privacy settings updated.");
 
             TempData["SuccessMessage"] = "Privacy settings updated.";
             return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
         }
 
-        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            return BadRequest(new { success = false, message = "Failed to update privacy settings." });
+        if (Request.IsAjaxRequest())
+            return this.JsonError("Failed to update privacy settings.");
 
         TempData["ErrorMessage"] = "Failed to update privacy settings.";
         return RedirectToAction("Index");
@@ -183,15 +184,15 @@ public class ProfileSettingsController : Controller
         var result = await _accountManagementService.UpdateNotificationSettingsAsync(request);
         if (result.Succeeded)
         {
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                return Ok(new { success = true, message = "Notification settings updated." });
+            if (Request.IsAjaxRequest())
+                return this.JsonSuccess("Notification settings updated.");
 
             TempData["SuccessMessage"] = "Notification settings updated.";
             return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
         }
 
-        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            return BadRequest(new { success = false, message = "Failed to update notification settings." });
+        if (Request.IsAjaxRequest())
+            return this.JsonError("Failed to update notification settings.");
 
         TempData["ErrorMessage"] = "Failed to update notification settings.";
         return RedirectToAction("Index");
