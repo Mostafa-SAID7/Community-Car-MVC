@@ -1,9 +1,11 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Settings;
 
-[Route("dashboard/settings/maintenance")]
+[Route("{culture=en-US}/dashboard/settings/maintenance")]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class MaintenanceController : Controller
 {
     private readonly IMaintenanceService _maintenanceService;
@@ -20,16 +22,34 @@ public class MaintenanceController : Controller
     {
         try
         {
+            // Temporary: Set default values to test routing
+            ViewBag.IsMaintenanceEnabled = false;
+            ViewBag.MaintenanceMessage = "Test message";
+            
+            // Use explicit path to ensure view is found
+            return View("~/Views/Maintenance/Index.cshtml");
+            
+            // Original code commented out for testing
+            /*
             ViewBag.IsMaintenanceEnabled = await _maintenanceService.IsMaintenanceModeEnabledAsync();
             ViewBag.MaintenanceMessage = await _maintenanceService.GetMaintenanceMessageAsync();
             return View();
+            */
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading maintenance settings");
             TempData["ErrorMessage"] = "Failed to load maintenance settings.";
-            return RedirectToAction("Index", "DashboardSettings");
+            return RedirectToAction("Index", "Settings");
         }
+    }
+
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+        ViewBag.IsMaintenanceEnabled = "Working!";
+        ViewBag.MaintenanceMessage = "Controller and view are working correctly.";
+        return View("~/Views/Maintenance/Test.cshtml");
     }
 
     [HttpPost("toggle")]

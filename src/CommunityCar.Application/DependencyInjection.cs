@@ -60,6 +60,9 @@ public static class DependencyInjection
         services.AddScoped<IContentModerationService, ContentModerationService>();
         services.AddScoped<IGuidesNotificationService, GuidesNotificationService>();
         services.AddScoped<INewsNotificationService, NewsNotificationService>();
+        
+        // Soft Delete Service
+        services.AddScoped<ISoftDeleteService, SoftDeleteService>();
 
         // Focused Feed Services
         services.AddScoped<IFeedContentAggregatorService, FeedContentAggregatorService>();

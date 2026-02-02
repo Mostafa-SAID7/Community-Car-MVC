@@ -3,8 +3,12 @@
     "version": "1.0.0",
     "description": "Frontend tooling for CommunityCar ASP.NET Core MVC",
     "scripts": {
-        "build:css": "postcss Styles/app.css -o wwwroot/css/app.min.css",
-        "watch:css": "postcss Styles/app.css -o wwwroot/css/app.min.css --watch"
+        "build:css": "postcss Styles/core.css -o wwwroot/css/core.min.css && postcss Styles/layout.css -o wwwroot/css/layout.min.css && postcss Styles/components.css -o wwwroot/css/components.min.css && postcss Styles/features.css -o wwwroot/css/features.min.css",
+        "watch:css": "concurrently \"npm run watch:core\" \"npm run watch:layout\" \"npm run watch:components\" \"npm run watch:features\"",
+        "watch:core": "postcss Styles/core.css -o wwwroot/css/core.min.css --watch",
+        "watch:layout": "postcss Styles/layout.css -o wwwroot/css/layout.min.css --watch",
+        "watch:components": "postcss Styles/components.css -o wwwroot/css/components.min.css --watch",
+        "watch:features": "postcss Styles/features.css -o wwwroot/css/features.min.css --watch"
     },
     "devDependencies": {
         "tailwindcss": "^3.4.1",

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CommunityCar.Web.Controllers.Dashboard;
 
 [Route("dashboard/error-reports")]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class ErrorReportsController : Controller
 {
     private readonly IErrorReportingService _errorReportingService;

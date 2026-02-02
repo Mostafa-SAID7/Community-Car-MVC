@@ -1,0 +1,73 @@
+{
+    "tech_stack": [
+        "C#",
+        "ASP.NET Core 9.0 MVC",
+        "Entity Framework Core",
+        "SQL Server",
+        "JavaScript",
+        "Vanilla CSS",
+        "SignalR",
+        "Google Gemini API",
+        "Hugging Face Hub"
+    ],
+    "features": [
+        {
+            "name": "Account Management",
+            "description": "User registration, login, and profile management.",
+            "files": [
+                "src/CommunityCar.Web/Controllers/Account"
+            ]
+        },
+        {
+            "name": "Community Q&A",
+            "description": "System for users to ask and answer car-related questions.",
+            "files": [
+                "src/CommunityCar.Web/Controllers/Community/QA"
+            ]
+        },
+        {
+            "name": "Feeds and Stories",
+            "description": "Sharing posts and temporary stories within the community.",
+            "files": [
+                "src/CommunityCar.Web/Controllers/Community/Feed",
+                "src/CommunityCar.Web/Controllers/Community/Stories"
+            ]
+        },
+        {
+            "name": "Groups and Events",
+            "description": "Creation and participation in car enthusiast groups and events.",
+            "files": [
+                "src/CommunityCar.Web/Controllers/Community/Groups",
+                "src/CommunityCar.Web/Controllers/Community/Events"
+            ]
+        },
+        {
+            "name": "AI Assistant",
+            "description": "Interactive AI-powered chat widget and smart responsiveness.",
+            "files": [
+                "src/CommunityCar.Web/Controllers/AiAgent"
+            ]
+        },
+        {
+            "name": "Maps and Localization",
+            "description": "Discover car-friendly locations and tracks with full RTL and Arabic support.",
+            "files": [
+                "src/CommunityCar.Web/Controllers/Community/Maps"
+            ]
+        },
+        {
+            "name": "Real-time Messaging",
+            "description": "Private chats and notifications powered by SignalR.",
+            "files": [
+                "src/CommunityCar.Web/Controllers/Chats"
+            ]
+        },
+        {
+            "name": "Admin Dashboard",
+            "description": "Management interface for content and platform settings.",
+            "files": [
+                "src/CommunityCar.Web/Controllers/Dashboard"
+            ]
+        }
+    ]
+}

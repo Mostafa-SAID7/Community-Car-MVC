@@ -60,6 +60,7 @@ public class UserSeeder
             };
             await _userManager.CreateAsync(seedUser, "Password123!");
             await _userManager.AddToRoleAsync(seedUser, Roles.SuperAdmin);
+            await _userManager.AddToRoleAsync(seedUser, Roles.Admin);
             users.Add(seedUser);
         }
 

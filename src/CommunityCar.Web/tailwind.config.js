@@ -11,6 +11,18 @@ module.exports = {
         './Models/**/*.cs'
     ],
     theme: {
+        screens: {
+            'xs': '475px',
+            'sm': '640px',
+            'md': '768px',
+            'lg': '1024px',
+            'xl': '1280px',
+            '2xl': '1400px',
+            // Custom breakpoints matching app.css
+            'mobile': '640px',      // Mobile breakpoint from app.css
+            'tablet': '768px',      // Tablet breakpoint from app.css  
+            'desktop': '1280px',    // Desktop breakpoint from app.css
+        },
         container: {
             center: true,
             padding: "2rem",
@@ -157,6 +169,28 @@ module.exports = {
                 '88': '22rem',
                 '128': '32rem',
                 '144': '36rem',
+                // Layout spacing utilities from app.css
+                'sidebar-left': '16rem',        // Left sidebar width (w-64) - 256px
+                'sidebar-right': '22rem',       // Right sidebar width when both sidebars present - 352px
+                'sidebar-mobile': '14rem',      // Mobile sidebar width (w-56) - 224px
+                'sidebar-tablet': '6rem',       // Tablet sidebar width (w-24) - 96px
+                // Main content spacing utilities
+                'main-mobile': '1rem',          // Mobile main content padding - 16px
+                'main-tablet': '6rem',          // Tablet main content left padding - 96px
+                'main-desktop': '16rem',        // Desktop main content left padding - 256px
+                'main-desktop-both': '22rem',   // Desktop main content right padding when both sidebars - 352px
+                // Responsive breakpoint spacing
+                'content-mobile': '1rem',       // Mobile content padding
+                'content-tablet': '1.5rem',     // Tablet content padding
+                'content-desktop': '2rem',      // Desktop content padding
+                // Sidebar specific measurements
+                'sidebar-collapsed': '4rem',    // Collapsed sidebar width - 64px
+                'sidebar-expanded': '16rem',    // Expanded sidebar width - 256px
+                'sidebar-right-expanded': '22rem', // Right sidebar expanded width - 352px
+                // Container spacing
+                'container-mobile': '1rem',     // Mobile container padding
+                'container-tablet': '2rem',     // Tablet container padding
+                'container-desktop': '3rem',    // Desktop container padding
             },
             backdropBlur: {
                 xs: '2px',
@@ -335,6 +369,72 @@ module.exports = {
                 },
             });
 
+            // Layout Components (matching app.css patterns)
+            addComponents({
+                '.layout-container': {
+                    '@apply min-h-screen bg-background': {},
+                },
+                '.sidebar-left': {
+                    '@apply fixed left-0 top-0 h-full bg-card border-r border-border z-40': {},
+                    '@apply hidden md:block': {},
+                    '@apply w-sidebar-tablet md:w-sidebar-tablet xl:w-sidebar-left': {},
+                },
+                '.sidebar-right': {
+                    '@apply fixed right-0 top-0 h-full bg-card border-l border-border z-40': {},
+                    '@apply hidden xl:block': {},
+                    '@apply w-sidebar-right': {},
+                },
+                '.main-content': {
+                    '@apply min-h-screen transition-all duration-300': {},
+                    '@apply p-main-mobile': {},
+                    '@apply md:pl-main-tablet': {},
+                    '@apply xl:pl-main-desktop xl:pr-main-desktop-both': {},
+                },
+                '.content-wrapper': {
+                    '@apply max-w-7xl mx-auto': {},
+                    '@apply px-container-mobile': {},
+                    '@apply md:px-container-tablet': {},
+                    '@apply xl:px-container-desktop': {},
+                },
+                '.sidebar-mobile-overlay': {
+                    '@apply fixed inset-0 bg-black/50 z-30 md:hidden': {},
+                },
+                '.sidebar-mobile': {
+                    '@apply fixed left-0 top-0 h-full w-sidebar-mobile bg-card border-r border-border z-40': {},
+                    '@apply transform transition-transform duration-300': {},
+                    '@apply -translate-x-full': {},
+                    '&.open': {
+                        '@apply translate-x-0': {},
+                    },
+                },
+                // RTL Layout Components
+                '.rtl-sidebar-left': {
+                    '[dir="rtl"] &': {
+                        '@apply right-0 left-auto border-l border-r-0': {},
+                    },
+                },
+                '.rtl-sidebar-right': {
+                    '[dir="rtl"] &': {
+                        '@apply left-0 right-auto border-r border-l-0': {},
+                    },
+                },
+                '.rtl-main-content': {
+                    '[dir="rtl"] &': {
+                        '@apply md:pr-main-tablet md:pl-0': {},
+                        '@apply xl:pr-main-desktop xl:pl-main-desktop-both': {},
+                    },
+                },
+                '.rtl-sidebar-mobile': {
+                    '[dir="rtl"] &': {
+                        '@apply right-0 left-auto border-l border-r-0': {},
+                        '@apply translate-x-full': {},
+                        '&.open': {
+                            '@apply translate-x-0': {},
+                        },
+                    },
+                },
+            });
+
             // Glass Effect Components
             addComponents({
                 '.glass': {
@@ -411,6 +511,105 @@ module.exports = {
                 '.bg-dot': {
                     'background-image': `radial-gradient(rgb(15 23 42 / 0.04) 1px, transparent 1px)`,
                     'background-size': '16px 16px',
+                },
+                // Sidebar and Main Content Layout Utilities (matching app.css patterns)
+                '.sidebar-spacing': {
+                    // Mobile: no sidebar spacing
+                    'padding-left': '0',
+                    'padding-right': '0',
+                    // Tablet: left sidebar spacing
+                    '@media (min-width: 768px)': {
+                        'padding-left': theme('spacing.main-tablet'),
+                    },
+                    // Desktop: both sidebars spacing
+                    '@media (min-width: 1280px)': {
+                        'padding-left': theme('spacing.main-desktop'),
+                        'padding-right': theme('spacing.main-desktop-both'),
+                    },
+                },
+                '.main-content-spacing': {
+                    // Mobile: basic padding
+                    'padding': theme('spacing.main-mobile'),
+                    // Tablet: left sidebar compensation
+                    '@media (min-width: 768px)': {
+                        'padding-left': theme('spacing.main-tablet'),
+                        'padding-right': theme('spacing.main-mobile'),
+                    },
+                    // Desktop: both sidebars compensation
+                    '@media (min-width: 1280px)': {
+                        'padding-left': theme('spacing.main-desktop'),
+                        'padding-right': theme('spacing.main-desktop-both'),
+                    },
+                },
+                '.sidebar-left-spacing': {
+                    // Mobile: hidden
+                    'margin-left': '0',
+                    // Tablet: show with tablet width
+                    '@media (min-width: 768px)': {
+                        'width': theme('spacing.sidebar-tablet'),
+                    },
+                    // Desktop: show with full width
+                    '@media (min-width: 1280px)': {
+                        'width': theme('spacing.sidebar-left'),
+                    },
+                },
+                '.sidebar-right-spacing': {
+                    // Mobile & Tablet: hidden
+                    'margin-right': '0',
+                    'width': '0',
+                    // Desktop: show with right sidebar width
+                    '@media (min-width: 1280px)': {
+                        'width': theme('spacing.sidebar-right'),
+                    },
+                },
+                '.content-container-spacing': {
+                    // Mobile: basic container padding
+                    'padding-left': theme('spacing.container-mobile'),
+                    'padding-right': theme('spacing.container-mobile'),
+                    // Tablet: increased padding
+                    '@media (min-width: 768px)': {
+                        'padding-left': theme('spacing.container-tablet'),
+                        'padding-right': theme('spacing.container-tablet'),
+                    },
+                    // Desktop: maximum padding
+                    '@media (min-width: 1280px)': {
+                        'padding-left': theme('spacing.container-desktop'),
+                        'padding-right': theme('spacing.container-desktop'),
+                    },
+                },
+                // RTL Support utilities
+                '.rtl-sidebar-spacing': {
+                    '[dir="rtl"] &': {
+                        // Mobile: no sidebar spacing
+                        'padding-right': '0',
+                        'padding-left': '0',
+                        // Tablet: right sidebar spacing for RTL
+                        '@media (min-width: 768px)': {
+                            'padding-right': theme('spacing.main-tablet'),
+                            'padding-left': '0',
+                        },
+                        // Desktop: both sidebars spacing for RTL
+                        '@media (min-width: 1280px)': {
+                            'padding-right': theme('spacing.main-desktop'),
+                            'padding-left': theme('spacing.main-desktop-both'),
+                        },
+                    },
+                },
+                '.rtl-main-content-spacing': {
+                    '[dir="rtl"] &': {
+                        // Mobile: basic padding
+                        'padding': theme('spacing.main-mobile'),
+                        // Tablet: right sidebar compensation for RTL
+                        '@media (min-width: 768px)': {
+                            'padding-right': theme('spacing.main-tablet'),
+                            'padding-left': theme('spacing.main-mobile'),
+                        },
+                        // Desktop: both sidebars compensation for RTL
+                        '@media (min-width: 1280px)': {
+                            'padding-right': theme('spacing.main-desktop'),
+                            'padding-left': theme('spacing.main-desktop-both'),
+                        },
+                    },
                 },
             });
         },

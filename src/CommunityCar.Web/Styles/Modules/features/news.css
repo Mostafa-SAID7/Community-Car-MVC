@@ -1,0 +1,45 @@
+/* ==========================================================================
+   FEATURE: NEWS & ARTICLES
+   ========================================================================== */
+
+@layer components {
+
+    /* Article Controls */
+    .article-controls {
+        @apply fixed top-20 right-4 z-40 flex flex-col gap-2;
+    }
+
+    .article-controls button {
+        @apply transition-all duration-200 hover:scale-105 active:scale-95;
+    }
+
+    /* Table of Contents */
+    .toc-container {
+        @apply cc-card p-4 max-w-xs;
+        @apply fixed top-20 left-4 z-40;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+    }
+
+    .toc-nav a {
+        @apply block py-1 px-2 text-muted-foreground hover:text-primary transition-colors rounded text-xs;
+    }
+
+    .toc-nav a.active {
+        @apply text-primary bg-primary/10;
+    }
+
+    /* Full Screen Mode */
+    .article-fullscreen {
+        @apply fixed inset-0 z-50 overflow-y-auto bg-background;
+    }
+
+    /* Related News Cards */
+    .related-news-card {
+        @apply cc-card overflow-hidden group;
+    }
+
+    .related-news-card img {
+        @apply group-hover:scale-105 transition-transform duration-300;
+    }
+}

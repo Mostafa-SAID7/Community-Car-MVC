@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Feature Bundle: Specialized Modules */
+@import "./Modules/features/ai-assistant.css";
+@import "./Modules/features/news.css";
+@import "./Modules/features/gallery.css";
+@import "./Modules/features/errors.css";

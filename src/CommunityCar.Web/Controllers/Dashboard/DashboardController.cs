@@ -1,11 +1,14 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CommunityCar.Web.Controllers.Dashboard;
 
-[Route("dashboard")]
+[Route("{culture=en-US}/dashboard")]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class DashboardController : Controller
 {
     private readonly IOverviewService _overviewService;
@@ -25,24 +28,49 @@ public class DashboardController : Controller
         _logger = logger;
     }
 
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+        ViewBag.Message = "Dashboard controller is working!";
+        ViewBag.UserRoles = string.Join(", ", User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value));
+        ViewBag.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
+        return View("~/Views/Dashboard/Test.cshtml");
+    }
+
     [HttpGet("")]
     public async Task<IActionResult> Index()
     {
         try
         {
             // Get overview data for the last 30 days
-            var OverviewVM = new OverviewVM
+            var overviewRequest = new OverviewVM
             {
                 TimeRange = "month"
             };
 
-            var overview = await _overviewService.GetOverviewAsync(OverviewVM);
+            var overview = await _overviewService.GetOverviewAsync(overviewRequest);
             var quickStats = await _overviewService.GetQuickStatsAsync();
-            var systemHealth = await _monitoringService.GetSystemHealthAsync();
+            var systemHealthList = await _monitoringService.GetSystemHealthAsync();
             var isSystemHealthy = await _monitoringService.IsSystemHealthyAsync();
 
+            // Get the first system health item or create a default one
+            var systemHealth = systemHealthList.FirstOrDefault() ?? new SystemHealthVM
+            {
+                CheckTime = DateTime.UtcNow,
+                ServiceName = "System",
+                Status = "Unknown",
+                IsHealthy = false,
+                CpuUsage = 0,
+                MemoryUsage = 0,
+                DiskUsage = 0,
+                LastCheck = DateTime.UtcNow
+            };
+
+            // Update the overview with system health data
+            overview.SystemHealth = systemHealth;
+
             ViewBag.QuickStats = quickStats;
-            ViewBag.SystemHealth = systemHealth;
+            ViewBag.SystemHealth = systemHealthList;
             ViewBag.IsSystemHealthy = isSystemHealthy;
 
             return View(overview);
@@ -51,7 +79,22 @@ public class DashboardController : Controller
         {
             _logger.LogError(ex, "Error loading main dashboard");
             TempData["ErrorMessage"] = "Failed to load dashboard. Please try again.";
-            return View();
+            
+            // Return a default overview model to prevent view errors
+            var defaultOverview = new OverviewVM
+            {
+                Stats = new StatsVM(),
+                SystemHealth = new SystemHealthVM
+                {
+                    CheckTime = DateTime.UtcNow,
+                    ServiceName = "System",
+                    Status = "Error",
+                    IsHealthy = false,
+                    LastCheck = DateTime.UtcNow
+                }
+            };
+            
+            return View(defaultOverview);
         }
     }
 

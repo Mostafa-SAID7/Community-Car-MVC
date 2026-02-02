@@ -1,0 +1,21 @@
+@{
+    Layout = "_DashboardLayout";
+    ViewData["Title"] = "Dashboard Test";
+}
+
+<div class="container">
+    <h1>Dashboard Test Page</h1>
+    <p><strong>Message:</strong> @ViewBag.Message</p>
+    <p><strong>Is Authenticated:</strong> @ViewBag.IsAuthenticated</p>
+    <p><strong>User Roles:</strong> @ViewBag.UserRoles</p>
+    <p><strong>User Identity:</strong> @User.Identity?.Name</p>
+    
+    <div class="mt-4">
+        <h3>Available Dashboard Links:</h3>
+        <ul>
+            <li><a href="/en-US/dashboard">Dashboard Home</a></li>
+            <li><a href="/en-US/dashboard/settings/maintenance">Maintenance</a></li>
+            <li><a href="/en-US/dashboard/system/background-jobs">Background Jobs</a></li>
+        </ul>
+    </div>
+</div>

@@ -193,7 +193,8 @@
                 @if (Model.CurrentPage > 1)
                 {
                     <a href="?page=@(Model.CurrentPage - 1)@Html.Raw(additionalParams)" 
-                       class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+                       class="pagination-link inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group"
+                       data-page="@(Model.CurrentPage - 1)">
                         <i data-lucide="chevron-left" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
                         @Localizer["Previous"]
                     </a>
@@ -208,14 +209,16 @@
                     else
                     {
                         <a href="?page=@i@Html.Raw(additionalParams)" 
-                           class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">@i</a>
+                           class="pagination-link inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95"
+                           data-page="@i">@i</a>
                     }
                 }
 
                 @if (Model.CurrentPage < Model.TotalPages)
                 {
                     <a href="?page=@(Model.CurrentPage + 1)@Html.Raw(additionalParams)" 
-                       class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group">
+                       class="pagination-link inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group"
+                       data-page="@(Model.CurrentPage + 1)">
                         @Localizer["Next"]
                         <i data-lucide="chevron-right" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
                     </a>

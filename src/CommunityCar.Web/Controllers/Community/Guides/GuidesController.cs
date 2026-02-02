@@ -57,6 +57,11 @@ public class GuidesController : Controller
 
             var result = await _guidesService.GetGuidesAsync(filter, currentUserId);
             
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("~/Views/Community/Guides/_GuidesList.cshtml", result);
+            }
+
             return View("~/Views/Community/Guides/Index.cshtml", result);
         }
         catch (Exception ex)
@@ -503,6 +508,11 @@ public class GuidesController : Controller
             var result = await _guidesService.GetGuidesAsync(filterDto, currentUserId);
             ViewBag.Filter = filter;
             
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("~/Views/Community/Guides/_MyGuidesList.cshtml", result);
+            }
+
             return View("~/Views/Community/Guides/MyGuides.cshtml", result);
         }
         catch (Exception ex)

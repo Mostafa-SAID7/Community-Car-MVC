@@ -7,8 +7,8 @@ using StackExchange.Redis;
 
 namespace CommunityCar.Web.Controllers.Dashboard.System;
 
-[Route("dashboard/system/cache")]
-[Authorize(Roles = "Admin")]
+[Route("{culture=en-US}/dashboard/system/cache")]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class CacheController : Controller
 {
     private readonly ICacheService _cacheService;

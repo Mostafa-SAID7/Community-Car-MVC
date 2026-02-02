@@ -8,7 +8,7 @@ using StackExchange.Redis;
 namespace CommunityCar.Web.Controllers.Dashboard;
 
 [Route("dashboard/cache")]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class CacheController : Controller
 {
     private readonly ICacheService _cacheService;

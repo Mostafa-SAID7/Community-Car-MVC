@@ -1,0 +1,11 @@
+@{
+    Layout = "_DashboardLayout";
+    ViewData["Title"] = "Maintenance Test";
+}
+
+<div class="container">
+    <h1>Maintenance Page Test</h1>
+    <p>This is a test page to verify the maintenance controller is working.</p>
+    <p>Status: @ViewBag.IsMaintenanceEnabled</p>
+    <p>Message: @ViewBag.MaintenanceMessage</p>
+</div>

@@ -1,9 +1,12 @@
 @inject IViewLocalizer Localizer
 @using CommunityCar.Domain.Entities.Shared
+@using CommunityCar.Application.Features.Dashboard.ViewModels
+@using CommunityCar.Application.Common.Models
 @model IEnumerable<ErrorLog>
 @{
     ViewData["Title"] = Localizer["ErrorManagementDashboard"];
-    var stats = ViewBag.Stats as ErrorStats;
+    var stats = ViewBag.Stats as ErrorStatsVM;
+    var pagination = ViewBag.Pagination as PaginationInfo;
 }
 
 <div class="space-y-8 animate-in fade-in duration-700">
@@ -218,6 +221,70 @@
             }
         </div>
     </div>
+
+    <!-- Pagination -->
+    @if (pagination != null && pagination.TotalPages > 1)
+    {
+        <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-sm text-muted-foreground">
+                    Showing @pagination.StartItem to @pagination.EndItem of @pagination.TotalItems errors
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    @if (pagination.HasPreviousPage)
+                    {
+                        <a href="@Url.Action("Index", new { page = 1, category = ViewBag.Category, severity = ViewBag.Severity, isResolved = ViewBag.IsResolved })" 
+                           class="inline-flex items-center gap-2 px-3 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-lg text-xs font-bold transition-all">
+                            <i data-lucide="chevrons-left" class="w-4 h-4"></i>
+                            First
+                        </a>
+                        <a href="@Url.Action("Index", new { page = pagination.CurrentPage - 1, category = ViewBag.Category, severity = ViewBag.Severity, isResolved = ViewBag.IsResolved })" 
+                           class="inline-flex items-center gap-2 px-3 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-lg text-xs font-bold transition-all">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            Previous
+                        </a>
+                    }
+                    
+                    @{
+                        var startPage = Math.Max(1, pagination.CurrentPage - 2);
+                        var endPage = Math.Min(pagination.TotalPages, pagination.CurrentPage + 2);
+                    }
+                    
+                    @for (int i = startPage; i <= endPage; i++)
+                    {
+                        if (i == pagination.CurrentPage)
+                        {
+                            <span class="inline-flex items-center justify-center w-10 h-10 bg-primary text-primary-foreground rounded-lg text-xs font-bold">
+                                @i
+                            </span>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Index", new { page = i, category = ViewBag.Category, severity = ViewBag.Severity, isResolved = ViewBag.IsResolved })" 
+                               class="inline-flex items-center justify-center w-10 h-10 bg-background border border-border hover:border-primary hover:text-primary rounded-lg text-xs font-bold transition-all">
+                                @i
+                            </a>
+                        }
+                    }
+                    
+                    @if (pagination.HasNextPage)
+                    {
+                        <a href="@Url.Action("Index", new { page = pagination.CurrentPage + 1, category = ViewBag.Category, severity = ViewBag.Severity, isResolved = ViewBag.IsResolved })" 
+                           class="inline-flex items-center gap-2 px-3 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-lg text-xs font-bold transition-all">
+                            Next
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="@Url.Action("Index", new { page = pagination.TotalPages, category = ViewBag.Category, severity = ViewBag.Severity, isResolved = ViewBag.IsResolved })" 
+                           class="inline-flex items-center gap-2 px-3 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-lg text-xs font-bold transition-all">
+                            Last
+                            <i data-lucide="chevrons-right" class="w-4 h-4"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
 
     <!-- Quick Actions -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

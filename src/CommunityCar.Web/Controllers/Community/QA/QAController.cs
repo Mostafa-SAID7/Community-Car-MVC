@@ -2,7 +2,6 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Features.Community.QA.ViewModels;
-using CommunityCar.Application.Features.Community.QA.ViewModels;
 using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Entities.Community.QA;
 using Microsoft.AspNetCore.Authorization;

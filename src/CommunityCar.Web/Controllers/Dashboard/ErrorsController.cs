@@ -1,11 +1,11 @@
 using CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard;
 
-[Authorize(Roles = "Admin")]
-[Route("Dashboard/Errors")]
+[Authorize(Roles = "Admin,SuperAdmin,ContentAdmin,DatabaseAdmin")]
 public class ErrorsController : Controller
 {
     private readonly IErrorService _errorService;
@@ -22,7 +22,7 @@ public class ErrorsController : Controller
     {
         try
         {
-            var errors = await _errorService.GetErrorsAsync(page, 50, category, severity, isResolved);
+            var (errors, pagination) = await _errorService.GetErrorsAsync(page, 50, category, severity, isResolved);
             var stats = await _errorService.GetErrorStatsAsync();
             
             ViewBag.CurrentPage = page;
@@ -30,18 +30,19 @@ public class ErrorsController : Controller
             ViewBag.Severity = severity;
             ViewBag.IsResolved = isResolved;
             ViewBag.Stats = stats;
+            ViewBag.Pagination = pagination;
             
-            return View(errors);
+            return View("~/Views/Dashboard/Errors/Index.cshtml", errors);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to load errors dashboard");
             TempData["ErrorMessage"] = "Failed to load errors. Please try again.";
-            return View(new List<CommunityCar.Domain.Entities.Shared.ErrorLog>());
+            return View("~/Views/Dashboard/Errors/Index.cshtml", new List<CommunityCar.Domain.Entities.Shared.ErrorLog>());
         }
     }
 
-    [HttpGet("Details/{errorId}")]
+    [HttpGet]
     public async Task<IActionResult> Details(string errorId)
     {
         try
@@ -63,7 +64,7 @@ public class ErrorsController : Controller
         }
     }
 
-    [HttpPost("Resolve/{errorId}")]
+    [HttpPost]
     public async Task<IActionResult> Resolve(string errorId, string resolution)
     {
         try
@@ -89,7 +90,7 @@ public class ErrorsController : Controller
         return RedirectToAction(nameof(Details), new { errorId });
     }
 
-    [HttpGet("Stats")]
+    [HttpGet]
     public async Task<IActionResult> Stats(DateTime? startDate = null, DateTime? endDate = null, string? category = null)
     {
         try
@@ -103,37 +104,39 @@ public class ErrorsController : Controller
             ViewBag.EndDate = end;
             ViewBag.Category = category;
             
-            return View(stats);
+            return View("~/Views/Dashboard/Errors/Stats.cshtml", stats);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to load error stats");
             TempData["ErrorMessage"] = "Failed to load error statistics.";
-            return View(new List<CommunityCar.Domain.Entities.Shared.ErrorStats>());
+            return View("~/Views/Dashboard/Errors/Stats.cshtml", new List<ErrorStatsVM>());
         }
     }
 
-    [HttpGet("Boundaries")]
-    public async Task<IActionResult> Boundaries(string? boundaryName = null, bool? isRecovered = null)
+    [HttpGet]
+    public async Task<IActionResult> Boundaries(int page = 1, string? boundaryName = null, bool? isRecovered = null)
     {
         try
         {
-            var boundaries = await _errorService.GetBoundaryErrorsAsync(boundaryName, isRecovered);
+            var (boundaries, pagination) = await _errorService.GetBoundaryErrorsAsync(page, 50, boundaryName, isRecovered);
             
             ViewBag.BoundaryName = boundaryName;
             ViewBag.IsRecovered = isRecovered;
+            ViewBag.CurrentPage = page;
+            ViewBag.Pagination = pagination;
             
-            return View(boundaries);
+            return View("~/Views/Dashboard/Errors/Boundaries.cshtml", boundaries);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to load boundary errors");
             TempData["ErrorMessage"] = "Failed to load boundary errors.";
-            return View(new List<CommunityCar.Domain.Entities.Shared.ErrorBoundary>());
+            return View("~/Views/Dashboard/Errors/Boundaries.cshtml", new List<ErrorBoundaryVM>());
         }
     }
 
-    [HttpPost("RecoverBoundary/{boundaryId}")]
+    [HttpPost]
     public async Task<IActionResult> RecoverBoundary(string boundaryId, string recoveryAction)
     {
         try
@@ -158,7 +161,7 @@ public class ErrorsController : Controller
         return RedirectToAction(nameof(Boundaries));
     }
 
-    [HttpPost("UpdateStats")]
+    [HttpPost]
     public async Task<IActionResult> UpdateStats()
     {
         try
@@ -175,7 +178,7 @@ public class ErrorsController : Controller
         return RedirectToAction(nameof(Stats));
     }
 
-    [HttpPost("Cleanup")]
+    [HttpPost]
     public async Task<IActionResult> Cleanup(int daysToKeep = 90)
     {
         try
@@ -192,14 +195,14 @@ public class ErrorsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    [HttpGet("Api/Summary")]
+    [HttpGet]
     public async Task<IActionResult> GetErrorSummary()
     {
         try
         {
             var today = DateTime.UtcNow.Date;
             var todayStats = await _errorService.GetErrorStatsAsync(today);
-            var totalErrors = await _errorService.GetErrorsAsync(1, 1000);
+            var (totalErrors, _) = await _errorService.GetErrorsAsync(1, 1000);
             
             var summary = new
             {
@@ -221,5 +224,3 @@ public class ErrorsController : Controller
         }
     }
 }
-
-

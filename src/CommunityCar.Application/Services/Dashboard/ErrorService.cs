@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
+using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ public class ErrorService : IErrorService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<ErrorLog>> GetErrorsAsync(int page = 1, int pageSize = 50, string? category = null, string? severity = null, bool? isResolved = null)
+    public async Task<(IEnumerable<ErrorLog> Errors, PaginationInfo Pagination)> GetErrorsAsync(int page = 1, int pageSize = 50, string? category = null, string? severity = null, bool? isResolved = null)
     {
         var query = _context.ErrorLogs.AsQueryable();
 
@@ -31,11 +32,28 @@ public class ErrorService : IErrorService
         if (isResolved.HasValue)
             query = query.Where(e => e.IsResolved == isResolved.Value);
 
-        return await query
+        var totalItems = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+        var errors = await query
             .OrderByDescending(e => e.LastOccurrence)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+
+        var pagination = new PaginationInfo
+        {
+            CurrentPage = page,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages,
+            HasPreviousPage = page > 1,
+            HasNextPage = page < totalPages,
+            StartItem = totalItems == 0 ? 0 : (page - 1) * pageSize + 1,
+            EndItem = Math.Min(page * pageSize, totalItems)
+        };
+
+        return (errors, pagination);
     }
 
     public async Task<ErrorLog?> GetErrorAsync(string errorId)
@@ -226,40 +244,54 @@ public class ErrorService : IErrorService
         return stats;
     }
 
-    public async Task<IEnumerable<ErrorBoundaryVM>> GetBoundaryErrorsAsync(string? boundaryName = null, bool? isRecovered = null)
+    public async Task<(IEnumerable<ErrorBoundaryVM> Boundaries, PaginationInfo Pagination)> GetBoundaryErrorsAsync(int page = 1, int pageSize = 50, string? boundaryName = null, bool? isRecovered = null)
     {
         // This is a placeholder implementation
         // In a real application, you would have a separate ErrorBoundary entity
-        var boundaries = new List<ErrorBoundaryVM>();
-
-        var errors = await _context.ErrorLogs
+        var query = _context.ErrorLogs
             .Where(e => e.Severity == "Critical")
-            .OrderByDescending(e => e.LastOccurrence)
-            .Take(50)
-            .ToListAsync();
-
-        foreach (var error in errors)
-        {
-            boundaries.Add(new ErrorBoundaryVM
-            {
-                Id = error.Id.ToString(),
-                BoundaryName = error.Category,
-                ErrorMessage = error.Message,
-                OccurredAt = error.CreatedAt,
-                IsRecovered = error.IsResolved,
-                RecoveryAction = error.Resolution,
-                RecoveredAt = error.ResolvedAt,
-                FailureCount = error.OccurrenceCount
-            });
-        }
+            .AsQueryable();
 
         if (!string.IsNullOrEmpty(boundaryName))
-            boundaries = boundaries.Where(b => b.BoundaryName.Contains(boundaryName, StringComparison.OrdinalIgnoreCase)).ToList();
+            query = query.Where(e => e.Category.Contains(boundaryName));
 
         if (isRecovered.HasValue)
-            boundaries = boundaries.Where(b => b.IsRecovered == isRecovered.Value).ToList();
+            query = query.Where(e => e.IsResolved == isRecovered.Value);
 
-        return boundaries;
+        var totalItems = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+        var errors = await query
+            .OrderByDescending(e => e.LastOccurrence)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var boundaries = errors.Select(error => new ErrorBoundaryVM
+        {
+            Id = error.Id.ToString(),
+            BoundaryName = error.Category,
+            ErrorMessage = error.Message,
+            OccurredAt = error.CreatedAt,
+            IsRecovered = error.IsResolved,
+            RecoveryAction = error.Resolution,
+            RecoveredAt = error.ResolvedAt,
+            FailureCount = error.OccurrenceCount
+        }).ToList();
+
+        var pagination = new PaginationInfo
+        {
+            CurrentPage = page,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            TotalPages = totalPages,
+            HasPreviousPage = page > 1,
+            HasNextPage = page < totalPages,
+            StartItem = totalItems == 0 ? 0 : (page - 1) * pageSize + 1,
+            EndItem = Math.Min(page * pageSize, totalItems)
+        };
+
+        return (boundaries, pagination);
     }
 
     public async Task<bool> RecoverBoundaryAsync(string boundaryId, string recoveryAction)

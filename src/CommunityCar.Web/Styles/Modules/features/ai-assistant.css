@@ -1,0 +1,43 @@
+/* ==========================================================================
+   FEATURE: AI ASSISTANT
+   ========================================================================== */
+
+@layer components {
+    #ai-chat-widget.active {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+    }
+
+    .ai-assistant-fab {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 1000;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chat-message {
+        animation: fadeInUp 0.3s ease-out;
+    }
+
+    .typing-indicator .animate-bounce {
+        animation: bounce 1.4s infinite;
+    }
+
+    [dir="rtl"] #ai-chat-widget {
+        right: auto;
+        left: 1rem;
+    }
+}

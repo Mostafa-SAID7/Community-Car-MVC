@@ -1,0 +1,18 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:5002",
+  "loginUser": "seed@communitycar.com",
+  "loginPassword": "Password123!",
+  "executionArgs": {
+    "projectName": "Community Car MVC",
+    "projectPath": "c:\\Users\\memos\\OneDrive\\Desktop\\Projects\\Community Car MVC",
+    "testIds": [],
+    "additionalInstruction": "Focus on core user flows: logging in, viewing the feed, and interacting with the AI assistant. Ensure the UI elements are present and responsive.",
+    "envs": {
+      "API_KEY": "sk-user-SDCSqcSiPao9VD-WmawBUEPDklOfQfQBsy-HK2I3pbRZ-cnlRMKIFpbGs283O1bX0lHZ8q-W3yZcB-5IQTJoIIPErLr8307sZHQqo8LL6s5wHbz9zV5YMZ-0V6ls4VJncnQ"
+    }
+  },
+  "proxy": "http://89002c5a-4f23-4878-9667-e56c81dcc4c8:Wk5WYNOda16b3d55XxpHib9ShSmBT7Mu@tun.testsprite.com:8080"
+}

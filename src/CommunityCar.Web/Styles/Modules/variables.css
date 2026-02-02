@@ -1,0 +1,246 @@
+/* ==========================================================================
+   MODULE: BASE & VARIABLES
+   ========================================================================== */
+
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 345 82% 51%;
+        /* Your custom red-500: #e11d48 */
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96.1%;
+        /* Standard Transitions */
+        --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        --accent-foreground: 222.2 47.4% 11.2%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 345 82% 51%;
+        /* Your custom red-500: #e11d48 */
+        --radius: 0.5rem;
+        --vh: 1vh;
+
+        /* Chart Colors - Light */
+        --chart-primary: 221.2 83.2% 53.3%;
+        /* blue-600 */
+        --chart-secondary: 142.1 70.6% 45.3%;
+        /* green-600 */
+        --chart-accent: 262.1 83.3% 57.8%;
+        /* violet-600 */
+        --chart-grid: 214.3 31.8% 91.4%;
+        /* border */
+
+        /* Font families */
+        --font-sans: 'Inter', 'Alexandria', system-ui, -apple-system, sans-serif;
+        --font-arabic-heading: 'Lemonada', 'Alexandria', cursive;
+        --font-arabic-body: 'Noto Sans Arabic', 'Alexandria', sans-serif;
+
+        /* Semantic Spacing */
+        --space-page: clamp(1rem, 5vw, 3rem);
+        --space-card: 2rem;
+        --gap-main: 2rem;
+        --container-max-inner: 1200px;
+        --container-max-details: 900px;
+
+        /* Elevation & Layers (Premium Multi-layered Shadows) */
+        --shadow-color: 222 47% 11%;
+        --shadow-sm: 0 1px 1px hsl(var(--shadow-color) / 0.05),
+            0 2px 2px hsl(var(--shadow-color) / 0.05);
+        --shadow-md: 0 4px 6px -1px hsl(var(--shadow-color) / 0.08),
+            0 2px 4px -2px hsl(var(--shadow-color) / 0.08),
+            0 10px 15px -3px hsl(var(--shadow-color) / 0.03);
+        --shadow-lg: 0 10px 25px -5px hsl(var(--shadow-color) / 0.1),
+            0 8px 10px -6px hsl(var(--shadow-color) / 0.1),
+            0 0 0 1px hsl(var(--shadow-color) / 0.02);
+        --shadow-xl: 0 25px 50px -12px hsl(var(--shadow-color) / 0.15),
+            0 0 0 1px hsl(var(--shadow-color) / 0.02);
+    }
+
+    .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 345 82% 51%;
+        /* Your custom red-500: #e11d48 */
+        --primary-foreground: 222.2 84% 4.9%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 345 82% 51%;
+        /* Your custom red-500: #e11d48 */
+
+        /* Chart Colors - Dark */
+        --chart-primary: 217.2 91.2% 59.8%;
+        /* blue-400 */
+        --chart-secondary: 142.1 70.6% 45.3%;
+        /* green-500 */
+        --chart-accent: 263.4 70% 50.4%;
+        /* violet-500 */
+        --chart-grid: 217.2 32.6% 17.5%;
+        /* border */
+
+        /* Dark Shadows - Deeper but softer */
+        --shadow-color: 0 0% 0%;
+        --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.3);
+        --shadow-md: 0 4px 8px -1px hsl(var(--shadow-color) / 0.4),
+            0 2px 4px -2px hsl(var(--shadow-color) / 0.4);
+        --shadow-lg: 0 12px 20px -5px hsl(var(--shadow-color) / 0.5),
+            0 8px 10px -6px hsl(var(--shadow-color) / 0.5);
+        --shadow-xl: 0 25px 50px -12px hsl(var(--shadow-color) / 0.6);
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground transition-colors duration-300;
+        max-width: 100%;
+        overflow-x: hidden;
+        font-family: var(--font-sans);
+    }
+
+    html {
+        max-width: 100%;
+        overflow-x: hidden;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Arabic Font Support */
+    html[lang="ar"] body {
+        font-family: var(--font-arabic-body);
+    }
+
+    html[lang="ar"] h1,
+    html[lang="ar"] h2,
+    html[lang="ar"] h3,
+    html[lang="ar"] h4,
+    html[lang="ar"] h5,
+    html[lang="ar"] h6,
+    html[lang="ar"] .card-title,
+    html[lang="ar"] .text-xl,
+    html[lang="ar"] .text-2xl,
+    html[lang="ar"] .text-3xl,
+    html[lang="ar"] .text-4xl,
+    html[lang="ar"] .text-5xl,
+    html[lang="ar"] .text-6xl,
+    html[lang="ar"] .font-bold,
+    html[lang="ar"] .font-semibold,
+    html[lang="ar"] .font-black {
+        font-family: var(--font-arabic-heading);
+        font-weight: 600;
+    }
+
+    html[lang="ar"] p,
+    html[lang="ar"] span,
+    html[lang="ar"] div,
+    html[lang="ar"] .text-sm,
+    html[lang="ar"] .text-xs,
+    html[lang="ar"] .text-base,
+    html[lang="ar"] .text-lg,
+    html[lang="ar"] input,
+    html[lang="ar"] textarea,
+    html[lang="ar"] button,
+    html[lang="ar"] .btn {
+        font-family: var(--font-arabic-body);
+    }
+
+    /* Arabic text improvements */
+    html[lang="ar"] {
+        line-height: 1.8;
+    }
+
+    html[lang="ar"] h1,
+    html[lang="ar"] h2,
+    html[lang="ar"] h3,
+    html[lang="ar"] h4,
+    html[lang="ar"] h5,
+    html[lang="ar"] h6 {
+        line-height: 1.6;
+        letter-spacing: 0.02em;
+    }
+
+    html[lang="ar"] p {
+        line-height: 1.9;
+    }
+
+    html[lang="ar"] .text-sm {
+        line-height: 1.7;
+    }
+
+    html[lang="ar"] .text-xs {
+        line-height: 1.6;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--muted-foreground) / 0.3);
+        border-radius: 9999px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: hsl(var(--muted-foreground) / 0.5);
+    }
+
+    /* Mobile viewport height fix */
+    .min-h-screen {
+        min-height: 100vh;
+        min-height: calc(var(--vh, 1vh) * 100);
+    }
+
+    /* Mobile touch improvements */
+    @media (max-width: 768px) {
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button,
+        a {
+            @apply touch-manipulation;
+        }
+
+        /* Improve scrolling on mobile */
+        .overflow-y-auto {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Better mobile text sizing */
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+    }
+}

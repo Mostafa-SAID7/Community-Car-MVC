@@ -178,7 +178,7 @@ public class ProfileController : Controller
 
     [HttpPost("update")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateProfile(UpdateProfileVM model)
+    public async Task<IActionResult> UpdateProfile(string culture, UpdateProfileVM model)
     {
         if (!ModelState.IsValid)
         {
@@ -212,11 +212,11 @@ public class ProfileController : Controller
         if (success)
         {
             TempData["SuccessMessage"] = "Profile updated successfully!";
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
         }
 
         TempData["ErrorMessage"] = "Failed to update profile. Please try again.";
-        return RedirectToAction("Index", "ProfileSettings");
+        return RedirectToAction("Index", "ProfileSettings", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
     }
 
     [HttpPost("upload-picture")]

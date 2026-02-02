@@ -1,9 +1,12 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
+using CommunityCar.Application.Features.Dashboard.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Monitoring;
 
-[Route("dashboard/monitoring")]
+[Route("{culture=en-US}/dashboard/monitoring")]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class MonitoringController : Controller
 {
     private readonly IMonitoringService _monitoringService;
@@ -22,17 +25,91 @@ public class MonitoringController : Controller
     {
         try
         {
-            var systemHealth = await _monitoringService.GetSystemHealthAsync();
+            var systemHealthList = await _monitoringService.GetSystemHealthAsync();
             var isHealthy = await _monitoringService.IsSystemHealthyAsync();
 
+            // If we have multiple health items, we need to create a summary or use the first one
+            // For now, let's create a summary SystemHealthVM or use the first available
+            SystemHealthVM systemHealth;
+            
+            if (systemHealthList?.Any() == true)
+            {
+                // Create a summary SystemHealthVM from all services
+                systemHealth = new SystemHealthVM
+                {
+                    CheckTime = DateTime.UtcNow,
+                    ServiceName = "System Overview",
+                    Status = isHealthy ? "Healthy" : "Issues Detected",
+                    ResponseTime = systemHealthList.Average(x => x.ResponseTime),
+                    CpuUsage = systemHealthList.Average(x => x.CpuUsage),
+                    MemoryUsage = systemHealthList.Average(x => x.MemoryUsage),
+                    DiskUsage = systemHealthList.Average(x => x.DiskUsage),
+                    ActiveConnections = systemHealthList.Sum(x => x.ActiveConnections),
+                    Uptime = systemHealthList.Average(x => x.Uptime),
+                    Version = "System",
+                    Environment = systemHealthList.FirstOrDefault()?.Environment ?? "Production",
+                    IsHealthy = isHealthy,
+                    ErrorCount = systemHealthList.Sum(x => x.ErrorCount),
+                    WarningCount = systemHealthList.Sum(x => x.WarningCount),
+                    Issues = systemHealthList.SelectMany(x => x.Issues).ToList(),
+                    LastCheck = systemHealthList.Any() ? systemHealthList.Max(x => x.LastCheck) : DateTime.UtcNow
+                };
+            }
+            else
+            {
+                // Create a default health status if no data is available
+                systemHealth = new SystemHealthVM
+                {
+                    CheckTime = DateTime.UtcNow,
+                    ServiceName = "System",
+                    Status = "Unknown",
+                    ResponseTime = 0,
+                    CpuUsage = 0,
+                    MemoryUsage = 0,
+                    DiskUsage = 0,
+                    ActiveConnections = 0,
+                    Uptime = 0,
+                    Version = "1.0.0",
+                    Environment = "Production",
+                    IsHealthy = false,
+                    ErrorCount = 0,
+                    WarningCount = 0,
+                    Issues = new List<string> { "No health data available" },
+                    LastCheck = DateTime.UtcNow
+                };
+            }
+
             ViewBag.IsSystemHealthy = isHealthy;
+            ViewBag.SystemHealthList = systemHealthList; // Pass the full list for detailed views
             return View("~/Views/Dashboard/Monitoring/Index.cshtml", systemHealth);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading system monitoring");
             TempData["ErrorMessage"] = "Failed to load system monitoring data. Please try again.";
-            return View("~/Views/Dashboard/Monitoring/Index.cshtml");
+            
+            // Return a default model to prevent view errors
+            var defaultHealth = new SystemHealthVM
+            {
+                CheckTime = DateTime.UtcNow,
+                ServiceName = "System",
+                Status = "Error",
+                ResponseTime = 0,
+                CpuUsage = 0,
+                MemoryUsage = 0,
+                DiskUsage = 0,
+                ActiveConnections = 0,
+                Uptime = 0,
+                Version = "1.0.0",
+                Environment = "Production",
+                IsHealthy = false,
+                ErrorCount = 1,
+                WarningCount = 0,
+                Issues = new List<string> { "Failed to load monitoring data" },
+                LastCheck = DateTime.UtcNow
+            };
+            
+            return View("~/Views/Dashboard/Monitoring/Index.cshtml", defaultHealth);
         }
     }
 
@@ -70,13 +147,13 @@ public class MonitoringController : Controller
     {
         try
         {
-            var systemHealth = await _monitoringService.GetSystemHealthAsync();
+            var systemHealthList = await _monitoringService.GetSystemHealthAsync();
             var isHealthy = await _monitoringService.IsSystemHealthyAsync();
 
             return Json(new
             {
                 success = true,
-                data = systemHealth,
+                data = systemHealthList,
                 isHealthy = isHealthy,
                 timestamp = DateTime.UtcNow
             });

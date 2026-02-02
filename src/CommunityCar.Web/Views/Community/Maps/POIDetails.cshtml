@@ -410,7 +410,8 @@
 <partial name="~/Views/Community/Maps/_MapsModals.cshtml" />
 
 @section Scripts {
-    <script src="~/js/maps.js"></script>
+    <script src="~/js/services/maps-service.js" asp-append-version="true"></script>
+    <script src="~/js/modules/maps-module.js" asp-append-version="true"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             Skeleton.initPageLoad('poi-skeleton', 'poi-content');

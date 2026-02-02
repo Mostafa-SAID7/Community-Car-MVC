@@ -31,8 +31,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS -->
-    <link rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
+    <!-- Styles Bundles -->
+    <link rel="stylesheet" href="~/css/core.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/features.min.css" asp-append-version="true" />
 
     <!-- Dynamic Font Styles -->
     <partial name="_FontStyles" />
@@ -121,19 +124,6 @@
             </div>
         </main>
 
-        @if (!hideRightSidebar)
-        {
-            @if (IsSectionDefined("SidebarRight"))
-            {
-                <div class="fixed right-4 rtl:right-auto rtl:left-4 top-24 bottom-20 w-80 hidden xl:block">
-                    @RenderSection("SidebarRight")
-                </div>
-            }
-            else
-            {
-                <partial name="Dashboard/_DashboardSidebarRight" />
-            }
-        }
     </div>
 
     <partial name="_AIAssistant" />
@@ -149,11 +139,30 @@
 
     }
 
+    <script src="~/js/core.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/cookie-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/theme-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/sidebar-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/localization-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/interaction-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/interaction-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/comment-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/notification-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/notification-controller.js" asp-append-version="true" defer></script>
+    
     <script src="~/js/site.js" asp-append-version="true" defer></script>
-    <script src="~/js/notifications.js" asp-append-version="true" defer></script>
-    <script src="~/js/ai-assistant.js" asp-append-version="true" defer></script>
-    <script src="~/js/layout-interactions.js" asp-append-version="true" defer></script>
-    <script src="~/js/comments.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/layout-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/feed-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/feed-module.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/stories-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/stories-module.js" asp-append-version="true" defer></script>
+
+    <script src="~/js/modules/dashboard/charts-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/overview-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/reports-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/settings-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/performance-controller.js" asp-append-version="true" defer></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

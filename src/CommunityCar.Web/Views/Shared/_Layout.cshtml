@@ -41,8 +41,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS -->
-    <link rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
+    <!-- Styles Bundles -->
+    <link rel="stylesheet" href="~/css/core.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/features.min.css" asp-append-version="true" />
 
     <!-- Dynamic Font Styles -->
     <partial name="_FontStyles" />
@@ -50,7 +53,7 @@
     @await RenderSectionAsync("Styles", required: false)
 
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+
 </head>
 
 <body class="font-sans antialiased">
@@ -90,11 +93,11 @@
             
             var mainContentAttributes = hideMainContentId ? "" : "id=\"main-content\"";
         }
-        <main class="flex-1 px-2 sm:px-3 md:px-4 lg:px-6 mt-24 sidebar-spacing @marginClasses" @Html.Raw(mainContentAttributes)>
-            <div class="max-w-none w-full overflow-x-hidden">
-                <div class="bg-card/30 backdrop-blur-xl   shadow-lg sm:shadow-2xl p-3  w-full mx-auto">
+        <main class="flex-1 pt-20 sidebar-spacing @marginClasses" @Html.Raw(mainContentAttributes)>
+            <div class="w-full overflow-x-hidden">
+                <div class="bg-card/30 backdrop-blur-xl shadow-lg sm:shadow-2xl p-3 w-full mx-auto">
                     <!-- Header with sidebar toggles -->
-                    <div class="flex items-center justify-between border-border  lg:border-none rounded-lg mb-4 sm:mb-6 xl:mb-0 lg:hidden">
+                    <div class="flex items-center justify-between border-border lg:border-none rounded-lg mb-4 sm:mb-6 xl:mb-0 lg:hidden">
                         <!-- Mobile navigation and options (hidden on desktop) -->
                         <div class="flex items-center gap-2 md:hidden">
                             <!-- Mobile sidebar toggle button -->
@@ -111,7 +114,7 @@
                             <div class="w-px h-6 bg-border mx-1"></div>
                             
                             <!-- Action icons -->
-                            <a href="/Dashboard" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="@Localizer["Dashboard"]" title="@Localizer["Dashboard"]">
+                            <a href="@Url.Action("Index", "Dashboard", new { culture = System.Globalization.CultureInfo.CurrentUICulture.Name })" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="@Localizer["Dashboard"]" title="@Localizer["Dashboard"]">
                                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                             </a>
                             <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="mobile-theme-toggle" aria-label="@Localizer["ToggleTheme"]" title="@Localizer["ToggleTheme"]">
@@ -182,7 +185,7 @@
         {
             @if (IsSectionDefined("SidebarRight"))
             {
-                <div class="fixed right-4 rtl:right-auto rtl:left-4 top-24 bottom-8 w-80 hidden xl:block overflow-y-auto custom-scrollbar">
+                <div class="fixed right-4 rtl:right-auto rtl:left-4 top-20 bottom-8 w-80 hidden xl:block overflow-y-auto custom-scrollbar">
                     @RenderSection("SidebarRight")
                 </div>
             }
@@ -198,10 +201,10 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script> -->
     <script src="~/js/toaster.js" asp-append-version="true" defer></script>
-    <script src="~/js/skeleton.js" asp-append-version="true"></script>
     <script src="~/js/error-boundary.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/error-module.js" asp-append-version="true" defer></script>
 
     <!-- SignalR -->
     @if (User.Identity?.IsAuthenticated == true)
@@ -209,11 +212,36 @@
         <script src="~/lib/signalr/signalr.min.js"></script>
     }
 
+    <!-- Core Services -->
+    <script src="~/js/core.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/cookie-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/theme-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/sidebar-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/localization-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/interaction-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/interaction-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/comment-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/notification-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/notification-controller.js" asp-append-version="true" defer></script>
+    
     <script src="~/js/site.js" asp-append-version="true" defer></script>
-    <script src="~/js/notifications.js" asp-append-version="true" defer></script>
-    <script src="~/js/ai-assistant.js" asp-append-version="true" defer></script>
-    <script src="~/js/layout-interactions.js" asp-append-version="true" defer></script>
-    <script src="~/js/comments.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/layout-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/feed-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/feed-module.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/stories-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/stories-module.js" asp-append-version="true" defer></script>
+    
+    <script src="~/js/services/ai-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/ai-module.js" asp-append-version="true" defer></script>
+    
+    <script src="~/js/services/social-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/social-module.js" asp-append-version="true" defer></script>
+    
+    <script src="~/js/services/search-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/search-module.js" asp-append-version="true" defer></script>
+    
+    <script src="~/js/modules/stories-create-module.js" asp-append-version="true" defer></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <!-- Global Skeleton Templates -->
     <div id="global-skeleton-templates" class="hidden">
         <partial name="_SkeletonLoading" model='"Post"' />
@@ -223,6 +251,7 @@
         <partial name="_SkeletonLoading" model='"Card"' />
     </div>
 
+    <script src="~/js/modules/profile/view-tracker.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

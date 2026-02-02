@@ -9,7 +9,7 @@ using Hangfire.Storage;
 namespace CommunityCar.Web.Controllers.Dashboard;
 
 [Route("dashboard/background-jobs")]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class BackgroundJobsController : Controller
 {
     private readonly BackgroundJobSchedulerService _schedulerService;
@@ -43,6 +43,18 @@ public class BackgroundJobsController : Controller
     {
         try
         {
+            // Temporary: Create empty model when Hangfire is not enabled
+            var model = new BackgroundJobsViewModel
+            {
+                JobStatistics = new JobStatistics(),
+                RecurringJobs = new List<RecurringJobInfo>(),
+                RecentJobs = new List<RecentJobInfo>()
+            };
+
+            return View("~/Views/Dashboard/BackgroundJobs/Index.cshtml", model);
+            
+            // Original code commented out until Hangfire is enabled
+            /*
             var model = new BackgroundJobsViewModel
             {
                 JobStatistics = GetJobStatistics(),
@@ -51,12 +63,13 @@ public class BackgroundJobsController : Controller
             };
 
             return View("~/Views/Dashboard/BackgroundJobs/Index.cshtml", model);
+            */
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading background jobs page");
             TempData["ErrorMessage"] = "Failed to load background jobs information.";
-            return View(new BackgroundJobsViewModel());
+            return View("~/Views/Dashboard/BackgroundJobs/Index.cshtml", new BackgroundJobsViewModel());
         }
     }
 
@@ -213,6 +226,13 @@ public class BackgroundJobsController : Controller
     {
         try
         {
+            // Check if Hangfire is enabled
+            if (JobStorage.Current == null)
+            {
+                _logger.LogWarning("Hangfire is not initialized - returning empty job statistics");
+                return new JobStatistics();
+            }
+
             using var connection = JobStorage.Current.GetConnection();
             var monitoring = JobStorage.Current.GetMonitoringApi();
 
@@ -237,6 +257,13 @@ public class BackgroundJobsController : Controller
     {
         try
         {
+            // Check if Hangfire is enabled
+            if (JobStorage.Current == null)
+            {
+                _logger.LogWarning("Hangfire is not initialized - returning empty recurring jobs list");
+                return new List<RecurringJobInfo>();
+            }
+
             using var connection = JobStorage.Current.GetConnection();
             var recurringJobs = connection.GetRecurringJobs();
 
@@ -261,6 +288,13 @@ public class BackgroundJobsController : Controller
     {
         try
         {
+            // Check if Hangfire is enabled
+            if (JobStorage.Current == null)
+            {
+                _logger.LogWarning("Hangfire is not initialized - returning empty recent jobs list");
+                return new List<RecentJobInfo>();
+            }
+
             var monitoring = JobStorage.Current.GetMonitoringApi();
             var succeededJobs = monitoring.SucceededJobs(0, 10);
             var failedJobs = monitoring.FailedJobs(0, 10);

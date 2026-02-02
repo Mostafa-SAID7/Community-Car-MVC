@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Core Bundle: Variables, Typography & Base */
+@import "./Modules/variables.css";
+@import "./Modules/typography.css";
