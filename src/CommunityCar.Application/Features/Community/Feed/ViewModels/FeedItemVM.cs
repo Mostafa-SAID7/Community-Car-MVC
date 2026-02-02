@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using CommunityCar.Domain.Enums.Community;
 using CommunityCar.Domain.Enums.Shared;
+using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
+
 
 namespace CommunityCar.Application.Features.Community.Feed.ViewModels;
 
@@ -55,5 +57,5 @@ public class FeedItemVM
     public string? Location { get; set; }
     public int? Rating { get; set; }
     public string TimeAgo { get; set; } = string.Empty;
-    public List<CommentItemVM> InitialComments { get; set; } = new();
+    public List<CommentVM> InitialComments { get; set; } = new();
 }

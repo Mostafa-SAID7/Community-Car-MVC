@@ -99,7 +99,7 @@ class AITrainingManager {
         }
 
         try {
-            const response = await fetch('/Dashboard/AIManagement/StartTraining', {
+            const response = await fetch('/AiAgent/AIManagement/StartTraining', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ class AITrainingManager {
             button.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 mr-1 animate-spin"></i>Queuing...';
             if (typeof lucide !== 'undefined') lucide.createIcons();
 
-            const response = await fetch('/Dashboard/AIManagement/RetrainModel', {
+            const response = await fetch('/AiAgent/AIManagement/RetrainModel', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -270,7 +270,7 @@ class AITrainingManager {
                         batchSize: parseInt(document.getElementById('batchSize').value)
                     };
 
-                    const response = await fetch('/Dashboard/AIManagement/UpdateModelSettings', {
+                    const response = await fetch('/AiAgent/AIManagement/UpdateModelSettings', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -300,7 +300,7 @@ class AITrainingManager {
         try {
             this.notify(`Preparing ${modelName} export...`, 'info');
 
-            const response = await fetch('/Dashboard/AIManagement/ExportModel', {
+            const response = await fetch('/AiAgent/AIManagement/ExportModel', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -344,7 +344,7 @@ class AITrainingManager {
         }
 
         try {
-            const response = await fetch('/Dashboard/AIManagement/DeleteModel', {
+            const response = await fetch('/AiAgent/AIManagement/DeleteModel', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -368,7 +368,7 @@ class AITrainingManager {
 
     async viewTrainingDetails(modelName, date) {
         try {
-            const response = await fetch(`/Dashboard/AIManagement/GetTrainingDetails?modelName=${encodeURIComponent(modelName)}&date=${encodeURIComponent(date)}`);
+            const response = await fetch(`/AiAgent/AIManagement/GetTrainingDetails?modelName=${encodeURIComponent(modelName)}&date=${encodeURIComponent(date)}`);
             const result = await response.json();
 
             if (result.success && window.AlertModal) {
@@ -397,7 +397,7 @@ class AITrainingManager {
     async downloadTrainingReport(modelName, date) {
         try {
             this.notify(`Generating report...`, 'info');
-            const response = await fetch(`/Dashboard/AIManagement/DownloadTrainingReport?modelName=${encodeURIComponent(modelName)}&date=${encodeURIComponent(date)}`);
+            const response = await fetch(`/AiAgent/AIManagement/DownloadTrainingReport?modelName=${encodeURIComponent(modelName)}&date=${encodeURIComponent(date)}`);
             const result = await response.json();
 
             if (result.success) {

@@ -78,11 +78,11 @@ app.MapControllers();
 // Dashboard area route for all Dashboard controllers
 app.MapControllerRoute(
     name: "dashboard",
-    pattern: "{culture=en}/Dashboard/{controller=Dashboard}/{action=Index}/{id?}");
+    pattern: "{culture=en-US}/Dashboard/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{culture=en}/{controller=Home}/{action=Index}/{id?}")
+    pattern: "{culture=en-US}/{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 

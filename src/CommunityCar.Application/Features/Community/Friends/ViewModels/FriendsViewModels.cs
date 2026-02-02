@@ -4,7 +4,7 @@ namespace CommunityCar.Application.Features.Community.Friends.ViewModels;
  * FRIENDS VIEWMODELS REFERENCE FILE
  * =================================
  * 
- * This file originally contained 6 ViewModels that have been split into separate files for better organization.
+ * This file originally contained ViewModels that have been split into separate files for better organization.
  * All ViewModels are now located in individual files within this same directory.
  * 
  * SPLIT FILES:
@@ -17,6 +17,13 @@ namespace CommunityCar.Application.Features.Community.Friends.ViewModels;
  * - FriendSuggestionVM.cs
  * - FriendshipResultVM.cs
  * - FriendshipStatusVM.cs
+ * 
+ * Request/Action ViewModels:
+ * - SendFriendRequestVM.cs - For sending friend requests
+ * - FriendshipActionVM.cs - For accepting/declining requests
+ * - RemoveFriendVM.cs - For removing friends
+ * - BlockUserVM.cs - For blocking users
+ * - FriendRequestsVM.cs - For displaying friend requests
  * 
  * USAGE:
  * ======

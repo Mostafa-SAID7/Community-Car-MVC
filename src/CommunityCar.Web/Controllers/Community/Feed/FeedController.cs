@@ -191,7 +191,7 @@ public class FeedController : Controller
     }
 
     [HttpPost("interact")]
-    public async Task<IActionResult> Interact([FromBody] FeedInteractionRequest request)
+    public async Task<IActionResult> Interact([FromBody] FeedInteractionRequestVM request)
     {
         var userId = GetCurrentUserId();
         if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
@@ -226,7 +226,7 @@ public class FeedController : Controller
     }
 
     [HttpPost("bookmark")]
-    public IActionResult Bookmark([FromBody] FeedInteractionRequest request)
+    public IActionResult Bookmark([FromBody] FeedInteractionRequestVM request)
     {
         var userId = GetCurrentUserId();
         if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
@@ -237,7 +237,7 @@ public class FeedController : Controller
     }
 
     [HttpPost("hide")]
-    public IActionResult Hide([FromBody] FeedInteractionRequest request)
+    public IActionResult Hide([FromBody] FeedInteractionRequestVM request)
     {
         var userId = GetCurrentUserId();
         if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
@@ -248,7 +248,7 @@ public class FeedController : Controller
     }
 
     [HttpPost("report")]
-    public async Task<IActionResult> Report([FromBody] FeedInteractionRequest request)
+    public async Task<IActionResult> Report([FromBody] FeedInteractionRequestVM request)
     {
         var userId = GetCurrentUserId();
         if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
@@ -267,7 +267,7 @@ public class FeedController : Controller
         return Ok(stats);
     }
     [HttpPost("mark-seen")]
-    public async Task<IActionResult> MarkSeen([FromBody] FeedInteractionRequest request)
+    public async Task<IActionResult> MarkSeen([FromBody] FeedInteractionRequestVM request)
     {
         var userId = GetCurrentUserId();
         if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
@@ -275,14 +275,6 @@ public class FeedController : Controller
         var success = await _feedService.MarkAsSeenAsync(userId.Value, request.ContentId, request.ContentType);
         return Ok(new { success });
     }
-}
-
-public class FeedInteractionRequest
-{
-    public Guid ContentId { get; set; }
-    public string ContentType { get; set; } = string.Empty;
-    public string? InteractionType { get; set; }
-    public string? Reason { get; set; }
 }
 
 

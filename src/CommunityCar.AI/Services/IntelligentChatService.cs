@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using CommunityCar.AI.Configuration;
 using CommunityCar.AI.Models;
+using CommunityCar.Domain.Enums.AI;
 using System.Text.Json;
 using static CommunityCar.AI.Models.SentimentData;
 using CommunityCar.Application.Services.Community;
@@ -895,92 +896,4 @@ public class IntelligentChatService : IIntelligentChatService
             SentimentTrend = "Positive"
         });
     }
-}
-
-// Supporting classes
-public class ChatRequest
-{
-    public string UserId { get; set; } = string.Empty;
-    public string Message { get; set; } = string.Empty;
-    public string ConversationId { get; set; } = string.Empty;
-    public string Context { get; set; } = string.Empty;
-    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-}
-
-public class ChatResponse
-{
-    public string MessageId { get; set; } = string.Empty;
-    public string UserId { get; set; } = string.Empty;
-    public string Message { get; set; } = string.Empty;
-    public bool IsBlocked { get; set; }
-    public float Confidence { get; set; }
-    public Guid ConversationId { get; set; }
-    public EnhancedSentimentPrediction? SentimentAnalysis { get; set; }
-    public ChatModerationResult? ModerationResult { get; set; }
-    public List<string> Suggestions { get; set; } = new();
-    public float EngagementScore { get; set; }
-    public List<string> ExtractedTopics { get; set; } = new();
-    public List<string> ExtractedEntities { get; set; } = new();
-    public DateTime Timestamp { get; set; }
-}
-
-public class ChatModerationResult
-{
-    public string MessageId { get; set; } = string.Empty;
-    public string UserId { get; set; } = string.Empty;
-    public string OriginalMessage { get; set; } = string.Empty;
-    public bool IsBlocked { get; set; }
-    public bool IsSpam { get; set; }
-    public bool HasInappropriateContent { get; set; }
-    public float ToxicityScore { get; set; }
-    public List<string> ModerationReasons { get; set; } = new();
-    public string SuggestedAlternative { get; set; } = string.Empty;
-}
-
-public class ChatInsight
-{
-    public string Type { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public float Confidence { get; set; }
-    public DateTime Timestamp { get; set; }
-}
-
-public class ChatSummary
-{
-    public string ConversationId { get; set; } = string.Empty;
-    public string Summary { get; set; } = string.Empty;
-    public List<string> KeyTopics { get; set; } = new();
-    public int ParticipantCount { get; set; }
-    public int MessageCount { get; set; }
-    public TimeSpan Duration { get; set; }
-    public SentimentType OverallSentiment { get; set; }
-    public List<string> ActionItems { get; set; } = new();
-}
-
-public class ChatTranslation
-{
-    public string OriginalMessage { get; set; } = string.Empty;
-    public string OriginalLanguage { get; set; } = string.Empty;
-    public string TargetLanguage { get; set; } = string.Empty;
-    public string TranslatedMessage { get; set; } = string.Empty;
-    public float Confidence { get; set; }
-}
-
-public enum MessageType
-{
-    General,
-    Question,
-    Problem,
-    Greeting,
-    Appreciation,
-    Complaint
-}
-
-// Additional models for controller compatibility
-public class ChatMessageResponse
-{
-    public string Message { get; set; } = string.Empty;
-    public float Confidence { get; set; }
-    public List<string> Suggestions { get; set; } = new();
-    public Guid ConversationId { get; set; }
 }

@@ -316,17 +316,3 @@ public class MLPipelineService : IMLPipelineService, IHostedService
         _retrainingTimer?.Dispose();
     }
 }
-
-// Supporting data models
-public class IntentData
-{
-    public string Text { get; set; } = string.Empty;
-    public string Intent { get; set; } = string.Empty;
-}
-
-public class ContentRecommendationData
-{
-    public string UserId { get; set; } = string.Empty;
-    public string ContentId { get; set; } = string.Empty;
-    public float Rating { get; set; }
-}

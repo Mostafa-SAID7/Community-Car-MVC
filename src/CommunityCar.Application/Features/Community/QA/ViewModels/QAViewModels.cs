@@ -6,3 +6,9 @@ namespace CommunityCar.Application.Features.Community.QA.ViewModels;
 // - AnswerVM.cs - Answer view model
 // - QASearchVM.cs - QA search view model
 // - QASearchStats.cs - QA search statistics view model
+// - CreateQuestionVM.cs - Create question view model
+// - UpdateQuestionVM.cs - Update question view model
+// - DeleteQuestionVM.cs - Delete question view model
+// - CreateAnswerVM.cs - Create answer view model
+// - UpdateAnswerVM.cs - Update answer view model
+// - DeleteAnswerVM.cs - Delete answer view model

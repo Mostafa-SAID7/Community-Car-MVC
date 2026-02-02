@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using CommunityCar.Domain.Entities.AI;
+using CommunityCar.Domain.Enums.AI;
 using CommunityCar.Infrastructure.Persistence.Data;
 using System.Text.Json;
 

@@ -2,8 +2,6 @@ using CommunityCar.Infrastructure.Configuration;
 using CommunityCar.Infrastructure.Configuration.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
-using CommunityCar.Infrastructure.Services.Account;
-using CommunityCar.Application.Services.Account.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
@@ -16,9 +14,30 @@ using CommunityCar.Application.Common.Interfaces.Repositories.AI;
 using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
+using CommunityCar.Application.Common.Interfaces.Services.Caching;
+using CommunityCar.Application.Common.Interfaces.Services.BackgroundJobs;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
+using CommunityCar.Application.Common.Interfaces.Services.Authentication;
+using CommunityCar.Application.Common.Interfaces.Repositories.Authorization;
+using CommunityCar.Application.Services.Account.Authorization;
 using CommunityCar.Application.Services.Shared;
 using CommunityCar.Application.Services.AI;
+using CommunityCar.Application.Services.AI.ModelManagement;
+using CommunityCar.Application.Services.AI.Training;
+using CommunityCar.Application.Services.AI.History;
+using CommunityCar.Application.Services.Account;
+using CommunityCar.Application.Services.Account.Authentication;
+using CommunityCar.Application.Services.Account.Authentication.OAuth;
+using CommunityCar.Application.Services.Communication;
+using CommunityCar.Application.Services.Community;
+using CommunityCar.Application.Services.Storage;
+using CommunityCar.Application.Services.Dashboard;
+using CommunityCar.Application.Services.Caching;
+using CommunityCar.Application.Common.Interfaces.Hubs;
+using CommunityCar.Infrastructure.Hubs;
 using CommunityCar.Domain.Entities.Account.Core;
+using CommunityCar.Domain.Entities.Account.Authorization;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using CommunityCar.Infrastructure.Persistence.Repositories.Community;
@@ -29,23 +48,12 @@ using CommunityCar.Infrastructure.Persistence.Repositories.Account.Gamification;
 using CommunityCar.Infrastructure.Persistence.Repositories.Account.Social;
 using CommunityCar.Infrastructure.Persistence.Repositories.Account.Media;
 using CommunityCar.Infrastructure.Persistence.Repositories.Account.Management;
+using CommunityCar.Infrastructure.Persistence.Repositories.Account.Authorization;
 using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
 using CommunityCar.Infrastructure.Persistence.Repositories.AI;
 using CommunityCar.Infrastructure.Persistence.Repositories.Chat;
 using CommunityCar.Infrastructure.Persistence.UnitOfWork;
-using CommunityCar.Infrastructure.Services.Account.Authentication;
-using CommunityCar.Infrastructure.Services.Account.Authentication.OAuth;
-using CommunityCar.Application.Services.AI.ModelManagement;
-using CommunityCar.Application.Services.AI.Training;
-using CommunityCar.Application.Services.AI.History;
-using CommunityCar.Infrastructure.Services.Communication;
-using CommunityCar.Infrastructure.Services.Community;
-using CommunityCar.Infrastructure.Services.Storage;
-using CommunityCar.Infrastructure.Services.Dashboard;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using CommunityCar.Application.Services.Communication;
-using CommunityCar.Application.Common.Interfaces.Services.Caching;
-using CommunityCar.Application.Common.Interfaces.Services.BackgroundJobs;
+
 using CommunityCar.Infrastructure.BackgroundJobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -54,14 +62,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using CommunityCar.Application.Services.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
-using CommunityCar.Application.Common.Interfaces.Services.Authentication;
-using CommunityCar.Domain.Entities.Account.Authorization;
-using CommunityCar.Application.Common.Interfaces.Repositories.Authorization;
-using CommunityCar.Infrastructure.Persistence.Repositories.Account.Authorization;
 
 namespace CommunityCar.Infrastructure;
 
@@ -176,13 +176,11 @@ public static class DependencyInjection
         services.AddScoped<ITrainingHistoryRepository, TrainingHistoryRepository>();
 
         // AI Services
-        services.AddScoped<IAIManagementService, AIManagementService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Consolidated User Repository (replacing multiple user-related repositories)
         // Consolidated User Repository (replacing multiple user-related repositories)
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IAccountManagementService, AccountManagementService>();
 
 
         // Profile Repositories
@@ -198,42 +196,17 @@ public static class DependencyInjection
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
 
-        // Authentication & Authorization services
-        services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IOAuthService, OAuthService>();
 
-        // Focused OAuth Services
-        services.AddScoped<IGoogleOAuthService, GoogleOAuthService>();
-        services.AddScoped<IFacebookOAuthService, FacebookOAuthService>();
-
-        // Focused TwoFactor Services
-        services.AddScoped<ITwoFactorService, TwoFactorService>();
-
-        // Focused AI Services
-        services.AddScoped<IModelManagementService, ModelManagementService>();
-        services.AddScoped<ITrainingManagementService, TrainingManagementService>();
-        services.AddScoped<ITrainingHistoryService, TrainingHistoryService>();
-        services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IEmailTemplateService, EmailTemplateService>();
-        services.AddScoped<IRoleService, RoleService>();
-        services.AddScoped<IPermissionService, PermissionService>();
-        services.AddScoped<INotificationService, NotificationService>();
-        services.AddScoped<IChatService, ChatService>();
-        services.AddScoped<IGuidesNotificationService, GuidesNotificationService>();
-        services.AddScoped<INewsNotificationService, NewsNotificationService>();
-        services.AddScoped<ISharedSearchService, SharedSearchService>();
-        services.AddScoped<IContentModerationService, ContentModerationService>();
-
-        // Storage services
-        services.AddScoped<IFileStorageService, FileStorageService>();
+        // SignalR Hub Context Wrapper
+        services.AddScoped<INotificationHubContext, NotificationHubContextWrapper>();
 
         // System Services
         services.AddMemoryCache();
         services.AddHttpClient();
-        services.AddScoped<IMaintenanceService, MaintenanceService>();
 
-        // Caching Services
+        // Caching Services - Configure Redis if enabled
         services.AddRedisCache(configuration);
+        services.AddScoped<CacheWarmupService>();
         
         // Background Job Services - only add if enabled
         var backgroundJobSettings = configuration.GetSection("BackgroundJobs").Get<BackgroundJobSettings>();
@@ -242,16 +215,10 @@ public static class DependencyInjection
             services.AddBackgroundJobs(configuration);
         }
         
-        services.AddScoped<GamificationBackgroundJobService>();
-        services.AddScoped<MaintenanceBackgroundJobService>();
-        services.AddScoped<FeedBackgroundJobService>();
-        services.AddScoped<EmailBackgroundJobService>();
-        services.AddScoped<BackgroundJobSchedulerService>();
         services.AddScoped<IBackgroundJobService, BackgroundJobs.BackgroundJobService>();
 
-        // Caching Services
+        // Caching Configuration
         services.Configure<CacheSettings>(configuration.GetSection(CacheSettings.SectionName));
-        services.AddScoped<ICacheService, CommunityCar.Infrastructure.Caching.CacheService>();
         
         // Add distributed cache if enabled
         var cacheSettings = configuration.GetSection(CacheSettings.SectionName).Get<CacheSettings>();
@@ -261,7 +228,6 @@ public static class DependencyInjection
             {
                 options.Configuration = cacheSettings.RedisConnectionString;
             });
-            services.AddScoped<IDistributedCacheService, DistributedCacheService>();
         }
 
         // Background Jobs Services

@@ -17,4 +17,4 @@ namespace CommunityCar.Application.Features.Community.Feed.ViewModels;
 // - TrendingFeedVM.cs - Trending feed view model
 // - StoryItemVM.cs - Story item view model for feed
 // - FriendSuggestionVM.cs - Friend suggestion view model
-// - CommentItemVM.cs - Comment item view model
+// - CommentVM.cs - Comment view model (using shared interactions)

@@ -141,10 +141,10 @@
                         <skeleton type="Line" />
                         <skeleton type="Line" />
                     </div>
-                    <div id="hotspots-content" class="max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                    <div id="hotspots-content">
                     @if (Model.PopularPOIs.Any())
                     {
-                        @foreach (var poi in Model.PopularPOIs.Take(3))
+                        @foreach (var poi in Model.PopularPOIs)
                         {
                             <div class="flex items-center gap-4 p-4 hover:bg-muted/30 rounded-xl transition-all group/poi cursor-pointer border border-transparent hover:border-border/40" onclick="showLocationDetails('@poi.Id')">
                                 <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shrink-0 group-hover/poi:scale-110 transition-transform">
@@ -168,7 +168,6 @@
                                 </div>
                             </div>
                         }
-                        <div id="hotspots-sentinel" class="h-4"></div>
                     }
                     else
                     {
@@ -223,11 +222,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             Skeleton.initPageLoad('hotspots-skeleton', 'hotspots-content');
             Skeleton.initPageLoad('top-routes-skeleton', 'top-routes-content');
-            
-            // Initialize hotspots infinite scroll
-            if (typeof initHotspotsInfiniteScroll === 'function') {
-                initHotspotsInfiniteScroll();
-            }
         });
     </script>
 }

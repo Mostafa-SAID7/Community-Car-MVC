@@ -1,5 +1,6 @@
 using CommunityCar.AI.Services;
 using CommunityCar.AI.Models;
+using CommunityCar.Application.Features.Chat.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -23,7 +24,7 @@ public class AIChatController : Controller
     }
 
     [HttpPost("send")]
-    public async Task<IActionResult> SendMessage([FromBody] ChatMessageRequest request)
+    public async Task<IActionResult> SendMessage([FromBody] ChatMessageRequestVM request)
     {
         if (string.IsNullOrWhiteSpace(request.Message))
         {
@@ -94,7 +95,7 @@ public class AIChatController : Controller
     }
 
     [HttpPost("conversations")]
-    public async Task<IActionResult> StartConversation([FromBody] StartConversationRequest request)
+    public async Task<IActionResult> StartConversation([FromBody] StartConversationRequestVM request)
     {
         try
         {
@@ -148,7 +149,7 @@ public class AIChatController : Controller
     }
 
     [HttpPost("feedback")]
-    public async Task<IActionResult> SubmitFeedback([FromBody] FeedbackRequest request)
+    public async Task<IActionResult> SubmitFeedback([FromBody] FeedbackRequestVM request)
     {
         try
         {
@@ -196,27 +197,6 @@ public class AIChatController : Controller
         // Fallback for development/testing
         return Guid.NewGuid();
     }
-}
-
-// Request/Response models
-public class ChatMessageRequest
-{
-    public string Message { get; set; } = string.Empty;
-    public string? Context { get; set; }
-}
-
-public class StartConversationRequest
-{
-    public string? Title { get; set; }
-    public string? Context { get; set; }
-}
-
-public class FeedbackRequest
-{
-    public Guid ConversationId { get; set; }
-    public Guid MessageId { get; set; }
-    public int Rating { get; set; }
-    public string? Feedback { get; set; }
 }
 
 

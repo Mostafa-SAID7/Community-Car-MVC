@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Base;
 using CommunityCar.Domain.Entities.AI;
+using CommunityCar.Domain.Enums.AI;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories.AI;
 

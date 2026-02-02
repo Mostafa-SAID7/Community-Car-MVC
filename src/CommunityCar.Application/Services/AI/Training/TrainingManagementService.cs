@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.AI;
 using CommunityCar.Application.Services.AI.ModelManagement;
 using CommunityCar.Domain.Entities.AI;
+using CommunityCar.Domain.Enums.AI;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 

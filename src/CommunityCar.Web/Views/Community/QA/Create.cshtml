@@ -1,3 +1,4 @@
+@model CommunityCar.Application.Features.Community.QA.ViewModels.CreateQuestionVM
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @inject IStringLocalizer<SharedResource> SharedLocalizer
@@ -40,7 +41,7 @@
                     </div>
                     <div class="group/input relative">
                         <div class="absolute -inset-px bg-gradient-to-r from-primary/20 to-transparent rounded-2xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
-                        <input type="text" name="title" id="title" class="relative w-full bg-background/50 border border-border/50 px-6 py-5 rounded-2xl text-lg font-black tracking-tight text-foreground placeholder:text-muted-foreground/30 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner" placeholder="@Localizer["TitlePlaceholder"]" required>
+                        <input type="text" asp-for="Title" class="relative w-full bg-background/50 border border-border/50 px-6 py-5 rounded-2xl text-lg font-black tracking-tight text-foreground placeholder:text-muted-foreground/30 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner" placeholder="@Localizer["TitlePlaceholder"]" required>
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -51,7 +52,7 @@
                     </div>
                     <div class="group/input relative">
                         <div class="absolute -inset-px bg-gradient-to-r from-primary/20 to-transparent rounded-2xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
-                        <input type="text" name="titleAr" id="titleAr" class="relative w-full bg-background/50 border border-border/50 px-6 py-5 rounded-2xl text-lg font-black tracking-tight text-foreground placeholder:text-muted-foreground/30 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner text-right" dir="rtl" placeholder="@Localizer["TitleArPlaceholder"]">
+                        <input type="text" asp-for="TitleAr" class="relative w-full bg-background/50 border border-border/50 px-6 py-5 rounded-2xl text-lg font-black tracking-tight text-foreground placeholder:text-muted-foreground/30 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner text-right" dir="rtl" placeholder="@Localizer["TitleArPlaceholder"]">
                     </div>
                     <p class="text-[10px] font-medium text-muted-foreground/60 px-2 italic">@Localizer["TitleNote"]</p>
                 </div>
@@ -68,7 +69,7 @@
                     <div class="group/input relative">
                          <div class="absolute -inset-px bg-gradient-to-r from-primary/10 to-transparent rounded-3xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
                          <div class="relative bg-background/50 border border-border/50 rounded-3xl overflow-hidden focus-within:border-primary/50 transition-all shadow-inner">
-                            <textarea name="body" id="body" class="w-full p-8 bg-transparent border-none focus:ring-0 resize-none min-h-[350px] text-foreground font-medium leading-relaxed placeholder:text-muted-foreground/30" placeholder="@Localizer["BodyPlaceholder"]" required></textarea>
+                            <textarea asp-for="Body" class="w-full p-8 bg-transparent border-none focus:ring-0 resize-none min-h-[350px] text-foreground font-medium leading-relaxed placeholder:text-muted-foreground/30" placeholder="@Localizer["BodyPlaceholder"]" required></textarea>
                          </div>
                     </div>
 
@@ -81,8 +82,78 @@
                     <div class="group/input relative">
                          <div class="absolute -inset-px bg-gradient-to-r from-primary/10 to-transparent rounded-3xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
                          <div class="relative bg-background/50 border border-border/50 rounded-3xl overflow-hidden focus-within:border-primary/50 transition-all shadow-inner">
-                            <textarea name="bodyAr" id="bodyAr" class="w-full p-8 bg-transparent border-none focus:ring-0 resize-none min-h-[350px] text-foreground font-medium leading-relaxed placeholder:text-muted-foreground/30 text-right" dir="rtl" placeholder="@Localizer["BodyArPlaceholder"]"></textarea>
+                            <textarea asp-for="BodyAr" class="w-full p-8 bg-transparent border-none focus:ring-0 resize-none min-h-[350px] text-foreground font-medium leading-relaxed placeholder:text-muted-foreground/30 text-right" dir="rtl" placeholder="@Localizer["BodyArPlaceholder"]"></textarea>
                          </div>
+                    </div>
+                </div>
+
+                <!-- Field 3: Car Details -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label class="text-[11px] font-black uppercase tracking-[0.25em] text-primary flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary shadow-glow-primary"></span>
+                            @Localizer["VehicleSpecs"]
+                        </label>
+                        <span class="text-[9px] font-black uppercase text-muted-foreground opacity-30">@Localizer["OptionalData"]</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="group/input relative">
+                            <div class="absolute -inset-px bg-gradient-to-r from-primary/20 to-transparent rounded-2xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
+                            <input type="text" asp-for="CarMake" class="relative w-full bg-background/50 border border-border/50 px-6 py-4 rounded-2xl text-sm font-medium text-foreground placeholder:text-muted-foreground/30 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner" placeholder="@Localizer["CarMake"]">
+                        </div>
+                        <div class="group/input relative">
+                            <div class="absolute -inset-px bg-gradient-to-r from-primary/20 to-transparent rounded-2xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
+                            <input type="text" asp-for="CarModel" class="relative w-full bg-background/50 border border-border/50 px-6 py-4 rounded-2xl text-sm font-medium text-foreground placeholder:text-muted-foreground/30 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner" placeholder="@Localizer["CarModel"]">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="group/input relative">
+                            <div class="absolute -inset-px bg-gradient-to-r from-primary/20 to-transparent rounded-2xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
+                            <input type="number" asp-for="CarYear" min="1900" max="2030" class="relative w-full bg-background/50 border border-border/50 px-6 py-4 rounded-2xl text-sm font-medium text-foreground placeholder:text-muted-foreground/30 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner" placeholder="@Localizer["CarYear"]">
+                        </div>
+                        <div class="group/input relative">
+                            <div class="absolute -inset-px bg-gradient-to-r from-primary/20 to-transparent rounded-2xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
+                            <input type="text" asp-for="CarEngine" class="relative w-full bg-background/50 border border-border/50 px-6 py-4 rounded-2xl text-sm font-medium text-foreground placeholder:text-muted-foreground/30 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner" placeholder="@Localizer["EngineType"]">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Field 4: Difficulty & Tags -->
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <label for="difficulty" class="text-[11px] font-black uppercase tracking-[0.25em] text-primary flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary shadow-glow-primary"></span>
+                                    @Localizer["DifficultyLevel"]
+                                </label>
+                            </div>
+                            <div class="group/input relative">
+                                <div class="absolute -inset-px bg-gradient-to-r from-primary/20 to-transparent rounded-2xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
+                                <select asp-for="Difficulty" class="relative w-full bg-background/50 border border-border/50 px-6 py-4 rounded-2xl text-sm font-medium text-foreground outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner">
+                                    <option value="1">@Localizer["Beginner"]</option>
+                                    <option value="2">@Localizer["Intermediate"]</option>
+                                    <option value="3">@Localizer["Advanced"]</option>
+                                    <option value="4">@Localizer["Expert"]</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <label for="tags" class="text-[11px] font-black uppercase tracking-[0.25em] text-primary flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary shadow-glow-primary"></span>
+                                    @Localizer["Tags"]
+                                </label>
+                            </div>
+                            <div class="group/input relative">
+                                <div class="absolute -inset-px bg-gradient-to-r from-primary/20 to-transparent rounded-2xl opacity-0 group-focus-within/input:opacity-100 transition duration-500"></div>
+                                <input type="text" asp-for="Tags" class="relative w-full bg-background/50 border border-border/50 px-6 py-4 rounded-2xl text-sm font-medium text-foreground placeholder:text-muted-foreground/30 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/50 transition-all shadow-inner" placeholder="@Localizer["TagsPlaceholder"]">
+                            </div>
+                            <p class="text-[10px] font-medium text-muted-foreground/60 px-2 italic">@Localizer["TagsNote"]</p>
+                        </div>
                     </div>
                 </div>
 

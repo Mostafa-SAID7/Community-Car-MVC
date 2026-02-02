@@ -83,7 +83,7 @@ public class QAController : Controller
     [HttpPost("ask")]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public async Task<IActionResult> Create(CreateQuestionRequest request)
+    public async Task<IActionResult> Create(CreateQuestionVM request)
     {
         if (!ModelState.IsValid)
         {
@@ -103,10 +103,10 @@ public class QAController : Controller
             request.CarModel,
             request.CarYear,
             request.CarEngine,
-            request.Tags?.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).ToList()
+            request.TagsList
         );
         
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index), new { culture = RouteData.Values["culture"] });
     }
 
     [HttpPost("{id:guid}/answer")]
@@ -117,14 +117,14 @@ public class QAController : Controller
         if (string.IsNullOrWhiteSpace(body))
         {
             var q = await _qaService.GetQuestionByIdAsync(id);
-            return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? id.ToString() });
+            return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? id.ToString() });
         }
 
         var authorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.CreateAnswerAsync(id, body, authorId, bodyAr);
 
         var question = await _qaService.GetQuestionByIdAsync(id);
-        return RedirectToAction(nameof(Details), new { slug = question?.Slug ?? id.ToString() });
+        return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = question?.Slug ?? id.ToString() });
     }
 
     [HttpPost("answer/{answerId:guid}/accept")]
@@ -135,7 +135,7 @@ public class QAController : Controller
         // TODO: Check if current user is the author of the question
         await _qaService.AcceptAnswerAsync(answerId);
         var q = await _qaService.GetQuestionByIdAsync(questionId);
-        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
+        return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? questionId.ToString() });
     }
 
     // Alternative route for AcceptAnswer to match asp-action helper
@@ -147,7 +147,7 @@ public class QAController : Controller
         // TODO: Check if current user is the author of the question
         await _qaService.AcceptAnswerAsync(answerId);
         var q = await _qaService.GetQuestionByIdAsync(questionId);
-        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
+        return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("vote")]
@@ -168,10 +168,10 @@ public class QAController : Controller
         if (entityType == EntityType.Question)
         {
             var q = await _qaService.GetQuestionByIdAsync(entityId);
-            return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? entityId.ToString() });
+            return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? entityId.ToString() });
         }
         
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index), new { culture = RouteData.Values["culture"] });
     }
 
     [HttpPost("bookmark")]
@@ -188,7 +188,7 @@ public class QAController : Controller
         }
 
         var q = await _qaService.GetQuestionByIdAsync(questionId);
-        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
+        return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("unbookmark")]
@@ -205,7 +205,7 @@ public class QAController : Controller
         }
 
         var q = await _qaService.GetQuestionByIdAsync(questionId);
-        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
+        return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("answer/{answerId:guid}/helpful")]
@@ -262,7 +262,7 @@ public class QAController : Controller
         var moderatorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.PinQuestionAsync(questionId, moderatorId);
         var q = await _qaService.GetQuestionByIdAsync(questionId);
-        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
+        return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("{questionId:guid}/unpin")]
@@ -273,7 +273,7 @@ public class QAController : Controller
         var moderatorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.UnpinQuestionAsync(questionId, moderatorId);
         var q = await _qaService.GetQuestionByIdAsync(questionId);
-        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
+        return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("{questionId:guid}/lock")]
@@ -284,7 +284,7 @@ public class QAController : Controller
         var moderatorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.LockQuestionAsync(questionId, reason, moderatorId);
         var q = await _qaService.GetQuestionByIdAsync(questionId);
-        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
+        return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? questionId.ToString() });
     }
 
     [HttpPost("{questionId:guid}/unlock")]
@@ -295,7 +295,7 @@ public class QAController : Controller
         var moderatorId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.UnlockQuestionAsync(questionId, moderatorId);
         var q = await _qaService.GetQuestionByIdAsync(questionId);
-        return RedirectToAction(nameof(Details), new { slug = q?.Slug ?? questionId.ToString() });
+        return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? questionId.ToString() });
     }
 
     // AJAX endpoints for dynamic content
@@ -329,7 +329,7 @@ public class QAController : Controller
                     q.Slug,
                     q.CreatedAt,
                     q.AuthorId,
-                    DetailsUrl = Url.Action("Details", "QA", new { slug = q.Slug })
+                    DetailsUrl = Url.Action("Details", "QA", new { culture = RouteData.Values["culture"], slug = q.Slug })
                 }).ToList(),
                 Success = true
             };
@@ -395,19 +395,3 @@ public class QAController : Controller
         }
     }
 }
-public class CreateQuestionRequest
-{
-    public string Title { get; set; } = string.Empty;
-    public string Body { get; set; } = string.Empty;
-    public string? TitleAr { get; set; }
-    public string? BodyAr { get; set; }
-    public DifficultyLevel Difficulty { get; set; } = DifficultyLevel.Beginner;
-    public string? CarMake { get; set; }
-    public string? CarModel { get; set; }
-    public int? CarYear { get; set; }
-    public string? CarEngine { get; set; }
-    public string? Tags { get; set; }
-}
-
-
-

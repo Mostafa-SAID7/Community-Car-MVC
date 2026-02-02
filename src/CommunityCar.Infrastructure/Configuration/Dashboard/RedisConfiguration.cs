@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using CommunityCar.Application.Common.Interfaces.Services.Caching;
-using CommunityCar.Infrastructure.Services.Caching;
+using CommunityCar.Application.Services.Caching;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Caching.SqlServer;
 
@@ -64,6 +64,7 @@ public static class RedisConfiguration
 
             // Register Redis-specific cache service
             services.AddScoped<RedisCacheService>();
+            services.AddScoped<CacheService>();
             
             // Use Redis cache as primary cache service
             services.AddScoped<ICacheService>(provider =>
@@ -75,7 +76,7 @@ public static class RedisConfiguration
                 catch
                 {
                     // Fallback to hybrid cache service if Redis is not available
-                    return provider.GetRequiredService<CommunityCar.Infrastructure.Caching.CacheService>();
+                    return provider.GetRequiredService<CacheService>();
                 }
             });
             
@@ -88,15 +89,18 @@ public static class RedisConfiguration
                 catch
                 {
                     // Fallback to distributed cache service if Redis is not available
-                    return provider.GetRequiredService<DistributedCacheService>();
+                    return provider.GetRequiredService<RedisCacheService>();
                 }
             });
         }
         else
         {
-            // Use in-memory caching only
-            services.AddScoped<ICacheService, CommunityCar.Infrastructure.Caching.CacheService>();
-            services.AddScoped<IDistributedCacheService, DistributedCacheService>();
+            // Use in-memory caching only - register null IConnectionMultiplexer for CacheService
+            services.AddSingleton<IConnectionMultiplexer>(provider => null!);
+            services.AddScoped<CacheService>();
+            services.AddScoped<RedisCacheService>();
+            services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<IDistributedCacheService, RedisCacheService>();
         }
 
         // Add distributed cache (SQL Server or Redis)
@@ -167,7 +171,7 @@ public static class RedisConfiguration
                 if (isConnected)
                 {
                     // Warm up cache with critical data
-                    var cacheWarmupService = serviceProvider.GetRequiredService<CommunityCar.Application.Services.Caching.CacheWarmupService>();
+                    var cacheWarmupService = serviceProvider.GetRequiredService<CacheWarmupService>();
                     await cacheWarmupService.WarmupReferenceDataAsync();
                     
                     logger.LogInformation("Redis connection warmed up successfully");

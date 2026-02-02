@@ -3,6 +3,7 @@ using Microsoft.ML.Data;
 using Microsoft.Extensions.Logging;
 using CommunityCar.AI.Models;
 using CommunityCar.AI.Configuration;
+using CommunityCar.Domain.Enums.AI;
 using Microsoft.Extensions.Options;
 
 namespace CommunityCar.AI.Services;

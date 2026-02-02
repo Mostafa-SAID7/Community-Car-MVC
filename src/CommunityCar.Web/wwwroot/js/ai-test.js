@@ -71,7 +71,7 @@ class AITestManager {
         }
 
         try {
-            const response = await fetch('/Dashboard/AIManagement/TestMessage', {
+            const response = await fetch('/AiAgent/AIManagement/TestMessage', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 using CommunityCar.Domain.Base;
+using CommunityCar.Domain.Enums.AI;
 
 namespace CommunityCar.Domain.Entities.AI;
 
@@ -23,13 +24,4 @@ public class TrainingHistory : BaseEntity
     
     // Navigation properties
     public virtual AIModel AIModel { get; set; } = null!;
-}
-
-public enum TrainingResult
-{
-    Success,
-    Failed,
-    Cancelled,
-    Timeout,
-    InsufficientData
 }

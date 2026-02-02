@@ -37,7 +37,7 @@ class AISettingsManager {
                 this.showLoading(true);
                 saveBtn.disabled = true;
 
-                const response = await fetch('/Dashboard/AIManagement/Settings/Save', {
+                const response = await fetch('/AiAgent/AIManagement/Settings/Save', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ class AISettingsManager {
                 const settingName = this.name === 'sentimentAnalysis' ? 'SentimentAnalysis' : 'ModerationEnabled';
 
                 try {
-                    const response = await fetch('/Dashboard/AIManagement/Settings/Toggle', {
+                    const response = await fetch('/AiAgent/AIManagement/Settings/Toggle', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ class AISettingsManager {
             this.showLoading(true);
             resetBtn.disabled = true;
 
-            const response = await fetch('/Dashboard/AIManagement/Settings/Reset', {
+            const response = await fetch('/AiAgent/AIManagement/Settings/Reset', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

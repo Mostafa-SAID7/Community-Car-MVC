@@ -1,4 +1,5 @@
 using CommunityCar.Domain.Base;
+using CommunityCar.Domain.Enums.AI;
 
 namespace CommunityCar.Domain.Entities.AI;
 
@@ -19,14 +20,4 @@ public class TrainingJob : BaseEntity
     
     // Navigation properties
     public virtual AIModel AIModel { get; set; } = null!;
-}
-
-public enum TrainingJobStatus
-{
-    Queued,
-    InProgress,
-    Completed,
-    Failed,
-    Cancelled,
-    Paused
 }

@@ -63,7 +63,7 @@ public class FriendsController : Controller
     }
 
     [HttpPost("send-request")]
-    public async Task<IActionResult> SendRequest([FromBody] SendFriendRequestModel model)
+    public async Task<IActionResult> SendRequest([FromBody] SendFriendRequestVM model)
     {
         var userId = GetCurrentUserId();
         var result = await _friendsService.SendFriendRequestAsync(userId, model.ReceiverId);
@@ -72,7 +72,7 @@ public class FriendsController : Controller
     }
 
     [HttpPost("accept-request")]
-    public async Task<IActionResult> AcceptRequest([FromBody] FriendshipActionModel model)
+    public async Task<IActionResult> AcceptRequest([FromBody] FriendshipActionVM model)
     {
         var userId = GetCurrentUserId();
         var result = await _friendsService.AcceptFriendRequestAsync(userId, model.FriendshipId);
@@ -81,7 +81,7 @@ public class FriendsController : Controller
     }
 
     [HttpPost("decline-request")]
-    public async Task<IActionResult> DeclineRequest([FromBody] FriendshipActionModel model)
+    public async Task<IActionResult> DeclineRequest([FromBody] FriendshipActionVM model)
     {
         var userId = GetCurrentUserId();
         var result = await _friendsService.DeclineFriendRequestAsync(userId, model.FriendshipId);
@@ -90,7 +90,7 @@ public class FriendsController : Controller
     }
 
     [HttpPost("remove-friend")]
-    public async Task<IActionResult> RemoveFriend([FromBody] RemoveFriendModel model)
+    public async Task<IActionResult> RemoveFriend([FromBody] RemoveFriendVM model)
     {
         var userId = GetCurrentUserId();
         var result = await _friendsService.RemoveFriendAsync(userId, model.FriendId);
@@ -99,7 +99,7 @@ public class FriendsController : Controller
     }
 
     [HttpPost("block-user")]
-    public async Task<IActionResult> BlockUser([FromBody] BlockUserModel model)
+    public async Task<IActionResult> BlockUser([FromBody] BlockUserVM model)
     {
         var userId = GetCurrentUserId();
         var result = await _friendsService.BlockUserAsync(userId, model.UserToBlockId);
@@ -129,33 +129,3 @@ public class FriendsController : Controller
         return Guid.Parse(userIdClaim ?? throw new UnauthorizedAccessException());
     }
 }
-
-// Request models
-public class SendFriendRequestModel
-{
-    public Guid ReceiverId { get; set; }
-}
-
-public class FriendshipActionModel
-{
-    public Guid FriendshipId { get; set; }
-}
-
-public class RemoveFriendModel
-{
-    public Guid FriendId { get; set; }
-}
-
-public class BlockUserModel
-{
-    public Guid UserToBlockId { get; set; }
-}
-
-public class FriendRequestsVM
-{
-    public IEnumerable<FriendRequestVM> PendingRequests { get; set; } = new List<FriendRequestVM>();
-    public IEnumerable<FriendRequestVM> SentRequests { get; set; } = new List<FriendRequestVM>();
-}
-
-
-

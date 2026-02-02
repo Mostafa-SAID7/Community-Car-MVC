@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using CommunityCar.Application.Common.Interfaces.Repositories.AI;
 using CommunityCar.Domain.Entities.AI;
+using CommunityCar.Domain.Enums.AI;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 

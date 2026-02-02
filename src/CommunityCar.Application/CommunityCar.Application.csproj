@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <EmbeddedResource Include="Templates\Email\*.html" />
+  </ItemGroup>
+
+  <ItemGroup>
 
     <ProjectReference Include="..\CommunityCar.Domain\CommunityCar.Domain.csproj" />
   </ItemGroup>
@@ -8,6 +12,11 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.16" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.9" />
   </ItemGroup>
 
   <ItemGroup>

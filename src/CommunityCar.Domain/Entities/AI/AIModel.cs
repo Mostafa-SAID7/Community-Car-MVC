@@ -1,4 +1,5 @@
 using CommunityCar.Domain.Base;
+using CommunityCar.Domain.Enums.AI;
 
 namespace CommunityCar.Domain.Entities.AI;
 
@@ -32,24 +33,4 @@ public class AIModel : BaseEntity
         IsActive = false;
         Audit(UpdatedBy);
     }
-}
-
-public enum AIModelType
-{
-    IntentClassification,
-    SentimentAnalysis,
-    ResponseGeneration,
-    TextSummarization,
-    LanguageTranslation,
-    ContentModeration
-}
-
-public enum AIModelStatus
-{
-    Draft,
-    Training,
-    Active,
-    Inactive,
-    Failed,
-    Deprecated
 }
