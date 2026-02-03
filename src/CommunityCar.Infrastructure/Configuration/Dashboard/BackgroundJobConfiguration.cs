@@ -6,9 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Infrastructure.Configuration;
 
-/// <summary>
-/// Configuration for background jobs using Hangfire
-/// </summary>
+
 public static class BackgroundJobConfiguration
 {
     public static IServiceCollection AddBackgroundJobs(this IServiceCollection services, IConfiguration configuration)
@@ -43,56 +41,56 @@ public static class BackgroundJobConfiguration
 
     public static void ConfigureRecurringJobs(IServiceProvider serviceProvider)
     {
-        var logger = serviceProvider.GetRequiredService<ILogger<BackgroundJobSchedulerService>>();
+        var logger = serviceProvider.GetRequiredService<ILogger<CommunityCar.Application.Services.Dashboard.BackgroundJobs.BackgroundJobSchedulerService>>();
         
         try
         {
             logger.LogInformation("Configuring recurring background jobs");
 
             // Daily maintenance at 2 AM
-            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.BackgroundJobs.BackgroundJobSchedulerService>(
+            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.Dashboard.BackgroundJobs.BackgroundJobSchedulerService>(
                 "daily-maintenance",
                 service => service.RunDailyMaintenanceAsync(),
                 "0 2 * * *", // Daily at 2 AM
                 TimeZoneInfo.Utc);
 
             // Hourly feed updates
-            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.BackgroundJobs.BackgroundJobSchedulerService>(
+            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.Dashboard.BackgroundJobs.BackgroundJobSchedulerService>(
                 "hourly-feed-update",
                 service => service.RunHourlyFeedUpdateAsync(),
                 "0 * * * *", // Every hour
                 TimeZoneInfo.Utc);
 
             // Trending topics every 15 minutes
-            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.BackgroundJobs.BackgroundJobSchedulerService>(
+            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.Dashboard.BackgroundJobs.BackgroundJobSchedulerService>(
                 "trending-topics-update",
                 service => service.UpdateTrendingTopicsAsync(),
                 "*/15 * * * *", // Every 15 minutes
                 TimeZoneInfo.Utc);
 
             // Gamification processing every 30 minutes
-            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.BackgroundJobs.BackgroundJobSchedulerService>(
+            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.Dashboard.BackgroundJobs.BackgroundJobSchedulerService>(
                 "gamification-processing",
                 service => service.RunGamificationProcessingAsync(),
                 "*/30 * * * *", // Every 30 minutes
                 TimeZoneInfo.Utc);
 
             // Weekly cleanup on Sunday at 3 AM
-            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.BackgroundJobs.BackgroundJobSchedulerService>(
+            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.Dashboard.BackgroundJobs.BackgroundJobSchedulerService>(
                 "weekly-cleanup",
                 service => service.RunWeeklyCleanupAsync(),
                 "0 3 * * 0", // Sunday at 3 AM
                 TimeZoneInfo.Utc);
 
             // Daily email digest at 8 AM
-            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.BackgroundJobs.BackgroundJobSchedulerService>(
+            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.Dashboard.BackgroundJobs.BackgroundJobSchedulerService>(
                 "daily-email-digest",
                 service => service.SendDailyEmailDigestAsync(),
                 "0 8 * * *", // Daily at 8 AM
                 TimeZoneInfo.Utc);
 
             // Cache warmup every 4 hours
-            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.Caching.CacheWarmupService>(
+            RecurringJob.AddOrUpdate<CommunityCar.Application.Services.Dashboard.Caching.CacheWarmupService>(
                 "cache-warmup",
                 service => service.WarmupAllCacheAsync(),
                 "0 */4 * * *", // Every 4 hours

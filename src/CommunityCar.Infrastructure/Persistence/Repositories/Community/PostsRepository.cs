@@ -262,4 +262,40 @@ public class PostsRepository : BaseRepository<Post>, IPostsRepository
             .IgnoreQueryFilters()
             .CountAsync(p => p.IsDeleted);
     }
+
+    // BroadcastHub specific methods
+    public async Task<IEnumerable<Post>> GetAccessiblePostsAsync(Guid userId, int page = 1, int pageSize = 10, string? category = null, string? sortBy = "recent", CancellationToken cancellationToken = default)
+    {
+        var query = Context.Posts
+            .Where(p => p.GroupId == null || Context.Groups.Any(g => g.Id == p.GroupId && g.OwnerId == userId));
+
+        // Apply category filter if specified
+        if (!string.IsNullOrEmpty(category))
+        {
+            query = query.Where(p => p.CategoryId != null && p.CategoryId.ToString() == category);
+        }
+
+        // Apply sorting
+        query = sortBy?.ToLower() switch
+        {
+            "popular" => query.OrderByDescending(p => p.LikeCount + p.CommentCount),
+            "oldest" => query.OrderBy(p => p.CreatedAt),
+            _ => query.OrderByDescending(p => p.CreatedAt) // default to recent
+        };
+
+        return await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Post>> GetGroupPostsAsync(Guid groupId, int page = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        return await Context.Posts
+            .Where(p => p.GroupId == groupId)
+            .OrderByDescending(p => p.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+    }
 }

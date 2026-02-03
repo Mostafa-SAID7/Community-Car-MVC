@@ -1,60 +1,366 @@
-@using System.Globalization
-@using Microsoft.Extensions.Localization
-@inject IStringLocalizer<SharedResource> SharedLocalizer
 <!DOCTYPE html>
-<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")" class="light">
-
+<html lang="@System.Globalization.CultureInfo.CurrentCulture.Name" class="h-full">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - @SharedLocalizer["AppName"]</title>
-
-    <!-- Theme initialization script (must be before any content) -->
-    <script>
-        (function() {
-            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            document.documentElement.classList.remove('light', 'dark');
-            document.documentElement.classList.add(theme);
-        })();
-    </script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
-
-    <link rel="icon" type="image/png" href="~/images/logo/logo.png">
-    <!-- Tailwind CSS -->
-    <link rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
-
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    @* Auth styles consolidated in app.css *@
-    @await RenderSectionAsync("Styles", required: false)
-</head>
-
-<body class="font-sans antialiased auth-gradient-bg">
-    <partial name="_Header" />
+    <title>@ViewData["Title"] - CommunityCar</title>
     
-    <!-- Main container - Enhanced responsive design -->
-    <div class="flex items-start justify-center w-full auth-container px-0 sm:px-4 pt-16 sm:pt-20 md:pt-24 pb-6 sm:pb-10 min-h-screen">
-        <main class="w-full @(ViewData["FullWidth"] != null ? "max-w-none" : "max-w-md") auth-view-transition">
-            <div class="@(ViewData["FullWidth"] != null ? "bg-transparent border-0 shadow-none" : "glass-card") rounded-b-3xl sm:rounded-3xl shadow-2xl overflow-hidden shadow-primary/10 border-white/20">
-                @RenderBody()
-            </div>
-        </main>
-    </div>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/notifications.js" asp-append-version="true"></script>
-    <script src="~/js/toaster.js" asp-append-version="true"></script>
-    <script src="~/js/validation.js" asp-append-version="true"></script>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="~/css/site.css" as="style" />
+    <link rel="preload" href="~/css/layout.css" as="style" />
+    <link rel="preload" href="~/css/components.css" as="style" />
+    <link rel="preload" href="~/css/features.css" as="style" />
+    <link rel="preload" href="~/css/broadcast-hub.css" as="style" />
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/features.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/broadcast-hub.css" asp-append-version="true" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    
+    <!-- Meta tags for SEO and social sharing -->
+    <meta name="description" content="@ViewData["Description"]" />
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <meta name="author" content="CommunityCar" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@Context.Request.GetDisplayUrl()" />
+    <meta property="og:title" content="@ViewData["Title"] - CommunityCar" />
+    <meta property="og:description" content="@ViewData["Description"]" />
+    <meta property="og:image" content="~/images/og-image.jpg" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="@Context.Request.GetDisplayUrl()" />
+    <meta property="twitter:title" content="@ViewData["Title"] - CommunityCar" />
+    <meta property="twitter:description" content="@ViewData["Description"]" />
+    <meta property="twitter:image" content="~/images/og-image.jpg" />
+    
+    <!-- Theme color -->
+    <meta name="theme-color" content="#000000" />
+    
+    <!-- Prevent FOUC (Flash of Unstyled Content) -->
+    <style>
+        html { visibility: hidden; opacity: 0; }
+    </style>
+</head>
+<body class="h-full auth-gradient-bg">
+    <!-- Connection Status Indicator -->
+    <div id="connection-status" class="connection-status" style="display: none;"></div>
+    
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+    
+    <!-- Main Authentication Container -->
+    <main class="auth-container" role="main">
+        <div class="w-full max-w-md mx-auto">
+            @RenderBody()
+        </div>
+    </main>
+    
+    <!-- Scripts -->
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <script src="~/js/broadcast-hub.js" asp-append-version="true"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Initialize page -->
     <script>
-        lucide.createIcons();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize theme from localStorage before showing the page
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Show the page after DOM is loaded
+            document.documentElement.style.visibility = 'visible';
+            document.documentElement.style.opacity = '1';
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Add smooth transitions
+            document.body.style.transition = 'opacity 0.3s ease-in-out';
+            
+            // Global theme toggle functionality
+            function initializeThemeToggle() {
+                const themeToggle = document.getElementById('theme-toggle');
+                const lightIcon = themeToggle?.querySelector('.theme-icon-light');
+                const darkIcon = themeToggle?.querySelector('.theme-icon-dark');
+                
+                if (!themeToggle || !lightIcon || !darkIcon) return;
+                
+                // Update icon visibility based on current theme
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                if (currentTheme === 'dark' && lightIcon && darkIcon) {
+                    lightIcon.style.display = 'none';
+                    darkIcon.style.display = 'block';
+                } else if (lightIcon && darkIcon) {
+                    lightIcon.style.display = 'block';
+                    darkIcon.style.display = 'none';
+                }
+                
+                themeToggle.addEventListener('click', function() {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    
+                    // Toggle icon visibility
+                    if (newTheme === 'dark' && lightIcon && darkIcon) {
+                        lightIcon.style.display = 'none';
+                        darkIcon.style.display = 'block';
+                    } else if (lightIcon && darkIcon) {
+                        lightIcon.style.display = 'block';
+                        darkIcon.style.display = 'none';
+                    }
+                    
+                    // Re-initialize icons after DOM changes
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                });
+            }
+            
+            // Global language toggle functionality
+            function initializeLanguageToggle() {
+                const languageToggle = document.getElementById('language-toggle');
+                if (!languageToggle) return;
+                
+                const supportedLanguages = ['en-US', 'ar-EG'];
+                
+                languageToggle.addEventListener('click', function() {
+                    const currentLang = document.documentElement.lang || 'en-US';
+                    const currentIndex = supportedLanguages.indexOf(currentLang);
+                    const nextIndex = (currentIndex + 1) % supportedLanguages.length;
+                    const newLang = supportedLanguages[nextIndex];
+                    
+                    // Store language preference
+                    localStorage.setItem('language', newLang);
+                    
+                    // Redirect to current page with new language
+                    const url = new URL(window.location);
+                    url.searchParams.set('culture', newLang);
+                    window.location.href = url.toString();
+                });
+            }
+            
+            // Initialize toggle functionality
+            initializeThemeToggle();
+            initializeLanguageToggle();
+            
+            // Handle form validation styling
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                const inputs = form.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('invalid', function() {
+                        this.classList.add('error');
+                    });
+                    
+                    input.addEventListener('input', function() {
+                        if (this.validity.valid) {
+                            this.classList.remove('error');
+                        }
+                    });
+                });
+            });
+            
+            // Handle authentication form submissions
+            const authForms = document.querySelectorAll('#login-form, #register-form, #forgot-password-form');
+            authForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    const buttonText = submitButton.querySelector('span');
+                    
+                    if (submitButton && buttonText) {
+                        submitButton.disabled = true;
+                        submitButton.classList.add('auth-loading');
+                        
+                        // Update button text based on form type
+                        if (form.id === 'login-form') {
+                            buttonText.textContent = 'Authenticating...';
+                        } else if (form.id === 'register-form') {
+                            buttonText.textContent = 'Creating Account...';
+                        } else if (form.id === 'forgot-password-form') {
+                            buttonText.textContent = 'Sending Reset...';
+                        }
+                    }
+                });
+            });
+            
+            // Handle social authentication buttons
+            const socialButtons = document.querySelectorAll('#google-register-btn, #facebook-register-btn, .auth-social-button');
+            socialButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const provider = this.textContent.toLowerCase().includes('google') ? 'Google' : 'Facebook';
+                    
+                    // Add loading state
+                    this.disabled = true;
+                    this.innerHTML = `<div class="spinner"></div> Connecting to ${provider}...`;
+                    
+                    // Simulate social auth (replace with actual implementation)
+                    setTimeout(() => {
+                        // Reset button state
+                        this.disabled = false;
+                        this.innerHTML = this.textContent.includes('Google') ? 
+                            '<i data-lucide="chrome" class="w-4 h-4"></i> Google' : 
+                            '<i data-lucide="facebook" class="w-4 h-4"></i> Facebook';
+                        
+                        // Re-initialize icons
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
+                    }, 2000);
+                });
+            });
+            
+            // Add keyboard navigation support
+            document.addEventListener('keydown', function(e) {
+                // Enter key on social buttons
+                if (e.key === 'Enter' && e.target.classList.contains('auth-social-button')) {
+                    e.target.click();
+                }
+                
+                // Escape key to clear form errors
+                if (e.key === 'Escape') {
+                    const errorElements = document.querySelectorAll('.error, .field-validation-error');
+                    errorElements.forEach(el => el.classList.remove('error'));
+                }
+            });
+            
+            // Add focus management for better accessibility
+            const firstInput = document.querySelector('input:not([type="hidden"])');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        });
+        
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+                // Reconnect SignalR if needed
+                if (window.broadcastHub && !window.broadcastHub.isConnected) {
+                    window.broadcastHub.start();
+                }
+            }
+        });
+        
+        // Global error handler for authentication
+        window.addEventListener('error', function(e) {
+            console.error('Authentication page error:', e.error);
+            
+            // Show user-friendly error message
+            if (window.broadcastHub) {
+                window.broadcastHub.showNotification('Error', 'An unexpected error occurred. Please try again.', 'error');
+            }
+        });
+        
+        // Handle unhandled promise rejections
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+            e.preventDefault();
+            
+            if (window.broadcastHub) {
+                window.broadcastHub.showNotification('Connection Error', 'Please check your internet connection and try again.', 'error');
+            }
+        });
     </script>
+    
     @await RenderSectionAsync("Scripts", required: false)
+    
+    <!-- Additional CSS for form centering -->
+    <style>
+        /* Ensure perfect centering */
+        .auth-container {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-height: 100vh !important;
+            padding: 1rem !important;
+        }
+        
+        .auth-futuristic-container {
+            width: 100% !important;
+            max-width: 28rem !important;
+            margin: 0 auto !important;
+        }
+        
+        /* Form validation error styling */
+        .error {
+            border-color: hsl(var(--destructive)) !important;
+            box-shadow: 0 0 0 2px hsl(var(--destructive) / 0.2) !important;
+        }
+        
+        .field-validation-error {
+            color: hsl(var(--destructive)) !important;
+            font-size: 0.75rem !important;
+            margin-top: 0.25rem !important;
+            display: block !important;
+        }
+        
+        /* Toggle buttons positioning and styling */
+        .toggle-buttons {
+            position: fixed !important;
+            top: 1rem !important;
+            right: 1rem !important;
+            display: flex !important;
+            gap: 0.5rem !important;
+            z-index: 50 !important;
+        }
+        
+        .toggle-button {
+            width: 2.5rem !important;
+            height: 2.5rem !important;
+            border-radius: 0.75rem !important;
+            background: hsl(var(--card) / 0.8) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid hsl(var(--border) / 0.4) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: hsl(var(--foreground) / 0.8) !important;
+            transition: all 0.2s ease !important;
+            cursor: pointer !important;
+        }
+        
+        .toggle-button:hover {
+            color: hsl(var(--primary)) !important;
+            background: hsl(var(--card)) !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 4px 12px hsl(var(--primary) / 0.15) !important;
+        }
+        
+        .toggle-button:active {
+            transform: scale(0.95) !important;
+        }
+        
+        /* Theme-specific icon visibility */
+        [data-theme="dark"] .theme-icon-light {
+            display: none !important;
+        }
+        
+        [data-theme="dark"] .theme-icon-dark {
+            display: block !important;
+        }
+        
+        [data-theme="light"] .theme-icon-light {
+            display: block !important;
+        }
+        
+        [data-theme="light"] .theme-icon-dark {
+            display: none !important;
+        }
+    </style>
 </body>
-
 </html>

@@ -14,6 +14,7 @@ public interface IEventsService
     Task<IEnumerable<EventVM>> GetUserEventsAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<bool> JoinEventAsync(Guid eventId, CancellationToken cancellationToken = default);
     Task<bool> LeaveEventAsync(Guid eventId, CancellationToken cancellationToken = default);
+    Task<bool> ShareEventAsync(Guid eventId, string? shareMessage = null, string? platform = null, CancellationToken cancellationToken = default);
     Task<EventsStatsVM> GetEventsStatsAsync(CancellationToken cancellationToken = default);
 }
 

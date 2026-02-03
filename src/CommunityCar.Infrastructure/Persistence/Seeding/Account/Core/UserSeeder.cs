@@ -58,10 +58,19 @@ public class UserSeeder
                 Country = "Egypt",
                 Bio = "Community Car platform administrator and seed user."
             };
-            await _userManager.CreateAsync(seedUser, "Password123!");
+            await _userManager.CreateAsync(seedUser, "Memo@3560");
             await _userManager.AddToRoleAsync(seedUser, Roles.SuperAdmin);
             await _userManager.AddToRoleAsync(seedUser, Roles.Admin);
             users.Add(seedUser);
+        }
+        else
+        {
+            // Ensure the seed user is unlocked and reset failed access count
+            seedUser.LockoutEnd = null;
+            seedUser.AccessFailedCount = 0;
+            seedUser.LockoutEnabled = false; // Prevent lockout for test user
+            await _userManager.UpdateAsync(seedUser);
+            _logger.LogInformation("Seed user 'seed@communitycar.com' unlocked, access count reset, and lockout disabled.");
         }
 
         // Add specialized staff users

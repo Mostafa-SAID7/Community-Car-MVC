@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Common.Interfaces.Services.Localization;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Localization;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
@@ -7,14 +7,14 @@ using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
 using CommunityCar.Application.Common.Interfaces.Services.SEO;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Common.Interfaces.Services.Caching;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.AI;
 using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Services.Community;
 using CommunityCar.Application.Services.Community.Feed;
-using CommunityCar.Application.Services.Localization;
+using CommunityCar.Application.Services.Dashboard.Localization;
 using CommunityCar.Application.Services.Account;
 using CommunityCar.Application.Services.Account.Authentication;
 using CommunityCar.Application.Services.Account.Authentication.OAuth;
@@ -22,7 +22,7 @@ using CommunityCar.Application.Services.Account.Authorization;
 using CommunityCar.Application.Services.Dashboard;
 using CommunityCar.Application.Services.SEO;
 using CommunityCar.Application.Services.Communication;
-using CommunityCar.Application.Services.Caching;
+using CommunityCar.Application.Services.Dashboard.Caching;
 using CommunityCar.Application.Services.Storage;
 using CommunityCar.Application.Services.Shared;
 using CommunityCar.Application.Services.AI;
@@ -31,7 +31,7 @@ using CommunityCar.Application.Services.AI.Training;
 using CommunityCar.Application.Services.AI.History;
 using CommunityCar.Application.Services.Maps.Routing;
 using CommunityCar.Application.Services.Maps.Pricing;
-using CommunityCar.Application.Services.BackgroundJobs;
+using CommunityCar.Application.Services.Dashboard.BackgroundJobs;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -122,7 +122,7 @@ public static class DependencyInjection
         
         // Error Management
         services.AddScoped<IErrorService, CommunityCar.Application.Services.Dashboard.ErrorService>();
-        services.AddScoped<IErrorReportingService, CommunityCar.Application.Services.ErrorReportingService>();
+        services.AddScoped<IErrorReportingService, CommunityCar.Application.Services.Dashboard.ErrorReportingService>();
 
         // SEO and Performance services
         services.AddScoped<ISEOService, SEOService>();

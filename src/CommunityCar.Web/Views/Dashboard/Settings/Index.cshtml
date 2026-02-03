@@ -49,7 +49,7 @@
                         <a href="@Url.Action("Index", "Settings", new { area = "" })" 
                            class="@(string.IsNullOrEmpty(category) ? "bg-primary/10 text-primary border-primary/20 shadow-glow-primary" : "text-foreground/70 hover:text-primary hover:bg-primary/5") block px-4 py-3 rounded-xl text-sm font-medium border border-border/30 transition-all duration-300 hover:border-primary/20 hover:shadow-md group">
                             <div class="flex items-center gap-3">
-                                <i class="fas fa-list w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                                <i data-lucide="list" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
                                 @Localizer["AllSettings"]
                             </div>
                         </a>
@@ -58,7 +58,7 @@
                             <a href="@Url.Action("Category", "Settings", new { category = cat })" 
                                class="@(category == cat ? "bg-primary/10 text-primary border-primary/20 shadow-glow-primary" : "text-foreground/70 hover:text-primary hover:bg-primary/5") block px-4 py-3 rounded-xl text-sm font-medium border border-border/30 transition-all duration-300 hover:border-primary/20 hover:shadow-md group">
                                 <div class="flex items-center gap-3">
-                                    <i class="fas fa-@(cat.ToLower() switch { "display" => "desktop", "notifications" => "bell", "performance" => "tachometer-alt", "security" => "shield-alt", _ => "cog" }) w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                                    <i data-lucide="@(cat.ToLower() switch { "display" => "monitor", "notifications" => "bell", "performance" => "gauge", "security" => "shield", _ => "settings" })" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
                                     @cat
                                 </div>
                             </a>
@@ -74,7 +74,7 @@
                 <div class="eng-card-header">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                            <i class="fas fa-@(category?.ToLower() switch { "display" => "desktop", "notifications" => "bell", "performance" => "tachometer-alt", "security" => "shield-alt", _ => "cog" }) w-4 h-4"></i>
+                            <i data-lucide="@(category?.ToLower() switch { "display" => "monitor", "notifications" => "bell", "performance" => "gauge", "security" => "shield", _ => "settings" })" class="w-4 h-4"></i>
                         </div>
                         <h2 class="text-xl font-bold text-foreground">
                             @if (!string.IsNullOrEmpty(category))
@@ -123,7 +123,7 @@
                                                 <div class="flex-1">
                                                     <div class="flex items-center gap-3 mb-2">
                                                         <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                                            <i class="fas fa-cog text-primary text-sm"></i>
+                                                            <i data-lucide="settings" class="text-primary w-4 h-4"></i>
                                                         </div>
                                                         <h4 class="text-sm font-bold text-foreground">@setting.SettingKey</h4>
                                                     </div>
@@ -143,7 +143,7 @@
                                                         </div>
                                                         <button type="submit" 
                                                                 class="btn btn-primary btn-sm px-4 py-2 btn-gradient hover:shadow-glow-primary transition-all duration-300">
-                                                            <i class="fas fa-save mr-2"></i>
+                                                            <i data-lucide="save" class="w-4 h-4 mr-2"></i>
                                                             @Localizer["Update"]
                                                         </button>
                                                     </form>
@@ -152,7 +152,7 @@
                                                         <button type="button" 
                                                                 class="btn btn-outline btn-sm px-4 py-2 text-muted-foreground hover:text-foreground hover:border-border transition-all duration-300"
                                                                 data-action="confirm-reset">
-                                                            <i class="fas fa-undo mr-2"></i>
+                                                            <i data-lucide="undo-2" class="w-4 h-4 mr-2"></i>
                                                             @Localizer["Reset"]
                                                         </button>
                                                     </form>
@@ -170,7 +170,7 @@
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center gap-4">
                                                 <div class="eng-stat-icon-wrap bg-destructive/10 text-destructive">
-                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
                                                 </div>
                                                 <div>
                                                     <h3 class="text-lg font-bold text-foreground">@Localizer["ResetAllSettings"]</h3>
@@ -182,7 +182,7 @@
                                                 <button type="button" 
                                                         class="btn btn-destructive px-6 py-3 hover:shadow-glow-destructive transition-all duration-300"
                                                         data-action="confirm-reset-all">
-                                                    <i class="fas fa-trash-alt mr-2"></i>
+                                                    <i data-lucide="trash-2" class="w-4 h-4 mr-2"></i>
                                                     @Localizer["ResetAllSettings"]
                                                 </button>
                                             </form>
@@ -195,7 +195,7 @@
                         {
                             <div class="text-center py-16">
                                 <div class="eng-stat-icon-wrap bg-muted/20 text-muted-foreground mx-auto mb-6">
-                                    <i class="fas fa-cog text-2xl"></i>
+                                    <i data-lucide="settings" class="w-6 h-6"></i>
                                 </div>
                                 <h3 class="text-lg font-bold text-foreground mb-2">@Localizer["NoSettingsFound"]</h3>
                                 <p class="eng-stat-label">

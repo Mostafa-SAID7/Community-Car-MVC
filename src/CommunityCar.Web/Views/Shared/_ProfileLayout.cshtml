@@ -1,0 +1,93 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using System.Globalization
+@{
+    var hideLeftSidebar = ViewData["HideLeftSidebar"] as bool? ?? false;
+    var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")" class="light">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Profile - CommunityCar</title>
+
+    <!-- Theme initialization -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.classList.add(theme);
+        })();
+    </script>
+
+    <link rel="icon" type="image/png" href="~/images/logo/logo.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS (Local) -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.css" />
+    
+    <!-- Site Styles -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-light">
+    @Html.AntiForgeryToken()
+    <partial name="_Header" />
+
+    <div class="container-fluid">
+        <div class="row min-vh-100">
+            @if (!hideLeftSidebar)
+            {
+                <div class="col-md-3 col-lg-2 d-none d-md-block border-end bg-white p-0">
+                    <div class="sticky-top" style="top: 4rem; height: calc(100vh - 4rem); overflow-y: auto; scrollbar-width: none;">
+                        <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
+                    </div>
+                </div>
+            }
+
+            <!-- Main Content Area -->
+            <main role="main" class="py-4 @(hideLeftSidebar ? "col-12" : "col-md-9 col-lg-10") @(!hideRightSidebar ? "col-lg-7" : "col-lg-10") px-4">
+                 <div class="mb-5">
+                    <partial name="~/Views/Account/Profile/_ProfileNavigation.cshtml" />
+                </div>
+                
+                @RenderBody()
+            </main>
+
+            @if (!hideRightSidebar)
+            {
+                <div class="col-lg-3 d-none d-lg-block border-start bg-white p-0">
+                    <div class="sticky-top p-4" style="top: 4rem; height: calc(100vh - 4rem); overflow-y: auto; scrollbar-width: none;">
+                        @if (IsSectionDefined("SidebarRight"))
+                        {
+                            @RenderSection("SidebarRight")
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/core.js" asp-append-version="true" defer></script>
+    <script src="~/js/site.js" asp-append-version="true" defer></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+    
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

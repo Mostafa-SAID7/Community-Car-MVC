@@ -246,6 +246,28 @@ public class EventsController : Controller
         }
     }
 
+    [HttpPost("{id:guid}/share")]
+    [Authorize]
+    public async Task<IActionResult> Share(Guid id, [FromBody] ShareEventRequest? request = null)
+    {
+        try
+        {
+            var success = await _eventsService.ShareEventAsync(id, request?.Message, request?.Platform);
+            if (success)
+            {
+                return Json(new { success = true, message = "Event shared successfully!" });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Event not found." });
+            }
+        }
+        catch (Exception)
+        {
+            return Json(new { success = false, message = "An error occurred while sharing the event." });
+        }
+    }
+
     [HttpGet("upcoming")]
     public async Task<IActionResult> Upcoming()
     {

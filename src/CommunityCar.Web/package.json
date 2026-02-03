@@ -1,20 +1,17 @@
 {
-    "name": "communitycar-web",
-    "version": "1.0.0",
-    "description": "Frontend tooling for CommunityCar ASP.NET Core MVC",
-    "scripts": {
-        "build:css": "postcss Styles/core.css -o wwwroot/css/core.min.css && postcss Styles/layout.css -o wwwroot/css/layout.min.css && postcss Styles/components.css -o wwwroot/css/components.min.css && postcss Styles/features.css -o wwwroot/css/features.min.css",
-        "watch:css": "concurrently \"npm run watch:core\" \"npm run watch:layout\" \"npm run watch:components\" \"npm run watch:features\"",
-        "watch:core": "postcss Styles/core.css -o wwwroot/css/core.min.css --watch",
-        "watch:layout": "postcss Styles/layout.css -o wwwroot/css/layout.min.css --watch",
-        "watch:components": "postcss Styles/components.css -o wwwroot/css/components.min.css --watch",
-        "watch:features": "postcss Styles/features.css -o wwwroot/css/features.min.css --watch"
-    },
-    "devDependencies": {
-        "tailwindcss": "^3.4.1",
-        "postcss": "^8.4.35",
-        "postcss-cli": "^11.0.0",
-        "autoprefixer": "^10.4.17",
-        "tailwindcss-animate": "^1.0.7"
-    }
+  "name": "communitycar.web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bootstrap": "^5.3.2",
+    "bootstrap-icons": "^1.11.1"
+  }
 }

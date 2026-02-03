@@ -4,6 +4,8 @@ using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Community.Events.ViewModels;
 using CommunityCar.Domain.Entities.Community.Events;
+using CommunityCar.Domain.Entities.Shared;
+using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Application.Services.Community;
 
@@ -12,12 +14,14 @@ public class EventsService : IEventsService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IBroadcastService _broadcastService;
 
-    public EventsService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUserService)
+    public EventsService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUserService, IBroadcastService broadcastService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _currentUserService = currentUserService;
+        _broadcastService = broadcastService;
     }
 
     public async Task<EventVM?> GetEventByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -190,6 +194,10 @@ public class EventsService : IEventsService
         var eventEntity = await _unitOfWork.Events.GetByIdAsync(eventId);
         if (eventEntity == null) return false;
 
+        var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
+        if (!Guid.TryParse(currentUserIdString, out var currentUserId))
+            throw new UnauthorizedAccessException("Invalid user ID");
+
         if (!eventEntity.HasAvailableSpots)
         {
             throw new InvalidOperationException("Event is full");
@@ -197,6 +205,9 @@ public class EventsService : IEventsService
 
         eventEntity.IncrementAttendeeCount();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        // Broadcast the join event
+        await _broadcastService.BroadcastEventJoinAsync(eventId, currentUserId);
 
         return true;
     }
@@ -206,8 +217,44 @@ public class EventsService : IEventsService
         var eventEntity = await _unitOfWork.Events.GetByIdAsync(eventId);
         if (eventEntity == null) return false;
 
+        var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
+        if (!Guid.TryParse(currentUserIdString, out var currentUserId))
+            throw new UnauthorizedAccessException("Invalid user ID");
+
         eventEntity.DecrementAttendeeCount();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        // Broadcast the leave event
+        await _broadcastService.BroadcastEventLeaveAsync(eventId, currentUserId);
+
+        return true;
+    }
+
+    public async Task<bool> ShareEventAsync(Guid eventId, string? shareMessage = null, string? platform = null, CancellationToken cancellationToken = default)
+    {
+        var eventEntity = await _unitOfWork.Events.GetByIdAsync(eventId);
+        if (eventEntity == null) return false;
+
+        var currentUserIdString = _currentUserService.UserId ?? throw new UnauthorizedAccessException("User must be authenticated");
+        if (!Guid.TryParse(currentUserIdString, out var currentUserId))
+            throw new UnauthorizedAccessException("Invalid user ID");
+
+        // Create share record
+        var share = new Share(eventId, EntityType.Event, currentUserId, ShareType.External, shareMessage, platform);
+        await _unitOfWork.Shares.AddAsync(share);
+
+        // Increment share count
+        eventEntity.IncrementShareCount();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        // Broadcast the share event
+        await _broadcastService.BroadcastEventInteractionAsync(eventId, "share", new
+        {
+            ShareCount = eventEntity.ShareCount,
+            UserId = currentUserId,
+            Platform = platform,
+            Message = shareMessage
+        });
 
         return true;
     }

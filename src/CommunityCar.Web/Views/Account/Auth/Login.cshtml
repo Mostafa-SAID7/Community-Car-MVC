@@ -6,204 +6,201 @@
 @inject IStringLocalizer<AccountResource> AccountLocalizer
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
-    ViewData["Title"] = AccountLocalizer["SignIn"];
-    ViewData["FullWidth"] = true; // Use wide container
+    ViewData["Title"] = "Gateway Access";
     Layout = "_AuthLayout";
 }
 
-@section Styles {
-    @* Login specific styles consolidated in app.css *@
-}
-
-<div class="login-grid">
-    <!-- Right Side: Form -->
-    <div class="p-8 sm:p-10 flex flex-col justify-center">
-        <div class="space-y-6 max-w-md mx-auto w-full">
-            <!-- Logo and Header -->
-            <div class="text-center">
-                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground mb-4 shadow-lg">
-                    <i data-lucide="car" class="w-7 h-7"></i>
-                </div>
-                <h1 class="text-2xl font-bold text-foreground mb-1">@AccountLocalizer["SignInTo"] @SharedLocalizer["AppName"]</h1>
-                <p class="text-sm text-muted-foreground">@AccountLocalizer["WelcomeBack"]</p>
-            </div>
-
-            <!-- Form -->
-            <form asp-action="Login" method="post" class="space-y-4">
-                <div asp-validation-summary="ModelOnly" class="p-3 rounded-lg bg-destructive/10 text-destructive text-sm"></div>
-
-                <div class="space-y-1.5">
-                    <label asp-for="LoginIdentifier" class="text-xs font-medium text-muted-foreground uppercase tracking-wide">@AccountLocalizer["EmailUsernameOrPhone"]</label>
-                    <input asp-for="LoginIdentifier" class="w-full px-4 py-3 bg-background/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="name@work-email.com, username, or phone" />
-                    <span asp-validation-for="LoginIdentifier" class="text-destructive text-xs"></span>
-                </div>
-
-                <div class="space-y-1.5">
-                    <label asp-for="Password" class="text-xs font-medium text-muted-foreground uppercase tracking-wide">@AccountLocalizer["Password"]</label>
-                    <input asp-for="Password" class="w-full px-4 py-3 bg-background/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="••••••••" />
-                    <span asp-validation-for="Password" class="text-destructive text-xs"></span>
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <input asp-for="RememberMe" class="h-4 w-4 rounded border-input text-primary focus:ring-2 focus:ring-primary/50" />
-                        <label asp-for="RememberMe" class="text-sm text-foreground">@AccountLocalizer["RememberMe"]</label>
-                    </div>
-                    <a asp-action="ForgotPassword" class="text-sm text-primary hover:text-primary/80 transition-colors">@AccountLocalizer["ForgotPassword"]?</a>
-                </div>
-
-                <button type="submit" id="login-button" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold py-3 px-4 rounded-lg transition-all btn-glow flex items-center justify-center gap-2">
-                    <span id="button-text">@AccountLocalizer["LogIn"]</span>
-                    <span id="button-spinner" class="hidden animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
-                </button>
-            </form>
-
-            <!-- Divider -->
-            <div class="relative">
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-border"></div>
-                </div>
-                <div class="relative flex justify-center text-xs uppercase">
-                    <span class="bg-transparent px-2 text-muted-foreground">@AccountLocalizer["Or"]</span>
-                </div>
-            </div>
-
-            <!-- Social Login -->
-            <div class="grid grid-cols-2 gap-3">
-                <form asp-action="ExternalLogin" method="post" class="inline">
-                    <input type="hidden" name="provider" value="Google" />
-                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
-                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-background border border-border hover:bg-accent rounded-lg text-sm font-medium transition-all group">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#4285F4" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                        <span class="hidden sm:inline">@AccountLocalizer["ContinueWithGoogle"]</span>
-                    </button>
-                </form>
-                <form asp-action="ExternalLogin" method="post" class="inline">
-                    <input type="hidden" name="provider" value="Facebook" />
-                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
-                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#1877F2] border border-transparent hover:bg-[#1877F2]/90 text-white rounded-lg text-sm font-medium transition-all group">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                        <span class="hidden sm:inline">@AccountLocalizer["ContinueWithFacebook"]</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Footer -->
-            <div class="text-center">
-                <p class="text-sm text-muted-foreground">
-                    @AccountLocalizer["DontHaveAccount"] 
-                    <a asp-action="Register" class="text-primary hover:text-primary/80 transition-colors font-semibold">@AccountLocalizer["SignUp"]</a>
-                </p>
+<div class="container min-vh-100 d-flex flex-column justify-content-center py-5">
+    <div class="text-center mb-5">
+        <div class="position-relative d-inline-flex align-items-center justify-content-center mb-4">
+            <div class="position-absolute inset-0 bg-primary opacity-25 rounded-circle blur-xl animate-pulse"></div>
+            <div class="position-relative w-20 h-20 rounded-4 bg-card border border-border d-flex align-items-center justify-content-center text-primary shadow-lg" style="width: 80px; height: 80px;">
+                <i data-lucide="shield-check" class="w-10 h-10" style="width: 40px; height: 40px;"></i>
             </div>
         </div>
+        
+        <div class="mb-2">
+            <h1 class="display-5 fw-black text-gradient tracking-tight">Gateway Access</h1>
+            <p class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75">Identity verification required</p>
+        </div>
+    </div>
+
+    <div class="card card-premium shadow-lg mx-auto" style="max-width: 450px;">
+        <div class="card-body p-4 p-md-5">
+            <div class="d-grid gap-4">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger border-0 bg-danger-subtle text-danger py-3">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            <span class="text-sm fw-bold">Authentication failed</span>
+                        </div>
+                        <div class="text-xs opacity-75">
+                            @Html.ValidationSummary(false)
+                        </div>
+                    </div>
+                }
+
+                <form asp-action="Login" method="post" id="login-form" class="d-grid gap-4">
+                    @Html.AntiForgeryToken()
+                    
+                    <div class="form-group">
+                        <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Identity Fragment</label>
+                        <div class="position-relative">
+                            <i data-lucide="user" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
+                            <input asp-for="LoginIdentifier" 
+                                   id="login-email" 
+                                   data-testid="login-email" 
+                                   class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
+                                   placeholder="john@example.com" 
+                                   autocomplete="username" />
+                        </div>
+                        <span asp-validation-for="LoginIdentifier" class="text-danger text-xs mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-0">Access Key</label>
+                            <a asp-action="ForgotPassword" 
+                               id="forgot-password-link" 
+                               class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground hover-text-primary transition-all text-decoration-none">Key Recovery</a>
+                        </div>
+                        <div class="position-relative">
+                            <i data-lucide="lock" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
+                            <input asp-for="Password" 
+                                   id="login-password" 
+                                   data-testid="login-password" 
+                                   type="password" 
+                                   class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
+                                   placeholder="••••••••" 
+                                   autocomplete="current-password" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger text-xs mt-1 d-block"></span>
+                    </div>
+
+                    <button type="submit" 
+                            id="login-button" 
+                            data-testid="login-submit" 
+                            class="btn btn-primary-red py-3 rounded-4 mt-2">
+                        <span id="login-button-text">Initialize Gateway</span>
+                    </button>
+                </form>
+
+                <div class="mt-2">
+                    <div class="position-relative d-flex align-items-center justify-content-center mb-4">
+                        <hr class="w-100 border-border opacity-25">
+                        <span class="position-absolute bg-card px-3 text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground">Alternative Protocols</span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <a href="#" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 d-flex align-items-center justify-content-center gap-2 text-sm transition-all border-border-subtle bg-muted-subtle hover-bg-muted">
+                                <i data-lucide="chrome" class="w-4 h-4"></i>
+                                <span>Google</span>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="#" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 d-flex align-items-center justify-content-center gap-2 text-sm transition-all border-border-subtle bg-muted-subtle hover-bg-muted">
+                                <i data-lucide="facebook" class="w-4 h-4"></i>
+                                <span>Facebook</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="text-sm text-muted-foreground mb-0">
+            New to the network? 
+            <a asp-action="Register" 
+               id="signup-link" 
+               data-testid="signup-link" 
+               class="text-primary-red fw-bold text-decoration-none hover-underline">Initialize new identity</a>
+        </p>
+    </div>
+</div>
+
+
+    <div class="text-center mt-6">
+        <p class="text-sm text-muted-foreground mb-4">
+            New to the network? 
+            <a asp-action="Register" 
+               id="signup-link" 
+               data-testid="signup-link" 
+               class="text-primary hover:text-primary/80 font-medium underline underline-offset-4 transition-all">Initialize new identity</a>
+        </p>
     </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Handle TempData messages
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <text>
-                toastr.success('@Html.Raw(Html.Encode(TempData["SuccessMessage"].ToString()).Replace("'", "\\'"))');
-                </text>
-            }
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <text>
-                toastr.error('@Html.Raw(Html.Encode(TempData["ErrorMessage"].ToString()).Replace("'", "\\'"))');
-                </text>
-            }
-            @if (TempData["InfoMessage"] != null)
-            {
-                <text>
-                toastr.info('@Html.Raw(Html.Encode(TempData["InfoMessage"].ToString()).Replace("'", "\\'"))');
-                </text>
-            }
-            @if (TempData["WarningMessage"] != null)
-            {
-                <text>
-                toastr.warning('@Html.Raw(Html.Encode(TempData["WarningMessage"].ToString()).Replace("'", "\\'"))');
-                </text>
-            }
-
-            const carImg = document.getElementById('car-animation');
-            const smokeContainer = document.getElementById('smoke-container');
-            const frames = Array.from({ length: 21 }, (_, i) => `/images/login_frames/frame_${i.toString().padStart(2, '0')}.png`);
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('login-form');
+            const submitButton = document.getElementById('login-button');
+            const buttonText = document.getElementById('login-button-text');
             
-            let currentFrameIdx = 0;
-            const frameDelay = 150; // Dynamic delay for smooth 21-frame sequence
-
-            // Preload frames
-            frames.forEach(src => {
-                const img = new Image();
-                img.src = src;
+            form?.addEventListener('submit', function() {
+                submitButton.disabled = true;
+                submitButton.classList.add('auth-loading');
+                buttonText.textContent = 'Authenticating...';
             });
-
-            function startAnimation() {
-                if (carImg && currentFrameIdx < frames.length - 1) {
-                    currentFrameIdx++;
-                    carImg.src = frames[currentFrameIdx];
-                    setTimeout(startAnimation, frameDelay);
-                } else if (smokeContainer) {
-                    // Animation finished, start smoke
-                    setInterval(createSmokeParticle, 300);
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('theme-toggle');
+            const lightIcon = themeToggle?.querySelector('.theme-icon-light');
+            const darkIcon = themeToggle?.querySelector('.theme-icon-dark');
+            
+            // Get current theme from localStorage or default to light
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            
+            // Update icon visibility based on current theme
+            if (currentTheme === 'dark' && lightIcon && darkIcon) {
+                lightIcon.style.display = 'none';
+                darkIcon.style.display = 'block';
+            }
+            
+            themeToggle?.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // Toggle icon visibility
+                if (newTheme === 'dark' && lightIcon && darkIcon) {
+                    lightIcon.style.display = 'none';
+                    darkIcon.style.display = 'block';
+                } else if (lightIcon && darkIcon) {
+                    lightIcon.style.display = 'block';
+                    darkIcon.style.display = 'none';
                 }
-            }
-
-            function createSmokeParticle() {
-                if (!smokeContainer) return;
-                const particle = document.createElement('div');
-                particle.className = 'smoke-particle';
+            });
+            
+            // Language toggle functionality
+            const languageToggle = document.getElementById('language-toggle');
+            const supportedLanguages = ['en-US', 'ar-EG'];
+            
+            languageToggle?.addEventListener('click', function() {
+                const currentLang = document.documentElement.lang || 'en-US';
+                const currentIndex = supportedLanguages.indexOf(currentLang);
+                const nextIndex = (currentIndex + 1) % supportedLanguages.length;
+                const newLang = supportedLanguages[nextIndex];
                 
-                // Random size and position within exhaust area
-                const size = Math.random() * 20 + 20;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${Math.random() * 20}px`;
-                particle.style.bottom = `${Math.random() * 20}px`;
+                // Store language preference
+                localStorage.setItem('language', newLang);
                 
-                // Animation duration
-                const duration = Math.random() * 2 + 3;
-                particle.style.animationDuration = `${duration}s`;
-                
-                smokeContainer.appendChild(particle);
-                
-                // Remove particle after animation
-                setTimeout(() => particle.remove(), duration * 1000);
-            }
-
-            // Start assembly after a short initial delay
-            setTimeout(startAnimation, 1000);
-
-            // Handle login button loading
-            const loginForm = document.querySelector('form[asp-action="Login"]');
-            if (loginForm) {
-                loginForm.addEventListener('submit', () => {
-                    const btn = document.getElementById('login-button');
-                    const text = document.getElementById('button-text');
-                    const spinner = document.getElementById('button-spinner');
-                    
-                    if (btn && text && spinner) {
-                        btn.disabled = true;
-                        text.classList.add('opacity-50');
-                        spinner.classList.remove('hidden');
-                    }
-                });
-            }
-
-            // Handle external login forms
-            const externalForms = document.querySelectorAll('form[asp-action="ExternalLogin"]');
-            externalForms.forEach(form => {
-                form.addEventListener('submit', function() {
-                    const button = this.querySelector('button[type="submit"]');
-                    if (button) {
-                        button.disabled = true;
-                        button.innerHTML = '<div class="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent mx-auto"></div>';
-                    }
-                });
+                // Redirect to current page with new language
+                const url = new URL(window.location);
+                url.searchParams.set('culture', newLang);
+                window.location.href = url.toString();
             });
         });
     </script>

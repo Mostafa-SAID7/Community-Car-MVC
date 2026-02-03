@@ -59,7 +59,7 @@
                         <div class="p-4 rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/50">
                             <div class="flex items-start gap-3">
                                 <div class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                    <i class="fas fa-info-circle text-xs"></i>
+                                    <i data-lucide="info" class="w-3.5 h-3.5"></i>
                                 </div>
                                 <div>
                                     <p class="text-sm font-medium text-amber-800 dark:text-amber-200">Active Message</p>
@@ -75,15 +75,15 @@
                         <h4 class="text-sm font-semibold text-foreground mb-3">Impact Information</h4>
                         <div class="space-y-3 text-sm">
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i class="fas fa-users w-4"></i>
+                                <i data-lucide="users" class="w-4 h-4"></i>
                                 <span>@(isEnabled ? "Users cannot access the application" : "All users have full access")</span>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i class="fas fa-shield-alt w-4"></i>
+                                <i data-lucide="shield" class="w-4 h-4"></i>
                                 <span>@(isEnabled ? "Only administrators can access" : "Normal security policies active")</span>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i class="fas fa-clock w-4"></i>
+                                <i data-lucide="clock" class="w-4 h-4"></i>
                                 <span>Last updated: @DateTime.Now.ToString("MMM dd, yyyy HH:mm")</span>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
         <div class="eng-card-header">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                    <i class="fas fa-cog text-lg"></i>
+                    <i data-lucide="settings" class="w-5 h-5"></i>
                 </div>
                 <div>
                     <h3 class="eng-card-title">Maintenance Control</h3>
@@ -131,14 +131,14 @@
                 
                 <div class="flex items-center justify-between pt-4 border-t border-border">
                     <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                        <i class="fas fa-exclamation-triangle text-amber-500"></i>
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i>
                         <span>This action will @(isEnabled ? "restore normal access" : "restrict user access") immediately</span>
                     </div>
                     
                     <button 
                         type="submit" 
                         class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 @(isEnabled ? "bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/25 hover:shadow-green-500/40" : "bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40") transform hover:scale-105 active:scale-95">
-                        <i class="fas fa-@(isEnabled ? "play" : "pause") text-sm"></i>
+                        <i data-lucide="@(isEnabled ? "play" : "pause")" class="w-4 h-4"></i>
                         <span>@(isEnabled ? "Disable Maintenance Mode" : "Enable Maintenance Mode")</span>
                     </button>
                 </div>
@@ -153,21 +153,21 @@
             <div class="p-6">
                 <div class="flex items-start gap-4">
                     <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-exclamation-triangle text-lg"></i>
+                        <i data-lucide="alert-triangle" class="w-5 h-5"></i>
                     </div>
                     <div class="flex-1">
                         <h4 class="text-lg font-semibold text-foreground mb-2">Before Enabling Maintenance Mode</h4>
                         <div class="space-y-2 text-sm text-muted-foreground">
                             <div class="flex items-center gap-2">
-                                <i class="fas fa-check text-green-500 w-4"></i>
+                                <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
                                 <span>Ensure all critical operations are completed</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <i class="fas fa-check text-green-500 w-4"></i>
+                                <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
                                 <span>Notify users in advance when possible</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <i class="fas fa-check text-green-500 w-4"></i>
+                                <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
                                 <span>Prepare a clear maintenance message</span>
                             </div>
                             <div class="flex items-center gap-2">
@@ -214,7 +214,7 @@
                 notification.className = 'fixed top-4 right-4 z-50 p-4 rounded-xl bg-green-500 text-white shadow-lg transform translate-x-full transition-transform duration-300';
                 notification.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <i class="fas fa-check-circle"></i>
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
                         <span>@TempData["SuccessMessage"]</span>
                     </div>
                 `;
@@ -238,7 +238,7 @@
                 notification.className = 'fixed top-4 right-4 z-50 p-4 rounded-xl bg-red-500 text-white shadow-lg transform translate-x-full transition-transform duration-300';
                 notification.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <i class="fas fa-exclamation-circle"></i>
+                        <i data-lucide="alert-circle" class="w-4 h-4"></i>
                         <span>@TempData["ErrorMessage"]</span>
                     </div>
                 `;

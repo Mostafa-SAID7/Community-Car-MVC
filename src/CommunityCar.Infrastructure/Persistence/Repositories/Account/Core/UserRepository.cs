@@ -90,11 +90,12 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
         var normalizedSearchTerm = searchTerm.ToLower();
         
         return await Context.Users
+            .Include(u => u.Profile)
             .Where(u => u.IsActive && (
                 u.UserName!.ToLower().Contains(normalizedSearchTerm) ||
                 u.Email!.ToLower().Contains(normalizedSearchTerm) ||
-                u.Profile.FullName.ToLower().Contains(normalizedSearchTerm) ||
-                u.Profile.Bio.ToLower().Contains(normalizedSearchTerm)
+                (u.Profile != null && u.Profile.FullName != null && u.Profile.FullName.ToLower().Contains(normalizedSearchTerm)) ||
+                (u.Profile != null && u.Profile.Bio != null && u.Profile.Bio.ToLower().Contains(normalizedSearchTerm))
             ))
             .Skip((page - 1) * pageSize)
             .Take(pageSize)

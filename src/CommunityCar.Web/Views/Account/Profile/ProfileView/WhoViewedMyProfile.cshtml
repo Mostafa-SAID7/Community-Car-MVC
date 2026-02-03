@@ -2,68 +2,27 @@
 @model WhoViewedMyProfileVM
 @{
     ViewData["Title"] = "Who Viewed My Profile";
-    ViewData["PageHeader"] = "Profile Views";
-    ViewData["PageDescription"] = "See who has been viewing your profile";
-    ViewData["HideLeftSidebar"] = true;
-    ViewData["HideRightSidebar"] = true;
-    ViewData["HideMainContainer"] = true;
-    ViewData["HideMainContentId"] = true;
 }
 
-<div class="space-y-8 animate-in fade-in duration-700">
-    <div class="profile-container py-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div>
-            @if (ViewData["HideLeftSidebar"] as bool? == true)
-            {
-                <!-- Single Column Layout - No Sidebar -->
-                <div class="space-y-6">
-                    <!-- Breadcrumb -->
-                    <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
-                        <a href="@Url.Action("Index", "Profile")" class="hover:text-primary transition-colors flex items-center gap-2">
-                            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Profile
-                        </a>
-                        <span class="opacity-20">/</span>
-                        <span class="text-foreground/40">Profile Views</span>
-                    </nav>
+<div class="animate-in fade-in duration-700">
+    <!-- Breadcrumb -->
+    <nav class="d-flex align-items-center gap-2 small fw-black text-uppercase tracking-widest text-muted mb-4 px-2">
+        <a href="@Url.Action("Index", "Profile")" class="text-decoration-none text-muted hover-text-primary-red transition-all d-flex align-items-center gap-1">
+            <i data-lucide="chevron-left" style="width: 14px;"></i> Profile
+        </a>
+        <span class="opacity-20">/</span>
+        <span class="text-dark opacity-50">Profile Views</span>
+    </nav>
 
-                    <!-- Profile Views Content -->
-                    @await Html.PartialAsync("_WhoViewedMyProfileContent", Model)
-                </div>
-            }
-            else
-            {
-                <!-- Grid Layout with Sidebar -->
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                    <!-- Left Sidebar -->
-                    <div class="lg:col-span-1">
-                        <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
-                    </div>
-                    
-                    <!-- Main Content -->
-                    <div class="lg:col-span-3 space-y-6">
-                        <!-- Breadcrumb -->
-                        <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
-                            <a href="@Url.Action("Index", "Profile")" class="hover:text-primary transition-colors flex items-center gap-2">
-                                <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Profile
-                            </a>
-                            <span class="opacity-20">/</span>
-                            <span class="text-foreground/40">Profile Views</span>
-                        </nav>
-
-                        <!-- Profile Views Content -->
-                        @await Html.PartialAsync("_WhoViewedMyProfileContent", Model)
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
+    <!-- Profile Views Content -->
+    @await Html.PartialAsync("_WhoViewedMyProfileContent", Model)
 </div>
 
 @section Scripts {
     <script>
         function followUser(userId) {
-            // Implementation for following a user
             console.log('Following user:', userId);
         }
+        lucide.createIcons();
     </script>
 }

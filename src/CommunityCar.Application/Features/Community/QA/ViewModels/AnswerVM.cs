@@ -8,6 +8,7 @@ public class AnswerVM
     public Guid QuestionId { get; set; }
     public Guid AuthorId { get; set; }
     public string AuthorName { get; set; } = string.Empty;
+    public string? AuthorSlug { get; set; }
     public string? AuthorProfilePicture { get; set; }
     public bool IsAccepted { get; set; }
     public bool IsVerified { get; set; }

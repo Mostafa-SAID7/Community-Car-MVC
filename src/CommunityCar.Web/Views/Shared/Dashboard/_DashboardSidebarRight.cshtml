@@ -1,108 +1,102 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-@inject IHtmlLocalizer<SharedResource> SharedLocalizer
+@inject IHtmlLocalizer<CommunityCar.Web.SharedResource> SharedLocalizer
 
-<aside class="sidebar-right fixed right-4 rtl:right-auto rtl:left-4 top-24 bottom-20 w-80 bg-card/40 backdrop-blur-xl border border-border rounded-xl shadow-2xl transition-all duration-300 z-40 translate-x-[calc(100%+2rem)] rtl:-translate-x-[calc(100%+2rem)] xl:translate-x-0 rtl:xl:translate-x-0 hidden xl:flex flex-col overflow-hidden">
-    
-    <div class="flex flex-col h-full overflow-y-auto custom-scrollbar p-1">
-        <!-- System Health Mini Panel -->
-        <div class="p-5 border-b border-border/30">
-            <h3 class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">
-                <i data-lucide="activity" class="w-3.5 h-3.5 text-primary"></i>
-                @Localizer["SystemStatus"]
-            </h3>
+<!-- Dashboard Right Sidebar (Stats & System Health) -->
+<div class="d-flex flex-column gap-4 p-3">
+    <!-- System Status -->
+    <div class="card card-premium p-4 border-0">
+        <h6 class="d-flex align-items-center gap-2 small fw-black text-uppercase tracking-widest text-primary-red mb-4">
+            <i data-lucide="activity" style="width: 14px; height: 14px;"></i>
+            @Localizer["SystemStatus"]
+        </h6>
+        
+        <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small fw-bold text-muted opacity-50">@Localizer["CoreEngine"]</span>
+                <span class="small fw-black text-uppercase text-success d-flex align-items-center gap-1">
+                    <span class="bg-success rounded-circle" style="width: 6px; height: 6px;"></span>
+                    @Localizer["Operational"]
+                </span>
+            </div>
             
-            <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-bold text-muted-foreground uppercase opacity-60">@Localizer["CoreEngine"]</span>
-                    <span class="flex items-center gap-1.5 text-[9px] font-black uppercase text-green-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                        @Localizer["Operational"]
-                    </span>
+            <div class="small fw-black text-uppercase tracking-tighter text-muted opacity-30 mb-1">@Localizer["LoadFactor"]</div>
+            <div class="progress" style="height: 4px; background-color: rgba(0,0,0,0.05);">
+                <div class="progress-bar bg-primary-red shadow-sm" style="width: 14%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card card-premium p-4 border-0">
+        <h6 class="d-flex align-items-center gap-2 small fw-black text-uppercase tracking-widest text-primary-red mb-4">
+            <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
+            @Localizer["QuickActions"]
+        </h6>
+        
+        <div class="row g-2">
+            <div class="col-6">
+                <a href="@Url.Action("Generate", "Reports")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-light border hover-bg-primary-red-subtle transition-all text-decoration-none text-dark group">
+                    <i data-lucide="file-plus" class="text-primary-red mb-2 group-hover-scale-110 transition-transform" style="width: 20px;"></i>
+                    <span class="fw-black text-uppercase tracking-tighter text-center" style="font-size: 0.6rem;">@Localizer["NewReport"]</span>
+                </a>
+            </div>
+            <div class="col-6">
+                <a href="@Url.Action("Index", "SEO")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-light border hover-bg-primary-red-subtle transition-all text-decoration-none text-dark group">
+                    <i data-lucide="search" class="text-primary-red mb-2 group-hover-scale-110 transition-transform" style="width: 20px;"></i>
+                    <span class="fw-black text-uppercase tracking-tighter text-center" style="font-size: 0.6rem;">@Localizer["SEOAudit"]</span>
+                </a>
+            </div>
+            <div class="col-6">
+                <a href="@Url.Action("Index", "Cache")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-light border hover-bg-primary-red-subtle transition-all text-decoration-none text-dark group">
+                    <i data-lucide="database" class="text-primary-red mb-2 group-hover-scale-110 transition-transform" style="width: 20px;"></i>
+                    <span class="fw-black text-uppercase tracking-tighter text-center" style="font-size: 0.6rem;">@Localizer["FlushCache"]</span>
+                </a>
+            </div>
+            <div class="col-6">
+                <a href="@Url.Action("Index", "BackgroundJobs")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-light border hover-bg-primary-red-subtle transition-all text-decoration-none text-dark group">
+                    <i data-lucide="clock" class="text-primary-red mb-2 group-hover-scale-110 transition-transform" style="width: 20px;"></i>
+                    <span class="fw-black text-uppercase tracking-tighter text-center" style="font-size: 0.6rem;">@Localizer["JobQueue"]</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logs -->
+    <div class="card card-premium p-4 border-0 flex-grow-1">
+        <h6 class="d-flex align-items-center gap-2 small fw-black text-uppercase tracking-widest text-primary-red mb-4">
+            <i data-lucide="list" style="width: 14px; height: 14px;"></i>
+            @Localizer["SystemLogs"]
+        </h6>
+        
+        <div class="d-flex flex-column gap-3">
+            <div class="d-flex gap-3 align-items-start p-2 rounded-3 hover-bg-light transition-colors">
+                <div class="bg-primary-red rounded-circle mt-1 shadow-sm" style="width: 6px; height: 6px;"></div>
+                <div class="flex-grow-1">
+                    <p class="mb-0 small fw-bold leading-tight">Admin login from 192.168.1.1</p>
+                    <p class="mb-0 text-muted opacity-50 fw-black text-uppercase tracking-widest" style="font-size: 0.6rem;">2 mins ago</p>
                 </div>
-                
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[9px] font-black uppercase tracking-tighter text-muted-foreground/50">@Localizer["LoadFactor"]</span>
-                        <span class="text-[10px] font-black tabular-nums">14%</span>
-                    </div>
-                    <div class="h-1 bg-muted/30 rounded-full overflow-hidden">
-                        <div class="h-full bg-primary w-[14%] rounded-full shadow-glow-primary"></div>
-                    </div>
+            </div>
+            <div class="d-flex gap-3 align-items-start p-2 rounded-3 hover-bg-light transition-colors">
+                <div class="bg-success rounded-circle mt-1 shadow-sm" style="width: 6px; height: 6px;"></div>
+                <div class="flex-grow-1">
+                    <p class="mb-0 small fw-bold leading-tight">Analytics Report generated</p>
+                    <p class="mb-0 text-muted opacity-50 fw-black text-uppercase tracking-widest" style="font-size: 0.6rem;">15 mins ago</p>
                 </div>
             </div>
         </div>
-
-        <!-- Quick Access Protocols -->
-        <div class="p-5 border-b border-border/30">
-            <h3 class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">
-                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-500"></i>
-                @Localizer["QuickActions"]
-            </h3>
-            
-            <div class="grid grid-cols-2 gap-2">
-                <a href="@Url.Action("Generate", "Reports")" class="flex flex-col items-center justify-center p-3 rounded-xl bg-accent/20 border border-border/50 hover:bg-accent/40 transition-all group">
-                    <i data-lucide="file-plus" class="w-4 h-4 mb-2 text-primary group-hover:scale-110 transition-transform"></i>
-                    <span class="text-[9px] font-black uppercase tracking-tighter text-center">@Localizer["NewReport"]</span>
-                </a>
-                <a href="@Url.Action("Index", "SEO")" class="flex flex-col items-center justify-center p-3 rounded-xl bg-accent/20 border border-border/50 hover:bg-accent/40 transition-all group">
-                    <i data-lucide="search" class="w-4 h-4 mb-2 text-emerald-500 group-hover:scale-110 transition-transform"></i>
-                    <span class="text-[9px] font-black uppercase tracking-tighter text-center">@Localizer["SEOAudit"]</span>
-                </a>
-                <a href="@Url.Action("Index", "Cache")" class="flex flex-col items-center justify-center p-3 rounded-xl bg-accent/20 border border-border/50 hover:bg-accent/40 transition-all group">
-                    <i data-lucide="database" class="w-4 h-4 mb-2 text-cyan-500 group-hover:scale-110 transition-transform"></i>
-                    <span class="text-[9px] font-black uppercase tracking-tighter text-center">@Localizer["FlushCache"]</span>
-                </a>
-                <a href="@Url.Action("Index", "BackgroundJobs")" class="flex flex-col items-center justify-center p-3 rounded-xl bg-accent/20 border border-border/50 hover:bg-accent/40 transition-all group">
-                    <i data-lucide="clock" class="w-4 h-4 mb-2 text-orange-500 group-hover:scale-110 transition-transform"></i>
-                    <span class="text-[9px] font-black uppercase tracking-tighter text-center">@Localizer["JobQueue"]</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Recent System Activity -->
-        <div class="p-5 flex-1">
-            <h3 class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">
-                <i data-lucide="list" class="w-3.5 h-3.5 text-indigo-500"></i>
-                @Localizer["SystemLogs"]
-            </h3>
-            
-            <div class="space-y-4">
-                <div class="flex gap-3 items-start p-2 rounded-lg hover:bg-accent/10 transition-colors">
-                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shadow-glow-blue"></div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[11px] font-bold text-foreground leading-tight">Admin login detected from 192.168.1.1</p>
-                        <p class="text-[9px] font-medium text-muted-foreground opacity-60 mt-0.5">2 mins ago</p>
-                    </div>
-                </div>
-                <div class="flex gap-3 items-start p-2 rounded-lg hover:bg-accent/10 transition-colors">
-                    <div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 shadow-glow-green"></div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[11px] font-bold text-foreground leading-tight">User Analytics Report generated successfully</p>
-                        <p class="text-[9px] font-medium text-muted-foreground opacity-60 mt-0.5">15 mins ago</p>
-                    </div>
-                </div>
-                <div class="flex gap-3 items-start p-2 rounded-lg hover:bg-accent/10 transition-colors">
-                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shadow-glow-amber"></div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[11px] font-bold text-foreground leading-tight">High memory usage threshold reached on Node A</p>
-                        <p class="text-[9px] font-medium text-muted-foreground opacity-60 mt-0.5">45 mins ago</p>
-                    </div>
-                </div>
-            </div>
-            
-            <a href="@Url.Action("Index", "Monitoring")" class="block w-full text-center mt-6 py-2.5 rounded-xl border border-border/50 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:bg-accent/20 hover:text-foreground transition-all">
-                @Localizer["FullDiagnostics"]
-            </a>
-        </div>
+        
+        <a href="@Url.Action("Index", "Monitoring")" class="btn btn-outline-secondary btn-sm w-100 mt-4 rounded-4 fw-black text-uppercase tracking-widest" style="font-size: 0.65rem;">
+            @Localizer["FullDiagnostics"]
+        </a>
     </div>
 
     <!-- AI Insights Footer -->
-    <div class="p-4 bg-primary/5 border-t border-border/30">
-        <div class="flex items-center gap-2 mb-2">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-primary"></i>
-            <span class="text-[9px] font-black uppercase tracking-widest text-primary">AI Insights</span>
+    <div class="card card-premium p-3 border-0 bg-primary-red text-white animate-float">
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+            <span class="small fw-black text-uppercase tracking-widest">AI Insights</span>
         </div>
-        <p class="text-[10px] font-medium text-muted-foreground leading-relaxed">System performance is optimized. No critical bottlenecks detected.</p>
+        <p class="mb-0 small opacity-75" style="font-size: 0.7rem;">System performance optimized. No bottlenecks detected.</p>
     </div>
-</aside>
+</div>

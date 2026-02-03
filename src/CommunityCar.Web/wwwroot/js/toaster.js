@@ -24,6 +24,24 @@
             this.createContainer();
             this.injectStyles();
             this.setupEventListeners();
+            this.checkForMetaMessages();
+        }
+
+        checkForMetaMessages() {
+            const typeMeta = document.querySelector('meta[name="toaster-type"]');
+            const titleMeta = document.querySelector('meta[name="toaster-title"]');
+            const messageMeta = document.querySelector('meta[name="toaster-message"]');
+
+            if (typeMeta && messageMeta) {
+                const type = typeMeta.content;
+                const title = titleMeta ? titleMeta.content : '';
+                const message = messageMeta.content;
+
+                if (type && message) {
+                    // Delay slightly to ensure UI is ready
+                    setTimeout(() => this.show({ type, title, message }), 100);
+                }
+            }
         }
 
         createContainer() {
@@ -232,6 +250,7 @@
     }
 
     CC.Services.Toaster = new ToasterService();
+    document.addEventListener('DOMContentLoaded', () => CC.Services.Toaster.init());
 
     // Compatibility
     window.toaster = CC.Services.Toaster;

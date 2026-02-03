@@ -10,254 +10,305 @@
     var answers = ViewBag.Answers as IEnumerable<CommunityCar.Application.Features.Community.QA.ViewModels.AnswerVM>;
 }
 
-<div class="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
-    <!-- Skeleton Loader -->
-    <div id="loading-skeleton" class="hidden space-y-8">
-        <div class="space-y-4">
-            <skeleton type="Line" class="w-32" /> <!-- Breadcrumb -->
-            <skeleton type="Card" class="h-96" /> <!-- Hero -->
-            <skeleton type="Line" /> <!-- Meta -->
+<div class="container animate-in fade-in duration-700 pb-5">
+    <!-- Navigation & Header -->
+    <div class="mb-5">
+        <nav class="d-flex align-items-center gap-2 small fw-black text-uppercase tracking-widest text-primary-red mb-3">
+            <i data-lucide="help-circle" style="width: 14px; height: 14px;"></i> @Localizer["QARegistry"]
+        </nav>
+        
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end gap-4">
+            <div>
+                <h1 class="fw-black text-gradient tracking-tight display-5 mb-3">@displayTitle</h1>
+                <p class="small fw-bold text-muted border-start border-4 border-primary-red-subtle ps-3 py-1 opacity-75" style="max-width: 600px;">
+                    @Localizer["TransmissionDetail"]
+                </p>
+            </div>
+            
+            <a asp-controller="QA" asp-action="Index" asp-route-culture="@currentCulture" class="btn btn-white border rounded-4 px-4 py-2 small fw-black text-uppercase tracking-widest shadow-sm hover-translate-y-1 transition-all d-flex align-items-center gap-2">
+                <i data-lucide="arrow-left" style="width: 16px;"></i> @Localizer["QARegistry"]
+            </a>
         </div>
     </div>
 
-    <div class="space-y-8">
-        <!-- Navigation & Signal Strategy -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2">
-            <div class="space-y-4">
-                <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">
-                    <i data-lucide="help-circle" class="w-3.5 h-3.5 fill-current"></i> @Localizer["QARegistry"]
-                </nav>
-                <h1 class="text-5xl font-black text-foreground tracking-tighter leading-none">@displayTitle</h1>
-                <p class="text-sm font-medium text-muted-foreground opacity-70 mt-4 border-l-4 border-primary/20 pl-4 py-1 max-w-2xl">@Localizer["TransmissionDetail"]</p>
+    <!-- Question Card -->
+    <div class="card card-premium p-0 border-0 mb-5 overflow-hidden shadow-lg animate-in slide-in-from-bottom-4 duration-500">
+        <!-- Header Info -->
+        <div class="p-4 p-md-5">
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+                @if (Model.IsSolved)
+                {
+                    <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 border border-success-subtle small fw-black tracking-widest">
+                        <i data-lucide="check-circle-2" class="me-1" style="width: 12px;"></i> @Localizer["Solved"] PROTOCOL
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-2 border border-warning-subtle small fw-black tracking-widest">
+                        <i data-lucide="help-circle" class="me-1" style="width: 12px;"></i> OPEN QUERY
+                    </span>
+                }
+                <span class="badge bg-primary-red-subtle text-primary-red rounded-pill px-3 py-2 border border-primary-red-subtle small fw-black tracking-widest">
+                    @Model.DifficultyDisplay LEVEL
+                </span>
+                <span class="small fw-black text-uppercase tracking-widest text-muted opacity-40 ms-auto">
+                    @string.Format(Localizer["Frequency"].Value, Model.CreatedAt.ToString("MMM dd, yyyy"))
+                </span>
             </div>
-            
-            <a asp-controller="QA" asp-action="Index" asp-route-culture="@currentCulture" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
-                <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
-                @Localizer["QARegistry"]
-            </a>
-        </div>
 
-        <div class="relative group">
-            <!-- Structural Glow -->
-            <div class="absolute -inset-1 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 rounded-[2.5rem] blur-3xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
-
-            <div class="relative bg-card/40 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] shadow-2xl overflow-hidden">
-                <!-- Question Header: Hero Style -->
-                <div class="p-8 md:p-14 space-y-8">
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-3">
-                            @if (Model.IsSolved)
-                            {
-                                <span class="px-4 py-1.5 rounded-2xl bg-green-500/10 text-green-500 border border-green-500/20 text-[9px] font-black uppercase tracking-widest">
-                                    <i data-lucide="check-circle-2" class="w-3 h-3 mr-1"></i> @Localizer["Solved"] PROTOCOL
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="px-4 py-1.5 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[9px] font-black uppercase tracking-widest">
-                                    <i data-lucide="help-circle" class="w-3 h-3 mr-1"></i> OPEN QUERY
-                                </span>
-                            }
-                            <span class="px-4 py-1.5 rounded-2xl bg-primary/10 text-primary border border-primary/20 text-[9px] font-black uppercase tracking-widest">
-                                @Model.DifficultyDisplay LEVEL
-                            </span>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@string.Format(Localizer["Frequency"].Value, Model.CreatedAt.ToString("MMM dd, yyyy"))</span>
-                        </div>
+            <div class="d-flex align-items-center justify-content-between pt-4 border-top">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="user-avatar-container shadow-sm border p-0 m-0" style="width: 56px; height: 56px;">
+                        @if (!string.IsNullOrEmpty(Model.AuthorProfilePicture))
+                        {
+                            <img src="@Model.AuthorProfilePicture" class="rounded-circle object-fit-cover w-100 h-100" alt="@Model.AuthorName" />
+                        }
+                        else
+                        {
+                            <div class="w-100 h-100 rounded-circle bg-light d-flex align-items-center justify-content-center text-muted">
+                                <i data-lucide="user" style="width: 24px;"></i>
+                            </div>
+                        }
                     </div>
-
-                    <div class="flex items-center justify-between pt-6 border-t border-border/20">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-2xl bg-muted border border-border flex items-center justify-center overflow-hidden shadow-inner group/avatar">
-                                @if (!string.IsNullOrEmpty(Model.AuthorProfilePicture))
-                                {
-                                    <img src="@Model.AuthorProfilePicture" class="w-full h-full object-cover group-hover/avatar:scale-110 transition-transform" alt="@Model.AuthorName" />
-                                }
-                                else
-                                {
-                                    <i data-lucide="user" class="w-7 h-7 text-muted-foreground opacity-30 group-hover/avatar:scale-110 transition-transform"></i>
-                                }
-                            </div>
-                            <div>
-                                <span class="block text-sm font-black text-foreground underline decoration-primary decoration-4 underline-offset-4 decoration-transparent hover:decoration-primary transition-all cursor-pointer">@Model.AuthorName</span>
-                                <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["SystemContributor"]</span>
-                            </div>
-                        </div>
-                        
-                        <div class="hidden sm:flex gap-8">
-                            <div class="text-right">
-                                <span class="block text-xl font-black text-foreground leading-none tracking-tighter">@Model.ViewCount.ToString("N0")</span>
-                                <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["ViewCount"]</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="block text-xl font-black text-foreground leading-none tracking-tighter">@Model.AnswerCount</span>
-                                <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Responses"]</span>
-                            </div>
-                        </div>
+                    <div>
+                        <a href="@Url.Action("Index", "Profile", new { area = "", culture = currentCulture, id = Model.AuthorId })" class="fw-black text-dark text-decoration-none hover-text-primary-red transition-all">@Model.AuthorName</a>
+                        <span class="d-block x-small fw-black text-uppercase tracking-widest text-muted opacity-40">@Localizer["SystemContributor"]</span>
                     </div>
                 </div>
-
-                <!-- Content Fluidity -->
-                <div class="px-8 md:px-14 py-12 bg-muted/10 border-y border-border/20">
-                    @if (!string.IsNullOrEmpty(Model.CarDisplayName))
-                    {
-                        <div class="mb-8 p-6 bg-primary/5 border border-primary/10 rounded-2xl">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                    <i data-lucide="car-front" class="w-6 h-6"></i>
-                                </div>
-                                <div>
-                                    <span class="block text-[10px] font-black uppercase tracking-widest text-primary/80 mb-1">@Localizer["AssetIdentified"]</span>
-                                    <span class="block text-lg font-black text-foreground">@Model.CarDisplayName</span>
-                                    @if (!string.IsNullOrEmpty(Model.CarEngine))
-                                    {
-                                        <span class="block text-sm text-muted-foreground">@Model.CarEngine</span>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    }
-
-                    <div class="prose prose-lg dark:prose-invert max-w-none text-foreground/80 leading-[1.8] font-medium">
-                        @Html.Raw(displayBody.Replace("\n", "<br/>"))
+                
+                <div class="d-none d-sm-flex gap-4 text-end">
+                    <div>
+                        <div class="h4 fw-black text-dark mb-0">@Model.ViewCount.ToString("N0")</div>
+                        <div class="x-small fw-black text-uppercase tracking-widest text-muted opacity-40">@Localizer["ViewCount"]</div>
                     </div>
-
-                    <!-- Tags -->
-                    @if (Model.Tags.Any())
-                    {
-                        <div class="mt-8 pt-8 border-t border-border/20">
-                            <div class="flex flex-wrap gap-3">
-                                @foreach (var tag in Model.Tags)
-                                {
-                                    <span class="px-3 py-1.5 rounded-xl bg-muted/40 text-muted-foreground text-[10px] font-black uppercase tracking-widest hover:bg-muted/60 transition-colors cursor-pointer">
-                                        #@tag
-                                    </span>
-                                }
-                            </div>
-                        </div>
-                    }
-                </div>
-
-                <!-- Interaction Control Strip -->
-                <div class="p-8 md:px-14 flex items-center justify-between bg-card/40">
-                    <div class="flex items-center gap-8">
-                        <button class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-green-500 transition-all">
-                            <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-green-500/10">
-                                <i data-lucide="arrow-up" class="w-4 h-4 group-hover/tool:fill-current"></i>
-                            </div>
-                            @Localizer["VoteUp"] (@Model.VoteScore)
-                        </button>
-                        <button class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-all">
-                            <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-blue-500/10">
-                                <i data-lucide="message-circle" class="w-4 h-4"></i>
-                            </div>
-                            @Localizer["JoinDiscussion"]
-                        </button>
-                    </div>
-
-                    <div class="flex gap-3">
-                        <button class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90">
-                            <i data-lucide="share-2" class="w-5 h-5"></i>
-                        </button>
-                        <button class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90 @(Model.IsBookmarked ? "text-amber-500 bg-amber-500/5 border-amber-500/20" : "")">
-                            <i data-lucide="bookmark" class="w-5 h-5 @(Model.IsBookmarked ? "fill-current" : "")"></i>
-                        </button>
+                    <div>
+                        <div class="h4 fw-black text-dark mb-0">@Model.AnswerCount</div>
+                        <div class="x-small fw-black text-uppercase tracking-widest text-muted opacity-40">@Localizer["Responses"]</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Answers Section -->
-        <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-            <div class="p-6 sm:p-8 border-b border-border">
-                <div class="flex items-center justify-between flex-wrap gap-4">
-                    <h2 class="text-xl font-bold text-foreground flex items-center gap-3">
-                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-primary-foreground text-sm font-bold">@Model.AnswerCount</span>
-                        @Localizer["ResponseFrequency"]
-                    </h2>
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs text-muted-foreground">@Localizer["SortingPulse"]:</span>
-                        <div class="flex bg-muted rounded-lg p-1">
-                            <button class="px-3 py-1.5 rounded-md text-xs font-medium bg-background border border-border shadow-sm">@Localizer["HighConfidence"]</button>
-                            <button class="px-3 py-1.5 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">@Localizer["Chronological"]</button>
+        <!-- Question Body -->
+        <div class="px-4 p-md-5 py-5 bg-primary-red-subtle border-top border-bottom">
+            @if (!string.IsNullOrEmpty(Model.CarDisplayName))
+            {
+                <div class="card p-3 border-0 rounded-4 shadow-sm mb-4" style="background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-primary-red text-white rounded-4 p-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i data-lucide="car-front" style="width: 20px;"></i>
+                        </div>
+                        <div>
+                            <span class="d-block x-small fw-black text-uppercase tracking-widest text-primary-red mb-1">@Localizer["AssetIdentified"]</span>
+                            <span class="d-block fw-black text-dark">@Model.CarDisplayName</span>
+                            @if (!string.IsNullOrEmpty(Model.CarEngine))
+                            {
+                                <span class="d-block small text-muted font-medium">@Model.CarEngine</span>
+                            }
                         </div>
                     </div>
                 </div>
+            }
+
+            <div class="prose max-w-none text-dark opacity-90 leading-relaxed fw-medium" style="font-size: 1.1rem;">
+                @Html.Raw(displayBody.Replace("\n", "<br/>"))
             </div>
 
-            <div class="divide-y divide-border">
+            @if (Model.Tags.Any())
+            {
+                <div class="d-flex flex-wrap gap-2 mt-5 pt-4 border-top border-dark border-opacity-10">
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <span class="badge bg-white text-muted border px-3 py-2 rounded-4 x-small fw-black text-uppercase tracking-widest hover-bg-light transition-all cursor-pointer">
+                            #@tag
+                        </span>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="p-4 px-md-5 d-flex flex-wrap align-items-center justify-content-between gap-4">
+            <div class="d-flex align-items-center gap-4">
+                <!-- Voting -->
+                <div class="d-flex align-items-center bg-light rounded-pill p-1 border">
+                    <form asp-controller="QA" asp-action="Vote" method="post" class="vote-form m-0">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="entityId" value="@Model.Id" />
+                        <input type="hidden" name="entityType" value="Question" />
+                        <input type="hidden" name="voteType" value="Upvote" />
+                        <button type="submit" class="btn btn-ghost rounded-circle p-2 hover-text-success vote-btn upvote-btn" title="@Localizer["VoteUp"]">
+                            <i data-lucide="arrow-up" style="width: 18px;"></i>
+                        </button>
+                    </form>
+                    
+                    <span class="fw-black px-2 vote-score" style="min-width: 2rem; text-align: center;">@Model.VoteScore</span>
+                    
+                    <form asp-controller="QA" asp-action="Vote" method="post" class="vote-form m-0">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="entityId" value="@Model.Id" />
+                        <input type="hidden" name="entityType" value="Question" />
+                        <input type="hidden" name="voteType" value="Downvote" />
+                        <button type="submit" class="btn btn-ghost rounded-circle p-2 hover-text-danger vote-btn downvote-btn" title="@Localizer["VoteDown"]">
+                            <i data-lucide="arrow-down" style="width: 18px;"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <button class="btn btn-primary-red-subtle text-primary-red rounded-pill px-4 py-2 small fw-black text-uppercase tracking-widest shadow-sm d-flex align-items-center gap-2" onclick="scrollToAnswerForm()">
+                    <i data-lucide="message-circle" style="width: 16px;"></i>
+                    <span>@Localizer["JoinDiscussion"]</span>
+                </button>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-white border rounded-4 p-3 shadow-sm hover-text-primary-red transition-all" onclick="shareQuestion()" title="Share">
+                    <i data-lucide="share-2" style="width: 18px;"></i>
+                </button>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form asp-controller="QA" asp-action="@(Model.IsBookmarked ? "Unbookmark" : "Bookmark")" method="post" class="m-0">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="questionId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-white border rounded-4 p-3 shadow-sm transition-all @(Model.IsBookmarked ? "text-warning bg-warning-subtle border-warning-subtle" : "hover-text-primary-red")">
+                            <i data-lucide="bookmark" class="@(Model.IsBookmarked ? "fill-current" : "")" style="width: 18px;"></i>
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Answers Section -->
+    <div class="card card-premium p-0 border-0 mb-5 overflow-hidden shadow-sm">
+        <div class="card-header bg-transparent p-4 p-md-5 pb-0 border-0">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <h3 class="fw-black text-dark d-flex align-items-center gap-3 mb-0">
+                    <span class="badge bg-primary-red rounded-circle d-flex align-items-center justify-content-center p-0" style="width: 32px; height: 32px; font-size: 0.8rem;">@Model.AnswerCount</span>
+                    @Localizer["ResponseFrequency"]
+                </h3>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <span class="x-small fw-black text-uppercase tracking-widest text-muted opacity-50">@Localizer["SortingPulse"]:</span>
+                    <div class="btn-group bg-light rounded-pill p-1 border">
+                        <button class="btn btn-white btn-sm px-3 rounded-pill small fw-black text-uppercase tracking-widest active" data-sort="confidence">@Localizer["HighConfidence"]</button>
+                        <button class="btn btn-ghost btn-sm px-3 rounded-pill small fw-black text-uppercase tracking-widest text-muted" data-sort="chronological">@Localizer["Chronological"]</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="divide-y">
                 @if (answers != null && answers.Any())
                 {
                     @foreach (var answer in answers.OrderByDescending(a => a.IsAccepted).ThenByDescending(a => a.VoteScore))
                     {
-                        <div class="p-6 sm:p-8 @(answer.IsAccepted ? "bg-primary/5 border-l-4 border-primary" : "")">
+                        <div class="p-4 p-md-5 @(answer.IsAccepted ? "bg-primary-red-subtle border-start border-4 border-primary-red" : "border-top")">
                             @if (answer.IsAccepted)
                             {
                                 <div class="mb-4">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary text-primary-foreground">
-                                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                                    <span class="badge bg-primary-red text-white rounded-pill px-3 py-2 shadow-sm small fw-black tracking-widest">
+                                        <i data-lucide="check-circle-2" class="me-2" style="width: 14px;"></i>
                                         @Localizer["VerifiedSolution"]
                                     </span>
                                 </div>
                             }
                             
-                            <div class="flex gap-6">
-                                <!-- Vote Controls -->
-                                <div class="flex flex-col items-center gap-2 pt-2">
-                                    <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-background border border-border hover:border-primary hover:text-primary transition-all">
-                                        <i data-lucide="chevron-up" class="w-5 h-5"></i>
-                                    </button>
-                                    <span class="text-sm font-bold tabular-nums">@answer.VoteScore</span>
-                                    <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-background border border-border hover:border-destructive hover:text-destructive transition-all">
-                                        <i data-lucide="chevron-down" class="w-5 h-5"></i>
-                                    </button>
+                            <div class="row g-4">
+                                <!-- Vote Column -->
+                                <div class="col-auto">
+                                    <div class="d-flex flex-column align-items-center gap-2">
+                                        <form asp-controller="QA" asp-action="Vote" method="post" class="vote-form m-0">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="entityId" value="@answer.Id" />
+                                            <input type="hidden" name="entityType" value="Answer" />
+                                            <input type="hidden" name="voteType" value="Upvote" />
+                                            <button type="submit" class="btn btn-white border rounded-3 p-2 hover-text-success vote-btn upvote-btn">
+                                                <i data-lucide="chevron-up" style="width: 20px;"></i>
+                                            </button>
+                                        </form>
+                                        
+                                        <span class="fw-black text-dark vote-score">@answer.VoteScore</span>
+                                        
+                                        <form asp-controller="QA" asp-action="Vote" method="post" class="vote-form m-0">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="entityId" value="@answer.Id" />
+                                            <input type="hidden" name="entityType" value="Answer" />
+                                            <input type="hidden" name="voteType" value="Downvote" />
+                                            <button type="submit" class="btn btn-white border rounded-3 p-2 hover-text-danger vote-btn downvote-btn">
+                                                <i data-lucide="chevron-down" style="width: 20px;"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
 
-                                <div class="flex-1 space-y-4">
-                                    <!-- Answer Header -->
-                                    <div class="flex items-center justify-between flex-wrap gap-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-muted border border-border flex items-center justify-center overflow-hidden">
+                                <!-- Content Column -->
+                                <div class="col">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="user-avatar-container shadow-sm border p-0 m-0" style="width: 32px; height: 32px;">
                                                 @if (!string.IsNullOrEmpty(answer.AuthorProfilePicture))
                                                 {
-                                                    <img src="@answer.AuthorProfilePicture" class="w-full h-full object-cover" alt="@answer.AuthorName" />
+                                                    <img src="@answer.AuthorProfilePicture" class="rounded-circle object-fit-cover w-100 h-100" alt="@answer.AuthorName" />
                                                 }
                                                 else
                                                 {
-                                                    <i data-lucide="user" class="w-4 h-4 text-muted-foreground"></i>
+                                                    <div class="w-100 h-100 rounded-circle bg-light d-flex align-items-center justify-content-center text-muted">
+                                                        <i data-lucide="user" style="width: 14px;"></i>
+                                                    </div>
                                                 }
                                             </div>
                                             <div>
-                                                <span class="block text-sm font-medium text-foreground">@answer.AuthorName</span>
-                                                <span class="block text-xs text-muted-foreground">@answer.TimeAgo</span>
+                                                <a href="@Url.Action("Index", "Profile", new { area = "", culture = currentCulture, id = answer.AuthorId })" class="small fw-black text-dark text-decoration-none hover-text-primary-red transition-all">@answer.AuthorName</a>
+                                                <span class="d-block x-small fw-bold text-muted opacity-50">@answer.TimeAgo</span>
                                             </div>
                                         </div>
                                         @if (answer.IsVerifiedByExpert)
                                         {
-                                            <div class="flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 text-blue-600 border border-blue-500/20 rounded-full">
-                                                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-                                                <span class="text-xs font-medium">@Localizer["ExpertVerified"]</span>
-                                            </div>
+                                            <span class="badge bg-primary-red-subtle text-primary-red rounded-pill px-2 py-1 border border-primary-red-subtle x-small fw-black tracking-widest">
+                                                <i data-lucide="shield-check" class="me-1" style="width: 10px;"></i> @Localizer["ExpertVerified"]
+                                            </span>
                                         }
                                     </div>
 
-                                    <!-- Answer Content -->
-                                    <div class="prose prose-sm max-w-none text-foreground/90 leading-relaxed">
+                                    <div class="prose prose-sm max-w-none text-dark opacity-90 leading-relaxed fw-medium mb-4">
                                         @{
                                             var displayAnswerBody = isArabic && !string.IsNullOrEmpty(answer.BodyAr) ? answer.BodyAr : answer.Body;
                                         }
                                         @Html.Raw(displayAnswerBody.Replace("\n", "<br/>"))
                                     </div>
 
-                                    <!-- Answer Actions -->
-                                    <div class="flex items-center gap-4 pt-4 border-t border-border">
-                                        <button class="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors">
-                                            <i data-lucide="thumbs-up" class="w-4 h-4"></i>
-                                            @Localizer["HelpfulProtocol"] (@answer.HelpfulCount)
-                                        </button>
-                                        <button class="flex items-center gap-2 text-xs text-muted-foreground hover:text-blue-500 transition-colors">
-                                            <i data-lucide="message-square" class="w-4 h-4"></i>
+                                    <div class="d-flex align-items-center gap-4 pt-3 border-top">
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <form asp-controller="QA" asp-action="MarkHelpful" method="post" class="helpful-form m-0">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="answerId" value="@answer.Id" />
+                                                <button type="submit" class="btn btn-ghost btn-sm p-0 small fw-bold text-muted hover-text-primary-red transition-all helpful-btn">
+                                                    <i data-lucide="thumbs-up" class="me-1" style="width: 14px;"></i>
+                                                    @Localizer["HelpfulProtocol"] (<span class="helpful-count">@answer.HelpfulCount</span>)
+                                                </button>
+                                            </form>
+                                        }
+                                        
+                                        <button class="btn btn-ghost btn-sm p-0 small fw-bold text-muted hover-text-primary-red transition-all" onclick="toggleCommentForm(@answer.Id)">
+                                            <i data-lucide="message-square" class="me-1" style="width: 14px;"></i>
                                             @Localizer["CommentLayer"]
                                         </button>
+                                        
+                                        @if (!answer.IsAccepted && User.Identity.IsAuthenticated)
+                                        {
+                                            <form asp-controller="QA" asp-action="AcceptAnswer" method="post" class="accept-form m-0">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="answerId" value="@answer.Id" />
+                                                <input type="hidden" name="questionId" value="@Model.Id" />
+                                                <button type="submit" class="btn btn-ghost btn-sm p-0 small fw-bold text-muted hover-text-success transition-all">
+                                                    <i data-lucide="check-circle" class="me-1" style="width: 14px;"></i>
+                                                    @Localizer["AcceptAnswer"]
+                                                </button>
+                                            </form>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -266,106 +317,194 @@
                 }
                 else
                 {
-                    <div class="p-12 text-center">
-                        <div class="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i data-lucide="message-square" class="w-8 h-8 text-muted-foreground"></i>
+                    <div class="p-5 text-center py-5">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 border" style="width: 80px; height: 80px;">
+                            <i data-lucide="message-square" class="text-muted opacity-20" style="width: 40px;"></i>
                         </div>
-                        <h3 class="text-lg font-medium text-foreground mb-2">@Localizer["NoFeedbackSignals"]</h3>
-                        <p class="text-sm text-muted-foreground">@Localizer["InitializeFirstResponse"]</p>
+                        <h4 class="fw-black text-dark mb-2">@Localizer["NoFeedbackSignals"]</h4>
+                        <p class="text-muted small">@Localizer["InitializeFirstResponse"]</p>
                     </div>
                 }
             </div>
         </div>
+    </div>
 
-        <!-- Add Answer Form -->
-        @if (!Model.IsLocked)
-        {
-            <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                <div class="p-6 sm:p-8 border-b border-border">
-                    <h3 class="text-xl font-bold text-foreground flex items-center gap-3">
-                        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
-                            <i data-lucide="pen-tool" class="w-5 h-5"></i>
-                        </div>
-                        @Localizer["CommitResponse"]
-                    </h3>
+    <!-- Response Form -->
+    @if (!Model.IsLocked)
+    {
+        <div class="card card-premium p-0 border-0 shadow-sm overflow-hidden mb-5">
+            <div class="card-header bg-transparent p-4 p-md-5 pb-0 border-0">
+                <h3 class="fw-black text-dark d-flex align-items-center gap-3 mb-0 commit-response-title">
+                    <div class="bg-primary-red-subtle text-primary-red rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i data-lucide="pen-tool" style="width: 20px;"></i>
+                    </div>
+                    @Localizer["CommitResponse"]
+                </h3>
+            </div>
+            
+            <form asp-action="Answer" asp-route-id="@Model.Id" asp-route-culture="@currentCulture" method="post" class="p-4 p-md-5">
+                <div class="mb-4">
+                    <label class="x-small fw-black text-uppercase tracking-widest text-muted opacity-50 mb-2">@Localizer["YourAnswer"]</label>
+                    <textarea name="body" class="form-control rounded-4 p-4 small fw-medium border shadow-sm bg-light-subtle" style="min-height: 200px;" placeholder="@Localizer["InitializeDataPayload"]" required></textarea>
                 </div>
                 
-                <form asp-action="Answer" asp-route-id="@Model.Id" asp-route-culture="@currentCulture" method="post" class="p-6 sm:p-8 space-y-6">
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium text-foreground">@Localizer["YourAnswer"]</label>
-                        <div class="relative">
-                            <textarea name="body" class="w-full p-4 bg-background/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none min-h-[200px]" placeholder="@Localizer["InitializeDataPayload"]" required></textarea>
-                            
-                            @if (isArabic)
-                            {
-                                <div class="mt-4">
-                                    <label class="text-sm font-medium text-foreground">@Localizer["ArabicAnswer"]</label>
-                                    <textarea name="bodyAr" class="w-full p-4 bg-background/50 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none min-h-[200px] mt-2" placeholder="@Localizer["InitializeDataPayloadAr"]" dir="rtl"></textarea>
-                                </div>
-                            }
-                        </div>
+                @if (isArabic)
+                {
+                    <div class="mb-4">
+                        <label class="x-small fw-black text-uppercase tracking-widest text-muted opacity-50 mb-2">@Localizer["ArabicAnswer"]</label>
+                        <textarea name="bodyAr" class="form-control rounded-4 p-4 small fw-medium border shadow-sm bg-light-subtle" style="min-height: 200px;" placeholder="@Localizer["InitializeDataPayloadAr"]" dir="rtl"></textarea>
                     </div>
+                }
 
-                    <div class="flex items-center justify-between pt-4 border-t border-border">
-                        <div class="flex items-center gap-2 text-xs text-muted-foreground">
-                            <i data-lucide="shield-check" class="w-4 h-4"></i>
-                            @Localizer["EncryptionLayer"]: @Localizer["AESVerified"]
-                        </div>
-                        <button type="submit" class="px-6 py-3 bg-primary text-primary-foreground font-medium text-sm rounded-lg shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all flex items-center gap-2">
-                            @Localizer["PostResponse"]
-                            <i data-lucide="send" class="w-4 h-4"></i>
-                        </button>
+                <div class="d-flex align-items-center justify-content-between pt-4 border-top">
+                    <div class="d-none d-sm-flex align-items-center gap-2 x-small fw-black text-uppercase tracking-widest text-muted opacity-40">
+                        <i data-lucide="shield-check" style="width: 14px;"></i>
+                        @Localizer["EncryptionLayer"]: @Localizer["AESVerified"]
                     </div>
-                </form>
-            </div>
-        }
-        else
-        {
-            <div class="bg-destructive/5 border border-destructive/20 rounded-2xl p-8 text-center">
-                <div class="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="lock" class="w-6 h-6 text-destructive"></i>
+                    <button type="submit" class="btn btn-primary-red px-5 py-3 rounded-pill fw-black text-uppercase tracking-widest small shadow-lg d-flex align-items-center gap-3">
+                        @Localizer["PostResponse"]
+                        <i data-lucide="send" style="width: 166px;"></i>
+                    </button>
                 </div>
-                <h4 class="text-lg font-bold text-foreground mb-2">@Localizer["ProtocolLocked"]</h4>
-                <p class="text-sm text-muted-foreground">@Localizer["ArchivedProtocol"]</p>
-            </div>
-        }
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="alert bg-primary-red-subtle border border-primary-red-subtle text-primary-red p-4 rounded-4 text-center mb-5">
+            <i data-lucide="lock" class="mb-3 d-block mx-auto" style="width: 32px; height: 32px;"></i>
+            <h4 class="fw-black mb-2">@Localizer["ProtocolLocked"]</h4>
+            <p class="mb-0 small fw-bold opacity-75">@Localizer["ArchivedProtocol"]</p>
+        </div>
+    }
 
-        <!-- System Metadata Trace -->
-        <div class="p-8 bg-muted/20 border border-border/40 rounded-[2.5rem] grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="space-y-1">
-                <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["TransportID"]</span>
-                <code class="text-xs font-mono text-primary font-bold">@Model.Id.ToString().Substring(0, 18)...</code>
-            </div>
-            <div class="space-y-1">
-                <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["CipherFormat"]</span>
-                <span class="text-xs font-black text-foreground">UTF-8 QA</span>
-            </div>
-            <div class="space-y-1">
-                <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Originator"]</span>
-                <span class="text-xs font-black text-foreground">QA-PROTOCOL</span>
-            </div>
-            <div class="space-y-1 text-right flex flex-col items-end">
-                <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Status"]</span>
-                <span class="flex items-center gap-2 text-xs font-black @(Model.IsSolved ? "text-green-500" : "text-amber-500")">
-                    <span class="w-1.5 h-1.5 rounded-full @(Model.IsSolved ? "bg-green-500" : "bg-amber-500") animate-pulse"></span>
-                    @(Model.IsSolved ? Localizer["SolvedArchive"] : Localizer["ActiveQuery"])
-                </span>
-            </div>
+    <!-- Metadata Trace -->
+    <div class="bg-white border rounded-5 p-4 d-flex flex-wrap justify-content-between align-items-center gap-4 opacity-75">
+        <div class="d-flex flex-column gap-1">
+            <span class="x-small fw-black text-uppercase tracking-widest text-muted opacity-40">@Localizer["TransportID"]</span>
+            <code class="x-small fw-bold text-primary-red">@Model.Id.ToString().Substring(0, 18)...</code>
+        </div>
+        <div class="d-flex flex-column gap-1">
+            <span class="x-small fw-black text-uppercase tracking-widest text-muted opacity-40">@Localizer["CipherFormat"]</span>
+            <span class="x-small fw-black text-dark">UTF-8 QA</span>
+        </div>
+        <div class="d-flex flex-column mb-0 ms-auto text-end">
+            <span class="x-small fw-black text-uppercase tracking-widest text-muted opacity-40">@Localizer["Status"]</span>
+            <span class="x-small fw-black @(Model.IsSolved ? "text-success" : "text-warning") d-flex align-items-center gap-2 justify-content-end">
+                <span class="bg-current rounded-circle animate-pulse" style="width: 6px; height: 6px;"></span>
+                @(Model.IsSolved ? Localizer["SolvedArchive"] : Localizer["ActiveQuery"])
+            </span>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
+        const currentCulture = '@currentCulture';
+        
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof Skeleton !== 'undefined') {
-                Skeleton.initPageLoad('loading-skeleton', 'main-content');
-            }
-            
-            // Initialize Lucide icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+            lucide.createIcons();
+            initializeQAVoting();
         });
+        
+        function initializeQAVoting() {
+            document.querySelectorAll('.vote-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleVote(this);
+                });
+            });
+            
+            document.querySelectorAll('.helpful-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleHelpful(this);
+                });
+            });
+            
+            document.querySelectorAll('.accept-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleAcceptAnswer(this);
+                });
+            });
+        }
+        
+        async function handleVote(form) {
+            const button = form.querySelector('.vote-btn');
+            const entityId = form.querySelector('input[name="entityId"]').value;
+            const voteType = form.querySelector('input[name="voteType"]').value;
+            
+            button.disabled = true;
+            
+            try {
+                const formData = new FormData(form);
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const container = form.closest('.d-flex') || form.parentElement;
+                    const scoreElement = container?.querySelector('.vote-score');
+                    if (scoreElement && data.voteScore !== undefined) {
+                        scoreElement.textContent = data.voteScore;
+                        window.notify?.success('Vote recorded!');
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                button.disabled = false;
+            }
+        }
+        
+        async function handleHelpful(form) {
+            const button = form.querySelector('.helpful-btn');
+            button.disabled = true;
+            try {
+                const formData = new FormData(form);
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                if (response.ok) {
+                    const countElement = button.querySelector('.helpful-count');
+                    if (countElement) {
+                        countElement.textContent = (parseInt(countElement.textContent) || 0) + 1;
+                        button.classList.add('text-primary-red');
+                        window.notify?.success('Marked as helpful!');
+                    }
+                }
+            } catch (error) { console.error(error); } finally { button.disabled = false; }
+        }
+
+        async function handleAcceptAnswer(form) {
+            if (!confirm('Are you sure you want to accept this answer?')) return;
+            const button = form.querySelector('button');
+            button.disabled = true;
+            try {
+                const formData = new FormData(form);
+                await fetch(form.action, { method: 'POST', body: formData });
+                location.reload();
+            } catch (error) { console.error(error); } finally { button.disabled = false; }
+        }
+
+        function scrollToAnswerForm() {
+            document.querySelector('.commit-response-title')?.scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('textarea[name="body"]')?.focus();
+        }
+
+        function shareQuestion() {
+            if (navigator.share) {
+                navigator.share({ title: document.title, url: window.location.href });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                window.notify?.success('Link copied to clipboard!');
+            }
+        }
     </script>
 }

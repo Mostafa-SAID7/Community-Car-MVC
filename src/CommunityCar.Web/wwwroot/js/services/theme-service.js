@@ -7,11 +7,7 @@
         constructor() {
             super('Theme');
             this.html = document.documentElement;
-            this.toggleButtons = [
-                { toggle: document.getElementById('theme-toggle'), sun: document.getElementById('sun-icon'), moon: document.getElementById('moon-icon') },
-                { toggle: document.getElementById('mobile-theme-toggle'), sun: document.getElementById('mobile-sun-icon'), moon: document.getElementById('mobile-moon-icon') },
-                { toggle: document.getElementById('dashboard-theme-toggle'), sun: document.getElementById('dashboard-sun-icon'), moon: document.getElementById('dashboard-moon-icon') }
-            ];
+            this.toggleButtons = [];
 
             // Initialization is handled by base or explicit call? 
             // In site.js we usually init. For now, we self-init if DOM is ready, or wait.
@@ -25,6 +21,12 @@
         init() {
             if (this.initialized) return;
             super.init();
+
+            this.toggleButtons = [
+                { toggle: document.getElementById('theme-toggle'), sun: document.getElementById('sun-icon'), moon: document.getElementById('moon-icon') },
+                { toggle: document.getElementById('mobile-theme-toggle'), sun: document.getElementById('mobile-sun-icon'), moon: document.getElementById('mobile-moon-icon') },
+                { toggle: document.getElementById('dashboard-theme-toggle'), sun: document.getElementById('dashboard-sun-icon'), moon: document.getElementById('dashboard-moon-icon') }
+            ];
 
             // Initialize from localStorage or system preference
             let currentTheme = localStorage.getItem('theme');

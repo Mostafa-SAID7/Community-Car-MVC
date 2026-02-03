@@ -2,7 +2,7 @@
   {
     "id": "TC001",
     "title": "User Registration with Valid Data",
-    "description": "Verify that a new user can successfully register with valid and complete information.",
+    "description": "Verify that a new user can successfully register with valid data, including email, username, and password meeting all criteria.",
     "category": "functional",
     "priority": "High",
     "steps": [
@@ -12,7 +12,7 @@
       },
       {
         "type": "action",
-        "description": "Input valid user details including username, email, and password."
+        "description": "Enter a valid username, a valid email address, and a strong password."
       },
       {
         "type": "action",
@@ -20,14 +20,14 @@
       },
       {
         "type": "assertion",
-        "description": "Confirm that the user receives a registration success message and can proceed to login."
+        "description": "The user account is created and a confirmation message or email is sent."
       }
     ]
   },
   {
     "id": "TC002",
-    "title": "User Registration with Missing Mandatory Fields",
-    "description": "Verify appropriate error messages appear when mandatory fields are missing on the registration form.",
+    "title": "User Registration with Invalid Data",
+    "description": "Verify that registration fails with invalid input such as missing fields, invalid email, or weak password.",
     "category": "error handling",
     "priority": "High",
     "steps": [
@@ -37,18 +37,18 @@
       },
       {
         "type": "action",
-        "description": "Leave required fields empty and attempt to submit the registration form."
+        "description": "Try submitting the registration form leaving required fields empty or entering invalid data."
       },
       {
         "type": "assertion",
-        "description": "Validate that the system displays error messages indicating the missing fields."
+        "description": "Appropriate error messages are displayed for each invalid input."
       }
     ]
   },
   {
     "id": "TC003",
     "title": "User Login with Correct Credentials",
-    "description": "Check that users can log in successfully using valid username/email and password.",
+    "description": "Verify that a user can login successfully using valid credentials.",
     "category": "functional",
     "priority": "High",
     "steps": [
@@ -66,14 +66,14 @@
       },
       {
         "type": "assertion",
-        "description": "Confirm the user is redirected to their profile or home page after successful login."
+        "description": "User is logged in and redirected to their personalized dashboard."
       }
     ]
   },
   {
     "id": "TC004",
     "title": "User Login with Incorrect Credentials",
-    "description": "Verify that login fails and an appropriate error message is shown with wrong username or password.",
+    "description": "Verify that login fails and displays error message with invalid username or password.",
     "category": "error handling",
     "priority": "High",
     "steps": [
@@ -83,7 +83,7 @@
       },
       {
         "type": "action",
-        "description": "Enter invalid or incorrect username/email and/or password."
+        "description": "Enter invalid username/email or password."
       },
       {
         "type": "action",
@@ -91,53 +91,49 @@
       },
       {
         "type": "assertion",
-        "description": "Check that login is unsuccessful and an error notification is displayed."
+        "description": "Check that login fails and an error message is displayed."
       }
     ]
   },
   {
     "id": "TC005",
-    "title": "User Profile Update",
-    "description": "Ensure users can successfully update their profile information including name, bio, and profile picture.",
-    "category": "functional",
-    "priority": "Medium",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Log in to the user account."
-      },
-      {
-        "type": "action",
-        "description": "Navigate to the profile settings page."
-      },
-      {
-        "type": "action",
-        "description": "Modify profile fields such as name and bio."
-      },
-      {
-        "type": "action",
-        "description": "Save the changes."
-      },
-      {
-        "type": "assertion",
-        "description": "Verify that updated profile information is saved and displayed correctly."
-      }
-    ]
-  },
-  {
-    "id": "TC006",
-    "title": "Post a Question in Community Q&A",
-    "description": "Validate that users can post new car-related questions and that the questions appear in real time on the Q&A feed.",
+    "title": "Dashboard Displays Accurate User Statistics",
+    "description": "Verify that the user dashboard correctly displays the user's recent activity and platform-related statistics.",
     "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Log in and navigate to the Community Q&A section."
+        "description": "Login as a valid user with known activity data."
       },
       {
         "type": "action",
-        "description": "Click 'Ask a Question' and enter a valid question title and details."
+        "description": "Navigate to the dashboard page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that all statistics (questions asked, answers given, votes, bookmarks) are shown accurately."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Community Q&A: Ask New Question Successfully",
+    "description": "Ensure authenticated users can ask a new question in the community Q&A section and it appears with real-time update.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a valid user."
+      },
+      {
+        "type": "action",
+        "description": "Navigate to the Community Q&A Ask Question page."
+      },
+      {
+        "type": "action",
+        "description": "Enter a valid question title and detailed description."
       },
       {
         "type": "action",
@@ -145,320 +141,290 @@
       },
       {
         "type": "assertion",
-        "description": "Confirm that the question appears immediately in the Q&A feed and is accessible."
+        "description": "The question is saved and visible in the question list immediately (real-time update)."
       }
     ]
   },
   {
     "id": "TC007",
-    "title": "Answer a Question in Community Q&A",
-    "description": "Ensure users can provide answers to existing questions and that answers update in real time.",
+    "title": "Community Q&A: Answer Existing Question",
+    "description": "Verify that users can provide answers to existing questions and those answers are added correctly.",
     "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to a posted question under Community Q&A."
+        "description": "Login as a valid user."
       },
       {
         "type": "action",
-        "description": "Enter a valid answer in the answer input field."
+        "description": "Navigate to an existing question detail page."
       },
       {
         "type": "action",
-        "description": "Submit the answer."
+        "description": "Submit a valid answer to the question."
       },
       {
         "type": "assertion",
-        "description": "Verify that the answer appears instantly and updates the answer count."
+        "description": "Answer appears under the question with proper formatting and is visible to all users."
       }
     ]
   },
   {
     "id": "TC008",
-    "title": "Post a Feed Story",
-    "description": "Check that users can post feed content and temporary stories and that they are visible to other users.",
+    "title": "Vote Up and Down on Questions and Answers",
+    "description": "Test that users can upvote or downvote questions and answers and that the vote counts update in real-time.",
     "category": "functional",
     "priority": "Medium",
     "steps": [
       {
         "type": "action",
-        "description": "Log in and navigate to Feeds or Stories section."
+        "description": "Login as a valid user."
       },
       {
         "type": "action",
-        "description": "Create a new feed post including text and optionally an image or link."
+        "description": "Navigate to any question or answer."
       },
       {
         "type": "action",
-        "description": "Submit the feed post."
+        "description": "Click on the upvote button and verify the vote count increments."
+      },
+      {
+        "type": "action",
+        "description": "Click on the downvote button and verify the vote count decrements."
       },
       {
         "type": "assertion",
-        "description": "Confirm that the feed post appears in user and community feeds."
+        "description": "Vote counts update immediately and accurately for all connected users."
       }
     ]
   },
   {
     "id": "TC009",
-    "title": "Create and Join Groups",
-    "description": "Validate that a user can create a new group and other users can search and join the group successfully.",
-    "category": "functional",
-    "priority": "High",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Log in and navigate to Groups section."
-      },
-      {
-        "type": "action",
-        "description": "Create a new group with valid details."
-      },
-      {
-        "type": "action",
-        "description": "Log in as a different user."
-      },
-      {
-        "type": "action",
-        "description": "Search for the created group and join it."
-      },
-      {
-        "type": "assertion",
-        "description": "Ensure both group creation and joining are successful and reflected immediately."
-      }
-    ]
-  },
-  {
-    "id": "TC010",
-    "title": "Create and Participate in Events",
-    "description": "Verify users can create events, RSVP to events, and see real-time event updates.",
-    "category": "functional",
-    "priority": "High",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to Events section after login."
-      },
-      {
-        "type": "action",
-        "description": "Create a new event with date, time, and description."
-      },
-      {
-        "type": "action",
-        "description": "Submit the event creation."
-      },
-      {
-        "type": "action",
-        "description": "As another user, view the event and RSVP 'Attending'."
-      },
-      {
-        "type": "assertion",
-        "description": "Check event is visible with correct details and RSVP status updates in real time."
-      }
-    ]
-  },
-  {
-    "id": "TC011",
-    "title": "RTL Layout and Localization Switching",
-    "description": "Validate UI and content fully support Arabic language with correct RTL layout and dynamic content translation.",
-    "category": "functional",
-    "priority": "High",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Log in and set user language preference to Arabic."
-      },
-      {
-        "type": "action",
-        "description": "Navigate through multiple pages including Q&A, feeds, maps, groups, and admin dashboard."
-      },
-      {
-        "type": "assertion",
-        "description": "Verify that all displayed content is in Arabic and UI layout switches properly to RTL orientation."
-      }
-    ]
-  },
-  {
-    "id": "TC012",
-    "title": "Map Display with Localized Points of Interest",
-    "description": "Ensure the maps display car-friendly locations and tracks correctly in both English and Arabic with proper localization.",
+    "title": "Bookmark Questions and Answers",
+    "description": "Verify users can bookmark questions and answers and retrieve them from their profile or dashboard.",
     "category": "functional",
     "priority": "Medium",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to the Maps section."
+        "description": "Login as a valid user."
       },
       {
         "type": "action",
-        "description": "View points of interest in English language setting."
+        "description": "Navigate to a question or answer."
       },
       {
         "type": "action",
-        "description": "Switch language to Arabic and reload the maps."
+        "description": "Click the bookmark icon to save the item."
       },
       {
         "type": "assertion",
-        "description": "Confirm POIs names and map labels are accurately translated and layout is correctly RTL for Arabic."
+        "description": "The question or answer appears in the user's bookmarked list accessible from the dashboard."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Real-time Notifications Display",
+    "description": "Ensure that when relevant events occur (such as answers to user questions or votes), notifications appear in real-time using SignalR.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as User A and perform an action that triggers notification to User B."
+      },
+      {
+        "type": "action",
+        "description": "Login as User B on a separate session and wait for notification."
+      },
+      {
+        "type": "assertion",
+        "description": "User B receives the notification instantly without needing to refresh the page."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Private Localized Chat Functionality",
+    "description": "Test that users can send and receive private chat messages using SignalR with correct localization applied.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as two different users on separate sessions."
+      },
+      {
+        "type": "action",
+        "description": "Initiate a private chat from User A to User B."
+      },
+      {
+        "type": "action",
+        "description": "Send messages back and forth."
+      },
+      {
+        "type": "assertion",
+        "description": "Messages are sent and received instantly with UI text appearing in selected language."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Posts & Stories Creation and Visibility",
+    "description": "Verify users can create posts and stories and that content is visible to others as expected (temporary for stories, permanent for posts).",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a valid user."
+      },
+      {
+        "type": "action",
+        "description": "Create a new post with text and images."
+      },
+      {
+        "type": "action",
+        "description": "Create a new story."
+      },
+      {
+        "type": "assertion",
+        "description": "Posts remain permanently visible; stories are visible for the correct temporary duration."
       }
     ]
   },
   {
     "id": "TC013",
-    "title": "Real-Time Messaging between Users",
-    "description": "Validate that private messages are sent and received instantly between two users using SignalR integration.",
+    "title": "Groups & Events Joining and Participation",
+    "description": "Test users can join car enthusiast groups, view group content, and RSVP to events successfully.",
     "category": "functional",
-    "priority": "High",
+    "priority": "Medium",
     "steps": [
       {
         "type": "action",
-        "description": "Log in as User A and open chat with User B."
+        "description": "Login as a valid user."
       },
       {
         "type": "action",
-        "description": "Send a text message to User B."
+        "description": "Browse available groups and join a selected group."
       },
       {
         "type": "action",
-        "description": "Log in as User B on a different session or device."
+        "description": "View group posts and events."
+      },
+      {
+        "type": "action",
+        "description": "RSVP to an event within the group."
       },
       {
         "type": "assertion",
-        "description": "Verify User B receives the message instantly and can reply with real-time delivery to User A."
+        "description": "User is successfully added to the group and RSVP status is recorded and shown."
       }
     ]
   },
   {
     "id": "TC014",
-    "title": "Real-Time Notifications Delivery",
-    "description": "Check that notifications such as new messages, event updates, or group invites are delivered instantly and displayed properly.",
+    "title": "Integrated Maps and Points of Interest Discovery",
+    "description": "Verify users can discover car-friendly locations and tracks on the map and receive accurate details.",
     "category": "functional",
-    "priority": "High",
+    "priority": "Medium",
     "steps": [
       {
         "type": "action",
-        "description": "Trigger a notification event such as sending a message or inviting a user to an event."
+        "description": "Login and navigate to the maps and points of interest section."
+      },
+      {
+        "type": "action",
+        "description": "Browse and search for car-friendly locations."
       },
       {
         "type": "assertion",
-        "description": "Confirm the receiving user gets the notification immediately and it is visible on the UI."
+        "description": "Locations appear correctly on the map with accurate details and user can interact with map features."
       }
     ]
   },
   {
     "id": "TC015",
     "title": "AI Assistant Response Accuracy",
-    "description": "Verify that the AI assistant integrated with Google Gemini and Hugging Face responds accurately to common car-related queries.",
+    "description": "Verify that the AI assistant provides relevant and accurate answers to user queries within the chat widget interface.",
     "category": "functional",
-    "priority": "Medium",
+    "priority": "High",
     "steps": [
+      {
+        "type": "action",
+        "description": "Login as a user."
+      },
       {
         "type": "action",
         "description": "Open the AI assistant chat widget."
       },
       {
         "type": "action",
-        "description": "Submit a set of predefined car-related questions to the assistant."
+        "description": "Submit various questions related to car topics and platform usage."
       },
       {
         "type": "assertion",
-        "description": "Check that the assistant replies correctly and contextually with meaningful answers."
+        "description": "AI assistant responds with relevant, helpful, and contextually correct answers."
       }
     ]
   },
   {
     "id": "TC016",
-    "title": "AI Assistant Responsiveness on Multiple Devices",
-    "description": "Ensure the AI assistant chat widget displays and functions responsively on desktop, tablet, and mobile devices.",
+    "title": "Localization: Language Switch and RTL Support",
+    "description": "Verify that users can switch between English and Arabic languages, and UI correctly adjusts for right-to-left text direction for Arabic.",
     "category": "functional",
-    "priority": "Medium",
+    "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Access the platform on desktop, tablet, and mobile device browsers."
+        "description": "Login as a user."
       },
       {
         "type": "action",
-        "description": "Open and interact with the AI assistant chat widget on each device."
+        "description": "Switch platform language to Arabic."
       },
       {
         "type": "assertion",
-        "description": "Verify the widget is fully functional, visually consistent, and responsive across all tested devices."
+        "description": "All text is displayed in Arabic and layout adjusts to right-to-left orientation."
+      },
+      {
+        "type": "action",
+        "description": "Switch back to English."
+      },
+      {
+        "type": "assertion",
+        "description": "Text reverts to English and layout orientation is left-to-right."
       }
     ]
   },
   {
     "id": "TC017",
-    "title": "Admin Dashboard Content Management",
-    "description": "Confirm that admins can create, edit, and delete community content such as Q&A entries, feed posts, groups, and events.",
-    "category": "functional",
-    "priority": "High",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Log in to the Admin Dashboard."
-      },
-      {
-        "type": "action",
-        "description": "Create new entries, edit existing community content, and delete items."
-      },
-      {
-        "type": "assertion",
-        "description": "Ensure all changes are applied immediately and correctly reflected on the user-facing platform."
-      }
-    ]
-  },
-  {
-    "id": "TC018",
-    "title": "Admin Dashboard Localization Management",
-    "description": "Verify that admins can update and manage dynamic translations and localization settings from the dashboard and changes reflect live.",
+    "title": "Admin Dashboard Translation Controls",
+    "description": "Ensure translation administrators can dynamically update and manage translations for supported languages using the admin dashboard.",
     "category": "functional",
     "priority": "Medium",
     "steps": [
       {
         "type": "action",
-        "description": "Access localization management section in Admin Dashboard."
+        "description": "Login as an admin user."
       },
       {
         "type": "action",
-        "description": "Update or add new translations for both English and Arabic languages."
-      },
-      {
-        "type": "assertion",
-        "description": "Confirm that updated translations are applied site-wide without requiring a system restart."
-      }
-    ]
-  },
-  {
-    "id": "TC019",
-    "title": "Secure Access to Admin Dashboard",
-    "description": "Ensure that only authenticated users with admin privileges can access the dashboard and unauthorized users are blocked.",
-    "category": "security",
-    "priority": "High",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Attempt to access the admin dashboard without logging in."
-      },
-      {
-        "type": "assertion",
-        "description": "Verify access is denied and redirected to login page."
+        "description": "Navigate to the translation management section."
       },
       {
         "type": "action",
-        "description": "Log in as a non-admin user and attempt dashboard access."
-      },
-      {
-        "type": "assertion",
-        "description": "Ensure access is denied and appropriate error or redirect is issued."
+        "description": "Update or add translations for a UI text key."
       },
       {
         "type": "action",
-        "description": "Log in as an admin user and open the dashboard."
+        "description": "Save changes and apply them to the platform."
       },
       {
         "type": "assertion",
-        "description": "Confirm full access to dashboard management features."
+        "description": "Translations are updated in the live environment and visible to users without requiring full deployment."
       }
     ]
   }

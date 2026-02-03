@@ -57,10 +57,10 @@ public class OverviewService : IOverviewService
     {
         return new List<StatsVM>
         {
-            new () { Title = "Total Users", Value = "1,250", Icon = "bi-people", Color = "primary", ChangePercentage = 12.5m, IsPositiveChange = true },
-            new () { Title = "Active Now", Value = "125", Icon = "bi-activity", Color = "success", ChangePercentage = 5.2m, IsPositiveChange = true },
-            new() { Title = "New Orders", Value = "45", Icon = "bi-cart", Color = "warning", ChangePercentage = 2.1m, IsPositiveChange = false },
-            new() { Title = "Reports", Value = "12", Icon = "bi-flag", Color = "danger", ChangePercentage = 0, IsPositiveChange = true }
+            new () { Title = "Total Users", Value = "1,250", Icon = "users", Color = "primary", ChangePercentage = 12.5m, IsPositiveChange = true },
+            new () { Title = "Active Now", Value = "125", Icon = "activity", Color = "success", ChangePercentage = 5.2m, IsPositiveChange = true },
+            new() { Title = "New Orders", Value = "45", Icon = "shopping-cart", Color = "warning", ChangePercentage = 2.1m, IsPositiveChange = false },
+            new() { Title = "Reports", Value = "12", Icon = "flag", Color = "danger", ChangePercentage = 0, IsPositiveChange = true }
         };
     }
 
@@ -89,7 +89,7 @@ public class OverviewService : IOverviewService
                 UserName = $"user{i + 1}",
                 Timestamp = DateTime.UtcNow.AddMinutes(-random.Next(1, 1440)),
                 TimeAgo = $"{i + 1}h ago",
-                Icon = "bi-info-circle",
+                Icon = "info",
                 Color = "primary"
             });
         }

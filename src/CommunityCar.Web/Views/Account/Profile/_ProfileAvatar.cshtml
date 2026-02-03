@@ -1,0 +1,73 @@
+@{
+    // Parameters that can be passed to this partial
+    var size = ViewData["Size"] as string ?? "large"; // large, medium, small
+    var showLevel = ViewData["ShowLevel"] as bool? ?? true;
+    var showStatus = ViewData["ShowStatus"] as bool? ?? true;
+    var iconBadge = ViewData["IconBadge"] as string; // Optional icon for badge
+    var context = ViewData["Context"] as string ?? "profile"; // profile, cover, sidebar
+    
+    // Extract data from ViewBag
+    var profilePictureUrl = ViewBag.ProfilePictureUrl as string ?? "/images/default-avatar.png";
+    var fullName = ViewBag.FullName as string ?? "User";
+    var level = ViewBag.Level as int? ?? 1;
+    
+    // Size configurations
+    var sizeClasses = size switch {
+        "small" => new { Container = "w-12 h-12", Border = "border-2", Badge = "w-4 h-4 -top-0.5 -right-0.5", Status = "w-3 h-3", Text = "text-[8px]" },
+        "medium" => new { Container = "w-16 h-16", Border = "border-3", Badge = "w-6 h-6 -top-1 -right-1", Status = "w-4 h-4", Text = "text-[10px]" },
+        "large" => new { Container = "w-24 h-24", Border = "border-4", Badge = "w-8 h-8 -top-1 -right-1", Status = "w-5 h-5", Text = "text-xs" },
+        _ => new { Container = "w-16 h-16", Border = "border-3", Badge = "w-6 h-6 -top-1 -right-1", Status = "w-4 h-4", Text = "text-[10px]" }
+    };
+    
+    // Context-specific styling
+    var contextClasses = context switch {
+        "cover" => new { BorderColor = "border-white/80", GlowColor = "bg-white/20", ShadowClass = "shadow-2xl" },
+        "sidebar" => new { BorderColor = "border-background/80", GlowColor = "bg-primary/20", ShadowClass = "shadow-xl" },
+        _ => new { BorderColor = "border-background/50", GlowColor = "bg-primary/30", ShadowClass = "shadow-lg" }
+    };
+}
+
+<!-- Profile Avatar Component -->
+<div class="relative group/avatar">
+    <!-- Hover Glow Effect -->
+    <div class="absolute -inset-2 @contextClasses.GlowColor rounded-full blur-lg opacity-0 group-hover/avatar:opacity-100 transition-all duration-500"></div>
+    
+    <!-- Main Avatar Container -->
+    <div class="relative @sizeClasses.Container rounded-full overflow-hidden @sizeClasses.Border @contextClasses.BorderColor @contextClasses.ShadowClass">
+        <!-- Profile Photo -->
+        <img src="@(profilePictureUrl)?v=@DateTime.Now.Ticks" alt="@fullName" class="w-full h-full object-cover transition-transform duration-300 group-hover/avatar:scale-110" />
+        
+        <!-- Overlay for better contrast -->
+        @if (context == "cover")
+        {
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
+        }
+        
+        <!-- Online Status Indicator -->
+        @if (showStatus)
+        {
+            <div class="absolute bottom-1 right-1 @sizeClasses.Status bg-green-500 @sizeClasses.Border @contextClasses.BorderColor rounded-full @contextClasses.ShadowClass"></div>
+        }
+    </div>
+    
+    <!-- Level Badge or Icon Badge -->
+    @if (showLevel || !string.IsNullOrEmpty(iconBadge))
+    {
+        <div class="absolute @sizeClasses.Badge bg-primary rounded-full @sizeClasses.Border @contextClasses.BorderColor @contextClasses.ShadowClass flex items-center justify-center">
+            @if (!string.IsNullOrEmpty(iconBadge))
+            {
+                <i data-lucide="@iconBadge" class="w-3 h-3 text-primary-foreground"></i>
+            }
+            else if (showLevel)
+            {
+                <span class="@sizeClasses.Text font-black text-primary-foreground">@level</span>
+            }
+        </div>
+    }
+    
+    <!-- Pulse Animation for Active Status -->
+    @if (showStatus)
+    {
+        <div class="absolute bottom-1 right-1 @sizeClasses.Status bg-green-400 rounded-full animate-ping opacity-75"></div>
+    }
+</div>

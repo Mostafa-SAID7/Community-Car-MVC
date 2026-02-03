@@ -443,6 +443,53 @@ public class NewsController : Controller
             return Json(new { success = false, message = _localizer["ErrorUnbookmarkingNews"] });
         }
     }
+
+    [HttpPost("{id:guid}/comment")]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Comment(Guid id, [FromBody] CommentRequestVM request)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            await _newsService.CommentAsync(id, currentUserId);
+            
+            // Get updated comment count
+            var newsItem = await _newsService.GetByIdAsync(id, currentUserId);
+            return Json(new { success = true, commentCount = newsItem?.CommentCount ?? 0 });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error commenting on news: {NewsId}", id);
+            return Json(new { success = false, message = _localizer["ErrorCommentingNews"] });
+        }
+    }
+
+    [HttpPost("{id:guid}/share")]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Share(Guid id)
+    {
+        try
+        {
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            await _newsService.ShareAsync(id, currentUserId);
+            
+            // Get updated share count
+            var newsItem = await _newsService.GetByIdAsync(id, currentUserId);
+            return Json(new { success = true, shareCount = newsItem?.ShareCount ?? 0 });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error sharing news: {NewsId}", id);
+            return Json(new { success = false, message = _localizer["ErrorSharingNews"] });
+        }
+    }
+}
+
+public class CommentRequestVM
+{
+    public string Content { get; set; } = string.Empty;
 }
 
 

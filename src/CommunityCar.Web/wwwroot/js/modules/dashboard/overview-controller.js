@@ -1,7 +1,6 @@
 /**
  * Dashboard Overview Controller
  * Handles general dashboard interactions, monitoring, and auto-refresh.
- * Merges functionality from: dashboard-overview.js, dashboard-monitoring.js, ai-dashboard.js
  */
 (function (CC) {
     class OverviewController extends CC.Utils.BaseComponent {
@@ -17,7 +16,6 @@
             this.setupEventHandlers();
             this.startAutoRefresh();
 
-            // Re-init icons if needed (though layout controller handles some)
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
@@ -48,15 +46,21 @@
             if (button) {
                 const icon = button.querySelector('i') || button.querySelector('svg');
                 if (icon) {
-                    icon.classList.add('fa-spin', 'animate-spin');
-                    setTimeout(() => icon.classList.remove('fa-spin', 'animate-spin'), 1000);
+                    icon.style.transition = 'transform 0.5s ease-in-out';
+                    icon.style.transform = 'rotate(360deg)';
+                    setTimeout(() => icon.style.transform = 'rotate(0deg)', 500);
                 }
             }
 
-            if (CC.Services.Toaster) CC.Services.Toaster.success('Activity feed updated');
-            else console.log('Activity refreshed');
+            // Show skeleton or loading state
+            const activityList = document.getElementById('activityList');
+            if (activityList) activityList.style.opacity = '0.5';
 
-            // TODO: Fetch logic
+            setTimeout(() => {
+                if (activityList) activityList.style.opacity = '1';
+                if (CC.Services.Toaster) CC.Services.Toaster.success('Activity feed updated');
+                else console.log('Activity refreshed');
+            }, 800);
         }
 
         refreshData(button) {
@@ -70,12 +74,12 @@
             // Mock Refresh
             setTimeout(() => {
                 location.reload();
-            }, 500);
+            }, 600);
         }
 
         reloadPage(button) {
             if (button) {
-                button.classList.add('opacity-75', 'cursor-not-allowed');
+                button.classList.add('opacity-50', 'pointer-events-none');
                 const icon = button.querySelector('[data-lucide]') || button.querySelector('svg');
                 if (icon) icon.classList.add('animate-spin');
             }
@@ -83,11 +87,10 @@
         }
 
         startAutoRefresh() {
-            // Refresh every 30 seconds
+            // Refresh every 60 seconds for performance
             this.refreshInterval = setInterval(() => {
-                // this.refreshActivity(null); // Optional auto-fetch
                 console.log('Dashboard auto-refresh tick');
-            }, 30000);
+            }, 60000);
         }
     }
 
@@ -96,3 +99,4 @@
     CC.Modules.Dashboard.Overview = new OverviewController();
 
 })(window.CommunityCar);
+

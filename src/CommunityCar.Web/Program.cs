@@ -70,6 +70,7 @@ app.MapStaticAssets();
 // Map SignalR Hubs
 app.MapHub<ChatHub>("/hubs/chat");
 app.MapHub<NotificationHub>("/hubs/notifications");
+app.MapHub<BroadcastHub>("/hubs/broadcast");
 
 // Map attribute-routed controllers FIRST (QA, Posts, etc. with [Route] attributes)
 app.MapControllers();

@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.Skeleton = CC.Utils.Skeleton;
         window.ErrorBoundary = CC.Utils.ErrorBoundary;
 
+        // Initialize Lucide Icons
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+
         if (CC.Config.debug) {
             console.log('Community Car App Initialized');
             console.log('Active Services:', Object.keys(CC.Services));

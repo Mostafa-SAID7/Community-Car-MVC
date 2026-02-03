@@ -3,36 +3,44 @@
 @model CommunityCar.Application.Features.Community.QA.ViewModels.QASearchStats
 
 <!-- Metrics Radar -->
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-primary/20">
-        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-            <i data-lucide="help-circle" class="w-5 h-5"></i>
+<div class="row g-4">
+    <div class="col-6 col-lg-3">
+        <div class="card card-premium p-4 h-100 border-0 animate-float" style="animation-delay: 0.1s">
+            <div class="bg-primary-red-subtle text-primary-red rounded-4 p-3 d-flex align-items-center justify-content-center mb-3" style="width: 48px; height: 48px;">
+                <i data-lucide="help-circle" style="width: 20px;"></i>
+            </div>
+            <div class="h2 fw-black text-dark mb-0 tabular-nums">@Model.TotalQuestions</div>
+            <div class="small fw-black text-uppercase tracking-widest text-muted opacity-50">@Localizer["TotalQuestions"]</div>
         </div>
-        <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.TotalQuestions</div>
-        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalQuestions"]</div>
     </div>
     
-    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-green-500/10">
-        <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-            <i data-lucide="check-circle" class="w-5 h-5"></i>
+    <div class="col-6 col-lg-3">
+        <div class="card card-premium p-4 h-100 border-0 animate-float" style="animation-delay: 0.2s">
+            <div class="bg-success-subtle text-success rounded-4 p-3 d-flex align-items-center justify-content-center mb-3" style="width: 48px; height: 48px;">
+                <i data-lucide="check-circle" style="width: 20px;"></i>
+            </div>
+            <div class="h2 fw-black text-dark mb-0 tabular-nums">@Model.SolvedQuestions</div>
+            <div class="small fw-black text-uppercase tracking-widest text-muted opacity-50">@Localizer["Solved"]</div>
         </div>
-        <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.SolvedQuestions</div>
-        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Solved"]</div>
     </div>
     
-    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-amber-500/10">
-        <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-            <i data-lucide="alert-circle" class="w-5 h-5"></i>
+    <div class="col-6 col-lg-3">
+        <div class="card card-premium p-4 h-100 border-0 animate-float" style="animation-delay: 0.3s">
+            <div class="bg-warning-subtle text-warning rounded-4 p-3 d-flex align-items-center justify-content-center mb-3" style="width: 48px; height: 48px;">
+                <i data-lucide="alert-circle" style="width: 20px;"></i>
+            </div>
+            <div class="h2 fw-black text-dark mb-0 tabular-nums">@Model.OpenQuestions</div>
+            <div class="small fw-black text-uppercase tracking-widest text-muted opacity-50">@Localizer["Open"]</div>
         </div>
-        <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.OpenQuestions</div>
-        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Open"]</div>
     </div>
     
-    <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-blue-500/10">
-        <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-            <i data-lucide="message-square" class="w-5 h-5"></i>
+    <div class="col-6 col-lg-3">
+        <div class="card card-premium p-4 h-100 border-0 animate-float" style="animation-delay: 0.4s">
+            <div class="bg-info-subtle text-info rounded-4 p-3 d-flex align-items-center justify-content-center mb-3" style="width: 48px; height: 48px;">
+                <i data-lucide="message-square" style="width: 20px;"></i>
+            </div>
+            <div class="h2 fw-black text-dark mb-0 tabular-nums">@Model.TotalAnswers</div>
+            <div class="small fw-black text-uppercase tracking-widest text-muted opacity-50">@Localizer["TotalAnswers"]</div>
         </div>
-        <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.TotalAnswers</div>
-        <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalAnswers"]</div>
     </div>
 </div>

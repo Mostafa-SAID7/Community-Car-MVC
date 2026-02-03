@@ -78,8 +78,14 @@ public class PerformanceService : IPerformanceService
 
         return new List<string>
         {
-            "/css/app.min.css",
-            "/js/site.js",
+            "/css/core.min.css",
+            "/css/layout.min.css",
+            "/css/components.min.css",
+            "/css/features.min.css",
+            "/js/core.js",
+            "/js/services/cookie-service.js",
+            "/js/services/localization-service.js",
+            "/js/services/notification-service.js",
             "/lib/jquery/dist/jquery.min.js",
             "/lib/signalr/signalr.min.js"
         };
@@ -114,7 +120,8 @@ public class PerformanceService : IPerformanceService
 
         return new List<string>
         {
-            "/css/app.min.css",
+            "/css/core.min.css",
+            "/css/layout.min.css",
             "/lib/jquery/dist/jquery.min.js"
         };
     }

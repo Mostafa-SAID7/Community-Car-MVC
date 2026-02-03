@@ -7,6 +7,13 @@
     class LayoutController extends CC.Utils.BaseComponent {
         constructor() {
             super('LayoutController');
+
+            // Self-initialize
+            if (document.readyState !== 'loading') {
+                this.init();
+            } else {
+                document.addEventListener('DOMContentLoaded', () => this.init());
+            }
         }
 
         init() {

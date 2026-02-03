@@ -1,15 +1,19 @@
 @using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    var hideLeftSidebar = ViewData["HideLeftSidebar"] as bool? ?? false;
+    var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
+}
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")" class="light">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="user-id"
-        content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
     <title>@ViewData["Title"] - Dashboard - CommunityCar</title>
 
-    <!-- Theme initialization script (must be before any content) -->
+    <!-- Theme initialization -->
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -17,28 +21,19 @@
         })();
     </script>
 
-    <performance-optimizations url="@Context.Request.Path" />
-    <seo-meta page-type="@(ViewData["PageType"] ?? "Dashboard")" entity-id="@(ViewData["EntityId"] as Guid?)" />
-
     <link rel="icon" type="image/png" href="~/images/logo/logo.png">
-    <link rel="alternate" type="application/rss+xml" title="CommunityCar RSS Feed"
-        href="@Url.Action("RSS", "DashboardSEO")" />
-
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lemonada:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <!-- Styles Bundles -->
-    <link rel="stylesheet" href="~/css/core.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/layout.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/components.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/features.min.css" asp-append-version="true" />
-
-    <!-- Dynamic Font Styles -->
-    <partial name="_FontStyles" />
+    <!-- Bootstrap CSS (Local) -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.css" />
+    
+    <!-- Site Styles -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
 
@@ -46,124 +41,53 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="font-sans antialiased dashboard-body">
+<body class="bg-light">
+    @Html.AntiForgeryToken()
     <partial name="_Header" />
 
-    <!-- Main container aligned with sidebar positioning -->
-    <div class="flex pb-4 sm:pb-6 md:pb-8 min-h-screen" id="dashboard-container">
-        <partial name="Dashboard/_DashboardSidebarLeft" />
-
-        <!-- Main Content Area positioned for dashboard layout -->
-        @{
-            var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
-            var mainContentClass = hideRightSidebar ? "xl:mr-0 rtl:xl:mr-0 rtl:xl:ml-0" : "xl:mr-80 rtl:xl:mr-0 rtl:xl:ml-80";
-        }
-        <main class="flex-1 px-2 sm:px-3 md:px-4 lg:px-6 mt-24 sidebar-spacing @mainContentClass" id="main-content">
-            <div class="max-w-none w-full overflow-x-hidden">
-                <!-- Header with mobile navigation -->
-                <div class="flex items-center justify-between mb-4 sm:mb-6">
-                    <!-- Mobile sidebar toggle button -->
-                    <div class="flex items-center gap-2 md:hidden">
-                        <button id="mobile-sidebar-toggle" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground" aria-label="Toggle Menu">
-                            <i data-lucide="menu" class="w-4 h-4"></i>
-                        </button>
-                        
-                        <!-- Separator -->
-                        <div class="w-px h-6 bg-border mx-1"></div>
-                        
-                        <!-- Action icons -->
-                        <div class="relative">
-                            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground dashboard-notification-bell" aria-label="Notifications">
-                                <i data-lucide="bell" class="w-4 h-4"></i>
-                                <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground dashboard-notification-badge hidden"></span>
-                            </button>
-                            
-                            <div class="absolute right-0 top-12 w-80 bg-card border border-border rounded-2xl shadow-lg hidden dashboard-notification-dropdown">
-                                <div class="flex items-center justify-between p-4 border-b border-border">
-                                    <h3 class="text-sm font-semibold">@SharedLocalizer["Notifications"]</h3>
-                                    <div class="flex items-center gap-2">
-                                        <button class="text-xs text-primary hover:text-primary/80 dashboard-mark-all-read-btn">@SharedLocalizer["MarkAllRead"]</button>
-                                    </div>
-                                </div>
-                                <div class="max-h-96 overflow-y-auto dashboard-notification-list">
-                                    <div class="flex flex-col items-center justify-center py-8 dashboard-notification-loading">
-                                        <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-muted-foreground"></i>
-                                        <p class="text-sm text-muted-foreground mt-2">@SharedLocalizer["LoadingNotifications"]</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground text-xs font-bold" id="dashboard-lang-toggle">@(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper() == "AR" ? "EN" : "AR")</button>
-
-                        <button id="dashboard-right-sidebar-toggle" class="xl:hidden inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground" aria-label="Toggle Stats">
-                            <i data-lucide="layout-sidebar" class="w-4 h-4"></i>
-                        </button>
+    <div class="container-fluid">
+        <div class="row min-vh-100">
+            @if (!hideLeftSidebar)
+            {
+                <div class="col-md-3 col-lg-2 d-none d-md-block border-end bg-white p-0">
+                    <div class="sticky-top" style="top: 4rem; height: calc(100vh - 4rem); overflow-y: auto;">
+                        <partial name="Dashboard/_DashboardSidebarLeft" />
                     </div>
-                    
-                    <!-- Desktop title section -->
-                    <div class="flex-1 text-center md:text-left hidden md:block">
-                        <div>
-                            <h1 class="text-xl sm:text-2xl md:text-3xl font-black text-foreground leading-tight">@ViewData["Title"]</h1>
-                            <p class="text-xs sm:text-sm font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                                Manage your community platform and view real-time analytics.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <!-- Mobile title (shown only on mobile) -->
-                    <div class="flex-1 text-center md:hidden">
-                        <h1 class="text-lg font-black text-foreground leading-tight">@ViewData["Title"]</h1>
+                </div>
+            }
+
+            <!-- Main Content Area -->
+            <main role="main" class="py-4 @(hideLeftSidebar ? "col-12" : "col-md-9 col-lg-10") @(!hideRightSidebar ? "col-lg-7" : "col-lg-10") px-4">
+                <div class="d-flex align-items-center justify-content-between mb-5">
+                    <div>
+                        <h1 class="fw-black text-gradient tracking-tight mb-2">@ViewData["Title"]</h1>
+                        <p class="small text-uppercase tracking-widest text-muted opacity-50 fw-bold">Platform Management & Analytics</p>
                     </div>
                 </div>
                 
-                <!-- Mobile-optimized content wrapper -->
-                <div class="w-full overflow-x-hidden">
-                    @RenderBody()
-                </div>
-            </div>
-        </main>
+                @RenderBody()
+            </main>
 
+            @if (!hideRightSidebar)
+            {
+                <div class="col-lg-3 d-none d-lg-block border-start bg-white p-0">
+                    <div class="sticky-top p-4" style="top: 4rem; height: calc(100vh - 4rem); overflow-y: auto;">
+                        <partial name="Dashboard/_DashboardSidebarRight" />
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 
-    <partial name="_AIAssistant" />
-    <partial name="_AlertModal" />
-
-    <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" defer></script>
-
-    <!-- SignalR -->
-    @if (User.Identity?.IsAuthenticated == true)
-    {
-        <script src="~/lib/signalr/signalr.min.js" defer></script>
-
-    }
-
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/core.js" asp-append-version="true" defer></script>
-    <script src="~/js/services/cookie-service.js" asp-append-version="true" defer></script>
-    <script src="~/js/services/theme-service.js" asp-append-version="true" defer></script>
-    <script src="~/js/services/sidebar-service.js" asp-append-version="true" defer></script>
-    <script src="~/js/services/localization-service.js" asp-append-version="true" defer></script>
-    <script src="~/js/services/interaction-service.js" asp-append-version="true" defer></script>
-    <script src="~/js/components/interaction-controller.js" asp-append-version="true" defer></script>
-    <script src="~/js/components/comment-controller.js" asp-append-version="true" defer></script>
-    <script src="~/js/services/notification-service.js" asp-append-version="true" defer></script>
-    <script src="~/js/components/notification-controller.js" asp-append-version="true" defer></script>
-    
     <script src="~/js/site.js" asp-append-version="true" defer></script>
-    <script src="~/js/components/layout-controller.js" asp-append-version="true" defer></script>
-    <script src="~/js/services/feed-service.js" asp-append-version="true" defer></script>
-    <script src="~/js/modules/feed-module.js" asp-append-version="true" defer></script>
-    <script src="~/js/services/stories-service.js" asp-append-version="true" defer></script>
-    <script src="~/js/modules/stories-module.js" asp-append-version="true" defer></script>
-
-    <script src="~/js/modules/dashboard/charts-controller.js" asp-append-version="true" defer></script>
-    <script src="~/js/modules/dashboard/overview-controller.js" asp-append-version="true" defer></script>
-    <script src="~/js/modules/dashboard/reports-controller.js" asp-append-version="true" defer></script>
-    <script src="~/js/modules/dashboard/settings-controller.js" asp-append-version="true" defer></script>
-    <script src="~/js/modules/dashboard/performance-controller.js" asp-append-version="true" defer></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
-
 </html>

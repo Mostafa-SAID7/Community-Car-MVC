@@ -3,66 +3,66 @@
     Layout = "_AuthLayout";
 }
 
-<div class="max-w-md mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-    <div class="text-center space-y-6">
-        <div class="relative inline-flex items-center justify-center group">
-            <div class="absolute -inset-4 bg-primary/20 rounded-full blur-2xl group-hover:bg-primary/30 transition-colors"></div>
-            <div class="relative w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground shadow-2xl shadow-primary/40 transform -rotate-6 group-hover:rotate-0 transition-transform duration-500">
-                <i data-lucide="@(TempData["SuccessMessage"] != null ? "check-circle-2" : "alert-octagon")" class="w-10 h-10"></i>
+<div class="container min-vh-100 d-flex flex-column justify-content-center py-5 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+    <div class="text-center mb-5">
+        <div class="position-relative d-inline-flex align-items-center justify-content-center mb-4 group">
+            <div class="position-absolute inset-0 bg-primary opacity-20 rounded-circle blur-2xl group-hover:bg-primary group-hover:opacity-30 transition-all"></div>
+            <div class="position-relative w-20 h-20 rounded-4 bg-primary-red flex align-items-center justify-content-center text-white shadow-2xl shadow-primary/40 transform -rotate-6 group-hover:rotate-0 transition-transform duration-500" style="width: 80px; height: 80px;">
+                <i data-lucide="@(TempData["SuccessMessage"] != null ? "check-circle-2" : "alert-octagon")" class="w-10 h-10" style="width: 40px; height: 40px;"></i>
             </div>
         </div>
         
-        <div class="space-y-2">
+        <div class="mb-5">
             @if (TempData["SuccessMessage"] != null)
             {
-                <h1 class="text-4xl font-black text-foreground tracking-tighter">Protocol Verified</h1>
-                <p class="text-sm font-medium text-muted-foreground uppercase tracking-widest opacity-60">Identity Link confirmed via AES-256</p>
+                <h1 class="display-5 fw-black text-gradient tracking-tighter mb-2">Protocol Verified</h1>
+                <p class="text-xs fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60">Identity Link confirmed via AES-256</p>
             }
             else
             {
-                <h1 class="text-4xl font-black text-destructive tracking-tighter">Protocol Failure</h1>
-                <p class="text-sm font-medium text-muted-foreground uppercase tracking-widest opacity-60">Handshake error detected in transmission</p>
+                <h1 class="display-5 fw-black text-danger tracking-tighter mb-2">Protocol Failure</h1>
+                <p class="text-xs fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60">Handshake error detected in transmission</p>
             }
         </div>
     </div>
 
-    <div class="bg-card/40 backdrop-blur-xl border border-border/50 rounded-[2rem] p-8 md:p-10 shadow-2xl relative overflow-hidden group">
-        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent"></div>
-        
-        <div class="space-y-8 text-center">
+    <div class="card card-premium shadow-lg mx-auto text-center" style="max-width: 500px;">
+        <div class="card-body p-5">
             @if (TempData["SuccessMessage"] != null)
             {
-                <div class="space-y-4">
-                    <p class="text-sm font-medium text-foreground/70 leading-relaxed uppercase tracking-wide">
+                <div class="mb-5">
+                    <p class="text-sm fw-medium text-foreground opacity-75 leading-relaxed text-uppercase tracking-wide">
                         Your frequency is now synchronized with the Community Car registry. Full access to the enthusiast network is authorized.
                     </p>
-                    <div class="pt-4">
-                        <a asp-action="Login" class="inline-flex w-full items-center justify-center px-8 py-5 bg-primary text-primary-foreground font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 active:scale-[0.98] transition-all gap-3">
-                            Initialize Session <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </a>
-                    </div>
+                    <div class="h-1 bg-primary-red bg-opacity-10 rounded-pill mx-auto mt-4" style="width: 40px;"></div>
+                </div>
+                <div class="pt-3">
+                    <a asp-action="Login" class="btn btn-primary-red w-100 py-3 rounded-4 fw-black text-uppercase tracking-widest text-xs shadow-lg d-flex align-items-center justify-content-center gap-2">
+                        Initialize Session <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
                 </div>
             }
             else
             {
-                <div class="space-y-4">
-                    <p class="text-sm font-medium text-muted-foreground/80 leading-relaxed uppercase tracking-wide">
+                <div class="mb-5">
+                    <p class="text-sm fw-medium text-muted-foreground opacity-75 leading-relaxed text-uppercase tracking-wide">
                         The requested confirmation fragment is either corrupted or has exceeded its operational TTL (Time-To-Live).
                     </p>
-                    <div class="pt-4 space-y-3">
-                        <a asp-action="Register" class="inline-flex w-full items-center justify-center px-8 py-5 bg-foreground text-background font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-xl hover:-translate-y-1 transition-all">
-                            Restart Onboarding
-                        </a>
-                        <a asp-action="Login" class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">Return to Gateway</a>
-                    </div>
+                    <div class="h-1 bg-danger bg-opacity-10 rounded-pill mx-auto mt-4" style="width: 40px;"></div>
+                </div>
+                <div class="d-grid gap-3 pt-3">
+                    <a asp-action="Register" class="btn btn-primary-red py-3 rounded-4 fw-black text-uppercase tracking-widest text-xs">
+                        Restart Onboarding
+                    </a>
+                    <a asp-action="Login" class="btn btn-link text-muted-foreground text-decoration-none fw-black text-uppercase tracking-widest text-[10px] hover-text-primary">Return to Gateway</a>
                 </div>
             }
         </div>
     </div>
 
-    <div class="flex items-center justify-center gap-2 grayscale opacity-40">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-        <span class="text-[9px] font-black uppercase tracking-[0.2em]">Enthusiast Registry Service</span>
-        <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+    <div class="d-flex align-items-center justify-content-center gap-2 mt-5 opacity-40">
+        <span class="w-1 h-1 rounded-circle bg-primary"></span>
+        <span class="text-[9px] fw-black text-uppercase tracking-[0.2em] text-muted-foreground">Enthusiast Registry Service</span>
+        <span class="w-1 h-1 rounded-circle bg-primary"></span>
     </div>
 </div>

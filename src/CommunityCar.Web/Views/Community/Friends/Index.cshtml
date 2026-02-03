@@ -3,144 +3,144 @@
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["PageTitle"];
+    ViewData["Subtitle"] = Localizer["HeaderSubtitle"];
 }
 
-<div class="space-y-8 animate-in fade-in duration-700">
-    <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-            <h1 class="text-3xl font-black text-foreground tracking-tight">@Localizer["HeaderTitle"]</h1>
-            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@Localizer["HeaderSubtitle"]</p>
-        </div>
-        <div class="flex items-center gap-4">
-            <a asp-controller="Friends" asp-action="Suggestions" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
-                <i data-lucide="user-search" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
-                @Localizer["FindFriends"]
-            </a>
-        </div>
-    </div>
-
+<div class="animate-in fade-in duration-700">
+<div class="d-flex flex-column gap-5 animate-in fade-in duration-700">
     <!-- Metrics Radar -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-primary/20">
-            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-                <i data-lucide="users" class="w-5 h-5"></i>
+    <div class="row g-4">
+        <div class="col-6 col-md-3">
+            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.1s">
+                <div class="card-body p-4">
+                    <div class="w-10 h-10 rounded-4 bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                    </div>
+                    <div class="h3 fw-black text-foreground mb-1">@Model.TotalFriends</div>
+                    <div class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground">@Localizer["Friends"]</div>
+                </div>
             </div>
-            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.TotalFriends</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Friends"]</div>
         </div>
         
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-orange-500/20">
-            <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-                <i data-lucide="user-plus" class="w-5 h-5"></i>
+        <div class="col-6 col-md-3">
+            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.2s">
+                <div class="card-body p-4">
+                    <div class="w-10 h-10 rounded-4 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <i data-lucide="user-plus" class="w-5 h-5"></i>
+                    </div>
+                    <div class="h3 fw-black text-foreground mb-1">@Model.PendingRequests</div>
+                    <div class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground">@Localizer["FriendRequests"]</div>
+                </div>
             </div>
-            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.PendingRequests</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["FriendRequests"]</div>
         </div>
         
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-green-500/20">
-            <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-                <i data-lucide="user-check" class="w-5 h-5"></i>
+        <div class="col-6 col-md-3">
+            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.3s">
+                <div class="card-body p-4">
+                    <div class="w-10 h-10 rounded-4 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <i data-lucide="user-check" class="w-5 h-5"></i>
+                    </div>
+                    <div class="h3 fw-black text-foreground mb-1">@(Model.RecentFriends.Count())</div>
+                    <div class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground">@Localizer["RecentFriends"]</div>
+                </div>
             </div>
-            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@(Model.RecentFriends.Count())</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["RecentFriends"]</div>
         </div>
         
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-blue-500/20">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-                <i data-lucide="message-circle" class="w-5 h-5"></i>
+        <div class="col-6 col-md-3">
+            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.4s">
+                <div class="card-body p-4">
+                    <div class="w-10 h-10 rounded-4 bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <div class="h3 fw-black text-foreground mb-1">@(Model.Suggestions.Count())</div>
+                    <div class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground">@Localizer["Suggestions"]</div>
+                </div>
             </div>
-            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@(Model.Suggestions.Count())</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Suggestions"]</div>
         </div>
     </div>
 
     <!-- Quick Actions -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-        <div class="flex flex-col sm:flex-row gap-4">
-            <a asp-controller="Friends" asp-action="All" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group flex-1 justify-center">
-                <i data-lucide="users" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
-                @Localizer["AllFriends"]
-            </a>
-            <a asp-controller="Friends" asp-action="Requests" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-orange-500 hover:text-orange-600 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group flex-1 justify-center">
-                <i data-lucide="user-plus" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
-                @Localizer["FriendRequests"] (@Model.PendingRequests)
-            </a>
-            <a asp-controller="Friends" asp-action="Suggestions" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center gap-2.5 px-6 py-3 bg-background border border-border hover:border-blue-500 hover:text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 group flex-1 justify-center">
-                <i data-lucide="user-search" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
-                @Localizer["FindFriends"]
-            </a>
+    <div class="card card-premium shadow-lg">
+        <div class="card-body p-3">
+            <div class="row g-2">
+                <div class="col-12 col-md-4">
+                    <a asp-controller="Friends" asp-action="All" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn btn-outline-secondary w-100 py-3 rounded-4 fw-black text-uppercase tracking-widest text-[10px] shadow-sm d-flex align-items-center justify-content-center gap-2 group">
+                        <i data-lucide="users" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                        @Localizer["AllFriends"]
+                    </a>
+                </div>
+                <div class="col-12 col-md-4">
+                    <a asp-controller="Friends" asp-action="Requests" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn btn-outline-warning w-100 py-3 rounded-4 fw-black text-uppercase tracking-widest text-[10px] shadow-sm d-flex align-items-center justify-content-center gap-2 group">
+                        <i data-lucide="user-plus" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                        @Localizer["FriendRequests"] @(Model.PendingRequests > 0 ? $"({Model.PendingRequests})" : "")
+                    </a>
+                </div>
+                <div class="col-12 col-md-4">
+                    <a asp-controller="Friends" asp-action="Suggestions" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn btn-primary-red w-100 py-3 rounded-4 fw-black text-uppercase tracking-widest text-[10px] shadow-sm d-flex align-items-center justify-content-center gap-2 group">
+                        <i data-lucide="user-search" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                        @Localizer["FindFriends"]
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="friends-skeleton" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2">
-            <skeleton type="Card" />
-        </div>
-        <div class="space-y-6">
-            <skeleton type="Card" />
-            <skeleton type="Card" />
-        </div>
-    </div>
-
-    <div id="friends-content" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Recent Friends -->
-        <div class="lg:col-span-2">
-            <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
-                <div class="p-6">
-                    <h3 class="text-lg font-black text-foreground mb-6 flex items-center gap-2">
-                        <i data-lucide="users" class="w-5 h-5 text-primary"></i>
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <div class="card card-premium shadow-lg h-100 overflow-hidden">
+                <div class="card-header border-0 bg-transparent p-4 pb-0">
+                    <h6 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red">
+                        <i data-lucide="users" style="width: 18px;"></i>
                         @Localizer["RecentFriends"]
-                    </h3>
-                    
+                    </h6>
+                </div>
+                <div class="card-body p-4">
                     @if (Model.RecentFriends.Any())
                     {
-                        <div class="space-y-4">
+                        <div class="d-grid gap-3">
                             @foreach (var friend in Model.RecentFriends)
                             {
-                                <div class="flex items-center gap-4 p-4 bg-background/50 border border-border rounded-2xl group hover:bg-muted/40 transition-all hover:border-primary/20 hover:shadow-md">
-                                    <div class="relative">
-                                        @if (!string.IsNullOrEmpty(friend.ProfilePictureUrl))
-                                        {
-                                            <img src="@friend.ProfilePictureUrl" alt="@friend.FullName" class="w-12 h-12 rounded-full object-cover" />
-                                        }
-                                        else
-                                        {
-                                            <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-black text-xs shadow-lg">
-                                                @friend.FullName.Substring(0, Math.Min(2, friend.FullName.Length)).ToUpper()
+                                <div class="card card-premium p-3 border border-border border-opacity-50 hover-bg-muted-subtle transition-all">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="position-relative">
+                                            <div class="user-avatar-container p-0 m-0 shadow-sm border-0 flex-shrink-0" style="width: 48px; height: 48px;">
+                                                @if (!string.IsNullOrEmpty(friend.ProfilePictureUrl))
+                                                {
+                                                    <img src="@friend.ProfilePictureUrl" alt="@friend.FullName" class="rounded-circle object-fit-cover w-100 h-100" />
+                                                }
+                                                else
+                                                {
+                                                    <div class="w-100 h-100 rounded-circle bg-primary-red text-white d-flex align-items-center justify-content-center fw-black small shadow-sm">
+                                                        @friend.FullName.Substring(0, Math.Min(2, friend.FullName.Length)).ToUpper()
+                                                    </div>
+                                                }
                                             </div>
-                                        }
-                                        @if (friend.IsOnline)
-                                        {
-                                            <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-background"></span>
-                                        }
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="text-sm font-black text-foreground truncate">@friend.FullName</div>
-                                        <div class="text-xs text-muted-foreground">
-                                            @if (!string.IsNullOrEmpty(friend.City))
+                                            @if (friend.IsOnline)
                                             {
-                                                <span class="flex items-center gap-1">
-                                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
-                                                    @friend.City
-                                                </span>
-                                            }
-                                            @if (friend.MutualFriendsCount > 0)
-                                            {
-                                                <span class="mt-1 flex items-center gap-1">
-                                                    <i data-lucide="users" class="w-3 h-3"></i>
-                                                    @friend.MutualFriendsCount mutual friends
-                                                </span>
+                                                <span class="position-absolute bottom-0 end-0 bg-success border border-4 border-card rounded-circle shadow-sm" style="width: 14px; height: 14px;"></span>
                                             }
                                         </div>
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <a asp-controller="Chats" asp-action="Index" asp-route-user="@friend.UserId" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center gap-1 px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-bold transition-all active:scale-95">
-                                            <i data-lucide="message-circle" class="w-3 h-3"></i>
-                                        </a>
-                                        <button class="inline-flex items-center gap-1 px-3 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-bold transition-all active:scale-95" onclick="viewProfile('@friend.UserId')">
-                                            <i data-lucide="user" class="w-3 h-3"></i>
-                                        </button>
+                                        <div class="flex-grow-1 min-w-0">
+                                            <div class="fw-black text-foreground truncate">@friend.FullName</div>
+                                            <div class="text-[9px] fw-bold text-muted-foreground text-uppercase tracking-widest d-flex align-items-center gap-1 opacity-60">
+                                                @if (!string.IsNullOrEmpty(friend.City))
+                                                {
+                                                    <i data-lucide="map-pin" style="width: 10px;"></i> @friend.City
+                                                }
+                                                @if (friend.MutualFriendsCount > 0)
+                                                {
+                                                    <span class="ms-1 px-1 opacity-50">•</span> @friend.MutualFriendsCount @Localizer["Mutual"]
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <a asp-controller="Chats" asp-action="Index" asp-route-user="@friend.UserId" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn btn-primary-red btn-sm rounded-3 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px;">
+                                                <i data-lucide="message-circle" style="width: 16px;"></i>
+                                            </a>
+                                            <button class="btn btn-outline-secondary btn-sm rounded-3 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px;" onclick="viewProfile('@friend.UserId')">
+                                                <i data-lucide="user" style="width: 16px;"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             }
@@ -148,22 +148,23 @@
                         
                         @if (Model.TotalFriends > Model.RecentFriends.Count())
                         {
-                            <div class="mt-6 text-center">
-                                <a asp-controller="Friends" asp-action="All" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="text-primary hover:text-primary/80 text-sm font-medium transition-colors">
-                                    View all @Model.TotalFriends friends →
+                            <div class="mt-4 text-center pb-2">
+                                <a asp-controller="Friends" asp-action="All" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn btn-link p-0 text-decoration-none text-[10px] fw-black text-uppercase tracking-widest text-primary-red group">
+                                    @string.Format(Localizer["ViewAllCount"].Value, Model.TotalFriends) <i data-lucide="arrow-right" class="w-3.5 h-3.5 ms-1 transition-transform group-hover:translate-x-1"></i>
                                 </a>
                             </div>
                         }
                     }
                     else
                     {
-                        <div class="text-center py-12">
-                            <i data-lucide="users" class="w-16 h-16 text-muted-foreground mx-auto mb-4"></i>
-                            <h3 class="text-lg font-black text-foreground mb-2">No Friends Yet</h3>
-                            <p class="text-muted-foreground mb-6">Start connecting with other car enthusiasts!</p>
-                            <a asp-controller="Friends" asp-action="Suggestions" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center gap-2.5 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
-                                <i data-lucide="user-search" class="w-4 h-4"></i>
-                                Find Friends
+                        <div class="text-center py-5">
+                            <div class="w-20 h-20 bg-muted rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4">
+                                <i data-lucide="users" class="text-muted opacity-30" style="width: 40px; height: 40px;"></i>
+                            </div>
+                            <h5 class="h5 fw-black text-gradient mb-2">@Localizer["NoFriendsYet"]</h5>
+                            <p class="text-sm text-muted-foreground mb-5 opacity-75">@Localizer["StartConnecting"]</p>
+                            <a asp-controller="Friends" asp-action="Suggestions" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn btn-primary-red px-5 py-3 rounded-4 fw-black text-uppercase tracking-widest text-xs shadow-lg d-flex align-items-center gap-2 mx-auto" style="width: fit-content;">
+                                <i data-lucide="user-search" class="w-4 h-4"></i> @Localizer["FindFriends"]
                             </a>
                         </div>
                     }
@@ -171,53 +172,54 @@
             </div>
         </div>
 
-        <!-- Sidebar -->
-        <div class="space-y-6">
+        <div class="col-12 col-lg-4 d-flex flex-column gap-4">
             <!-- Friend Requests -->
             @if (Model.RecentRequests.Any())
             {
-                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
-                    <div class="p-6">
-                        <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
-                            <i data-lucide="user-plus" class="w-5 h-5 text-orange-500"></i>
-                            Friend Requests
-                        </h3>
-                        
-                        <div class="space-y-3">
+                <div class="card card-premium shadow-lg overflow-hidden">
+                    <div class="card-header border-0 bg-transparent p-4 pb-0">
+                        <h6 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-warning">
+                            <i data-lucide="user-plus" style="width: 18px;"></i>
+                            @Localizer["FriendRequests"]
+                        </h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-grid gap-2">
                             @foreach (var request in Model.RecentRequests)
                             {
-                                <div class="flex items-center gap-3 p-3 bg-background/50 border border-border rounded-xl hover:bg-muted/40 transition-all">
-                                    @if (!string.IsNullOrEmpty(request.ProfilePictureUrl))
-                                    {
-                                        <img src="@request.ProfilePictureUrl" alt="@request.FullName" class="w-10 h-10 rounded-full object-cover" />
-                                    }
-                                    else
-                                    {
-                                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-black text-xs">
-                                            @request.FullName.Substring(0, Math.Min(2, request.FullName.Length)).ToUpper()
-                                        </div>
-                                    }
-                                    <div class="flex-1 min-w-0">
-                                        <div class="text-sm font-medium text-foreground truncate">@request.FullName</div>
-                                        <div class="text-xs text-muted-foreground">@request.RequestDate.ToString("MMM dd")</div>
+                                <div class="d-flex align-items-center gap-3 p-2 bg-muted-subtle rounded-4 border border-border border-opacity-50">
+                                    <div class="user-avatar-container shadow-sm border-0 p-0 m-0" style="width: 36px; height: 36px;">
+                                        @if (!string.IsNullOrEmpty(request.ProfilePictureUrl))
+                                        {
+                                            <img src="@request.ProfilePictureUrl" alt="@request.FullName" class="rounded-circle object-fit-cover w-100 h-100" />
+                                        }
+                                        else
+                                        {
+                                            <div class="w-100 h-100 rounded-circle bg-primary-red text-white d-flex align-items-center justify-content-center fw-black x-small">
+                                                @request.FullName.Substring(0, Math.Min(2, request.FullName.Length)).ToUpper()
+                                            </div>
+                                        }
                                     </div>
-                                    <div class="flex gap-1">
-                                        <button class="inline-flex items-center justify-center w-7 h-7 bg-green-500 text-white hover:bg-green-600 rounded-lg text-xs transition-all active:scale-95" onclick="acceptRequest('@request.FriendshipId')">
-                                            <i data-lucide="check" class="w-3 h-3"></i>
+                                    <div class="flex-grow-1 min-w-0">
+                                        <div class="text-[11px] fw-black text-foreground truncate">@request.FullName</div>
+                                        <div class="text-[9px] fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60">@request.RequestDate.ToString("MMM dd")</div>
+                                    </div>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-success btn-sm rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 28px; height: 28px;" onclick="acceptRequest('@request.FriendshipId')">
+                                            <i data-lucide="check" style="width: 12px; height: 12px;"></i>
                                         </button>
-                                        <button class="inline-flex items-center justify-center w-7 h-7 bg-background border border-border hover:border-red-500 hover:text-red-600 rounded-lg text-xs transition-all active:scale-95" onclick="declineRequest('@request.FriendshipId')">
-                                            <i data-lucide="x" class="w-3 h-3"></i>
+                                        <button class="btn btn-outline-secondary btn-sm rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 28px; height: 28px;" onclick="declineRequest('@request.FriendshipId')">
+                                            <i data-lucide="x" style="width: 12px; height: 12px;"></i>
                                         </button>
                                     </div>
                                 </div>
                             }
                         </div>
-                        
                         @if (Model.PendingRequests > Model.RecentRequests.Count())
                         {
-                            <div class="mt-4 text-center">
-                                <a asp-controller="Friends" asp-action="Requests" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="text-primary hover:text-primary/80 text-sm font-medium transition-colors">
-                                    View all requests →
+                            <div class="mt-3 text-center">
+                                <a asp-controller="Friends" asp-action="Requests" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn btn-link p-0 text-decoration-none text-[8px] fw-black text-uppercase tracking-widest text-primary-red">
+                                    @Localizer["ViewAllRequests"] <i data-lucide="chevron-right" class="w-2.5 h-2.5 ms-1"></i>
                                 </a>
                             </div>
                         }
@@ -228,41 +230,43 @@
             <!-- Friend Suggestions -->
             @if (Model.Suggestions.Any())
             {
-                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
-                    <div class="p-6">
-                        <h3 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
-                            <i data-lucide="user-search" class="w-5 h-5 text-blue-500"></i>
-                            People You May Know
-                        </h3>
-                        
-                        <div class="space-y-3">
+                <div class="card card-premium shadow-lg overflow-hidden">
+                    <div class="card-header border-0 bg-transparent p-4 pb-0">
+                        <h6 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red">
+                            <i data-lucide="sparkles" style="width: 18px;"></i>
+                            @Localizer["Suggestions"]
+                        </h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="d-grid gap-2 mb-3">
                             @foreach (var suggestion in Model.Suggestions)
                             {
-                                <div class="flex items-center gap-3 p-3 bg-background/50 border border-border rounded-xl hover:bg-muted/40 transition-all">
-                                    @if (!string.IsNullOrEmpty(suggestion.ProfilePictureUrl))
-                                    {
-                                        <img src="@suggestion.ProfilePictureUrl" alt="@suggestion.FullName" class="w-10 h-10 rounded-full object-cover" />
-                                    }
-                                    else
-                                    {
-                                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-black text-xs">
-                                            @suggestion.FullName.Substring(0, Math.Min(2, suggestion.FullName.Length)).ToUpper()
-                                        </div>
-                                    }
-                                    <div class="flex-1 min-w-0">
-                                        <div class="text-sm font-medium text-foreground truncate">@suggestion.FullName</div>
-                                        <div class="text-xs text-muted-foreground truncate">@suggestion.SuggestionReason</div>
+                                <div class="d-flex align-items-center gap-3 p-2 bg-muted-subtle rounded-4 border border-border border-opacity-50">
+                                    <div class="user-avatar-container shadow-sm border-0 p-0 m-0" style="width: 36px; height: 36px;">
+                                        @if (!string.IsNullOrEmpty(suggestion.ProfilePictureUrl))
+                                        {
+                                            <img src="@suggestion.ProfilePictureUrl" alt="@suggestion.FullName" class="rounded-circle object-fit-cover w-100 h-100" />
+                                        }
+                                        else
+                                        {
+                                            <div class="w-100 h-100 rounded-circle bg-primary-red text-white d-flex align-items-center justify-content-center fw-black x-small">
+                                                @suggestion.FullName.Substring(0, Math.Min(2, suggestion.FullName.Length)).ToUpper()
+                                            </div>
+                                        }
                                     </div>
-                                    <button class="inline-flex items-center justify-center w-7 h-7 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-xs transition-all active:scale-95" onclick="sendFriendRequest('@suggestion.UserId')">
-                                        <i data-lucide="user-plus" class="w-3 h-3"></i>
+                                    <div class="flex-grow-1 min-w-0">
+                                        <div class="text-[11px] fw-black text-foreground truncate">@suggestion.FullName</div>
+                                        <div class="text-[9px] fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60 truncate">@suggestion.SuggestionReason</div>
+                                    </div>
+                                    <button class="btn btn-primary-red btn-sm rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 28px; height: 28px;" onclick="sendFriendRequest('@suggestion.UserId')">
+                                        <i data-lucide="user-plus" style="width: 12px; height: 12px;"></i>
                                     </button>
                                 </div>
                             }
                         </div>
-                        
-                        <div class="mt-4 text-center">
-                            <a asp-controller="Friends" asp-action="Suggestions" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="text-primary hover:text-primary/80 text-sm font-medium transition-colors">
-                                See more suggestions →
+                        <div class="text-center">
+                            <a asp-controller="Friends" asp-action="Suggestions" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn btn-link p-0 text-decoration-none text-[8px] fw-black text-uppercase tracking-widest text-primary-red">
+                                @Localizer["SeeMoreSuggestions"] <i data-lucide="chevron-right" class="w-2.5 h-2.5 ms-1"></i>
                             </a>
                         </div>
                     </div>
@@ -273,12 +277,7 @@
 </div>
 
 @section Scripts {
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Skeleton.initPageLoad('friends-skeleton', 'friends-content');
-        });
-
         async function sendFriendRequest(receiverId) {
             try {
                 const response = await fetch('/friends/send-request', {
@@ -292,13 +291,13 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    window.notify.success(result.message);
-                    location.reload();
+                    window.notify?.success(result.message);
+                    setTimeout(() => location.reload(), 1000);
                 } else {
-                    window.notify.error(result.message);
+                    window.notify?.error(result.message);
                 }
             } catch (error) {
-                window.notify.error('An error occurred while sending the friend request.');
+                console.error(error);
             }
         }
 
@@ -315,13 +314,11 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    window.notify.success(result.message);
-                    location.reload();
-                } else {
-                    window.notify.error(result.message);
+                    window.notify?.success(result.message);
+                    setTimeout(() => location.reload(), 1000);
                 }
             } catch (error) {
-                window.notify.error('An error occurred while accepting the friend request.');
+                console.error(error);
             }
         }
 
@@ -338,19 +335,19 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    window.notify.success(result.message);
-                    location.reload();
-                } else {
-                    window.notify.error(result.message);
+                    window.notify?.success(result.message);
+                    setTimeout(() => location.reload(), 1000);
                 }
             } catch (error) {
-                window.notify.error('An error occurred while declining the friend request.');
+                console.error(error);
             }
         }
 
         function viewProfile(userId) {
             window.location.href = `/${'@System.Globalization.CultureInfo.CurrentCulture.Name'}/profile/${userId}`;
         }
+        
+        lucide.createIcons();
     </script>
 }
 @section SidebarRight {

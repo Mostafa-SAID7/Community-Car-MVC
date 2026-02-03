@@ -22,6 +22,9 @@ public class EventVM
     public int? MaxAttendees { get; set; }
     public bool RequiresApproval { get; set; }
     
+    // Interactions
+    public int ShareCount { get; set; }
+    
     // Pricing
     public decimal? TicketPrice { get; set; }
     public string? TicketInfo { get; set; }

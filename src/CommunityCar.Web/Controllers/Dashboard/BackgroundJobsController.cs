@@ -1,5 +1,5 @@
-using CommunityCar.Application.Services.BackgroundJobs;
-using CommunityCar.Application.Common.Interfaces.Services.BackgroundJobs;
+using CommunityCar.Application.Services.Dashboard.BackgroundJobs;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.BackgroundJobs;
 using CommunityCar.Application.Features.Dashboard.ViewModels.BackgroundJobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

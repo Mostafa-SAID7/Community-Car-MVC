@@ -203,16 +203,65 @@
                 </div>
             }
 
+            <!-- Rating Section -->
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div class="bg-background/50 rounded-2xl p-6 mb-8">
+                    <h4 class="text-lg font-black text-foreground mb-4 flex items-center gap-2">
+                        <i data-lucide="star" class="w-5 h-5 text-yellow-500"></i>
+                        @SharedLocalizer["RateThisGuide"]
+                    </h4>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-1" id="ratingStars">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <button onclick="rateGuide('@Model.Guide.Id', @i)" 
+                                        class="rating-star p-1 rounded-lg hover:bg-yellow-500/10 transition-all @(Model.Guide.UserRating.HasValue && i <= Model.Guide.UserRating ? "text-yellow-500" : "text-muted-foreground hover:text-yellow-500")"
+                                        data-rating="@i">
+                                    <i data-lucide="star" class="w-6 h-6 @(Model.Guide.UserRating.HasValue && i <= Model.Guide.UserRating ? "fill-current" : "")"></i>
+                                </button>
+                            }
+                        </div>
+                        <div class="text-sm text-muted-foreground">
+                            @if (Model.Guide.UserRating.HasValue)
+                            {
+                                <span>@SharedLocalizer["YourRating"]: <strong class="text-yellow-500">@Model.Guide.UserRating.Value.ToString("F1")</strong></span>
+                            }
+                            else
+                            {
+                                <span>@SharedLocalizer["ClickToRate"]</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
             <!-- Actions -->
             <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-border/30">
                 <div class="flex items-center gap-4">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <button onclick="toggleBookmark('@Model.Guide.Id', this)" class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 @(Model.Guide.IsBookmarked ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-600" : "")" id="bookmarkBtn">
-                            <i data-lucide="bookmark" class="w-4 h-4 @(Model.Guide.IsBookmarked ? "fill-current" : "")"></i>
-                            @(Model.Guide.IsBookmarked ? SharedLocalizer["UnbookmarkGuide"] : SharedLocalizer["BookmarkGuide"])
+                        <form class="bookmark-form" data-guide-id="@Model.Guide.Id" action="@Url.Action(Model.Guide.IsBookmarked ? "Unbookmark" : "Bookmark", "Guides", new { id = Model.Guide.Id })" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="bookmark-btn inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-amber-500 hover:text-amber-500 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95 @(Model.Guide.IsBookmarked ? "text-amber-500 bg-amber-500/5 border-amber-500/20" : "")">
+                                <i data-lucide="bookmark" class="w-4 h-4 @(Model.Guide.IsBookmarked ? "fill-current" : "")"></i>
+                                <span class="bookmark-text">@(Model.Guide.IsBookmarked ? SharedLocalizer["UnbookmarkGuide"] : SharedLocalizer["BookmarkGuide"])</span>
+                            </button>
+                        </form>
+                        
+                        <button onclick="shareGuide()" class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-blue-500 hover:text-blue-500 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                            <i data-lucide="share-2" class="w-4 h-4"></i>
+                            @SharedLocalizer["ShareGuide"]
                         </button>
-                        <button onclick="shareGuide('@Model.Guide.Id')" class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
+                            <i data-lucide="bookmark" class="w-4 h-4"></i>
+                            @SharedLocalizer["BookmarkGuide"]
+                        </a>
+                        
+                        <button onclick="shareGuide()" class="inline-flex items-center gap-2 px-4 py-2 bg-background border border-border hover:border-blue-500 hover:text-blue-500 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">
                             <i data-lucide="share-2" class="w-4 h-4"></i>
                             @SharedLocalizer["ShareGuide"]
                         </button>

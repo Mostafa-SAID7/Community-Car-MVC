@@ -6,248 +6,294 @@
 @inject IStringLocalizer<AccountResource> AccountLocalizer
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
-    ViewData["Title"] = AccountLocalizer["SignUp"];
-    ViewData["FullWidth"] = true; // Use wide container
+    ViewData["Title"] = "Identity Genesis";
     Layout = "_AuthLayout";
 }
 
-@section Styles {
-    @* Register specific styles consolidated in app.css *@
-}
-
-<div class="login-grid">
-    <!-- Right Side: Form -->
-    <div class="p-8 sm:p-10 flex flex-col justify-center">
-        <div class="space-y-6 max-w-md mx-auto w-full">
-            <!-- Logo and Header -->
-            <div class="text-center">
-                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground mb-4 shadow-lg ring-4 ring-primary/5">
-                    <i data-lucide="user-plus" class="w-7 h-7"></i>
-                </div>
-                <h1 class="text-2xl font-bold text-foreground mb-1 tracking-tight">@AccountLocalizer["CreateAccount"]</h1>
-                <p class="text-xs text-muted-foreground">@AccountLocalizer["JoinCommunity"]</p>
-            </div>
-
-            <!-- Social Registration -->
-            <div class="grid grid-cols-2 gap-3">
-                <button type="button" id="google-register-btn" class="flex items-center justify-center gap-2 px-4 py-2.5 bg-background/50 border border-border/50 hover:bg-accent rounded-lg text-[10px] font-semibold transition-all">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#4285F4" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                    @AccountLocalizer["ContinueWithGoogle"]
-                </button>
-                <button type="button" id="facebook-register-btn" class="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#1877F2] border border-transparent hover:bg-[#1877F2]/90 text-white rounded-lg text-[10px] font-semibold transition-all">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    @AccountLocalizer["ContinueWithFacebook"]
-                </button>
-            </div>
-
-            <div class="relative">
-                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-border/50"></div></div>
-                <div class="relative flex justify-center text-[10px] uppercase tracking-widest font-bold"><span class="bg-transparent px-4 text-muted-foreground/60">@AccountLocalizer["Or"]</span></div>
-            </div>
-
-            <!-- Form -->
-            <form asp-action="Register" method="post" class="space-y-4">
-                @Html.AntiForgeryToken()
-                <div asp-validation-summary="ModelOnly" class="p-2 rounded-lg bg-destructive/10 text-destructive text-[10px]"></div>
-
-                <div class="space-y-1">
-                    <label asp-for="FullName" class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">@AccountLocalizer["FullName"]</label>
-                    <input asp-for="FullName" class="w-full px-3 py-2 bg-background/40 border border-border/50 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/40" placeholder="John Doe" />
-                </div>
-
-                <div class="space-y-1">
-                    <label asp-for="Email" class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">@AccountLocalizer["Email"]</label>
-                    <input asp-for="Email" class="w-full px-3 py-2 bg-background/40 border border-border/50 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/40" placeholder="john@example.com" />
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="space-y-1">
-                        <label asp-for="Password" class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">@AccountLocalizer["Password"]</label>
-                        <input asp-for="Password" type="password" class="w-full px-3 py-2.5 bg-background/40 border border-border/50 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/40" 
-                               placeholder="••••••••" 
-                               data-password-strength="true"
-                               data-strength-label="@AccountLocalizer["PasswordStrength"]"
-                               data-vweak="@AccountLocalizer["VeryWeak"]"
-                               data-weak="@AccountLocalizer["Weak"]"
-                               data-fair="@AccountLocalizer["Fair"]"
-                               data-good="@AccountLocalizer["Good"]"
-                               data-strong="@AccountLocalizer["Strong"]"
-                               data-req-length="@AccountLocalizer["LengthRequirement"]"
-                               data-req-lower="@AccountLocalizer["LowercaseRequirement"]"
-                               data-req-upper="@AccountLocalizer["UppercaseRequirement"]"
-                               data-req-number="@AccountLocalizer["NumberRequirement"]"
-                               data-req-special="@AccountLocalizer["SpecialRequirement"]" />
-                    </div>
-                    <div class="space-y-1">
-                        <label asp-for="ConfirmPassword" class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest pl-1">@AccountLocalizer["Confirm"]</label>
-                        <input asp-for="ConfirmPassword" type="password" class="w-full px-3 py-2.5 bg-background/40 border border-border/50 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/40" placeholder="••••••••" />
-                    </div>
-                </div>
-
-                <button type="submit" id="register-button" class="w-full bg-primary text-primary-foreground hover:bg-primary/95 font-bold py-3 px-4 rounded-xl transition-all shadow-lg hover:shadow-primary/10 btn-glow mt-2 text-sm flex items-center justify-center gap-2">
-                    <span id="button-text">@AccountLocalizer["CreateAccount"]</span>
-                    <span id="button-spinner" class="hidden animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
-                </button>
-            </form>
-
-            <div class="text-center pt-2">
-                <p class="text-xs text-muted-foreground">
-                    @AccountLocalizer["AlreadyHaveAccount"] 
-                    <a asp-action="Login" class="text-primary hover:text-primary/80 transition-colors font-bold underline underline-offset-4">@AccountLocalizer["SignIn"]</a>
-                </p>
+<div class="container min-vh-100 d-flex flex-column justify-content-center py-5">
+    <div class="text-center mb-5">
+        <div class="position-relative d-inline-flex align-items-center justify-content-center mb-4">
+            <div class="position-absolute inset-0 bg-primary opacity-25 rounded-circle blur-xl animate-pulse"></div>
+            <div class="position-relative w-20 h-20 rounded-4 bg-card border border-border d-flex align-items-center justify-content-center text-primary shadow-lg" style="width: 80px; height: 80px;">
+                <i data-lucide="user-plus" class="w-10 h-10" style="width: 40px; height: 40px;"></i>
             </div>
         </div>
+        
+        <div class="mb-2">
+            <h1 class="display-5 fw-black text-gradient tracking-tight">Identity Genesis</h1>
+            <p class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75">Neural profile initialization</p>
+        </div>
+    </div>
+
+    <div class="card card-premium shadow-lg mx-auto" style="max-width: 500px;">
+        <div class="card-body p-4 p-md-5">
+            <div class="d-grid gap-4">
+                <div class="mt-2 text-center">
+                    <div class="position-relative d-flex align-items-center justify-content-center mb-4">
+                        <hr class="w-100 border-border opacity-25">
+                        <span class="position-absolute bg-card px-3 text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground">Quick Genesis Protocols</span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <button type="button" id="google-register-btn" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 d-flex align-items-center justify-content-center gap-2 text-sm transition-all border-border-subtle bg-muted-subtle hover-bg-muted">
+                                <i data-lucide="chrome" class="w-4 h-4"></i>
+                                <span>Neural</span>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" id="facebook-register-btn" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 d-flex align-items-center justify-content-center gap-2 text-sm transition-all border-border-subtle bg-muted-subtle hover-bg-muted">
+                                <i data-lucide="facebook" class="w-4 h-4"></i>
+                                <span>Social</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <form asp-action="Register" method="post" id="register-form" class="d-grid gap-4">
+                    @Html.AntiForgeryToken()
+                    
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger border-0 bg-danger-subtle text-danger py-3">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                                <span class="text-sm fw-bold">Genesis Protocol Failed</span>
+                            </div>
+                            <div class="text-xs opacity-75">
+                                @Html.ValidationSummary(false)
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Identity Designation</label>
+                        <div class="position-relative">
+                            <i data-lucide="user" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
+                            <input asp-for="FullName" 
+                                   id="register-fullname" 
+                                   data-testid="register-fullname" 
+                                   class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
+                                   placeholder="Neo Anderson" 
+                                   autocomplete="name" />
+                        </div>
+                        <span asp-validation-for="FullName" class="text-danger text-xs mt-1 d-block"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Neural Link Address</label>
+                        <div class="position-relative">
+                            <i data-lucide="mail" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
+                            <input asp-for="Email" 
+                                   id="register-email" 
+                                   data-testid="register-email" 
+                                   type="email"
+                                   class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
+                                   placeholder="neo@matrix.net" 
+                                   autocomplete="email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger text-xs mt-1 d-block"></span>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Access Cipher</label>
+                                <div class="position-relative">
+                                    <i data-lucide="lock" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
+                                    <input asp-for="Password" 
+                                           id="register-password" 
+                                           data-testid="register-password" 
+                                           type="password" 
+                                           class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
+                                           placeholder="••••••••" 
+                                           autocomplete="new-password" />
+                                </div>
+                                <span asp-validation-for="Password" class="text-danger text-xs mt-1 d-block"></span>
+                                
+                                <div class="password-strength mt-3">
+                                    <div class="progress h-1 border-0 bg-muted rounded-pill overflow-hidden">
+                                        <div id="password-strength-fill" class="progress-bar transition-all duration-300 rounded-pill" role="progressbar"></div>
+                                    </div>
+                                    <p class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground mt-2 mb-0" id="password-strength-text">Cipher Strength</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Cipher Verification</label>
+                                <div class="position-relative">
+                                    <i data-lucide="shield-check" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
+                                    <input asp-for="ConfirmPassword" 
+                                           id="register-confirm" 
+                                           data-testid="register-confirm" 
+                                           type="password" 
+                                           class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
+                                           placeholder="••••••••" 
+                                           autocomplete="new-password" />
+                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger text-xs mt-1 d-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" 
+                            id="register-button" 
+                            data-testid="register-submit" 
+                            class="btn btn-primary-red py-3 rounded-4 mt-2">
+                        <span id="button-text">Initialize Identity</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="text-sm text-muted-foreground mb-0">
+            Identity already exists? 
+            <a asp-action="Login" 
+               id="signin-link" 
+               data-testid="signin-link" 
+               class="text-primary-red fw-bold text-decoration-none hover-underline d-inline-flex align-items-center gap-2">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                Return to Gateway
+            </a>
+        </p>
+    </div>
+</div>
+
+
+    <div class="text-center mt-6">
+        <p class="text-sm text-muted-foreground mb-2">
+            Identity already exists?
+        </p>
+        <a asp-action="Login" 
+           id="signin-link" 
+           data-testid="signin-link" 
+           class="text-primary hover:text-primary/80 font-medium inline-flex items-center gap-2 transition-all">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i> 
+            Return to Gateway
+        </a>
     </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const carImg = document.getElementById('car-animation');
-            const smokeContainer = document.getElementById('smoke-container');
-            const frames = Array.from({ length: 21 }, (_, i) => `/images/login_frames/frame_${i.toString().padStart(2, '0')}.png`);
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('register-form');
+            const submitButton = document.getElementById('register-button');
+            const buttonText = document.getElementById('button-text');
+            const passwordInput = document.getElementById('register-password');
+            const strengthFill = document.getElementById('password-strength-fill');
+            const strengthText = document.getElementById('password-strength-text');
             
-            let currentFrameIdx = 0;
-            const frameDelay = 120; // Faster delay for the 21-frame progression
-
-            frames.forEach(src => {
-                const img = new Image();
-                img.src = src;
+            // Password strength checker
+            function checkPasswordStrength(password) {
+                let strength = 0;
+                let feedback = '@AccountLocalizer["WeakPassword"]';
+                
+                if (password.length >= 8) strength++;
+                if (/[a-z]/.test(password)) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+                
+                const strengthBar = strengthFill.parentElement;
+                strengthBar.className = 'password-strength-bar';
+                
+                switch (strength) {
+                    case 0:
+                    case 1:
+                        strengthBar.classList.add('password-strength-weak');
+                        feedback = '@AccountLocalizer["WeakPassword"]';
+                        break;
+                    case 2:
+                        strengthBar.classList.add('password-strength-fair');
+                        feedback = '@AccountLocalizer["FairPassword"]';
+                        break;
+                    case 3:
+                        strengthBar.classList.add('password-strength-good');
+                        feedback = '@AccountLocalizer["GoodPassword"]';
+                        break;
+                    case 4:
+                    case 5:
+                        strengthBar.classList.add('password-strength-strong');
+                        feedback = '@AccountLocalizer["StrongPassword"]';
+                        break;
+                }
+                
+                strengthText.textContent = feedback;
+            }
+            
+            // Password input event listener
+            passwordInput?.addEventListener('input', function() {
+                checkPasswordStrength(this.value);
             });
-
-            function startAnimation() {
-                if (currentFrameIdx < frames.length - 1) {
-                    currentFrameIdx++;
-                    carImg.src = frames[currentFrameIdx];
-                    setTimeout(startAnimation, frameDelay);
-                } else {
-                    smokeContainer.style.display = 'block';
-                    setInterval(createSmokeParticle, 200);
-                }
+            
+            // Form submission
+            form?.addEventListener('submit', function() {
+                submitButton.disabled = true;
+                submitButton.classList.add('auth-loading');
+                buttonText.textContent = '@AccountLocalizer["CreatingAccount"]...';
+            });
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
             }
-
-            function createSmokeParticle() {
-                const particle = document.createElement('div');
-                particle.className = 'smoke-particle';
-                const size = Math.random() * 25 + 15;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${Math.random() * 25}px`;
-                particle.style.bottom = `${Math.random() * 25}px`;
-                const duration = Math.random() * 1.5 + 2;
-                particle.style.animationDuration = `${duration}s`;
-                smokeContainer.appendChild(particle);
-                setTimeout(() => particle.remove(), duration * 1000);
+            
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('theme-toggle');
+            const lightIcon = themeToggle?.querySelector('.theme-icon-light');
+            const darkIcon = themeToggle?.querySelector('.theme-icon-dark');
+            
+            // Get current theme from localStorage or default to light
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            
+            // Update icon visibility based on current theme
+            if (currentTheme === 'dark' && lightIcon && darkIcon) {
+                lightIcon.style.display = 'none';
+                darkIcon.style.display = 'block';
             }
-
-            setTimeout(startAnimation, 1000);
-
-            // Handle register button loading
-            const registerForm = document.querySelector('form[asp-action="Register"]');
-            if (registerForm) {
-                registerForm.addEventListener('submit', () => {
-                    const btn = document.getElementById('register-button');
-                    const text = document.getElementById('button-text');
-                    const spinner = document.getElementById('button-spinner');
-                    
-                    if (btn && text && spinner) {
-                        btn.disabled = true;
-                        text.classList.add('opacity-50');
-                        spinner.classList.remove('hidden');
-                    }
-                });
-            }
-
-            // --- OAuth Configuration ---
-            const googleClientId = "@(Configuration["Authentication:OAuth:Google:ClientId"] ?? Configuration["SocialAuth:Google:ClientId"])";
-            const facebookAppId = "@(Configuration["Authentication:OAuth:Facebook:AppId"] ?? Configuration["SocialAuth:Facebook:AppId"])";
-
-            // 1. Google Integration
-            function handleGoogleSignIn(response) {
-                if (response.credential) {
-                    submitOAuth("google", { idToken: response.credential });
-                }
-            }
-
-            // Load Google SDK
-            const gScript = document.createElement('script');
-            gScript.src = 'https://accounts.google.com/gsi/client';
-            gScript.async = true;
-            gScript.defer = true;
-            gScript.onload = () => {
-                google.accounts.id.initialize({
-                    client_id: googleClientId,
-                    callback: handleGoogleSignIn
-                });
+            
+            themeToggle?.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 
-                const googleBtn = document.getElementById('google-register-btn');
-                if (googleBtn) {
-                    googleBtn.addEventListener('click', () => {
-                        google.accounts.id.prompt(); // Show One Tap if possible
-                    });
-                }
-            };
-            document.head.appendChild(gScript);
-
-            // 2. Facebook Integration
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId      : facebookAppId,
-                    cookie     : true,
-                    xfbml      : true,
-                    version    : 'v18.0'
-                });
-            };
-
-            // Load Facebook SDK
-            (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "https://connect.facebook.net/en_US/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-
-            const facebookBtn = document.getElementById('facebook-register-btn');
-            if (facebookBtn) {
-                facebookBtn.addEventListener('click', () => {
-                    FB.login(function(response) {
-                        if (response.authResponse) {
-                            submitOAuth("facebook", { accessToken: response.authResponse.accessToken });
-                        }
-                    }, {scope: 'public_profile,email'});
-                });
-            }
-
-            // 3. Common OAuth Submitter
-            async function submitOAuth(provider, data) {
-                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-                const endpoint = provider === "google" ? "/google-signin" : "/facebook-signin";
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
                 
-                try {
-                    const response = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'RequestVerificationToken': token
-                        },
-                        body: new URLSearchParams(data)
-                    });
-
-                    const result = await response.json();
-                    if (result.success) {
-                        window.location.href = "/";
-                    } else {
-                        console.error("OAuth Error:", result.message || "External registration failed.");
-                        // You can add a toast notification here if available
-                        alert(result.message || "External registration failed.");
-                    }
-                } catch (error) {
-                    console.error("OAuth Error:", error);
-                    alert("An error occurred during external registration.");
+                // Toggle icon visibility
+                if (newTheme === 'dark' && lightIcon && darkIcon) {
+                    lightIcon.style.display = 'none';
+                    darkIcon.style.display = 'block';
+                } else if (lightIcon && darkIcon) {
+                    lightIcon.style.display = 'block';
+                    darkIcon.style.display = 'none';
                 }
-            }
+            });
+            
+            // Language toggle functionality
+            const languageToggle = document.getElementById('language-toggle');
+            const supportedLanguages = ['en-US', 'ar-EG'];
+            
+            languageToggle?.addEventListener('click', function() {
+                const currentLang = document.documentElement.lang || 'en-US';
+                const currentIndex = supportedLanguages.indexOf(currentLang);
+                const nextIndex = (currentIndex + 1) % supportedLanguages.length;
+                const newLang = supportedLanguages[nextIndex];
+                
+                // Store language preference
+                localStorage.setItem('language', newLang);
+                
+                // Redirect to current page with new language
+                const url = new URL(window.location);
+                url.searchParams.set('culture', newLang);
+                window.location.href = url.toString();
+            });
         });
     </script>
 }

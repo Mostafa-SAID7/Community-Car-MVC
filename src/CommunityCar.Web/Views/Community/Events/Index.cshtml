@@ -9,251 +9,291 @@
     ViewData["Title"] = Localizer["Events"];
 }
 
-<div class="space-y-8 animate-in fade-in duration-700">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="d-flex flex-column gap-5 animate-in fade-in duration-700">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4">
         <div>
-            <h1 class="text-3xl font-black text-foreground tracking-tight">@Localizer["CommunityEvents"]</h1>
-            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@Localizer["EventsSubtitle"]</p>
+            <h1 class="display-5 fw-black text-gradient tracking-tight mb-2">@Localizer["CommunityEvents"]</h1>
+            <p class="text-xs fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60">@Localizer["EventsSubtitle"]</p>
         </div>
-        <a asp-controller="Events" asp-action="Create" asp-route-culture="@currentCulture" class="inline-flex items-center gap-2.5 px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group">
-            <i data-lucide="plus-circle" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
-            @Localizer["CreateEvent"]
-        </a>
+        <div>
+            <a asp-controller="Events" asp-action="Create" asp-route-culture="@currentCulture" class="btn btn-primary-red px-4 py-3 rounded-4 fw-black text-uppercase tracking-widest text-[10px] shadow-lg d-flex align-items-center gap-2 group">
+                <i data-lucide="plus-circle" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                @Localizer["CreateEvent"]
+            </a>
+        </div>
     </div>
 
     <!-- Metrics Radar -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-primary/20">
-            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-                <i data-lucide="calendar" class="w-5 h-5"></i>
+    <div class="row g-4 mb-2">
+        <div class="col-6 col-lg-3">
+            <div class="card card-premium shadow-lg h-100 group">
+                <div class="card-body p-4">
+                    <div class="w-10 h-10 rounded-4 bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <i data-lucide="calendar" class="w-5 h-5"></i>
+                    </div>
+                    <div class="h3 fw-black text-foreground mb-1">@Model.Stats.TotalEvents</div>
+                    <div class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground">@Localizer["TotalEvents"]</div>
+                </div>
             </div>
-            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Stats.TotalEvents</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalEvents"]</div>
         </div>
         
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-green-500/10">
-            <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-                <i data-lucide="calendar-check" class="w-5 h-5"></i>
+        <div class="col-6 col-lg-3">
+            <div class="card card-premium shadow-lg h-100 group">
+                <div class="card-body p-4">
+                    <div class="w-10 h-10 rounded-4 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                    </div>
+                    <div class="h3 fw-black text-foreground mb-1">@Model.Stats.UpcomingEvents</div>
+                    <div class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground">@Localizer["Upcoming"]</div>
+                </div>
             </div>
-            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Stats.UpcomingEvents</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["Upcoming"]</div>
         </div>
         
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-orange-500/10">
-            <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-                <i data-lucide="calendar-clock" class="w-5 h-5"></i>
+        <div class="col-6 col-lg-3">
+            <div class="card card-premium shadow-lg h-100 group">
+                <div class="card-body p-4">
+                    <div class="w-10 h-10 rounded-4 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <i data-lucide="calendar-clock" class="w-5 h-5"></i>
+                    </div>
+                    <div class="h3 fw-black text-foreground mb-1">@Model.Stats.ActiveEvents</div>
+                    <div class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground">@Localizer["ActiveNow"]</div>
+                </div>
             </div>
-            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Stats.ActiveEvents</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["ActiveNow"]</div>
         </div>
         
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-6 shadow-lg group transition-all hover:border-blue-500/10">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all">
-                <i data-lucide="users" class="w-5 h-5"></i>
+        <div class="col-6 col-lg-3">
+            <div class="card card-premium shadow-lg h-100 group">
+                <div class="card-body p-4">
+                    <div class="w-10 h-10 rounded-4 bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                    </div>
+                    <div class="h3 fw-black text-foreground mb-1">@Model.Stats.TotalAttendees</div>
+                    <div class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground">@Localizer["TotalAttendees"]</div>
+                </div>
             </div>
-            <div class="text-2xl font-black text-foreground mb-1 tabular-nums">@Model.Stats.TotalAttendees</div>
-            <div class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalAttendees"]</div>
         </div>
     </div>
 
     <!-- Discovery Toolbar -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl space-y-6">
-        <form method="get">
-        <div class="flex flex-col lg:flex-row gap-4 items-center">
-            <div class="relative flex-1 w-full group">
-                <input type="text" name="SearchTerm" value="@Model.SearchRequest.SearchTerm" 
-                       placeholder="@Localizer["SearchTerm"]" 
-                       class="w-full bg-background border border-border pl-12 pr-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors"></i>
-            </div>
-            
-            <div class="flex gap-2 w-full lg:w-auto">
-                <input type="text" name="Location" value="@Model.SearchRequest.Location" 
-                       placeholder="@Localizer["Location"]" 
-                       class="flex-1 lg:w-48 bg-background border border-border px-4 py-3 rounded-xl text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none">
-                <button type="submit" class="h-[42px] px-6 py-2 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95">
-                    <i data-lucide="search" class="w-4 h-4"></i>
-                    @Localizer["Search"]
-                </button>
-                <a asp-controller="Events" asp-action="Index" asp-route-culture="@currentCulture" class="h-[42px] px-6 py-2 rounded-xl bg-background border border-border hover:border-primary hover:text-primary text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/5 transition-all flex items-center justify-center gap-2 active:scale-95">@Localizer["Clear"]</a>
-            </div>
+    <div class="card card-premium shadow-lg">
+        <div class="card-body p-4 p-md-5">
+            <form method="get" class="d-grid gap-4">
+                <div class="row g-3 align-items-center">
+                    <div class="col-12 col-lg-5">
+                        <div class="position-relative group">
+                            <i data-lucide="search" class="position-absolute start-3 top-50 translate-middle-y w-4 h-4 text-muted-foreground group-focus-within:text-primary-red transition-colors"></i>
+                            <input type="text" name="SearchTerm" value="@Model.SearchRequest.SearchTerm" 
+                                   placeholder="@Localizer["SearchTerm"]" 
+                                   class="form-control bg-muted-subtle border-border ps-5 py-2.5 rounded-4 text-sm focus-ring-primary" />
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-8 col-lg-4">
+                        <div class="position-relative group">
+                            <i data-lucide="map-pin" class="position-absolute start-3 top-50 translate-middle-y w-4 h-4 text-muted-foreground group-focus-within:text-primary-red transition-colors"></i>
+                            <input type="text" name="Location" value="@Model.SearchRequest.Location" 
+                                   placeholder="@Localizer["Location"]" 
+                                   class="form-control bg-muted-subtle border-border ps-5 py-2.5 rounded-4 text-sm focus-ring-primary" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4 col-lg-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary-red flex-grow-1 py-2.5 rounded-4 fw-black text-uppercase tracking-widest text-[10px] shadow-lg d-flex align-items-center justify-content-center gap-2 active:scale-95">
+                            <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                            @Localizer["Search"]
+                        </button>
+                        <a asp-controller="Events" asp-action="Index" asp-route-culture="@currentCulture" class="btn btn-outline-secondary px-3 py-2.5 rounded-4 fw-black text-uppercase tracking-widest text-[10px] d-flex align-items-center justify-content-center active:scale-95">@Localizer["Clear"]</a>
+                    </div>
+                </div>
+                
+                <div class="d-flex flex-wrap gap-4 pt-2">
+                    <div class="form-check custom-check">
+                        <input type="checkbox" name="IsUpcomingOnly" value="true" @(Model.SearchRequest.IsUpcomingOnly == true ? "checked" : "") class="form-check-input" id="upcomingOnly">
+                        <label class="form-check-label text-xs fw-bold text-uppercase tracking-widest opacity-75" for="upcomingOnly">@Localizer["UpcomingOnly"]</label>
+                    </div>
+                    <div class="form-check custom-check">
+                        <input type="checkbox" name="IsFreeOnly" value="true" @(Model.SearchRequest.IsFreeOnly == true ? "checked" : "") class="form-check-input" id="freeOnly">
+                        <label class="form-check-label text-xs fw-bold text-uppercase tracking-widest opacity-75" for="freeOnly">@Localizer["FreeEvents"]</label>
+                    </div>
+                    <div class="form-check custom-check">
+                        <input type="checkbox" name="HasAvailableSpots" value="true" @(Model.SearchRequest.HasAvailableSpots == true ? "checked" : "") class="form-check-input" id="availableSpots">
+                        <label class="form-check-label text-xs fw-bold text-uppercase tracking-widest opacity-75" for="availableSpots">@Localizer["AvailableSpots"]</label>
+                    </div>
+                </div>
+            </form>
         </div>
-        
-        <div class="flex flex-wrap gap-4">
-            <label class="flex items-center gap-2 text-sm font-medium">
-                <input type="checkbox" name="IsUpcomingOnly" value="true" @(Model.SearchRequest.IsUpcomingOnly == true ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
-                @Localizer["UpcomingOnly"]
-            </label>
-            <label class="flex items-center gap-2 text-sm font-medium">
-                <input type="checkbox" name="IsFreeOnly" value="true" @(Model.SearchRequest.IsFreeOnly == true ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
-                @Localizer["FreeEvents"]
-            </label>
-            <label class="flex items-center gap-2 text-sm font-medium">
-                <input type="checkbox" name="HasAvailableSpots" value="true" @(Model.SearchRequest.HasAvailableSpots == true ? "checked" : "") class="rounded border-border text-primary focus:ring-primary">
-                @Localizer["AvailableSpots"]
-            </label>
-        </div>
-    </form>
     </div>
 
     <!-- Events Interface -->
-    <div id="eventsContainer" class="min-h-[400px]">
-        <div id="events-skeleton" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div id="eventsContainer" class="min-vh-50">
+        <div id="events-skeleton" class="d-none row g-4 mb-5">
             @for (int i = 0; i < 6; i++)
             {
-                <skeleton type="Card" />
+                <div class="col-12 col-md-6 col-lg-4">
+                    <skeleton type="Card" />
+                </div>
             }
         </div>
         <div id="events-list-container">
 
-    @if (Model.SearchResponse.Items.Any())
-    {
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            @foreach (var eventItem in Model.SearchResponse.Items)
+            @if (Model.SearchResponse.Items.Any())
             {
-                <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group">
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="flex-1">
+                <div class="row g-4 mb-5">
+                    @foreach (var eventItem in Model.SearchResponse.Items)
+                    {
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card card-premium shadow-lg h-100 group transition-all hover-translate-y-2 overflow-hidden">
+                                <div class="card-body p-4">
+                                    <div class="d-flex align-items-start justify-content-between mb-3">
+                                        <div class="flex-grow-1 min-w-0 pe-3">
+                                            @{
+                                                var displayTitle = isArabic && !string.IsNullOrEmpty(eventItem.TitleAr) ? eventItem.TitleAr : eventItem.Title;
+                                                var displayDescription = isArabic && !string.IsNullOrEmpty(eventItem.DescriptionAr) ? eventItem.DescriptionAr : eventItem.Description;
+                                            }
+                                            <h3 class="h6 fw-black text-truncate mb-1">
+                                                <a asp-controller="Events" asp-action="Details" asp-route-id="@eventItem.Id" asp-route-culture="@currentCulture" class="text-decoration-none text-foreground hover-text-primary-red transition-colors">@displayTitle</a>
+                                            </h3>
+                                            <p class="text-[11px] text-muted-foreground line-clamp-2 mb-0 opacity-75 fw-medium">@displayDescription</p>
+                                        </div>
+                                        @if (eventItem.IsFree)
+                                        {
+                                            <span class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-20 px-2 py-1 text-[9px] fw-black text-uppercase tracking-widest">@Localizer["Free"]</span>
+                                        }
+                                        else if (eventItem.TicketPrice.HasValue)
+                                        {
+                                            <span class="badge rounded-pill bg-primary-red bg-opacity-10 text-primary-red border border-primary-red border-opacity-20 px-2 py-1 text-[9px] fw-black text-uppercase tracking-widest">$@eventItem.TicketPrice.Value</span>
+                                        }
+                                    </div>
+
+                                    <div class="d-flex flex-column gap-2 mb-4 pt-2">
+                                        <div class="d-flex align-items-center gap-2 text-[10px] fw-bold text-muted-foreground">
+                                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-primary-red"></i>
+                                            <span>@eventItem.StartTime.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 text-[10px] fw-bold text-muted-foreground">
+                                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-primary-red"></i>
+                                            <span class="text-truncate">@eventItem.Location</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 text-[10px] fw-bold text-muted-foreground">
+                                            <i data-lucide="users" class="w-3.5 h-3.5 text-primary-red"></i>
+                                            <span>@string.Format(Localizer["AttendeesFormat"].Value, eventItem.AttendeeCount)</span>
+                                            @if (eventItem.MaxAttendees.HasValue)
+                                            {
+                                                <span class="opacity-50">/ @eventItem.MaxAttendees.Value</span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    @if (eventItem.Tags.Any())
+                                    {
+                                        <div class="d-flex flex-wrap gap-1 mb-4">
+                                            @foreach (var tag in eventItem.Tags.Take(3))
+                                            {
+                                                <span class="badge bg-muted-subtle text-muted-foreground rounded-pill px-2 py-1 text-[9px] fw-bold">#@tag</span>
+                                            }
+                                        </div>
+                                    }
+
+                                    <div class="d-flex align-items-center justify-content-between pt-3 border-top border-border border-opacity-50 mt-auto">
+                                        <div>
+                                            @if (eventItem.IsUpcoming)
+                                            {
+                                                <span class="text-[9px] fw-black text-uppercase tracking-widest text-success d-flex align-items-center gap-1">
+                                                    <span class="w-1.5 h-1.5 rounded-circle bg-success"></span> @Localizer["Upcoming"]
+                                                </span>
+                                            }
+                                            else if (eventItem.IsActive)
+                                            {
+                                                <span class="text-[9px] fw-black text-uppercase tracking-widest text-warning d-flex align-items-center gap-1 animate-pulse">
+                                                    <span class="w-1.5 h-1.5 rounded-circle bg-warning"></span> @Localizer["Active"]
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground d-flex align-items-center gap-1 opacity-50">
+                                                    <span class="w-1.5 h-1.5 rounded-circle bg-muted"></span> @Localizer["Past"]
+                                                </span>
+                                            }
+                                        </div>
+                                        <a asp-controller="Events" asp-action="Details" asp-route-id="@eventItem.Id" asp-route-culture="@currentCulture" class="btn btn-link p-0 text-decoration-none text-[10px] fw-black text-uppercase tracking-widest text-primary-red group/btn">
+                                            @Localizer["ViewDetails"] <i data-lucide="arrow-right" class="w-3 h-3 ms-1 transition-transform group-hover/btn:translate-x-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Pagination -->
+                @if (Model.SearchResponse.TotalCount > Model.SearchRequest.PageSize)
+                {
+                    <div class="d-flex justify-content-center pt-4">
+                        <nav aria-label="Events pagination">
+                            <ul class="pagination pagination-sm gap-2 align-items-center border-0">
                                 @{
-                                    var displayTitle = isArabic && !string.IsNullOrEmpty(eventItem.TitleAr) ? eventItem.TitleAr : eventItem.Title;
-                                    var displayDescription = isArabic && !string.IsNullOrEmpty(eventItem.DescriptionAr) ? eventItem.DescriptionAr : eventItem.Description;
+                                    var totalPages = (int)Math.Ceiling((double)Model.SearchResponse.TotalCount / Model.SearchRequest.PageSize);
+                                    var currentPage = Model.SearchRequest.Page;
                                 }
-                                <h3 class="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                                    <a asp-controller="Events" asp-action="Details" asp-route-id="@eventItem.Id" asp-route-culture="@currentCulture">@displayTitle</a>
-                                </h3>
-                                <p class="text-sm text-muted-foreground line-clamp-2 mb-3">@displayDescription</p>
-                            </div>
-                            @if (eventItem.IsFree)
-                            {
-                                <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-xs font-medium">@Localizer["Free"]</span>
-                            }
-                            else if (eventItem.TicketPrice.HasValue)
-                            {
-                                <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 px-2 py-1 rounded-full text-xs font-medium">$@eventItem.TicketPrice.Value</span>
-                            }
+                                
+                                <li class="page-item @(currentPage <= 1 ? "disabled" : "")">
+                                    <a class="page-link rounded-4 border-border bg-card shadow-sm px-3 py-2 text-[10px] fw-black text-uppercase tracking-widest transition-all @(currentPage > 1 ? "hover-bg-primary-red text-foreground" : "text-muted opacity-50")" 
+                                       asp-controller="Events" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-pageSize="@Model.SearchRequest.PageSize" asp-route-searchTerm="@Model.SearchRequest.SearchTerm" asp-route-location="@Model.SearchRequest.Location" asp-route-culture="@currentCulture">
+                                        @Localizer["Previous"]
+                                    </a>
+                                </li>
+                                
+                                <li class="px-3">
+                                    <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-75">
+                                        @currentPage <span class="mx-1">/</span> @totalPages
+                                    </span>
+                                </li>
+                                
+                                <li class="page-item @(currentPage >= totalPages ? "disabled" : "")">
+                                    <a class="page-link rounded-4 border-border bg-card shadow-sm px-3 py-2 text-[10px] fw-black text-uppercase tracking-widest transition-all @(currentPage < totalPages ? "hover-bg-primary-red text-foreground" : "text-muted opacity-50")" 
+                                       asp-controller="Events" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-pageSize="@Model.SearchRequest.PageSize" asp-route-searchTerm="@Model.SearchRequest.SearchTerm" asp-route-location="@Model.SearchRequest.Location" asp-route-culture="@currentCulture">
+                                        @Localizer["Next"]
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="card card-premium shadow-lg text-center p-5">
+                    <div class="card-body">
+                        <div class="w-16 h-16 rounded-circle bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center mx-auto mb-4">
+                            <i data-lucide="calendar-x" class="w-8 h-8"></i>
                         </div>
-
-                        <div class="space-y-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                                <i data-lucide="calendar" class="w-4 h-4"></i>
-                                <span>@eventItem.StartTime.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                                <i data-lucide="map-pin" class="w-4 h-4"></i>
-                                <span>@eventItem.Location</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                                <i data-lucide="users" class="w-4 h-4"></i>
-                                <span>@string.Format(Localizer["AttendeesFormat"].Value, eventItem.AttendeeCount)</span>
-                                @if (eventItem.MaxAttendees.HasValue)
-                                {
-                                    <span>@string.Format(Localizer["MaxAttendeesFormat"].Value, eventItem.MaxAttendees.Value)</span>
-                                }
-                            </div>
-                        </div>
-
-                        @if (eventItem.Tags.Any())
-                        {
-                            <div class="flex flex-wrap gap-1 mb-4">
-                                @foreach (var tag in eventItem.Tags.Take(3))
-                                {
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">#@tag</span>
-                                }
-                                @if (eventItem.Tags.Count() > 3)
-                                {
-                                    <span class="text-xs text-muted-foreground">@string.Format(Localizer["MoreTagsFormat"].Value, (eventItem.Tags.Count() - 3))</span>
-                                }
-                            </div>
-                        }
-
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                @if (eventItem.IsUpcoming)
-                                {
-                                    <span class="bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-xs font-medium">@Localizer["Upcoming"]</span>
-                                }
-                                else if (eventItem.IsActive)
-                                {
-                                    <span class="bg-orange-500/10 text-orange-600 dark:text-orange-400 px-2 py-1 rounded-full text-xs font-medium">@Localizer["Active"]</span>
-                                }
-                                else
-                                {
-                                    <span class="bg-gray-500/10 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-full text-xs font-medium">@Localizer["Past"]</span>
-                                }
-                            </div>
-                                <a asp-controller="Events" asp-action="Details" asp-route-id="@eventItem.Id" asp-route-culture="@currentCulture" class="inline-flex items-center justify-center px-4 py-2 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/view">
-                                    <i data-lucide="external-link" class="w-3.5 h-3.5 mr-2 group-hover/view:scale-110 transition-transform"></i>
-                                    @Localizer["ViewDetails"]
-                                </a>
+                        <h3 class="h4 fw-black text-gradient mb-2">@Localizer["NoEventsFound"]</h3>
+                        <p class="text-sm text-muted-foreground mb-5 opacity-75">
+                            @if (!string.IsNullOrEmpty(Model.SearchRequest.SearchTerm) || !string.IsNullOrEmpty(Model.SearchRequest.Location))
+                            {
+                                <span>@Localizer["NoEventsMatch"]</span>
+                            }
+                            else
+                            {
+                                <span>@Localizer["NoEventsScheduled"]</span>
+                            }
+                        </p>
+                        <div class="d-flex gap-3 justify-content-center">
+                            <a asp-controller="Events" asp-action="Create" asp-route-culture="@currentCulture" class="btn btn-primary-red px-5 py-3 rounded-4 fw-black text-uppercase tracking-widest text-xs shadow-lg d-flex align-items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                @Localizer["CreateEvent"]
+                            </a>
+                            @if (!string.IsNullOrEmpty(Model.SearchRequest.SearchTerm) || !string.IsNullOrEmpty(Model.SearchRequest.Location))
+                            {
+                                <a asp-controller="Events" asp-action="Index" asp-route-culture="@currentCulture" class="btn btn-outline-secondary px-5 py-3 rounded-4 fw-black text-uppercase tracking-widest text-xs">@Localizer["ClearFilters"]</a>
+                            }
                         </div>
                     </div>
                 </div>
             }
         </div>
-
-        <!-- Pagination -->
-        @if (Model.SearchResponse.TotalCount > Model.SearchRequest.PageSize)
-        {
-            <div class="flex justify-center">
-                <div class="flex items-center gap-2">
-                    @{
-                        var totalPages = (int)Math.Ceiling((double)Model.SearchResponse.TotalCount / Model.SearchRequest.PageSize);
-                        var currentPage = Model.SearchRequest.Page;
-                    }
-                    
-                    @if (currentPage > 1)
-                    {
-                        <a asp-controller="Events" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-pageSize="@Model.SearchRequest.PageSize" asp-route-searchTerm="@Model.SearchRequest.SearchTerm" asp-route-location="@Model.SearchRequest.Location" asp-route-culture="@currentCulture"
-                           class="inline-flex items-center justify-center px-4 py-2 bg-background border border-border/50 hover:bg-muted/10 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95">
-                            @Localizer["Previous"]
-                        </a>
-                    }
-                    
-                    <span class="text-sm text-muted-foreground px-4">
-                        @string.Format(Localizer["PaginationInfoFormat"].Value, currentPage, totalPages, Model.SearchResponse.TotalCount)
-                    </span>
-                    
-                    @if (currentPage < totalPages)
-                    {
-                        <a asp-controller="Events" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-pageSize="@Model.SearchRequest.PageSize" asp-route-searchTerm="@Model.SearchRequest.SearchTerm" asp-route-location="@Model.SearchRequest.Location" asp-route-culture="@currentCulture"
-                           class="inline-flex items-center justify-center px-4 py-2 bg-background border border-border/50 hover:bg-muted/10 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95">
-                            @Localizer["Next"]
-                        </a>
-                    }
-                </div>
-            </div>
-        }
-    }
-    else
-    {
-        <div class="bg-card/50 backdrop-blur-md border border-border rounded-2xl p-8 text-center">
-            <div class="bg-primary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <i data-lucide="calendar-x" class="w-8 h-8 text-primary"></i>
-            </div>
-            <h3 class="text-lg font-black text-foreground mb-2">@Localizer["NoEventsFound"]</h3>
-            <p class="text-sm text-muted-foreground mb-4">
-                @if (!string.IsNullOrEmpty(Model.SearchRequest.SearchTerm) || !string.IsNullOrEmpty(Model.SearchRequest.Location))
-                {
-                    <span>@Localizer["NoEventsMatch"]</span>
-                }
-                else
-                {
-                    <span>@Localizer["NoEventsScheduled"]</span>
-                }
-            </p>
-            <div class="flex gap-2 justify-center">
-                <a asp-controller="Events" asp-action="Create" asp-route-culture="@currentCulture" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                    @Localizer["CreateEvent"]
-                </a>
-                @if (!string.IsNullOrEmpty(Model.SearchRequest.SearchTerm) || !string.IsNullOrEmpty(Model.SearchRequest.Location))
-                {
-                    <a asp-controller="Events" asp-action="Index" asp-route-culture="@currentCulture" class="inline-flex items-center gap-2.5 px-6 py-2.5 bg-background border border-border hover:border-primary hover:text-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-black/5 active:scale-95">@Localizer["ClearFilters"]</a>
-                }
-            </div>
-        </div>
-    }
+    </div>
+</div>
     </div>
 </div>
 

@@ -5,7 +5,7 @@
     ViewData["Title"] = $"{Model.Title} - {Localizer["BroadcastArchive"]}";
 }
 
-<div class="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
+<div class="mx-auto space-y-8 animate-in fade-in duration-700">
     <!-- Skeleton Loader -->
     <div id="loading-skeleton" class="hidden space-y-8">
         <div class="space-y-4">
@@ -52,21 +52,35 @@
                 <div class="flex items-center justify-between pt-6 border-t border-border/20">
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-2xl bg-muted border border-border flex items-center justify-center overflow-hidden shadow-inner group/avatar">
-                             <i data-lucide="user" class="w-7 h-7 text-muted-foreground opacity-30 group-hover/avatar:scale-110 transition-transform"></i>
+                             @if (!string.IsNullOrEmpty(Model.AuthorProfilePicture))
+                             {
+                                 <img src="@Model.AuthorProfilePicture" class="w-full h-full object-cover group-hover/avatar:scale-110 transition-transform" alt="@Model.AuthorName" />
+                             }
+                             else
+                             {
+                                 <i data-lucide="user" class="w-7 h-7 text-muted-foreground opacity-30 group-hover/avatar:scale-110 transition-transform"></i>
+                             }
                         </div>
                         <div>
-                             <span class="block text-sm font-black text-foreground underline decoration-primary decoration-4 underline-offset-4 decoration-transparent hover:decoration-primary transition-all cursor-pointer">@(Model.AuthorId == Guid.Empty ? Localizer["ProtocolGhost"].Value : Localizer["VerifiedEnthusiast"].Value)</span>
-                             <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["SystemContributor"]</span>
+                             @if (Model.AuthorId != Guid.Empty)
+                             {
+                                 <a href="@Url.Action("Index", "Profile", new { area = "", culture = System.Globalization.CultureInfo.CurrentCulture.Name, id = Model.AuthorId })" class="block text-sm font-black text-foreground underline decoration-primary decoration-4 underline-offset-4 decoration-transparent hover:decoration-primary transition-all">@Model.AuthorName</a>
+                             }
+                             else
+                             {
+                                 <span class="block text-sm font-black text-foreground underline decoration-primary decoration-4 underline-offset-4 decoration-transparent hover:decoration-primary transition-all cursor-pointer">@Localizer["ProtocolGhost"]</span>
+                             }
+                             <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["SystemContributor"] • @Localizer["VerifiedEnthusiast"]</span>
                         </div>
                     </div>
                     
                     <div class="hidden sm:flex gap-8">
                         <div class="text-right">
-                             <span class="block text-xl font-black text-foreground leading-none tracking-tighter">04.2k</span>
+                             <span class="block text-xl font-black text-foreground leading-none tracking-tighter like-count">@(Model.LikeCount > 0 ? Model.LikeCount.ToString("N0") : "0")</span>
                              <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["SignalPulse"]</span>
                         </div>
                         <div class="text-right">
-                             <span class="block text-xl font-black text-foreground leading-none tracking-tighter">128</span>
+                             <span class="block text-xl font-black text-foreground leading-none tracking-tighter">@(Model.CommentCount > 0 ? Model.CommentCount.ToString("N0") : "0")</span>
                              <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Interactions"]</span>
                         </div>
                     </div>
@@ -83,31 +97,106 @@
             <!-- Interaction Control Strip -->
             <div class="p-8 md:px-14 flex items-center justify-between bg-card/40">
                 <div class="flex items-center gap-8">
-                    <button class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-red-500 transition-all">
-                         <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-red-500/10">
-                            <i data-lucide="heart" class="w-4 h-4 group-hover/tool:fill-current"></i>
-                         </div>
-                         @Localizer["OscillateLiked"]
-                    </button>
-                    <button class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-all">
-                         <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-blue-500/10">
-                            <i data-lucide="message-circle" class="w-4 h-4"></i>
-                         </div>
-                         @Localizer["JoinStream"]
-                    </button>
+                    <!-- Like Button -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-controller="Posts" asp-action="Like" method="post" class="like-form" data-post-id="@Model.Id">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-red-500 transition-all like-btn">
+                                <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-red-500/10">
+                                    <i data-lucide="heart" class="w-4 h-4 group-hover/tool:fill-current"></i>
+                                </div>
+                                @Localizer["OscillateLiked"]
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-red-500 transition-all" title="Login to like">
+                            <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-red-500/10">
+                                <i data-lucide="heart" class="w-4 h-4 group-hover/tool:fill-current"></i>
+                            </div>
+                            @Localizer["OscillateLiked"]
+                        </a>
+                    }
+
+                    <!-- Join Stream (Comment) Button -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button onclick="scrollToCommentForm()" class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-all">
+                            <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-blue-500/10">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                            </div>
+                            @Localizer["JoinStream"]
+                        </button>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-all" title="Login to comment">
+                            <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-blue-500/10">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                            </div>
+                            @Localizer["JoinStream"]
+                        </a>
+                    }
                 </div>
 
                 <div class="flex gap-3">
-                    <button class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90">
+                    <!-- Share Button -->
+                    <button onclick="sharePost()" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90 share-btn" title="Share post">
                         <i data-lucide="share-2" class="w-5 h-5"></i>
                     </button>
-                    <button class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90">
-                        <i data-lucide="bookmark" class="w-5 h-5"></i>
-                    </button>
+
+                    <!-- Bookmark Button -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-controller="Posts" asp-action="Bookmark" method="post" class="bookmark-form" data-post-id="@Model.Id">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90 bookmark-btn" title="Bookmark post">
+                                <i data-lucide="bookmark" class="w-5 h-5"></i>
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90" title="Login to bookmark">
+                            <i data-lucide="bookmark" class="w-5 h-5"></i>
+                        </a>
+                    }
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Comments Section -->
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="bg-card/40 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] shadow-2xl overflow-hidden">
+            <div class="p-8 md:p-14">
+                <h3 class="text-2xl font-black text-foreground tracking-tighter leading-none mb-6">@Localizer["JoinStream"]</h3>
+                
+                <form asp-controller="Posts" asp-action="Comment" method="post" class="comment-form" data-post-id="@Model.Id">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <textarea name="content" rows="4" class="w-full px-4 py-3 bg-muted/20 border border-border/50 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="@Localizer["ShareYourThoughts"]" required></textarea>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all active:scale-95 font-medium comment-submit-btn">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                                @Localizer["PostComment"]
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
 
     <!-- System Metadata Trace -->
     <div class="p-8 bg-muted/20 border border-border/40 rounded-[2.5rem] grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -135,9 +224,409 @@
 </div>
 
 @section Scripts {
+    <script src="~/lib/signalr/signalr.min.js"></script>
     <script>
+        let broadcastConnection;
+        
         document.addEventListener('DOMContentLoaded', function() {
             Skeleton.initPageLoad('loading-skeleton', 'main-content');
+            initializePostInteractions();
+            initializeBroadcastHub();
+        });
+
+        function initializeBroadcastHub() {
+            // Initialize SignalR connection to BroadcastHub
+            broadcastConnection = new signalR.HubConnectionBuilder()
+                .withUrl("/hubs/broadcast")
+                .withAutomaticReconnect()
+                .build();
+
+            // Handle connection events
+            broadcastConnection.start().then(function () {
+                console.log('BroadcastHub connected');
+                
+                // Join group broadcast if this post belongs to a group
+                @if (Model.GroupId != null && Model.GroupId != Guid.Empty)
+                {
+                    <text>
+                    broadcastConnection.invoke("JoinGroupBroadcast", "@Model.GroupId");
+                    </text>
+                }
+                
+                // Request accessible posts
+                broadcastConnection.invoke("GetAccessiblePosts", 1, 10);
+                
+            }).catch(function (err) {
+                console.error('BroadcastHub connection error:', err);
+            });
+
+            // Handle real-time post interactions
+            broadcastConnection.on("PostInteractionBroadcast", function (data) {
+                if (data.PostId === "@Model.Id") {
+                    handleRealTimeInteraction(data);
+                }
+            });
+
+            // Handle new post broadcasts
+            broadcastConnection.on("NewPostBroadcast", function (postData) {
+                showNewPostNotification(postData);
+            });
+
+            // Handle group access responses
+            broadcastConnection.on("GroupPostAccessGranted", function (groupId) {
+                showToast('Access granted to group posts!', 'success');
+            });
+
+            broadcastConnection.on("GroupPostAccessDenied", function (groupId, reason) {
+                showToast(`Access denied: ${reason}`, 'error');
+            });
+
+            broadcastConnection.on("GroupPostAccessRequested", function (groupId) {
+                showToast('Join request sent to group admins', 'info');
+            });
+
+            // Handle accessible posts updates
+            broadcastConnection.on("AccessiblePostsUpdate", function (posts) {
+                updateAccessiblePostsList(posts);
+            });
+        }
+
+        function handleRealTimeInteraction(data) {
+            switch (data.InteractionType) {
+                case 'like':
+                    updateLikeCount(data.Data.likeCount, data.Data.liked);
+                    break;
+                case 'comment':
+                    updateCommentCount(data.Data.commentCount);
+                    break;
+                case 'bookmark':
+                    // Handle bookmark updates if needed
+                    break;
+            }
+        }
+
+        function updateLikeCount(newCount, isLiked) {
+            const likeCountElement = document.querySelector('.like-count');
+            if (likeCountElement) {
+                likeCountElement.textContent = newCount || '0';
+                
+                // Add visual feedback for real-time updates
+                likeCountElement.classList.add('animate-pulse');
+                setTimeout(() => likeCountElement.classList.remove('animate-pulse'), 1000);
+            }
+        }
+
+        function updateCommentCount(newCount) {
+            // Update comment count display if it exists
+            const commentElements = document.querySelectorAll('[data-comment-count]');
+            commentElements.forEach(element => {
+                element.textContent = newCount || '0';
+                element.classList.add('animate-pulse');
+                setTimeout(() => element.classList.remove('animate-pulse'), 1000);
+            });
+        }
+
+        function showNewPostNotification(postData) {
+            // Show a subtle notification for new posts in the same group
+            @if (Model.GroupId != null && Model.GroupId != Guid.Empty)
+            {
+                <text>
+                if (postData.GroupId === "@Model.GroupId" && postData.Id !== "@Model.Id") {
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed top-4 right-4 bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg z-50 animate-in slide-in-from-right duration-300';
+                    notification.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="zap" class="w-4 h-4"></i>
+                            <span class="text-sm font-medium">New post by ${postData.AuthorName}</span>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(notification);
+                    
+                    // Auto-remove after 5 seconds
+                    setTimeout(() => {
+                        notification.classList.add('animate-out', 'slide-out-to-right');
+                        setTimeout(() => document.body.removeChild(notification), 300);
+                    }, 5000);
+                }
+                </text>
+            }
+        }
+
+        function updateAccessiblePostsList(posts) {
+            // This could be used to update a sidebar or feed of accessible posts
+            console.log('Accessible posts updated:', posts);
+        }
+
+        function initializePostInteractions() {
+            // Handle like form submissions
+            document.querySelectorAll('.like-form').forEach(form => {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    await handleLike(this);
+                });
+            });
+
+            // Handle bookmark form submissions
+            document.querySelectorAll('.bookmark-form').forEach(form => {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    await handleBookmark(this);
+                });
+            });
+
+            // Handle comment form submissions
+            document.querySelectorAll('.comment-form').forEach(form => {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    await handleComment(this);
+                });
+            });
+        }
+
+        async function handleLike(form) {
+            const button = form.querySelector('.like-btn');
+            const postId = form.dataset.postId;
+            
+            // Disable button during request
+            button.disabled = true;
+            button.style.opacity = '0.6';
+            
+            try {
+                const formData = new FormData(form);
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Update button appearance
+                    const icon = button.querySelector('i');
+                    const container = button.querySelector('.w-10');
+                    
+                    if (data.liked) {
+                        button.classList.add('text-red-500');
+                        container.classList.add('bg-red-500/10');
+                        icon.classList.add('fill-current');
+                        showToast('Post liked!', 'success');
+                    } else {
+                        button.classList.remove('text-red-500');
+                        container.classList.remove('bg-red-500/10');
+                        icon.classList.remove('fill-current');
+                        showToast('Like removed!', 'success');
+                    }
+                    
+                    // Update like count locally
+                    if (data.likeCount !== undefined) {
+                        updateLikeCount(data.likeCount, data.liked);
+                    }
+                    
+                    // Broadcast the interaction via SignalR
+                    if (broadcastConnection && broadcastConnection.state === signalR.HubConnectionState.Connected) {
+                        broadcastConnection.invoke("BroadcastPostInteraction", postId, "like", {
+                            liked: data.liked,
+                            likeCount: data.likeCount
+                        });
+                    }
+                } else {
+                    showToast('Failed to update like. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Like error:', error);
+                showToast('An error occurred. Please try again.', 'error');
+            } finally {
+                // Re-enable button
+                button.disabled = false;
+                button.style.opacity = '1';
+            }
+        }
+
+        async function handleBookmark(form) {
+            const button = form.querySelector('.bookmark-btn');
+            const postId = form.dataset.postId;
+            
+            button.disabled = true;
+            button.style.opacity = '0.6';
+            
+            try {
+                const formData = new FormData(form);
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Update button appearance
+                    const icon = button.querySelector('i');
+                    if (data.bookmarked) {
+                        button.classList.add('text-amber-500', 'bg-amber-500/5', 'border-amber-500/20');
+                        icon.classList.add('fill-current');
+                        showToast('Post bookmarked!', 'success');
+                    } else {
+                        button.classList.remove('text-amber-500', 'bg-amber-500/5', 'border-amber-500/20');
+                        icon.classList.remove('fill-current');
+                        showToast('Bookmark removed!', 'success');
+                    }
+                    
+                    // Broadcast the interaction via SignalR
+                    if (broadcastConnection && broadcastConnection.state === signalR.HubConnectionState.Connected) {
+                        broadcastConnection.invoke("BroadcastPostInteraction", postId, "bookmark", {
+                            bookmarked: data.bookmarked
+                        });
+                    }
+                } else {
+                    showToast('Failed to update bookmark. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Bookmark error:', error);
+                showToast('An error occurred. Please try again.', 'error');
+            } finally {
+                button.disabled = false;
+                button.style.opacity = '1';
+            }
+        }
+
+        async function handleComment(form) {
+            const button = form.querySelector('.comment-submit-btn');
+            const textarea = form.querySelector('textarea[name="content"]');
+            const postId = form.dataset.postId;
+            
+            if (!textarea.value.trim()) {
+                showToast('Please enter a comment.', 'error');
+                return;
+            }
+            
+            button.disabled = true;
+            button.style.opacity = '0.6';
+            
+            try {
+                const formData = new FormData(form);
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Clear the textarea
+                    textarea.value = '';
+                    
+                    // Show success message
+                    showToast('Comment posted successfully!', 'success');
+                    
+                    // Update comment count if provided
+                    if (data.commentCount !== undefined) {
+                        updateCommentCount(data.commentCount);
+                    }
+                    
+                    // Broadcast the interaction via SignalR
+                    if (broadcastConnection && broadcastConnection.state === signalR.HubConnectionState.Connected) {
+                        broadcastConnection.invoke("BroadcastPostInteraction", postId, "comment", {
+                            commentCount: data.commentCount,
+                            newComment: data.comment
+                        });
+                    }
+                    
+                    // Optionally reload to show new comment
+                    if (data.reload) {
+                        setTimeout(() => window.location.reload(), 1000);
+                    }
+                } else {
+                    showToast('Failed to post comment. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Comment error:', error);
+                showToast('An error occurred. Please try again.', 'error');
+            } finally {
+                button.disabled = false;
+                button.style.opacity = '1';
+            }
+        }
+
+        function scrollToCommentForm() {
+            const commentForm = document.querySelector('.comment-form');
+            if (commentForm) {
+                commentForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const textarea = commentForm.querySelector('textarea[name="content"]');
+                if (textarea) {
+                    setTimeout(() => textarea.focus(), 500);
+                }
+            } else {
+                // If not authenticated, redirect to login
+                window.location.href = '@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })';
+            }
+        }
+
+        function sharePost() {
+            const title = document.title;
+            const url = window.location.href;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: url
+                }).then(() => {
+                    showToast('Post shared successfully!', 'success');
+                }).catch((error) => {
+                    console.log('Error sharing:', error);
+                    fallbackShare(url);
+                });
+            } else {
+                fallbackShare(url);
+            }
+        }
+
+        function fallbackShare(url) {
+            // Copy to clipboard as fallback
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('Link copied to clipboard!', 'success');
+            }).catch(() => {
+                // Final fallback - show URL in prompt
+                prompt('Copy this link to share:', url);
+            });
+        }
+
+        function showToast(message, type = 'info') {
+            // Simple toast notification
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                'bg-blue-500 text-white'
+            }`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => toast.style.transform = 'translateX(0)', 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (broadcastConnection) {
+                broadcastConnection.stop();
+            }
         });
     </script>
 }

@@ -2,8 +2,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
-using CommunityCar.Application.Common.Interfaces.Services.Caching;
-using CommunityCar.Application.Services.Caching;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
+using CommunityCar.Application.Services.Dashboard.Caching;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Caching.SqlServer;
 

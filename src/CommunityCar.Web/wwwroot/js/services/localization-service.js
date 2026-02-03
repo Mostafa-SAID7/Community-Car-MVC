@@ -112,10 +112,20 @@
                 document.body.classList.remove('rtl');
             }
 
-            if (CC.Config.debug) console.log('Cookie set, reloading page...');
+            if (CC.Config.debug) console.log('Cookie set, updating URL...');
 
-            // Reload to apply server-side localization
-            window.location.reload();
+            // Update URL if it contains a culture segment
+            const currentPath = window.location.pathname;
+            const segments = currentPath.split('/');
+            const supportedCultures = ['en-US', 'ar-EG', 'ar-AE', 'ar-SA', 'en', 'ar'];
+
+            if (segments.length > 1 && (supportedCultures.includes(segments[1]) || supportedCultures.map(c => c.toLowerCase()).includes(segments[1].toLowerCase()))) {
+                segments[1] = newLang;
+                window.location.href = segments.join('/') + window.location.search + window.location.hash;
+            } else {
+                // Fallback to reload if no culture segment found
+                window.location.reload();
+            }
         }
     }
 

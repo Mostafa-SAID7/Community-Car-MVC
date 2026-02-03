@@ -1,123 +1,127 @@
 @using CommunityCar.Domain.Constants
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<!-- Left Sidebar -->
-<aside id="main-sidebar"
-    class="sidebar fixed left-4 rtl:left-auto rtl:right-4 top-20 bottom-20 w-16 xl:w-56 bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl z-50 -translate-x-[calc(100%+2rem)] rtl:translate-x-[calc(100%+2rem)] md:translate-x-0 rtl:md:translate-x-0 transition-all duration-300 ease-in-out sidebar-expanded">
-    
-    <!-- Sidebar backdrop for mobile -->
-    <div id="main-sidebar-backdrop" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden md:hidden"></div>
-    
-    <div class="flex flex-col h-full overflow-y-auto overflow-x-hidden custom-scrollbar p-2">
-        <!-- Mobile close button -->
-        <div class="flex justify-end md:hidden mb-2">
-            <button id="main-sidebar-close" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground" aria-label="Close Menu">
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
-        </div>
-        
-        <nav class="flex flex-col gap-1 mt-1">
+
+<!-- Left Sidebar (Premium Design System) -->
+<div class="d-flex flex-column flex-shrink-0 p-3 h-100">
+    <nav class="flex-grow-1">
+        <ul class="nav nav-pills flex-column mb-auto gap-2">
             @{
                 var currentCultureSidebar = System.Globalization.CultureInfo.CurrentCulture.Name;
+                var currentPath = Context.Request.Path.Value ?? "";
+                
+                Func<string, string, bool> isActive = (controller, action) => 
+                {
+                    var routeData = ViewContext.RouteData.Values;
+                    return string.Equals(routeData["controller"]?.ToString(), controller, StringComparison.OrdinalIgnoreCase) &&
+                           string.Equals(routeData["action"]?.ToString(), action, StringComparison.OrdinalIgnoreCase);
+                };
             }
-            <a asp-controller="Home" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="home" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Home"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["Home"]
-                </div>
-            </a>
-            <a asp-controller="QA" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="help-circle" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["QA"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["QA"]
-                </div>
-            </a>
-            <a asp-controller="Posts" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="pen-tool" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Posts"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["Posts"]
-                </div>
-            </a>
-            <a asp-controller="Guides" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="book-open" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Guides"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["Guides"]
-                </div>
-            </a>
-            <a asp-controller="Groups" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="users" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Groups"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["Groups"]
-                </div>
-            </a>
-            <a asp-controller="Friends" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="user-plus" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Friends"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["Friends"]
-                </div>
-            </a>
-            <a asp-controller="News" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="newspaper" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["News"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["News"]
-                </div>
-            </a>
-            <a asp-controller="Events" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="calendar" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Events"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["Events"]
-                </div>
-            </a>
-            <a asp-controller="Reviews" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="star" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Reviews"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["Reviews"]
-                </div>
-            </a>
-            <a asp-controller="Maps" asp-action="Index" asp-route-culture="@currentCultureSidebar"
-                class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-                <i data-lucide="map" class="w-[18px] h-[18px] shrink-0"></i>
-                <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@Localizer["Maps"]</span>
-                <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                    @Localizer["Maps"]
-                </div>
-            </a>
-        </nav>
-    </div>
+            
+            <li class="nav-item">
+                <a asp-controller="Home" asp-action="Index" asp-route-culture="@currentCultureSidebar" 
+                   class="nav-link @(isActive("Home", "Index") ? "active bg-primary-red" : "link-body-emphasis hover-light") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="home" class="bi opacity-75 @(isActive("Home", "Index") ? "text-white" : "text-primary-red")" style="width: 20px; height: 20px;"></i>
+                    <span class="fw-bold small text-uppercase tracking-wider">@Localizer["Home"]</span>
+                </a>
+            </li>
 
-    <div class="p-2 border-t border-border">
-        @{
-            var isStaff = User.IsInRole(Roles.SuperAdmin) || 
-                          User.IsInRole(Roles.ContentAdmin) || 
-                          User.IsInRole(Roles.DesignAdmin) || 
-                          User.IsInRole(Roles.DatabaseAdmin);
-            var profileLabel = isStaff ? Localizer["AdminProfile"] : Localizer["MyProfile"];
-        }
-        <a asp-controller="Profile" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name"
-            class="flex items-center gap-3 px-3 py-2 rounded-2xl text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full group relative">
-            <i data-lucide="user" class="w-[18px] h-[18px] shrink-0"></i>
-            <span class="sidebar-text hidden xl:inline md:hidden main-sidebar-mobile-open:inline transition-opacity duration-300">@profileLabel</span>
-            <div class="sidebar-tooltip absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 xl:hidden">
-                @profileLabel
-            </div>
-        </a>
+            <li class="nav-item">
+                <a asp-controller="QA" asp-action="Index" asp-route-culture="@currentCultureSidebar" 
+                   class="nav-link @(isActive("QA", "Index") ? "active bg-primary-red" : "link-body-emphasis hover-light") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="help-circle" class="bi opacity-75 @(isActive("QA", "Index") ? "text-white" : "text-primary-red")" style="width: 20px; height: 20px;"></i>
+                    <span class="fw-bold small text-uppercase tracking-wider">@Localizer["QA"]</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="Posts" asp-action="Index" asp-route-culture="@currentCultureSidebar" 
+                   class="nav-link @(isActive("Posts", "Index") ? "active bg-primary-red" : "link-body-emphasis hover-light") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="pen-tool" class="bi opacity-75 @(isActive("Posts", "Index") ? "text-white" : "text-primary-red")" style="width: 20px; height: 20px;"></i>
+                    <span class="fw-bold small text-uppercase tracking-wider">@Localizer["Posts"]</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="Guides" asp-action="Index" asp-route-culture="@currentCultureSidebar" 
+                   class="nav-link @(isActive("Guides", "Index") ? "active bg-primary-red" : "link-body-emphasis hover-light") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="book-open" class="bi opacity-75 @(isActive("Guides", "Index") ? "text-white" : "text-primary-red")" style="width: 20px; height: 20px;"></i>
+                    <span class="fw-bold small text-uppercase tracking-wider">@Localizer["Guides"]</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="Groups" asp-action="Index" asp-route-culture="@currentCultureSidebar" 
+                   class="nav-link @(isActive("Groups", "Index") ? "active bg-primary-red" : "link-body-emphasis hover-light") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="users" class="bi opacity-75 @(isActive("Groups", "Index") ? "text-white" : "text-primary-red")" style="width: 20px; height: 20px;"></i>
+                    <span class="fw-bold small text-uppercase tracking-wider">@Localizer["Groups"]</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <hr class="my-3 opacity-10">
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="News" asp-action="Index" asp-route-culture="@currentCultureSidebar" 
+                   class="nav-link @(isActive("News", "Index") ? "active bg-primary-red" : "link-body-emphasis hover-light") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="newspaper" class="bi opacity-75 @(isActive("News", "Index") ? "text-white" : "text-primary-red")" style="width: 20px; height: 20px;"></i>
+                    <span class="fw-bold small text-uppercase tracking-wider">@Localizer["News"]</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="Events" asp-action="Index" asp-route-culture="@currentCultureSidebar" 
+                   class="nav-link @(isActive("Events", "Index") ? "active bg-primary-red" : "link-body-emphasis hover-light") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="calendar" class="bi opacity-75 @(isActive("Events", "Index") ? "text-white" : "text-primary-red")" style="width: 20px; height: 20px;"></i>
+                    <span class="fw-bold small text-uppercase tracking-wider">@Localizer["Events"]</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="Reviews" asp-action="Index" asp-route-culture="@currentCultureSidebar" 
+                   class="nav-link @(isActive("Reviews", "Index") ? "active bg-primary-red" : "link-body-emphasis hover-light") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="star" class="bi opacity-75 @(isActive("Reviews", "Index") ? "text-white" : "text-primary-red")" style="width: 20px; height: 20px;"></i>
+                    <span class="fw-bold small text-uppercase tracking-wider">@Localizer["Reviews"]</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="Maps" asp-action="Index" asp-route-culture="@currentCultureSidebar" 
+                   class="nav-link @(isActive("Maps", "Index") ? "active bg-primary-red" : "link-body-emphasis hover-light") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="map" class="bi opacity-75 @(isActive("Maps", "Index") ? "text-white" : "text-primary-red")" style="width: 20px; height: 20px;"></i>
+                    <span class="fw-bold small text-uppercase tracking-wider">@Localizer["Maps"]</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="mt-auto px-1 pt-4 pb-2">
+        <div class="dropdown">
+            @{
+                var isStaff = User.IsInRole(Roles.SuperAdmin) || 
+                              User.IsInRole(Roles.ContentAdmin) || 
+                              User.IsInRole(Roles.DesignAdmin) || 
+                              User.IsInRole(Roles.DatabaseAdmin);
+                var profileLabel = isStaff ? Localizer["AdminProfile"] : Localizer["MyProfile"];
+            }
+            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle p-2 rounded-4 hover-light animate-heartbeat" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="user-avatar-container p-0 border-0 me-3 shadow-sm">
+                    <i data-lucide="user" class="bi text-primary-red bg-primary-subtle rounded-circle p-2" style="width: 40px; height: 40px;"></i>
+                </div>
+                <strong class="small text-uppercase tracking-tight">@profileLabel</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark shadow-lg border-0 rounded-4 p-2 animate-in slide-in-from-bottom-2 duration-300">
+                <li><a class="dropdown-item rounded-3 py-2" asp-controller="Profile" asp-action="Index">@Localizer["MyProfile"]</a></li>
+                <li><a class="dropdown-item rounded-3 py-2" asp-controller="ProfileSettings" asp-action="Index">@Localizer["Settings"]</a></li>
+                <li><hr class="dropdown-divider opacity-10"></li>
+                <li>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="px-2">
+                         <button type="submit" class="dropdown-item rounded-3 py-2 text-danger fw-bold">@Localizer["Logout"]</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </div>
-</aside>
+</div>
+

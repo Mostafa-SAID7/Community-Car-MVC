@@ -1,0 +1,357 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@using System.Globalization
+@{
+    var hideLeftSidebar = ViewData["HideLeftSidebar"] as bool? ?? false;
+    var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
+    var dashboardSection = ViewData["DashboardSection"] as string ?? "Overview";
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")" class="light">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="user-id" content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
+    <title>@ViewData["Title"] - Dashboard - CommunityCar</title>
+
+    <!-- Theme initialization script -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.classList.add(theme);
+        })();
+    </script>
+
+    <performance-optimizations url="@Context.Request.Path" />
+    <seo-meta page-type="Dashboard" entity-id="@(ViewData["EntityId"] as Guid?)" />
+
+    <link rel="icon" type="image/png" href="~/images/logo/logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lemonada:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Styles Bundles -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/features.css" asp-append-version="true" />
+
+    <!-- Dashboard-specific styles -->
+    <style>
+        .dashboard-body {
+            background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
+        }
+        .dashboard-header {
+            backdrop-filter: blur(20px);
+            background: hsl(var(--background) / 0.8);
+            border-bottom: 1px solid hsl(var(--border) / 0.5);
+        }
+        .dashboard-sidebar {
+            background: hsl(var(--card) / 0.6);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid hsl(var(--border) / 0.3);
+        }
+        .dashboard-content {
+            background: hsl(var(--card) / 0.4);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+
+
+    @await RenderSectionAsync("Styles", required: false)
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="font-sans antialiased dashboard-body">
+    @Html.AntiForgeryToken()
+    
+    <!-- Dashboard Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 dashboard-header">
+        <div class="flex items-center justify-between px-4 py-3">
+            <!-- Left section -->
+            <div class="flex items-center gap-4">
+                <!-- Mobile sidebar toggle -->
+                <button id="dashboard-sidebar-toggle" class="lg:hidden inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Toggle Menu">
+                    <i data-lucide="menu" class="w-4 h-4"></i>
+                </button>
+                
+                <!-- Logo and title -->
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/80 shadow-md">
+                        <span class="text-xs font-bold text-primary-foreground">CC</span>
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-lg font-bold text-foreground">Dashboard</h1>
+                        <p class="text-xs text-muted-foreground">@dashboardSection</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center section - Search -->
+            <div class="hidden md:flex items-center gap-2 flex-1 max-w-md mx-8">
+                <div class="flex items-center gap-2 flex-1 bg-card/50 backdrop-blur-sm rounded-full px-4 py-2 border border-border">
+                    <i data-lucide="search" class="w-4 h-4 text-muted-foreground"></i>
+                    <input type="text" placeholder="@Localizer["SearchDashboard"]" class="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground">
+                </div>
+            </div>
+
+            <!-- Right section -->
+            <div class="flex items-center gap-2">
+                <!-- Quick actions -->
+                <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="dashboard-refresh" aria-label="Refresh">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                </button>
+                
+                <!-- Theme toggle -->
+                <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="dashboard-theme-toggle" aria-label="@Localizer["ToggleTheme"]">
+                    <i data-lucide="sun" id="dashboard-sun-icon" class="w-4 h-4"></i>
+                    <i data-lucide="moon" id="dashboard-moon-icon" class="w-4 h-4 hidden"></i>
+                </button>
+                
+                <!-- Notifications -->
+                <div class="relative notification-wrapper">
+                    <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors dashboard-notification-bell" aria-label="@Localizer["Notifications"]">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                        <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground dashboard-notification-badge hidden"></span>
+                    </button>
+                    
+                    <div class="absolute right-0 top-12 w-80 bg-card border border-border rounded-2xl shadow-lg hidden dashboard-notification-dropdown">
+                        <div class="flex items-center justify-between p-4 border-b border-border">
+                            <h3 class="text-sm font-semibold">@Localizer["Notifications"]</h3>
+                            <button class="text-xs text-primary hover:text-primary/80 dashboard-mark-all-read-btn">@Localizer["MarkAllRead"]</button>
+                        </div>
+                        <div class="max-h-96 overflow-y-auto dashboard-notification-list">
+                            <div class="flex flex-col items-center justify-center py-8 dashboard-notification-loading">
+                                <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-muted-foreground"></i>
+                                <p class="text-sm text-muted-foreground mt-2">@Localizer["LoadingNotifications"]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language toggle -->
+                <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors text-xs font-bold" id="dashboard-lang-toggle">@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper() == "AR" ? "EN" : "AR")</button>
+
+                <!-- Profile menu -->
+                <div class="relative profile-wrapper">
+                    <button class="flex items-center justify-center p-1 rounded-full transition-all hover:bg-accent dashboard-profile-toggle" aria-label="@Localizer["Profile"]">
+                        <div class="avatar h-8 w-8">
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                var profilePic = User.FindFirst("ProfilePictureUrl")?.Value;
+                                if (!string.IsNullOrEmpty(profilePic))
+                                {
+                                    <img src="@profilePic" alt="@User.Identity.Name" class="avatar-image" />
+                                }
+                                else
+                                {
+                                    <div class="avatar-fallback text-[10px]">
+                                        @(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </button>
+                    
+                    <div class="absolute right-0 top-12 w-64 dropdown-content hidden dashboard-profile-dropdown">
+                        <div class="p-4 border-b border-border">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+                                    <span class="text-sm font-bold text-primary-foreground">@(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")</span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-foreground truncate">@(User.Identity.Name ?? "User")</p>
+                                    <p class="text-xs text-muted-foreground truncate">@(User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "")</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="py-2">
+                            <a href="@Url.Action("Index", "Home", new { culture = CultureInfo.CurrentCulture.Name })" class="dropdown-item">
+                                <i data-lucide="home" class="w-4 h-4"></i>
+                                <span>@Localizer["BackToApp"]</span>
+                            </a>
+                            <a asp-controller="Profile" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name" class="dropdown-item">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                                <span>@Localizer["MyProfile"]</span>
+                            </a>
+                            <a asp-controller="ProfileSettings" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name" class="dropdown-item">
+                                <i data-lucide="settings" class="w-4 h-4"></i>
+                                <span>@Localizer["Settings"]</span>
+                            </a>
+                            
+                            <div class="border-t border-border my-2"></div>
+                            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="w-full">
+                                <button type="submit" class="dropdown-item w-full text-left text-destructive hover:text-destructive hover:bg-destructive/5">
+                                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                                    <span>@Localizer["Logout"]</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Container -->
+    <div class="flex min-h-screen pt-16">
+        
+        @if (!hideLeftSidebar)
+        {
+            <!-- Dashboard Sidebar -->
+            <aside class="dashboard-sidebar w-64 fixed left-0 top-16 bottom-0 z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300" id="dashboard-sidebar">
+                <partial name="Dashboard/_DashboardSidebarLeft" />
+            </aside>
+        }
+
+        <!-- Main Content Area -->
+        <main class="flex-1 @(!hideLeftSidebar ? "lg:ml-64" : "") min-h-screen" id="dashboard-main-content">
+            <div class="dashboard-content min-h-full p-6">
+                
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-black text-foreground leading-tight">@ViewData["Title"]</h1>
+                            <p class="text-sm text-muted-foreground mt-1">
+                                @(ViewData["Description"] ?? "Manage your community platform and view real-time analytics")
+                            </p>
+                        </div>
+                        
+                        <!-- Page actions -->
+                        <div class="flex items-center gap-2">
+                            @if (IsSectionDefined("PageActions"))
+                            {
+                                @RenderSection("PageActions")
+                            }
+                            else
+                            {
+                                <button class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl font-medium text-sm hover:bg-primary/90 transition-colors">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                    <span class="hidden sm:inline">@Localizer["NewItem"]</span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="space-y-6">
+                    @RenderBody()
+                </div>
+            </div>
+        </main>
+
+        @if (!hideRightSidebar)
+        {
+            <!-- Dashboard Right Sidebar -->
+            <aside class="dashboard-sidebar w-80 fixed right-0 top-16 bottom-0 z-40 transform translate-x-full xl:translate-x-0 transition-transform duration-300 hidden xl:block" id="dashboard-right-sidebar">
+                <partial name="Dashboard/_DashboardSidebarRight" />
+            </aside>
+        }
+    </div>
+
+    <!-- Dashboard-specific modals and components -->
+    <partial name="_AlertModal" />
+
+    <!-- Core Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/core.js" asp-append-version="true" defer></script>
+    <script src="~/js/toaster.js" asp-append-version="true" defer></script>
+    <script src="~/js/error-boundary.js" asp-append-version="true" defer></script>
+
+    <!-- SignalR for real-time dashboard updates -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <script src="~/lib/signalr/signalr.min.js"></script>
+    }
+
+    <!-- Dashboard Services -->
+    <script src="~/js/services/cookie-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/theme-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/sidebar-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/localization-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/notification-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/notification-controller.js" asp-append-version="true" defer></script>
+    
+    <!-- Dashboard-specific modules -->
+    <script src="~/js/modules/dashboard/charts-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/overview-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/reports-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/settings-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/performance-controller.js" asp-append-version="true" defer></script>
+
+    <!-- Dashboard initialization script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dashboard sidebar toggle
+            const sidebarToggle = document.getElementById('dashboard-sidebar-toggle');
+            const sidebar = document.getElementById('dashboard-sidebar');
+            
+            sidebarToggle?.addEventListener('click', function() {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+            
+            // Theme toggle
+            const themeToggle = document.getElementById('dashboard-theme-toggle');
+            const sunIcon = document.getElementById('dashboard-sun-icon');
+            const moonIcon = document.getElementById('dashboard-moon-icon');
+            
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+            
+            themeToggle?.addEventListener('click', function() {
+                const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.classList.remove('light', 'dark');
+                document.documentElement.classList.add(newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                if (newTheme === 'dark') {
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            });
+            
+            // Language toggle
+            const langToggle = document.getElementById('dashboard-lang-toggle');
+            langToggle?.addEventListener('click', function() {
+                const currentLang = document.documentElement.lang || 'en-US';
+                const newLang = currentLang === 'ar-EG' ? 'en-US' : 'ar-EG';
+                
+                localStorage.setItem('language', newLang);
+                
+                const url = new URL(window.location);
+                url.searchParams.set('culture', newLang);
+                window.location.href = url.toString();
+            });
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

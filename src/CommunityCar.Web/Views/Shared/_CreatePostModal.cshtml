@@ -1,0 +1,130 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<!-- Create Post Modal -->
+<div id="create-post-modal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="create-post-backdrop"></div>
+    
+    <!-- Modal -->
+    <div class="relative flex items-center justify-center min-h-screen p-4">
+        <div class="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between p-6 border-b border-border">
+                <h2 class="text-lg font-bold text-foreground">@Localizer["CreatePost"]</h2>
+                <button id="close-create-post" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <!-- Content -->
+            <div class="p-6 space-y-4">
+                <form id="create-post-form" class="space-y-4">
+                    <!-- Post content -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-foreground">@Localizer["WhatOnYourMind"]</label>
+                        <textarea 
+                            id="post-content" 
+                            class="w-full min-h-[120px] p-4 bg-muted/50 border border-border rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-colors" 
+                            placeholder="@Localizer["ShareYourThoughts"]..."></textarea>
+                    </div>
+                    
+                    <!-- Media upload -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-foreground">@Localizer["AddMedia"]</label>
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-xl hover:bg-accent transition-colors">
+                                <i data-lucide="image" class="w-4 h-4"></i>
+                                <span class="text-sm">@Localizer["Photo"]</span>
+                            </button>
+                            <button type="button" class="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-xl hover:bg-accent transition-colors">
+                                <i data-lucide="video" class="w-4 h-4"></i>
+                                <span class="text-sm">@Localizer["Video"]</span>
+                            </button>
+                            <button type="button" class="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-xl hover:bg-accent transition-colors">
+                                <i data-lucide="link" class="w-4 h-4"></i>
+                                <span class="text-sm">@Localizer["Link"]</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Privacy settings -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-foreground">@Localizer["Privacy"]</label>
+                        <select class="w-full p-3 bg-muted/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-colors">
+                            <option value="public">@Localizer["Public"]</option>
+                            <option value="friends">@Localizer["FriendsOnly"]</option>
+                            <option value="private">@Localizer["OnlyMe"]</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Footer -->
+            <div class="flex items-center justify-end gap-3 p-6 border-t border-border">
+                <button id="cancel-create-post" class="px-4 py-2 border border-border rounded-xl hover:bg-accent transition-colors">
+                    @Localizer["Cancel"]
+                </button>
+                <button id="submit-create-post" class="px-6 py-2 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors">
+                    @Localizer["Post"]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('create-post-modal');
+    const backdrop = document.getElementById('create-post-backdrop');
+    const closeBtn = document.getElementById('close-create-post');
+    const cancelBtn = document.getElementById('cancel-create-post');
+    const submitBtn = document.getElementById('submit-create-post');
+    const mobileCreateBtn = document.getElementById('mobile-create-post');
+    
+    // Show modal
+    function showModal() {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Hide modal
+    function hideModal() {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    
+    // Event listeners
+    mobileCreateBtn?.addEventListener('click', showModal);
+    closeBtn?.addEventListener('click', hideModal);
+    cancelBtn?.addEventListener('click', hideModal);
+    backdrop?.addEventListener('click', hideModal);
+    
+    // Submit form
+    submitBtn?.addEventListener('click', function() {
+        const content = document.getElementById('post-content').value.trim();
+        
+        if (!content) {
+            // Show error message
+            return;
+        }
+        
+        // Here you would typically submit the form via AJAX
+        console.log('Creating post:', content);
+        
+        // Hide modal after successful submission
+        hideModal();
+        
+        // Reset form
+        document.getElementById('create-post-form').reset();
+    });
+    
+    // Escape key to close
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            hideModal();
+        }
+    });
+});
+</script>

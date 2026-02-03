@@ -1,0 +1,361 @@
+/* 
+   Site.css - Unified Design System 
+   A single source of truth for all global styles, colors, and typography.
+   Standardized on the Premium Red (#fb2c36) theme.
+*/
+
+:root {
+    /* --- Red Palette --- */
+    --red-50: #fef2f2;
+    --red-100: #ffe2e2;
+    --red-200: #ffc9c9;
+    --red-300: #ffa2a2;
+    --red-400: #ff6467;
+    --red-500: #fb2c36;
+    --red-600: #e7000b;
+    --red-700: #c10007;
+    --red-800: #9f0712;
+    --red-900: #82181a;
+    --red-950: #460809;
+    --primary-red: #fb2c36;
+
+    /* --- Semantic Color Tokens (HSL) --- */
+    --color-border: 0 0% 89.8%;
+    --color-input: 0 0% 89.8%;
+    --color-ring: 0 72.2% 50.6%;
+    --color-background: 0 0% 100%;
+    --color-foreground: 0 0% 3.9%;
+    --color-primary: 358 96% 58%;
+    /* #fb2c36 */
+    --color-primary-foreground: 0 0% 98%;
+    --color-secondary: 0 0% 96.1%;
+    --color-secondary-foreground: 0 0% 9%;
+    --color-destructive: 0 84.2% 60.2%;
+    --color-destructive-foreground: 0 0% 98%;
+    --color-muted: 0 0% 96.1%;
+    --color-muted-foreground: 0 0% 45.1%;
+    --color-accent: 0 0% 96.1%;
+    --color-accent-foreground: 0 0% 9%;
+    --color-popover: 0 0% 100%;
+    --color-popover-foreground: 0 0% 3.9%;
+    --color-card: 0 0% 100%;
+    --color-card-foreground: 0 0% 3.9%;
+
+    /* --- Typography --- */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-arabic-heading: 'Lemonada', 'Alexandria', cursive;
+    --font-arabic-body: 'Noto Sans Arabic', 'Alexandria', sans-serif;
+
+    /* --- Shadows --- */
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-default: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --shadow-2xl: 0 50px 100px -20px rgb(0 0 0 / 0.25);
+    --shadow-glow: 0 0 20px rgb(251 44 54 / 0.3);
+    --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+
+    /* --- Border Radius --- */
+    --radius-xs: 0.125rem;
+    --radius-sm: 0.25rem;
+    --radius-default: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-3xl: 2rem;
+    --radius-full: 9999px;
+
+    /* --- Layout --- */
+    --header-height: 70px;
+    --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-bs-theme="dark"] {
+    --color-background: 0 0% 3.9%;
+    --color-foreground: 0 0% 98%;
+    --color-card: 0 0% 8%;
+    /* Slightly lighter than background */
+    --color-card-foreground: 0 0% 98%;
+    --color-popover: 0 0% 3.9%;
+    --color-popover-foreground: 0 0% 98%;
+    --color-primary: 358 96% 58%;
+    --color-primary-foreground: 0 0% 9%;
+    --color-secondary: 0 0% 14.9%;
+    --color-secondary-foreground: 0 0% 98%;
+    --color-muted: 0 0% 14.9%;
+    --color-muted-foreground: 0 0% 63.9%;
+    --color-accent: 0 0% 14.9%;
+    --color-accent-foreground: 0 0% 98%;
+    --color-border: 0 0% 14.9%;
+    --color-input: 0 0% 14.9%;
+}
+
+/* --- Base --- */
+body {
+    background-color: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+    font-family: var(--font-sans);
+    transition: background-color var(--transition-base), color var(--transition-base);
+    min-height: 100vh;
+}
+
+html[lang=ar] body {
+    font-family: var(--font-arabic-body);
+}
+
+html[lang=ar] h1,
+html[lang=ar] h2,
+html[lang=ar] h3,
+html[lang=ar] h4,
+html[lang=ar] h5,
+html[lang=ar] h6 {
+    font-family: var(--font-arabic-heading);
+    font-weight: 600;
+}
+
+.font-sans {
+    font-family: var(--font-sans) !important;
+}
+
+.font-arabic-heading {
+    font-family: var(--font-arabic-heading) !important;
+}
+
+.font-arabic-body {
+    font-family: var(--font-arabic-body) !important;
+}
+
+/* --- Scrollbar --- */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--color-primary) / 0.2) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--color-primary) / 0.2);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--color-primary) / 0.4);
+}
+
+/* --- Typography Utilities --- */
+.fw-black {
+    font-weight: 900 !important;
+}
+
+.tracking-tight {
+    letter-spacing: -0.025em !important;
+}
+
+.tracking-widest {
+    letter-spacing: 0.1em !important;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--red-500), var(--red-700));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* --- Color Utilities --- */
+.text-primary-red {
+    color: var(--red-500) !important;
+}
+
+.bg-primary-red {
+    background-color: var(--red-500) !important;
+    color: white !important;
+}
+
+.bg-primary-red-subtle {
+    background-color: hsla(var(--color-primary), 0.1) !important;
+    color: hsl(var(--color-primary)) !important;
+}
+
+.border-primary-red {
+    border-color: var(--red-500) !important;
+}
+
+.shadow-glow-primary {
+    box-shadow: var(--shadow-glow);
+}
+
+/* --- Interaction Utilities --- */
+.hover-translate-y-1:hover {
+    transform: translateY(-0.25rem);
+    transition: all var(--transition-base);
+}
+
+.active-scale-95:active {
+    transform: scale(0.95);
+}
+
+.transition-all {
+    transition: all var(--transition-base);
+}
+
+.hover-light:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+[data-bs-theme="dark"] .hover-light:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* --- Line Clamp --- */
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --- Components --- */
+.card-premium {
+    background-color: hsl(var(--color-card));
+    border: 1px solid hsl(var(--color-border));
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-default);
+    transition: all var(--transition-base);
+}
+
+.card-premium:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.btn-primary-red {
+    background-color: var(--red-500);
+    color: white;
+    border: 1px solid var(--red-500);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all var(--transition-base);
+}
+
+.btn-primary-red:hover {
+    background-color: var(--red-600);
+    border-color: var(--red-600);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-1px);
+}
+
+/* --- Glassmorphism --- */
+.glass {
+    background: hsla(var(--color-background), 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsla(var(--color-border), 0.5);
+}
+
+/* --- Prose Styles (Markdown/Rich Text) --- */
+.prose {
+    color: hsl(var(--color-foreground) / 0.9);
+    line-height: 1.6;
+}
+
+.prose h1,
+.prose h2,
+.prose h3 {
+    color: hsl(var(--color-foreground));
+    font-weight: 900;
+    margin-top: 1.5rem;
+}
+
+.prose a {
+    color: var(--red-500);
+    text-decoration: underline;
+}
+
+.prose img {
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+/* --- Animations --- */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.animate-pulse-subtle {
+    animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* --- Header & Layout Hacks --- */
+.app-header {
+    height: var(--header-height);
+    background: hsla(var(--color-background), 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid hsl(var(--color-border));
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+
+.user-avatar-container {
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    background-color: hsl(var(--color-muted));
+    border: 2px solid white;
+}

@@ -47,6 +47,9 @@ public class ProfileSettingsVM
     [Display(Name = "Profile Picture")]
     public IFormFile? ProfilePicture { get; set; }
 
+    [Display(Name = "Cover Image")]
+    public IFormFile? CoverImage { get; set; }
+
     public string? ProfilePictureUrl { get; set; }
     public string? CoverImageUrl { get; set; }
     

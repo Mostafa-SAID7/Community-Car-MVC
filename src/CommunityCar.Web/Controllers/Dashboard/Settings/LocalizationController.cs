@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Localization;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Localization;
 using CommunityCar.Domain.Entities.Localization;
 using CommunityCar.Application.Features.Dashboard.ViewModels.Localization;
 using Microsoft.AspNetCore.Mvc;

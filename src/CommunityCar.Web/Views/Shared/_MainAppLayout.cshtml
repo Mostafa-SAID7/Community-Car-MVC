@@ -1,0 +1,238 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using System.Globalization
+@{
+    var hideLeftSidebar = ViewData["HideLeftSidebar"] as bool? ?? false;
+    var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
+    var hideMainContentId = ViewData["HideMainContentId"] as bool? ?? false;
+    var mainContentAttributes = hideMainContentId ? "" : "id=\"main-content\"";
+    var hideMainContainer = ViewData["HideMainContainer"] as bool? ?? false;
+    var mainContainerAttributes = hideMainContainer ? "" : "id=\"main-container\"";
+    var pageType = ViewData["PageType"] as string ?? "Community";
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")" class="light">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="user-id" content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
+    
+    @if (TempData["ToasterType"] != null)
+    {
+        <meta name="toaster-type" content="@TempData["ToasterType"]" />
+        <meta name="toaster-title" content="@TempData["ToasterTitle"]" />
+        <meta name="toaster-message" content="@TempData["ToasterMessage"]" />
+    }
+    
+    <title>@ViewData["Title"] - CommunityCar</title>
+
+    <!-- Theme initialization script (must be before any content) -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.classList.add(theme);
+        })();
+    </script>
+
+    <performance-optimizations url="@Context.Request.Path" />
+    <seo-meta page-type="@pageType" entity-id="@(ViewData["EntityId"] as Guid?)" />
+
+    <link rel="icon" type="image/png" href="~/images/logo/logo.png">
+    <link rel="alternate" type="application/rss+xml" title="CommunityCar RSS Feed" href="@Url.Action("RSS", "DashboardSEO")" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lemonada:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Styles Bundles -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/features.css" asp-append-version="true" />
+
+
+    @await RenderSectionAsync("Styles", required: false)
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="font-sans antialiased main-app-body">
+    @Html.AntiForgeryToken()
+    <partial name="_Header" />
+
+    <!-- Main App Container with optimized layout -->
+    <div class="layout-grid constrained-layout @(hideLeftSidebar ? "hide-left" : "") @(hideRightSidebar ? "hide-right" : "") pb-4 sm:pb-6 md:pb-8 min-h-screen w-full overflow-x-hidden" @Html.Raw(mainContainerAttributes)>
+        
+        @if (!hideLeftSidebar)
+        {
+            <partial name="_SidebarLeft" />
+        }
+
+        <!-- Main Content Area optimized for community features -->
+        <main class="min-h-screen main-content-spacing" @Html.Raw(mainContentAttributes)>
+            <div class="w-full overflow-x-hidden">
+                <div class="bg-card/30 backdrop-blur-xl shadow-lg sm:shadow-2xl p-3 sm:p-4 md:p-6 w-full mx-auto mt-[5px] rounded-2xl md:rounded-[2rem]">
+                    
+                    <!-- Mobile Header with Community-focused actions -->
+                    <div class="flex items-center justify-between border-border lg:border-none rounded-lg mb-4 sm:mb-6 xl:mb-0 lg:hidden">
+                        <div class="flex items-center gap-2 md:hidden">
+                            <!-- Mobile sidebar toggle -->
+                            <button id="sidebar-toggle" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="Toggle Menu">
+                                <i data-lucide="menu" class="w-4 h-4"></i>
+                            </button>
+                            
+                            <!-- Search for mobile -->
+                            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="mobile-search-toggle" aria-label="Search">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </button>
+                            
+                            <!-- Separator -->
+                            <div class="w-px h-6 bg-border mx-1"></div>
+                            
+                            <!-- Community-specific actions -->
+                            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="mobile-create-post" aria-label="Create Post">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                            </button>
+                            
+                            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="mobile-theme-toggle" aria-label="@Localizer["ToggleTheme"]">
+                                <i data-lucide="sun" id="mobile-sun-icon" class="w-4 h-4"></i>
+                                <i data-lucide="moon" id="mobile-moon-icon" class="w-4 h-4 hidden"></i>
+                            </button>
+                            
+                            <!-- Notifications -->
+                            <div class="relative notification-wrapper">
+                                <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors mobile-notification-bell" aria-label="@Localizer["Notifications"]">
+                                    <i data-lucide="bell" class="w-4 h-4"></i>
+                                    <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground mobile-notification-badge hidden"></span>
+                                </button>
+                                
+                                <div class="absolute right-0 top-12 w-80 bg-card border border-border rounded-2xl shadow-lg hidden mobile-notification-dropdown">
+                                    <div class="flex items-center justify-between p-4 border-b border-border">
+                                        <h3 class="text-sm font-semibold">@Localizer["Notifications"]</h3>
+                                        <button class="text-xs text-primary hover:text-primary/80 transition-colors mobile-mark-all-read-btn">@Localizer["MarkAllRead"]</button>
+                                    </div>
+                                    <div class="max-h-96 overflow-y-auto mobile-notification-list">
+                                        <div class="flex flex-col gap-2 p-4 mobile-notification-loading">
+                                            <skeleton type="Line" />
+                                            <skeleton type="Line" />
+                                            <skeleton type="Line" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors text-xs font-bold" id="mobile-lang-toggle">@(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper() == "AR" ? "EN" : "AR")</button>
+                        </div>
+                        
+                        <!-- Mobile search overlay -->
+                        <div class="fixed inset-0 z-50 hidden" id="mobile-search-overlay">
+                            <div class="flex items-center gap-3 p-4 border-b border-border">
+                                <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="mobile-search-close">
+                                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                                </button>
+                                <div class="flex items-center gap-2 flex-1 bg-card/50 backdrop-blur-sm rounded-full px-4 py-2 border border-border">
+                                    <i data-lucide="search" class="w-4 h-4 text-muted-foreground"></i>
+                                    <input type="text" placeholder="@Localizer["Search"]" class="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground" id="mobile-search-input" autofocus>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-sm text-muted-foreground text-center">@Localizer["StartTypingToSearch"]</p>
+                            </div>
+                        </div>
+                        
+                        <button id="right-sidebar-toggle" class="xl:hidden p-2 rounded-lg hover:bg-accent transition-colors">
+                            <i data-lucide="sidebar" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Content wrapper optimized for community features -->
+                    <div class="w-full constrained-content" style="overflow-x: clip; overflow-y: visible;">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        @if (!hideRightSidebar)
+        {
+            if (IsSectionDefined("SidebarRight"))
+            {
+                <aside class="grid-sidebar-sticky hidden xl:block z-40">
+                    <div class="overflow-y-auto custom-scrollbar scrollbar-left h-full">
+                        @RenderSection("SidebarRight")
+                    </div>
+                </aside>
+            }
+            else
+            {
+                <partial name="_SidebarRight" />
+            }
+        }
+    </div>
+
+    <!-- Community-specific components -->
+    <partial name="_AIAssistant" />
+    <partial name="_CreatePostModal" />
+
+    <!-- Core Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/core.js" asp-append-version="true" defer></script>
+    <script src="~/js/toaster.js" asp-append-version="true" defer></script>
+    <script src="~/js/error-boundary.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/error-module.js" asp-append-version="true" defer></script>
+
+    <!-- SignalR for real-time features -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <script src="~/lib/signalr/signalr.min.js"></script>
+    }
+
+    <!-- Community-focused Services -->
+    <script src="~/js/services/cookie-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/theme-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/sidebar-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/localization-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/interaction-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/interaction-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/comment-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/notification-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/notification-controller.js" asp-append-version="true" defer></script>
+    
+    <script src="~/js/site.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/layout-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/feed-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/feed-module.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/stories-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/stories-module.js" asp-append-version="true" defer></script>
+    
+    <script src="~/js/services/ai-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/ai-module.js" asp-append-version="true" defer></script>
+    
+    <script src="~/js/services/social-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/social-module.js" asp-append-version="true" defer></script>
+    
+    <script src="~/js/services/search-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/search-module.js" asp-append-version="true" defer></script>
+    
+    <script src="~/js/modules/stories-create-module.js" asp-append-version="true" defer></script>
+    
+    <!-- Global Skeleton Templates -->
+    <div id="global-skeleton-templates" class="hidden">
+        <partial name="_SkeletonLoading" model='"Post"' />
+        <partial name="_SkeletonLoading" model='"Story"' />
+        <partial name="_SkeletonLoading" model='"Circle"' />
+        <partial name="_SkeletonLoading" model='"Line"' />
+        <partial name="_SkeletonLoading" model='"Card"' />
+    </div>
+
+    <script src="~/js/modules/profile/view-tracker.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

@@ -1,270 +1,126 @@
 @using CommunityCar.Domain.Constants
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-4 py-3 bg-background/80 backdrop-blur-md border-b border-border">
-    <div class="flex items-center gap-3 bg-card/50 backdrop-blur-sm rounded-full px-4 py-2 border border-border shadow-sm">
-        @if (ViewData["FullWidth"] == null) 
-        {
-            <!-- Unified Sidebar Toggle Button (All Screens) -->
-            <button id="sidebar-toggle" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="@Localizer["ToggleSidebar"]">
-                <i data-lucide="menu" class="w-[18px] h-[18px]"></i>
-            </button>
-        }
-        <a href="/" class="flex items-center gap-2 text-inherit no-underline">
-            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 shadow-md">
-                <span class="text-xs font-bold text-primary-foreground">@Localizer["AppInitials"]</span>
-            </div>
-            <div class="hidden sm:flex flex-col justify-center">
-                <span class="text-sm font-semibold text-foreground">@Localizer["AppName"]</span>
-                <span class="font-bold text-xs text-muted-foreground whitespace-nowrap hidden lg:flex">@Localizer["AppTagline"]</span>
-            </div>
-        </a>
-    </div>
 
-    <div class="flex items-center gap-3 bg-card/50 backdrop-blur-sm rounded-full px-4 py-2 border border-border shadow-sm max-w-2xl">
-        <div class="hidden md:flex items-center gap-2 flex-1 max-w-md">
-            <i data-lucide="search" class="w-4 h-4 text-muted-foreground"></i>
-            <input type="text" placeholder="@Localizer["Search"]" class="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground">
+<nav class="navbar navbar-expand-md app-header sticky-top">
+    <div class="container-fluid">
+        <!-- Brand / Sidebar Toggle -->
+        <div class="d-flex align-items-center gap-2">
+            @if (ViewData["FullWidth"] == null) 
+            {
+                <button class="btn btn-ghost d-md-none me-2" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <i data-lucide="menu"></i>
+                </button>
+            }
+
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+                <div class="brand-logo bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                    <span class="fw-bold small">@Localizer["AppInitials"]</span>
+                </div>
+                <div class="d-flex flex-column lh-1">
+                    <span class="fw-bold text-body">@Localizer["AppName"]</span>
+                    <small class="text-muted d-none d-lg-block" style="font-size: 0.7em;">@Localizer["AppTagline"]</small>
+                </div>
+            </a>
         </div>
-        
-        @if (ViewData["FullWidth"] == null)
-        {
-            <nav class="hidden md:flex items-center gap-1">
-                <a href="/" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@Localizer["Home"]" title="@Localizer["Home"]">
-                    <i data-lucide="home" class="w-[18px] h-[18px]"></i>
-                    <span class="hidden xl:inline">@Localizer["Home"]</span>
-                </a>
-                <a href="/chats" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@Localizer["Chat"]" title="@Localizer["Chat"]">
-                    <i data-lucide="message-circle" class="w-[18px] h-[18px]"></i>
-                    <span class="hidden xl:inline">@Localizer["Chat"]</span>
-                </a>
-                <a asp-controller="Friends" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="@Localizer["Friends"]" title="@Localizer["Friends"]">
-                    <i data-lucide="users" class="w-[18px] h-[18px]"></i>
-                    <span class="hidden xl:inline">@Localizer["Friends"]</span>
-                </a>
-            </nav>
-        }
-        
-        @if (ViewData["FullWidth"] == null)
-        {
-            <!-- Mobile navigation icons (shown only on mobile) -->
-            <nav class="flex md:hidden items-center justify-evenly flex-1 gap-2">
-                <a href="/" class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground flex-1" aria-label="@Localizer["Home"]" title="@Localizer["Home"]">
-                    <i data-lucide="home" class="w-[20px] h-[20px]"></i>
-                </a>
-                <a href="/chats" class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground flex-1" aria-label="@Localizer["Chat"]" title="@Localizer["Chat"]">
-                    <i data-lucide="message-circle" class="w-[20px] h-[20px]"></i>
-                </a>
-                <a href="/friends" class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground flex-1" aria-label="@Localizer["Friends"]" title="@Localizer["Friends"]">
-                    <i data-lucide="users" class="w-[20px] h-[20px]"></i>
+
+        <!-- Search Bar -->
+        <div class="d-none d-md-block mx-auto flex-grow-1 px-4" style="max-width: 500px;">
+            <div class="input-group search-group">
+                <span class="input-group-text">
+                    <i data-lucide="search" class="text-muted" style="width: 18px;"></i>
+                </span>
+                <input class="form-control" type="search" placeholder="@Localizer["Search"]" aria-label="Search">
+            </div>
+        </div>
+
+        <!-- Right Side User Menu -->
+        <div class="d-flex align-items-center gap-3">
+             <!-- Nav Links (Desktop) -->
+            @if (ViewData["FullWidth"] == null)
+            {
+                <div class="d-none d-md-flex align-items-center gap-2">
+                    <a href="/" class="btn btn-ghost" title="@Localizer["Home"]">
+                        <i data-lucide="home"></i>
+                    </a>
+                    <a href="/chats" class="btn btn-ghost" title="@Localizer["Chat"]">
+                        <i data-lucide="message-circle"></i>
+                    </a>
+                    <a asp-controller="Friends" asp-action="Index" class="btn btn-ghost" title="@Localizer["Friends"]">
+                        <i data-lucide="users"></i>
+                    </a>
+                </div>
+            }
+
+            <div class="vr d-none d-md-block"></div>
+
+            <!-- Theme Toggle -->
+             <button class="btn btn-link nav-link px-2 text-decoration-none" id="theme-toggle" title="@Localizer["ToggleTheme"]">
+                <i data-lucide="sun" id="sun-icon"></i>
+                <i data-lucide="moon" id="moon-icon" class="d-none"></i>
+            </button>
+
+            <!-- Language Toggle -->
+            <button class="btn btn-sm btn-outline-secondary font-monospace" id="lang-toggle">
+                @(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper() == "AR" ? "EN" : "AR")
+            </button>
+
+            <!-- User Dropdown -->
+            <div class="dropdown">
+                <a href="#" class="user-avatar-container d-flex align-items-center text-decoration-none dropdown-toggle hidden-arrow" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        var profilePic = User.FindFirst("ProfilePictureUrl")?.Value;
+                        if (!string.IsNullOrEmpty(profilePic))
+                        {
+                            <img src="@profilePic" alt="User" class="rounded-circle" width="38" height="38" />
+                        }
+                        else
+                        {
+                            <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                                <span class="fw-bold">@(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="bg-light text-secondary rounded-circle d-flex align-items-center justify-content-center border" style="width: 38px; height: 38px;">
+                            <i data-lucide="user" style="width: 20px;"></i>
+                        </div>
+                    }
                 </a>
                 
-                <!-- Mobile Profile Button -->
-                <div class="relative mobile-profile-wrapper flex-1">
-                    <button class="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground w-full mobile-profile-toggle" aria-label="@Localizer["Profile"]" title="@Localizer["Profile"]" data-action="toggle-dropdown">
-                        @if (User.Identity?.IsAuthenticated == true)
+                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li class="px-3 py-2">
+                             <p class="mb-0 fw-bold">@(User.Identity.Name ?? "User")</p>
+                             <small class="text-muted">@(User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "")</small>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index">@Localizer["MyProfile"]</a></li>
+                        <li><a class="dropdown-item" asp-controller="ProfileSettings" asp-action="Index">@Localizer["Settings"]</a></li>
+                        
+                        @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Admin))
                         {
-                            <div class="w-5 h-5 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
-                                <span class="text-[10px] font-bold text-primary-foreground">@(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")</span>
-                            </div>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">@Localizer["Dashboard"]</a></li>
                         }
-                        else
-                        {
-                            <i data-lucide="user" class="w-[20px] h-[20px]"></i>
-                        }
-                    </button>
-                    
-                    <div class="absolute right-0 top-12 w-64 dropdown-content hidden mobile-profile-dropdown rtl:right-auto rtl:left-0">
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <!-- Authenticated User Menu -->
-                            <div class="p-4 border-b border-border">
-                                <div class="flex items-center gap-3 rtl:flex-row-reverse">
-                                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
-                                        <span class="text-sm font-bold text-primary-foreground">@(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")</span>
-                                    </div>
-                                    <div class="flex-1 min-w-0 rtl:text-right">
-                                        <p class="text-sm font-semibold text-foreground truncate">@(User.Identity.Name ?? "User")</p>
-                                        <p class="text-xs text-muted-foreground truncate">@(User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "")</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="py-2">
-                                <a href="/Profile" class="dropdown-item rtl:flex-row-reverse">
-                                    <i data-lucide="user" class="w-4 h-4"></i>
-                                    <span>@Localizer["MyProfile"]</span>
-                                </a>
-                                <a href="/Profile/Settings" class="dropdown-item rtl:flex-row-reverse">
-                                    <i data-lucide="settings" class="w-4 h-4"></i>
-                                    <span>@Localizer["Settings"]</span>
-                                </a>
-                                <a href="/Profile/Security" class="dropdown-item rtl:flex-row-reverse">
-                                    <i data-lucide="shield" class="w-4 h-4"></i>
-                                    <span>@Localizer["Security"]</span>
-                                </a>
-                                <a href="/Profile/Gallery" class="dropdown-item rtl:flex-row-reverse">
-                                    <i data-lucide="image" class="w-4 h-4"></i>
-                                    <span>@Localizer["Gallery"]</span>
-                                </a>
-                                
-                                @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.ContentAdmin) || User.IsInRole(Roles.DesignAdmin) || User.IsInRole(Roles.DatabaseAdmin) || User.IsInRole(Roles.Admin))
-                                {
-                                    <div class="border-t border-border my-2"></div>
-                                    <a href="@Url.Action("Index", "Dashboard", new { culture = System.Globalization.CultureInfo.CurrentUICulture.Name })" class="dropdown-item rtl:flex-row-reverse">
-                                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                                        <span>@Localizer["Dashboard"]</span>
-                                    </a>
-                                }
-                                
-                                <div class="border-t border-border my-2"></div>
-                                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="w-full">
-                                    <button type="submit" class="dropdown-item w-full text-left text-destructive hover:text-destructive hover:bg-destructive/5 rtl:flex-row-reverse rtl:text-right">
-                                        <i data-lucide="log-out" class="w-4 h-4"></i>
-                                        <span>@Localizer["Logout"]</span>
-                                    </button>
-                                </form>
-                            </div>
-                        }
-                        else
-                        {
-                            <!-- Guest User Menu -->
-                            <div class="py-2">
-                                <a href="/Account/Login" class="dropdown-item rtl:flex-row-reverse">
-                                    <i data-lucide="log-in" class="w-4 h-4"></i>
-                                    <span>@Localizer["Login"]</span>
-                                </a>
-                                <a href="/Account/Register" class="dropdown-item rtl:flex-row-reverse">
-                                    <i data-lucide="user-plus" class="w-4 h-4"></i>
-                                    <span>@Localizer["Register"]</span>
-                                </a>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </nav>
-        }
-    </div>
-    
-    <div class="hidden md:flex items-center gap-2 bg-card/50 backdrop-blur-sm rounded-full px-3 py-2 border border-border shadow-sm">
-        @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.ContentAdmin) || User.IsInRole(Roles.DesignAdmin) || User.IsInRole(Roles.DatabaseAdmin) || User.IsInRole(Roles.Admin))
-        {
-            <a href="@Url.Action("Index", "Dashboard", new { culture = System.Globalization.CultureInfo.CurrentUICulture.Name })" class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" aria-label="@Localizer["Dashboard"]" title="@Localizer["Dashboard"]">
-                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-            </a>
-        }
-        <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors" id="theme-toggle" aria-label="@Localizer["ToggleTheme"]" title="@Localizer["ToggleTheme"]">
-            <i data-lucide="sun" id="sun-icon" class="w-4 h-4"></i>
-            <i data-lucide="moon" id="moon-icon" class="w-4 h-4 hidden"></i>
-        </button>
-        
-        <div class="relative notification-wrapper">
-            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors notification-bell" aria-label="@Localizer["Notifications"]" title="@Localizer["Notifications"]">
-                <i data-lucide="bell" class="w-4 h-4"></i>
-                <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground notification-badge hidden"></span>
-            </button>
-            
-            <div class="absolute right-0 top-12 w-80 dropdown-content hidden notification-dropdown rtl:right-auto rtl:left-0">
-                <div class="flex items-center justify-between p-4 border-b border-border">
-                    <h3 class="text-sm font-semibold">@Localizer["Notifications"]</h3>
-                    <div class="flex items-center gap-2">
-                        <button class="text-xs text-primary hover:text-primary/80 transition-colors mark-all-read-btn">@Localizer["MarkAllRead"]</button>
-                    </div>
-                </div>
-                <div class="max-h-96 overflow-y-auto notification-list">
-                    <div class="flex flex-col gap-2 p-4 notification-loading">
-                        <skeleton type="Line" />
-                        <skeleton type="Line" />
-                        <skeleton type="Line" />
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors text-xs font-bold" id="lang-toggle">@(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper() == "AR" ? "EN" : "AR")</button>
-        
-        <!-- Profile Dropdown -->
-        <div class="relative profile-wrapper">
-            <button class="inline-flex items-center justify-center h-8 w-8 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors profile-toggle" aria-label="@Localizer["Profile"]" title="@Localizer["Profile"]" data-action="toggle-dropdown">
-                @if (User.Identity?.IsAuthenticated == true)
-                {
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
-                        <span class="text-[10px] font-bold text-primary-foreground">@(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")</span>
-                    </div>
-                }
-                else
-                {
-                    <i data-lucide="user" class="w-4 h-4"></i>
-                }
-            </button>
-            
-            <div class="absolute right-0 top-12 w-64 dropdown-content hidden profile-dropdown rtl:right-auto rtl:left-0">
-                @if (User.Identity?.IsAuthenticated == true)
-                {
-                    <!-- Authenticated User Menu -->
-                    <div class="p-4 border-b border-border">
-                        <div class="flex items-center gap-3 rtl:flex-row-reverse">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
-                                <span class="text-sm font-bold text-primary-foreground">@(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")</span>
-                            </div>
-                            <div class="flex-1 min-w-0 rtl:text-right">
-                                <p class="text-sm font-semibold text-foreground truncate">@(User.Identity.Name ?? "User")</p>
-                                <p class="text-xs text-muted-foreground truncate">@(User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "")</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="py-2">
-                        <a href="/Profile" class="dropdown-item rtl:flex-row-reverse">
-                            <i data-lucide="user" class="w-4 h-4"></i>
-                            <span>@Localizer["MyProfile"]</span>
-                        </a>
-                        <a href="/Profile/Settings" class="dropdown-item rtl:flex-row-reverse">
-                            <i data-lucide="settings" class="w-4 h-4"></i>
-                            <span>@Localizer["Settings"]</span>
-                        </a>
-                        <a href="/Profile/Security" class="dropdown-item rtl:flex-row-reverse">
-                            <i data-lucide="shield" class="w-4 h-4"></i>
-                            <span>@Localizer["Security"]</span>
-                        </a>
-                        <a href="/Profile/Gallery" class="dropdown-item rtl:flex-row-reverse">
-                            <i data-lucide="image" class="w-4 h-4"></i>
-                            <span>@Localizer["Gallery"]</span>
-                        </a>
-                        
-                        @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.ContentAdmin) || User.IsInRole(Roles.DesignAdmin) || User.IsInRole(Roles.DatabaseAdmin) || User.IsInRole(Roles.Admin))
-                        {
-                            <div class="border-t border-border my-2"></div>
-                            <a href="@Url.Action("Index", "Dashboard", new { culture = System.Globalization.CultureInfo.CurrentUICulture.Name })" class="dropdown-item rtl:flex-row-reverse">
-                                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                                <span>@Localizer["Dashboard"]</span>
-                            </a>
-                        }
-                        
-                        <div class="border-t border-border my-2"></div>
-                        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" class="w-full">
-                            <button type="submit" class="dropdown-item w-full text-left text-destructive hover:text-destructive hover:bg-destructive/5 rtl:flex-row-reverse rtl:text-right">
-                                <i data-lucide="log-out" class="w-4 h-4"></i>
-                                <span>@Localizer["Logout"]</span>
-                            </button>
-                        </form>
-                    </div>
-                }
-                else
-                {
-                    <!-- Guest User Menu -->
-                    <div class="py-2">
-                        <a href="/Account/Login" class="dropdown-item">
-                            <i data-lucide="log-in" class="w-4 h-4"></i>
-                            <span>@Localizer["Login"]</span>
-                        </a>
-                        <a href="/Account/Register" class="dropdown-item">
-                            <i data-lucide="user-plus" class="w-4 h-4"></i>
-                            <span>@Localizer["Register"]</span>
-                        </a>
-                    </div>
-                }
+                        <li><hr class="dropdown-divider"></li>
+                         <li>
+                             <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="dropdown-item text-danger">@Localizer["Logout"]</button>
+                             </form>
+                         </li>
+                    }
+                    else
+                    {
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a></li>
+                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Register">@Localizer["Register"]</a></li>
+                    }
+                </ul>
             </div>
         </div>
     </div>
-</header>
+</nav>

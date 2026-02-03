@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Localization;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Localization;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 

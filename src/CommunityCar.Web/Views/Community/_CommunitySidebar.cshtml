@@ -1,40 +1,48 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
-<aside class="w-full space-y-6">
-    <div class="bg-card/40 backdrop-blur-xl border border-border rounded-2xl p-6 shadow-sm">
-        <h3 class="flex items-center gap-2 text-sm font-bold mb-6 uppercase tracking-wider text-primary">
-            <i data-lucide="zap" class="w-4 h-4"></i>
-            @Localizer["SidebarTitle"]
-        </h3>
+<!-- Community Sidebar (Design System) -->
+<aside class="w-full d-flex flex-column gap-4">
+    <!-- Main Card -->
+    <div class="card card-premium">
+        <div class="card-header border-0 bg-transparent p-4 pb-0">
+            <h6 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red">
+                <i data-lucide="zap" style="width: 18px;"></i>
+                @Localizer["SidebarTitle"]
+            </h6>
+        </div>
         
-        <!-- Featured Experts -->
-        <div class="space-y-6">
-            <div class="space-y-4">
-                <h4 class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["FeaturedExperts"]</h4>
-                @for (int i = 1; i <= 2; i++)
-                {
-                    <div class="flex items-center gap-3 p-3 rounded-xl bg-accent/20 hover:bg-accent/40 transition-all cursor-pointer border border-transparent hover:border-border">
-                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">E@i</div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-xs font-bold truncate">@Localizer["ExpertName"] @i</p>
-                            <p class="text-[9px] text-primary font-black uppercase tracking-tighter">@Localizer["VerifiedExpert"]</p>
+        <div class="card-body p-4">
+            <!-- Featured Experts -->
+            <div class="mb-5">
+                <h6 class="small fw-black text-uppercase tracking-widest text-muted opacity-50 mb-3" style="font-size: 0.65rem;">@Localizer["FeaturedExperts"]</h6>
+                <div class="d-flex flex-column gap-3">
+                    @for (int i = 1; i <= 2; i++)
+                    {
+                        <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-muted-subtle border border-transparent hover-border-primary-red transition-all cursor-pointer group">
+                            <div class="user-avatar-container p-0 m-0 border-0 shadow-sm">
+                                <div class="bg-primary-red-subtle text-primary-red rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px;">E@i</div>
+                            </div>
+                            <div class="flex-grow-1 min-w-0">
+                                <p class="mb-0 small fw-bold text-truncate">@Localizer["ExpertName"] @i</p>
+                                <p class="mb-0 text-primary-red fw-black text-uppercase tracking-tighter" style="font-size: 0.6rem;">@Localizer["VerifiedExpert"]</p>
+                            </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
 
             <!-- Recent Contributions -->
-            <div class="space-y-4">
-                <h4 class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["RecentContributions"]</h4>
-                <div class="space-y-3">
+            <div>
+                <h6 class="small fw-black text-uppercase tracking-widest text-muted opacity-50 mb-3" style="font-size: 0.65rem;">@Localizer["RecentContributions"]</h6>
+                <div class="d-flex flex-column gap-3">
                     @for (int i = 1; i <= 3; i++)
                     {
-                        <div class="flex gap-3 items-start group">
-                            <div class="w-1 h-8 rounded-full bg-border group-hover:bg-primary transition-colors"></div>
-                            <div class="flex-1">
-                                <p class="text-xs font-medium leading-tight group-hover:text-primary transition-colors">@Localizer["SampleActivity"]</p>
-                                <p class="text-[9px] text-muted-foreground mt-1">@Localizer["TwoHoursAgo"]</p>
+                        <div class="d-flex gap-3 align-items-start group cursor-pointer">
+                            <div class="bg-primary-red-subtle rounded-pill transition-colors group-hover-bg-primary-red" style="width: 3px; height: 32px;"></div>
+                            <div class="flex-grow-1">
+                                <p class="mb-0 small fw-medium text-body leading-tight group-hover-text-primary-red transition-colors">@Localizer["SampleActivity"]</p>
+                                <p class="mb-0 text-muted opacity-50 text-uppercase tracking-widest" style="font-size: 0.6rem;">@Localizer["TwoHoursAgo"]</p>
                             </div>
                         </div>
                     }
@@ -43,15 +51,16 @@
         </div>
     </div>
 
-    <!-- Promo -->
-    <div class="bg-card/40 backdrop-blur-xl border border-border rounded-2xl overflow-hidden shadow-sm relative group cursor-pointer">
-        <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <img src="/images/logo/logo.png" class="w-full h-32 object-contain opacity-10 p-4 absolute -right-4 -bottom-4 rotate-12" />
-        <div class="p-6 relative z-10">
-            <h5 class="text-sm font-black mb-1">@Localizer["UpgradeExperience"]</h5>
-            <p class="text-[10px] text-muted-foreground mb-4">@Localizer["UpgradeDescription"]</p>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em] text-primary flex items-center gap-2 group-hover:translate-x-1 transition-transform">
-                @Localizer["LearnMore"] <i data-lucide="arrow-right" class="w-3 h-3"></i>
+    <!-- Promo Card -->
+    <div class="card card-premium overflow-hidden position-relative group cursor-pointer border-0 bg-primary-red animate-float">
+        <div class="position-absolute end-0 bottom-0 p-3 opacity-10 rotate-12">
+             <i data-lucide="award" style="width: 80px; height: 80px; color: white;"></i>
+        </div>
+        <div class="card-body p-4 position-relative z-1">
+            <h6 class="fw-black text-white mb-1">@Localizer["UpgradeExperience"]</h6>
+            <p class="text-white opacity-75 mb-3 small" style="font-size: 0.75rem;">@Localizer["UpgradeDescription"]</p>
+            <span class="text-white fw-black text-uppercase tracking-widest d-flex align-items-center gap-2 group-hover-translate-x-2 transition-transform" style="font-size: 0.65rem;">
+                @Localizer["LearnMore"] <i data-lucide="arrow-right" style="width: 12px;"></i>
             </span>
         </div>
     </div>

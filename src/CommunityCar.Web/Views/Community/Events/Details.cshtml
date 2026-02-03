@@ -12,6 +12,8 @@
     ViewData["Title"] = displayTitle;
 }
 
+@Html.AntiForgeryToken()
+
     <!-- Navigation & Header Strategy -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2 mb-10">
         <div class="space-y-4">
@@ -161,7 +163,7 @@
                             <div>
                                 <div class="font-medium text-foreground">@Localizer["Attendance"]</div>
                                 <div class="text-sm text-muted-foreground">
-                                    @Model.AttendeeCount @Localizer["Attendees"]
+                                    <span id="attendeeCount">@Model.AttendeeCount</span> @Localizer["Attendees"]
                                     @if (Model.MaxAttendees.HasValue)
                                     {
                                         <span>/ @Model.MaxAttendees.Value @Localizer["Max"]</span>
@@ -170,6 +172,18 @@
                                             <span class="text-red-500 font-medium">(@Localizer["Full"])</span>
                                         }
                                     }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                                <i data-lucide="share-2" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-foreground">@Localizer["Shares"]</div>
+                                <div class="text-sm text-muted-foreground">
+                                    <span id="shareCount">@Model.ShareCount</span> @Localizer["Shares"]
                                 </div>
                             </div>
                         </div>
@@ -367,18 +381,53 @@ async function leaveEvent(eventId) {
 }
 
 function shareEvent() {
-    if (navigator.share) {
-        navigator.share({
-            title: '@Model.Title',
-            text: '@Model.Description',
-            url: window.location.href
+    shareEventToBackend('@Model.Id');
+}
+
+async function shareEventToBackend(eventId, platform = null, message = null) {
+    try {
+        const response = await fetch(`/events/${eventId}/share`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+            },
+            body: JSON.stringify({
+                platform: platform,
+                message: message
+            })
         });
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        if (window.AlertModal) {
-            window.AlertModal.success('Event link copied to clipboard!', 'Success');
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Share via native API or copy to clipboard
+            if (navigator.share && !platform) {
+                navigator.share({
+                    title: '@Model.Title',
+                    text: '@Model.Description',
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                if (window.AlertModal) {
+                    window.AlertModal.success('Event link copied to clipboard!', 'Success');
+                } else {
+                    alert('Event link copied to clipboard!');
+                }
+            }
         } else {
-            alert('Event link copied to clipboard!');
+            if (window.AlertModal) {
+                window.AlertModal.error(result.message, 'Error');
+            } else {
+                alert(result.message);
+            }
+        }
+    } catch (error) {
+        if (window.AlertModal) {
+            window.AlertModal.error('An error occurred while sharing the event.', 'Error');
+        } else {
+            alert('An error occurred while sharing the event.');
         }
     }
 }
@@ -395,5 +444,101 @@ function addToCalendar() {
 // Initialize skeleton loading
 document.addEventListener('DOMContentLoaded', function() {
     Skeleton.initPageLoad('loading-skeleton', 'main-content');
+    
+    // Initialize SignalR connection for real-time updates
+    initializeEventSignalR();
 });
+
+// SignalR connection for real-time event updates
+let eventConnection = null;
+
+function initializeEventSignalR() {
+    if (typeof signalR === 'undefined') {
+        console.warn('SignalR not available');
+        return;
+    }
+
+    eventConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/broadcastHub")
+        .build();
+
+    eventConnection.start().then(function () {
+        console.log('Event SignalR Connected');
+        
+        // Join the event group for real-time updates
+        eventConnection.invoke("JoinEventGroup", "@Model.Id");
+        
+        // Listen for event interaction updates
+        eventConnection.on("EventInteractionUpdate", function (eventId, interactionType, data) {
+            if (eventId === "@Model.Id") {
+                updateEventInteraction(interactionType, data);
+            }
+        });
+        
+        // Listen for event join updates
+        eventConnection.on("EventJoinUpdate", function (data) {
+            if (data.eventId === "@Model.Id") {
+                updateAttendeeCount(data.attendeeCount);
+                showJoinNotification(data.userName + " joined the event!");
+            }
+        });
+        
+        // Listen for event leave updates
+        eventConnection.on("EventLeaveUpdate", function (data) {
+            if (data.eventId === "@Model.Id") {
+                updateAttendeeCount(data.attendeeCount);
+                showLeaveNotification(data.userName + " left the event.");
+            }
+        });
+        
+    }).catch(function (err) {
+        console.error('Event SignalR Connection Error: ', err.toString());
+    });
+}
+
+function updateEventInteraction(interactionType, data) {
+    switch (interactionType) {
+        case 'share':
+            updateShareCount(data.ShareCount);
+            break;
+    }
+}
+
+function updateAttendeeCount(newCount) {
+    const attendeeCountElement = document.getElementById('attendeeCount');
+    if (attendeeCountElement) {
+        attendeeCountElement.textContent = newCount;
+        
+        // Add animation effect
+        attendeeCountElement.classList.add('animate-pulse');
+        setTimeout(() => {
+            attendeeCountElement.classList.remove('animate-pulse');
+        }, 1000);
+    }
+}
+
+function updateShareCount(newCount) {
+    const shareCountElement = document.getElementById('shareCount');
+    if (shareCountElement) {
+        shareCountElement.textContent = newCount;
+        
+        // Add animation effect
+        shareCountElement.classList.add('animate-pulse');
+        setTimeout(() => {
+            shareCountElement.classList.remove('animate-pulse');
+        }, 1000);
+    }
+}
+
+function showJoinNotification(message) {
+    if (window.AlertModal) {
+        window.AlertModal.info(message, 'Event Update');
+    }
+}
+
+function showLeaveNotification(message) {
+    if (window.AlertModal) {
+        window.AlertModal.info(message, 'Event Update');
+    }
+}
 </script>

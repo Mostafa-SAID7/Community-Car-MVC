@@ -148,12 +148,26 @@ public class PostsController : Controller
     [HttpPost("{id:guid}/like")]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public IActionResult Like(Guid id)
+    public async Task<IActionResult> Like(Guid id)
     {
-        try
-        {
+        try {
             // TODO: Implement like functionality in service
+            // For now, return mock response
+            var liked = true; // This should come from service
+            var likeCount = 42; // This should come from service
+            
             _logger.LogInformation("Post {PostId} liked", id);
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { 
+                    success = true, 
+                    liked = liked,
+                    likeCount = likeCount,
+                    message = "Post liked successfully!" 
+                });
+            }
+            
             TempData["ToasterType"] = "success";
             TempData["ToasterTitle"] = "Success";
             TempData["ToasterMessage"] = "Post liked successfully!";
@@ -161,6 +175,15 @@ public class PostsController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error liking post {PostId}", id);
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { 
+                    success = false, 
+                    message = "An error occurred while liking the post." 
+                });
+            }
+            
             TempData["ToasterType"] = "error";
             TempData["ToasterTitle"] = "Error";
             TempData["ToasterMessage"] = "An error occurred while liking the post.";
@@ -175,13 +198,73 @@ public class PostsController : Controller
         return RedirectToAction(nameof(Details), new { id });
     }
 
+    [HttpPost("{id:guid}/bookmark")]
+    [ValidateAntiForgeryToken]
+    [Authorize]
+    public async Task<IActionResult> Bookmark(Guid id)
+    {
+        try
+        {
+            // TODO: Implement bookmark functionality in service
+            // For now, return mock response
+            var bookmarked = true; // This should come from service
+            
+            _logger.LogInformation("Post {PostId} bookmarked", id);
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { 
+                    success = true, 
+                    bookmarked = bookmarked,
+                    message = bookmarked ? "Post bookmarked!" : "Bookmark removed!" 
+                });
+            }
+            
+            TempData["ToasterType"] = "success";
+            TempData["ToasterTitle"] = "Success";
+            TempData["ToasterMessage"] = bookmarked ? "Post bookmarked!" : "Bookmark removed!";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error bookmarking post {PostId}", id);
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { 
+                    success = false, 
+                    message = "An error occurred while updating bookmark." 
+                });
+            }
+            
+            TempData["ToasterType"] = "error";
+            TempData["ToasterTitle"] = "Error";
+            TempData["ToasterMessage"] = "An error occurred while updating bookmark.";
+        }
+
+        var referer = Request.Headers["Referer"].ToString();
+        if (!string.IsNullOrEmpty(referer))
+        {
+            return Redirect(referer);
+        }
+
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
     [HttpPost("{id:guid}/comment")]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public IActionResult Comment(Guid id, string content)
+    public async Task<IActionResult> Comment(Guid id, string content)
     {
         if (string.IsNullOrWhiteSpace(content))
         {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { 
+                    success = false, 
+                    message = "Comment content is required." 
+                });
+            }
+            
             TempData["ToasterType"] = "validation";
             TempData["ToasterTitle"] = "Validation Error";
             TempData["ToasterMessage"] = "Comment content is required.";
@@ -192,6 +275,16 @@ public class PostsController : Controller
         {
             // TODO: Implement comment functionality in service
             _logger.LogInformation("Comment added to post {PostId}", id);
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { 
+                    success = true, 
+                    message = "Comment posted successfully!",
+                    reload = false // Set to true if you want to reload the page to show new comment
+                });
+            }
+            
             TempData["ToasterType"] = "success";
             TempData["ToasterTitle"] = "Success";
             TempData["ToasterMessage"] = "Comment added successfully!";
@@ -199,6 +292,15 @@ public class PostsController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error adding comment to post {PostId}", id);
+            
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { 
+                    success = false, 
+                    message = "An error occurred while adding the comment." 
+                });
+            }
+            
             TempData["ToasterType"] = "error";
             TempData["ToasterTitle"] = "Error";
             TempData["ToasterMessage"] = "An error occurred while adding the comment.";

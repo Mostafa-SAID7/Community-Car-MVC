@@ -14,6 +14,7 @@ public class PostVM
     public string? Category { get; set; }
     public Guid AuthorId { get; set; }
     public string AuthorName { get; set; } = string.Empty;
+    public string? AuthorProfilePicture { get; set; }
     public Guid? GroupId { get; set; }
     public string? GroupName { get; set; }
     public bool IsPinned { get; set; }
@@ -22,6 +23,14 @@ public class PostVM
     public List<string> ImageUrls { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    
+    // Interaction properties
+    public int LikeCount { get; set; }
+    public int CommentCount { get; set; }
+    public int ShareCount { get; set; }
+    public int BookmarkCount { get; set; }
+    public bool IsLiked { get; set; }
+    public bool IsBookmarked { get; set; }
     
     // Helper properties
     public string TypeText => Type.ToString();

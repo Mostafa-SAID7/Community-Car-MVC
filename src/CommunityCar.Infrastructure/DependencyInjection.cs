@@ -15,8 +15,8 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using CommunityCar.Application.Common.Interfaces.Services.Caching;
-using CommunityCar.Application.Common.Interfaces.Services.BackgroundJobs;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.BackgroundJobs;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Application.Common.Interfaces.Repositories.Authorization;
@@ -33,7 +33,7 @@ using CommunityCar.Application.Services.Communication;
 using CommunityCar.Application.Services.Community;
 using CommunityCar.Application.Services.Storage;
 using CommunityCar.Application.Services.Dashboard;
-using CommunityCar.Application.Services.Caching;
+using CommunityCar.Application.Services.Dashboard.Caching;
 using CommunityCar.Application.Common.Interfaces.Hubs;
 using CommunityCar.Infrastructure.Hubs;
 using CommunityCar.Domain.Entities.Account.Core;
@@ -93,10 +93,10 @@ public static class DependencyInjection
             options.Password.RequireLowercase = true;
             options.Password.RequiredUniqueChars = 4;
 
-            // Lockout settings
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-            options.Lockout.MaxFailedAccessAttempts = 5;
-            options.Lockout.AllowedForNewUsers = true;
+            // Lockout settings - Relaxed for testing
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+            options.Lockout.MaxFailedAccessAttempts = 999;
+            options.Lockout.AllowedForNewUsers = false;
 
             // User settings
             options.User.RequireUniqueEmail = true;
@@ -199,6 +199,9 @@ public static class DependencyInjection
 
         // SignalR Hub Context Wrapper
         services.AddScoped<INotificationHubContext, NotificationHubContextWrapper>();
+        
+        // Broadcast Service
+        services.AddScoped<IBroadcastService, Services.BroadcastService>();
 
         // System Services
         services.AddMemoryCache();

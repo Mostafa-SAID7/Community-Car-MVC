@@ -8,6 +8,20 @@
             super('DashboardCharts');
             this.rootStyles = getComputedStyle(document.documentElement);
             this.charts = {};
+
+            // Premium Red Design System Colors
+            this.colors = {
+                primary: '#fb2c36',
+                primarySubtle: 'rgba(251, 44, 54, 0.1)',
+                secondary: '#6366f1',
+                secondarySubtle: 'rgba(99, 102, 241, 0.1)',
+                success: '#10b981',
+                warning: '#f59e0b',
+                danger: '#ef4444',
+                info: '#0ea5e9',
+                grid: 'rgba(0, 0, 0, 0.05)',
+                text: this.rootStyles.getPropertyValue('--muted-foreground').trim() || '#64748b'
+            };
         }
 
         init() {
@@ -22,14 +36,6 @@
             }
         }
 
-        getStyle(name, opacity = 1) {
-            const val = this.rootStyles.getPropertyValue(name).trim();
-            if (opacity < 1 && (val.startsWith('hsl') || !isNaN(parseFloat(val)))) {
-                return `hsla(${val}, ${opacity})`;
-            }
-            return `hsl(${val})`;
-        }
-
         initUserGrowthChart() {
             const canvas = document.getElementById('userGrowthChart');
             if (!canvas) return;
@@ -38,14 +44,10 @@
             const labels = JSON.parse(canvas.getAttribute('data-labels') || '[]');
             const datasets = JSON.parse(canvas.getAttribute('data-datasets') || '[]');
 
-            const textColor = this.getStyle('--muted-foreground');
-            const gridColor = this.getStyle('--chart-grid', 0.5);
-
-            // Map datasets to include styles
+            // Map datasets to include premium styles
             const formattedDatasets = datasets.map((ds, index) => {
-                const colorVar = index === 0 ? '--chart-primary' : '--chart-secondary';
-                const color = this.getStyle(colorVar);
-                const bgColor = this.getStyle(colorVar, 0.1);
+                const color = index === 0 ? this.colors.primary : this.colors.secondary;
+                const bgColor = index === 0 ? this.colors.primarySubtle : this.colors.secondarySubtle;
 
                 return {
                     ...ds,
@@ -72,28 +74,33 @@
                         legend: {
                             display: datasets.length > 1,
                             position: 'top',
-                            labels: { font: { weight: 'bold', size: 10 } }
+                            labels: {
+                                font: { weight: '800', size: 10 },
+                                usePointStyle: true,
+                                padding: 20,
+                                color: this.colors.text
+                            }
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                            titleColor: '#0f172a',
-                            bodyColor: '#334155',
-                            borderColor: '#e2e8f0',
+                            backgroundColor: '#ffffff',
+                            titleColor: '#000000',
+                            bodyColor: '#64748b',
+                            borderColor: 'rgba(0, 0, 0, 0.1)',
                             borderWidth: 1,
                             padding: 12,
-                            cornerRadius: 8,
+                            cornerRadius: 12,
                             usePointStyle: true
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            grid: { color: gridColor, drawBorder: false },
-                            ticks: { font: { weight: 'bold', size: 10 }, color: textColor, padding: 8 }
+                            grid: { color: this.colors.grid, drawBorder: false },
+                            ticks: { font: { weight: '800', size: 10 }, color: this.colors.text, padding: 8 }
                         },
                         x: {
                             grid: { display: false },
-                            ticks: { font: { weight: 'bold', size: 10 }, color: textColor, padding: 8 }
+                            ticks: { font: { weight: '800', size: 10 }, color: this.colors.text, padding: 8 }
                         }
                     }
                 }
@@ -108,33 +115,45 @@
             const labels = JSON.parse(canvas.getAttribute('data-labels') || '[]');
             const data = JSON.parse(canvas.getAttribute('data-values') || '[]');
 
-            const primaryColor = this.getStyle('--chart-primary');
-            const secondaryColor = this.getStyle('--chart-secondary');
-            const accentVariant = this.getStyle('--chart-accent');
-
             this.charts.activity = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: labels,
                     datasets: [{
                         data: data,
-                        backgroundColor: [primaryColor, secondaryColor, '#f59e0b', '#ef4444', accentVariant],
+                        backgroundColor: [
+                            this.colors.primary,
+                            this.colors.secondary,
+                            this.colors.warning,
+                            this.colors.success,
+                            this.colors.info
+                        ],
                         borderWidth: 0,
-                        weight: 1
+                        hoverOffset: 15
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '70%',
+                    cutout: '75%',
                     plugins: {
                         legend: {
                             position: 'bottom',
                             labels: {
-                                font: { weight: 'bold', size: 9 },
+                                font: { weight: '800', size: 9 },
                                 usePointStyle: true,
-                                padding: 20
+                                padding: 25,
+                                color: this.colors.text
                             }
+                        },
+                        tooltip: {
+                            backgroundColor: '#ffffff',
+                            titleColor: '#000000',
+                            bodyColor: '#64748b',
+                            borderColor: 'rgba(0, 0, 0, 0.1)',
+                            borderWidth: 1,
+                            padding: 12,
+                            cornerRadius: 12
                         }
                     }
                 }
@@ -149,3 +168,4 @@
     CC.Modules.Dashboard.Charts = new ChartsController();
 
 })(window.CommunityCar);
+

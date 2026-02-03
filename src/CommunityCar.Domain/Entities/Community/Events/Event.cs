@@ -28,6 +28,9 @@ public class Event : AggregateRoot
     public int? MaxAttendees { get; private set; }
     public bool RequiresApproval { get; private set; }
     
+    // Interactions
+    public int ShareCount { get; private set; }
+    
     // Pricing
     public decimal? TicketPrice { get; private set; }
     public string? TicketInfo { get; private set; }
@@ -57,6 +60,7 @@ public class Event : AggregateRoot
         Location = location;
         OrganizerId = organizerId;
         AttendeeCount = 0;
+        ShareCount = 0;
         RequiresApproval = false;
         IsPublic = true;
         IsCancelled = false;
@@ -150,6 +154,12 @@ public class Event : AggregateRoot
         {
             Audit(UpdatedBy);
         }
+    }
+
+    public void IncrementShareCount()
+    {
+        ShareCount++;
+        Audit(UpdatedBy);
     }
 
     public void IncrementAttendeeCount()

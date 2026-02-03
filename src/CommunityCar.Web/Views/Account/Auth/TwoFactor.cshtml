@@ -5,99 +5,112 @@
     Layout = "_Layout";
 }
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
-}
-
-<div class="profile-container py-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="space-y-6">
-            
+<div class="container py-5 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
             <!-- Header -->
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground mb-4 shadow-lg">
-                    <i data-lucide="shield-check" class="w-8 h-8"></i>
+            <div class="text-center mb-5">
+                <div class="position-relative d-inline-flex align-items-center justify-content-center mb-4">
+                    <div class="position-absolute inset-0 bg-primary opacity-25 rounded-circle blur-xl animate-pulse"></div>
+                    <div class="position-relative w-16 h-16 rounded-4 bg-card border border-border d-flex align-items-center justify-content-center text-primary shadow-lg" style="width: 64px; height: 64px;">
+                        <i data-lucide="shield-check" class="w-8 h-8"></i>
+                    </div>
                 </div>
-                <h1 class="text-3xl font-bold text-foreground mb-2">Two-Factor Authentication</h1>
-                <p class="text-muted-foreground">Add an extra layer of security to your account</p>
+                <h1 class="display-6 fw-black text-gradient tracking-tight mb-2">Two-Factor Authentication</h1>
+                <p class="text-sm text-muted-foreground uppercase tracking-widest fw-bold opacity-75">Add an extra layer of security to your account</p>
             </div>
 
-            <!-- Status Card -->
-            <div class="leetcode-card p-6">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full @(Model.IsEnabled ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600") flex items-center justify-center">
-                            <i data-lucide="@(Model.IsEnabled ? "shield-check" : "shield-alert")" class="w-6 h-6"></i>
+            <div class="d-grid gap-4">
+                <!-- Status Card -->
+                <div class="card card-premium shadow-lg border-0">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-0 gap-4">
+                            <div class="d-flex align-items-center gap-4 text-center text-md-start">
+                                <div class="w-16 h-16 rounded-circle @(Model.IsEnabled ? "bg-success bg-opacity-10 text-success" : "bg-warning bg-opacity-10 text-warning") d-flex align-items-center justify-content-center flex-shrink-0" style="width: 64px; height: 64px;">
+                                    <i data-lucide="@(Model.IsEnabled ? "shield-check" : "shield-alert")" class="w-8 h-8"></i>
+                                </div>
+                                <div>
+                                    <h3 class="h5 fw-black text-uppercase tracking-wider mb-1">
+                                        @(Model.IsEnabled ? "Protection Active" : "Account Vulnerable")
+                                    </h3>
+                                    <p class="text-sm text-muted-foreground mb-0">
+                                        @(Model.IsEnabled ? "Your account is protected with 2FA" : "Enable 2FA to secure your account")
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge rounded-pill @(Model.IsEnabled ? "bg-success bg-opacity-10 text-success" : "bg-warning bg-opacity-10 text-warning") px-4 py-2 text-xs fw-black text-uppercase tracking-widest">
+                                    @(Model.IsEnabled ? "Enabled" : "Disabled")
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-foreground">
-                                @(Model.IsEnabled ? "Two-Factor Authentication is Enabled" : "Two-Factor Authentication is Disabled")
-                            </h3>
-                            <p class="text-sm text-muted-foreground">
-                                @(Model.IsEnabled ? "Your account is protected with 2FA" : "Enable 2FA to secure your account")
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="px-3 py-1 rounded-full text-xs font-medium @(Model.IsEnabled ? "bg-green-100 text-green-800" : "bg-orange-100 text-orange-800")">
-                            @(Model.IsEnabled ? "Enabled" : "Disabled")
-                        </span>
                     </div>
                 </div>
 
                 @if (!Model.IsEnabled)
                 {
                     <!-- Setup 2FA -->
-                    <div class="space-y-6">
-                        <div class="border-t border-border pt-6">
-                            <h4 class="text-lg font-semibold text-foreground mb-4">Set up Two-Factor Authentication</h4>
+                    <div class="card card-premium shadow-lg border-0">
+                        <div class="card-body p-4 p-md-5">
+                            <h4 class="h6 fw-black text-uppercase tracking-widest text-primary-red mb-5 d-flex align-items-center gap-2">
+                                <i data-lucide="settings" class="w-5 h-5"></i>
+                                Setup Protocol
+                            </h4>
                             
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div class="row g-5">
                                 <!-- QR Code Section -->
-                                <div class="space-y-4">
-                                    <h5 class="font-medium text-foreground">1. Scan QR Code</h5>
-                                    <p class="text-sm text-muted-foreground">
-                                        Use an authenticator app like Google Authenticator, Authy, or Microsoft Authenticator to scan this QR code:
-                                    </p>
-                                    
-                                    @if (!string.IsNullOrEmpty(Model.AuthenticatorUri))
-                                    {
-                                        <div class="flex justify-center p-4 bg-white rounded-lg border">
-                                            <div id="qrcode" class="qr-code"></div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="d-grid gap-4">
+                                        <div>
+                                            <h5 class="h6 fw-bold mb-2">1. Scan QR Pattern</h5>
+                                            <p class="text-sm text-muted-foreground mb-4">
+                                                Use an authenticator app (Google, Authy, Microsoft) to scan this synchronization pattern:
+                                            </p>
+                                            
+                                            @if (!string.IsNullOrEmpty(Model.AuthenticatorUri))
+                                            {
+                                                <div class="p-4 bg-white rounded-4 border border-border d-flex justify-content-center align-items-center shadow-sm" style="max-width: 250px; margin: 0 auto;">
+                                                    <div id="qrcode" class="qr-code"></div>
+                                                </div>
+                                            }
                                         </div>
-                                    }
-                                    
-                                    <!-- Manual Entry -->
-                                    <div class="mt-4">
-                                        <h6 class="text-sm font-medium text-foreground mb-2">Or enter this key manually:</h6>
-                                        <div class="flex items-center gap-2">
-                                            <code class="flex-1 px-3 py-2 bg-muted rounded text-sm font-mono break-all">@Model.AuthenticatorKey</code>
-                                            <button type="button" onclick="copyToClipboard('@Model.AuthenticatorKey')" class="px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors">
-                                                Copy
-                                            </button>
+                                        
+                                        <!-- Manual Entry -->
+                                        <div>
+                                            <h6 class="text-xs fw-black text-uppercase tracking-widest text-muted-foreground mb-3">Or manual key entry:</h6>
+                                            <div class="input-group">
+                                                <code class="form-control bg-muted-subtle border-border rounded-start-4 text-sm font-mono py-2 px-3 break-all d-flex align-items-center">@Model.AuthenticatorKey</code>
+                                                <button type="button" onclick="copyToClipboard('@Model.AuthenticatorKey')" class="btn btn-primary-red rounded-end-4 px-3 fw-bold text-xs text-uppercase tracking-widest">
+                                                    Copy
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Verification Section -->
-                                <div class="space-y-4">
-                                    <h5 class="font-medium text-foreground">2. Enter Verification Code</h5>
-                                    <p class="text-sm text-muted-foreground">
-                                        Enter the 6-digit code from your authenticator app to complete setup:
-                                    </p>
-                                    
-                                    <form asp-action="EnableTwoFactor" method="post" class="space-y-4">
-                                        <input type="hidden" name="ManualEntryKey" value="@Model.AuthenticatorKey" />
-                                        
+                                <div class="col-12 col-lg-6">
+                                    <div class="d-grid gap-4 h-100">
                                         <div>
-                                            <label class="block text-sm font-medium text-foreground mb-2">Verification Code</label>
-                                            <input type="text" name="VerificationCode" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground font-mono text-center text-lg tracking-widest focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="000000" maxlength="6" pattern="[0-9]{6}" required />
+                                            <h5 class="h6 fw-bold mb-2">2. Handshake Verification</h5>
+                                            <p class="text-sm text-muted-foreground mb-4">
+                                                Enter the 6-digit pulse from your app to finalize the link:
+                                            </p>
+                                            
+                                            <form asp-action="EnableTwoFactor" method="post" class="d-grid gap-4">
+                                                <input type="hidden" name="ManualEntryKey" value="@Model.AuthenticatorKey" />
+                                                
+                                                <div class="form-group text-center">
+                                                    <label class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground mb-2 d-block">Verification Code</label>
+                                                    <input type="text" name="VerificationCode" class="form-control bg-muted-subtle border-border rounded-4 py-3 text-center text-xl fw-black tracking-[0.5em] focus-ring-primary" placeholder="000000" maxlength="6" pattern="[0-9]{6}" required />
+                                                </div>
+                                                
+                                                <button type="submit" class="btn btn-primary-red py-3 rounded-4 fw-black text-uppercase tracking-widest text-xs btn-glow mt-2">
+                                                    Authorize Two-Factor
+                                                </button>
+                                            </form>
                                         </div>
-                                        
-                                        <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold py-3 px-4 rounded-lg transition-all btn-glow">
-                                            Enable Two-Factor Authentication
-                                        </button>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -106,85 +119,103 @@
                 else
                 {
                     <!-- Manage 2FA -->
-                    <div class="space-y-6">
-                        <div class="border-t border-border pt-6">
-                            <h4 class="text-lg font-semibold text-foreground mb-4">Manage Two-Factor Authentication</h4>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Recovery Codes -->
-                                <div class="space-y-4">
-                                    <div class="flex items-center gap-2">
-                                        <i data-lucide="key" class="w-5 h-5 text-primary"></i>
-                                        <h5 class="font-medium text-foreground">Recovery Codes</h5>
-                                    </div>
-                                    <p class="text-sm text-muted-foreground">
-                                        Generate backup codes in case you lose access to your authenticator app.
-                                    </p>
-                                    <button type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-lg text-sm font-medium transition-all">
-                                        <i data-lucide="download" class="w-4 h-4"></i>
-                                        Generate Recovery Codes
-                                    </button>
-                                </div>
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="card card-premium shadow-lg border-0 h-100">
+                                <div class="card-body p-4 p-md-5">
+                                    <h4 class="h6 fw-black text-uppercase tracking-widest text-primary-red mb-5 d-flex align-items-center gap-2">
+                                        <i data-lucide="cog" class="w-5 h-5"></i>
+                                        Management Mainframe
+                                    </h4>
+                                    
+                                    <div class="row g-4">
+                                        <!-- Recovery Codes -->
+                                        <div class="col-12 col-md-6">
+                                            <div class="card h-100 border-border bg-muted-subtle rounded-4 p-4 transition-all hover-bg-muted">
+                                                <div class="d-flex align-items-center gap-3 mb-3">
+                                                    <div class="w-10 h-10 rounded-4 bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center">
+                                                        <i data-lucide="key" class="w-5 h-5"></i>
+                                                    </div>
+                                                    <h5 class="h6 fw-bold mb-0">Recovery Codes</h5>
+                                                </div>
+                                                <p class="text-xs text-muted-foreground mb-4">
+                                                    Generate emergency backup codes for offline access if your device is lost.
+                                                </p>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm w-100 rounded-pill px-4 fw-black text-uppercase tracking-widest text-[10px] transition-all">
+                                                    <i data-lucide="download" class="w-3.5 h-3.5 me-2"></i>
+                                                    Generate Codes
+                                                </button>
+                                            </div>
+                                        </div>
 
-                                <!-- Reset 2FA -->
-                                <div class="space-y-4">
-                                    <div class="flex items-center gap-2">
-                                        <i data-lucide="refresh-cw" class="w-5 h-5 text-orange-500"></i>
-                                        <h5 class="font-medium text-foreground">Reset Authenticator</h5>
+                                        <!-- Reset 2FA -->
+                                        <div class="col-12 col-md-6">
+                                            <div class="card h-100 border-border bg-muted-subtle rounded-4 p-4 transition-all hover-bg-muted">
+                                                <div class="d-flex align-items-center gap-3 mb-3">
+                                                    <div class="w-10 h-10 rounded-4 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center">
+                                                        <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                                                    </div>
+                                                    <h5 class="h6 fw-bold mb-0">Sync Reset</h5>
+                                                </div>
+                                                <p class="text-xs text-muted-foreground mb-4">
+                                                    Restore and re-synchronize your authenticator linkage on a new device.
+                                                </p>
+                                                <button type="button" class="btn btn-outline-warning btn-sm w-100 rounded-pill px-4 fw-black text-uppercase tracking-widest text-[10px] transition-all">
+                                                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5 me-2"></i>
+                                                    Rotate Link
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p class="text-sm text-muted-foreground">
-                                        Reset your authenticator app if you've lost access to your device.
-                                    </p>
-                                    <button type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-700 hover:bg-orange-200 rounded-lg text-sm font-medium transition-all">
-                                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                                        Reset Authenticator
-                                    </button>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Disable 2FA -->
-                        <div class="border-t border-border pt-6">
-                            <div class="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
-                                <div class="flex items-start gap-4">
-                                    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
-                                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <h5 class="font-medium text-red-800 dark:text-red-200 mb-2">Disable Two-Factor Authentication</h5>
-                                        <p class="text-sm text-red-700 dark:text-red-300 mb-4">
-                                            Disabling 2FA will make your account less secure. Only disable if you're having issues with your authenticator app.
-                                        </p>
-                                        
-                                        <form asp-action="DisableTwoFactor" method="post" class="space-y-4">
-                                            <div>
-                                                <label class="block text-sm font-medium text-red-800 dark:text-red-200 mb-2">Enter your password to confirm</label>
-                                                <input type="password" name="Password" class="w-full max-w-sm px-3 py-2 bg-white dark:bg-gray-800 border border-red-300 dark:border-red-600 rounded text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500" required />
-                                            </div>
+                        <div class="col-12">
+                            <div class="card card-premium shadow-lg border-0 border-top border-danger border-4 overflow-hidden">
+                                <div class="card-body p-4 p-md-5">
+                                    <div class="d-flex align-items-start gap-4">
+                                        <div class="w-12 h-12 rounded-4 bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
+                                            <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h5 class="h6 fw-black text-uppercase tracking-widest text-danger mb-3">Terminate Security Protocol</h5>
+                                            <p class="text-sm text-muted-foreground mb-5">
+                                                Disabling two-factor authentication will degrade your account security. This action requires high-level verification.
+                                            </p>
                                             
-                                            <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg text-sm font-medium transition-all">
-                                                <i data-lucide="shield-off" class="w-4 h-4"></i>
-                                                Disable Two-Factor Authentication
-                                            </button>
-                                        </form>
+                                            <form asp-action="DisableTwoFactor" method="post" class="d-grid gap-4" style="max-width: 400px;">
+                                                <div class="form-group">
+                                                    <label class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground mb-2 d-block">Authorized Password</label>
+                                                    <input type="password" name="Password" class="form-control bg-muted-subtle border-border rounded-4 py-2 px-3 text-sm focus-ring-danger" required />
+                                                </div>
+                                                
+                                                <button type="submit" class="btn btn-danger py-2 rounded-4 fw-black text-uppercase tracking-widest text-[10px] d-flex align-items-center justify-content-center gap-2">
+                                                    <i data-lucide="shield-off" class="w-4 h-4"></i>
+                                                    Confirm Termination
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 }
-            </div>
 
-            <!-- Back Button -->
-            <div class="text-center">
-                <a href="/profile/settings" class="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-lg font-medium transition-all">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    Back to Settings
-                </a>
+                <!-- Back Button -->
+                <div class="text-center pt-4 pb-5">
+                    <a href="/profile/settings" class="btn btn-outline-secondary px-5 py-3 rounded-pill fw-black text-uppercase tracking-widest text-xs transition-all hover-bg-muted">
+                        <i data-lucide="arrow-left" class="w-4 h-4 me-2"></i>
+                        Settings Mainframe
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 
 @section Scripts {
     @if (!string.IsNullOrEmpty(Model.AuthenticatorUri))

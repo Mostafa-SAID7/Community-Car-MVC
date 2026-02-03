@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Domain.Entities.Community.Groups;
+using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Enums.Community;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
@@ -70,5 +71,101 @@ public class GroupsRepository : BaseRepository<Group>, IGroupsRepository
             .OrderByDescending(g => g.UpdatedAt)
             .Take(count)
             .ToListAsync(cancellationToken);
+    }
+
+    // BroadcastHub specific methods
+    public async Task<bool> UserHasAccessAsync(Guid userId, Guid groupId, CancellationToken cancellationToken = default)
+    {
+        var group = await Context.Groups.FindAsync(new object[] { groupId }, cancellationToken);
+        if (group == null) return false;
+
+        // Public groups are accessible to everyone
+        if (group.Privacy == GroupPrivacy.Public) return true;
+
+        // Check if user is owner
+        return group.OwnerId == userId;
+    }
+
+    public async Task<bool> UserCanPostAsync(Guid userId, Guid groupId, CancellationToken cancellationToken = default)
+    {
+        var group = await Context.Groups.FindAsync(new object[] { groupId }, cancellationToken);
+        if (group == null) return false;
+
+        // Owner can always post
+        if (group.OwnerId == userId) return true;
+
+        // For now, assume public groups allow posting by anyone
+        return group.Privacy == GroupPrivacy.Public;
+    }
+
+    public async Task<IEnumerable<Group>> GetUserGroupsAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Groups
+            .Where(g => g.OwnerId == userId)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<User>> GetAdminsAsync(Guid groupId, CancellationToken cancellationToken = default)
+    {
+        var group = await Context.Groups.FindAsync(new object[] { groupId }, cancellationToken);
+        if (group == null) return new List<User>();
+
+        // Get the owner user
+        var owner = await Context.Users.FindAsync(new object[] { group.OwnerId }, cancellationToken);
+        if (owner == null) return new List<User>();
+
+        // For now, only return the owner as admin
+        return new List<User> { owner };
+    }
+
+    public async Task AddMemberAsync(Guid groupId, Guid userId, CancellationToken cancellationToken = default)
+    {
+        // For now, just a placeholder - would need to implement member management
+        await Task.CompletedTask;
+    }
+
+    public async Task CreateJoinRequestAsync(Guid groupId, Guid userId, CancellationToken cancellationToken = default)
+    {
+        // For now, just a placeholder - would need to implement join request entity
+        await Task.CompletedTask;
+    }
+
+    public async Task<bool> IsUserAdminAsync(Guid userId, Guid groupId, CancellationToken cancellationToken = default)
+    {
+        var group = await Context.Groups.FindAsync(new object[] { groupId }, cancellationToken);
+        if (group == null) return false;
+
+        // Check if user is owner (admin)
+        return group.OwnerId == userId;
+    }
+
+    public async Task ApproveJoinRequestAsync(Guid groupId, Guid userId, CancellationToken cancellationToken = default)
+    {
+        // For now, just a placeholder - would need to implement join request approval
+        await Task.CompletedTask;
+    }
+
+    public async Task DenyJoinRequestAsync(Guid groupId, Guid userId, CancellationToken cancellationToken = default)
+    {
+        // For now, just a placeholder - would need to implement join request denial
+        await Task.CompletedTask;
+    }
+
+    public async Task<IEnumerable<dynamic>> GetUserGroupsWithAccessLevelAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var groups = await Context.Groups
+            .Where(g => g.OwnerId == userId)
+            .Select(g => new
+            {
+                g.Id,
+                g.Name,
+                UserAccessLevel = "Admin",
+                IsUserAdmin = true,
+                CanUserPost = true,
+                CanUserModerate = true
+            })
+            .ToListAsync(cancellationToken);
+
+        return groups.Cast<dynamic>();
     }
 }

@@ -1,0 +1,288 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using System.Globalization
+@{
+    var hideLeftSidebar = ViewData["HideLeftSidebar"] as bool? ?? false;
+    var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
+    var pageTitle = ViewData["Title"] as string ?? "Dashboard";
+    var pageDescription = ViewData["Description"] as string ?? "Manage your community platform and view real-time analytics";
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")" class="light">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="user-id" content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
+    <title>@pageTitle - Dashboard - CommunityCar</title>
+
+    <!-- Theme initialization script -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.classList.add(theme);
+        })();
+    </script>
+
+    <!-- Performance and SEO -->
+    <performance-optimizations url="@Context.Request.Path" />
+    <seo-meta page-type="Dashboard" entity-id="@(ViewData["EntityId"] as Guid?)" />
+
+    <!-- Favicon and RSS -->
+    <link rel="icon" type="image/png" href="~/images/logo/logo.png">
+    <link rel="alternate" type="application/rss+xml" title="CommunityCar RSS Feed" href="@Url.Action("RSS", "DashboardSEO")" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lemonada:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/features.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="font-sans antialiased dashboard-body">
+    @Html.AntiForgeryToken()
+    
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="dashboard-header-content">
+            <!-- Logo and Brand -->
+            <div class="dashboard-brand">
+                <a href="/" class="brand-link">
+                    <div class="brand-icon">
+                        <span class="brand-text">CC</span>
+                    </div>
+                    <div class="brand-info">
+                        <span class="brand-name">CommunityCar</span>
+                        <span class="brand-subtitle">Dashboard</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="dashboard-search hidden md:flex">
+                <div class="search-wrapper">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" placeholder="@Localizer["SearchDashboard"]" class="search-input">
+                    <kbd class="search-shortcut">⌘K</kbd>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="dashboard-header-actions">
+                <!-- Mobile Menu Toggle -->
+                <button id="dashboard-mobile-menu" class="dashboard-action-btn md:hidden">
+                    <i data-lucide="menu" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Notifications -->
+                <div class="relative dashboard-notifications">
+                    <button class="dashboard-action-btn dashboard-notification-toggle">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                        <span class="notification-badge hidden">3</span>
+                    </button>
+                    
+                    <div class="dashboard-notification-dropdown hidden">
+                        <div class="notification-header">
+                            <h3 class="notification-title">@Localizer["Notifications"]</h3>
+                            <button class="notification-mark-all">@Localizer["MarkAllRead"]</button>
+                        </div>
+                        <div class="notification-list">
+                            <div class="notification-loading">
+                                <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+                                <span>@Localizer["LoadingNotifications"]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button id="dashboard-theme-toggle" class="dashboard-action-btn">
+                    <i data-lucide="sun" class="w-4 h-4 theme-icon-light"></i>
+                    <i data-lucide="moon" class="w-4 h-4 theme-icon-dark hidden"></i>
+                </button>
+
+                <!-- Language Toggle -->
+                <button id="dashboard-lang-toggle" class="dashboard-action-btn dashboard-lang-btn">
+                    @(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper() == "AR" ? "EN" : "AR")
+                </button>
+
+                <!-- User Menu -->
+                <div class="relative dashboard-user-menu">
+                    <button class="dashboard-user-toggle">
+                        <div class="user-avatar">
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                var profilePic = User.FindFirst("ProfilePictureUrl")?.Value;
+                                if (!string.IsNullOrEmpty(profilePic))
+                                {
+                                    <img src="@profilePic" alt="@User.Identity.Name" class="avatar-image" />
+                                }
+                                else
+                                {
+                                    <span class="avatar-fallback">@(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "U")</span>
+                                }
+                            }
+                            else
+                            {
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                            }
+                        </div>
+                        <i data-lucide="chevron-down" class="w-3 h-3 ml-1"></i>
+                    </button>
+                    
+                    <div class="dashboard-user-dropdown hidden">
+                        <div class="user-info">
+                            <div class="user-details">
+                                <p class="user-name">@(User.Identity?.Name ?? "User")</p>
+                                <p class="user-email">@(User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "")</p>
+                            </div>
+                        </div>
+                        <div class="user-menu-items">
+                            <a href="@Url.Action("Index", "Profile", new { culture = CultureInfo.CurrentUICulture.Name })" class="user-menu-item">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                                <span>@Localizer["MyProfile"]</span>
+                            </a>
+                            <a href="@Url.Action("Index", "ProfileSettings", new { culture = CultureInfo.CurrentUICulture.Name })" class="user-menu-item">
+                                <i data-lucide="settings" class="w-4 h-4"></i>
+                                <span>@Localizer["Settings"]</span>
+                            </a>
+                            <div class="menu-separator"></div>
+                            <a href="/" class="user-menu-item">
+                                <i data-lucide="home" class="w-4 h-4"></i>
+                                <span>@Localizer["BackToApp"]</span>
+                            </a>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="w-full">
+                                <button type="submit" class="user-menu-item w-full text-left text-destructive">
+                                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                                    <span>@Localizer["Logout"]</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Layout Container -->
+    <div class="dashboard-container">
+        
+        <!-- Dashboard Sidebar -->
+        @if (!hideLeftSidebar)
+        {
+            <aside class="dashboard-sidebar">
+                <div class="sidebar-content">
+                    <partial name="Dashboard/_DashboardSidebarLeft" />
+                </div>
+            </aside>
+        }
+
+        <!-- Main Dashboard Content -->
+        <main class="dashboard-main" id="dashboard-main">
+            <!-- Page Header -->
+            <div class="dashboard-page-header">
+                <div class="page-header-content">
+                    <div class="page-title-section">
+                        <h1 class="page-title">@pageTitle</h1>
+                        <p class="page-description">@pageDescription</p>
+                    </div>
+                    
+                    @if (IsSectionDefined("PageActions"))
+                    {
+                        <div class="page-actions">
+                            @RenderSection("PageActions")
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div class="dashboard-content">
+                @RenderBody()
+            </div>
+        </main>
+
+        <!-- Dashboard Right Sidebar -->
+        @if (!hideRightSidebar)
+        {
+            <aside class="dashboard-sidebar-right">
+                <div class="sidebar-content">
+                    @if (IsSectionDefined("DashboardSidebarRight"))
+                    {
+                        @RenderSection("DashboardSidebarRight")
+                    }
+                    else
+                    {
+                        <partial name="Dashboard/_DashboardSidebarRight" />
+                    }
+                </div>
+            </aside>
+        }
+    </div>
+
+    <!-- Mobile Search Overlay -->
+    <div class="dashboard-mobile-search-overlay" id="dashboard-mobile-search">
+        <div class="mobile-search-content">
+            <div class="mobile-search-header">
+                <button id="dashboard-mobile-search-close" class="dashboard-action-btn">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                </button>
+                <div class="mobile-search-input-wrapper">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                    <input type="text" placeholder="@Localizer["SearchDashboard"]" class="mobile-search-input" autofocus>
+                </div>
+            </div>
+            <div class="mobile-search-results">
+                <p class="text-sm text-muted-foreground text-center">@Localizer["StartTypingToSearch"]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    
+    <!-- Core Services -->
+    <script src="~/js/core.js" asp-append-version="true" defer></script>
+    <script src="~/js/toaster.js" asp-append-version="true" defer></script>
+    <script src="~/js/error-boundary.js" asp-append-version="true" defer></script>
+
+    <!-- SignalR -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <script src="~/lib/signalr/signalr.min.js"></script>
+    }
+
+    <!-- Dashboard Services -->
+    <script src="~/js/services/cookie-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/theme-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/sidebar-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/localization-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/notification-service.js" asp-append-version="true" defer></script>
+
+    <!-- Dashboard Modules -->
+    <script src="~/js/modules/dashboard/charts-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/overview-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/reports-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/settings-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/performance-controller.js" asp-append-version="true" defer></script>
+
+    <!-- Main Site Script -->
+    <script src="~/js/site.js" asp-append-version="true" defer></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

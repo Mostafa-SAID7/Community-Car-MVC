@@ -5,190 +5,241 @@
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
-<div class="space-y-8 animate-in fade-in duration-700">
-    <div id="analytics-skeleton" class="hidden space-y-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <skeleton type="Card" />
-            <skeleton type="Card" />
-            <skeleton type="Card" />
-            <skeleton type="Card" />
+<div class="d-flex flex-column gap-5 animate-in fade-in duration-700">
+    <div id="analytics-skeleton" class="d-none">
+        <div class="row g-4 mb-5">
+            @for (int i = 0; i < 4; i++) {
+                <div class="col-12 col-md-6 col-lg-3"><skeleton type="Card" /></div>
+            }
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 h-[350px] bg-card/40 animate-pulse rounded-xl border border-border"></div>
-            <div class="h-[350px] bg-card/40 animate-pulse rounded-xl border border-border"></div>
+        <div class="row g-4">
+            <div class="col-12 col-lg-8"><div class="h-[350px] bg-card bg-opacity-40 animate-pulse rounded-4 border border-border"></div></div>
+            <div class="col-12 col-lg-4"><div class="h-[350px] bg-card bg-opacity-40 animate-pulse rounded-4 border border-border"></div></div>
         </div>
     </div>
 
-    <div id="analytics-content" class="space-y-8">
+    <div id="analytics-content" class="d-flex flex-column gap-5">
 
     <!-- Key Metrics Row -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="eng-stat-group group">
-            <div class="flex items-center justify-between mb-4 w-full">
-                <h6 class="eng-stat-label">@Localizer["NewUsers"]</h6>
-                <div class="p-2 rounded-lg bg-green-500/10 text-green-500 text-sm group-hover:scale-110 transition-transform">
-                    <i class="fas fa-user-plus"></i>
+    <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.1s">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["NewUsers"]</div>
+                        <div class="w-10 h-10 rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center group-hover:scale-110 transition-all">
+                            <i data-lucide="user-plus" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="h2 fw-black text-gradient mb-1">@Model.NewUsers.ToString("N0")</div>
+                    <div class="text-[10px] fw-bold text-success d-flex align-items-center">
+                        <i data-lucide="arrow-up" class="w-3 h-3 me-1"></i> +12.5% <span class="opacity-40 ms-1 fw-medium text-muted-foreground">@Localizer["VsLastPeriod"]</span>
+                    </div>
                 </div>
-            </div>
-            <div class="eng-stat-value">@Model.NewUsers.ToString("N0")</div>
-            <div class="eng-stat-delta text-green-500">
-                <i class="fas fa-arrow-up text-[8px]"></i> +12.5% <span class="opacity-40 ml-1">@Localizer["VsLastPeriod"]</span>
             </div>
         </div>
         
-        <div class="eng-stat-group group">
-            <div class="flex items-center justify-between mb-4 w-full">
-                <h6 class="eng-stat-label">@Localizer["ActiveUsers"]</h6>
-                <div class="p-2 rounded-lg bg-blue-500/10 text-blue-500 text-sm group-hover:scale-110 transition-transform">
-                    <i class="fas fa-users"></i>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.2s">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["ActiveUsers"]</div>
+                        <div class="w-10 h-10 rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center group-hover:scale-110 transition-all">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="h2 fw-black text-gradient mb-1">@Model.ActiveUsers.ToString("N0")</div>
+                    <div class="text-[10px] fw-bold text-primary d-flex align-items-center">
+                        <i data-lucide="arrow-up" class="w-3 h-3 me-1"></i> +8.3% <span class="opacity-40 ms-1 fw-medium text-muted-foreground">@Localizer["VsLastPeriod"]</span>
+                    </div>
                 </div>
-            </div>
-            <div class="eng-stat-value">@Model.ActiveUsers.ToString("N0")</div>
-            <div class="eng-stat-delta text-blue-500">
-                <i class="fas fa-arrow-up text-[8px]"></i> +8.3% <span class="opacity-40 ml-1">@Localizer["VsLastPeriod"]</span>
             </div>
         </div>
         
-        <div class="eng-stat-group group">
-            <div class="flex items-center justify-between mb-4 w-full">
-                <h6 class="eng-stat-label">@Localizer["RetentionRate"]</h6>
-                <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-500 text-sm group-hover:scale-110 transition-transform">
-                    <i class="fas fa-chart-line"></i>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.3s">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["RetentionRate"]</div>
+                        <div class="w-10 h-10 rounded-3 bg-indigo bg-opacity-10 text-indigo d-flex align-items-center justify-content-center group-hover:scale-110 transition-all">
+                            <i data-lucide="trending-up" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="h2 fw-black text-gradient mb-1">@Model.RetentionRate.ToString("F1")%</div>
+                    <div class="text-[10px] fw-bold text-indigo d-flex align-items-center">
+                        <i data-lucide="arrow-up" class="w-3 h-3 me-1"></i> +2.1% <span class="opacity-40 ms-1 fw-medium text-muted-foreground">@Localizer["VsLastPeriod"]</span>
+                    </div>
                 </div>
-            </div>
-            <div class="eng-stat-value">@Model.RetentionRate.ToString("F1")%</div>
-            <div class="eng-stat-delta text-indigo-500">
-                <i class="fas fa-arrow-up text-[8px]"></i> +2.1% <span class="opacity-40 ml-1">@Localizer["VsLastPeriod"]</span>
             </div>
         </div>
         
-        <div class="eng-stat-group group">
-            <div class="flex items-center justify-between mb-4 w-full">
-                <h6 class="eng-stat-label">@Localizer["AvgSession"]</h6>
-                <div class="p-2 rounded-lg bg-amber-500/10 text-amber-500 text-sm group-hover:scale-110 transition-transform">
-                    <i class="fas fa-clock"></i>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.4s">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["AvgSession"]</div>
+                        <div class="w-10 h-10 rounded-3 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center group-hover:scale-110 transition-all">
+                            <i data-lucide="clock" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="h2 fw-black text-gradient mb-1">@Model.AverageSessionDuration.ToString(@"mm\:ss")</div>
+                    <div class="text-[10px] fw-bold text-danger d-flex align-items-center">
+                        <i data-lucide="arrow-down" class="w-3 h-3 me-1"></i> -1.2% <span class="opacity-40 ms-1 fw-medium text-muted-foreground">@Localizer["VsLastPeriod"]</span>
+                    </div>
                 </div>
-            </div>
-            <div class="eng-stat-value">@Model.AverageSessionDuration.ToString(@"mm\:ss")</div>
-            <div class="eng-stat-delta text-destructive">
-                <i class="fas fa-arrow-down text-[8px]"></i> -1.2% <span class="opacity-40 ml-1">@Localizer["VsLastPeriod"]</span>
             </div>
         </div>
     </div>
 
     <!-- Charts Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 eng-card overflow-hidden transition-all">
-            <div class="eng-card-header">
-                <h5 class="eng-card-title">@Localizer["UserGrowthTrend"]</h5>
-            </div>
-            <div class="p-6">
-                <canvas id="userGrowthChart" class="w-full h-[300px]"
-                        data-labels='@Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Label)))'
-                        data-datasets='[{"label": "@Localizer["NewUsers"]", "data": @Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Value)))}, {"label": "@Localizer["ActiveUsers"]", "data": @Html.Raw(Json.Serialize(Model.ActivityData.Select(x => x.Value)))}]'></canvas>
+    <div class="row g-4">
+        <div class="col-12 col-xl-8">
+            <div class="card card-premium shadow-xl h-100 overflow-hidden">
+                <div class="card-header border-0 bg-transparent p-4 pb-0">
+                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
+                        <i data-lucide="trending-up" style="width: 18px;"></i>
+                        @Localizer["UserGrowthTrend"]
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div style="height: 320px;">
+                        <canvas id="userGrowthChart" class="w-100 h-100"
+                                data-labels='@Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Label)))'
+                                data-datasets='[{"label": "@Localizer["NewUsers"]", "data": @Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Value)))}, {"label": "@Localizer["ActiveUsers"]", "data": @Html.Raw(Json.Serialize(Model.ActivityData.Select(x => x.Value)))}]'></canvas>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div class="eng-card overflow-hidden transition-all">
-            <div class="eng-card-header">
-                <h5 class="eng-card-title">@Localizer["UserActivity"]</h5>
-            </div>
-            <div class="p-6">
-                <canvas id="activityChart" class="w-full h-[300px]"
-                        data-labels='["@Localizer["Posts"]", "@Localizer["Questions"]", "@Localizer["Answers"]", "@Localizer["Reviews"]", "@Localizer["Stories"]"]'
-                        data-values='[@Model.PostsCreated, @Model.QuestionsAsked, @Model.AnswersGiven, @Model.ReviewsWritten, @Model.StoriesShared]'></canvas>
+        <div class="col-12 col-xl-4">
+            <div class="card card-premium shadow-xl h-100 overflow-hidden">
+                <div class="card-header border-0 bg-transparent p-4 pb-0">
+                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
+                        <i data-lucide="pie-chart" style="width: 18px;"></i>
+                        @Localizer["UserActivity"]
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div style="height: 320px;">
+                        <canvas id="activityChart" class="w-100 h-100"
+                                data-labels='["@Localizer["Posts"]", "@Localizer["Questions"]", "@Localizer["Answers"]", "@Localizer["Reviews"]", "@Localizer["Stories"]"]'
+                                data-values='[@Model.PostsCreated, @Model.QuestionsAsked, @Model.AnswersGiven, @Model.ReviewsWritten, @Model.StoriesShared]'></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Detailed Analytics Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="eng-card overflow-hidden transition-all">
-            <div class="eng-card-header">
-                <h5 class="eng-card-title">@Localizer["UserEngagement"]</h5>
-            </div>
-            <div class="p-8 space-y-6">
-                <div class="space-y-3">
-                    <div class="flex justify-between items-end">
-                        <span class="text-[11px] font-black uppercase tracking-widest opacity-60">@Localizer["PostsCreated"]</span>
-                        <span class="text-base font-black tabular-nums">@Model.PostsCreated.ToString("N0")</span>
-                    </div>
-                    <div class="eng-progress-container h-1.5">
-                        <div class="eng-progress-bar bg-blue-500 w-[85%]"></div>
-                    </div>
+    <div class="row g-4">
+        <div class="col-12 col-lg-6">
+            <div class="card card-premium shadow-xl h-100 overflow-hidden">
+                <div class="card-header border-0 bg-transparent p-4 pb-0">
+                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
+                        <i data-lucide="target" style="width: 18px;"></i>
+                        @Localizer["UserEngagement"]
+                    </h5>
                 </div>
-                
-                <div class="space-y-3">
-                    <div class="flex justify-between items-end">
-                        <span class="text-[11px] font-black uppercase tracking-widest opacity-60">@Localizer["QuestionsAsked"]</span>
-                        <span class="text-base font-black tabular-nums">@Model.QuestionsAsked.ToString("N0")</span>
+                <div class="card-body p-4 d-flex flex-column gap-4">
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-end">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["PostsCreated"]</span>
+                            <span class="text-sm fw-black tabular-nums">@Model.PostsCreated.ToString("N0")</span>
+                        </div>
+                        <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
+                            <div class="progress-bar bg-primary rounded-pill transition-all duration-700" style="width: 85%"></div>
+                        </div>
                     </div>
-                    <div class="eng-progress-container h-1.5">
-                        <div class="eng-progress-bar bg-green-500 w-[70%]"></div>
+                    
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-end">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["QuestionsAsked"]</span>
+                            <span class="text-sm fw-black tabular-nums">@Model.QuestionsAsked.ToString("N0")</span>
+                        </div>
+                        <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
+                            <div class="progress-bar bg-success rounded-pill transition-all duration-700" style="width: 70%"></div>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="space-y-3">
-                    <div class="flex justify-between items-end">
-                        <span class="text-[11px] font-black uppercase tracking-widest opacity-60">@Localizer["AnswersGiven"]</span>
-                        <span class="text-base font-black tabular-nums">@Model.AnswersGiven.ToString("N0")</span>
+                    
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-end">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["AnswersGiven"]</span>
+                            <span class="text-sm fw-black tabular-nums">@Model.AnswersGiven.ToString("N0")</span>
+                        </div>
+                        <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
+                            <div class="progress-bar bg-warning rounded-pill transition-all duration-700" style="width: 60%"></div>
+                        </div>
                     </div>
-                    <div class="eng-progress-container h-1.5">
-                        <div class="eng-progress-bar bg-amber-500 w-[60%]"></div>
-                    </div>
-                </div>
-                
-                <div class="space-y-3">
-                    <div class="flex justify-between items-end">
-                        <span class="text-[11px] font-black uppercase tracking-widest opacity-60">@Localizer["ReviewsWritten"]</span>
-                        <span class="text-base font-black tabular-nums">@Model.ReviewsWritten.ToString("N0")</span>
-                    </div>
-                    <div class="eng-progress-container h-1.5">
-                        <div class="eng-progress-bar bg-red-500 w-[45%]"></div>
+                    
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between align-items-end">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["ReviewsWritten"]</span>
+                            <span class="text-sm fw-black tabular-nums">@Model.ReviewsWritten.ToString("N0")</span>
+                        </div>
+                        <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
+                            <div class="progress-bar bg-primary-red rounded-pill transition-all duration-700" style="width: 45%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="eng-card overflow-hidden transition-all">
-            <div class="eng-card-header">
-                <h5 class="eng-card-title">@Localizer["UserDemographics"]</h5>
-            </div>
-            <div class="p-6 divide-y divide-border/30">
-                <div class="flex items-center justify-between py-4 group/item">
-                    <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest opacity-70 group-hover/item:text-primary transition-colors">@Localizer["MostActiveDevice"]</span>
-                    <span class="text-xs font-black text-foreground">@Model.DeviceType</span>
+        <div class="col-12 col-lg-6">
+            <div class="card card-premium shadow-xl h-100 overflow-hidden">
+                <div class="card-header border-0 bg-transparent p-4 pb-0">
+                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
+                        <i data-lucide="globe" style="width: 18px;"></i>
+                        @Localizer["UserDemographics"]
+                    </h5>
                 </div>
-                <div class="flex items-center justify-between py-4 group/item">
-                    <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest opacity-70 group-hover/item:text-primary transition-colors">@Localizer["PrimaryBrowser"]</span>
-                    <span class="text-xs font-black text-foreground">@Model.BrowserType</span>
-                </div>
-                <div class="flex items-center justify-between py-4 group/item">
-                    <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest opacity-70 group-hover/item:text-primary transition-colors">@Localizer["TopLocation"]</span>
-                    <span class="text-xs font-black text-foreground">@Model.Location</span>
-                </div>
-                <div class="flex items-center justify-between py-4 group/item">
-                    <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest opacity-70 group-hover/item:text-primary transition-colors">@Localizer["MostVisitedArea"]</span>
-                    <span class="text-xs font-black text-foreground">@Model.MostVisitedSection</span>
-                </div>
-                <div class="flex items-center justify-between py-4 group/item">
-                    <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest opacity-70 group-hover/item:text-primary transition-colors">@Localizer["TotalPageViews"]</span>
-                    <span class="text-xs font-black text-foreground tabular-nums">@Model.PageViews.ToString("N0")</span>
-                </div>
-                <div class="flex items-center justify-between py-4 group/item">
-                    <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-widest opacity-70 group-hover/item:text-primary transition-colors">@Localizer["TimeOnSite"]</span>
-                    <span class="text-xs font-black text-foreground tabular-nums">@Model.TimeSpentOnSite.ToString(@"hh\:mm\:ss")</span>
+                <div class="card-body p-4">
+                    <div class="d-flex flex-column gap-1">
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-4 hover-bg-muted-subtle transition-all group/item">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60 group-hover/item:text-primary-red transition-colors">@Localizer["MostActiveDevice"]</span>
+                            <span class="text-xs fw-black text-foreground">@Model.DeviceType</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-4 hover-bg-muted-subtle transition-all group/item">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60 group-hover/item:text-primary-red transition-colors">@Localizer["PrimaryBrowser"]</span>
+                            <span class="text-xs fw-black text-foreground">@Model.BrowserType</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-4 hover-bg-muted-subtle transition-all group/item">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60 group-hover/item:text-primary-red transition-colors">@Localizer["TopLocation"]</span>
+                            <span class="text-xs fw-black text-foreground">@Model.Location</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-4 hover-bg-muted-subtle transition-all group/item">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60 group-hover/item:text-primary-red transition-colors">@Localizer["MostVisitedArea"]</span>
+                            <span class="text-xs fw-black text-foreground">@Model.MostVisitedSection</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-4 hover-bg-muted-subtle transition-all group/item">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60 group-hover/item:text-primary-red transition-colors">@Localizer["TotalPageViews"]</span>
+                            <span class="text-xs fw-black text-foreground tabular-nums">@Model.PageViews.ToString("N0")</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-4 hover-bg-muted-subtle transition-all group/item">
+                            <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60 group-hover/item:text-primary-red transition-colors">@Localizer["TimeOnSite"]</span>
+                            <span class="text-xs fw-black text-foreground tabular-nums">@Model.TimeSpentOnSite.ToString(@"hh\:mm\:ss")</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
+    </div>
+</div>
+
     </div>
 </div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="~/js/dashboard-charts.js" asp-append-version="true"></script>
+    <script src="~/js/modules/dashboard/charts-controller.js" asp-append-version="true"></script>
     <script>
-        function exportAnalytics() { console.log('Exporting...'); }
+        document.addEventListener('DOMContentLoaded', () => {
+            if (CC.Modules.Dashboard.Charts) {
+                CC.Modules.Dashboard.Charts.init();
+            }
+        });
+        function exportAnalytics() { 
+            if (CC.Services.Toaster) CC.Services.Toaster.info('@Localizer["ExportingAnalytics"]...');
+            console.log('Exporting analytics...'); 
+        }
     </script>
 }

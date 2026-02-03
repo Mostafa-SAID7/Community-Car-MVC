@@ -46,6 +46,7 @@ public class ProfileController : Controller
                 ViewBag.City = profile.City;
                 ViewBag.Country = profile.Country;
                 ViewBag.ProfilePictureUrl = profile.ProfilePictureUrl;
+                ViewBag.CoverImageUrl = profile.CoverImageUrl;
                 ViewBag.CreatedAt = profile.CreatedAt;
                 ViewBag.PostsCount = profile.PostsCount;
                 ViewBag.CommentsCount = profile.CommentsCount;

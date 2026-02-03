@@ -46,4 +46,8 @@ public interface IPostsRepository : IBaseRepository<Post>
     // Admin operations
     Task<IEnumerable<Post>> GetDeletedPostsForModerationAsync(int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
     Task<int> GetDeletedPostsCountAsync();
+    
+    // BroadcastHub specific methods
+    Task<IEnumerable<Post>> GetAccessiblePostsAsync(Guid userId, int page = 1, int pageSize = 10, string? category = null, string? sortBy = "recent", CancellationToken cancellationToken = default);
+    Task<IEnumerable<Post>> GetGroupPostsAsync(Guid groupId, int page = 1, int pageSize = 10, CancellationToken cancellationToken = default);
 }

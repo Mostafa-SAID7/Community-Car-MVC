@@ -1,7 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* UI Bundle: Global Components & Animations */
-@import "./Modules/components.css";
-@import "./Modules/animations.css";

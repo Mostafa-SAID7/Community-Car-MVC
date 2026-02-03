@@ -14,13 +14,15 @@ window.CommunityCar = window.CommunityCar || {
     Components: {},
     Modules: {},
     Utils: {},
+    Events: {}, // Placeholder, will be replaced by EventBus instance
     Config: {
         debug: true
     }
 };
 
 // Alias for convenience within the codebase (optional usage)
-const CC = window.CommunityCar;
+// Alias for convenience within the codebase
+window.CC = window.CommunityCar;
 
 /**
  * Base Service Class
@@ -63,7 +65,16 @@ CC.Utils.BaseComponent = class BaseComponent {
     findAll(selector) {
         return this.element ? this.element.querySelectorAll(selector) : [];
     }
+
+    init() {
+        if (this.initialized) return true;
+        this.initialized = true;
+        return false;
+    }
 };
+
+// Compatibility Alias
+CC.Services.BaseService = CC.Utils.BaseService;
 
 // Event Bus for decoupled communication
 CC.Utils.EventBus = new class EventBus {
@@ -92,5 +103,8 @@ CC.Utils.EventBus = new class EventBus {
         });
     }
 }();
+
+// Alias for easier access
+CC.Events = CC.Utils.EventBus;
 
 console.log('Community Car Core initialized');

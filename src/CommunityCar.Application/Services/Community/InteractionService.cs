@@ -648,7 +648,7 @@ public partial class InteractionService : IInteractionService
         {
             ReactionType.Like => "thumbs-up",
             ReactionType.Love => "heart",
-            ReactionType.Haha => "laugh",
+            ReactionType.Haha => "smile",
             ReactionType.Wow => "zap",
             ReactionType.Sad => "frown",
             ReactionType.Angry => "angry",

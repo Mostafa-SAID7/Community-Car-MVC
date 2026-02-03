@@ -13,11 +13,11 @@
         </div>
         <div class="flex gap-2">
             <button id="cleanup-btn" class="btn btn-outline-warning">
-                <i class="fas fa-broom mr-2"></i>
+                <i data-lucide="brush" class="w-4 h-4 mr-2"></i>
                 Cleanup Old Content
             </button>
             <a href="@Url.Action("Stats")" class="btn btn-outline-primary">
-                <i class="fas fa-chart-bar mr-2"></i>
+                <i data-lucide="bar-chart-3" class="w-4 h-4 mr-2"></i>
                 View Statistics
             </a>
         </div>
@@ -48,7 +48,7 @@
             </div>
             <div class="flex items-end">
                 <button type="submit" class="btn btn-primary w-full">
-                    <i class="fas fa-search mr-2"></i>
+                    <i data-lucide="search" class="w-4 h-4 mr-2"></i>
                     Filter
                 </button>
             </div>
@@ -62,11 +62,11 @@
                 <h2 class="text-lg font-semibold">Deleted Content (@Model.TotalCount items)</h2>
                 <div class="flex gap-2">
                     <button id="bulk-restore-btn" class="btn btn-outline-success btn-sm" disabled>
-                        <i class="fas fa-undo mr-1"></i>
+                        <i data-lucide="undo-2" class="w-4 h-4 mr-1"></i>
                         Restore Selected
                     </button>
                     <button id="bulk-delete-btn" class="btn btn-outline-danger btn-sm" disabled>
-                        <i class="fas fa-trash mr-1"></i>
+                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
                         Permanent Delete
                     </button>
                 </div>
@@ -123,19 +123,19 @@
                                         {
                                             <button class="btn btn-outline-success btn-sm restore-btn" 
                                                     data-id="@item.Id" data-type="@item.ContentType.ToLower()">
-                                                <i class="fas fa-undo"></i>
+                                                <i data-lucide="undo-2" class="w-4 h-4"></i>
                                             </button>
                                         }
                                         @if (item.CanPermanentDelete)
                                         {
                                             <button class="btn btn-outline-danger btn-sm permanent-delete-btn" 
                                                     data-id="@item.Id" data-type="@item.ContentType.ToLower()">
-                                                <i class="fas fa-trash"></i>
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
                                             </button>
                                         }
                                         <a href="#" class="btn btn-outline-primary btn-sm view-btn" 
                                            data-id="@item.Id" data-type="@item.ContentType.ToLower()">
-                                            <i class="fas fa-eye"></i>
+                                            <i data-lucide="eye" class="w-4 h-4"></i>
                                         </a>
                                     </div>
                                 </td>
@@ -176,7 +176,7 @@
         else
         {
             <div class="p-8 text-center text-muted-foreground">
-                <i class="fas fa-inbox text-4xl mb-4"></i>
+                <i data-lucide="inbox" class="w-12 h-12 mb-4 opacity-20"></i>
                 <p>No deleted content found.</p>
             </div>
         }
@@ -200,7 +200,7 @@
                 <div class="flex gap-2 justify-end">
                     <button type="button" id="cleanup-cancel" class="btn btn-outline">Cancel</button>
                     <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-broom mr-2"></i>
+                        <i data-lucide="brush" class="w-4 h-4 mr-2"></i>
                         Start Cleanup
                     </button>
                 </div>

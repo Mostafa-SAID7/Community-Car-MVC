@@ -63,6 +63,7 @@ public class ProfileSettingsController : Controller
         ViewBag.City = profile.City;
         ViewBag.Country = profile.Country;
         ViewBag.ProfilePictureUrl = profile.ProfilePictureUrl;
+        ViewBag.CoverImageUrl = profile.CoverImageUrl;
         ViewBag.CreatedAt = profile.CreatedAt;
         ViewBag.PostsCount = profile.PostsCount;
         ViewBag.CommentsCount = profile.CommentsCount;
@@ -297,6 +298,28 @@ public class ProfileSettingsController : Controller
                                 return BadRequest(new { success = false, message = "Profile updated but failed to upload picture." });
                             
                             TempData["ErrorMessage"] = "Profile updated but failed to upload picture.";
+                            return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
+                        }
+                    }
+                }
+
+                // Handle cover image upload if provided
+                if (model.CoverImage != null)
+                {
+                    // First upload the file to get the URL
+                    using var stream = model.CoverImage.OpenReadStream();
+                    var fileName = $"cover_{userId}_{Guid.NewGuid()}{Path.GetExtension(model.CoverImage.FileName)}";
+                    var imageUrl = await _fileStorageService.UploadFileAsync(stream, fileName, model.CoverImage.ContentType);
+                    
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        var uploadResult = await _profileService.UpdateCoverImageAsync(userId, imageUrl);
+                        if (!uploadResult)
+                        {
+                            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                                return BadRequest(new { success = false, message = "Profile updated but cover image upload failed." });
+                            
+                            TempData["ErrorMessage"] = "Profile updated but cover image upload failed.";
                             return RedirectToAction("Index", new { culture = System.Globalization.CultureInfo.CurrentCulture.Name });
                         }
                     }

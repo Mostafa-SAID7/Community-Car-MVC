@@ -54,6 +54,134 @@ public class QAController : Controller
         return View("~/Views/Community/QA/SearchResults.cshtml", response);
     }
 
+    [HttpGet("ask")]
+    [Authorize]
+    public IActionResult Create()
+    {
+        return View("~/Views/Community/QA/Create.cshtml");
+    }
+
+    [HttpGet("vote-count-test")]
+    public async Task<IActionResult> GetVoteCountTest(string entityId, string entityType)
+    {
+        try
+        {
+            if (!Guid.TryParse(entityId, out var parsedEntityId))
+            {
+                return Json(new { error = "Invalid entityId format", success = false });
+            }
+
+            if (!Enum.TryParse<EntityType>(entityType, out var parsedEntityType))
+            {
+                return Json(new { error = "Invalid entityType", success = false });
+            }
+
+            var voteScore = await _qaService.GetVoteCountAsync(parsedEntityId, parsedEntityType);
+            return Json(new { voteScore, success = true, entityId, entityType });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting vote count for entity {EntityId} of type {EntityType}", entityId, entityType);
+            return Json(new { error = ex.Message, success = false });
+        }
+    }
+
+    [HttpGet("tags")]
+    public async Task<IActionResult> GetTags()
+    {
+        var tags = await _qaService.GetPopularTagsAsync(50);
+        return Json(tags);
+    }
+
+    [HttpGet("car-makes")]
+    public async Task<IActionResult> GetCarMakes()
+    {
+        var makes = await _qaService.GetAvailableCarMakesAsync();
+        return Json(makes);
+    }
+    
+    [HttpGet("debug")]
+    public async Task<IActionResult> Debug()
+    {
+        try
+        {
+            var questions = await _qaService.GetAllQuestionsAsync();
+            var result = new
+            {
+                QuestionsCount = questions.Count(),
+                Questions = questions.Take(5).Select(q => new
+                {
+                    q.Id,
+                    q.Title,
+                    q.Slug,
+                    q.CreatedAt,
+                    q.AuthorId,
+                    DetailsUrl = Url.Action("Details", "QA", new { culture = RouteData.Values["culture"], slug = q.Slug })
+                }).ToList(),
+                Success = true
+            };
+            
+            return Json(result);
+        }
+        catch (Exception ex)
+        {
+            return Json(new { Error = ex.Message, StackTrace = ex.StackTrace, Success = false });
+        }
+    }
+    
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+        return Json(new { Message = "QA Controller is working!", Controller = "QA", Action = "Test" });
+    }
+    
+    [HttpGet("fix-slugs")]
+    public async Task<IActionResult> FixSlugs()
+    {
+        try
+        {
+            // Get all questions directly from the database
+            var questions = await _unitOfWork.QA.GetAllAsync();
+            var fixedCount = 0;
+            
+            foreach (var question in questions)
+            {
+                if (string.IsNullOrEmpty(question.Slug))
+                {
+                    // Use reflection to set the slug since it has a private setter
+                    var slugProperty = typeof(Question).GetProperty("Slug");
+                    var generateSlugMethod = typeof(Question).GetMethod("GenerateSlug", 
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                    
+                    if (generateSlugMethod != null)
+                    {
+                        var newSlug = (string)generateSlugMethod.Invoke(null, new object[] { question.Title });
+                        
+                        // Update the question content to trigger slug regeneration
+                        question.UpdateContent(question.Title, question.Body);
+                        await _unitOfWork.QA.UpdateAsync(question);
+                        fixedCount++;
+                    }
+                }
+            }
+            
+            if (fixedCount > 0)
+            {
+                await _unitOfWork.SaveChangesAsync();
+            }
+            
+            return Json(new { 
+                Message = $"Fixed {fixedCount} questions with empty slugs", 
+                TotalQuestions = questions.Count(),
+                Success = true 
+            });
+        }
+        catch (Exception ex)
+        {
+            return Json(new { Error = ex.Message, StackTrace = ex.StackTrace, Success = false });
+        }
+    }
+
     [HttpGet("{slug}")]
     public async Task<IActionResult> Details(string slug)
     {
@@ -70,13 +198,6 @@ public class QAController : Controller
 
         ViewBag.Answers = await _qaService.GetAnswersByQuestionIdAsync(id);
         return View("~/Views/Community/QA/Details.cshtml", question);
-    }
-
-    [HttpGet("ask")]
-    [Authorize]
-    public IActionResult Create()
-    {
-        return View("~/Views/Community/QA/Create.cshtml");
     }
 
     [HttpPost("ask")]
@@ -156,6 +277,13 @@ public class QAController : Controller
     {
         var userId = Guid.Parse(_currentUserService.UserId!);
         await _qaService.VoteAsync(entityId, entityType, userId, voteType);
+
+        // For AJAX requests, return JSON response
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+        {
+            var voteScore = await _qaService.GetVoteCountAsync(entityId, entityType);
+            return Json(new { success = true, voteScore, voteType = voteType.ToString() });
+        }
 
         // Redirect back to referring page or details if unsure
         var referer = Request.Headers["Referer"].ToString();
@@ -295,102 +423,5 @@ public class QAController : Controller
         await _qaService.UnlockQuestionAsync(questionId, moderatorId);
         var q = await _qaService.GetQuestionByIdAsync(questionId);
         return RedirectToAction(nameof(Details), new { culture = RouteData.Values["culture"], slug = q?.Slug ?? questionId.ToString() });
-    }
-
-    // AJAX endpoints for dynamic content
-    [HttpGet("tags")]
-    public async Task<IActionResult> GetTags()
-    {
-        var tags = await _qaService.GetPopularTagsAsync(50);
-        return Json(tags);
-    }
-
-    [HttpGet("car-makes")]
-    public async Task<IActionResult> GetCarMakes()
-    {
-        var makes = await _qaService.GetAvailableCarMakesAsync();
-        return Json(makes);
-    }
-    
-    [HttpGet("debug")]
-    public async Task<IActionResult> Debug()
-    {
-        try
-        {
-            var questions = await _qaService.GetAllQuestionsAsync();
-            var result = new
-            {
-                QuestionsCount = questions.Count(),
-                Questions = questions.Take(5).Select(q => new
-                {
-                    q.Id,
-                    q.Title,
-                    q.Slug,
-                    q.CreatedAt,
-                    q.AuthorId,
-                    DetailsUrl = Url.Action("Details", "QA", new { culture = RouteData.Values["culture"], slug = q.Slug })
-                }).ToList(),
-                Success = true
-            };
-            
-            return Json(result);
-        }
-        catch (Exception ex)
-        {
-            return Json(new { Error = ex.Message, StackTrace = ex.StackTrace, Success = false });
-        }
-    }
-    
-    [HttpGet("test")]
-    public IActionResult Test()
-    {
-        return Json(new { Message = "QA Controller is working!", Controller = "QA", Action = "Test" });
-    }
-    
-    [HttpGet("fix-slugs")]
-    public async Task<IActionResult> FixSlugs()
-    {
-        try
-        {
-            // Get all questions directly from the database
-            var questions = await _unitOfWork.QA.GetAllAsync();
-            var fixedCount = 0;
-            
-            foreach (var question in questions)
-            {
-                if (string.IsNullOrEmpty(question.Slug))
-                {
-                    // Use reflection to set the slug since it has a private setter
-                    var slugProperty = typeof(Question).GetProperty("Slug");
-                    var generateSlugMethod = typeof(Question).GetMethod("GenerateSlug", 
-                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-                    
-                    if (generateSlugMethod != null)
-                    {
-                        var newSlug = (string)generateSlugMethod.Invoke(null, new object[] { question.Title });
-                        
-                        // Update the question content to trigger slug regeneration
-                        question.UpdateContent(question.Title, question.Body);
-                        await _unitOfWork.QA.UpdateAsync(question);
-                        fixedCount++;
-                    }
-                }
-            }
-            
-            if (fixedCount > 0)
-            {
-                await _unitOfWork.SaveChangesAsync();
-            }
-            
-            return Json(new { 
-                Message = $"Fixed {fixedCount} questions with empty slugs", 
-                TotalQuestions = questions.Count(),
-                Success = true 
-            });
-        }
-        catch (Exception ex)
-        {
-            return Json(new { Error = ex.Message, StackTrace = ex.StackTrace, Success = false });
-        }
     }
 }

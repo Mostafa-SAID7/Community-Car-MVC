@@ -141,12 +141,12 @@ public class DashboardController : Controller
     {
         var navigationItems = new[]
         {
-            new { Title = "Overview", Icon = "fas fa-tachometer-alt", Url = Url.Action("Index", "Overview", new { area = "" }), Description = "Dashboard overview and statistics" },
-            new { Title = "Analytics", Icon = "fas fa-chart-bar", Url = Url.Action("Index", "Analytics", new { area = "" }), Description = "User and content analytics" },
-            new { Title = "Reports", Icon = "fas fa-file-alt", Url = Url.Action("Index", "Reports", new { area = "" }), Description = "Generate and manage reports" },
-            new { Title = "Monitoring", Icon = "fas fa-heartbeat", Url = Url.Action("Index", "Monitoring", new { area = "" }), Description = "System health monitoring" },
-            new { Title = "Management", Icon = "fas fa-users-cog", Url = Url.Action("Index", "Management", new { area = "" }), Description = "User management tools" },
-            new { Title = "Settings", Icon = "fas fa-cog", Url = Url.Action("Index", "Settings", new { area = "" }), Description = "Dashboard configuration" }
+            new { Title = "Overview", Icon = "layout-dashboard", Url = Url.Action("Index", "Overview", new { area = "" }), Description = "Dashboard overview and statistics" },
+            new { Title = "Analytics", Icon = "bar-chart-3", Url = Url.Action("Index", "Analytics", new { area = "" }), Description = "User and content analytics" },
+            new { Title = "Reports", Icon = "file-text", Url = Url.Action("Index", "Reports", new { area = "" }), Description = "Generate and manage reports" },
+            new { Title = "Monitoring", Icon = "activity", Url = Url.Action("Index", "Monitoring", new { area = "" }), Description = "System health monitoring" },
+            new { Title = "Management", Icon = "users", Url = Url.Action("Index", "Management", new { area = "" }), Description = "User management tools" },
+            new { Title = "Settings", Icon = "settings", Url = Url.Action("Index", "Settings", new { area = "" }), Description = "Dashboard configuration" }
         };
 
         return Json(new { success = true, data = navigationItems });

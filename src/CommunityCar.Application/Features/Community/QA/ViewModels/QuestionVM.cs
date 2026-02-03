@@ -13,6 +13,7 @@ public class QuestionVM
     public string? BodyAr { get; set; }
     public Guid AuthorId { get; set; }
     public string AuthorName { get; set; } = string.Empty;
+    public string? AuthorSlug { get; set; }
     public string? AuthorProfilePicture { get; set; }
     public string? Category { get; set; }
     public List<string> Tags { get; set; } = new();
