@@ -1,7 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.SEO;
 using CommunityCar.Application.Features.Dashboard.SEO.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.SEO;
 
@@ -46,6 +45,102 @@ public class SEOService : ISEOService
             Issues = GenerateSEOIssues(score),
             Recommendations = GenerateSEORecommendations(score),
             Keywords = new List<string> { "car sharing", "community car", "rent car" }
+        };
+    }
+
+    public async Task<SEOAnalysisVM> AnalyzePageSEOAsync(string url)
+    {
+        return await AnalyzeSEOAsync(url);
+    }
+
+    public async Task<string> GenerateSitemapXmlAsync()
+    {
+        // In real implementation, generate actual sitemap XML
+        await Task.Delay(500);
+        return @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<urlset xmlns=""http://www.sitemaps.org/schemas/sitemap/0.9"">
+    <url>
+        <loc>https://communitycar.com/</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://communitycar.com/about</loc>
+        <lastmod>2024-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+</urlset>";
+    }
+
+    public async Task<string> GenerateRSSXmlAsync()
+    {
+        // In real implementation, generate actual RSS XML
+        await Task.Delay(500);
+        return @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<rss version=""2.0"">
+    <channel>
+        <title>Community Car News</title>
+        <description>Latest news from Community Car</description>
+        <link>https://communitycar.com</link>
+        <item>
+            <title>Sample News Article</title>
+            <description>Sample news description</description>
+            <link>https://communitycar.com/news/sample</link>
+            <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>";
+    }
+
+    public async Task<Dictionary<string, object>> GenerateMetaDataAsync(string url)
+    {
+        await Task.Delay(200);
+        return new Dictionary<string, object>
+        {
+            { "title", "Community Car - Car Sharing Platform" },
+            { "description", "Join our community-driven car sharing platform" },
+            { "keywords", "car sharing, community car, rent car" },
+            { "author", "Community Car Team" },
+            { "robots", "index, follow" },
+            { "canonical", url },
+            { "og:title", "Community Car - Car Sharing Platform" },
+            { "og:description", "Join our community-driven car sharing platform" },
+            { "og:image", "https://communitycar.com/images/og-image.jpg" },
+            { "og:url", url },
+            { "twitter:card", "summary_large_image" },
+            { "twitter:title", "Community Car - Car Sharing Platform" },
+            { "twitter:description", "Join our community-driven car sharing platform" }
+        };
+    }
+
+    public async Task<Dictionary<string, object>> GenerateStructuredDataAsync(string url)
+    {
+        await Task.Delay(200);
+        return new Dictionary<string, object>
+        {
+            { "@context", "https://schema.org" },
+            { "@type", "Organization" },
+            { "name", "Community Car" },
+            { "url", url },
+            { "logo", "https://communitycar.com/images/logo.png" },
+            { "description", "Community-driven car sharing platform" },
+            { "address", new Dictionary<string, object>
+                {
+                    { "@type", "PostalAddress" },
+                    { "streetAddress", "123 Main St" },
+                    { "addressLocality", "City" },
+                    { "addressCountry", "Country" }
+                }
+            },
+            { "contactPoint", new Dictionary<string, object>
+                {
+                    { "@type", "ContactPoint" },
+                    { "telephone", "+1-555-123-4567" },
+                    { "contactType", "customer service" }
+                }
+            }
         };
     }
 

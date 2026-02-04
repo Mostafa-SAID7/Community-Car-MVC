@@ -30,8 +30,17 @@ public class LocalizationController : Controller
         
         var viewModel = new ResourcesVM
         {
-            Resources = resources,
-            Cultures = await _localizationService.GetSupportedCulturesAsync(),
+            Resources = resources.Select(r => new LocalizationResourceVM
+            {
+                Id = r.Id,
+                Key = r.Key,
+                Value = r.Value,
+                Culture = r.Culture,
+                ResourceGroup = r.ResourceGroup,
+                CreatedAt = r.CreatedAt,
+                ModifiedAt = r.UpdatedAt
+            }).ToList(),
+            Cultures = (await _localizationService.GetSupportedCulturesAsync()).Select(c => c.Name).ToList(),
             ResourceGroups = await _localizationService.GetResourceGroupsAsync(),
             SelectedCulture = culture,
             SelectedGroup = group,

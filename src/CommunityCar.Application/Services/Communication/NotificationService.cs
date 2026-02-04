@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Hubs;
-using CommunityCar.Application.Features.Notifications.ViewModels;
+using CommunityCar.Application.Features.Communication.Notifications.ViewModels;
 using CommunityCar.Domain.Enums.Account;
 using System.Collections.Concurrent;
 

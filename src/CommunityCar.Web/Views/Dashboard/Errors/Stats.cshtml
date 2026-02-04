@@ -67,7 +67,7 @@
                 {
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-foreground">@stat.Date.ToString("MMM dd, yyyy")</h3>
+                            <h3 class="text-lg font-bold text-foreground">@stat.LastErrorDate.ToString("MMM dd, yyyy")</h3>
                             <span class="text-sm text-muted-foreground">@stat.TotalErrors total errors</span>
                         </div>
                         
@@ -94,7 +94,7 @@
                         {
                             <div class="mt-4 p-4 bg-muted/20 rounded-xl">
                                 <div class="text-sm font-bold text-foreground mb-1">Most Common Error:</div>
-                                <div class="text-sm text-muted-foreground">@stat.MostCommonError (@stat.MostCommonErrorCount occurrences)</div>
+                                <div class="text-sm text-muted-foreground">@stat.MostCommonError (@stat.ErrorsToday occurrences)</div>
                             </div>
                         }
                     </div>

@@ -76,7 +76,8 @@ public class ManagementController : Controller
 
         try
         {
-            var success = await _managementService.PerformUserActionAsync(request);
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var success = await _managementService.PerformUserActionAsync(request.Action, request.UserId, currentUserId.ToString());
             if (success)
             {
                 TempData["SuccessMessage"] = $"User action '{request.Action}' performed successfully!";
@@ -163,7 +164,8 @@ public class ManagementController : Controller
 
         try
         {
-            var success = await _managementService.PerformUserActionAsync(request);
+            var currentUserId = Guid.Parse(_currentUserService.UserId!);
+            var success = await _managementService.PerformUserActionAsync(request.Action, request.UserId, currentUserId.ToString());
             if (success)
             {
                 return Json(new { success = true, message = $"User action '{request.Action}' performed successfully" });

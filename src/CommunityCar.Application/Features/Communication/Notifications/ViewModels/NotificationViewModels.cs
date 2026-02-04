@@ -1,6 +1,6 @@
 using CommunityCar.Domain.Enums.Account;
 
-namespace CommunityCar.Application.Features.Notifications.ViewModels;
+namespace CommunityCar.Application.Features.Communication.Notifications.ViewModels;
 
 /*
  * NOTIFICATION VIEWMODELS REFERENCE FILE

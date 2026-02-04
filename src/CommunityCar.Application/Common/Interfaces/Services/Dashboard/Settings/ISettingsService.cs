@@ -5,8 +5,11 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Settings
 public interface ISettingsService
 {
     Task<DashboardSettingsVM> GetDashboardSettingsAsync();
+    Task<DashboardSettingsVM> GetSettingsAsync();
     Task<bool> UpdateDashboardSettingsAsync(DashboardSettingsVM settings);
     Task<bool> ResetSettingsToDefaultAsync();
+    Task<bool> ResetToDefaultAsync(string key);
+    Task<bool> ResetAllToDefaultAsync();
     Task<Dictionary<string, object>> GetSettingsByCategoryAsync(string category);
     Task<bool> UpdateSettingAsync(string key, object value);
     Task<object?> GetSettingAsync(string key);

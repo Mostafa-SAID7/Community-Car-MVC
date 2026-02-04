@@ -1,7 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Maintenance;
 using CommunityCar.Application.Features.Dashboard.Maintenance.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.Maintenance;
 
@@ -43,6 +42,27 @@ public class MaintenanceService : IMaintenanceService
         // In real implementation, disable maintenance mode
         await Task.Delay(300);
         return true;
+    }
+
+    public async Task<bool> SetMaintenanceModeAsync(bool enabled)
+    {
+        // In real implementation, set maintenance mode
+        await Task.Delay(300);
+        return true;
+    }
+
+    public async Task<bool> SetMaintenanceMessageAsync(string message)
+    {
+        // In real implementation, set maintenance message
+        await Task.Delay(100);
+        return true;
+    }
+
+    public async Task<bool> IsMaintenanceModeEnabledAsync()
+    {
+        // In real implementation, check maintenance mode status
+        await Task.Delay(50);
+        return false; // Default to not in maintenance mode
     }
 
     public async Task<bool> ScheduleMaintenanceAsync(DateTime startTime, DateTime endTime, string message, bool notifyUsers = true)

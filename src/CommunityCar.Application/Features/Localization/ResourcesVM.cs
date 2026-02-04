@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Localization;
 
-namespace CommunityCar.Application.Features.Dashboard.ViewModels.Localization;
+namespace CommunityCar.Application.Features.Localization;
 
 public class ResourcesVM
 {

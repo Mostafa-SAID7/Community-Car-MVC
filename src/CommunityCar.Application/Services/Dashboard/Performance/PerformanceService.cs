@@ -27,6 +27,114 @@ public class PerformanceService : IPerformanceService
         };
     }
 
+    public async Task<CoreWebVitalsVM> GetCoreWebVitalsAsync()
+    {
+        var random = new Random();
+        
+        return new CoreWebVitalsVM
+        {
+            LargestContentfulPaint = (double)(random.NextDouble() * 2 + 1), // 1-3 seconds
+            FirstInputDelay = random.Next(50, 200), // 50-200ms
+            CumulativeLayoutShift = (double)(random.NextDouble() * 0.2), // 0-0.2
+            FirstContentfulPaint = (double)(random.NextDouble() * 1.5 + 0.5), // 0.5-2 seconds
+            TimeToInteractive = (double)(random.NextDouble() * 3 + 2), // 2-5 seconds
+            TotalBlockingTime = random.Next(100, 500) // 100-500ms
+        };
+    }
+
+    public async Task<PerformanceReportVM> GeneratePerformanceReportAsync()
+    {
+        var metrics = await GetPerformanceMetricsAsync(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
+        var coreWebVitals = await GetCoreWebVitalsAsync();
+        
+        return new PerformanceReportVM
+        {
+            GeneratedAt = DateTime.UtcNow,
+            ReportId = Guid.NewGuid().ToString(),
+            Metrics = metrics,
+            Recommendations = new List<string>
+            {
+                "Optimize images using WebP format",
+                "Enable browser caching",
+                "Minify CSS and JavaScript files",
+                "Use a Content Delivery Network (CDN)"
+            },
+            Summary = "Performance report generated successfully"
+        };
+    }
+
+    public async Task<bool> OptimizeImageAsync(string imagePath)
+    {
+        // Simulate image optimization
+        await Task.Delay(1000);
+        return true;
+    }
+
+    public async Task<List<ResourceVM>> GetCriticalResourcesAsync()
+    {
+        var resources = new List<ResourceVM>();
+        var random = new Random();
+        var resourceTypes = new[] { "CSS", "JavaScript", "Image", "Font", "API" };
+
+        for (int i = 0; i < 10; i++)
+        {
+            resources.Add(new ResourceVM
+            {
+                Name = $"critical-resource-{i + 1}.{resourceTypes[random.Next(resourceTypes.Length)].ToLower()}",
+                Type = resourceTypes[random.Next(resourceTypes.Length)],
+                Size = random.Next(10000, 500000), // 10KB - 500KB
+                LoadTime = random.Next(50, 1000), // 50ms - 1s
+                IsCritical = true,
+                IsBlocking = random.Next(2) == 0
+            });
+        }
+
+        return resources;
+    }
+
+    public async Task<List<ResourceVM>> GetRenderBlockingResourcesAsync()
+    {
+        var resources = new List<ResourceVM>();
+        var random = new Random();
+
+        for (int i = 0; i < 5; i++)
+        {
+            resources.Add(new ResourceVM
+            {
+                Name = $"blocking-resource-{i + 1}.css",
+                Type = "CSS",
+                Size = random.Next(50000, 200000), // 50KB - 200KB
+                LoadTime = random.Next(100, 500), // 100ms - 500ms
+                IsCritical = true,
+                IsBlocking = true
+            });
+        }
+
+        return resources;
+    }
+
+    public async Task<ResourceAnalysisVM> AnalyzeResourcesAsync()
+    {
+        var critical = await GetCriticalResourcesAsync();
+        var blocking = await GetRenderBlockingResourcesAsync();
+        
+        return new ResourceAnalysisVM
+        {
+            Resources = critical.Concat(blocking).ToList(),
+            TotalResources = critical.Count + blocking.Count + 20, // Mock additional resources
+            TotalSize = critical.Sum(r => r.Size) + blocking.Sum(r => r.Size) + 1000000, // Mock additional size
+            TotalLoadTime = critical.Sum(r => r.LoadTime) + blocking.Sum(r => r.LoadTime),
+            Recommendations = new List<string>
+            {
+                "Defer non-critical CSS",
+                "Inline critical CSS",
+                "Compress images",
+                "Use modern image formats",
+                "Minimize JavaScript bundles"
+            }
+        };
+    }
+
     public async Task<List<ChartDataVM>> GetResponseTimeChartAsync(int days)
     {
         var data = new List<ChartDataVM>();

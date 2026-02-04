@@ -56,7 +56,7 @@ public class SecurityController : Controller
 
     [HttpPost("change-password")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ChangePassword(CommunityCar.Application.Features.Account.ViewModels.Security.ChangePasswordVM model)
+    public async Task<IActionResult> ChangePassword(CommunityCar.Application.Features.Account.ViewModels.Authentication.ChangePasswordVM model)
     {
         if (!Guid.TryParse(_currentUserService.UserId, out var userId))
             return RedirectToAction("Login", "Account");

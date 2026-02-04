@@ -8,52 +8,37 @@ namespace CommunityCar.Application.Services.Dashboard.Monitoring;
 
 public class MonitoringService : IMonitoringService
 {
-    public async Task<List<SystemHealthVM>> GetSystemHealthAsync()
+    public async Task<SystemHealthVM> GetSystemHealthAsync()
     {
-        // Mock data
-        var services = new List<SystemHealthVM>
+        // Mock data - return a single SystemHealthVM instead of a list
+        var systemHealth = new SystemHealthVM
         {
-            new()
-            {
-                CheckTime = DateTime.UtcNow,
-                ServiceName = "Web Application",
-                Status = "Healthy",
-                ResponseTime = (int)TimeSpan.FromMilliseconds(245.5).TotalMilliseconds,
-                CpuUsage = 35.2m,
-                MemoryUsage = 68.7m,
-                DiskUsage = 45.3m,
-                ActiveConnections = 127,
-                ErrorCount = 0,
-                Uptime = TimeSpan.FromHours(720.5),
-                Version = "1.0.0",
-                Environment = "Production",
-                IsHealthy = true
-            },
-            new()
-            {
-                CheckTime = DateTime.UtcNow,
-                ServiceName = "Database",
-                Status = "Healthy",
-                ResponseTime = (int)TimeSpan.FromMilliseconds(12.3).TotalMilliseconds,
-                CpuUsage = 22.1m,
-                MemoryUsage = 78.9m,
-                DiskUsage = 62.4m,
-                ActiveConnections = 45,
-                ErrorCount = 0,
-                Uptime = TimeSpan.FromHours(1440.2),
-                Version = "15.2",
-                Environment = "Production",
-                IsHealthy = true
-            }
+            CheckTime = DateTime.UtcNow,
+            ServiceName = "System",
+            Status = "Healthy",
+            OverallStatus = "Healthy",
+            ResponseTime = (int)TimeSpan.FromMilliseconds(245.5).TotalMilliseconds,
+            CpuUsage = 35.2m,
+            MemoryUsage = 68.7m,
+            DiskUsage = 45.3m,
+            ActiveConnections = 127,
+            ErrorCount = 0,
+            WarningCount = 0,
+            Uptime = TimeSpan.FromHours(720.5),
+            Version = "1.0.0",
+            Environment = "Production",
+            IsHealthy = true,
+            LastCheck = DateTime.UtcNow,
+            Issues = new List<SystemIssueVM>()
         };
 
-        return await Task.FromResult(services);
+        return await Task.FromResult(systemHealth);
     }
 
     public async Task<SystemHealthVM?> GetServiceHealthAsync(string serviceName)
     {
-        var allServices = await GetSystemHealthAsync();
-        return allServices.FirstOrDefault(s => s.ServiceName.Equals(serviceName, StringComparison.OrdinalIgnoreCase));
+        var systemHealth = await GetSystemHealthAsync();
+        return systemHealth.ServiceName.Equals(serviceName, StringComparison.OrdinalIgnoreCase) ? systemHealth : null;
     }
 
     public async Task<bool> UpdateSystemHealthAsync(string serviceName, string status, double responseTime,
@@ -85,8 +70,8 @@ public class MonitoringService : IMonitoringService
 
     public async Task<bool> IsSystemHealthyAsync()
     {
-        var services = await GetSystemHealthAsync();
-        return services.All(s => s.IsHealthy);
+        var systemHealth = await GetSystemHealthAsync();
+        return systemHealth.IsHealthy;
     }
 
     public async Task<List<SystemAlertVM>> GetSystemAlertsAsync(int page, int pageSize)

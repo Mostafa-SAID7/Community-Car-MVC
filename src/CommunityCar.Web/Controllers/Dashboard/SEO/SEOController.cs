@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.SEO;
-using CommunityCar.Application.Features.SEO.ViewModels;
+using CommunityCar.Application.Features.Dashboard.SEO.ViewModels;
 
 namespace CommunityCar.Web.Controllers.Dashboard.SEO;
 
@@ -66,8 +66,7 @@ public class SEOController : Controller
     {
         try
         {
-            var request = new RSSFeedVM { FeedType = feedType ?? "all" };
-            var xml = await _seoService.GenerateRSSXmlAsync(request);
+            var xml = await _seoService.GenerateRSSXmlAsync();
             return Content(xml, "application/rss+xml");
         }
         catch (Exception ex)
@@ -82,7 +81,7 @@ public class SEOController : Controller
     {
         try
         {
-            var metaData = await _seoService.GenerateMetaDataAsync(pageType, entityId);
+            var metaData = await _seoService.GenerateMetaDataAsync(pageType);
             return Json(metaData);
         }
         catch (Exception ex)
@@ -97,8 +96,8 @@ public class SEOController : Controller
     {
         try
         {
-            var structuredData = await _seoService.GenerateStructuredDataAsync(pageType, entityId);
-            return Content(structuredData, "application/ld+json");
+            var structuredData = await _seoService.GenerateStructuredDataAsync(pageType);
+            return Content(structuredData.ToString(), "application/ld+json");
         }
         catch (Exception ex)
         {

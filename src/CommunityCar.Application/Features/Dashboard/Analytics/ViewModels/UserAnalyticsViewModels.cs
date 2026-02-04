@@ -1,4 +1,5 @@
 using CommunityCar.Domain.Enums.Account;
+using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Features.Dashboard.Analytics.ViewModels;
 
@@ -13,6 +14,14 @@ public class UserAnalyticsVM
     public DateTime Date { get; set; }
     public int NewUsers { get; set; }
     public int ActiveUsers { get; set; }
+    public int ReturnUsers { get; set; }
+    public double RetentionRate { get; set; }
+    public List<ChartDataVM> UserGrowthData { get; set; } = new();
+    public List<ChartDataVM> ActivityData { get; set; } = new();
+    public int QuestionsAsked { get; set; }
+    public int AnswersGiven { get; set; }
+    public int ReviewsWritten { get; set; }
+    public int StoriesShared { get; set; }
     public int TotalSessions { get; set; }
     public int PageViews { get; set; }
     public double AverageSessionDuration { get; set; }

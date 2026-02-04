@@ -8,6 +8,8 @@ public class PerformanceMetricsVM
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public DateTime LastUpdated { get; set; }
+    public CoreWebVitalsVM CoreWebVitals { get; set; } = new();
+    public List<PerformanceIssueVM> Issues { get; set; } = new();
     public double AverageResponseTime { get; set; }
     public double MedianResponseTime { get; set; }
     public double P95ResponseTime { get; set; }
@@ -29,6 +31,70 @@ public class PerformanceMetricsVM
     public List<ChartDataVM> ResponseTimeTrend { get; set; } = new();
     public List<ChartDataVM> ThroughputTrend { get; set; } = new();
     public List<ChartDataVM> ErrorRateTrend { get; set; } = new();
+}
+
+public class CoreWebVitalsVM
+{
+    public double LargestContentfulPaint { get; set; }
+    public double FirstInputDelay { get; set; }
+    public double CumulativeLayoutShift { get; set; }
+    public double FirstContentfulPaint { get; set; }
+    public double TimeToInteractive { get; set; }
+    public double TotalBlockingTime { get; set; }
+    public string Grade { get; set; } = "Unknown";
+    public DateTime LastMeasured { get; set; }
+    
+    // Additional properties for view compatibility
+    public double LCP => LargestContentfulPaint;
+    public double FID => FirstInputDelay;
+    public double CLS => CumulativeLayoutShift;
+    public string LCPGrade => Grade;
+    public string FIDGrade => Grade;
+    public string CLSGrade => Grade;
+}
+
+public class PerformanceIssueVM
+{
+    public string Type { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string Severity { get; set; } = "Info";
+    public string Recommendation { get; set; } = string.Empty;
+    public DateTime DetectedAt { get; set; }
+    
+    // Additional properties for view compatibility
+    public string Message => Description;
+    public string Impact => Severity;
+    public string Resource => Type;
+    public string Fix => Recommendation;
+}
+
+public class PerformanceReportVM
+{
+    public DateTime GeneratedAt { get; set; }
+    public string ReportId { get; set; } = string.Empty;
+    public PerformanceMetricsVM Metrics { get; set; } = new();
+    public List<string> Recommendations { get; set; } = new();
+    public string Summary { get; set; } = string.Empty;
+}
+
+public class ResourceVM
+{
+    public string Name { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
+    public long Size { get; set; }
+    public double LoadTime { get; set; }
+    public bool IsBlocking { get; set; }
+    public bool IsCritical { get; set; }
+}
+
+public class ResourceAnalysisVM
+{
+    public List<ResourceVM> Resources { get; set; } = new();
+    public int TotalResources { get; set; }
+    public long TotalSize { get; set; }
+    public double TotalLoadTime { get; set; }
+    public List<string> Recommendations { get; set; } = new();
 }
 
 public class DatabasePerformanceVM

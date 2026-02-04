@@ -1,4 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.ErrorReporting;
 using CommunityCar.Web.Extensions;
 using System.Net;
 using System.Text.Json;
@@ -59,12 +60,9 @@ public class ErrorHandlingMiddleware
                     Timestamp = DateTime.UtcNow
                 });
 
-                errorId = await errorService.LogErrorAsync(
-                    exception.Message, 
+                await errorService.LogErrorAsync(
                     exception, 
-                    userId, 
-                    context.Request.Path.Value, 
-                    additionalContext);
+                    $"User: {userId}, Path: {context.Request.Path.Value}, Context: {JsonSerializer.Serialize(additionalContext)}");
             }
         }
         catch (Exception logEx)

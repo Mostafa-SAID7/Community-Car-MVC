@@ -28,7 +28,7 @@ public class PerformanceTagHelper : TagHelper
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var criticalResources = await _performanceService.GetCriticalResourcesAsync(Url);
+        var criticalResources = await _performanceService.GetCriticalResourcesAsync();
         
         output.TagName = null;
         
@@ -45,13 +45,13 @@ public class PerformanceTagHelper : TagHelper
         // Preload critical resources
         foreach (var resource in criticalResources)
         {
-            var type = resource.EndsWith(".css") ? "style" : resource.EndsWith(".js") ? "script" : "fetch";
+            var type = resource.Url.EndsWith(".css") ? "style" : resource.Url.EndsWith(".js") ? "script" : "fetch";
             
             // Add version tracking if it's a local resource
-            var finalResource = resource;
-            if (resource.StartsWith("/"))
+            var finalResource = resource.Url;
+            if (resource.Url.StartsWith("/"))
             {
-                finalResource = _fileVersionProvider.AddFileVersionToPath(requestPathBase, resource);
+                finalResource = _fileVersionProvider.AddFileVersionToPath(requestPathBase, resource.Url);
             }
             
             content.AppendLine($"<link rel=\"preload\" href=\"{finalResource}\" as=\"{type}\">");

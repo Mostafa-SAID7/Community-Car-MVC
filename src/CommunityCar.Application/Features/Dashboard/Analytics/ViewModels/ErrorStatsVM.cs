@@ -12,6 +12,8 @@ public class ErrorStatsVM
     public int InfoErrors { get; set; }
     public int ResolvedErrors { get; set; }
     public int UnresolvedErrors { get; set; }
+    public DateTime Date { get; set; }
+    public int MostCommonErrorCount { get; set; }
     public double ErrorRate { get; set; }
     public double ResolutionRate { get; set; }
     public DateTime LastUpdated { get; set; }

@@ -34,9 +34,15 @@ public class SettingsController : Controller
                 return RedirectToAction("Login", "Account");
             }
 
-            var settings = string.IsNullOrEmpty(category)
-                ? await _settingsService.GetSettingsAsync(userId)
-                : await _settingsService.GetSettingsByCategoryAsync(userId, category);
+            object settings;
+            if (string.IsNullOrEmpty(category))
+            {
+                settings = await _settingsService.GetSettingsAsync();
+            }
+            else
+            {
+                settings = await _settingsService.GetSettingsByCategoryAsync(category);
+            }
 
             ViewBag.Category = category;
             ViewBag.Categories = new[] { "Display", "Notifications", "Performance", "Security" };
@@ -61,7 +67,7 @@ public class SettingsController : Controller
                 return RedirectToAction("Login", "Account");
             }
 
-            var settings = await _settingsService.GetSettingsByCategoryAsync(userId, category);
+            var settings = await _settingsService.GetSettingsByCategoryAsync(category);
             ViewBag.Category = category;
 
             return View("~/Views/Dashboard/Settings/Index.cshtml", settings);
@@ -91,7 +97,7 @@ public class SettingsController : Controller
                 return RedirectToAction("Login", "Account");
             }
 
-            var success = await _settingsService.UpdateSettingAsync(userId, request);
+            var success = await _settingsService.UpdateSettingAsync(request.Key, request.Value);
             if (success)
             {
                 TempData["SuccessMessage"] = "Setting updated successfully!";
@@ -122,7 +128,7 @@ public class SettingsController : Controller
                 return RedirectToAction("Login", "Account");
             }
 
-            var success = await _settingsService.ResetToDefaultAsync(userId, settingKey);
+            var success = await _settingsService.ResetToDefaultAsync(settingKey);
             if (success)
             {
                 TempData["SuccessMessage"] = "Setting reset to default successfully!";
@@ -153,7 +159,7 @@ public class SettingsController : Controller
                 return RedirectToAction("Login", "Account");
             }
 
-            var success = await _settingsService.ResetAllToDefaultAsync(userId);
+            var success = await _settingsService.ResetAllToDefaultAsync();
             if (success)
             {
                 TempData["SuccessMessage"] = "All settings reset to default successfully!";
@@ -183,9 +189,15 @@ public class SettingsController : Controller
                 return Json(new { success = false, message = "User not authenticated" });
             }
 
-            var settings = string.IsNullOrEmpty(category)
-                ? await _settingsService.GetSettingsAsync(userId)
-                : await _settingsService.GetSettingsByCategoryAsync(userId, category);
+            object settings;
+            if (string.IsNullOrEmpty(category))
+            {
+                settings = await _settingsService.GetSettingsAsync();
+            }
+            else
+            {
+                settings = await _settingsService.GetSettingsByCategoryAsync(category);
+            }
 
             return Json(new { success = true, data = settings });
         }
@@ -206,7 +218,7 @@ public class SettingsController : Controller
                 return Json(new { success = false, message = "User not authenticated" });
             }
 
-            var setting = await _settingsService.GetSettingAsync(userId, settingKey);
+            var setting = await _settingsService.GetSettingAsync(settingKey);
             if (setting == null)
             {
                 return Json(new { success = false, message = "Setting not found" });
@@ -237,7 +249,7 @@ public class SettingsController : Controller
                 return Json(new { success = false, message = "User not authenticated" });
             }
 
-            var success = await _settingsService.UpdateSettingAsync(userId, request);
+            var success = await _settingsService.UpdateSettingAsync(request.SettingKey, request.Value);
             if (success)
             {
                 return Json(new { success = true, message = "Setting updated successfully" });
@@ -265,7 +277,7 @@ public class SettingsController : Controller
                 return Json(new { success = false, message = "User not authenticated" });
             }
 
-            var success = await _settingsService.ResetToDefaultAsync(userId, settingKey);
+            var success = await _settingsService.ResetToDefaultAsync(settingKey);
             if (success)
             {
                 return Json(new { success = true, message = "Setting reset to default successfully" });

@@ -1,6 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community.Feed;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Analytics;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Application.Features.Dashboard.ErrorReporting.ViewModels;
 using CommunityCar.Domain.Enums.Community;
@@ -31,93 +30,62 @@ public class FeedController : Controller
     [HttpGet("")]
     public async Task<IActionResult> Index(string feedType = "personalized", string? topic = null, int page = 1, int pageSize = 0)
     {
-        // Debug current culture
-        var currentCulture = CultureInfo.CurrentCulture.Name;
-        var currentUICulture = CultureInfo.CurrentUICulture.Name;
-        Console.WriteLine($"Feed Index - Current Culture: {currentCulture}, UI Culture: {currentUICulture}");
-        
-        var userId = GetCurrentUserId();
-        
-        // Set page size: 20 for first page, 10 for subsequent pages
-        if (pageSize == 0)
+        try
         {
-            pageSize = page == 1 ? 20 : 10;
-        }
-        
-        var request = new FeedVM
-        {
-            UserId = userId,
-            FeedType = feedType,
-            Page = page,
-            PageSize = pageSize
-        };
-
-        if (!string.IsNullOrEmpty(topic))
-        {
-            request.Tags.Add(topic);
-            ViewBag.CurrentTopic = topic;
+            // Debug current culture
+            var currentCulture = CultureInfo.CurrentCulture.Name;
+            var currentUICulture = CultureInfo.CurrentUICulture.Name;
+            Console.WriteLine($"Feed Index - Current Culture: {currentCulture}, UI Culture: {currentUICulture}");
             
-            // If topic is selected, we might want to default to Trending algorithm if not specified
-            if (feedType == "personalized") 
+            var userId = GetCurrentUserId();
+            
+            // Set page size: 20 for first page, 10 for subsequent pages
+            if (pageSize == 0)
             {
-               request.FeedType = "trending";
-               feedType = "trending";
+                pageSize = page == 1 ? 20 : 10;
+            }
+            
+            var request = new FeedVM
+            {
+                UserId = userId,
+                FeedType = feedType,
+                Page = page,
+                PageSize = pageSize
+            };
+
+            if (!string.IsNullOrEmpty(topic))
+            {
+                request.Tags.Add(topic);
+                ViewBag.CurrentTopic = topic;
+                
+                // If topic is selected, we might want to default to Trending algorithm if not specified
+                if (feedType == "personalized") 
+                {
+                   request.FeedType = "trending";
+                   feedType = "trending";
+                }
+            }
+
+            var feedTypeEnum = Enum.TryParse<FeedType>(feedType, true, out var type) ? type : FeedType.Personalized;
+            
+            switch (feedTypeEnum)
+            {
+                case FeedType.Trending:
+                    var trendingFeed = await _feedService.GetTrendingFeedAsync(page, pageSize);
+                    return View("~/Views/Community/Feed/Index.cshtml", trendingFeed);
+                case FeedType.Friends:
+                    var friendsFeed = userId.HasValue ? await _feedService.GetFriendsFeedAsync(userId.Value, page, pageSize) : new FeedVM();
+                    return View("~/Views/Community/Feed/Index.cshtml", friendsFeed);
+                default:
+                    var personalizedFeed = userId.HasValue ? await _feedService.GetPersonalizedFeedAsync(userId.Value, page, pageSize) : new FeedVM();
+                    return View("~/Views/Community/Feed/Index.cshtml", personalizedFeed);
             }
         }
-
-        var feedTypeEnum = Enum.TryParse<FeedType>(feedType, true, out var type) ? type : FeedType.Personalized;
-        var FeedVM = feedTypeEnum switch
+        catch (Exception ex)
         {
-            FeedType.Trending => await _feedService.GetTrendingFeedAsync(request),
-            FeedType.Friends => await _feedService.GetFriendsFeedAsync(request),
-            _ => await _feedService.GetPersonalizedFeedAsync(request)
-        };
-
-        ViewBag.FeedType = feedType;
-        ViewBag.CurrentUserId = userId;
-        
-        // Pass feed data to sidebar
-        ViewData["FeedSidebarData"] = FeedVM;
-        
-        // Track user activity
-        // TODO: Update to use LogUserActivityAsync from IUserAnalyticsService
-        /*
-        if (userId.HasValue && _analyticsService != null)
-        {
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await _analyticsService.TrackActivityAsync(new TrackActivityRequest
-                    {
-                        UserId = userId.Value,
-                        ActivityType = ActivityType.View,
-                        EntityType = "Feed",
-                        Description = $"Viewed {feedType} feed",
-                        IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString(),
-                        UserAgent = HttpContext.Request.Headers.UserAgent.ToString()
-                    });
-
-                    // Update user interests based on feed type
-                    await _analyticsService.UpdateUserInterestsAsync(
-                        userId.Value,
-                        "Content",
-                        "Feed",
-                        "FeedType",
-                        feedType,
-                        0.5,
-                        "FeedView"
-                    );
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error tracking feed activity for user {UserId}", userId);
-                }
-            });
+            _logger.LogError(ex, "Error loading feed");
+            return View("~/Views/Community/Feed/Index.cshtml", new FeedVM());
         }
-        */
-        
-        return View("~/Views/Community/Feed/Index.cshtml", FeedVM);
     }
 
     [HttpGet("trending")]
@@ -146,7 +114,7 @@ public class FeedController : Controller
             ViewBag.CurrentTopic = topic;
         }
 
-        var FeedVM = await _feedService.GetTrendingFeedAsync(request);
+        var FeedVM = await _feedService.GetTrendingFeedAsync(page, pageSize);
 
         ViewBag.FeedType = "trending";
         ViewBag.CurrentUserId = userId;
@@ -252,7 +220,7 @@ public class FeedController : Controller
         var userId = GetCurrentUserId();
         if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
 
-        var success = await _feedService.ReportContentAsync(userId.Value, request.ContentId, request.ContentType, request.Reason ?? "No reason provided");
+        var success = await _feedService.ReportContentAsync(request.ContentId, request.ContentType, request.Reason ?? "No reason provided");
         return Ok(new { success });
     }
 
@@ -262,7 +230,7 @@ public class FeedController : Controller
         var userId = GetCurrentUserId();
         // GetFeedStatsAsync requires userId (nullable or not? checked service, it takes Guid?)
         // FeedService line 74: await GetFeedStatsAsync(request.UserId) -> FeedVM.UserId is Guid?
-        var stats = await _feedService.GetFeedStatsAsync(userId);
+        var stats = await _feedService.GetFeedStatsAsync();
         return Ok(stats);
     }
     [HttpPost("mark-seen")]
@@ -271,7 +239,7 @@ public class FeedController : Controller
         var userId = GetCurrentUserId();
         if (userId == null) return Unauthorized(new { success = false, message = "User not logged in" });
 
-        var success = await _feedService.MarkAsSeenAsync(userId.Value, request.ContentId, request.ContentType);
+        var success = await _feedService.MarkAsSeenAsync(userId.Value, request.ContentId);
         return Ok(new { success });
     }
 }

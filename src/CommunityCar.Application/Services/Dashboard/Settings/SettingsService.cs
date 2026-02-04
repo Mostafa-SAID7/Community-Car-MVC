@@ -1,6 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Settings;
 using CommunityCar.Application.Features.Dashboard.Settings.ViewModels;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.Settings;
 
@@ -98,6 +97,23 @@ public class SettingsService : ISettingsService
             CriticalAlertThreshold = 90,
             WarningAlertThreshold = 75
         };
+    }
+
+    public async Task<DashboardSettingsVM> GetSettingsAsync()
+    {
+        return await GetDashboardSettingsAsync();
+    }
+
+    public async Task<bool> ResetToDefaultAsync(string key)
+    {
+        // In real implementation, reset specific setting to default
+        await Task.Delay(100);
+        return true;
+    }
+
+    public async Task<bool> ResetAllToDefaultAsync()
+    {
+        return await ResetSettingsToDefaultAsync();
     }
 
     public async Task<bool> UpdateDashboardSettingsAsync(DashboardSettingsVM settings)

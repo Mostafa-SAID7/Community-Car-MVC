@@ -8,6 +8,7 @@ public class OverviewVM
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public DateTime LastUpdated { get; set; }
+    public string TimeRange { get; set; } = "7d";
     public StatsVM Stats { get; set; } = new();
     public StatsVM QuickStats { get; set; } = new();
     public List<RecentActivityVM> RecentActivity { get; set; } = new();
@@ -25,6 +26,8 @@ public class OverviewVM
 public class SystemHealthSummaryVM
 {
     public string Status { get; set; } = string.Empty;
+    public bool IsHealthy { get; set; }
+    public DateTime LastCheck { get; set; }
     public double CpuUsage { get; set; }
     public double MemoryUsage { get; set; }
     public double DiskUsage { get; set; }

@@ -6,7 +6,7 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Monitori
 
 public interface IMonitoringService
 {
-    Task<List<SystemHealthVM>> GetSystemHealthAsync();
+    Task<SystemHealthVM> GetSystemHealthAsync();
     Task<SystemHealthVM?> GetServiceHealthAsync(string serviceName);
     Task<bool> UpdateSystemHealthAsync(string serviceName, string status, double responseTime, double cpuUsage, double memoryUsage, double diskUsage, int activeConnections, int errorCount);
     Task<List<ChartDataVM>> GetPerformanceChartAsync(string serviceName, DateTime startDate, DateTime endDate);

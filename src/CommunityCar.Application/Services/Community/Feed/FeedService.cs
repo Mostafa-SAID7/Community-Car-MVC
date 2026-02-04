@@ -30,21 +30,24 @@ public class FeedService : IFeedService
 
     public async Task<object> GetFeedAsync()
     {
+        // Return a basic feed with mock data
+        return await GetPersonalizedFeedAsync(Guid.NewGuid(), 1, 20);
+    }
+
+    public async Task<FeedVM> GetPersonalizedFeedAsync(Guid userId, int page = 1, int pageSize = 20)
+    {
+        // Create request from parameters
         var request = new FeedVM
         {
-            Page = 1,
-            PageSize = 20,
+            UserId = userId,
+            Page = page,
+            PageSize = pageSize,
             SortBy = FeedSortBy.Newest
         };
 
-        return await GetPersonalizedFeedAsync(request);
-    }
-
-    public async Task<FeedVM> GetPersonalizedFeedAsync(FeedVM request)
-    {
         // Get user's interests and preferences
-        var userInterests = await _utilityService.GetUserInterestsAsync(request.UserId);
-        var friendIds = await _utilityService.GetUserFriendIdsAsync(request.UserId);
+        var userInterests = await _utilityService.GetUserInterestsAsync(userId);
+        var friendIds = await _utilityService.GetUserFriendIdsAsync(userId);
 
         // Get personalized content
         var feedItems = await _contentAggregatorService.GetPersonalizedContentAsync(request, userInterests, friendIds);
@@ -58,11 +61,9 @@ public class FeedService : IFeedService
         await _interactionService.LoadInitialCommentsAsync(pagedItems, request.UserId);
 
         // Get additional feed data
-        var activeStories = await _utilityService.GetActiveStoriesAsync(request.UserId);
+        var activeStories = await _utilityService.GetActiveStoriesAsync(userId);
         var trendingTopics = await _utilityService.GetTrendingTopicsAsync(10);
-        var suggestedFriends = request.UserId.HasValue 
-            ? await _utilityService.GetSuggestedFriendsAsync(request.UserId.Value, 5) 
-            : new List<SuggestedFriendVM>();
+        var suggestedFriends = await _utilityService.GetSuggestedFriendsAsync(userId, 5);
 
         return new FeedVM
         {
@@ -115,8 +116,16 @@ public class FeedService : IFeedService
         };
     }
 
-    public async Task<FeedVM> GetTrendingFeedAsync(FeedVM request)
+    public async Task<TrendingFeedVM> GetTrendingFeedAsync(int page = 1, int pageSize = 20)
     {
+        // Create request from parameters
+        var request = new FeedVM
+        {
+            Page = page,
+            PageSize = pageSize,
+            SortBy = FeedSortBy.Trending
+        };
+
         // Get trending content
         var feedItems = await _contentAggregatorService.GetTrendingContentAsync(request);
 
@@ -128,22 +137,9 @@ public class FeedService : IFeedService
         // Load initial comments for each feed item
         await _interactionService.LoadInitialCommentsAsync(pagedItems, request.UserId);
 
-        return new FeedVM
+        return new TrendingFeedVM
         {
             FeedItems = pagedItems,
-            Stories = (await _utilityService.GetActiveStoriesAsync(request.UserId)).Select(s => new StoryItemVM
-            {
-                Id = s.Id,
-                AuthorId = s.AuthorId,
-                AuthorName = s.AuthorName,
-                AuthorAvatar = s.AuthorAvatar ?? string.Empty,
-                MediaUrl = s.MediaUrl,
-                ThumbnailUrl = s.ThumbnailUrl,
-                CreatedAt = s.CreatedAt,
-                ExpiresAt = s.ExpiresAt,
-                IsViewed = s.IsViewed,
-                ViewCount = s.ViewCount
-            }).ToList(),
             TrendingTopics = (await _utilityService.GetTrendingTopicsAsync(15)).ToList(),
             Pagination = new CommunityCar.Application.Common.Models.PaginationInfo
             {
@@ -161,10 +157,16 @@ public class FeedService : IFeedService
         };
     }
 
-    public async Task<FeedVM> GetFriendsFeedAsync(FeedVM request)
+    public async Task<FeedVM> GetFriendsFeedAsync(Guid userId, int page = 1, int pageSize = 20)
     {
-        if (!request.UserId.HasValue)
-            return new FeedVM();
+        // Create request from parameters
+        var request = new FeedVM
+        {
+            UserId = userId,
+            Page = page,
+            PageSize = pageSize,
+            SortBy = FeedSortBy.Newest
+        };
 
         var friendIds = await _utilityService.GetUserFriendIdsAsync(request.UserId);
         
@@ -217,53 +219,12 @@ public class FeedService : IFeedService
         };
     }
 
-    #region Delegate to Utility Service
+    public async Task<bool> ReportContentAsync(Guid contentId, string contentType, string reason)
+        => await _interactionService.ReportContentAsync(Guid.Empty, contentId, contentType, reason);
 
-    public async Task<IEnumerable<StoryFeedVM>> GetActiveStoriesAsync(Guid? userId = null)
-        => await _utilityService.GetActiveStoriesAsync(userId);
-
-    public async Task<IEnumerable<TrendingTopicVM>> GetTrendingTopicsAsync(int count = 10)
-        => await _utilityService.GetTrendingTopicsAsync(count);
-
-    public Task<IEnumerable<SuggestedFriendVM>> GetSuggestedFriendsAsync(Guid userId, int count = 5)
-        => _utilityService.GetSuggestedFriendsAsync(userId, count);
-
-    public async Task<FeedStatsVM> GetFeedStatsAsync(Guid? userId = null)
-        => await _utilityService.GetFeedStatsAsync(userId);
-
-    public async Task<FeedStatsVM> GetFeedStatisticsAsync()
+    public async Task<FeedStatsVM> GetFeedStatsAsync()
         => await _utilityService.GetFeedStatsAsync(null);
 
-    public async Task<int> CleanupExpiredStoriesAsync()
-        => await _utilityService.CleanupExpiredStoriesAsync();
-
-    public async Task<IEnumerable<FeedItemVM>> GetPopularContentAsync(int hours)
-        => await _contentAggregatorService.GetPopularContentAsync(hours);
-
-    #endregion
-
-    #region Delegate to Interaction Service
-
-    public Task<bool> MarkAsSeenAsync(Guid userId, Guid contentId, string contentType)
-        => _interactionService.MarkAsSeenAsync(userId, contentId, contentType);
-
-    public Task<bool> InteractWithContentAsync(Guid userId, Guid contentId, string contentType, string interactionType)
-        => _interactionService.InteractWithContentAsync(userId, contentId, contentType, interactionType);
-
-    public async Task<bool> AddCommentAsync(Guid userId, Guid contentId, string contentType, string comment)
-        => await _interactionService.AddCommentAsync(userId, contentId, contentType, comment);
-
-    public async Task<IEnumerable<object>> GetCommentsAsync(Guid contentId, string contentType)
-        => await _interactionService.GetCommentsAsync(contentId, contentType);
-
-    public async Task<bool> BookmarkContentAsync(Guid userId, Guid contentId, string contentType)
-        => await _interactionService.BookmarkContentAsync(userId, contentId, contentType);
-
-    public async Task<bool> HideContentAsync(Guid userId, Guid contentId, string contentType)
-        => await _interactionService.HideContentAsync(userId, contentId, contentType);
-
-    public async Task<bool> ReportContentAsync(Guid userId, Guid contentId, string contentType, string reason)
-        => await _interactionService.ReportContentAsync(userId, contentId, contentType, reason);
-
-    #endregion
+    public async Task<bool> MarkAsSeenAsync(Guid userId, Guid contentId)
+        => await _interactionService.MarkAsSeenAsync(userId, contentId, "Post");
 }

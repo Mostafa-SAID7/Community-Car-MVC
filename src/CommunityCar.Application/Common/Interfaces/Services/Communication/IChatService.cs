@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Chat.ViewModels;
+using CommunityCar.Application.Features.Communication.Chat.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Communication;
 

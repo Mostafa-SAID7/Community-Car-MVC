@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Monitoring;
 using CommunityCar.Application.Features.Dashboard.Monitoring.ViewModels;
+using CommunityCar.Application.Features.Dashboard.System.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,35 +26,14 @@ public class MonitoringController : Controller
     {
         try
         {
-            var systemHealthList = await _monitoringService.GetSystemHealthAsync();
+            var systemHealth = await _monitoringService.GetSystemHealthAsync();
             var isHealthy = await _monitoringService.IsSystemHealthyAsync();
 
-            // If we have multiple health items, we need to create a summary or use the first one
-            // For now, let's create a summary SystemHealthVM or use the first available
-            SystemHealthVM systemHealth;
-            
-            if (systemHealthList?.Any() == true)
+            // Use the system health data directly
+            if (systemHealth != null)
             {
-                // Create a summary SystemHealthVM from all services
-                systemHealth = new SystemHealthVM
-                {
-                    CheckTime = DateTime.UtcNow,
-                    ServiceName = "System Overview",
-                    Status = isHealthy ? "Healthy" : "Issues Detected",
-                    ResponseTime = systemHealthList.Average(x => x.ResponseTime),
-                    CpuUsage = systemHealthList.Average(x => x.CpuUsage),
-                    MemoryUsage = systemHealthList.Average(x => x.MemoryUsage),
-                    DiskUsage = systemHealthList.Average(x => x.DiskUsage),
-                    ActiveConnections = systemHealthList.Sum(x => x.ActiveConnections),
-                    Uptime = systemHealthList.Average(x => x.Uptime),
-                    Version = "System",
-                    Environment = systemHealthList.FirstOrDefault()?.Environment ?? "Production",
-                    IsHealthy = isHealthy,
-                    ErrorCount = systemHealthList.Sum(x => x.ErrorCount),
-                    WarningCount = systemHealthList.Sum(x => x.WarningCount),
-                    Issues = systemHealthList.SelectMany(x => x.Issues).ToList(),
-                    LastCheck = systemHealthList.Any() ? systemHealthList.Max(x => x.LastCheck) : DateTime.UtcNow
-                };
+                systemHealth.IsHealthy = isHealthy;
+                systemHealth.Status = isHealthy ? "Healthy" : "Issues Detected";
             }
             else
             {
@@ -68,19 +48,19 @@ public class MonitoringController : Controller
                     MemoryUsage = 0,
                     DiskUsage = 0,
                     ActiveConnections = 0,
-                    Uptime = 0,
+                    Uptime = TimeSpan.Zero,
                     Version = "1.0.0",
                     Environment = "Production",
                     IsHealthy = false,
                     ErrorCount = 0,
                     WarningCount = 0,
-                    Issues = new List<string> { "No health data available" },
+                    Issues = new List<SystemIssueVM>(),
                     LastCheck = DateTime.UtcNow
                 };
             }
 
             ViewBag.IsSystemHealthy = isHealthy;
-            ViewBag.SystemHealthList = systemHealthList; // Pass the full list for detailed views
+            ViewBag.SystemHealth = systemHealth; // Pass the system health data
             return View("~/Views/Dashboard/Monitoring/Index.cshtml", systemHealth);
         }
         catch (Exception ex)
@@ -99,13 +79,13 @@ public class MonitoringController : Controller
                 MemoryUsage = 0,
                 DiskUsage = 0,
                 ActiveConnections = 0,
-                Uptime = 0,
+                Uptime = TimeSpan.Zero,
                 Version = "1.0.0",
                 Environment = "Production",
                 IsHealthy = false,
                 ErrorCount = 1,
                 WarningCount = 0,
-                Issues = new List<string> { "Failed to load monitoring data" },
+                Issues = new List<SystemIssueVM> { new SystemIssueVM { Type = "Error", Message = "Failed to load monitoring data", Severity = "Error", DetectedAt = DateTime.UtcNow } },
                 LastCheck = DateTime.UtcNow
             };
             

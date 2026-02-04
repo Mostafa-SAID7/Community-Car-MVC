@@ -4,6 +4,7 @@ public class AnalyticsVM
 {
     public DateTime StartDate { get; set; } = DateTime.UtcNow.AddDays(-30);
     public DateTime EndDate { get; set; } = DateTime.UtcNow;
+    public string ContentType { get; set; } = "all";
     public int TotalUsers { get; set; }
     public int ActiveUsers { get; set; }
     public int NewUsers { get; set; }

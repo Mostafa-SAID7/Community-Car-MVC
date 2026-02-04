@@ -3,7 +3,6 @@ using CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Common.Interfaces.Services.Account;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.Reports;
 

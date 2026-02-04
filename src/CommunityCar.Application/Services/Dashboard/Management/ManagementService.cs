@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management;
 using CommunityCar.Application.Features.Dashboard.Management.ViewModels;
 using CommunityCar.Application.Features.Dashboard.Monitoring.ViewModels;
+using CommunityCar.Application.Features.Dashboard.UserManagement.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.Management;
@@ -35,6 +36,64 @@ public class ManagementService : IManagementService
             MaintenanceMode = false,
             LastMaintenanceDate = DateTime.UtcNow.AddDays(-random.Next(7, 30))
         };
+    }
+
+    public async Task<List<UserManagementVM>> GetUserManagementHistoryAsync(int page = 1, int pageSize = 20)
+    {
+        var history = new List<UserManagementVM>();
+        var random = new Random();
+        var actions = new[] { "Suspend", "Activate", "Delete", "Warn", "Ban", "Unban" };
+
+        for (int i = 0; i < pageSize; i++)
+        {
+            history.Add(new UserManagementVM
+            {
+                Action = actions[random.Next(actions.Length)],
+                UserId = Guid.NewGuid(),
+                Reason = $"Sample reason for action #{i + 1}",
+                ActionDate = DateTime.UtcNow.AddDays(-random.Next(1, 30)),
+                PerformedByName = "System Administrator",
+                IsReversible = random.Next(2) == 0
+            });
+        }
+
+        return history;
+    }
+
+    public async Task<List<UserManagementVM>> GetUserManagementHistoryByUserAsync(Guid userId, int page = 1, int pageSize = 20)
+    {
+        var history = new List<UserManagementVM>();
+        var random = new Random();
+        var actions = new[] { "Suspend", "Activate", "Delete", "Warn", "Ban", "Unban" };
+
+        for (int i = 0; i < Math.Min(pageSize, 5); i++) // Fewer actions for specific user
+        {
+            history.Add(new UserManagementVM
+            {
+                Action = actions[random.Next(actions.Length)],
+                UserId = userId,
+                Reason = $"User-specific action reason #{i + 1}",
+                ActionDate = DateTime.UtcNow.AddDays(-random.Next(1, 90)),
+                PerformedByName = "System Administrator",
+                IsReversible = random.Next(2) == 0
+            });
+        }
+
+        return history;
+    }
+
+    public async Task<bool> PerformUserActionAsync(string action, Guid userId, string reason)
+    {
+        // In real implementation, perform the user action
+        await Task.Delay(500);
+        return true;
+    }
+
+    public async Task<bool> ReverseUserActionAsync(Guid actionId)
+    {
+        // In real implementation, reverse the user action
+        await Task.Delay(300);
+        return true;
     }
 
     public async Task<List<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemTaskVM>> GetSystemTasksAsync()

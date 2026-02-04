@@ -1,6 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Features.Dashboard.Analytics.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Analytics;
@@ -33,43 +34,29 @@ public class AnalyticsController : Controller
                 EndDate = endDate ?? DateTime.UtcNow
             };
 
-            var dailyAnalytics = await _analyticsService.GetUserAnalyticsAsync(request);
+            var analyticsData = await _analyticsService.GetUserAnalyticsAsync(request);
             
-            // Aggregate daily data into a single UserAnalyticsVM
+            // Map AnalyticsVM to UserAnalyticsVM
             var aggregateAnalytics = new UserAnalyticsVM
             {
-                NewUsers = dailyAnalytics.Sum(x => x.NewUsers),
-                ActiveUsers = dailyAnalytics.Any() ? dailyAnalytics.Max(x => x.ActiveUsers) : 0, // Using Max for ActiveUsers as a proxy
-                ReturnUsers = dailyAnalytics.Sum(x => x.ReturnUsers),
-                RetentionRate = dailyAnalytics.Any() ? dailyAnalytics.Average(x => x.RetentionRate) : 0,
-                AverageSessionDuration = dailyAnalytics.Any() 
-                    ? TimeSpan.FromTicks((long)dailyAnalytics.Average(x => x.TimeSpentOnSite.Ticks))
-                    : TimeSpan.Zero,
-                UserGrowthData = dailyAnalytics.Select(x => new ChartDataVM 
-                { 
-                    Label = x.Date.ToString("MMM dd"), 
-                    Value = x.NewUsers,
-                    Date = x.Date
-                }).ToList(),
-                ActivityData = dailyAnalytics.Select(x => new ChartDataVM 
-                { 
-                    Label = x.Date.ToString("MMM dd"), 
-                    Value = x.ActiveUsers,
-                    Date = x.Date
-                }).ToList()
+                NewUsers = analyticsData?.NewUsers ?? 0,
+                ActiveUsers = analyticsData?.ActiveUsers ?? 0,
+                ReturnUsers = 0, // Not available in AnalyticsVM
+                RetentionRate = 0, // Not available in AnalyticsVM
+                AverageSessionDuration = analyticsData?.AverageSessionDuration ?? 0,
+                UserGrowthData = new List<ChartDataVM>(), // Not available in AnalyticsVM
+                ActivityData = new List<ChartDataVM>(), // Not available in AnalyticsVM
+                PostsCreated = 0, // Not available in AnalyticsVM
+                QuestionsAsked = 0, // Not available in AnalyticsVM
+                AnswersGiven = 0, // Not available in AnalyticsVM
+                ReviewsWritten = 0, // Not available in AnalyticsVM
+                StoriesShared = 0, // Not available in AnalyticsVM
+                PageViews = analyticsData?.PageViews ?? 0,
+                DeviceType = "Desktop/Mobile", // Default value
+                BrowserType = "Chrome/Safari", // Default value
+                Location = "Global", // Default value
+                MostVisitedSection = "Community Feed" // Default value
             };
-
-            // Set some default/dummy data for properties not currently provided by the service
-            aggregateAnalytics.PostsCreated = dailyAnalytics.Sum(x => x.PostsCreated);
-            aggregateAnalytics.QuestionsAsked = dailyAnalytics.Sum(x => x.QuestionsAsked);
-            aggregateAnalytics.AnswersGiven = dailyAnalytics.Sum(x => x.AnswersGiven);
-            aggregateAnalytics.ReviewsWritten = dailyAnalytics.Sum(x => x.ReviewsWritten);
-            aggregateAnalytics.StoriesShared = dailyAnalytics.Sum(x => x.StoriesShared);
-            aggregateAnalytics.PageViews = dailyAnalytics.Sum(x => x.PageViews);
-            aggregateAnalytics.DeviceType = "Desktop/Mobile";
-            aggregateAnalytics.BrowserType = "Chrome/Safari";
-            aggregateAnalytics.Location = "Global";
-            aggregateAnalytics.MostVisitedSection = "Community Feed";
 
             return View("~/Views/Dashboard/Analytics/Index.cshtml", aggregateAnalytics);
         }

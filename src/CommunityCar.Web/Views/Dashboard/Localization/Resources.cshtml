@@ -28,7 +28,7 @@
                     <option value="">@Localizer["GlobalDictionary"]</option>
                     @foreach (var c in Model.Cultures)
                     {
-                        <option value="@c.Name" selected="@(Model.SelectedCulture == c.Name)">@c.DisplayName (@c.Name)</option>
+                        <option value="@c" selected="@(Model.SelectedCulture == c)">@c</option>
                     }
                 </select>
             </div>

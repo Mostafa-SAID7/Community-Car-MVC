@@ -8,6 +8,9 @@ public interface IMaintenanceService
     Task<MaintenanceStatusVM> GetMaintenanceStatusAsync();
     Task<bool> EnableMaintenanceModeAsync(string message, DateTime? scheduledEnd = null);
     Task<bool> DisableMaintenanceModeAsync();
+    Task<bool> SetMaintenanceModeAsync(bool enabled);
+    Task<bool> SetMaintenanceMessageAsync(string message);
+    Task<bool> IsMaintenanceModeEnabledAsync();
     Task<bool> ScheduleMaintenanceAsync(DateTime startTime, DateTime endTime, string message, bool notifyUsers = true);
     Task<bool> CancelScheduledMaintenanceAsync();
     Task<List<MaintenanceHistoryVM>> GetMaintenanceHistoryAsync(int page = 1, int pageSize = 20);

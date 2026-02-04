@@ -9,6 +9,12 @@ public class UserManagementVM
     public string LastName { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
+    public string Action { get; set; } = string.Empty;
+    public Guid UserId { get; set; }
+    public string Reason { get; set; } = string.Empty;
+    public DateTime ActionDate { get; set; }
+    public string PerformedByName { get; set; } = string.Empty;
+    public bool IsReversible { get; set; }
     public bool IsActive { get; set; }
     public bool IsEmailConfirmed { get; set; }
     public bool IsTwoFactorEnabled { get; set; }

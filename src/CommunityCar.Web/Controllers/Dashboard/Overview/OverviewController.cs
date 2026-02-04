@@ -76,7 +76,7 @@ public class OverviewController : Controller
                 "users" => await _overviewService.GetUserGrowthChartAsync(start, end),
                 "content" => await _overviewService.GetContentChartAsync(start, end),
                 "engagement" => await _overviewService.GetEngagementChartAsync(start, end),
-                _ => new List<Application.Features.Dashboard.ViewModels.ChartDataVM>()
+                _ => new List<CommunityCar.Application.Features.Shared.ViewModels.ChartDataVM>()
             };
 
             return Json(new { success = true, data });

@@ -1,5 +1,6 @@
 using CommunityCar.Application.Features.Dashboard.Management.ViewModels;
 using CommunityCar.Application.Features.Dashboard.Monitoring.ViewModels;
+using CommunityCar.Application.Features.Dashboard.UserManagement.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management;
@@ -7,6 +8,10 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Manageme
 public interface IManagementService
 {
     Task<DashboardOverviewVM> GetDashboardOverviewAsync();
+    Task<List<UserManagementVM>> GetUserManagementHistoryAsync(int page = 1, int pageSize = 20);
+    Task<List<UserManagementVM>> GetUserManagementHistoryByUserAsync(Guid userId, int page = 1, int pageSize = 20);
+    Task<bool> PerformUserActionAsync(string action, Guid userId, string reason);
+    Task<bool> ReverseUserActionAsync(Guid actionId);
     Task<List<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemTaskVM>> GetSystemTasksAsync();
     Task<bool> ExecuteSystemTaskAsync(string taskType, Dictionary<string, object>? parameters = null);
     Task<bool> CancelSystemTaskAsync(Guid taskId);

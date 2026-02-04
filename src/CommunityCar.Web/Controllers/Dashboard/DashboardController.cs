@@ -2,6 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Monitoring;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
+using CommunityCar.Application.Features.Dashboard.System.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -51,11 +52,11 @@ public class DashboardController : Controller
 
             var overview = await _overviewService.GetOverviewAsync(overviewRequest);
             var quickStats = await _overviewService.GetQuickStatsAsync();
-            var systemHealthList = await _monitoringService.GetSystemHealthAsync();
+            var systemHealth = await _monitoringService.GetSystemHealthAsync();
             var isSystemHealthy = await _monitoringService.IsSystemHealthyAsync();
 
-            // Get the first system health item or create a default one
-            var systemHealth = systemHealthList.FirstOrDefault() ?? new SystemHealthVM
+            // Use the system health data directly
+            systemHealth = systemHealth ?? new SystemHealthVM
             {
                 CheckTime = DateTime.UtcNow,
                 ServiceName = "System",
@@ -68,10 +69,22 @@ public class DashboardController : Controller
             };
 
             // Update the overview with system health data
-            overview.SystemHealth = systemHealth;
+            overview.SystemHealth = new SystemHealthSummaryVM
+            {
+                Status = systemHealth?.Status ?? "Unknown",
+                CpuUsage = (double)(systemHealth?.CpuUsage ?? 0),
+                MemoryUsage = (double)(systemHealth?.MemoryUsage ?? 0),
+                DiskUsage = (double)(systemHealth?.DiskUsage ?? 0),
+                LastCheck = systemHealth?.LastCheck ?? DateTime.UtcNow,
+                IsHealthy = isSystemHealthy,
+                ActiveConnections = systemHealth?.ActiveConnections ?? 0,
+                CriticalAlerts = systemHealth?.ErrorCount ?? 0,
+                WarningAlerts = systemHealth?.WarningCount ?? 0,
+                Uptime = systemHealth?.Uptime ?? TimeSpan.Zero
+            };
 
             ViewBag.QuickStats = quickStats;
-            ViewBag.SystemHealth = systemHealthList;
+            ViewBag.SystemHealth = systemHealth;
             ViewBag.IsSystemHealthy = isSystemHealthy;
 
             return View(overview);
@@ -85,13 +98,18 @@ public class DashboardController : Controller
             var defaultOverview = new OverviewVM
             {
                 Stats = new StatsVM(),
-                SystemHealth = new SystemHealthVM
+                SystemHealth = new SystemHealthSummaryVM
                 {
-                    CheckTime = DateTime.UtcNow,
-                    ServiceName = "System",
                     Status = "Error",
                     IsHealthy = false,
-                    LastCheck = DateTime.UtcNow
+                    LastCheck = DateTime.UtcNow,
+                    CpuUsage = 0,
+                    MemoryUsage = 0,
+                    DiskUsage = 0,
+                    ActiveConnections = 0,
+                    CriticalAlerts = 1,
+                    WarningAlerts = 0,
+                    Uptime = TimeSpan.Zero
                 }
             };
             

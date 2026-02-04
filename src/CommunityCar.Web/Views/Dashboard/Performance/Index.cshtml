@@ -173,7 +173,7 @@
                             <div class="d-flex flex-column gap-3">
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="badge rounded-pill px-3 py-1 xx-small fw-black text-uppercase tracking-widest @(issue.Severity == "High" ? "bg-danger bg-opacity-10 text-danger border border-danger border-opacity-20" : "bg-warning bg-opacity-10 text-warning border border-warning border-opacity-20")">@string.Format(Localizer["SeverityLabel"].Value, issue.Severity)</span>
-                                    <span class="xx-small fw-bold text-muted opacity-60 text-uppercase tracking-widest">@string.Format(Localizer["ImpactLabel"].Value, issue.Impact.ToString("F1"))</span>
+                                    <span class="xx-small fw-bold text-muted opacity-60 text-uppercase tracking-widest">@string.Format(Localizer["ImpactLabel"].Value, issue.Impact)</span>
                                 </div>
                                 <h4 class="small fw-black text-foreground mb-1">@issue.Message</h4>
                                 <div class="font-monospace xx-small text-muted bg-muted bg-opacity-5 p-2 px-3 rounded-3 border border-border border-opacity-50 break-all mb-1">@issue.Resource</div>

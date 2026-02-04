@@ -1,6 +1,6 @@
 using CommunityCar.AI.Services;
 using CommunityCar.AI.Models;
-using CommunityCar.Application.Features.Chat.ViewModels;
+using CommunityCar.Application.Features.Communication.Chat.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;

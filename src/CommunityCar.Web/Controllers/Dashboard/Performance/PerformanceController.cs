@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Performance;
-using CommunityCar.Application.Features.SEO.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Performance.ViewModels;
+using CommunityCar.Application.Features.Dashboard.SEO.ViewModels;
 using SystemIO = System.IO;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Performance;
@@ -22,7 +23,7 @@ public class PerformanceController : Controller
     {
         try
         {
-            var metrics = await _performanceService.GetCoreWebVitalsAsync("/");
+            var metrics = await _performanceService.GetCoreWebVitalsAsync();
             return View("~/Views/Dashboard/Performance/Index.cshtml", metrics);
         }
         catch (Exception ex)
@@ -37,7 +38,7 @@ public class PerformanceController : Controller
     {
         try
         {
-            var metrics = await _performanceService.GetCoreWebVitalsAsync(url);
+            var metrics = await _performanceService.GetCoreWebVitalsAsync();
             return Json(metrics);
         }
         catch (Exception ex)
@@ -52,7 +53,7 @@ public class PerformanceController : Controller
     {
         try
         {
-            var report = await _performanceService.GeneratePerformanceReportAsync(url);
+            var report = await _performanceService.GeneratePerformanceReportAsync();
             return Json(report);
         }
         catch (Exception ex)
@@ -79,7 +80,7 @@ public class PerformanceController : Controller
                 await image.CopyToAsync(stream);
             }
 
-            var result = await _performanceService.OptimizeImageAsync(tempPath, options);
+            var result = await _performanceService.OptimizeImageAsync(tempPath);
 
             // Clean up temp file
             if (SystemIO.File.Exists(tempPath))
@@ -101,7 +102,7 @@ public class PerformanceController : Controller
     {
         try
         {
-            var resources = await _performanceService.GetCriticalResourcesAsync(url);
+            var resources = await _performanceService.GetCriticalResourcesAsync();
             return Json(resources);
         }
         catch (Exception ex)
@@ -116,7 +117,7 @@ public class PerformanceController : Controller
     {
         try
         {
-            var resources = await _performanceService.GetRenderBlockingResourcesAsync(url);
+            var resources = await _performanceService.GetRenderBlockingResourcesAsync();
             return Json(resources);
         }
         catch (Exception ex)
@@ -131,7 +132,7 @@ public class PerformanceController : Controller
     {
         try
         {
-            var analysis = await _performanceService.AnalyzeResourcesAsync(url);
+            var analysis = await _performanceService.AnalyzeResourcesAsync();
             return Json(analysis);
         }
         catch (Exception ex)

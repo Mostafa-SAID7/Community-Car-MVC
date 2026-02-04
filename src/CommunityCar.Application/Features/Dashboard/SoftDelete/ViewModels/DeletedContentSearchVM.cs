@@ -7,6 +7,7 @@ public class DeletedContentSearchVM
 {
     public string? SearchTerm { get; set; }
     public string? ContentType { get; set; } // Post, Comment, Story, etc.
+    public DeletedContentFilterVM? Filter { get; set; } // Filter object
     public DateTime? DeletedAfter { get; set; }
     public DateTime? DeletedBefore { get; set; }
     public string? DeletedBy { get; set; }

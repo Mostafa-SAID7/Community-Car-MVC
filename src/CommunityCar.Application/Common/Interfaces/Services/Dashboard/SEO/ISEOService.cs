@@ -6,6 +6,7 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.SEO;
 public interface ISEOService
 {
     Task<SEOAnalysisVM> AnalyzeSEOAsync(string url);
+    Task<SEOAnalysisVM> AnalyzePageSEOAsync(string url);
     Task<List<SEOKeywordVM>> GetKeywordRankingsAsync(string domain);
     Task<SEOReportVM> GenerateSEOReportAsync(string domain);
     Task<bool> UpdateSEOSettingsAsync(SEOSettingsVM settings);
@@ -13,5 +14,9 @@ public interface ISEOService
     Task<List<SEOIssueVM>> GetSEOIssuesAsync(string? url = null);
     Task<List<CompetitorAnalysisVM>> GetCompetitorAnalysisAsync(string domain);
     Task<bool> SubmitSitemapAsync(string sitemapUrl);
+    Task<string> GenerateSitemapXmlAsync();
+    Task<string> GenerateRSSXmlAsync();
+    Task<Dictionary<string, object>> GenerateMetaDataAsync(string url);
+    Task<Dictionary<string, object>> GenerateStructuredDataAsync(string url);
     Task<List<ChartDataVM>> GetSEOMetricsChartAsync(string metricType, int days = 30);
 }

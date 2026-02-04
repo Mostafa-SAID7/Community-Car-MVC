@@ -17,5 +17,7 @@ public class LocalizationCulture : BaseEntity
 
     public bool IsEnabled { get; set; } = true;
 
+    public bool IsActive { get; set; } = true;
+
     public bool IsDefault { get; set; } = false;
 }

@@ -53,7 +53,7 @@ public class NewsController : Controller
             var request = new NewsSearchVM
             {
                 SearchTerm = search,
-                Category = category,
+                Category = category?.ToString(),
                 CarMake = carMake,
                 CarModel = carModel,
                 CarYear = carYear,
@@ -64,10 +64,11 @@ public class NewsController : Controller
                 IsPublished = true // Only show published news on public page
             };
 
-            var response = await _newsService.SearchNewsAsync(request);
+            var response = await _newsService.SearchNewsAsync(search ?? "", category?.ToString() ?? "", page, pageSize);
             
             ViewBag.SearchRequest = request;
             ViewBag.CurrentUserId = currentUserId;
+            ViewBag.SelectedCategory = category?.ToString();
             
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -89,7 +90,7 @@ public class NewsController : Controller
         try
         {
             var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
-            var newsItem = await _newsService.GetByIdAsync(id, currentUserId);
+            var newsItem = await _newsService.GetByIdAsync(id);
             
             if (newsItem == null)
             {
@@ -129,7 +130,18 @@ public class NewsController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            var newsId = await _newsService.CreateAsync(model, currentUserId);
+            var newsId = await _newsService.CreateAsync(new CreateNewsVM
+            {
+                Title = model.Headline,
+                Content = model.Body,
+                Summary = model.Summary ?? "",
+                ImageUrl = model.ImageUrl,
+                Category = model.Category.ToString(),
+                Tags = model.GetTagsList(),
+                IsPublished = model.PublishImmediately,
+                IsFeatured = model.IsFeatured,
+                PublishDate = model.PublishImmediately ? DateTime.UtcNow : null
+            });
             
             TempData["SuccessMessage"] = _localizer["NewsCreatedSuccessfully"];
             return RedirectToAction(nameof(Details), new { id = newsId });
@@ -149,7 +161,7 @@ public class NewsController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            var newsItem = await _newsService.GetByIdAsync(id, currentUserId);
+            var newsItem = await _newsService.GetByIdAsync(id);
             
             if (newsItem == null)
             {
@@ -165,19 +177,13 @@ public class NewsController : Controller
             var model = new NewsEditVM
             {
                 Id = newsItem.Id,
-                Headline = newsItem.Headline,
-                Body = newsItem.Body,
+                Headline = newsItem.Title,
+                Body = newsItem.Content,
                 Summary = newsItem.Summary,
-                Category = newsItem.Category,
-                CarMake = newsItem.CarMake,
-                CarModel = newsItem.CarModel,
-                CarYear = newsItem.CarYear,
+                Category = Enum.TryParse<NewsCategory>(newsItem.Category, out var cat) ? cat : NewsCategory.General,
                 Tags = string.Join(", ", newsItem.Tags),
-                ImageUrl = newsItem.ImageUrl,
-                Source = newsItem.Source,
-                SourceUrl = newsItem.SourceUrl,
-                MetaTitle = newsItem.MetaTitle,
-                MetaDescription = newsItem.MetaDescription
+                ImageUrl = newsItem.FeaturedImageUrl,
+                IsFeatured = newsItem.IsFeatured
             };
             
             return View("~/Views/Community/News/Edit.cshtml", model);
@@ -202,7 +208,19 @@ public class NewsController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            await _newsService.UpdateAsync(id, model, currentUserId);
+            await _newsService.UpdateAsync(id, new EditNewsVM
+            {
+                Id = id,
+                Title = model.Headline,
+                Content = model.Body,
+                Summary = model.Summary ?? "",
+                Category = model.Category.ToString(),
+                Tags = model.GetTagsList(),
+                ImageUrl = model.ImageUrl,
+                IsFeatured = model.IsFeatured,
+                IsPublished = true, // Default to published when editing
+                PublishDate = DateTime.UtcNow
+            });
             
             TempData["SuccessMessage"] = _localizer["NewsUpdatedSuccessfully"];
             return RedirectToAction(nameof(Details), new { id });
@@ -223,7 +241,7 @@ public class NewsController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            await _newsService.DeleteAsync(id, currentUserId);
+            await _newsService.DeleteAsync(id);
             
             TempData["SuccessMessage"] = _localizer["NewsDeletedSuccessfully"];
             return RedirectToAction(nameof(Index));
@@ -244,7 +262,7 @@ public class NewsController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            await _newsService.PublishAsync(id, currentUserId);
+            await _newsService.PublishAsync(id);
             
             return Json(new { success = true, message = _localizer["NewsPublishedSuccessfully"] });
         }
@@ -263,7 +281,7 @@ public class NewsController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            await _newsService.UnpublishAsync(id, currentUserId);
+            await _newsService.UnpublishAsync(id);
             
             return Json(new { success = true, message = _localizer["NewsUnpublishedSuccessfully"] });
         }
@@ -322,15 +340,7 @@ public class NewsController : Controller
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
             
-            var request = new NewsSearchVM
-            {
-                AuthorId = currentUserId,
-                Page = page,
-                PageSize = pageSize,
-                SortBy = "newest"
-            };
-
-            var response = await _newsService.SearchNewsAsync(request);
+            var response = await _newsService.SearchNewsAsync("", null, page, pageSize);
             
             return View("~/Views/Community/News/MyNews.cshtml", response);
         }
@@ -346,16 +356,7 @@ public class NewsController : Controller
     {
         try
         {
-            var request = new NewsSearchVM
-            {
-                Category = category,
-                Page = page,
-                PageSize = pageSize,
-                IsPublished = true,
-                SortBy = "newest"
-            };
-
-            var response = await _newsService.SearchNewsAsync(request);
+            var response = await _newsService.SearchNewsAsync("", category.ToString(), page, pageSize);
             
             ViewBag.Category = category;
             return View("~/Views/Community/News/Category.cshtml", response);
@@ -373,7 +374,7 @@ public class NewsController : Controller
         try
         {
             var currentUserId = !string.IsNullOrEmpty(_currentUserService.UserId) ? Guid.Parse(_currentUserService.UserId) : (Guid?)null;
-            var newsItem = await _newsService.GetByIdAsync(id, currentUserId);
+            var newsItem = await _newsService.GetByIdAsync(id);
             
             if (newsItem == null)
             {
@@ -381,21 +382,10 @@ public class NewsController : Controller
             }
 
             // Get related news based on category, tags, and car make/model
-            var request = new NewsSearchVM
-            {
-                Category = newsItem.Category,
-                CarMake = newsItem.CarMake,
-                CarModel = newsItem.CarModel,
-                Tags = newsItem.Tags.Take(3).ToList(), // Use first 3 tags
-                IsPublished = true,
-                PageSize = 6,
-                SortBy = "newest"
-            };
-
-            var response = await _newsService.SearchNewsAsync(request);
+            var response = await _newsService.SearchNewsAsync("", newsItem.Category, 1, 6);
             
             // Remove the current article from related news
-            var relatedNews = response.Items.Where(n => n.Id != id).Take(3).ToList();
+            var relatedNews = response.Items?.Where(n => n.Id != id).Take(3).ToList() ?? new List<NewsVM>();
             
             return PartialView("~/Views/Community/News/_RelatedNews.cshtml", relatedNews);
         }
@@ -452,10 +442,10 @@ public class NewsController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            await _newsService.CommentAsync(id, currentUserId);
+            await _newsService.CommentAsync(id, currentUserId, request.Content);
             
             // Get updated comment count
-            var newsItem = await _newsService.GetByIdAsync(id, currentUserId);
+            var newsItem = await _newsService.GetByIdAsync(id);
             return Json(new { success = true, commentCount = newsItem?.CommentCount ?? 0 });
         }
         catch (Exception ex)
@@ -473,10 +463,10 @@ public class NewsController : Controller
         try
         {
             var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            await _newsService.ShareAsync(id, currentUserId);
+            await _newsService.ShareAsync(id, currentUserId, "web");
             
             // Get updated share count
-            var newsItem = await _newsService.GetByIdAsync(id, currentUserId);
+            var newsItem = await _newsService.GetByIdAsync(id);
             return Json(new { success = true, shareCount = newsItem?.ShareCount ?? 0 });
         }
         catch (Exception ex)

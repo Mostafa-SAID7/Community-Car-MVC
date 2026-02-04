@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Chat.ViewModels;
+namespace CommunityCar.Application.Features.Communication.Chat.ViewModels;
 
 public class CreateConversationVM
 {

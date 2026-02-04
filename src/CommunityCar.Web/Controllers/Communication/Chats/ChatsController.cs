@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Features.Chat.ViewModels;
+using CommunityCar.Application.Features.Communication.Chat.ViewModels;
 using System.Security.Claims;
 
 namespace CommunityCar.Web.Controllers.Chats;

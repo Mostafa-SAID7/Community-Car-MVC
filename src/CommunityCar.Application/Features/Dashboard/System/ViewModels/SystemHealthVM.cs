@@ -20,8 +20,21 @@ public class SystemHealthVM
     public DateTime CheckTime { get; set; }
     public string ServiceName { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
+    public bool IsHealthy { get; set; }
+    public int WarningCount { get; set; }
+    public List<SystemIssueVM> Issues { get; set; } = new();
+    public DateTime LastCheck { get; set; }
     public int ErrorCount { get; set; }
     public string Version { get; set; } = string.Empty;
     public string Environment { get; set; } = string.Empty;
-    public bool IsHealthy { get; set; }
+}
+
+public class SystemIssueVM
+{
+    public string Type { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
+    public string Severity { get; set; } = "Info"; // Info, Warning, Error, Critical
+    public DateTime DetectedAt { get; set; }
+    public bool IsResolved { get; set; }
+    public string? Resolution { get; set; }
 }

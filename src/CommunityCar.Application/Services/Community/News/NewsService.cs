@@ -35,7 +35,7 @@ public class NewsService : INewsService
         };
     }
 
-    public async Task<(IEnumerable<NewsVM> News, PaginationInfo Pagination)> GetNewsAsync(int page = 1, int pageSize = 20, NewsCategory? category = null, string? search = null)
+    public async Task<NewsSearchVM> SearchNewsAsync(string searchTerm, string? category = null, int page = 1, int pageSize = 20)
     {
         var news = new List<NewsVM>();
         var random = new Random();
@@ -45,29 +45,29 @@ public class NewsService : INewsService
             news.Add(new NewsVM
             {
                 Id = Guid.NewGuid(),
-                Title = $"News Article {i + 1}",
-                Content = $"This is the content for news article {i + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                Category = ((NewsCategory)(random.Next(0, 5))).ToString(),
+                Title = $"Search Result {i + 1}: {searchTerm}",
+                Content = $"This is the content for search result {i + 1} matching '{searchTerm}'.",
+                Category = category ?? ((NewsCategory)(random.Next(0, 5))).ToString(),
                 PublishDate = DateTime.UtcNow.AddDays(-random.Next(0, 30)),
                 AuthorName = $"Author {i + 1}",
                 ViewCount = random.Next(100, 1000),
                 IsPublished = true,
-                Tags = new List<string> { "tag1", "tag2", "tag3" }
+                Tags = new List<string> { searchTerm.ToLower(), "search", "result" }
             });
         }
 
-        var pagination = new PaginationInfo
+        return new NewsSearchVM
         {
-            CurrentPage = page,
+            SearchTerm = searchTerm,
+            Category = category,
+            Page = page,
             PageSize = pageSize,
-            TotalItems = 100,
-            TotalPages = (int)Math.Ceiling(100.0 / pageSize)
+            TotalCount = 100, // Mock total
+            Items = news
         };
-
-        return (news, pagination);
     }
 
-    public async Task<NewsVM?> GetNewsByIdAsync(Guid id)
+    public async Task<NewsVM?> GetByIdAsync(Guid id)
     {
         return new NewsVM
         {
@@ -83,7 +83,7 @@ public class NewsService : INewsService
         };
     }
 
-    public async Task<NewsVM> CreateNewsAsync(CreateNewsVM request)
+    public async Task<NewsVM> CreateAsync(CreateNewsVM request)
     {
         var newsId = Guid.NewGuid();
         
@@ -103,112 +103,88 @@ public class NewsService : INewsService
         // Send notification if published
         if (request.IsPublished)
         {
-            var newsItem = new NewsItem("Sample Headline", "Sample Content", Guid.NewGuid(), NewsCategory.General); // Create a mock NewsItem for notification
+            var newsItem = new NewsItem("Sample Headline", "Sample Content", Guid.NewGuid(), NewsCategory.General);
             await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, request.Title);
         }
 
         return news;
     }
 
-    public async Task<bool> UpdateNewsAsync(Guid id, UpdateNewsVM request)
+    public async Task<bool> UpdateAsync(Guid id, EditNewsVM request)
     {
         // Mock implementation
         await Task.CompletedTask;
         return true;
     }
 
-    public async Task<bool> DeleteNewsAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
         // Mock implementation
         await Task.CompletedTask;
         return true;
     }
 
-    public async Task<bool> PublishNewsAsync(Guid id)
+    public async Task<bool> PublishAsync(Guid id)
     {
         // Send notification
-        var newsItem = new NewsItem("Sample Headline", "Sample Content", Guid.NewGuid(), NewsCategory.General); // Create a mock NewsItem for notification
+        var newsItem = new NewsItem("Sample Headline", "Sample Content", Guid.NewGuid(), NewsCategory.General);
         await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, "News Article Title");
         return true;
     }
 
-    public async Task<bool> UnpublishNewsAsync(Guid id)
+    public async Task<bool> UnpublishAsync(Guid id)
     {
         // Mock implementation
         await Task.CompletedTask;
         return true;
     }
 
-    public async Task<IEnumerable<NewsVM>> GetFeaturedNewsAsync(int count = 5)
+    public async Task<bool> LikeAsync(Guid id, Guid userId)
     {
-        var news = new List<NewsVM>();
-        var random = new Random();
-
-        for (int i = 0; i < count; i++)
-        {
-            news.Add(new NewsVM
-            {
-                Id = Guid.NewGuid(),
-                Title = $"Featured News {i + 1}",
-                Content = $"This is featured news content {i + 1}.",
-                Category = ((NewsCategory)(random.Next(0, 5))).ToString(),
-                PublishDate = DateTime.UtcNow.AddDays(-random.Next(0, 7)),
-                AuthorName = $"Featured Author {i + 1}",
-                ViewCount = random.Next(500, 2000),
-                IsPublished = true,
-                Tags = new List<string> { "featured", "news" }
-            });
-        }
-
-        return news;
+        // Mock implementation
+        await Task.CompletedTask;
+        return true;
     }
 
-    public async Task<IEnumerable<NewsVM>> GetNewsByAuthorAsync(string authorId, int page = 1, int pageSize = 10)
+    public async Task<int> GetLikeCountAsync(Guid id)
     {
-        var news = new List<NewsVM>();
         var random = new Random();
-
-        for (int i = 0; i < pageSize; i++)
-        {
-            news.Add(new NewsVM
-            {
-                Id = Guid.NewGuid(),
-                Title = $"Author News {i + 1}",
-                Content = $"This is news content by author {authorId}.",
-                Category = ((NewsCategory)(random.Next(0, 5))).ToString(),
-                PublishDate = DateTime.UtcNow.AddDays(-random.Next(0, 30)),
-                AuthorName = "Author Name",
-                ViewCount = random.Next(100, 1000),
-                IsPublished = true,
-                Tags = new List<string> { "author", "news" }
-            });
-        }
-
-        return news;
+        return random.Next(10, 500);
     }
 
-    public async Task<IEnumerable<NewsVM>> GetNewsByCategoryAsync(NewsCategory category, int page = 1, int pageSize = 10)
+    public async Task<bool> UnlikeAsync(Guid id, Guid userId)
     {
-        var news = new List<NewsVM>();
-        var random = new Random();
+        // Mock implementation
+        await Task.CompletedTask;
+        return true;
+    }
 
-        for (int i = 0; i < pageSize; i++)
-        {
-            news.Add(new NewsVM
-            {
-                Id = Guid.NewGuid(),
-                Title = $"{category} News {i + 1}",
-                Content = $"This is {category} news content.",
-                Category = category.ToString(),
-                PublishDate = DateTime.UtcNow.AddDays(-random.Next(0, 30)),
-                AuthorName = $"Category Author {i + 1}",
-                ViewCount = random.Next(100, 1000),
-                IsPublished = true,
-                Tags = new List<string> { category.ToString().ToLower(), "news" }
-            });
-        }
+    public async Task<bool> BookmarkAsync(Guid id, Guid userId)
+    {
+        // Mock implementation
+        await Task.CompletedTask;
+        return true;
+    }
 
-        return news;
+    public async Task<bool> UnbookmarkAsync(Guid id, Guid userId)
+    {
+        // Mock implementation
+        await Task.CompletedTask;
+        return true;
+    }
+
+    public async Task<bool> CommentAsync(Guid id, Guid userId, string comment)
+    {
+        // Mock implementation
+        await Task.CompletedTask;
+        return true;
+    }
+
+    public async Task<bool> ShareAsync(Guid id, Guid userId, string platform)
+    {
+        // Mock implementation
+        await Task.CompletedTask;
+        return true;
     }
 
     public async Task<bool> IncrementViewCountAsync(Guid id)

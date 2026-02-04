@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CommunityCar.Application.Features.Chat.ViewModels;
+namespace CommunityCar.Application.Features.Communication.Chat.ViewModels;
 
 /// <summary>
 /// ViewModel for AI chat message requests

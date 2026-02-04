@@ -21,7 +21,7 @@ public class EventsController : Controller
         request.Page = Math.Max(1, request.Page);
         request.PageSize = Math.Min(50, Math.Max(1, request.PageSize == 0 ? 12 : request.PageSize));
 
-        var response = await _eventsService.SearchEventsAsync(request);
+        var response = await _eventsService.SearchEventsAsync(request.SearchTerm, request.Page, request.PageSize);
         var stats = await _eventsService.GetEventsStatsAsync();
 
         var viewModel = new EventsIndexVM
@@ -140,9 +140,31 @@ public class EventsController : Controller
 
         try
         {
-            var eventItem = await _eventsService.UpdateEventAsync(id, request);
-            TempData["SuccessMessage"] = "Event updated successfully!";
-            return RedirectToAction(nameof(Details), new { id = eventItem.Id });
+            var success = await _eventsService.UpdateEventAsync(id, new EditEventVM
+            {
+                Id = id,
+                Title = request.Title,
+                Description = request.Description,
+                Location = request.Location,
+                StartDate = request.StartTime,
+                EndDate = request.EndTime,
+                IsPublic = request.IsPublic,
+                MaxAttendees = request.MaxAttendees ?? 0,
+                ImageUrl = request.ExternalUrl,
+                Tags = request.Tags,
+                Category = request.ContactInfo
+            });
+            
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Event updated successfully!";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            else
+            {
+                ModelState.AddModelError("", "Failed to update event.");
+                return View("~/Views/Community/Events/Edit.cshtml", request);
+            }
         }
         catch (UnauthorizedAccessException)
         {
@@ -204,7 +226,7 @@ public class EventsController : Controller
     {
         try
         {
-            var success = await _eventsService.JoinEventAsync(id);
+            var success = await _eventsService.JoinEventAsync(id, GetCurrentUserId());
             if (success)
             {
                 return Json(new { success = true, message = "Successfully joined the event!" });
@@ -230,7 +252,7 @@ public class EventsController : Controller
     {
         try
         {
-            var success = await _eventsService.LeaveEventAsync(id);
+            var success = await _eventsService.LeaveEventAsync(id, GetCurrentUserId());
             if (success)
             {
                 return Json(new { success = true, message = "Successfully left the event!" });
@@ -252,7 +274,7 @@ public class EventsController : Controller
     {
         try
         {
-            var success = await _eventsService.ShareEventAsync(id, request?.Message, request?.Platform);
+            var success = await _eventsService.ShareEventAsync(id, GetCurrentUserId(), request?.Platform ?? "web");
             if (success)
             {
                 return Json(new { success = true, message = "Event shared successfully!" });
@@ -273,6 +295,16 @@ public class EventsController : Controller
     {
         var events = await _eventsService.GetUpcomingEventsAsync(20);
         return View("~/Views/Community/Events/Upcoming.cshtml", events);
+    }
+
+    private Guid GetCurrentUserId()
+    {
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+        {
+            throw new UnauthorizedAccessException("User not authenticated");
+        }
+        return userId;
     }
 }
 

@@ -113,12 +113,12 @@
                         <div class="relative">
                             <select name="category" class="w-full bg-background border border-border px-4 py-2.5 rounded-xl text-xs font-bold outline-none appearance-none">
                                 <option value="">@Localizer["AllCategories"]</option>
-                                <option value="General" selected="@(searchRequest?.Category == NewsCategory.General)">@Localizer["General"]</option>
-                                <option value="CarReviews" selected="@(searchRequest?.Category == NewsCategory.CarReviews)">@Localizer["CarReviews"]</option>
-                                <option value="Industry" selected="@(searchRequest?.Category == NewsCategory.Industry)">@Localizer["Industry"]</option>
-                                <option value="Technology" selected="@(searchRequest?.Category == NewsCategory.Technology)">@Localizer["Technology"]</option>
-                                <option value="Events" selected="@(searchRequest?.Category == NewsCategory.Events)">@Localizer["Events"]</option>
-                                <option value="Tips" selected="@(searchRequest?.Category == NewsCategory.Tips)">@Localizer["Tips"]</option>
+                                <option value="General" selected="@(ViewBag.SelectedCategory == "General")">@Localizer["General"]</option>
+                                <option value="CarReviews" selected="@(ViewBag.SelectedCategory == "CarReviews")">@Localizer["CarReviews"]</option>
+                                <option value="Industry" selected="@(ViewBag.SelectedCategory == "Industry")">@Localizer["Industry"]</option>
+                                <option value="Technology" selected="@(ViewBag.SelectedCategory == "Technology")">@Localizer["Technology"]</option>
+                                <option value="Events" selected="@(ViewBag.SelectedCategory == "Events")">@Localizer["Events"]</option>
+                                <option value="Tips" selected="@(ViewBag.SelectedCategory == "Tips")">@Localizer["Tips"]</option>
                             </select>
                             <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground pointer-events-none"></i>
                         </div>
