@@ -190,4 +190,22 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
     }
 
     #endregion
+
+    #region Social Operations
+
+    public async Task<IEnumerable<UserEntity>> GetFollowersAsync(Guid userId)
+    {
+        // This would typically involve a UserFollowing relationship table
+        // For now, return empty list as the relationship tables may not be fully implemented
+        return await Task.FromResult(new List<UserEntity>());
+    }
+
+    public async Task<IEnumerable<UserEntity>> GetFollowingAsync(Guid userId)
+    {
+        // This would typically involve a UserFollowing relationship table
+        // For now, return empty list as the relationship tables may not be fully implemented
+        return await Task.FromResult(new List<UserEntity>());
+    }
+
+    #endregion
 }

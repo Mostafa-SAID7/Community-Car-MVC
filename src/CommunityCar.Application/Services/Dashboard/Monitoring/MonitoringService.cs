@@ -2,8 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Monitoring;
 using CommunityCar.Application.Features.Dashboard.Monitoring.ViewModels;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Moderation;
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
-using CommunityCar.Application.Features.Shared.ViewModels;
+using CommunityCar.Application.Features.Dashboard.System.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.Monitoring;
 
@@ -19,13 +18,13 @@ public class MonitoringService : IMonitoringService
                 CheckTime = DateTime.UtcNow,
                 ServiceName = "Web Application",
                 Status = "Healthy",
-                ResponseTime = 245.5,
-                CpuUsage = 35.2,
-                MemoryUsage = 68.7,
-                DiskUsage = 45.3,
+                ResponseTime = (int)TimeSpan.FromMilliseconds(245.5).TotalMilliseconds,
+                CpuUsage = 35.2m,
+                MemoryUsage = 68.7m,
+                DiskUsage = 45.3m,
                 ActiveConnections = 127,
                 ErrorCount = 0,
-                Uptime = 720.5,
+                Uptime = TimeSpan.FromHours(720.5),
                 Version = "1.0.0",
                 Environment = "Production",
                 IsHealthy = true
@@ -35,13 +34,13 @@ public class MonitoringService : IMonitoringService
                 CheckTime = DateTime.UtcNow,
                 ServiceName = "Database",
                 Status = "Healthy",
-                ResponseTime = 12.3,
-                CpuUsage = 22.1,
-                MemoryUsage = 78.9,
-                DiskUsage = 62.4,
+                ResponseTime = (int)TimeSpan.FromMilliseconds(12.3).TotalMilliseconds,
+                CpuUsage = 22.1m,
+                MemoryUsage = 78.9m,
+                DiskUsage = 62.4m,
                 ActiveConnections = 45,
                 ErrorCount = 0,
-                Uptime = 1440.2,
+                Uptime = TimeSpan.FromHours(1440.2),
                 Version = "15.2",
                 Environment = "Production",
                 IsHealthy = true
@@ -75,7 +74,7 @@ public class MonitoringService : IMonitoringService
             data.Add(new ChartDataVM
             {
                 Label = current.ToString("HH:mm"),
-                Value = (decimal)(random.NextDouble() * 100 + 50),
+                Value = (double)(random.NextDouble() * 100 + 50),
                 Date = current
             });
             current = current.AddHours(1);

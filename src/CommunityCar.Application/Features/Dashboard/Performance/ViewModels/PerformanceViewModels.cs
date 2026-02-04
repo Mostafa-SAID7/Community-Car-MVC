@@ -86,6 +86,8 @@ public class SystemResourcesVM
     public decimal MemoryUsage { get; set; }
     public long MemoryTotal { get; set; }
     public long MemoryUsed { get; set; }
+    public long TotalMemory { get; set; }
+    public int ActiveConnections { get; set; }
     public decimal DiskUsage { get; set; }
     public long DiskTotal { get; set; }
     public long DiskUsed { get; set; }

@@ -2,7 +2,6 @@ using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management;
 using CommunityCar.Application.Features.Dashboard.Management.ViewModels;
 using CommunityCar.Application.Features.Dashboard.Monitoring.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.Management;
 
@@ -23,12 +22,12 @@ public class ManagementService : IManagementService
             DatabaseSize = random.Next(100, 1000), // MB
             StorageUsed = random.Next(1000, 10000), // MB
             BandwidthUsage = random.Next(100, 1000), // GB
-            ErrorRate = (decimal)(random.NextDouble() * 0.05), // 0-5%
+            ErrorRate = (double)(random.NextDouble() * 0.05), // 0-5%
             ResponseTime = random.Next(100, 500), // ms
             ActiveSessions = random.Next(50, 500),
             QueuedJobs = random.Next(0, 100),
             FailedJobs = random.Next(0, 10),
-            CacheHitRate = (decimal)(0.7 + random.NextDouble() * 0.25), // 70-95%
+            CacheHitRate = (double)(0.7 + random.NextDouble() * 0.25), // 70-95%
             LastBackup = DateTime.UtcNow.AddDays(-random.Next(0, 7)),
             SecurityAlerts = random.Next(0, 5),
             PendingUpdates = random.Next(0, 3),
@@ -38,9 +37,9 @@ public class ManagementService : IManagementService
         };
     }
 
-    public async Task<List<SystemTaskVM>> GetSystemTasksAsync()
+    public async Task<List<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemTaskVM>> GetSystemTasksAsync()
     {
-        var tasks = new List<SystemTaskVM>();
+        var tasks = new List<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemTaskVM>();
         var random = new Random();
         var taskTypes = new[] { "Backup", "Cleanup", "Update", "Optimization", "Security Scan" };
         var statuses = new[] { "Running", "Completed", "Failed", "Scheduled", "Pending" };
@@ -51,7 +50,7 @@ public class ManagementService : IManagementService
             var status = statuses[random.Next(statuses.Length)];
             var startTime = DateTime.UtcNow.AddMinutes(-random.Next(1, 1440));
             
-            tasks.Add(new SystemTaskVM
+            tasks.Add(new CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemTaskVM
             {
                 Id = Guid.NewGuid(),
                 Name = $"{taskType} Task #{i + 1}",
@@ -63,7 +62,7 @@ public class ManagementService : IManagementService
                 Duration = status == "Completed" ? TimeSpan.FromMinutes(random.Next(5, 60)) : null,
                 Description = $"System {taskType.ToLower()} task",
                 CreatedBy = "System",
-                Priority = new[] { "Low", "Medium", "High" }[random.Next(3)],
+                Priority = random.Next(1, 4), // 1-3 priority levels
                 ErrorMessage = status == "Failed" ? "Task failed due to system error" : null,
                 NextRun = status == "Scheduled" ? DateTime.UtcNow.AddHours(random.Next(1, 24)) : null
             });
@@ -86,15 +85,15 @@ public class ManagementService : IManagementService
         return true;
     }
 
-    public async Task<SystemTaskVM?> GetSystemTaskAsync(Guid taskId)
+    public async Task<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemTaskVM?> GetSystemTaskAsync(Guid taskId)
     {
         var tasks = await GetSystemTasksAsync();
         return tasks.FirstOrDefault(t => t.Id == taskId);
     }
 
-    public async Task<List<SystemLogVM>> GetSystemLogsAsync(int page = 1, int pageSize = 50, string? level = null)
+    public async Task<List<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemLogVM>> GetSystemLogsAsync(int page = 1, int pageSize = 50, string? level = null)
     {
-        var logs = new List<SystemLogVM>();
+        var logs = new List<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemLogVM>();
         var random = new Random();
         var logLevels = new[] { "Info", "Warning", "Error", "Debug", "Trace" };
         var sources = new[] { "Application", "Database", "Cache", "Email", "Background Jobs" };
@@ -104,7 +103,7 @@ public class ManagementService : IManagementService
             var logLevel = level ?? logLevels[random.Next(logLevels.Length)];
             var timestamp = DateTime.UtcNow.AddMinutes(-random.Next(1, 10080)); // Last week
             
-            logs.Add(new SystemLogVM
+            logs.Add(new CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemLogVM
             {
                 Id = Guid.NewGuid(),
                 Timestamp = timestamp,
@@ -136,11 +135,11 @@ public class ManagementService : IManagementService
         return true;
     }
 
-    public async Task<SystemResourcesVM> GetSystemResourcesAsync()
+    public async Task<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemResourcesVM> GetSystemResourcesAsync()
     {
         var random = new Random();
         
-        return new SystemResourcesVM
+        return new CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemResourcesVM
         {
             CpuUsage = (decimal)(random.NextDouble() * 80 + 10), // 10-90%
             MemoryUsage = (decimal)(random.NextDouble() * 80 + 10), // 10-90%
@@ -177,7 +176,7 @@ public class ManagementService : IManagementService
             data.Add(new ChartDataVM
             {
                 Label = time.ToString("HH:mm"),
-                Value = value,
+                Value = (double)value,
                 Date = time
             });
         }

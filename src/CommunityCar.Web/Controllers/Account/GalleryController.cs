@@ -1,5 +1,5 @@
-using CommunityCar.Application.Common.Interfaces.Services.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Media;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Features.Account.ViewModels.Media;
 using CommunityCar.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;

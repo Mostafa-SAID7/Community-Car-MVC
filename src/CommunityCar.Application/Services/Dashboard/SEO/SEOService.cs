@@ -37,7 +37,7 @@ public class SEOService : ISEOService
             ImagesWithoutAlt = random.Next(0, 5),
             InternalLinksCount = random.Next(10, 50),
             ExternalLinksCount = random.Next(5, 20),
-            PageLoadTime = (decimal)(random.NextDouble() * 3 + 1), // 1-4 seconds
+            PageLoadTime = (double)(random.NextDouble() * 3 + 1), // 1-4 seconds
             PageSize = random.Next(500000, 2000000), // 500KB - 2MB
             IsMobileFriendly = random.Next(10) > 1, // 90% mobile friendly
             HasSitemap = true,
@@ -45,12 +45,7 @@ public class SEOService : ISEOService
             SslEnabled = true,
             Issues = GenerateSEOIssues(score),
             Recommendations = GenerateSEORecommendations(score),
-            Keywords = new List<SEOKeywordVM>
-            {
-                new() { Keyword = "car sharing", Position = random.Next(1, 10), SearchVolume = 12000, Difficulty = "Medium" },
-                new() { Keyword = "community car", Position = random.Next(1, 15), SearchVolume = 3400, Difficulty = "Low" },
-                new() { Keyword = "rent car", Position = random.Next(5, 20), SearchVolume = 45000, Difficulty = "High" }
-            }
+            Keywords = new List<string> { "car sharing", "community car", "rent car" }
         };
     }
 
@@ -75,7 +70,7 @@ public class SEOService : ISEOService
                 Position = random.Next(1, 100),
                 PreviousPosition = random.Next(1, 100),
                 SearchVolume = random.Next(1000, 50000),
-                Difficulty = new[] { "Low", "Medium", "High" }[random.Next(3)],
+                Difficulty = (decimal)(random.NextDouble() * 5 + 0.5), // Convert to decimal
                 Cpc = (decimal)(random.NextDouble() * 5 + 0.5), // $0.5 - $5.5
                 Competition = (decimal)(random.NextDouble()),
                 Trend = random.Next(3) switch
@@ -188,9 +183,9 @@ public class SEOService : ISEOService
                 DetectedAt = DateTime.UtcNow.AddDays(-random.Next(1, 30)),
                 IsFixed = random.Next(4) == 0, // 25% fixed
                 FixedAt = null,
-                Impact = random.Next(1, 10),
+                Impact = random.Next(1, 10).ToString(),
                 Recommendation = $"Fix recommendation for: {issue}",
-                Priority = random.Next(1, 5)
+                Priority = random.Next(1, 5).ToString()
             });
         }
 
@@ -257,7 +252,7 @@ public class SEOService : ISEOService
             data.Add(new ChartDataVM
             {
                 Label = date.ToString("MMM dd"),
-                Value = value,
+                Value = (double)value,
                 Date = date
             });
         }
@@ -279,7 +274,7 @@ public class SEOService : ISEOService
                 Description = "Page takes more than 3 seconds to load",
                 Severity = "High",
                 Category = "Performance",
-                Impact = 8,
+                Impact = "8",
                 Recommendation = "Optimize images and enable compression"
             });
         }
@@ -293,7 +288,7 @@ public class SEOService : ISEOService
                 Description = "Several pages are missing meta descriptions",
                 Severity = "Medium",
                 Category = "Content",
-                Impact = 6,
+                Impact = "6",
                 Recommendation = "Add unique meta descriptions to all pages"
             });
         }

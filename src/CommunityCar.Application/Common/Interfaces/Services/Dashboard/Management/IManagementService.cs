@@ -1,23 +1,21 @@
 using CommunityCar.Application.Features.Dashboard.Management.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Monitoring.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management;
 
 public interface IManagementService
 {
-    Task<List<UserManagementVM>> GetUserManagementHistoryAsync(int page = 1, int pageSize = 20);
-    Task<List<UserManagementVM>> GetUserManagementHistoryByUserAsync(Guid userId, int page = 1, int pageSize = 20);
-    Task<bool> PerformUserActionAsync(UserManagementVM request);
-    Task<bool> ReverseUserActionAsync(Guid actionId);
-    Task ProcessExpiredActionsAsync();
-
-    // Added to match ManagementController expectations
-    Task<List<CommunityCar.Application.Features.Dashboard.System.ViewModels.SystemHealthVM>> GetSystemHealthAsync();
-    Task<List<UserManagementVM>> GetUsersAsync(int page, int pageSize, string? search);
-    Task<UserManagementVM?> GetUserAsync(Guid userId);
-    Task<bool> BlockUserAsync(Guid userId, string reason);
-    Task<bool> UnblockUserAsync(Guid userId);
-    Task<bool> UpdateUserRoleAsync(Guid userId, string role);
-    Task<List<ContentModerationVM>> GetContentModerationAsync(int page, int pageSize);
-    Task<bool> ModerateContentAsync(ModerateContentVM request);
-    Task<List<SystemAlertVM>> GetSystemAlertsAsync();
+    Task<DashboardOverviewVM> GetDashboardOverviewAsync();
+    Task<List<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemTaskVM>> GetSystemTasksAsync();
+    Task<bool> ExecuteSystemTaskAsync(string taskType, Dictionary<string, object>? parameters = null);
+    Task<bool> CancelSystemTaskAsync(Guid taskId);
+    Task<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemTaskVM?> GetSystemTaskAsync(Guid taskId);
+    Task<List<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemLogVM>> GetSystemLogsAsync(int page = 1, int pageSize = 50, string? level = null);
+    Task<bool> ClearSystemLogsAsync(DateTime? olderThan = null);
+    Task<CommunityCar.Application.Features.Dashboard.Management.ViewModels.SystemResourcesVM> GetSystemResourcesAsync();
+    Task<List<ChartDataVM>> GetSystemMetricsChartAsync(string metricType, int hours = 24);
+    Task<bool> RestartSystemServiceAsync(string serviceName);
+    Task<bool> UpdateSystemConfigurationAsync(Dictionary<string, object> configuration);
+    Task<Dictionary<string, object>> GetSystemConfigurationAsync();
 }

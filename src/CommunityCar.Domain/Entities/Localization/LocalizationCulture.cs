@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using CommunityCar.Domain.Base;
 
 namespace CommunityCar.Domain.Entities.Localization;
 
-public class LocalizationCulture
+public class LocalizationCulture : BaseEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     [Required]
     [MaxLength(20)]
     public string Name { get; set; } = string.Empty; // e.g., "en-US", "ar-EG"
@@ -16,7 +15,7 @@ public class LocalizationCulture
 
     public bool IsRTL { get; set; } = false;
 
-    public bool IsActive { get; set; } = true;
+    public bool IsEnabled { get; set; } = true;
 
     public bool IsDefault { get; set; } = false;
 }

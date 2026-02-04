@@ -1,6 +1,6 @@
 using CommunityCar.Application.Services.Dashboard.BackgroundJobs;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.BackgroundJobs;
-using CommunityCar.Application.Features.Dashboard.ViewModels.BackgroundJobs;
+using CommunityCar.Application.Features.Dashboard.BackgroundJobs.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Hangfire;

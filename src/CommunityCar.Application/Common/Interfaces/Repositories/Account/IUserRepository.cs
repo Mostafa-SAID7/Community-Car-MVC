@@ -34,4 +34,9 @@ public interface IUserRepository : IBaseRepository<UserEntity>
     Task<DateTime?> GetLockoutEndAsync(Guid userId);
     Task<DateTime?> GetLastPasswordChangeAsync(Guid userId);
     #endregion
+
+    #region Social Operations
+    Task<IEnumerable<UserEntity>> GetFollowersAsync(Guid userId);
+    Task<IEnumerable<UserEntity>> GetFollowingAsync(Guid userId);
+    #endregion
 }

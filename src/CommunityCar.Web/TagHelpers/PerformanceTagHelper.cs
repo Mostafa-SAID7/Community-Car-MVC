@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.SEO;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Performance;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;

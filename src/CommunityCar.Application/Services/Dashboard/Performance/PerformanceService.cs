@@ -79,7 +79,7 @@ public class PerformanceService : IPerformanceService
             data.Add(new ChartDataVM
             {
                 Label = date.ToString("MMM dd"),
-                Value = (decimal)(random.NextDouble() * 5), // 0-5%
+                Value = (double)(random.NextDouble() * 5), // 0-5%
                 Date = date
             });
         }
@@ -99,7 +99,7 @@ public class PerformanceService : IPerformanceService
             data.Add(new ChartDataVM
             {
                 Label = date.ToString("MMM dd"),
-                Value = (decimal)(random.NextDouble() * 80 + 10), // 10-90%
+                Value = (double)(random.NextDouble() * 80 + 10), // 10-90%
                 Date = date
             });
         }
@@ -119,7 +119,7 @@ public class PerformanceService : IPerformanceService
             data.Add(new ChartDataVM
             {
                 Label = date.ToString("MMM dd"),
-                Value = (decimal)(random.NextDouble() * 80 + 10), // 10-90%
+                Value = (double)(random.NextDouble() * 80 + 10), // 10-90%
                 Date = date
             });
         }

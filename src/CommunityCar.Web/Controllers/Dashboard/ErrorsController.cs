@@ -1,5 +1,5 @@
-using CommunityCar.Application.Common.Interfaces.Services;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.ErrorReporting;
+using CommunityCar.Application.Features.Dashboard.ErrorReporting.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Reports;

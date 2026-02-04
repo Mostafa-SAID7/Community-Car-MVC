@@ -3,6 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
+using CommunityCar.Application.Common.Interfaces.Repositories.Localization;
 using CommunityCar.Infrastructure.Persistence.Data;
 
 namespace CommunityCar.Infrastructure.Persistence.UnitOfWork;
@@ -35,7 +36,9 @@ public class UnitOfWork : IUnitOfWork
         IGroupsRepository groupsRepository,
         IPostsRepository postsRepository,
         IGuidesRepository guidesRepository,
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        ILocalizationCultureRepository localizationCultureRepository,
+        ILocalizationResourceRepository localizationResourceRepository)
     {
         _context = context;
         Conversations = conversationRepository;
@@ -61,6 +64,8 @@ public class UnitOfWork : IUnitOfWork
         Posts = postsRepository;
         Guides = guidesRepository;
         Users = userRepository;
+        LocalizationCultures = localizationCultureRepository;
+        LocalizationResources = localizationResourceRepository;
     }
 
     public IConversationRepository Conversations { get; }
@@ -86,6 +91,8 @@ public class UnitOfWork : IUnitOfWork
     public IPostsRepository Posts { get; }
     public IGuidesRepository Guides { get; }
     public IUserRepository Users { get; }
+    public ILocalizationCultureRepository LocalizationCultures { get; }
+    public ILocalizationResourceRepository LocalizationResources { get; }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

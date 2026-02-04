@@ -4,4 +4,5 @@ public interface IGamificationService
 {
     // Gamification service interface - placeholder for now
     Task<object> GetGamificationAsync();
+    Task<ProfileStatsVM> GetUserStatsAsync(Guid userId);
 }

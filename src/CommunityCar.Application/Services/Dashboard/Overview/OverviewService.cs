@@ -26,8 +26,8 @@ public class OverviewService : IOverviewService
                 TotalNews = 150,
                 TotalInteractions = 25000,
                 ActiveUsersToday = 125,
-                EngagementRate = 4.5m,
-                GrowthRate = 12.5m,
+                EngagementRate = 4.5,
+                GrowthRate = 12.5,
                 LastUpdated = DateTime.UtcNow
             },
             RecentActivity = await GetRecentActivityAsync(10),
@@ -59,9 +59,9 @@ public class OverviewService : IOverviewService
     {
         return new List<StatsVM>
         {
-            new () { Title = "Total Users", Value = "1,250", Icon = "users", Color = "primary", ChangePercentage = 12.5m, IsPositiveChange = true },
-            new () { Title = "Active Now", Value = "125", Icon = "activity", Color = "success", ChangePercentage = 5.2m, IsPositiveChange = true },
-            new() { Title = "New Orders", Value = "45", Icon = "shopping-cart", Color = "warning", ChangePercentage = 2.1m, IsPositiveChange = false },
+            new () { Title = "Total Users", Value = "1,250", Icon = "users", Color = "primary", ChangePercentage = 12.5, IsPositiveChange = true },
+            new () { Title = "Active Now", Value = "125", Icon = "activity", Color = "success", ChangePercentage = 5.2, IsPositiveChange = true },
+            new() { Title = "New Orders", Value = "45", Icon = "shopping-cart", Color = "warning", ChangePercentage = 2.1, IsPositiveChange = false },
             new() { Title = "Reports", Value = "12", Icon = "flag", Color = "danger", ChangePercentage = 0, IsPositiveChange = true }
         };
     }

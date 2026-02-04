@@ -18,7 +18,6 @@ public class ErrorService : IErrorService
         {
             errors.Add(new ErrorLog
             {
-                Id = Guid.NewGuid(),
                 Message = $"Sample error message #{i + 1}",
                 Exception = "System.Exception: Sample exception",
                 StackTrace = "Sample stack trace",
@@ -47,7 +46,6 @@ public class ErrorService : IErrorService
     {
         return new ErrorLog
         {
-            Id = Guid.Parse(errorId),
             Message = "Sample error message",
             Exception = "System.Exception: Sample exception",
             StackTrace = "Sample stack trace",
@@ -90,7 +88,7 @@ public class ErrorService : IErrorService
             ErrorsThisWeek = random.Next(50, 500),
             ErrorsThisMonth = random.Next(200, 2000),
             AverageErrorsPerDay = random.Next(20, 200),
-            ErrorRate = (decimal)(random.NextDouble() * 0.1),
+            ErrorRate = (double)(random.NextDouble() * 0.1),
             MostCommonError = "NullReferenceException",
             MostActiveErrorSource = "Web Application",
             ErrorTrend = random.Next(2) == 0 ? "Increasing" : "Decreasing",
@@ -99,13 +97,9 @@ public class ErrorService : IErrorService
             ResolvedErrorsCount = random.Next(80, 800),
             UnresolvedErrorsCount = random.Next(20, 200),
             AverageResolutionTime = TimeSpan.FromHours(random.Next(1, 24)),
-            TopErrorCategories = new Dictionary<string, int>
+            TopErrorCategories = new List<string>
             {
-                { "System", random.Next(50, 300) },
-                { "Business Logic", random.Next(30, 200) },
-                { "Validation", random.Next(20, 150) },
-                { "Security", random.Next(5, 50) },
-                { "Performance", random.Next(10, 100) }
+                "System", "Business Logic", "Validation", "Security", "Performance"
             },
             ErrorsByLevel = new Dictionary<string, int>
             {
@@ -141,7 +135,7 @@ public class ErrorService : IErrorService
                 ErrorsThisWeek = random.Next(20, 200),
                 ErrorsThisMonth = random.Next(100, 1000),
                 AverageErrorsPerDay = random.Next(10, 100),
-                ErrorRate = (decimal)(random.NextDouble() * 0.05),
+                ErrorRate = (double)(random.NextDouble() * 0.05),
                 MostCommonError = "NullReferenceException",
                 MostActiveErrorSource = "Web Application",
                 ErrorTrend = random.Next(2) == 0 ? "Increasing" : "Decreasing",
@@ -150,13 +144,9 @@ public class ErrorService : IErrorService
                 ResolvedErrorsCount = random.Next(40, 400),
                 UnresolvedErrorsCount = random.Next(10, 100),
                 AverageResolutionTime = TimeSpan.FromHours(random.Next(1, 12)),
-                TopErrorCategories = new Dictionary<string, int>
+                TopErrorCategories = new List<string>
                 {
-                    { "System", random.Next(25, 150) },
-                    { "Business Logic", random.Next(15, 100) },
-                    { "Validation", random.Next(10, 75) },
-                    { "Security", random.Next(2, 25) },
-                    { "Performance", random.Next(5, 50) }
+                    "System", "Business Logic", "Validation", "Security", "Performance"
                 },
                 ErrorsByLevel = new Dictionary<string, int>
                 {

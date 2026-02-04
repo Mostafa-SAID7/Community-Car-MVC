@@ -47,8 +47,8 @@ public class NewsService : INewsService
                 Id = Guid.NewGuid(),
                 Title = $"News Article {i + 1}",
                 Content = $"This is the content for news article {i + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                Category = (NewsCategory)(random.Next(0, 5)),
-                PublishedDate = DateTime.UtcNow.AddDays(-random.Next(0, 30)),
+                Category = ((NewsCategory)(random.Next(0, 5))).ToString(),
+                PublishDate = DateTime.UtcNow.AddDays(-random.Next(0, 30)),
                 AuthorName = $"Author {i + 1}",
                 ViewCount = random.Next(100, 1000),
                 IsPublished = true,
@@ -74,8 +74,8 @@ public class NewsService : INewsService
             Id = id,
             Title = "Sample News Article",
             Content = "This is a sample news article content. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            Category = NewsCategory.General,
-            PublishedDate = DateTime.UtcNow.AddDays(-1),
+            Category = NewsCategory.General.ToString(),
+            PublishDate = DateTime.UtcNow.AddDays(-1),
             AuthorName = "Sample Author",
             ViewCount = 150,
             IsPublished = true,
@@ -93,7 +93,7 @@ public class NewsService : INewsService
             Title = request.Title,
             Content = request.Content,
             Category = request.Category,
-            PublishedDate = DateTime.UtcNow,
+            PublishDate = DateTime.UtcNow,
             AuthorName = "Current User",
             ViewCount = 0,
             IsPublished = request.IsPublished,
@@ -103,7 +103,8 @@ public class NewsService : INewsService
         // Send notification if published
         if (request.IsPublished)
         {
-            await _newsNotificationService.NotifyNewsPublishedAsync(newsId, request.Title);
+            var newsItem = new NewsItem("Sample Headline", "Sample Content", Guid.NewGuid(), NewsCategory.General); // Create a mock NewsItem for notification
+            await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, request.Title);
         }
 
         return news;
@@ -126,7 +127,8 @@ public class NewsService : INewsService
     public async Task<bool> PublishNewsAsync(Guid id)
     {
         // Send notification
-        await _newsNotificationService.NotifyNewsPublishedAsync(id, "News Article Title");
+        var newsItem = new NewsItem("Sample Headline", "Sample Content", Guid.NewGuid(), NewsCategory.General); // Create a mock NewsItem for notification
+        await _newsNotificationService.NotifyNewsPublishedAsync(newsItem, "News Article Title");
         return true;
     }
 
@@ -149,8 +151,8 @@ public class NewsService : INewsService
                 Id = Guid.NewGuid(),
                 Title = $"Featured News {i + 1}",
                 Content = $"This is featured news content {i + 1}.",
-                Category = (NewsCategory)(random.Next(0, 5)),
-                PublishedDate = DateTime.UtcNow.AddDays(-random.Next(0, 7)),
+                Category = ((NewsCategory)(random.Next(0, 5))).ToString(),
+                PublishDate = DateTime.UtcNow.AddDays(-random.Next(0, 7)),
                 AuthorName = $"Featured Author {i + 1}",
                 ViewCount = random.Next(500, 2000),
                 IsPublished = true,
@@ -173,8 +175,8 @@ public class NewsService : INewsService
                 Id = Guid.NewGuid(),
                 Title = $"Author News {i + 1}",
                 Content = $"This is news content by author {authorId}.",
-                Category = (NewsCategory)(random.Next(0, 5)),
-                PublishedDate = DateTime.UtcNow.AddDays(-random.Next(0, 30)),
+                Category = ((NewsCategory)(random.Next(0, 5))).ToString(),
+                PublishDate = DateTime.UtcNow.AddDays(-random.Next(0, 30)),
                 AuthorName = "Author Name",
                 ViewCount = random.Next(100, 1000),
                 IsPublished = true,
@@ -197,8 +199,8 @@ public class NewsService : INewsService
                 Id = Guid.NewGuid(),
                 Title = $"{category} News {i + 1}",
                 Content = $"This is {category} news content.",
-                Category = category,
-                PublishedDate = DateTime.UtcNow.AddDays(-random.Next(0, 30)),
+                Category = category.ToString(),
+                PublishDate = DateTime.UtcNow.AddDays(-random.Next(0, 30)),
                 AuthorName = $"Category Author {i + 1}",
                 ViewCount = random.Next(100, 1000),
                 IsPublished = true,

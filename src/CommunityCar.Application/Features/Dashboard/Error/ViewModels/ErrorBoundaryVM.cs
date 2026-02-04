@@ -8,6 +8,8 @@ public class ErrorBoundaryVM
     public Guid Id { get; set; }
     public string ErrorId { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
+    public string BoundaryName { get; set; } = string.Empty;
+    public string ErrorMessage { get; set; } = string.Empty;
     public string StackTrace { get; set; } = string.Empty;
     public string Source { get; set; } = string.Empty;
     public string ComponentName { get; set; } = string.Empty;
@@ -17,7 +19,9 @@ public class ErrorBoundaryVM
     public string Url { get; set; } = string.Empty;
     public string Severity { get; set; } = string.Empty; // Critical, High, Medium, Low
     public bool IsResolved { get; set; }
+    public bool IsRecovered { get; set; }
     public string? ResolutionNotes { get; set; }
+    public string? RecoveryAction { get; set; }
     public DateTime? ResolvedAt { get; set; }
     public string? ResolvedBy { get; set; }
     public Dictionary<string, object> AdditionalData { get; set; } = new();

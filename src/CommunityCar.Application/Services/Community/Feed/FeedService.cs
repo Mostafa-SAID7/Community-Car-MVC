@@ -34,7 +34,7 @@ public class FeedService : IFeedService
         {
             Page = 1,
             PageSize = 20,
-            SortBy = "Recent"
+            SortBy = FeedSortBy.Newest
         };
 
         return await GetPersonalizedFeedAsync(request);

@@ -7,4 +7,6 @@ public class TopPageVM
     public int Views { get; set; }
     public int UniqueViews { get; set; }
     public decimal BounceRate { get; set; }
+    public double AverageTimeOnPage { get; set; }
+    public double ExitRate { get; set; }
 }

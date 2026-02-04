@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
@@ -22,6 +22,66 @@ public class BroadcastService : IBroadcastService
         _currentUserService = currentUserService;
     }
 
+    public async Task BroadcastToAllAsync(string message, object? data = null, CancellationToken cancellationToken = default)
+    {
+        await _hubContext.Clients.All.SendAsync(message, data, cancellationToken);
+    }
+
+    public async Task BroadcastToUserAsync(Guid userId, string message, object? data = null, CancellationToken cancellationToken = default)
+    {
+        var connectionId = BroadcastHub.GetUserConnectionId(userId.ToString());
+        if (!string.IsNullOrEmpty(connectionId))
+        {
+            await _hubContext.Clients.Client(connectionId).SendAsync(message, data, cancellationToken);
+        }
+    }
+
+    public async Task BroadcastToGroupAsync(string groupName, string message, object? data = null, CancellationToken cancellationToken = default)
+    {
+        await _hubContext.Clients.Group(groupName).SendAsync(message, data, cancellationToken);
+    }
+
+    public async Task BroadcastToRoleAsync(string role, string message, object? data = null, CancellationToken cancellationToken = default)
+    {
+        // Get users with the specified role and broadcast to them
+        var usersInRole = await _unitOfWork.Users.GetUsersByRoleAsync(role);
+        foreach (var user in usersInRole)
+        {
+            await BroadcastToUserAsync(user.Id, message, data, cancellationToken);
+        }
+    }
+
+    public async Task NotifyUserAsync(Guid userId, string title, string message, string? url = null, CancellationToken cancellationToken = default)
+    {
+        var notificationData = new
+        {
+            Title = title,
+            Message = message,
+            Url = url,
+            Timestamp = DateTime.UtcNow
+        };
+
+        await BroadcastToUserAsync(userId, "Notification", notificationData, cancellationToken);
+    }
+
+    public async Task NotifyFollowersAsync(Guid userId, string title, string message, string? url = null, CancellationToken cancellationToken = default)
+    {
+        var followers = await _unitOfWork.Users.GetFollowersAsync(userId);
+        var notificationData = new
+        {
+            Title = title,
+            Message = message,
+            Url = url,
+            Timestamp = DateTime.UtcNow
+        };
+
+        foreach (var follower in followers)
+        {
+            await BroadcastToUserAsync(follower.Id, "Notification", notificationData, cancellationToken);
+        }
+    }
+
+    // Legacy methods for backward compatibility
     public async Task BroadcastNewPostAsync(Guid postId, Guid? groupId = null)
     {
         var post = await _unitOfWork.Posts.GetByIdAsync(postId);

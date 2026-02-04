@@ -204,8 +204,8 @@ public class CacheWarmupService
                 {
                     var request = new CommunityCar.Application.Features.Community.News.ViewModels.NewsSearchVM
                     {
-                        Category = NewsCategory.General,
-                        Page = 1,
+                        Category = NewsCategory.General.ToString(),
+                        PageNumber = 1,
                         PageSize = 10
                     };
                     return await _newsService.GetNewsAsync();

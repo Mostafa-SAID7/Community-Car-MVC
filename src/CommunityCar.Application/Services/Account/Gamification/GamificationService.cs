@@ -42,14 +42,15 @@ public class GamificationService : IGamificationService
 
     public async Task<object> GetGamificationAsync()
     {
-        var currentUserId = await _currentUserService.GetCurrentUserIdAsync();
-        if (currentUserId == null) return new { };
+        var currentUserId = _currentUserService.UserId;
+        if (string.IsNullOrEmpty(currentUserId) || !Guid.TryParse(currentUserId, out var userId)) 
+            return new { };
 
-        var badges = await GetUserBadgesAsync(currentUserId.Value);
-        var achievements = await GetUserAchievementsAsync(currentUserId.Value);
-        var stats = await GetUserStatsAsync(currentUserId.Value);
-        var points = await GetUserPointsAsync(currentUserId.Value);
-        var level = await GetUserLevelAsync(currentUserId.Value);
+        var badges = await GetUserBadgesAsync(userId);
+        var achievements = await GetUserAchievementsAsync(userId);
+        var stats = await GetUserStatsAsync(userId);
+        var points = await GetUserPointsAsync(userId);
+        var level = await GetUserLevelAsync(userId);
 
         return new
         {

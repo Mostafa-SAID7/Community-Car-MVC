@@ -79,7 +79,7 @@ using CommunityCar.Application.Services.Dashboard.Security;
 using CommunityCar.Application.Services.Dashboard.Settings;
 using CommunityCar.Application.Services.Dashboard.System;
 using CommunityCar.Application.Services.Dashboard.UserManagement;
-using CommunityCar.Application.Services.SEO;
+using CommunityCar.Application.Services.Dashboard.SEO;
 using CommunityCar.Application.Services.Communication;
 using CommunityCar.Application.Services.Dashboard.Caching;
 using CommunityCar.Application.Services.Storage;
@@ -105,7 +105,7 @@ public static class DependencyInjection
         
         // Community services
         services.AddScoped<IQAService, QAService>();
-        services.AddScoped<IMapsService, MapsService>();
+        services.AddScoped<CommunityCar.Application.Common.Interfaces.Services.Community.Maps.IMapsService, CommunityCar.Application.Services.Community.MapsService>();
         services.AddScoped<INewsService, NewsService>();
         services.AddScoped<IReviewsService, ReviewsService>();
         services.AddScoped<IEventsService, EventsService>();
@@ -131,10 +131,10 @@ public static class DependencyInjection
 
         // Account services
         services.AddScoped<ICurrentUserService, CurrentUserService>();
-        services.AddScoped<IOAuthService, OAuthService>();
+        // services.AddScoped<IOAuthService, OAuthService>();
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IAccountSecurityService, AccountSecurityService>();
-        services.AddScoped<IAuthService, AuthService>();
+        // services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IAccountManagementService, AccountManagementService>();
         services.AddScoped<IUserGalleryService, UserGalleryService>();
         services.AddScoped<IGamificationService, GamificationService>();

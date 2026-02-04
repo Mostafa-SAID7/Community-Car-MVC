@@ -6,11 +6,14 @@ public class ErrorLog : BaseEntity
 {
     public string ErrorId { get; set; } = Guid.NewGuid().ToString();
     public string Message { get; set; } = string.Empty;
+    public string Exception { get; set; } = string.Empty;
     public string? StackTrace { get; set; }
     public string? InnerException { get; set; }
     public string Source { get; set; } = string.Empty;
     public string Severity { get; set; } = "Error"; // Error, Warning, Critical, Info
+    public string Level { get; set; } = "Error"; // Error, Warning, Critical, Info
     public string Category { get; set; } = "General"; // Database, Network, Validation, Business, Security
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     public string? UserId { get; set; }
     public string? UserAgent { get; set; }
     public string? IpAddress { get; set; }

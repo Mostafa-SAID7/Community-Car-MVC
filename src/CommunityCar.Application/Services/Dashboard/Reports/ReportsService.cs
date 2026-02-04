@@ -49,7 +49,7 @@ public class ReportsService : IReportsService
                 Format = format,
                 IsPublic = random.Next(0, 2) == 1,
                 DownloadCount = status == "Generated" ? random.Next(0, 50) : 0,
-                FileSize = status == "Generated" ? random.Next(1024, 10485760) : null,
+                FileSize = status == "Generated" ? random.Next(1024, 10485760) : 0,
                 FileSizeFormatted = status == "Generated" ? FormatFileSize(random.Next(1024, 10485760)) : string.Empty,
                 FileUrl = status == "Generated" ? $"/api/reports/download/{Guid.NewGuid()}" : null
             });
@@ -82,7 +82,7 @@ public class ReportsService : IReportsService
     {
         // In real implementation, return actual report file bytes
         await Task.CompletedTask;
-        return System.Text.Encoding.UTF8.GetBytes($"Mock report content for report {reportId}");
+        return global::System.Text.Encoding.UTF8.GetBytes($"Mock report content for report {reportId}");
     }
 
     public async Task<List<SystemReportVM>> GetReportsByTypeAsync(string reportType, int page = 1, int pageSize = 20)

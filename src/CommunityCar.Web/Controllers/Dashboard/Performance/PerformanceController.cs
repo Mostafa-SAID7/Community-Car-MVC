@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using CommunityCar.Application.Common.Interfaces.Services.SEO;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Performance;
 using CommunityCar.Application.Features.SEO.ViewModels;
 using SystemIO = System.IO;
 

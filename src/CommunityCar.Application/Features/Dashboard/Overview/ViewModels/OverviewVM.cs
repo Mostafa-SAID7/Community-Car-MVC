@@ -5,9 +5,15 @@ namespace CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
 
 public class OverviewVM
 {
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
     public DateTime LastUpdated { get; set; }
+    public StatsVM Stats { get; set; } = new();
     public StatsVM QuickStats { get; set; } = new();
+    public List<RecentActivityVM> RecentActivity { get; set; } = new();
     public List<RecentActivityVM> RecentActivities { get; set; } = new();
+    public List<TopContentVM> TopContent { get; set; } = new();
+    public List<ActiveUserVM> ActiveUsers { get; set; } = new();
     public List<ChartDataVM> UserGrowthChart { get; set; } = new();
     public List<ChartDataVM> ContentChart { get; set; } = new();
     public List<ChartDataVM> EngagementChart { get; set; } = new();

@@ -2,7 +2,6 @@ using CommunityCar.Application.Common.Interfaces.Services.Dashboard.ErrorReporti
 using CommunityCar.Application.Features.Dashboard.ErrorReporting.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
-using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.ErrorReporting;
 
@@ -108,7 +107,7 @@ public class ErrorReportingService : IErrorReportingService
             LowSeverityErrors = random.Next(50, 500),
             ResolvedErrors = random.Next(80, 800),
             UnresolvedErrors = random.Next(20, 200),
-            ErrorRate = (decimal)(random.NextDouble() * 0.05), // 0-5%
+            ErrorRate = (double)(random.NextDouble() * 0.05), // 0-5%
             AverageResolutionTime = TimeSpan.FromHours(random.Next(1, 48)),
             MostCommonErrorType = "Application Error",
             MostAffectedEndpoint = "/api/posts",
@@ -134,7 +133,7 @@ public class ErrorReportingService : IErrorReportingService
                 { "API", random.Next(50, 200) },
                 { "Background Service", random.Next(20, 100) },
                 { "Database", random.Next(10, 50) }
-            }
+            }.Select(kvp => kvp.Key).ToList()
         };
     }
 
@@ -223,7 +222,7 @@ public class ErrorReportingService : IErrorReportingService
             CriticalErrorThreshold = 1, // Alert immediately for critical errors
             HighErrorThreshold = 5, // Alert after 5 high severity errors
             MediumErrorThreshold = 20, // Alert after 20 medium severity errors
-            AlertInterval = TimeSpan.FromMinutes(15), // Don't spam alerts
+            AlertInterval = (int)TimeSpan.FromMinutes(15).TotalMinutes, // Don't spam alerts
             EnableSlackAlerts = false,
             SlackWebhookUrl = "",
             EnableSmsAlerts = false,

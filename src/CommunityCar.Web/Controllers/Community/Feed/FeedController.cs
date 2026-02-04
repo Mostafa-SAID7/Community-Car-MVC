@@ -1,8 +1,6 @@
-using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Common.Interfaces.Services;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Feed;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
-using CommunityCar.Application.Features.Analytics.ViewModels;
 using CommunityCar.Application.Features.Error.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.AspNetCore.Mvc;

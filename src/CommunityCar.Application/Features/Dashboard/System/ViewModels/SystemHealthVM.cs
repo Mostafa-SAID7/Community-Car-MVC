@@ -15,4 +15,13 @@ public class SystemHealthVM
     public int RequestsPerMinute { get; set; }
     public decimal ErrorRate { get; set; }
     public int ResponseTime { get; set; }
+    
+    // Additional properties used by MonitoringService
+    public DateTime CheckTime { get; set; }
+    public string ServiceName { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public int ErrorCount { get; set; }
+    public string Version { get; set; } = string.Empty;
+    public string Environment { get; set; } = string.Empty;
+    public bool IsHealthy { get; set; }
 }

@@ -6,13 +6,14 @@ using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Common.Interfaces.Data;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.AI;
 using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
+using CommunityCar.Application.Common.Interfaces.Repositories.Localization;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Maintenance;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
@@ -52,7 +53,9 @@ using CommunityCar.Infrastructure.Persistence.Repositories.Account.Authorization
 using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
 using CommunityCar.Infrastructure.Persistence.Repositories.AI;
 using CommunityCar.Infrastructure.Persistence.Repositories.Chat;
+using CommunityCar.Infrastructure.Persistence.Repositories.Localization;
 using CommunityCar.Infrastructure.Persistence.UnitOfWork;
+using CommunityCar.Application.Services.Account.Core;
 
 using CommunityCar.Infrastructure.BackgroundJobs;
 using Microsoft.AspNetCore.Http;
@@ -195,6 +198,10 @@ public static class DependencyInjection
         // Authorization Repositories
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
+
+        // Localization Repositories
+        services.AddScoped<ILocalizationCultureRepository, LocalizationCultureRepository>();
+        services.AddScoped<ILocalizationResourceRepository, LocalizationResourceRepository>();
 
 
         // SignalR Hub Context Wrapper

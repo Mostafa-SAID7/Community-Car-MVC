@@ -4,6 +4,14 @@ public class AnalyticsVM
 {
     public DateTime StartDate { get; set; } = DateTime.UtcNow.AddDays(-30);
     public DateTime EndDate { get; set; } = DateTime.UtcNow;
+    public int TotalUsers { get; set; }
+    public int ActiveUsers { get; set; }
+    public int NewUsers { get; set; }
+    public int PageViews { get; set; }
+    public int Sessions { get; set; }
+    public double BounceRate { get; set; }
+    public double AverageSessionDuration { get; set; }
+    public double ConversionRate { get; set; }
     public string? FilterType { get; set; }
     public string? FilterValue { get; set; }
     public int PageSize { get; set; } = 20;

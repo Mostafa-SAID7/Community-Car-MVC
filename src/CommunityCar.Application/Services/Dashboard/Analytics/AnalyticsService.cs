@@ -21,9 +21,9 @@ public class AnalyticsService : IAnalyticsService
             NewUsers = random.Next(50, 500),
             PageViews = random.Next(10000, 100000),
             Sessions = random.Next(2000, 20000),
-            BounceRate = (decimal)(0.3 + random.NextDouble() * 0.4),
-            AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 15)),
-            ConversionRate = (decimal)(0.02 + random.NextDouble() * 0.08)
+            BounceRate = (double)(0.3 + random.NextDouble() * 0.4),
+            AverageSessionDuration = (double)TimeSpan.FromMinutes(random.Next(2, 15)).TotalMinutes,
+            ConversionRate = (double)(0.02 + random.NextDouble() * 0.08)
         };
     }
 
@@ -71,8 +71,8 @@ public class AnalyticsService : IAnalyticsService
         {
             PageViews = random.Next(10000, 50000),
             UniquePageViews = random.Next(5000, 20000),
-            BounceRate = (decimal)(0.35 + random.NextDouble() * 0.2),
-            AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 10)),
+            BounceRate = (double)(0.35 + random.NextDouble() * 0.2),
+            AverageSessionDuration = (double)TimeSpan.FromMinutes(random.Next(2, 10)).TotalMinutes,
             TrafficData = new List<ChartDataVM>
             {
                 new() { Label = "Today", Value = random.Next(1000, 5000), Date = DateTime.UtcNow },
@@ -112,8 +112,8 @@ public class AnalyticsService : IAnalyticsService
                 Views = random.Next(1000, 10000),
                 UniqueViews = random.Next(500, 5000),
                 BounceRate = (decimal)(0.2 + random.NextDouble() * 0.6),
-                AverageTimeOnPage = TimeSpan.FromMinutes(random.Next(1, 10)),
-                ExitRate = (decimal)(0.1 + random.NextDouble() * 0.5)
+                AverageTimeOnPage = (double)TimeSpan.FromMinutes(random.Next(1, 10)).TotalMinutes,
+                ExitRate = (double)(0.1 + random.NextDouble() * 0.5)
             });
         }
 
@@ -146,9 +146,9 @@ public class AnalyticsService : IAnalyticsService
             NewUsers = random.Next(50, 500),
             PageViews = random.Next(10000, 100000),
             Sessions = random.Next(2000, 20000),
-            BounceRate = (decimal)(0.3 + random.NextDouble() * 0.4),
-            AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 15)),
-            ConversionRate = (decimal)(0.02 + random.NextDouble() * 0.08)
+            BounceRate = (double)(0.3 + random.NextDouble() * 0.4),
+            AverageSessionDuration = (double)TimeSpan.FromMinutes(random.Next(2, 15)).TotalMinutes,
+            ConversionRate = (double)(0.02 + random.NextDouble() * 0.08)
         };
     }
 
@@ -164,9 +164,9 @@ public class AnalyticsService : IAnalyticsService
             NewUsers = random.Next(50, 500),
             PageViews = random.Next(10000, 100000),
             Sessions = random.Next(2000, 20000),
-            BounceRate = (decimal)(0.3 + random.NextDouble() * 0.4),
-            AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 15)),
-            ConversionRate = (decimal)(0.02 + random.NextDouble() * 0.08)
+            BounceRate = (double)(0.3 + random.NextDouble() * 0.4),
+            AverageSessionDuration = (double)TimeSpan.FromMinutes(random.Next(2, 15)).TotalMinutes,
+            ConversionRate = (double)(0.02 + random.NextDouble() * 0.08)
         };
     }
 
@@ -182,9 +182,9 @@ public class AnalyticsService : IAnalyticsService
             NewUsers = random.Next(50, 500),
             PageViews = random.Next(10000, 100000),
             Sessions = random.Next(2000, 20000),
-            BounceRate = (decimal)(0.3 + random.NextDouble() * 0.4),
-            AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 15)),
-            ConversionRate = (decimal)(0.02 + random.NextDouble() * 0.08)
+            BounceRate = (double)(0.3 + random.NextDouble() * 0.4),
+            AverageSessionDuration = (double)TimeSpan.FromMinutes(random.Next(2, 15)).TotalMinutes,
+            ConversionRate = (double)(0.02 + random.NextDouble() * 0.08)
         };
     }
 

@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using CommunityCar.Domain.Base;
 
 namespace CommunityCar.Domain.Entities.Localization;
 
-public class LocalizationResource
+public class LocalizationResource : BaseEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     [Required]
     [MaxLength(200)]
     public string Key { get; set; } = string.Empty; // e.g., "QA", "HeaderTitle"

@@ -141,7 +141,7 @@ public class MaintenanceService : IMaintenanceService
             EmergencyMaintenanceCount = random.Next(5, 25),
             AverageDowntimeMinutes = random.Next(60, 180),
             TotalDowntimeHours = random.Next(100, 500),
-            SuccessfulMaintenanceRate = (decimal)(0.85 + random.NextDouble() * 0.1), // 85-95%
+            SuccessfulMaintenanceRate = (double)(0.85 + random.NextDouble() * 0.1), // 85-95%
             AverageNotificationsSent = random.Next(500, 2000),
             LastMaintenanceDate = DateTime.UtcNow.AddDays(-random.Next(1, 30)),
             NextScheduledMaintenance = DateTime.UtcNow.AddDays(random.Next(7, 30)),

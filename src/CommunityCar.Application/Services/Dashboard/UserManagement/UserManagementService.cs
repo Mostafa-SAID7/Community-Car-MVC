@@ -184,9 +184,9 @@ public class UserManagementService : IUserManagementService
             NewUsersThisMonth = random.Next(100, 1000),
             UsersWithTwoFactor = random.Next(200, 2000),
             UsersWithoutEmailConfirmation = random.Next(50, 500),
-            AverageLoginFrequency = (decimal)(random.NextDouble() * 10 + 1), // 1-11 times per week
+            AverageLoginFrequency = (double)(random.NextDouble() * 10 + 1), // 1-11 times per week
             MostActiveUser = "admin@example.com",
-            UserGrowthRate = (decimal)(random.NextDouble() * 20 + 5) // 5-25% growth
+            UserGrowthRate = (double)(random.NextDouble() * 20 + 5) // 5-25% growth
         };
     }
 

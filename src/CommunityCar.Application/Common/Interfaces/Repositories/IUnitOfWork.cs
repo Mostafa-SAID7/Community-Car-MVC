@@ -3,6 +3,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories.AI;
+using CommunityCar.Application.Common.Interfaces.Repositories.Localization;
 
 namespace CommunityCar.Application.Common.Interfaces.Repositories;
 
@@ -31,6 +32,8 @@ public interface IUnitOfWork : IDisposable
     IGroupsRepository Groups { get; }
     IPostsRepository Posts { get; }
     IGuidesRepository Guides { get; }
+    ILocalizationCultureRepository LocalizationCultures { get; }
+    ILocalizationResourceRepository LocalizationResources { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 

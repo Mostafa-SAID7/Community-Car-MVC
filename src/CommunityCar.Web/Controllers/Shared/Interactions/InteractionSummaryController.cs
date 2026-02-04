@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Interactions;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Web.Controllers.Shared;

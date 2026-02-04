@@ -153,7 +153,7 @@ public class SystemManagementService : ISystemManagementService
             ActiveConnections = random.Next(5, 50),
             MaxConnections = 100,
             LastBackup = DateTime.UtcNow.AddDays(-random.Next(1, 7)),
-            FragmentationLevel = (decimal)(random.NextDouble() * 30), // 0-30%
+            FragmentationLevel = (double)(random.NextDouble() * 30), // 0-30%
             IndexOptimizationNeeded = random.Next(5) == 0, // 20% need optimization
             TransactionLogSize = random.Next(10, 100), // MB
             FreeSpace = random.Next(1000, 5000) // MB

@@ -1,15 +1,17 @@
 using CommunityCar.Application.Features.Dashboard.SEO.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.SEO;
 
 public interface ISEOService
 {
-    Task<SEOMetaDataVM> GenerateMetaDataAsync(string pageType, Guid? entityId = null);
-    Task<string> GenerateStructuredDataAsync(string pageType, Guid? entityId = null);
-    Task<SitemapVM> GenerateSitemapAsync(SitemapGenerationVM? request = null);
-    Task<RSSFeedVM> GenerateRSSFeedAsync(RSSFeedVM? request = null);
-    Task<SEOAnalysisVM> AnalyzePageSEOAsync(string url);
-    Task UpdateSEOMetricsAsync(string url, SEOMetricsVM metrics);
-    Task<string> GenerateSitemapXmlAsync(SitemapGenerationVM? request = null);
-    Task<string> GenerateRSSXmlAsync(RSSFeedVM? request = null);
+    Task<SEOAnalysisVM> AnalyzeSEOAsync(string url);
+    Task<List<SEOKeywordVM>> GetKeywordRankingsAsync(string domain);
+    Task<SEOReportVM> GenerateSEOReportAsync(string domain);
+    Task<bool> UpdateSEOSettingsAsync(SEOSettingsVM settings);
+    Task<SEOSettingsVM> GetSEOSettingsAsync();
+    Task<List<SEOIssueVM>> GetSEOIssuesAsync(string? url = null);
+    Task<List<CompetitorAnalysisVM>> GetCompetitorAnalysisAsync(string domain);
+    Task<bool> SubmitSitemapAsync(string sitemapUrl);
+    Task<List<ChartDataVM>> GetSEOMetricsChartAsync(string metricType, int days = 30);
 }

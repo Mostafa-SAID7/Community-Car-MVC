@@ -203,15 +203,16 @@ public class UserAnalyticsService : IUserAnalyticsService
                 TotalViews = totalViews,
                 UniqueViewers = uniqueViewers,
                 ViewsByDate = viewsByDate,
-                RecentViews = recentViews.Select(v => new ProfileViewVM
+                RecentViews = recentViews.Select(v => new ProfileViewerVM
                 {
-                    Id = v.Id,
-                    ViewerId = v.ViewerId,
-                    ProfileUserId = v.ProfileUserId,
+                    UserId = v.ViewerId,
+                    UserName = "User", // Will be populated from User entity lookup
+                    FullName = "User", // Will be populated from User entity lookup
+                    ProfilePictureUrl = null, // Will be populated from User entity lookup
                     ViewedAt = v.ViewedAt,
-                    IsAnonymous = v.IsAnonymous
+                    ViewCount = 1
                 }).ToList(),
-                TopViewers = topViewers.Select(id => new ProfileViewerVM { ViewerId = id }).ToList(),
+                TopViewers = topViewers.Select(id => new ProfileViewerVM { UserId = id }).ToList(),
                 AverageViewsPerDay = totalViews / Math.Max((toDate - fromDateValue).Days, 1)
             };
         }

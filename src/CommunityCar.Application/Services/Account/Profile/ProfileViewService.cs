@@ -50,7 +50,7 @@ public class ProfileViewService : IProfileViewService
         return new WhoViewedMyProfileVM
         {
             UserId = userId,
-            Views = views.ToList(),
+            Views = views.Count(),
             TotalCount = totalCount,
             Page = page,
             PageSize = pageSize
@@ -126,7 +126,16 @@ public class ProfileViewService : IProfileViewService
     {
         var totalViews = await _viewRepository.GetProfileViewCountAsync(profileUserId, since);
         var uniqueViewers = await _viewRepository.GetUniqueViewerCountAsync(profileUserId, since);
-        var recentViews = await GetProfileViewsAsync(profileUserId, 1, 10);
+        var recentViewsData = await GetProfileViewsAsync(profileUserId, 1, 10);
+        var recentViews = recentViewsData.Select(v => new ProfileViewerVM
+        {
+            UserId = v.ViewerId,
+            UserName = "User", // Will be populated from User entity lookup
+            FullName = "User", // Will be populated from User entity lookup
+            ProfilePictureUrl = null, // Will be populated from User entity lookup
+            ViewedAt = v.ViewedAt,
+            ViewCount = 1
+        }).ToList();
         var topViewersIds = await _viewRepository.GetTopViewersAsync(profileUserId, 10);
         
         var fromDate = since ?? DateTime.UtcNow.AddDays(-30);
@@ -150,7 +159,7 @@ public class ProfileViewService : IProfileViewService
             ProfileUserId = profileUserId,
             TotalViews = totalViews,
             UniqueViewers = uniqueViewers,
-            RecentViews = recentViews.ToList(),
+            RecentViews = recentViews,
             TopViewers = topViewers,
             DailyViews = viewsByDate,
             ViewsToday = await _viewRepository.GetDailyViewCountAsync(profileUserId, DateTime.UtcNow.Date),

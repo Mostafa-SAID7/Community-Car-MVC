@@ -20,4 +20,10 @@ public class SystemAlertVM
     public int Priority { get; set; } = 1; // 1-5, 5 being highest
     public bool RequiresAction { get; set; }
     public string? ActionUrl { get; set; }
+    
+    // Additional properties used by MonitoringService
+    public DateTime CreatedAt { get; set; }
+    public bool IsRead { get; set; }
+    public string Type { get; set; } = string.Empty;
 }
+

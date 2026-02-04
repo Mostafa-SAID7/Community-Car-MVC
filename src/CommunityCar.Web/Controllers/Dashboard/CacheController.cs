@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
 using CommunityCar.Application.Services.Dashboard.Caching;
-using CommunityCar.Application.Features.Dashboard.ViewModels.Cache;
+using CommunityCar.Application.Features.Dashboard.Cache.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
