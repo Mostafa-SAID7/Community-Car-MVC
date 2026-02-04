@@ -1,5 +1,7 @@
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
+using CommunityCar.Application.Features.Dashboard.Security.ViewModels;
+
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Security;
 
 public interface ISecurityService

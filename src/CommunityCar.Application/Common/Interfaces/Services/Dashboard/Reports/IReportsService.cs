@@ -1,5 +1,7 @@
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
+using CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports;
 
 public interface IReportsService

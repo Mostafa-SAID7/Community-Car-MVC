@@ -1,5 +1,7 @@
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
+using CommunityCar.Application.Features.Dashboard.UserManagement.ViewModels;
+
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.UserManagement;
 
 public interface IUserManagementService

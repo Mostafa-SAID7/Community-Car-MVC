@@ -1,5 +1,7 @@
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
+using CommunityCar.Application.Features.Dashboard.Moderation.ViewModels;
+
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Monitoring;
 
 public interface IMonitoringService

@@ -1,5 +1,7 @@
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
+using CommunityCar.Application.Features.Dashboard.Audit.ViewModels;
+
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Audit;
 
 public interface IAuditService

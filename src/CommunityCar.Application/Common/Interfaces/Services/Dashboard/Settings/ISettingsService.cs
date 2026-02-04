@@ -1,5 +1,7 @@
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
+using CommunityCar.Application.Features.Dashboard.Settings.ViewModels;
+
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Settings;
 
 public interface ISettingsService

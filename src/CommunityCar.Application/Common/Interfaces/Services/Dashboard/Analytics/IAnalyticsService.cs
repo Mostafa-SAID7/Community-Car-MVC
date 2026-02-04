@@ -1,5 +1,7 @@
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
+using CommunityCar.Application.Features.Dashboard.Analytics.ViewModels;
+
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics;
 
 public interface IAnalyticsService
