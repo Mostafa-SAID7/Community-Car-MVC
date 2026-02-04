@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Services.AI;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Analytics;
 using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 
 namespace CommunityCar.Web.Controllers.AiAgent;

@@ -1,6 +1,6 @@
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Stories;
 using CommunityCar.Application.Features.Community.Stories.ViewModels;
-using CommunityCar.Application.Features.Error.ViewModels;
+using CommunityCar.Application.Features.Dashboard.ErrorReporting.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

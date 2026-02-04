@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.ErrorReporting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

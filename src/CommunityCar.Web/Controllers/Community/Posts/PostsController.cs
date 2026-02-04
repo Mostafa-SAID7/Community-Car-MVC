@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Posts;
 using CommunityCar.Application.Features.Community.Posts.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 

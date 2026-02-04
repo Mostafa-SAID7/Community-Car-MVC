@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Maps;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Reviews;
 using CommunityCar.Application.Features.Community.Maps.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.AspNetCore.Authorization;
