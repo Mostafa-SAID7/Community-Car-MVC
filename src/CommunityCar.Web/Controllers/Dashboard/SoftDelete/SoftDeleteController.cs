@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Features.Community.SoftDelete.ViewModels;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.SoftDelete;
+using CommunityCar.Application.Features.Dashboard.SoftDelete.ViewModels;
 using CommunityCar.Web.Attributes;
 
-namespace CommunityCar.Web.Controllers.Community;
+namespace CommunityCar.Web.Controllers.Dashboard.SoftDelete;
 
 [Authorize]
-[Route("Community/[controller]")]
+[Route("Dashboard/[controller]")]
 public class SoftDeleteController : Controller
 {
     private readonly ISoftDeleteService _softDeleteService;

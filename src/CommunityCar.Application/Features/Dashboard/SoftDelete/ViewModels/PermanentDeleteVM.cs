@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CommunityCar.Application.Features.Community.SoftDelete.ViewModels;
+namespace CommunityCar.Application.Features.Dashboard.SoftDelete.ViewModels;
 
 public class PermanentDeleteVM
 {

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Community.SoftDelete.ViewModels;
+namespace CommunityCar.Application.Features.Dashboard.SoftDelete.ViewModels;
 
 /// <summary>
 /// Deleted content item view model

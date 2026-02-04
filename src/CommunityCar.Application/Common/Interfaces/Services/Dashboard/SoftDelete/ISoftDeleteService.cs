@@ -1,8 +1,9 @@
 using CommunityCar.Application.Features.Community.Posts.ViewModels;
 using CommunityCar.Application.Features.Community.Stories.ViewModels;
 using CommunityCar.Application.Features.Community.Groups.ViewModels;
+using CommunityCar.Application.Features.Dashboard.SoftDelete.ViewModels;
 
-namespace CommunityCar.Application.Common.Interfaces.Services.Community.SoftDelete;
+namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.SoftDelete;
 
 /// <summary>
 /// Service for managing soft delete operations across community entities

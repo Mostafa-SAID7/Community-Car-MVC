@@ -1,13 +1,14 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.SoftDelete;
 using CommunityCar.Application.Common.Interfaces.Services.Identity;
 using CommunityCar.Application.Features.Community.Posts.ViewModels;
 using CommunityCar.Application.Features.Community.Stories.ViewModels;
 using CommunityCar.Application.Features.Community.Groups.ViewModels;
+using CommunityCar.Application.Features.Dashboard.SoftDelete.ViewModels;
 using Microsoft.Extensions.Logging;
 
-namespace CommunityCar.Application.Services.Community.SoftDelete;
+namespace CommunityCar.Application.Services.Dashboard.SoftDelete;
 
 public class SoftDeleteService : ISoftDeleteService
 {
