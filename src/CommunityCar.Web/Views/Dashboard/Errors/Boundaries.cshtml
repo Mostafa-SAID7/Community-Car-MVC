@@ -93,7 +93,7 @@
                                 <div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
                                     <span class="flex items-center gap-1">
                                         <i data-lucide="clock" class="w-4 h-4"></i>
-                                        @boundary.OccurredAt.ToString("MMM dd, yyyy HH:mm")
+                                        @(boundary.OccurredAt?.ToString("MMM dd, yyyy HH:mm") ?? "N/A")
                                     </span>
                                     @if (boundary.RecoveredAt.HasValue)
                                     {
