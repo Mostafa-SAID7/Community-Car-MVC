@@ -6,201 +6,114 @@
 @inject IStringLocalizer<AccountResource> AccountLocalizer
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
-    ViewData["Title"] = "Gateway Access";
+    ViewData["Title"] = "Sign In";
     Layout = "_AuthLayout";
+    ViewData["AuthSideCaption"] = "Browse thousands of activities with trusted automation agents.";
 }
 
-<div class="container min-vh-100 d-flex flex-column justify-content-center py-5">
-    <div class="text-center mb-5">
-        <div class="position-relative d-inline-flex align-items-center justify-content-center mb-4">
-            <div class="position-absolute inset-0 bg-primary opacity-25 rounded-circle blur-xl animate-pulse"></div>
-            <div class="position-relative w-20 h-20 rounded-4 bg-card border border-border d-flex align-items-center justify-content-center text-primary shadow-lg" style="width: 80px; height: 80px;">
-                <i data-lucide="shield-check" class="w-10 h-10" style="width: 40px; height: 40px;"></i>
-            </div>
-        </div>
-        
-        <div class="mb-2">
-            <h1 class="display-5 fw-black text-gradient tracking-tight">Gateway Access</h1>
-            <p class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75">Identity verification required</p>
-        </div>
-    </div>
+<!-- Logo Section -->
+<a href="/" class="auth-logo">
+    <i data-lucide="zap" class="w-6 h-6 text-warning"></i>
+    <span>Havenix.</span>
+</a>
 
-    <div class="card card-premium shadow-lg mx-auto" style="max-width: 450px;">
-        <div class="card-body p-4 p-md-5">
-            <div class="d-grid gap-4">
-                @if (!ViewData.ModelState.IsValid)
-                {
-                    <div class="alert alert-danger border-0 bg-danger-subtle text-danger py-3">
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
-                            <span class="text-sm fw-bold">Authentication failed</span>
-                        </div>
-                        <div class="text-xs opacity-75">
-                            @Html.ValidationSummary(false)
-                        </div>
-                    </div>
-                }
+<h1 class="auth-title">Welcome Back</h1>
+<p class="auth-subtitle">Let's login to grab amazing deal</p>
 
-                <form asp-action="Login" method="post" id="login-form" class="d-grid gap-4">
-                    @Html.AntiForgeryToken()
-                    
-                    <div class="form-group">
-                        <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Identity Fragment</label>
-                        <div class="position-relative">
-                            <i data-lucide="user" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
-                            <input asp-for="LoginIdentifier" 
-                                   id="login-email" 
-                                   data-testid="login-email" 
-                                   class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
-                                   placeholder="john@example.com" 
-                                   autocomplete="username" />
-                        </div>
-                        <span asp-validation-for="LoginIdentifier" class="text-danger text-xs mt-1 d-block"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-0">Access Key</label>
-                            <a asp-action="ForgotPassword" 
-                               id="forgot-password-link" 
-                               class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground hover-text-primary transition-all text-decoration-none">Key Recovery</a>
-                        </div>
-                        <div class="position-relative">
-                            <i data-lucide="lock" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
-                            <input asp-for="Password" 
-                                   id="login-password" 
-                                   data-testid="login-password" 
-                                   type="password" 
-                                   class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
-                                   placeholder="••••••••" 
-                                   autocomplete="current-password" />
-                        </div>
-                        <span asp-validation-for="Password" class="text-danger text-xs mt-1 d-block"></span>
-                    </div>
-
-                    <button type="submit" 
-                            id="login-button" 
-                            data-testid="login-submit" 
-                            class="btn btn-primary-red py-3 rounded-4 mt-2">
-                        <span id="login-button-text">Initialize Gateway</span>
-                    </button>
-                </form>
-
-                <div class="mt-2">
-                    <div class="position-relative d-flex align-items-center justify-content-center mb-4">
-                        <hr class="w-100 border-border opacity-25">
-                        <span class="position-absolute bg-card px-3 text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground">Alternative Protocols</span>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <a href="#" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 d-flex align-items-center justify-content-center gap-2 text-sm transition-all border-border-subtle bg-muted-subtle hover-bg-muted">
-                                <i data-lucide="chrome" class="w-4 h-4"></i>
-                                <span>Google</span>
-                            </a>
-                        </div>
-                        <div class="col-6">
-                            <a href="#" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 d-flex align-items-center justify-content-center gap-2 text-sm transition-all border-border-subtle bg-muted-subtle hover-bg-muted">
-                                <i data-lucide="facebook" class="w-4 h-4"></i>
-                                <span>Facebook</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="text-center mt-5">
-        <p class="text-sm text-muted-foreground mb-0">
-            New to the network? 
-            <a asp-action="Register" 
-               id="signup-link" 
-               data-testid="signup-link" 
-               class="text-primary-red fw-bold text-decoration-none hover-underline">Initialize new identity</a>
-        </p>
-    </div>
+<!-- Social Login -->
+<div class="auth-social-row">
+    <a href="#" class="btn-auth-social" id="google-login">
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" />
+        Continue with Google
+    </a>
+    <a href="#" class="btn-auth-social" id="facebook-login">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" />
+        Continue with Facebook
+    </a>
 </div>
 
+<div class="auth-separator">
+    <span>Or</span>
+</div>
 
-    <div class="text-center mt-6">
-        <p class="text-sm text-muted-foreground mb-4">
-            New to the network? 
-            <a asp-action="Register" 
-               id="signup-link" 
-               data-testid="signup-link" 
-               class="text-primary hover:text-primary/80 font-medium underline underline-offset-4 transition-all">Initialize new identity</a>
-        </p>
+<!-- Login Form -->
+<form asp-action="Login" method="post" id="login-form">
+    @Html.AntiForgeryToken()
+    
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger border-0 mb-4 p-3" style="font-size: 0.85rem; border-radius: 0.75rem; background: #fef2f2; color: #991b1b;">
+            @Html.ValidationSummary(false)
+        </div>
+    }
+
+    <!-- Email Field -->
+    <div class="auth-input-group">
+        <label class="auth-label" asp-for="LoginIdentifier">Email</label>
+        <div class="auth-input-wrapper">
+            <input asp-for="LoginIdentifier" class="auth-input" placeholder="Enter your email" required />
+        </div>
+        <span asp-validation-for="LoginIdentifier" class="text-danger xx-small mt-1 px-1"></span>
     </div>
+
+    <!-- Password Field -->
+    <div class="auth-input-group">
+        <label class="auth-label" asp-for="Password">Password</label>
+        <div class="auth-input-wrapper">
+            <input asp-for="Password" id="password-input" type="password" class="auth-input" placeholder="Enter your password" required />
+            <button type="button" class="password-toggle" id="toggle-password">
+                <i data-lucide="eye" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <span asp-validation-for="Password" class="text-danger xx-small mt-1 px-1"></span>
+    </div>
+
+    <!-- Actions -->
+    <div class="auth-actions">
+        <div class="auth-checkbox-group">
+            <input type="checkbox" id="remember-me" class="rounded border-gray-300" />
+            <label for="remember-me" class="mb-0">Remember me</label>
+        </div>
+        <a asp-action="ForgotPassword" class="auth-link">Forgot Password?</a>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn-auth-primary" id="login-button">
+        Login
+    </button>
+</form>
+
+<div class="auth-footer mt-5">
+    Don't have an account? <a asp-action="Register" class="auth-footer-link">Sign Up</a>
 </div>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('password-input');
+            const togglePasswordBtn = document.getElementById('toggle-password');
+            
+            if (togglePasswordBtn && passwordInput) {
+                togglePasswordBtn.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    const icon = this.querySelector('i');
+                    if (type === 'text') {
+                        icon.setAttribute('data-lucide', 'eye-off');
+                    } else {
+                        icon.setAttribute('data-lucide', 'eye');
+                    }
+                    lucide.createIcons();
+                });
+            }
+
             const form = document.getElementById('login-form');
-            const submitButton = document.getElementById('login-button');
-            const buttonText = document.getElementById('login-button-text');
+            const submitBtn = document.getElementById('login-button');
             
-            form?.addEventListener('submit', function() {
-                submitButton.disabled = true;
-                submitButton.classList.add('auth-loading');
-                buttonText.textContent = 'Authenticating...';
-            });
-            
-            // Initialize Lucide icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-            
-            // Theme toggle functionality
-            const themeToggle = document.getElementById('theme-toggle');
-            const lightIcon = themeToggle?.querySelector('.theme-icon-light');
-            const darkIcon = themeToggle?.querySelector('.theme-icon-dark');
-            
-            // Get current theme from localStorage or default to light
-            const currentTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            
-            // Update icon visibility based on current theme
-            if (currentTheme === 'dark' && lightIcon && darkIcon) {
-                lightIcon.style.display = 'none';
-                darkIcon.style.display = 'block';
-            }
-            
-            themeToggle?.addEventListener('click', function() {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                // Toggle icon visibility
-                if (newTheme === 'dark' && lightIcon && darkIcon) {
-                    lightIcon.style.display = 'none';
-                    darkIcon.style.display = 'block';
-                } else if (lightIcon && darkIcon) {
-                    lightIcon.style.display = 'block';
-                    darkIcon.style.display = 'none';
-                }
-            });
-            
-            // Language toggle functionality
-            const languageToggle = document.getElementById('language-toggle');
-            const supportedLanguages = ['en-US', 'ar-EG'];
-            
-            languageToggle?.addEventListener('click', function() {
-                const currentLang = document.documentElement.lang || 'en-US';
-                const currentIndex = supportedLanguages.indexOf(currentLang);
-                const nextIndex = (currentIndex + 1) % supportedLanguages.length;
-                const newLang = supportedLanguages[nextIndex];
-                
-                // Store language preference
-                localStorage.setItem('language', newLang);
-                
-                // Redirect to current page with new language
-                const url = new URL(window.location);
-                url.searchParams.set('culture', newLang);
-                window.location.href = url.toString();
+            form.addEventListener('submit', function() {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Logging in...';
             });
         });
     </script>

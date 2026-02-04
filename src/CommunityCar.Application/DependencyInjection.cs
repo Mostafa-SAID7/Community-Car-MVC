@@ -4,14 +4,25 @@ using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
-using CommunityCar.Application.Common.Interfaces.Services.SEO;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Audit;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.ErrorReporting;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Maintenance;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Monitoring;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Performance;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Security;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.SEO;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Settings;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.System;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.UserManagement;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.AI;
-using CommunityCar.Application.Common.Interfaces.Services;
 using CommunityCar.Application.Services.Community;
 using CommunityCar.Application.Services.Community.Feed;
 using CommunityCar.Application.Services.Dashboard.Localization;
@@ -19,7 +30,20 @@ using CommunityCar.Application.Services.Account;
 using CommunityCar.Application.Services.Account.Authentication;
 using CommunityCar.Application.Services.Account.Authentication.OAuth;
 using CommunityCar.Application.Services.Account.Authorization;
-using CommunityCar.Application.Services.Dashboard;
+using CommunityCar.Application.Services.Dashboard.Analytics;
+using CommunityCar.Application.Services.Dashboard.Audit;
+using CommunityCar.Application.Services.Dashboard.ErrorReporting;
+using CommunityCar.Application.Services.Dashboard.Maintenance;
+using CommunityCar.Application.Services.Dashboard.Management;
+using CommunityCar.Application.Services.Dashboard.Monitoring;
+using CommunityCar.Application.Services.Dashboard.Overview;
+using CommunityCar.Application.Services.Dashboard.Performance;
+using CommunityCar.Application.Services.Dashboard.Reports;
+using CommunityCar.Application.Services.Dashboard.Security;
+using CommunityCar.Application.Services.Dashboard.SEO;
+using CommunityCar.Application.Services.Dashboard.Settings;
+using CommunityCar.Application.Services.Dashboard.System;
+using CommunityCar.Application.Services.Dashboard.UserManagement;
 using CommunityCar.Application.Services.SEO;
 using CommunityCar.Application.Services.Communication;
 using CommunityCar.Application.Services.Dashboard.Caching;
@@ -119,14 +143,18 @@ public static class DependencyInjection
         services.AddScoped<IMaintenanceService, MaintenanceService>();
         services.AddScoped<IManagementService, ManagementService>();
         services.AddScoped<ISettingsService, SettingsService>();
+        services.AddScoped<IPerformanceService, PerformanceService>();
+        services.AddScoped<ISecurityService, SecurityService>();
+        services.AddScoped<IAuditService, AuditService>();
+        services.AddScoped<ISystemManagementService, SystemManagementService>();
+        services.AddScoped<IUserManagementService, UserManagementService>();
         
         // Error Management
-        services.AddScoped<IErrorService, CommunityCar.Application.Services.Dashboard.ErrorService>();
-        services.AddScoped<IErrorReportingService, CommunityCar.Application.Services.Dashboard.ErrorReportingService>();
+        services.AddScoped<IErrorService, ErrorService>();
+        services.AddScoped<IErrorReportingService, ErrorReportingService>();
 
-        // SEO and Performance services
+        // SEO services
         services.AddScoped<ISEOService, SEOService>();
-        services.AddScoped<IPerformanceService, PerformanceService>();
 
         // Background Job Services
         services.AddScoped<BackgroundJobSchedulerService>();

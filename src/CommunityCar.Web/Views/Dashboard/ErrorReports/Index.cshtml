@@ -4,26 +4,26 @@
     Layout = "_DashboardLayout";
 }
 
-<div class="space-y-8">
+<div class="animate-slide-up">
     <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 mb-4">
         <div>
-            <h1 class="text-2xl font-black text-foreground tracking-tight flex items-center gap-3">
-                <i data-lucide="flag" class="w-6 h-6 text-primary"></i>
+            <h1 class="page-title mb-1">
+                <i data-lucide="flag" class="text-muted opacity-40 me-2"></i>
                 @Localizer["ErrorReports"]
             </h1>
-            <p class="text-sm text-muted-foreground mt-1">@Localizer["ErrorReportsDesc"]</p>
+            <p class="text-muted small">@Localizer["ErrorReportsDesc"]</p>
         </div>
         
-        <div class="flex items-center gap-4">
-            <select id="statusFilter" class="px-4 py-2 border border-border rounded-lg bg-background text-foreground">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <select id="statusFilter" class="form-select form-select-sm border-0 shadow-sm rounded-pill px-3" style="width: auto; min-width: 140px;">
                 <option value="">@Localizer["AllStatus"]</option>
                 <option value="new">@Localizer["StatusNew"]</option>
                 <option value="in-progress">@Localizer["StatusInProgress"]</option>
                 <option value="resolved">@Localizer["StatusResolved"]</option>
                 <option value="closed">@Localizer["StatusClosed"]</option>
             </select>
-            <select id="priorityFilter" class="px-4 py-2 border border-border rounded-lg bg-background text-foreground">
+            <select id="priorityFilter" class="form-select form-select-sm border-0 shadow-sm rounded-pill px-3" style="width: auto; min-width: 140px;">
                 <option value="">@Localizer["AllPriority"]</option>
                 <option value="Critical">@Localizer["PriorityCritical"]</option>
                 <option value="High">@Localizer["PriorityHigh"]</option>
@@ -34,162 +34,133 @@
     </div>
 
     <!-- Stats Cards -->
-    <div id="stats-skeleton" class="hidden grid grid-cols-1 md:grid-cols-4 gap-6">
-        <skeleton type="Card" class="h-24" />
-        <skeleton type="Card" class="h-24" />
-        <skeleton type="Card" class="h-24" />
-        <skeleton type="Card" class="h-24" />
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="stats-content">
-        <div class="bg-gradient-to-br from-red-500/10 to-red-600/10 border border-red-500/20 rounded-2xl p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-red-600 font-bold text-sm">@Localizer["CriticalIssues"]</p>
-                    <p class="text-2xl font-black text-foreground" id="criticalCount">0</p>
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card-modern border-start border-4 border-danger">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold">@Localizer["CriticalIssues"]</span>
+                    <i data-lucide="alert-triangle" class="text-danger w-5 h-5"></i>
                 </div>
-                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-500"></i>
+                <h2 class="display-6 fw-black mb-0" id="criticalCount">0</h2>
+                <div class="progress mt-3" style="height: 4px; background: rgba(0,0,0,0.05)">
+                    <div class="progress-bar bg-danger" style="width: 15%"></div>
+                </div>
             </div>
         </div>
-        <div class="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border border-orange-500/20 rounded-2xl p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-orange-600 font-bold text-sm">@Localizer["HighPriority"]</p>
-                    <p class="text-2xl font-black text-foreground" id="highCount">0</p>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card-modern border-start border-4 border-warning">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold">@Localizer["HighPriority"]</span>
+                    <i data-lucide="alert-circle" class="text-warning w-5 h-5"></i>
                 </div>
-                <i data-lucide="alert-circle" class="w-8 h-8 text-orange-500"></i>
+                <h2 class="display-6 fw-black mb-0" id="highCount">0</h2>
+                <div class="progress mt-3" style="height: 4px; background: rgba(0,0,0,0.05)">
+                    <div class="progress-bar bg-warning" style="width: 25%"></div>
+                </div>
             </div>
         </div>
-        <div class="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border border-blue-500/20 rounded-2xl p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-blue-600 font-bold text-sm">@Localizer["InProgress"]</p>
-                    <p class="text-2xl font-black text-foreground" id="inProgressCount">0</p>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card-modern border-start border-4 border-primary">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold">@Localizer["InProgress"]</span>
+                    <i data-lucide="clock" class="text-primary w-5 h-5"></i>
                 </div>
-                <i data-lucide="clock" class="w-8 h-8 text-blue-500"></i>
+                <h2 class="display-6 fw-black mb-0" id="inProgressCount">0</h2>
+                <div class="progress mt-3" style="height: 4px; background: rgba(0,0,0,0.05)">
+                    <div class="progress-bar bg-primary" style="width: 45%"></div>
+                </div>
             </div>
         </div>
-        <div class="bg-gradient-to-br from-green-500/10 to-green-600/10 border border-green-500/20 rounded-2xl p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-green-600 font-bold text-sm">@Localizer["Resolved"]</p>
-                    <p class="text-2xl font-black text-foreground" id="resolvedCount">0</p>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card-modern border-start border-4 border-success">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold">@Localizer["Resolved"]</span>
+                    <i data-lucide="check-circle" class="text-success w-5 h-5"></i>
                 </div>
-                <i data-lucide="check-circle" class="w-8 h-8 text-green-500"></i>
+                <h2 class="display-6 fw-black mb-0" id="resolvedCount">0</h2>
+                <div class="progress mt-3" style="height: 4px; background: rgba(0,0,0,0.05)">
+                    <div class="progress-bar bg-success" style="width: 85%"></div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Error Reports Table -->
-    <div class="bg-background border border-border rounded-2xl overflow-hidden">
-        <div class="p-6 border-b border-border">
-            <h3 class="text-lg font-bold text-foreground flex items-center gap-2">
-                <i data-lucide="list" class="w-5 h-5 text-primary"></i>
+    <div class="card-modern p-0 overflow-hidden">
+        <div class="p-4 border-b border-light d-flex justify-content-between align-items-center">
+            <h3 class="h6 fw-bold mb-0">
+                <i data-lucide="list" class="text-muted me-2 w-4 h-4"></i>
                 @Localizer["RecentErrorReports"]
             </h3>
+            <button class="btn btn-sm btn-light rounded-pill">View All</button>
         </div>
         
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-muted/20">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light bg-opacity-50">
                     <tr>
-                        <th class="text-left p-4 font-bold text-foreground">@Localizer["TicketID"]</th>
-                        <th class="text-left p-4 font-bold text-foreground">@Localizer["User"]</th>
-                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Priority"]</th>
-                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Status"]</th>
-                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Description"]</th>
-                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Date"]</th>
-                        <th class="text-left p-4 font-bold text-foreground">@Localizer["Actions"]</th>
+                        <th class="ps-4 border-0 xx-small text-uppercase tracking-wider">@Localizer["TicketID"]</th>
+                        <th class="border-0 xx-small text-uppercase tracking-wider">@Localizer["User"]</th>
+                        <th class="border-0 xx-small text-uppercase tracking-wider">@Localizer["Priority"]</th>
+                        <th class="border-0 xx-small text-uppercase tracking-wider">@Localizer["Status"]</th>
+                        <th class="border-0 xx-small text-uppercase tracking-wider text-center">@Localizer["Actions"]</th>
                     </tr>
                 </thead>
                 <tbody id="reportsTableBody">
-                    <tr id="table-skeleton" class="hidden">
-                         <td colspan="7" class="p-4">
-                             <div class="space-y-4">
-                                 <skeleton type="Line" />
-                                 <skeleton type="Line" />
-                                 <skeleton type="Line" />
-                             </div>
-                         </td>
-                    </tr>
-                    <!-- Sample data - will be populated by JavaScript -->
-                    <tr class="border-b border-border hover:bg-muted/10">
-                        <td class="p-4">
-                            <span class="font-mono text-sm bg-muted/30 px-2 py-1 rounded">ERR-20260125-ABC123</span>
+                    <tr class="border-bottom border-light">
+                        <td class="ps-4 py-3">
+                            <span class="font-monospace xx-small bg-light px-2 py-1 rounded">ERR-2026-ABC</span>
                         </td>
-                        <td class="p-4">
-                            <div>
-                                <div class="font-medium text-foreground">John Doe</div>
-                                <div class="text-sm text-muted-foreground">john@example.com</div>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://i.pravatar.cc/150?u=1" class="rounded-circle" width="28" height="28" />
+                                <div>
+                                    <div class="fw-bold small">John Doe</div>
+                                    <div class="xx-small text-muted">john@example.com</div>
+                                </div>
                             </div>
                         </td>
-                        <td class="p-4">
-                            <span class="inline-flex px-2 py-1 rounded-full text-xs font-medium priority-high">High</span>
+                        <td>
+                            <span class="badge bg-danger-subtle text-danger rounded-pill px-2 py-1 xx-small">High</span>
                         </td>
-                        <td class="p-4">
-                            <span class="inline-flex px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">New</span>
+                        <td>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-1 xx-small">New</span>
                         </td>
-                        <td class="p-4">
-                            <div class="max-w-xs truncate text-foreground">Profile page not loading correctly after login</div>
-                        </td>
-                        <td class="p-4 text-muted-foreground text-sm">2 hours ago</td>
-                        <td class="p-4">
-                            <div class="flex items-center gap-2">
-                                <button class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" title="@Localizer["ViewDetails"]">
-                                    <i data-lucide="eye" class="w-4 h-4"></i>
-                                </button>
-                                <button class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300" title="@Localizer["MarkResolved"]">
-                                    <i data-lucide="check" class="w-4 h-4"></i>
-                                </button>
-                                <button class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" title="@Localizer["Delete"]">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                </button>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-1">
+                                <button class="btn btn-icon btn-sm btn-ghost" title="@Localizer["ViewDetails"]"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                <button class="btn btn-icon btn-sm btn-ghost text-success" title="@Localizer["MarkResolved"]"><i data-lucide="check" class="w-4 h-4"></i></button>
                             </div>
                         </td>
                     </tr>
-                    <tr class="border-b border-border hover:bg-muted/10">
-                        <td class="p-4">
-                            <span class="font-mono text-sm bg-muted/30 px-2 py-1 rounded">ERR-20260125-DEF456</span>
+                    <tr class="border-bottom border-light">
+                        <td class="ps-4 py-3">
+                            <span class="font-monospace xx-small bg-light px-2 py-1 rounded">ERR-2026-XYZ</span>
                         </td>
-                        <td class="p-4">
-                            <div>
-                                <div class="font-medium text-foreground">Jane Smith</div>
-                                <div class="text-sm text-muted-foreground">jane@example.com</div>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://i.pravatar.cc/150?u=2" class="rounded-circle" width="28" height="28" />
+                                <div>
+                                    <div class="fw-bold small">Jane Smith</div>
+                                    <div class="xx-small text-muted">jane@smith.com</div>
+                                </div>
                             </div>
                         </td>
-                        <td class="p-4">
-                            <span class="inline-flex px-2 py-1 rounded-full text-xs font-medium priority-critical">Critical</span>
+                        <td>
+                            <span class="badge bg-warning-subtle text-warning rounded-pill px-2 py-1 xx-small">Medium</span>
                         </td>
-                        <td class="p-4">
-                            <span class="inline-flex px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">In Progress</span>
+                        <td>
+                            <span class="badge bg-info-subtle text-info rounded-pill px-2 py-1 xx-small">Pending</span>
                         </td>
-                        <td class="p-4">
-                            <div class="max-w-xs truncate text-foreground">Unable to upload images to gallery</div>
-                        </td>
-                        <td class="p-4 text-muted-foreground text-sm">5 hours ago</td>
-                        <td class="p-4">
-                            <div class="flex items-center gap-2">
-                                <button class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" title="@Localizer["ViewDetails"]">
-                                    <i data-lucide="eye" class="w-4 h-4"></i>
-                                </button>
-                                <button class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300" title="@Localizer["MarkResolved"]">
-                                    <i data-lucide="check" class="w-4 h-4"></i>
-                                </button>
-                                <button class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" title="@Localizer["Delete"]">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                </button>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-1">
+                                <button class="btn btn-icon btn-sm btn-ghost" title="@Localizer["ViewDetails"]"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                <button class="btn btn-icon btn-sm btn-ghost text-success" title="@Localizer["MarkResolved"]"><i data-lucide="check" class="w-4 h-4"></i></button>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-        
-        <!-- Empty State -->
-        <div id="emptyState" class="hidden p-12 text-center">
-            <i data-lucide="inbox" class="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-30"></i>
-            <h3 class="text-lg font-bold text-foreground mb-2">@Localizer["NoErrorReports"]</h3>
-            <p class="text-sm text-muted-foreground">@Localizer["NoErrorReportsDesc"]</p>
         </div>
     </div>
 </div>
@@ -197,44 +168,15 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Lucide icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-            
-            Skeleton.initPageLoad('stats-skeleton', 'stats-content');
-
-            // Load error reports data
-            loadErrorReports();
-            
-            // Set up filters
-            document.getElementById('statusFilter').addEventListener('change', filterReports);
-            document.getElementById('priorityFilter').addEventListener('change', filterReports);
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            updateStats({ critical: 3, high: 8, inProgress: 12, resolved: 45 });
         });
-
-        function loadErrorReports() {
-            // Mock data for demonstration
-            updateStats({
-                critical: 1,
-                high: 1,
-                inProgress: 1,
-                resolved: 0
-            });
-        }
 
         function updateStats(stats) {
             document.getElementById('criticalCount').textContent = stats.critical;
             document.getElementById('highCount').textContent = stats.high;
             document.getElementById('inProgressCount').textContent = stats.inProgress;
             document.getElementById('resolvedCount').textContent = stats.resolved;
-        }
-
-        function filterReports() {
-            const statusFilter = document.getElementById('statusFilter').value;
-            const priorityFilter = document.getElementById('priorityFilter').value;
-            
-            // In a real app, this would filter the table rows
-            console.log('Filtering by status:', statusFilter, 'priority:', priorityFilter);
         }
     </script>
 }

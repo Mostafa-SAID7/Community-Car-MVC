@@ -25,6 +25,7 @@
                        User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == userId;
 }
 
+<!-- Profile Information Card -->
 <div class="card card-premium p-4 border-0 mb-4 overflow-hidden position-relative group">
     <!-- Identity Header -->
     <div class="text-center mb-4">
@@ -109,4 +110,59 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Profile Navigation using Standard Sidebar -->
+<div class="standard-sidebar profile-theme">
+    <nav class="flex-grow-1">
+        <ul class="nav nav-pills flex-column mb-auto gap-2">
+            @{
+                Func<string, string, bool> isActive = (controller, action) => 
+                {
+                    var routeData = ViewContext.RouteData.Values;
+                    return string.Equals(routeData["controller"]?.ToString(), controller, StringComparison.OrdinalIgnoreCase) &&
+                           string.Equals(routeData["action"]?.ToString(), action, StringComparison.OrdinalIgnoreCase);
+                };
+            }
+            
+            <li class="nav-item">
+                <a asp-controller="Profile" asp-action="Index" asp-route-id="@userId" asp-route-culture="@currentCulture" 
+                   class="nav-link sidebar-nav-link @(isActive("Profile", "Index") ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="user" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
+                    <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer["Profile"]</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="Profile" asp-action="Gallery" asp-route-id="@userId" asp-route-culture="@currentCulture" 
+                   class="nav-link sidebar-nav-link @(isActive("Profile", "Gallery") ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="image" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
+                    <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer["Gallery"]</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-controller="Profile" asp-action="Interests" asp-route-id="@userId" asp-route-culture="@currentCulture" 
+                   class="nav-link sidebar-nav-link @(isActive("Profile", "Interests") ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                    <i data-lucide="heart" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
+                    <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer["Interests"]</span>
+                </a>
+            </li>
+
+            @if (isOwnProfile)
+            {
+                <li class="nav-item">
+                    <hr class="sidebar-divider my-3 opacity-10">
+                </li>
+                
+                <li class="nav-item">
+                    <a asp-controller="ProfileSettings" asp-action="Index" asp-route-culture="@currentCulture" 
+                       class="nav-link sidebar-nav-link @(isActive("ProfileSettings", "Index") ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                        <i data-lucide="settings" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
+                        <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer["Settings"]</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
 </div>

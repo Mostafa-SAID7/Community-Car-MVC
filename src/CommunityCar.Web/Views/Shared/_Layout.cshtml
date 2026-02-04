@@ -11,7 +11,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="user-id" content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
     <title>@ViewData["Title"] - CommunityCar</title>
+
+    <seo-meta page-type="@(ViewData["PageType"] as string ?? "Community")" entity-id="@(ViewData["EntityId"] as Guid?)" />
 
     <!-- Theme initialization -->
     <script>
@@ -26,6 +29,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS (Local) -->
@@ -34,6 +39,8 @@
     
     <!-- Site Styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/modern-dual-sidebar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/modern-dashboard.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
 
@@ -41,64 +48,38 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="bg-light">
+<body class="modern-theme dual-sidebar-layout">
     @Html.AntiForgeryToken()
-    <partial name="_Header" />
+    @{
+        IgnoreSection("SidebarRight");
+        IgnoreSection("SidebarLeft");
+    }
+    
+    <partial name="Dashboard/_ModernSidebar" />
 
-    <div class="container-fluid">
-        <div class="row min-vh-100">
-            @if (!hideLeftSidebar)
+    <main role="main" class="modern-main-content">
+        <partial name="Dashboard/_DashboardHeader" />
+        
+        <div class="animate-slide-up">
+            @if (ViewData["Title"] != null && !(ViewData["HidePageTitle"] as bool? ?? false))
             {
-                <div class="col-md-3 col-lg-2 d-none d-md-block border-end bg-white p-0">
-                    <!-- Fixed Sidebar Wrapper -->
-                    <div class="sticky-top" style="top: 4rem; height: calc(100vh - 4rem); overflow-y: auto; scrollbar-width: none;">
-                        <partial name="_SidebarLeft" />
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 px-1">
+                    <div>
+                        <h1 class="page-title mb-1 text-gradient">@ViewData["Title"]</h1>
+                        @if (ViewData["Subtitle"] != null)
+                        {
+                            <p class="small text-uppercase tracking-widest text-muted opacity-50 fw-black">@ViewData["Subtitle"]</p>
+                        }
                     </div>
-                </div>
-            }
-
-            <!-- Main Content Area -->
-            <main role="main" class="py-4 @(hideLeftSidebar ? "col-12" : "col-md-9 col-lg-10") @(!hideRightSidebar ? "col-lg-7" : "col-lg-10") px-4">
-                @if (ViewData["Title"] != null && !(ViewData["HidePageTitle"] as bool? ?? false))
-                {
-                    <div class="d-flex align-items-center justify-content-between mb-5">
-                        <div class="d-md-none">
-                            <button id="mobile-sidebar-toggle" class="btn btn-outline-secondary btn-sm" aria-label="Toggle Menu">
-                                <i data-lucide="menu"></i>
-                            </button>
-                        </div>
-                        <div>
-                            <h1 class="fw-black text-gradient tracking-tight mb-0">@ViewData["Title"]</h1>
-                            @if (ViewData["Subtitle"] != null)
-                            {
-                                <p class="small text-uppercase tracking-widest text-muted opacity-50 fw-bold mt-1">@ViewData["Subtitle"]</p>
-                            }
-                        </div>
+                    <div class="d-flex align-items-center gap-2">
                         @await RenderSectionAsync("PageActions", required: false)
                     </div>
-                }
-                
-                @RenderBody()
-            </main>
-
-            @if (!hideRightSidebar)
-            {
-                <div class="col-lg-3 d-none d-lg-block border-start bg-white p-0">
-                    <!-- Fixed Sidebar Wrapper -->
-                    <div class="sticky-top p-4" style="top: 4rem; height: calc(100vh - 4rem); overflow-y: auto; scrollbar-width: none;">
-                        @if (IsSectionDefined("SidebarRight"))
-                        {
-                            @RenderSection("SidebarRight")
-                        }
-                        else
-                        {
-                            <partial name="_SidebarRight" />
-                        }
-                    </div>
                 </div>
             }
+            
+            @RenderBody()
         </div>
-    </div>
+    </main>
 
     <partial name="_AIAssistant" />
 

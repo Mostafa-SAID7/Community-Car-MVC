@@ -1,0 +1,222 @@
+@using Microsoft.AspNetCore.Http
+@{
+    var currentPath = Context.Request.Path.Value?.ToLower() ?? "";
+    var controllerName = ViewContext.RouteData.Values["Controller"]?.ToString() ?? "";
+}
+
+<aside class="modern-dual-sidebar">
+    <!-- Left Rail: Permanent Icons -->
+    <div class="sidebar-rail">
+        <div class="rail-item logo-item mb-2" title="Community Car">
+            <i data-lucide="zap" class="w-6 h-6 text-primary-red"></i>
+        </div>
+        
+        <button id="sidebar-collapse-toggle" class="rail-item border-0 bg-transparent mb-4" title="Toggle Sidebar">
+            <i data-lucide="panel-left-close"></i>
+        </button>
+        
+        <a asp-controller="Feed" asp-action="Index" class="rail-item @(currentPath.Contains("/feed") || currentPath == "/" ? "active" : "")" title="Social Feed">
+            <i data-lucide="home"></i>
+        </a>
+        
+        <a asp-controller="Groups" asp-action="Index" class="rail-item @(currentPath.Contains("/groups") ? "active" : "")" title="Community Hub">
+            <i data-lucide="users"></i>
+        </a>
+
+        <a asp-controller="Posts" asp-action="Index" class="rail-item @(currentPath.Contains("/posts") ? "active" : "")" title="Content Production">
+            <i data-lucide="pen-tool"></i>
+        </a>
+
+        <a asp-controller="Dashboard" asp-action="Index" class="rail-item @(currentPath.Contains("/dashboard") || currentPath.Contains("/aimanagement") || currentPath.Contains("/localization") ? "active" : "")" title="System Hub">
+            <i data-lucide="shield"></i>
+        </a>
+
+        <!-- Footer Rail -->
+        <div class="rail-footer">
+            <a href="/" class="rail-item" title="Return to Main App">
+                <i data-lucide="layout-grid"></i>
+            </a>
+            <a href="/settings" class="rail-item" title="Settings">
+                <i data-lucide="settings"></i>
+            </a>
+            
+            <a asp-controller="Profile" asp-action="Index" class="mb-3 rail-item p-0" title="Profile">
+                <img src="https://i.pravatar.cc/150?u=mostafa" class="rail-avatar" alt="User" />
+            </a>
+        </div>
+    </div>
+
+    <!-- Right Panel: Sub-navigation -->
+    <div class="sidebar-panel">
+        <div class="panel-header">
+            <h3 class="panel-title">
+                @if (currentPath.Contains("/dashboard") || currentPath.Contains("/aimanagement") || currentPath.Contains("/localization"))
+                {
+                    <text>System Hub</text>
+                }
+                else if (currentPath.Contains("/groups"))
+                {
+                    <text>Community</text>
+                }
+                else if (currentPath.Contains("/posts"))
+                {
+                    <text>Content</text>
+                }
+                else
+                {
+                    <text>Core Hub</text>
+                }
+            </h3>
+        </div>
+
+        <div class="panel-nav custom-scrollbar sidebar-content">
+            @if (currentPath.Contains("/dashboard") || currentPath.Contains("/aimanagement") || currentPath.Contains("/localization") || currentPath.Contains("/monitoring") || currentPath.Contains("/performance") || currentPath.Contains("/errors"))
+            {
+                <partial name="Dashboard/_DashboardSidebarLeft" />
+            }
+            else if (currentPath.Contains("/groups"))
+            {
+                <span class="d-block xx-small fw-black text-muted text-uppercase tracking-widest mb-2 opacity-40 px-2">Discovery</span>
+                <a asp-controller="Groups" asp-action="Index" class="panel-link active">
+                    <i data-lucide="users"></i> <span>All Groups</span>
+                </a>
+                <a href="#" class="panel-link">
+                    <i data-lucide="plus-circle"></i> <span>Create Group</span>
+                </a>
+            }
+            else if (currentPath.Contains("/posts"))
+            {
+                <span class="d-block xx-small fw-black text-muted text-uppercase tracking-widest mb-2 opacity-40 px-2">Exploration</span>
+                <a asp-controller="Posts" asp-action="Index" class="panel-link active">
+                    <i data-lucide="compass"></i> <span>Find Content</span>
+                </a>
+                <a href="#" class="panel-link">
+                    <i data-lucide="trending-up"></i> <span>Trending</span>
+                </a>
+            }
+            else
+            {
+                <span class="d-block xx-small fw-black text-muted text-uppercase tracking-widest mb-2 opacity-40 px-2">Navigation</span>
+                <a asp-controller="Feed" asp-action="Index" class="panel-link @(currentPath.Contains("/feed") || currentPath == "/" ? "active" : "")">
+                    <i data-lucide="home"></i> <span>Social Feed</span>
+                </a>
+                <a href="#" class="panel-link">
+                    <i data-lucide="star"></i> <span>Favorites</span>
+                </a>
+            }
+        </div>
+
+        <!-- Panel Footer -->
+        <div class="mt-auto pt-4 border-top border-white border-opacity-5">
+            <div class="d-flex align-items-center gap-3 px-2">
+                <div class="position-relative">
+                    <img src="https://i.pravatar.cc/150?u=mostafa" class="rounded-circle shadow-sm" style="width: 32px; height: 32px;" alt="User" />
+                    <div class="user-status-dot" style="bottom: 0; right: 0; width: 10px; height: 10px;"></div>
+                </div>
+                <div class="overflow-hidden">
+                    <span class="d-block fw-bold xx-small text-truncate user-name-text" style="line-height: 1;">Mostafa Said</span>
+                    <span class="d-block text-muted" style="font-size: 9px;">Executive Admin</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        lucide.createIcons();
+
+        const mobileToggleBtn = document.getElementById('mobileSidebarToggle');
+        const sidebar = document.querySelector('.modern-dual-sidebar');
+        const collapseToggleBtn = document.getElementById('sidebar-collapse-toggle');
+        const collapseIcon = collapseToggleBtn?.querySelector('i');
+        const body = document.body;
+
+        // --- Desktop Collapse Logic ---
+        const SIDEBAR_STATE_KEY = 'sidebar_collapsed_state';
+
+        function setSidebarState(isCollapsed) {
+            if (isCollapsed) {
+                body.classList.add('sidebar-collapsed');
+                collapseIcon?.setAttribute('data-lucide', 'panel-left-open');
+                localStorage.setItem(SIDEBAR_STATE_KEY, 'true');
+            } else {
+                body.classList.remove('sidebar-collapsed');
+                collapseIcon?.setAttribute('data-lucide', 'panel-left-close');
+                localStorage.setItem(SIDEBAR_STATE_KEY, 'false');
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // Init state
+        const savedState = localStorage.getItem(SIDEBAR_STATE_KEY);
+        if (savedState === 'true') {
+            setSidebarState(true);
+        }
+
+        if (collapseToggleBtn) {
+            collapseToggleBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const isCollapsed = body.classList.contains('sidebar-collapsed');
+                setSidebarState(!isCollapsed);
+            });
+        }
+
+        // --- Dashboard Section Collapse Logic ---
+        window.toggleSection = function(headerElement) {
+            const group = headerElement.closest('.sidebar-section-group');
+            const content = group.querySelector('.sidebar-section-content');
+            const sectionId = group.dataset.sectionId;
+            
+            const isCollapsed = content.classList.contains('collapsed');
+            
+            if (isCollapsed) {
+                // Open
+                content.classList.remove('collapsed');
+                headerElement.classList.remove('collapsed');
+                localStorage.setItem(`dashboard_section_${sectionId}_collapsed`, 'false');
+            } else {
+                // Close
+                content.classList.add('collapsed');
+                headerElement.classList.add('collapsed');
+                localStorage.setItem(`dashboard_section_${sectionId}_collapsed`, 'true');
+            }
+        };
+
+        // Initialize Section State
+        const sections = document.querySelectorAll('.sidebar-section-group');
+        sections.forEach(group => {
+            const sectionId = group.dataset.sectionId;
+            const content = group.querySelector('.sidebar-section-content');
+            const header = group.querySelector('.sidebar-section-header');
+            
+            // Default to open if not set
+            const isCollapsed = localStorage.getItem(`dashboard_section_${sectionId}_collapsed`) === 'true';
+            
+            if (isCollapsed && content && header) {
+                content.classList.add('collapsed');
+                header.classList.add('collapsed');
+            }
+        });
+
+        // --- Mobile Logic ---
+        // Create overlay for mobile
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+
+        if (mobileToggleBtn) {
+            mobileToggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('mobile-show');
+                overlay.classList.toggle('active');
+                body.style.overflow = sidebar.classList.contains('mobile-show') ? 'hidden' : '';
+            });
+        }
+
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('mobile-show');
+            overlay.classList.remove('active');
+            body.style.overflow = '';
+        });
+    });
+</script>

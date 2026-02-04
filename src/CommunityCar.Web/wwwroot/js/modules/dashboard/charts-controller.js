@@ -1,6 +1,6 @@
 /**
  * Dashboard Charts Controller
- * Handles initialization and updates for Chart.js instances.
+ * Handles initialization and updates for Chart.js instances with the Premium Red Design System.
  */
 (function (CC) {
     class ChartsController extends CC.Utils.BaseComponent {
@@ -9,19 +9,30 @@
             this.rootStyles = getComputedStyle(document.documentElement);
             this.charts = {};
 
-            // Premium Red Design System Colors
+            // Premium Red Design System Palette
             this.colors = {
                 primary: '#fb2c36',
-                primarySubtle: 'rgba(251, 44, 54, 0.1)',
-                secondary: '#6366f1',
-                secondarySubtle: 'rgba(99, 102, 241, 0.1)',
+                primaryGradientStart: 'rgba(251, 44, 54, 0.3)',
+                primaryGradientEnd: 'rgba(251, 44, 54, 0)',
+                secondary: '#2563eb', // Executive Blue
+                secondaryGradientStart: 'rgba(37, 99, 235, 0.2)',
+                secondaryGradientEnd: 'rgba(37, 99, 235, 0)',
+                text: 'rgba(255, 255, 255, 0.6)',
+                textStrong: '#ffffff',
+                grid: 'rgba(255, 255, 255, 0.05)',
+                tooltipBg: '#1e1e1e',
                 success: '#10b981',
                 warning: '#f59e0b',
-                danger: '#ef4444',
                 info: '#0ea5e9',
-                grid: 'rgba(0, 0, 0, 0.05)',
-                text: this.rootStyles.getPropertyValue('--muted-foreground').trim() || '#64748b'
+                danger: '#ef4444'
             };
+
+            // Global Defaults
+            if (typeof Chart !== 'undefined') {
+                Chart.defaults.color = this.colors.text;
+                Chart.defaults.font.family = "'Inter', system-ui, -apple-system, sans-serif";
+                Chart.defaults.font.weight = '700';
+            }
         }
 
         init() {
@@ -44,23 +55,29 @@
             const labels = JSON.parse(canvas.getAttribute('data-labels') || '[]');
             const datasets = JSON.parse(canvas.getAttribute('data-datasets') || '[]');
 
-            // Map datasets to include premium styles
-            const formattedDatasets = datasets.map((ds, index) => {
-                const color = index === 0 ? this.colors.primary : this.colors.secondary;
-                const bgColor = index === 0 ? this.colors.primarySubtle : this.colors.secondarySubtle;
+            // Create Gradients
+            const primaryGradient = ctx.createLinearGradient(0, 0, 0, 300);
+            primaryGradient.addColorStop(0, this.colors.primaryGradientStart);
+            primaryGradient.addColorStop(1, this.colors.primaryGradientEnd);
 
+            const secondaryGradient = ctx.createLinearGradient(0, 0, 0, 300);
+            secondaryGradient.addColorStop(0, this.colors.secondaryGradientStart);
+            secondaryGradient.addColorStop(1, this.colors.secondaryGradientEnd);
+
+            const formattedDatasets = datasets.map((ds, index) => {
+                const isPrimary = index === 0;
                 return {
                     ...ds,
-                    borderColor: color,
-                    backgroundColor: bgColor,
-                    borderWidth: 3,
-                    tension: 0.4,
+                    borderColor: isPrimary ? this.colors.primary : this.colors.secondary,
+                    backgroundColor: isPrimary ? primaryGradient : secondaryGradient,
+                    borderWidth: 2.5,
+                    tension: 0.45,
                     fill: true,
-                    pointRadius: canvas.hasAttribute('data-show-points') ? 4 : 0,
+                    pointRadius: 0,
                     pointHoverRadius: 6,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: color,
-                    pointBorderWidth: 2
+                    pointHoverBackgroundColor: isPrimary ? this.colors.primary : this.colors.secondary,
+                    pointHoverBorderColor: '#fff',
+                    pointHoverBorderWidth: 2
                 };
             });
 
@@ -70,37 +87,41 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: {
-                            display: datasets.length > 1,
-                            position: 'top',
-                            labels: {
-                                font: { weight: '800', size: 10 },
-                                usePointStyle: true,
-                                padding: 20,
-                                color: this.colors.text
-                            }
+                            display: false // Handled by custom header
                         },
                         tooltip: {
-                            backgroundColor: '#ffffff',
-                            titleColor: '#000000',
-                            bodyColor: '#64748b',
-                            borderColor: 'rgba(0, 0, 0, 0.1)',
-                            borderWidth: 1,
+                            backgroundColor: this.colors.tooltipBg,
+                            titleColor: this.colors.textStrong,
+                            bodyColor: this.colors.text,
                             padding: 12,
-                            cornerRadius: 12,
-                            usePointStyle: true
+                            cornerRadius: 8,
+                            usePointStyle: true,
+                            boxPadding: 6,
+                            borderWidth: 1,
+                            borderColor: 'rgba(255, 255, 255, 0.1)'
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             grid: { color: this.colors.grid, drawBorder: false },
-                            ticks: { font: { weight: '800', size: 10 }, color: this.colors.text, padding: 8 }
+                            ticks: {
+                                color: this.colors.text,
+                                font: { size: 10, weight: '700' },
+                                padding: 10,
+                                callback: (value) => value >= 1000 ? (value / 1000) + 'k' : value
+                            }
                         },
                         x: {
                             grid: { display: false },
-                            ticks: { font: { weight: '800', size: 10 }, color: this.colors.text, padding: 8 }
+                            ticks: {
+                                color: this.colors.text,
+                                font: { size: 10, weight: '700' },
+                                padding: 10
+                            }
                         }
                     }
                 }
@@ -129,31 +150,24 @@
                             this.colors.info
                         ],
                         borderWidth: 0,
-                        hoverOffset: 15
+                        hoverOffset: 12,
+                        borderRadius: 4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '75%',
+                    cutout: '82%',
                     plugins: {
                         legend: {
-                            position: 'bottom',
-                            labels: {
-                                font: { weight: '800', size: 9 },
-                                usePointStyle: true,
-                                padding: 25,
-                                color: this.colors.text
-                            }
+                            display: false // Handled by manual legend in view if needed
                         },
                         tooltip: {
-                            backgroundColor: '#ffffff',
-                            titleColor: '#000000',
-                            bodyColor: '#64748b',
-                            borderColor: 'rgba(0, 0, 0, 0.1)',
-                            borderWidth: 1,
+                            backgroundColor: this.colors.tooltipBg,
                             padding: 12,
-                            cornerRadius: 12
+                            cornerRadius: 8,
+                            usePointStyle: true,
+                            boxPadding: 6
                         }
                     }
                 }
@@ -161,10 +175,9 @@
         }
     }
 
-    // Initialize module namespace if needed
+    // Initialize module namespace
     CC.Modules = CC.Modules || {};
     CC.Modules.Dashboard = CC.Modules.Dashboard || {};
-
     CC.Modules.Dashboard.Charts = new ChartsController();
 
 })(window.CommunityCar);

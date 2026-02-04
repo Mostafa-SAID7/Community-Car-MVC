@@ -14,7 +14,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories.AI;
 using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Maintenance;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.BackgroundJobs;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;

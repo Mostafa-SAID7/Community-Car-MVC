@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
 using CommunityCar.Application.Common.Interfaces.Data;
-using CommunityCar.Application.Common.Models.Caching;
+using CommunityCar.Application.Configuration.Caching;
 using CommunityCar.Domain.Enums.Shared;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;

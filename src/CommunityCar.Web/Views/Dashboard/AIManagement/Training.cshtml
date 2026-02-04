@@ -2,206 +2,189 @@
 @{
     ViewData["Title"] = "AI Training";
     Layout = "_DashboardLayout";
+    ViewData["UseModernTheme"] = true;
 }
 
 @Html.AntiForgeryToken()
 
-<div class="space-y-6">
-    <!-- Header -->
-    <div class="flex items-center justify-between">
+<div class="animate-slide-up">
+    <!-- Top Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
-            <h1 class="text-2xl font-bold text-foreground">AI Training</h1>
-            <p class="text-muted-foreground">Manage AI model training and performance</p>
+            <h1 class="page-title mb-2">AI Training</h1>
+            <p class="text-muted fw-medium">Manage AI model training and performance</p>
         </div>
-        <div class="flex items-center gap-3">
-            <a asp-action="Index" class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-background border border-border/50 hover:bg-muted/10 text-foreground text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
-                <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
-                Back to Dashboard
+        <div class="d-flex align-items-center gap-3">
+            <a asp-action="Index" class="btn-modern-outline d-flex align-items-center gap-2">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                Back to Hub
             </a>
-            <button class="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-95 group/play" data-action="start-training">
-                <i data-lucide="play" class="w-4 h-4 group-hover/play:scale-125 transition-transform"></i>
-                Start Training
+            <button class="btn-modern-primary" data-action="start-training">
+                <i data-lucide="play" class="w-5 h-5"></i>
+                Start Training Session
             </button>
         </div>
     </div>
 
-    <!-- Model Status -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Model Status Cards -->
+    <div class="row g-4 mb-5">
         @foreach (var trainingModel in Model.Models)
         {
-            <div class="eng-card">
-                <div class="eng-card-header">
-                    <div class="flex items-center justify-between">
-                        <h3 class="eng-card-title">@trainingModel.Name</h3>
+            <div class="col-12 col-md-4">
+                <div class="modern-action-card h-100 d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <h4 class="fw-black mb-1">@trainingModel.Name</h4>
+                            <span class="xx-small text-muted font-monospace opacity-60">VERSION @trainingModel.Version</span>
+                        </div>
                         @{
-                            var statusClass = trainingModel.Status switch
+                            var statusBadge = trainingModel.Status switch
                             {
-                                "Active" => "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-                                "Training" => "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-                                _ => "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
+                                "Active" => "modern-badge-success",
+                                "Training" => "modern-badge-info",
+                                _ => "modern-badge-outline"
                             };
                         }
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium @statusClass">
-                            @trainingModel.Status
-                        </span>
+                        <span class="modern-badge @statusBadge">@trainingModel.Status</span>
                     </div>
-                    <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Version @trainingModel.Version</p>
-                </div>
-                <div class="p-6 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-muted-foreground">Accuracy</span>
-                        <span class="font-medium text-foreground">@trainingModel.Accuracy%</span>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small fw-bold">Accuracy</span>
+                            <span class="small fw-black">@trainingModel.Accuracy%</span>
+                        </div>
+                        <div class="modern-progress">
+                            <div class="modern-progress-bar bg-modern-lime" style="width: @trainingModel.Accuracy%; background-color: var(--modern-lime);"></div>
+                        </div>
                     </div>
-                    <div class="eng-progress-container h-2 bg-background">
-                        <div class="eng-progress-bar bg-primary w-[@trainingModel.Accuracy%]" ></div>
+
+                    <div class="flex-grow-1 mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="xx-small text-muted fw-bold">DATASET SIZE</span>
+                            <span class="xx-small fw-black">@trainingModel.DatasetSize.ToString("N0")</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="xx-small text-muted fw-bold">LAST TRAINED</span>
+                            <span class="xx-small fw-black">@trainingModel.LastTrained.ToString("MMM dd, yyyy")</span>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-muted-foreground">Dataset Size</span>
-                        <span class="text-foreground">@trainingModel.DatasetSize.ToString("N0")</span>
-                    </div>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-muted-foreground">Last Trained</span>
-                        <span class="text-foreground">@trainingModel.LastTrained.ToString("MMM dd, yyyy")</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="inline-flex items-center justify-center flex-1 px-4 py-2 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/retrain" data-action="retrain-model" data-model="@trainingModel.Name">
-                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 mr-1.5 group-hover/retrain:rotate-180 transition-transform duration-700"></i>
+
+                    <div class="d-flex gap-2">
+                        <button class="btn-modern-primary flex-grow-1 justify-content-center py-2" style="font-size: 0.75rem" data-action="retrain-model" data-model="@trainingModel.Name">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 mr-1"></i>
                             Retrain
                         </button>
-                        <div class="relative">
-                            <button class="inline-flex items-center justify-center w-10 h-10 bg-background border border-border/50 hover:bg-muted/10 rounded-xl transition-all active:scale-95" data-action="toggle-options" data-model="@trainingModel.Name">
-                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
-                            </button>
-                            <div id="options-@trainingModel.Name" class="absolute right-0 top-full mt-1 w-48 bg-background border border-border rounded-lg shadow-lg z-10 hidden">
-                                <div class="py-1">
-                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="view-details" data-model="@trainingModel.Name">
-                                        <i data-lucide="eye" class="w-3 h-3"></i>
-                                        View Details
-                                    </button>
-                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="edit-settings" data-model="@trainingModel.Name">
-                                        <i data-lucide="settings" class="w-3 h-3"></i>
-                                        Edit Settings
-                                    </button>
-                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted flex items-center gap-2" data-action="export-model" data-model="@trainingModel.Name">
-                                        <i data-lucide="download" class="w-3 h-3"></i>
-                                        Export Model
-                                    </button>
-                                    <hr class="my-1">
-                                    <button class="w-full text-left px-3 py-2 text-sm hover:bg-muted text-red-600 flex items-center gap-2" data-action="delete-model" data-model="@trainingModel.Name">
-                                        <i data-lucide="trash-2" class="w-3 h-3"></i>
-                                        Delete Model
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <button class="btn-icon-modern" data-action="toggle-options" data-model="@trainingModel.Name">
+                            <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         }
     </div>
 
-    <!-- Training Queue -->
-    <div class="eng-card">
-        <div class="eng-card-header">
-            <h3 class="eng-card-title">Training Queue</h3>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Scheduled training jobs</p>
-        </div>
-        <div class="p-6">
-            @if (Model.TrainingQueue.Length > 0)
-            {
-                <div class="space-y-3">
-                    @foreach (var job in Model.TrainingQueue)
+    <div class="row g-4 mb-5">
+        <!-- Training Queue -->
+        <div class="col-12 col-lg-5">
+            <div class="card-modern h-100">
+                <h5 class="fw-black mb-4 d-flex align-items-center gap-2">
+                    <i data-lucide="list" class="w-5 h-5 opacity-40"></i>
+                    Training Queue
+                </h5>
+                <div class="d-flex flex-column">
+                    @if (Model.TrainingQueue.Length > 0)
                     {
-                        <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                            <div class="flex items-center gap-3">
-                                <div class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                    @if (job.Status == "In Progress")
-                                    {
-                                        <i data-lucide="loader" class="w-4 h-4 text-blue-600 dark:text-blue-400 animate-spin"></i>
-                                    }
-                                    else
-                                    {
-                                        <i data-lucide="clock" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
-                                    }
+                        @foreach (var job in Model.TrainingQueue)
+                        {
+                            <div class="modern-queue-item">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="w-10 h-10 rounded-circle bg-light d-flex align-items-center justify-content-center text-primary">
+                                        @if (job.Status == "In Progress")
+                                        {
+                                            <i data-lucide="loader" class="w-5 h-5 animate-spin"></i>
+                                        }
+                                        else
+                                        {
+                                            <i data-lucide="clock" class="w-5 h-5"></i>
+                                        }
+                                    </div>
+                                    <div>
+                                        <div class="small fw-bold">@job.Model</div>
+                                        <div class="xx-small text-muted">@job.Status</div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div class="font-medium text-foreground">@job.Model</div>
-                                    <div class="text-sm text-muted-foreground">@job.Status</div>
+                                <div class="text-end">
+                                    <div class="xx-small fw-black">@job.EstimatedTime</div>
+                                    <div class="xx-small text-muted opacity-60">REMAINING</div>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <div class="text-sm font-medium text-foreground">@job.EstimatedTime</div>
-                                <div class="text-xs text-muted-foreground">remaining</div>
-                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5 opacity-40">
+                            <i data-lucide="inbox" class="w-10 h-10 mb-3"></i>
+                            <p class="small fw-bold">No training jobs in queue</p>
                         </div>
                     }
                 </div>
-            }
-            else
-            {
-                <div class="text-center py-8">
-                    <i data-lucide="inbox" class="w-12 h-12 text-muted-foreground mx-auto mb-4"></i>
-                    <p class="text-muted-foreground">No training jobs in queue</p>
-                </div>
-            }
+            </div>
         </div>
-    </div>
 
-    <!-- Recent Training History -->
-    <div class="eng-card">
-        <div class="eng-card-header">
-            <h3 class="eng-card-title">Recent Training History</h3>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">Latest training results and improvements</p>
-        </div>
-        <div class="p-6">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="border-b border-border">
-                        <tr class="text-left">
-                            <th class="p-4 font-medium text-foreground">Model</th>
-                            <th class="p-4 font-medium text-foreground">Date</th>
-                            <th class="p-4 font-medium text-foreground">Result</th>
-                            <th class="p-4 font-medium text-foreground">Improvement</th>
-                            <th class="p-4 font-medium text-foreground">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var training in Model.RecentTraining)
-                        {
-                            <tr class="border-b border-border hover:bg-muted/50">
-                                <td class="p-4">
-                                    <div class="font-medium text-foreground">@training.Model</div>
-                                </td>
-                                <td class="p-4">
-                                    <div class="text-sm text-foreground">@training.Date.ToString("MMM dd, yyyy")</div>
-                                    <div class="text-xs text-muted-foreground">@training.Date.ToString("HH:mm")</div>
-                                </td>
-                                <td class="p-4">
-                                    @{
-                                        var resultClass = training.Result == "Success" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-                                    }
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium @resultClass">
-                                        @training.Result
-                                    </span>
-                                </td>
-                                <td class="p-4">
-                                    <span class="text-green-600 font-medium">@training.Improvement</span>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex items-center gap-2">
-                                        <button class="inline-flex items-center justify-center px-3 py-1.5 bg-background border border-border/50 hover:border-primary/50 hover:text-primary text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all active:scale-95 group/view" data-action="view-training-details" data-model="@training.Model" data-date="@training.Date.ToString("yyyy-MM-dd")">
-                                            <i data-lucide="eye" class="w-3.5 h-3.5 mr-1.5 group-hover/view:scale-110 transition-transform"></i>
-                                            View Details
-                                        </button>
-                                        <button class="inline-flex items-center justify-center w-8 h-8 bg-background border border-border/50 hover:border-primary/50 hover:text-primary rounded-xl transition-all active:scale-95 group/download" data-action="download-report" data-model="@training.Model" data-date="@training.Date.ToString("yyyy-MM-dd")">
-                                            <i data-lucide="download" class="w-4 h-4 group-hover/download:translate-y-0.5 transition-transform"></i>
-                                        </button>
-                                    </div>
-                                </td>
+        <!-- History -->
+        <div class="col-12 col-lg-7">
+            <div class="card-modern h-100 p-0 overflow-hidden">
+                <div class="p-4 border-bottom">
+                    <h5 class="fw-black mb-0 d-flex align-items-center gap-2">
+                        <i data-lucide="history" class="w-5 h-5 opacity-40"></i>
+                        Recent Training History
+                    </h5>
+                </div>
+                <div class="modern-table-container border-0">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Date</th>
+                                <th class="text-center">Result</th>
+                                <th class="text-center">Delta</th>
+                                <th class="text-end">Actions</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var training in Model.RecentTraining)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@training.Model</div>
+                                    </td>
+                                    <td>
+                                        <div class="small fw-bold">@training.Date.ToString("MMM dd, yyyy")</div>
+                                        <div class="xx-small text-muted">@training.Date.ToString("HH:mm")</div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="modern-badge @(training.Result == "Success" ? "modern-badge-success" : "modern-badge-danger")">
+                                            @training.Result
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="text-success fw-bold small">+@training.Improvement</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button class="btn-icon-modern">
+                                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                            </button>
+                                            <button class="btn-icon-modern">
+                                                <i data-lucide="download" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

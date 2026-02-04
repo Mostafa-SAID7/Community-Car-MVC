@@ -3,124 +3,99 @@
 @{
     ViewData["Title"] = Localizer["DictionaryExplorerTitle"];
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewData["UseModernTheme"] = true;
 }
 
-<div class="space-y-8 animate-in fade-in duration-700">
-    <!-- Skeleton Loader -->
-    <div id="resources-skeleton" class="hidden space-y-8">
-        <skeleton type="Line" class="w-64" />
-        <skeleton type="Card" class="h-32" />
-        <skeleton type="Card" class="h-96" />
-    </div>
-
-    <div id="resources-content">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="animate-slide-up">
+    <!-- Top Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
-            <h1 class="text-3xl font-black text-foreground tracking-tight">@Localizer["DictionaryExplorer"]</h1>
-            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@string.Format(Localizer["ActiveEntriesDesc"].Value, Model.Pagination.TotalItems)</p>
+            <h1 class="page-title mb-2">@Localizer["DictionaryExplorer"]</h1>
+            <p class="text-muted fw-medium">@string.Format(Localizer["ActiveEntriesDesc"].Value, Model.Pagination.TotalItems)</p>
         </div>
-        <a href="@Url.Action("AddResource", "Localization")" class="px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95 group flex items-center justify-center">
-            <i data-lucide="plus" class="w-4 h-4 mr-2 group-hover:scale-125 transition-transform"></i> @Localizer["NewEntry"]
+        <a href="@Url.Action("AddResource", "Localization")" class="btn-modern-primary">
+            <i data-lucide="plus" class="w-5 h-5"></i>
+            @Localizer["NewEntry"]
         </a>
     </div>
 
     <!-- Filter Console -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl">
-        <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-            <div class="space-y-2">
-                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["NamespaceCulture"]</label>
-                <div class="relative">
-                    <select name="culture" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-primary/10 transition-all appearance-none">
-                        <option value="">@Localizer["GlobalDictionary"]</option>
-                        @foreach (var c in Model.Cultures)
-                        {
-                            if (Model.SelectedCulture == c.Name)
-                            {
-                                <option value="@c.Name" selected>@c.DisplayName (@c.Name)</option>
-                            }
-                            else
-                            {
-                                <option value="@c.Name">@c.DisplayName (@c.Name)</option>
-                            }
-                        }
-                    </select>
-                    <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+    <div class="card-modern p-4 mb-4" style="border-radius: 1.5rem;">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-12 col-md-3">
+                <label class="modern-label">@Localizer["NamespaceCulture"]</label>
+                <select name="culture" class="modern-select">
+                    <option value="">@Localizer["GlobalDictionary"]</option>
+                    @foreach (var c in Model.Cultures)
+                    {
+                        <option value="@c.Name" selected="@(Model.SelectedCulture == c.Name)">@c.DisplayName (@c.Name)</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="modern-label">@Localizer["TargetFileGroup"]</label>
+                <select name="group" class="modern-select">
+                    <option value="">@Localizer["AllResourceFiles"]</option>
+                    @foreach (var g in Model.ResourceGroups)
+                    {
+                        <option value="@g" selected="@(Model.SelectedGroup == g)">@g</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="modern-label">@Localizer["SearchKeywords"]</label>
+                <div class="position-relative">
+                    <i data-lucide="search" class="position-absolute translate-middle-y text-muted" style="left: 1rem; top: 50%; width: 1rem; height: 1rem;"></i>
+                    <input type="text" name="search" class="modern-input" style="padding-left: 2.75rem;" value="@Model.SearchTerm" placeholder="@Localizer["SearchKeywords"]...">
                 </div>
             </div>
-            <div class="space-y-2">
-                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TargetFileGroup"]</label>
-                <div class="relative">
-                    <select name="group" class="w-full bg-background border border-border px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-primary/10 transition-all appearance-none">
-                        <option value="">@Localizer["AllResourceFiles"]</option>
-                        @foreach (var g in Model.ResourceGroups)
-                        {
-                            if (Model.SelectedGroup == g)
-                            {
-                                <option value="@g" selected>@g</option>
-                            }
-                            else
-                            {
-                                <option value="@g">@g</option>
-                            }
-                        }
-                    </select>
-                    <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+            <div class="col-12 col-md-2">
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn-modern-primary w-100 justify-content-center">@Localizer["Search"]</button>
+                    <a href="@Url.Action("Resources")" class="btn-icon-modern" style="height: 48px; width: 48px; border-radius: 1rem;"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></a>
                 </div>
-            </div>
-            <div class="space-y-2">
-                <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">Search Key/Value</label>
-                <div class="relative group">
-                    <input type="text" name="search" class="w-full bg-background border border-border pl-10 pr-4 py-3 rounded-xl text-sm font-medium outline-none focus:ring-4 focus:ring-primary/10 transition-all" value="@Model.SearchTerm" placeholder="@Localizer["SearchKeywords"]">
-                    <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors"></i>
-                </div>
-            </div>
-            <div class="flex gap-3">
-                <button type="submit" class="flex-1 bg-foreground text-background px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all">@Localizer["Search"]</button>
-                <a href="@Url.Action("Resources")" class="px-6 py-3 bg-muted text-foreground rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-muted/80 transition-all flex items-center justify-center"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></a>
             </div>
         </form>
     </div>
 
     <!-- Data Table -->
-    <div class="bg-card/40 backdrop-blur-md border border-border rounded-2xl shadow-xl overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse min-w-[800px]">
+    <div class="card-modern p-0 overflow-hidden">
+        <div class="modern-table-container border-0">
+            <table class="modern-table">
                 <thead>
-                    <tr class="bg-muted/30 border-b border-border/50">
-                        <th class="px-8 py-5 text-[10px] font-black text-muted-foreground uppercase tracking-widest">@Localizer["ResourceKey"]</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-muted-foreground uppercase tracking-widest">@Localizer["CultureID"]</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-muted-foreground uppercase tracking-widest text-center">@Localizer["Group"]</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-muted-foreground uppercase tracking-widest">@Localizer["MappedValue"]</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-muted-foreground uppercase tracking-widest text-right">@Localizer["Actions"]</th>
+                    <tr>
+                        <th>@Localizer["ResourceKey"]</th>
+                        <th class="text-center">@Localizer["CultureID"]</th>
+                        <th class="text-center">@Localizer["Group"]</th>
+                        <th>@Localizer["MappedValue"]</th>
+                        <th class="text-end">@Localizer["Actions"]</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-border/20">
+                <tbody>
                     @foreach (var resource in Model.Resources)
                     {
-                        <tr class="group hover:bg-primary/5 transition-colors">
-                            <td class="px-8 py-5">
-                                <code class="px-3 py-1 bg-background border border-border rounded-lg text-primary font-black text-xs shadow-inner">@resource.Key</code>
+                        <tr>
+                            <td>
+                                <code class="badge bg-light text-primary font-monospace px-2 py-1 border">@resource.Key</code>
                             </td>
-                            <td class="px-8 py-5">
-                                <span class="px-3 py-1 rounded-lg bg-indigo-500/10 text-indigo-600 border border-indigo-500/20 text-[9px] font-black uppercase tracking-widest">@resource.Culture</span>
+                            <td class="text-center">
+                                <span class="modern-badge modern-badge-info">@resource.Culture</span>
                             </td>
-                            <td class="px-8 py-5 text-center">
-                                <span class="text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">@resource.ResourceGroup</span>
+                            <td class="text-center">
+                                <span class="modern-badge modern-badge-outline">@resource.ResourceGroup</span>
                             </td>
-                            <td class="px-8 py-5">
-                                <div class="max-w-[300px] xl:max-w-[500px] truncate text-sm font-medium text-foreground opacity-80" title="@resource.Value">@resource.Value</div>
+                            <td>
+                                <div class="text-truncate" style="max-width: 400px;" title="@resource.Value">@resource.Value</div>
                             </td>
-                            <td class="px-8 py-5 text-right">
-                                <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <a href="@Url.Action("EditResource", "Localization", new { id = resource.Id })" class="w-8 h-8 flex items-center justify-center rounded-lg bg-background border border-border hover:border-primary hover:text-primary transition-all shadow-sm">
-                                        <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="@Url.Action("EditResource", "Localization", new { id = resource.Id })" class="btn-icon-modern">
+                                        <i data-lucide="edit-3" class="w-4 h-4"></i>
                                     </a>
                                     <form asp-action="DeleteResource" asp-route-id="@resource.Id" method="post" class="inline delete-resource-form">
                                         @Html.AntiForgeryToken()
-                                        <button type="button" 
-                                                data-action="confirm-delete-resource"
-                                                class="w-8 h-8 flex items-center justify-center rounded-lg bg-background border border-border hover:border-red-500 hover:text-red-600 transition-all shadow-sm">
-                                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                        <button type="button" data-action="confirm-delete-resource" class="btn-icon-modern danger">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -130,13 +105,10 @@
                     @if (!Model.Resources.Any())
                     {
                         <tr>
-                            <td colspan="5" class="px-8 py-20 text-center">
-                                <div class="flex flex-col items-center justify-center gap-4">
-                                    <div class="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-2">
-                                        <i data-lucide="search-x" class="w-8 h-8 text-muted-foreground"></i>
-                                    </div>
-                                    <h3 class="text-lg font-black text-foreground uppercase tracking-tight">@Localizer["NoResourcesFound"]</h3>
-                                    <p class="text-sm text-muted-foreground max-w-xs">@Localizer["NoResourcesFoundDesc"]</p>
+                            <td colspan="5" class="text-center py-5">
+                                <div class="py-5">
+                                    <i data-lucide="search-x" class="w-10 h-10 text-muted mb-3"></i>
+                                    <h5 class="fw-black text-muted">@Localizer["NoResourcesFound"]</h5>
                                 </div>
                             </td>
                         </tr>
@@ -147,46 +119,29 @@
 
         @if (Model.Pagination.TotalPages > 1)
         {
-            <div class="px-8 py-6 bg-muted/10 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+            <div class="p-4 border-top d-flex justify-content-between align-items-center bg-light bg-opacity-50">
+                <span class="modern-page-info">
                     @string.Format(Localizer["ShowingEntries"].Value, Model.Pagination.StartItem, Model.Pagination.EndItem, Model.Pagination.TotalItems)
-                </p>
+                </span>
                 
-                <div class="flex items-center gap-2">
-                    @if (Model.Pagination.HasPreviousPage)
-                    {
-                        <a href="@Url.Action("Resources", new { culture = Model.SelectedCulture, group = Model.SelectedGroup, search = Model.SearchTerm, page = Model.Pagination.CurrentPage - 1 })" class="w-10 h-10 flex items-center justify-center rounded-xl bg-background border border-border hover:bg-muted transition-all active:scale-95 shadow-sm">
-                            <i data-lucide="chevron-left" class="w-4 h-4 text-foreground"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-background/50 border border-border opacity-30 cursor-not-allowed">
-                            <i data-lucide="chevron-left" class="w-4 h-4 text-foreground"></i>
-                        </div>
-                    }
+                <div class="modern-pagination">
+                    <a href="@(Model.Pagination.HasPreviousPage ? Url.Action("Resources", new { culture = Model.SelectedCulture, group = Model.SelectedGroup, search = Model.SearchTerm, page = Model.Pagination.CurrentPage - 1 }) : "#")" 
+                       class="modern-page-item @(!Model.Pagination.HasPreviousPage ? "disabled" : "")">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    </a>
 
-                    <div class="flex items-center bg-background border border-border rounded-xl px-4 h-10 shadow-inner">
-                        <span class="text-xs font-black uppercase tracking-widest text-muted-foreground">@string.Format(Localizer["PageOf"].Value, Model.Pagination.CurrentPage, Model.Pagination.TotalPages)</span>
+                    <div class="modern-page-info px-2">
+                        @string.Format(Localizer["PageOf"].Value, Model.Pagination.CurrentPage, Model.Pagination.TotalPages)
                     </div>
 
-                    @if (Model.Pagination.HasNextPage)
-                    {
-                        <a href="@Url.Action("Resources", new { culture = Model.SelectedCulture, group = Model.SelectedGroup, search = Model.SearchTerm, page = Model.Pagination.CurrentPage + 1 })" class="w-10 h-10 flex items-center justify-center rounded-xl bg-background border border-border hover:bg-muted transition-all active:scale-95 shadow-sm">
-                            <i data-lucide="chevron-right" class="w-4 h-4 text-foreground"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-background/50 border border-border opacity-30 cursor-not-allowed">
-                            <i data-lucide="chevron-right" class="w-4 h-4 text-foreground"></i>
-                        </div>
-                    }
+                    <a href="@(Model.Pagination.HasNextPage ? Url.Action("Resources", new { culture = Model.SelectedCulture, group = Model.SelectedGroup, search = Model.SearchTerm, page = Model.Pagination.CurrentPage + 1 }) : "#")" 
+                       class="modern-page-item @(!Model.Pagination.HasNextPage ? "disabled" : "")">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
                 </div>
             </div>
         }
     </div>
-    </div> <!-- End resources-content -->
 </div>
 
 @section Scripts {

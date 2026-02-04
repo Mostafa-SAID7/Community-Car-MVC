@@ -7,116 +7,115 @@
 }
 
 <!-- Maintenance Control Panel -->
-<div class="min-h-screen bg-black text-white p-6 lg:p-12 font-mono">
-    <div class="max-w-4xl mx-auto">
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-12 border-b border-white/10 pb-8">
-            <div>
-                <h1 class="text-4xl font-black tracking-tighter uppercase mb-2 italic">
-                    <span class="text-red-600">@Localizer["Protocol"]</span> 503
-                </h1>
-                <p class="text-zinc-500 text-sm tracking-widest uppercase">@Localizer["SystemWideMaintenanceLockdown"]</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="h-2 w-2 rounded-full @(isEnabled ? "bg-red-600 animate-pulse" : "bg-green-600")"></div>
-                <span class="text-xs font-bold uppercase tracking-widest">
-                    @Localizer["Status"]: @(isEnabled ? Localizer["ActiveLockdown"] : Localizer["GridOperational"])
-                </span>
+<div class="d-flex flex-column gap-5 animate-in fade-in duration-700 pb-5">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 border-bottom border-border border-opacity-30 pb-4">
+        <div>
+            <h1 class="h1 fw-black text-uppercase mb-1 italic tracking-tighter">
+                <span class="text-primary-red">@Localizer["Protocol"]</span> 503
+            </h1>
+            <p class="xx-small fw-black text-muted text-uppercase tracking-widest opacity-70">@Localizer["SystemWideMaintenanceLockdown"]</p>
+        </div>
+        <div class="d-flex align-items-center gap-4 bg-muted bg-opacity-5 px-4 py-2 rounded-4 border border-border border-opacity-20 shadow-sm">
+            <div class="w-8px h-8px rounded-circle @(isEnabled ? "bg-primary-red animate-pulse shadow-primary-red" : "bg-success shadow-success")" style="box-shadow: 0 0 10px currentColor;"></div>
+            <span class="xx-small font-black uppercase tracking-widest text-foreground">
+                @Localizer["Status"]: <span class="@(isEnabled ? "text-primary-red" : "text-success")">@(isEnabled ? Localizer["ActiveLockdown"] : Localizer["GridOperational"])</span>
+            </span>
+        </div>
+    </div>
+
+    <form asp-action="Toggle" method="post" class="d-flex flex-column gap-5">
+        @Html.AntiForgeryToken()
+
+        <!-- Warning Card -->
+        <div class="card card-premium shadow-xl border-opacity-20 overflow-hidden group">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex flex-column flex-md-row align-items-start gap-4">
+                    <div class="w-64px h-64px rounded-4 @(isEnabled ? "bg-success bg-opacity-10 text-success" : "bg-primary-red bg-opacity-10 text-primary-red") d-flex align-items-center justify-content-center shadow-sm">
+                        <i data-lucide="@(isEnabled ? "power" : "zap-off")" class="w-32px h-32px"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h3 class="h4 fw-black mb-2 text-uppercase tracking-tight text-foreground">
+                            @(isEnabled ? Localizer["DeactivateLockdown"] : Localizer["InitiateSystemShutdown"])
+                        </h3>
+                        <p class="small fw-bold text-muted opacity-70 mb-4 lh-lg" style="max-width: 600px;">
+                            @(isEnabled 
+                                ? Localizer["DeactivateLockdownDesc"] 
+                                : Localizer["InitiateSystemShutdownDesc"])
+                        </p>
+                        
+                        <input type="hidden" name="isEnabled" value="@((!isEnabled).ToString().ToLower())" />
+                        
+                        <button type="submit" class="btn btn-primary-red px-5 py-3 rounded-3 small fw-black text-uppercase tracking-widest shadow-lg hover-scale-105 transition-all d-flex align-items-center gap-3">
+                            @(isEnabled ? Localizer["RestoreGridAccess"] : Localizer["ExecuteSystemKillSwitch"])
+                            <i data-lucide="chevron-right" class="w-16px h-16px"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <form asp-action="Toggle" method="post" class="space-y-12">
-            @Html.AntiForgeryToken()
-
-            <!-- Warning Card -->
-            <div class="relative group">
-                <div class="absolute -inset-0.5 bg-gradient-to-r @(isEnabled ? "from-green-600 to-emerald-600" : "from-red-600 to-orange-600") rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-                <div class="relative bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-xl p-8">
-                    <div class="flex items-start gap-6">
-                        <div class="p-4 rounded-lg @(isEnabled ? "bg-green-600/10 text-green-600" : "bg-red-600/10 text-red-600")">
-                            <i data-lucide="@(isEnabled ? "power" : "zap-off")" class="w-8 h-8"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-2 uppercase tracking-tight">
-                                @(isEnabled ? Localizer["DeactivateLockdown"] : Localizer["InitiateSystemShutdown"])
-                            </h3>
-                            <p class="text-zinc-400 text-sm leading-relaxed mb-6">
-                                @(isEnabled 
-                                    ? Localizer["DeactivateLockdownDesc"] 
-                                    : Localizer["InitiateSystemShutdownDesc"])
-                            </p>
-                            
-                            <input type="hidden" name="isEnabled" value="@((!isEnabled).ToString().ToLower())" />
-                            
-                            <button type="submit" 
-                                    class="relative px-8 py-4 bg-white text-black font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform group overflow-hidden">
-                                <span class="relative z-10 flex items-center gap-2">
-                                    @(isEnabled ? Localizer["RestoreGridAccess"] : Localizer["ExecuteSystemKillSwitch"])
-                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                                </span>
-                                <div class="absolute inset-0 bg-zinc-200 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        <!-- Configuration Section -->
+        <div class="d-flex flex-column gap-4">
+            <div class="d-flex align-items-center gap-4">
+                <div class="flex-grow-1 h-1px bg-border bg-opacity-30"></div>
+                <h2 class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["TransmissionTelemetry"]</h2>
+                <div class="flex-grow-1 h-1px bg-border bg-opacity-30"></div>
             </div>
 
-            <!-- Configuration Section -->
-            <div class="space-y-6">
-                <div class="flex items-center gap-4 mb-4">
-                    <span class="h-[1px] flex-1 bg-white/10"></span>
-                    <h2 class="text-xs font-bold uppercase tracking-[0.3em] text-zinc-500">@Localizer["TransmissionTelemetry"]</h2>
-                    <span class="h-[1px] flex-1 bg-white/10"></span>
-                </div>
-
-                <div class="grid grid-cols-1 gap-8">
-                    <!-- Message Input -->
-                    <div class="space-y-4">
-                        <label class="block text-xs font-bold uppercase tracking-widest text-zinc-400">@Localizer["PublicBroadcastMessage"]</label>
-                        <div class="relative">
-                            <textarea name="message" rows="4" 
-                                class="w-full bg-zinc-900 border border-white/10 rounded-lg p-6 text-zinc-300 focus:outline-none focus:border-red-600 transition-colors placeholder:text-zinc-700 resize-none"
-                                placeholder="@Localizer["MaintenanceMessagePlaceholder"]">@message</textarea>
-                            <div class="absolute bottom-4 right-4 text-[10px] text-zinc-600 uppercase tracking-widest">
-                                @Localizer["Protocol"]: @Localizer["Standard"]
+            <div class="row g-4">
+                <!-- Message Input -->
+                <div class="col-12">
+                    <div class="card card-premium shadow-lg border-opacity-20">
+                        <div class="card-body p-4">
+                            <label class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60 mb-3 d-block">@Localizer["PublicBroadcastMessage"]</label>
+                            <div class="position-relative">
+                                <textarea name="message" rows="4" 
+                                    class="form-control bg-background border border-border border-opacity-30 rounded-4 p-4 small fw-bold text-foreground shadow-none focus-border-primary-red transition-all resize-none"
+                                    placeholder="@Localizer["MaintenanceMessagePlaceholder"]">@message</textarea>
+                                <div class="position-absolute bottom-0 end-0 p-3 xx-small fw-black text-muted opacity-30 text-uppercase tracking-widest">
+                                    @Localizer["Protocol"]: @Localizer["Standard"]
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Safety Check -->
-                    <div class="flex items-center gap-4 p-4 border border-zinc-800 rounded-lg bg-zinc-900/30">
-                        <div class="p-2 bg-zinc-800 rounded">
-                            <i data-lucide="shield-check" class="w-4 h-4 text-zinc-500"></i>
+                <!-- Safety Check -->
+                <div class="col-12">
+                    <div class="d-flex align-items-center gap-4 p-4 border border-border border-opacity-20 rounded-4 bg-muted bg-opacity-5">
+                        <div class="w-40px h-40px rounded-3 bg-muted bg-opacity-10 d-flex align-items-center justify-content-center">
+                            <i data-lucide="shield-check" class="w-20px h-20px text-muted"></i>
                         </div>
-                        <p class="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">
+                        <p class="xx-small fw-black text-muted text-uppercase tracking-widest opacity-60 mb-0 lh-base">
                             @Localizer["VerifiedAdminDesc"]
                         </p>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
+    </form>
 
-        <!-- Footer Stats -->
-        <div class="mt-20 grid grid-cols-3 gap-8">
-            <div class="border-t border-white/5 pt-4">
-                <div class="text-[10px] text-zinc-600 uppercase tracking-widest mb-1">@Localizer["Node"] 01</div>
-                <div class="text-xs font-bold text-zinc-400">@Localizer["Link"]: @Localizer["Secure"]</div>
-            </div>
-            <div class="border-t border-white/5 pt-4">
-                <div class="text-[10px] text-zinc-600 uppercase tracking-widest mb-1">@Localizer["Node"] 02</div>
-                <div class="text-xs font-bold text-zinc-400">@Localizer["Link"]: @Localizer["Standby"]</div>
-            </div>
-            <div class="border-t border-white/5 pt-4">
-                <div class="text-[10px] text-zinc-600 uppercase tracking-widest mb-1">@Localizer["Node"] 03</div>
-                <div class="text-xs font-bold text-zinc-400">@Localizer["Link"]: @Localizer["Active"]</div>
-            </div>
+    <!-- Footer Stats -->
+    <div class="mt-5 row g-4 border-top border-border border-opacity-20 pt-4">
+        <div class="col-4">
+            <div class="xx-small fw-black text-muted text-uppercase tracking-widest mb-1 opacity-40">@Localizer["Node"] 01</div>
+            <div class="x-small fw-black text-foreground opacity-60">@Localizer["Link"]: <span class="text-success">@Localizer["Secure"]</span></div>
+        </div>
+        <div class="col-4">
+            <div class="xx-small fw-black text-muted text-uppercase tracking-widest mb-1 opacity-40">@Localizer["Node"] 02</div>
+            <div class="x-small fw-black text-foreground opacity-60">@Localizer["Link"]: <span class="text-warning">@Localizer["Standby"]</span></div>
+        </div>
+        <div class="col-4">
+            <div class="xx-small fw-black text-muted text-uppercase tracking-widest mb-1 opacity-40">@Localizer["Node"] 03</div>
+            <div class="x-small fw-black text-foreground opacity-60">@Localizer["Link"]: <span class="text-primary-red">@Localizer["Active"]</span></div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // Lucide icons are initialized globally in the dashboard, but we can re-init if needed
+        // Lucide icons are initialized globally in the dashboard
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }

@@ -3,100 +3,101 @@
 @inject IHtmlLocalizer<CommunityCar.Web.SharedResource> SharedLocalizer
 
 <!-- Dashboard Right Sidebar (Stats & System Health) -->
-<div class="d-flex flex-column gap-4 p-3">
-    <!-- System Status -->
-    <div class="card card-premium p-4 border-0">
-        <h6 class="d-flex align-items-center gap-2 small fw-black text-uppercase tracking-widest text-primary-red mb-4">
-            <i data-lucide="activity" style="width: 14px; height: 14px;"></i>
+<div class="d-flex flex-column gap-4">
+    <!-- System Status (Glass Card) -->
+    <div class="card card-premium-glass p-4">
+        <h6 class="xx-small fw-black text-uppercase tracking-widest text-primary-red mb-4 d-flex align-items-center gap-2">
+            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
             @Localizer["SystemStatus"]
         </h6>
         
         <div class="mb-4">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="small fw-bold text-muted opacity-50">@Localizer["CoreEngine"]</span>
-                <span class="small fw-black text-uppercase text-success d-flex align-items-center gap-1">
-                    <span class="bg-success rounded-circle" style="width: 6px; height: 6px;"></span>
+                <span class="xx-small fw-bold text-muted opacity-60">@Localizer["CoreEngine"]</span>
+                <span class="xx-small fw-black text-uppercase text-success d-flex align-items-center gap-1">
+                    <span class="w-1.5 h-1.5 bg-success rounded-circle shadow-glow-primary"></span>
                     @Localizer["Operational"]
                 </span>
             </div>
             
-            <div class="small fw-black text-uppercase tracking-tighter text-muted opacity-30 mb-1">@Localizer["LoadFactor"]</div>
-            <div class="progress" style="height: 4px; background-color: rgba(0,0,0,0.05);">
-                <div class="progress-bar bg-primary-red shadow-sm" style="width: 14%"></div>
+            <div class="xx-small fw-black text-uppercase tracking-tighter text-muted opacity-30 mb-2">@Localizer["LoadFactor"]</div>
+            <div class="progress bg-white bg-opacity-5" style="height: 4px;">
+                <div class="progress-bar bg-gradient-premium shadow-sm" style="width: 14%"></div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="card card-premium p-4 border-0">
-        <h6 class="d-flex align-items-center gap-2 small fw-black text-uppercase tracking-widest text-primary-red mb-4">
-            <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
-            @Localizer["QuickActions"]
-        </h6>
-        
-        <div class="row g-2">
-            <div class="col-6">
-                <a href="@Url.Action("Generate", "Reports")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-light border hover-bg-primary-red-subtle transition-all text-decoration-none text-dark group">
-                    <i data-lucide="file-plus" class="text-primary-red mb-2 group-hover-scale-110 transition-transform" style="width: 20px;"></i>
-                    <span class="fw-black text-uppercase tracking-tighter text-center" style="font-size: 0.6rem;">@Localizer["NewReport"]</span>
-                </a>
-            </div>
-            <div class="col-6">
-                <a href="@Url.Action("Index", "SEO")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-light border hover-bg-primary-red-subtle transition-all text-decoration-none text-dark group">
-                    <i data-lucide="search" class="text-primary-red mb-2 group-hover-scale-110 transition-transform" style="width: 20px;"></i>
-                    <span class="fw-black text-uppercase tracking-tighter text-center" style="font-size: 0.6rem;">@Localizer["SEOAudit"]</span>
-                </a>
-            </div>
-            <div class="col-6">
-                <a href="@Url.Action("Index", "Cache")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-light border hover-bg-primary-red-subtle transition-all text-decoration-none text-dark group">
-                    <i data-lucide="database" class="text-primary-red mb-2 group-hover-scale-110 transition-transform" style="width: 20px;"></i>
-                    <span class="fw-black text-uppercase tracking-tighter text-center" style="font-size: 0.6rem;">@Localizer["FlushCache"]</span>
-                </a>
-            </div>
-            <div class="col-6">
-                <a href="@Url.Action("Index", "BackgroundJobs")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-light border hover-bg-primary-red-subtle transition-all text-decoration-none text-dark group">
-                    <i data-lucide="clock" class="text-primary-red mb-2 group-hover-scale-110 transition-transform" style="width: 20px;"></i>
-                    <span class="fw-black text-uppercase tracking-tighter text-center" style="font-size: 0.6rem;">@Localizer["JobQueue"]</span>
-                </a>
-            </div>
+    <!-- Quick Actions (Grid Style) -->
+    <div class="card card-premium-glass p-0">
+        <div class="card-header border-0 bg-transparent p-4 pb-2">
+            <h6 class="xx-small fw-black text-uppercase tracking-widest text-white mb-0">@Localizer["QuickExecutiveActions"]</h6>
         </div>
-    </div>
-
-    <!-- Logs -->
-    <div class="card card-premium p-4 border-0 flex-grow-1">
-        <h6 class="d-flex align-items-center gap-2 small fw-black text-uppercase tracking-widest text-primary-red mb-4">
-            <i data-lucide="list" style="width: 14px; height: 14px;"></i>
-            @Localizer["SystemLogs"]
-        </h6>
-        
-        <div class="d-flex flex-column gap-3">
-            <div class="d-flex gap-3 align-items-start p-2 rounded-3 hover-bg-light transition-colors">
-                <div class="bg-primary-red rounded-circle mt-1 shadow-sm" style="width: 6px; height: 6px;"></div>
-                <div class="flex-grow-1">
-                    <p class="mb-0 small fw-bold leading-tight">Admin login from 192.168.1.1</p>
-                    <p class="mb-0 text-muted opacity-50 fw-black text-uppercase tracking-widest" style="font-size: 0.6rem;">2 mins ago</p>
+        <div class="card-body p-4 pt-0">
+            <div class="row g-3">
+                <div class="col-6">
+                    <a href="@Url.Action("Generate", "Reports")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-white bg-opacity-5 border border-white border-opacity-5 hover:bg-opacity-10 transition-all text-decoration-none group">
+                        <i data-lucide="file-plus" class="text-primary-red mb-2 group-hover:scale-110 transition-transform" style="width: 20px;"></i>
+                        <span class="xx-small fw-black text-uppercase tracking-tighter text-white opacity-60">Report</span>
+                    </a>
                 </div>
-            </div>
-            <div class="d-flex gap-3 align-items-start p-2 rounded-3 hover-bg-light transition-colors">
-                <div class="bg-success rounded-circle mt-1 shadow-sm" style="width: 6px; height: 6px;"></div>
-                <div class="flex-grow-1">
-                    <p class="mb-0 small fw-bold leading-tight">Analytics Report generated</p>
-                    <p class="mb-0 text-muted opacity-50 fw-black text-uppercase tracking-widest" style="font-size: 0.6rem;">15 mins ago</p>
+                <div class="col-6">
+                    <a href="@Url.Action("Index", "SEO")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-white bg-opacity-5 border border-white border-opacity-5 hover:bg-opacity-10 transition-all text-decoration-none group">
+                        <i data-lucide="search" class="text-primary-red mb-2 group-hover:scale-110 transition-transform" style="width: 20px;"></i>
+                        <span class="xx-small fw-black text-uppercase tracking-tighter text-white opacity-60">SEO</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="@Url.Action("Index", "Cache")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-white bg-opacity-5 border border-white border-opacity-5 hover:bg-opacity-10 transition-all text-decoration-none group">
+                        <i data-lucide="database" class="text-primary-red mb-2 group-hover:scale-110 transition-transform" style="width: 20px;"></i>
+                        <span class="xx-small fw-black text-uppercase tracking-tighter text-white opacity-60">Cache</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="@Url.Action("Index", "BackgroundJobs")" class="d-flex flex-column align-items-center justify-content-center p-3 rounded-4 bg-white bg-opacity-5 border border-white border-opacity-5 hover:bg-opacity-10 transition-all text-decoration-none group">
+                        <i data-lucide="clock" class="text-primary-red mb-2 group-hover:scale-110 transition-transform" style="width: 20px;"></i>
+                        <span class="xx-small fw-black text-uppercase tracking-tighter text-white opacity-60">Jobs</span>
+                    </a>
                 </div>
             </div>
         </div>
-        
-        <a href="@Url.Action("Index", "Monitoring")" class="btn btn-outline-secondary btn-sm w-100 mt-4 rounded-4 fw-black text-uppercase tracking-widest" style="font-size: 0.65rem;">
-            @Localizer["FullDiagnostics"]
-        </a>
     </div>
 
-    <!-- AI Insights Footer -->
-    <div class="card card-premium p-3 border-0 bg-primary-red text-white animate-float">
-        <div class="d-flex align-items-center gap-2 mb-2">
-            <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
-            <span class="small fw-black text-uppercase tracking-widest">AI Insights</span>
+    <!-- Recent System Logs (Integrated Style) -->
+    <div class="card card-premium-glass p-0">
+        <div class="card-header border-0 bg-transparent p-4 pb-2">
+            <h6 class="xx-small fw-black text-uppercase tracking-widest text-white mb-0">@Localizer["SystemDiagnostics"]</h6>
         </div>
-        <p class="mb-0 small opacity-75" style="font-size: 0.7rem;">System performance optimized. No bottlenecks detected.</p>
+        <div class="card-body p-0">
+            <div class="d-flex flex-column">
+                <div class="p-4 border-top border-white border-opacity-5 hover:bg-white hover:bg-opacity-5 transition-all">
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <span class="xx-small fw-black text-white">Admin Login</span>
+                        <span class="xx-small text-muted opacity-40">2m ago</span>
+                    </div>
+                    <p class="xx-small fw-bold text-muted mb-0 opacity-60">192.168.1.1 [SUCCESS]</p>
+                </div>
+                <div class="p-4 border-top border-white border-opacity-5 hover:bg-white hover:bg-opacity-5 transition-all">
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <span class="xx-small fw-black text-white">Report Generated</span>
+                        <span class="xx-small text-muted opacity-40">15m ago</span>
+                    </div>
+                    <p class="xx-small fw-bold text-muted mb-0 opacity-60">Analytics.pdf [READY]</p>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 pt-2">
+            <a href="@Url.Action("Index", "Monitoring")" class="btn btn-sm btn-ghost-glass w-100 rounded-4 xx-small fw-black text-uppercase tracking-widest py-2">
+                @Localizer["FullDiagnostics"]
+            </a>
+        </div>
+    </div>
+
+    <!-- AI Optimization Hero -->
+    <div class="card card-premium-accent p-4 border-0 bg-gradient-premium text-white shadow-glow-primary">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span class="xx-small fw-black text-uppercase tracking-widest">AI Optimizer</span>
+        </div>
+        <p class="xx-small fw-bold mb-0 opacity-90 leading-relaxed">System is running at 94% efficiency. Automated cache flushing scheduled for 03:00 AM.</p>
     </div>
 </div>

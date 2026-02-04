@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Data;
+using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Localization;
 using CommunityCar.Domain.Entities.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -7,129 +7,114 @@ namespace CommunityCar.Application.Services.Dashboard.Localization;
 
 public class LocalizationService : ILocalizationService
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public LocalizationService(IApplicationDbContext context)
+    public LocalizationService(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<LocalizationCulture>> GetSupportedCulturesAsync()
     {
-        return await _context.LocalizationCultures
-            .Where(c => c.IsActive)
+        var cultures = await _unitOfWork.Context.Set<LocalizationCulture>()
+            .Where(c => c.IsEnabled)
+            .OrderBy(c => c.DisplayName)
             .ToListAsync();
+
+        return cultures;
     }
 
     public async Task<LocalizationCulture?> GetCultureByNameAsync(string name)
     {
-        return await _context.LocalizationCultures
+        return await _unitOfWork.Context.Set<LocalizationCulture>()
             .FirstOrDefaultAsync(c => c.Name == name);
     }
 
     public async Task<Guid> AddCultureAsync(LocalizationCulture culture)
     {
-        if (culture.IsDefault)
-        {
-            var currentDefault = await _context.LocalizationCultures.FirstOrDefaultAsync(c => c.IsDefault);
-            if (currentDefault != null) currentDefault.IsDefault = false;
-        }
-
-        _context.LocalizationCultures.Add(culture);
-        await _context.SaveChangesAsync();
+        culture.Id = Guid.NewGuid();
+        culture.CreatedAt = DateTime.UtcNow;
+        
+        await _unitOfWork.Context.Set<LocalizationCulture>().AddAsync(culture);
+        await _unitOfWork.SaveChangesAsync();
+        
         return culture.Id;
     }
 
     public async Task UpdateCultureAsync(LocalizationCulture culture)
     {
-        if (culture.IsDefault)
-        {
-            var currentDefault = await _context.LocalizationCultures
-                .FirstOrDefaultAsync(c => c.IsDefault && c.Id != culture.Id);
-            if (currentDefault != null) currentDefault.IsDefault = false;
-        }
-
-        _context.LocalizationCultures.Update(culture);
-        await _context.SaveChangesAsync();
+        culture.UpdatedAt = DateTime.UtcNow;
+        
+        _unitOfWork.Context.Set<LocalizationCulture>().Update(culture);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task DeleteCultureAsync(Guid id)
     {
-        var culture = await _context.LocalizationCultures.FindAsync(id);
+        var culture = await _unitOfWork.Context.Set<LocalizationCulture>()
+            .FindAsync(id);
+            
         if (culture != null)
         {
-            _context.LocalizationCultures.Remove(culture);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Context.Set<LocalizationCulture>().Remove(culture);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 
     public async Task<string?> GetResourceValueAsync(string key, string culture, string? resourceGroup = null)
     {
-        var query = _context.LocalizationResources
-            .Where(r => r.Key == key && r.Culture == culture);
+        var resource = await _unitOfWork.Context.Set<LocalizationResource>()
+            .FirstOrDefaultAsync(r => r.Key == key && 
+                                    r.Culture == culture && 
+                                    (resourceGroup == null || r.ResourceGroup == resourceGroup));
 
-        if (!string.IsNullOrEmpty(resourceGroup))
-        {
-            query = query.Where(r => r.ResourceGroup == resourceGroup);
-        }
-
-        var resource = await query.FirstOrDefaultAsync();
         return resource?.Value;
     }
 
     public async Task<Dictionary<string, string>> GetResourcesByCultureAsync(string culture, string? resourceGroup = null)
     {
-        var query = _context.LocalizationResources
-            .Where(r => r.Culture == culture);
+        var resources = await _unitOfWork.Context.Set<LocalizationResource>()
+            .Where(r => r.Culture == culture && 
+                       (resourceGroup == null || r.ResourceGroup == resourceGroup))
+            .ToDictionaryAsync(r => r.Key, r => r.Value);
 
-        if (!string.IsNullOrEmpty(resourceGroup))
-        {
-            query = query.Where(r => r.ResourceGroup == resourceGroup);
-        }
-
-        return await query.ToDictionaryAsync(r => r.Key, r => r.Value);
+        return resources;
     }
 
     public async Task<List<LocalizationResource>> GetAllResourcesAsync(string? culture = null, string? resourceGroup = null)
     {
-        var query = _context.LocalizationResources.AsQueryable();
+        var query = _unitOfWork.Context.Set<LocalizationResource>().AsQueryable();
 
         if (!string.IsNullOrEmpty(culture))
-        {
             query = query.Where(r => r.Culture == culture);
-        }
 
         if (!string.IsNullOrEmpty(resourceGroup))
-        {
             query = query.Where(r => r.ResourceGroup == resourceGroup);
-        }
 
-        return await query.ToListAsync();
+        return await query.OrderBy(r => r.Key).ToListAsync();
     }
 
-    public async Task<(List<LocalizationResource> Items, int TotalCount)> GetPaginatedResourcesAsync(string? culture = null, string? resourceGroup = null, string? search = null, int page = 1, int pageSize = 20)
+    public async Task<(List<LocalizationResource> Items, int TotalCount)> GetPaginatedResourcesAsync(
+        string? culture = null, 
+        string? resourceGroup = null, 
+        string? search = null, 
+        int page = 1, 
+        int pageSize = 20)
     {
-        var query = _context.LocalizationResources.AsQueryable();
+        var query = _unitOfWork.Context.Set<LocalizationResource>().AsQueryable();
 
         if (!string.IsNullOrEmpty(culture))
-        {
             query = query.Where(r => r.Culture == culture);
-        }
 
         if (!string.IsNullOrEmpty(resourceGroup))
-        {
             query = query.Where(r => r.ResourceGroup == resourceGroup);
-        }
 
         if (!string.IsNullOrEmpty(search))
-        {
             query = query.Where(r => r.Key.Contains(search) || r.Value.Contains(search));
-        }
 
         var totalCount = await query.CountAsync();
         var items = await query
-            .OrderBy(r => r.ResourceGroup)
-            .ThenBy(r => r.Key)
+            .OrderBy(r => r.Key)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -139,73 +124,63 @@ public class LocalizationService : ILocalizationService
 
     public async Task<List<string>> GetResourceGroupsAsync()
     {
-        return await _context.LocalizationResources
-            .Select(r => r.ResourceGroup ?? "Global")
+        var groups = await _unitOfWork.Context.Set<LocalizationResource>()
+            .Where(r => !string.IsNullOrEmpty(r.ResourceGroup))
+            .Select(r => r.ResourceGroup!)
             .Distinct()
             .OrderBy(g => g)
             .ToListAsync();
+
+        return groups;
     }
 
     public async Task SetResourceValueAsync(string key, string value, string culture, string? resourceGroup = null)
     {
-        var resource = await _context.LocalizationResources
-            .FirstOrDefaultAsync(r => r.Key == key && r.Culture == culture && r.ResourceGroup == resourceGroup);
+        var resource = await _unitOfWork.Context.Set<LocalizationResource>()
+            .FirstOrDefaultAsync(r => r.Key == key && 
+                                    r.Culture == culture && 
+                                    (resourceGroup == null || r.ResourceGroup == resourceGroup));
 
         if (resource != null)
         {
             resource.Value = value;
-            _context.LocalizationResources.Update(resource);
+            resource.UpdatedAt = DateTime.UtcNow;
+            _unitOfWork.Context.Set<LocalizationResource>().Update(resource);
         }
         else
         {
-            _context.LocalizationResources.Add(new LocalizationResource
+            resource = new LocalizationResource
             {
+                Id = Guid.NewGuid(),
                 Key = key,
                 Value = value,
                 Culture = culture,
-                ResourceGroup = resourceGroup
-            });
+                ResourceGroup = resourceGroup,
+                CreatedAt = DateTime.UtcNow
+            };
+            await _unitOfWork.Context.Set<LocalizationResource>().AddAsync(resource);
         }
 
-        await _context.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task DeleteResourceAsync(Guid id)
     {
-        var resource = await _context.LocalizationResources.FindAsync(id);
+        var resource = await _unitOfWork.Context.Set<LocalizationResource>()
+            .FindAsync(id);
+            
         if (resource != null)
         {
-            _context.LocalizationResources.Remove(resource);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Context.Set<LocalizationResource>().Remove(resource);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 
     public async Task ImportResourcesAsync(Dictionary<string, string> resources, string culture, string? resourceGroup = null)
     {
-        foreach (var item in resources)
+        foreach (var kvp in resources)
         {
-            var existing = await _context.LocalizationResources
-                .FirstOrDefaultAsync(r => r.Key == item.Key && r.Culture == culture && r.ResourceGroup == resourceGroup);
-
-            if (existing != null)
-            {
-                existing.Value = item.Value;
-            }
-            else
-            {
-                _context.LocalizationResources.Add(new LocalizationResource
-                {
-                    Key = item.Key,
-                    Value = item.Value,
-                    Culture = culture,
-                    ResourceGroup = resourceGroup
-                });
-            }
+            await SetResourceValueAsync(kvp.Key, kvp.Value, culture, resourceGroup);
         }
-
-        await _context.SaveChangesAsync();
     }
 }
-
-
-

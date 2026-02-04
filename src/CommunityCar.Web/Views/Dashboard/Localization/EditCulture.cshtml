@@ -4,65 +4,72 @@
     var isEdit = Model.Id != Guid.Empty;
     ViewData["Title"] = isEdit ? Localizer["ModifyCulture"] : Localizer["DeployCulture"];
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewData["UseModernTheme"] = true;
 }
 
-<div class="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-    <div class="flex items-center justify-between border-b border-border/50 pb-6">
+<div class="animate-slide-up mx-auto" style="max-width: 900px;">
+    <!-- Top Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
-            <h1 class="text-3xl font-black text-foreground tracking-tighter">@(isEdit ? Localizer["AdjustProfile"] : Localizer["InitializeLocale"])</h1>
-            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@Localizer["GlobalizingDesc"]</p>
+            <h1 class="page-title mb-2">@(isEdit ? Localizer["AdjustProfile"] : Localizer["InitializeLocale"])</h1>
+            <p class="text-muted fw-medium">@Localizer["GlobalizingDesc"]</p>
         </div>
-        <a href="@Url.Action("Index")" class="px-6 py-2.5 bg-muted/50 hover:bg-muted text-foreground rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-border/50">@Localizer["ReturnToHub"]</a>
+        <a href="@Url.Action("Index")" class="btn-modern-outline">@Localizer["ReturnToHub"]</a>
     </div>
 
-    <div class="bg-card/40 backdrop-blur-xl border border-border rounded-3xl p-10 shadow-2xl relative overflow-hidden group">
-        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
-        
-        <form asp-action="SaveCulture" method="post" class="relative space-y-10">
+    <!-- Form Section -->
+    <div class="card-modern">
+        <form asp-action="SaveCulture" method="post">
             <input type="hidden" asp-for="Id" />
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="space-y-3">
-                    <label asp-for="Name" class="text-[10px] font-black uppercase tracking-widest text-primary">@Localizer["IETFLanguagePort"]</label>
-                    <input asp-for="Name" class="w-full bg-background/50 border border-border px-5 py-4 rounded-2xl text-sm font-black tracking-tight outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-inner" placeholder="e.g. ja-JP" required />
-                    <p class="text-[9px] font-medium text-muted-foreground opacity-60">@Localizer["IETFLanguagePortDesc"]</p>
+            <div class="row g-4 mb-5">
+                <div class="col-12 col-md-6">
+                    <label asp-for="Name" class="modern-label">@Localizer["IETFLanguagePort"]</label>
+                    <input asp-for="Name" class="modern-input" placeholder="e.g. ja-JP" required />
+                    <p class="xx-small text-muted mt-2">@Localizer["IETFLanguagePortDesc"]</p>
                 </div>
 
-                <div class="space-y-3">
-                    <label asp-for="DisplayName" class="text-[10px] font-black uppercase tracking-widest text-primary">@Localizer["IdentityLabel"]</label>
-                    <input asp-for="DisplayName" class="w-full bg-background/50 border border-border px-5 py-4 rounded-2xl text-sm font-black tracking-tight outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-inner" placeholder="e.g. Japanese (Internal)" required />
-                    <p class="text-[9px] font-medium text-muted-foreground opacity-60">@Localizer["IdentityLabelDesc"]</p>
+                <div class="col-12 col-md-6">
+                    <label asp-for="DisplayName" class="modern-label">@Localizer["IdentityLabel"]</label>
+                    <input asp-for="DisplayName" class="modern-input" placeholder="e.g. Japanese (Internal)" required />
+                    <p class="xx-small text-muted mt-2">@Localizer["IdentityLabelDesc"]</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <label class="bg-muted/30 border border-border/50 p-6 rounded-2xl flex items-center justify-between cursor-pointer group/toggle hover:bg-muted/50 transition-all">
-                    <div class="space-y-1">
-                        <span class="block text-[10px] font-black uppercase tracking-widest text-foreground">@Localizer["RTLLogic"]</span>
-                        <span class="block text-[8px] font-black uppercase text-muted-foreground opacity-50 tracking-widest leading-none">@Localizer["RTLLogicDesc"]</span>
-                    </div>
-                    <input asp-for="IsRTL" type="checkbox" class="w-5 h-5 rounded-lg border-border text-primary focus:ring-primary bg-background transition-all" />
-                </label>
+            <div class="row g-3 mb-5">
+                <div class="col-12 col-md-4">
+                    <label class="modern-checkbox-card">
+                        <div>
+                            <span class="d-block fw-bold small">@Localizer["RTLLogic"]</span>
+                            <span class="xx-small text-muted">@Localizer["RTLLogicDesc"]</span>
+                        </div>
+                        <input asp-for="IsRTL" type="checkbox" class="modern-checkbox" />
+                    </label>
+                </div>
 
-                <label class="bg-muted/30 border border-border/50 p-6 rounded-2xl flex items-center justify-between cursor-pointer group/toggle hover:bg-muted/50 transition-all">
-                    <div class="space-y-1">
-                        <span class="block text-[10px] font-black uppercase tracking-widest text-foreground">@Localizer["SystemDefault"]</span>
-                        <span class="block text-[8px] font-black uppercase text-muted-foreground opacity-50 tracking-widest leading-none">@Localizer["SystemDefaultDesc"]</span>
-                    </div>
-                    <input asp-for="IsDefault" type="checkbox" class="w-5 h-5 rounded-lg border-border text-primary focus:ring-primary bg-background transition-all" />
-                </label>
+                <div class="col-12 col-md-4">
+                    <label class="modern-checkbox-card">
+                        <div>
+                            <span class="d-block fw-bold small">@Localizer["SystemDefault"]</span>
+                            <span class="xx-small text-muted">@Localizer["SystemDefaultDesc"]</span>
+                        </div>
+                        <input asp-for="IsDefault" type="checkbox" class="modern-checkbox" />
+                    </label>
+                </div>
 
-                <label class="bg-muted/30 border border-border/50 p-6 rounded-2xl flex items-center justify-between cursor-pointer group/toggle hover:bg-muted/50 transition-all">
-                    <div class="space-y-1">
-                        <span class="block text-[10px] font-black uppercase tracking-widest text-foreground">@Localizer["ActiveStatus"]</span>
-                        <span class="block text-[8px] font-black uppercase text-muted-foreground opacity-50 tracking-widest leading-none">@Localizer["ActiveStatusDesc"]</span>
-                    </div>
-                    <input asp-for="IsActive" type="checkbox" class="w-5 h-5 rounded-lg border-border text-primary focus:ring-primary bg-background transition-all" />
-                </label>
+                <div class="col-12 col-md-4">
+                    <label class="modern-checkbox-card">
+                        <div>
+                            <span class="d-block fw-bold small">@Localizer["ActiveStatus"]</span>
+                            <span class="xx-small text-muted">@Localizer["ActiveStatusDesc"]</span>
+                        </div>
+                        <input asp-for="IsActive" type="checkbox" class="modern-checkbox" />
+                    </label>
+                </div>
             </div>
 
-            <div class="pt-8 flex gap-4">
-                <button type="submit" class="flex-1 bg-foreground text-background py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all">
+            <div class="pt-4 border-top">
+                <button type="submit" class="btn-modern-primary w-100 justify-content-center py-3">
                     @Localizer["DeployProfile"]
                 </button>
             </div>

@@ -2,366 +2,305 @@
 @{
     ViewData["Title"] = Localizer["DashboardOverview"];
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewData["UseModernTheme"] = true;
 }
 @inject IViewLocalizer Localizer
 
-<div class="d-flex flex-column gap-5 animate-in fade-in duration-700">
-    <!-- Stats Cards Row -->
-    <div class="row g-4" id="dashboard-content">
-        <div class="col-12 col-md-6 col-lg-3">
-            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.1s">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="w-12 h-12 rounded-4 bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center group-hover:scale-110 group-hover:rotate-6 transition-all">
-                            <i data-lucide="users" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <div class="h2 fw-black text-gradient mb-0">@Model.Stats.TotalUsers.ToString("N0")</div>
-                            <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalUsers"]</div>
-                        </div>
-                    </div>
-                    <div class="text-[10px] fw-bold text-success d-flex align-items-center">
-                        <i data-lucide="arrow-up" class="w-3 h-3 me-1"></i> +@Model.Stats.GrowthRate%
-                        <span class="opacity-50 ms-1 fw-medium">@Localizer["ThisMonth"]</span>
-                    </div>
-                </div>
-            </div>
+<div class="animate-slide-up">
+    <!-- Top Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h1 class="page-title mb-2">Managing <i data-lucide="sun" class="text-muted opacity-40 mx-1"></i> Your Team <br class="d-none d-md-block" /> and <i data-lucide="zap" class="text-muted opacity-40 mx-1"></i> Workflows</h1>
         </div>
-
-        <div class="col-12 col-md-6 col-lg-3">
-            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.2s">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="w-12 h-12 rounded-4 bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center group-hover:scale-110 group-hover:rotate-6 transition-all">
-                            <i data-lucide="edit-3" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <div class="h2 fw-black text-gradient mb-0">@Model.Stats.TotalPosts.ToString("N0")</div>
-                            <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalPosts"]</div>
-                        </div>
-                    </div>
-                    <div class="text-[10px] fw-bold text-muted-foreground opacity-60">
-                        @Localizer["ActiveToday"]: <span class="text-foreground fw-black">@Model.Stats.ActiveUsersToday</span>
-                    </div>
-                </div>
+        <div class="d-flex align-items-center gap-3">
+            <div class="w-10 h-10 rounded-circle bg-white d-flex align-items-center justify-content-center shadow-sm cursor-pointer">
+                <i data-lucide="settings" class="w-5 h-5 text-muted"></i>
             </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-3">
-            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.3s">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="w-12 h-12 rounded-4 bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center group-hover:scale-110 group-hover:rotate-6 transition-all">
-                            <i data-lucide="messages-square" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <div class="h2 fw-black text-gradient mb-0">@Model.Stats.TotalComments.ToString("N0")</div>
-                            <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["TotalComments"]</div>
-                        </div>
-                    </div>
-                    <div class="text-[10px] fw-bold text-primary-red">
-                        @Localizer["Engagement"]: <span class="fw-black">@Model.Stats.EngagementRate%</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-3">
-            <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.4s">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="w-12 h-12 rounded-4 bg-primary-red bg-opacity-10 text-primary-red d-flex align-items-center justify-content-center group-hover:scale-110 group-hover:rotate-6 transition-all">
-                            <i data-lucide="help-circle" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <div class="h2 fw-black text-gradient mb-0">@(Model.Stats.TotalQuestions + Model.Stats.TotalAnswers)</div>
-                            <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["QAItems"]</div>
-                        </div>
-                    </div>
-                    <div class="text-[10px] fw-bold text-muted-foreground opacity-60">
-                        @Model.Stats.TotalQuestions Q / @Model.Stats.TotalAnswers A
-                    </div>
-                </div>
-            </div>
+            <button class="btn-modern-primary flex-grow-1">
+                <i data-lucide="plus" class="w-5 h-5"></i>
+                <span>Create a New Scenario</span>
+            </button>
         </div>
     </div>
 
-    <!-- Charts and Health Row -->
-    <div class="row g-4">
-        <div class="col-12 col-xl-8">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="trending-up" style="width: 18px;"></i>
-                        @Localizer["UserGrowth"]
-                    </h5>
-                    <div class="btn-group bg-muted-subtle p-1 rounded-4 border border-border border-opacity-50">
-                        <button type="button" class="btn btn-sm btn-primary-red rounded-3 text-[9px] fw-black text-uppercase tracking-widest px-3 py-1 shadow-sm active" data-period="7">@Localizer["SevenDays"]</button>
-                        <button type="button" class="btn btn-sm btn-ghost rounded-3 text-[9px] fw-black text-uppercase tracking-widest px-3 py-1 text-muted-foreground hover:text-foreground border-0" data-period="30">@Localizer["ThirtyDays"]</button>
-                        <button type="button" class="btn btn-sm btn-ghost rounded-3 text-[9px] fw-black text-uppercase tracking-widest px-3 py-1 text-muted-foreground hover:text-foreground border-0" data-period="90">@Localizer["NinetyDays"]</button>
-                    </div>
-                </div>
-                <div class="card-body p-4">
-                    <div style="height: 320px;">
-                        <canvas id="userGrowthChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-xl-4">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="activity" style="width: 18px;"></i>
-                        @Localizer["SystemHealth"]
-                    </h5>
-                </div>
-                <div class="card-body p-4 d-flex flex-column gap-5">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <h6 class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60 mb-0">@Localizer["Status"]</h6>
-                        <span class="badge rounded-pill border border-border border-opacity-50 px-3 py-2 text-[9px] fw-black text-uppercase tracking-widest d-flex align-items-center gap-2 @(Model.SystemHealth.IsHealthy ? "bg-success-subtle text-success" : "bg-danger-subtle text-danger animate-pulse")">
-                            <span class="w-1.5 h-1.5 rounded-circle bg-current"></span>
-                            @(Model.SystemHealth.IsHealthy ? Localizer["Healthy"] : Localizer["IssuesDetected"])
-                        </span>
-                    </div>
-
-                    <div class="d-flex flex-column gap-4">
-                        <div class="d-flex flex-column gap-2">
-                            <div class="d-flex justify-content-between align-items-end">
-                                <span class="text-[9px] fw-bold text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["CpuUsage"]</span>
-                                <span class="text-xs fw-black tabular-nums">@Model.SystemHealth.CpuUsage%</span>
-                            </div>
-                            <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
-                                <div class="progress-bar rounded-pill @(Model.SystemHealth.CpuUsage > 70 ? "bg-danger" : Model.SystemHealth.CpuUsage > 50 ? "bg-warning" : "bg-success") transition-all duration-700" style="width: @Model.SystemHealth.CpuUsage%"></div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column gap-2">
-                            <div class="d-flex justify-content-between align-items-end">
-                                <span class="text-[9px] fw-bold text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["MemoryUsage"]</span>
-                                <span class="text-xs fw-black tabular-nums">@Model.SystemHealth.MemoryUsage%</span>
-                            </div>
-                            <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
-                                <div class="progress-bar rounded-pill @(Model.SystemHealth.MemoryUsage > 80 ? "bg-danger" : Model.SystemHealth.MemoryUsage > 60 ? "bg-warning" : "bg-success") transition-all duration-700" style="width: @Model.SystemHealth.MemoryUsage%"></div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column gap-2">
-                            <div class="d-flex justify-content-between align-items-end">
-                                <span class="text-[9px] fw-bold text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["DiskUsage"]</span>
-                                <span class="text-xs fw-black tabular-nums">@Model.SystemHealth.DiskUsage%</span>
-                            </div>
-                            <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
-                                <div class="progress-bar rounded-pill @(Model.SystemHealth.DiskUsage > 85 ? "bg-danger" : Model.SystemHealth.DiskUsage > 70 ? "bg-warning" : "bg-success") transition-all duration-700" style="width: @Model.SystemHealth.DiskUsage%"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-auto pt-4 border-top border-border border-opacity-50">
-                        <div class="d-flex align-items-center gap-2 text-[10px] fw-bold text-muted-foreground text-uppercase opacity-60">
-                            <i data-lucide="clock" class="w-3.5 h-3.5"></i> @Localizer["LastCheck"]: <span class="text-foreground">@Model.SystemHealth.LastCheck.ToString("HH:mm")</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Navigation Tabs -->
+    <div class="modern-tabs mb-4">
+        <div class="modern-tab active">Organization</div>
+        <div class="modern-tab">Teams</div>
+        <div class="modern-tab">Users</div>
+        <div class="modern-tab">Subscription</div>
+        <div class="modern-tab">Payment</div>
+        <div class="modern-tab">Installed Apps</div>
+        <div class="modern-tab">Variables</div>
+        <div class="modern-tab">Scenario Properties</div>
     </div>
 
-    <!-- Activity and Content Row -->
     <div class="row g-4">
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0 d-flex justify-content-between align-items-center">
-                    <h6 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="history" style="width: 18px;"></i>
-                        @Localizer["RecentActivity"]
-                    </h6>
-                    <button class="btn btn-muted-subtle btn-sm rounded-3 p-1.5 shadow-sm hover:text-primary-red border border-border border-opacity-50 transition-all group" onclick="refreshActivity()">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-700"></i>
-                    </button>
-                </div>
-                <div class="card-body p-4">
-                    <div class="position-relative">
-                        <div id="activity-skeleton" class="d-none position-absolute inset-0 bg-card bg-opacity-80 backdrop-blur-sm z-3 flex-column p-0 gap-3">
-                            <skeleton type="Line" />
-                            <skeleton type="Line" />
-                            <skeleton type="Line" />
-                        </div>
-                        <div class="d-flex flex-column gap-1 overflow-y-auto no-scrollbar" style="max-height: 480px;" id="activityList">
-                            @foreach (var activity in Model.RecentActivity)
-                            {
-                                <div class="d-flex align-items-center gap-3 p-3 rounded-4 hover-bg-muted-subtle transition-all cursor-default group">
-                                    <div class="w-8 h-8 rounded-circle shadow-sm d-flex align-items-center justify-content-center flex-shrink-0 text-white group-hover:scale-110 transition-transform @(activity.Color == "blue" ? "bg-primary" : activity.Color == "green" ? "bg-success" : activity.Color == "amber" ? "bg-warning" : "bg-primary-red")">
-                                        <i data-lucide="@activity.Icon" style="width: 14px;"></i>
-                                    </div>
-                                    <div class="flex-grow-1 min-w-0">
-                                        <div class="text-[11px] fw-black text-foreground truncate">@activity.Description</div>
-                                        <div class="text-[9px] fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60 d-flex align-items-center gap-2">
-                                            <span class="text-primary-red">@activity.UserName</span>
-                                            <span class="opacity-30">•</span>
-                                            <span>@activity.TimeAgo</span>
-                                        </div>
-                                    </div>
+        <!-- Main Content (Left) -->
+        <div class="col-12 col-xl-9">
+            <div class="row g-4 mb-4">
+                <!-- Operations Card -->
+                <div class="col-12 col-md-4">
+                    <div class="card-modern">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="w-8 h-8 rounded-circle border d-flex align-items-center justify-content-center">
+                                    <i data-lucide="settings" class="w-4 h-4 text-muted"></i>
                                 </div>
+                                <span class="fw-bold text-muted small">Operations</span>
+                            </div>
+                            <i data-lucide="more-vertical" class="w-5 h-5 text-muted"></i>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span class="display-5 fw-black">780</span>
+                                <span class="text-muted font-monospace">/ 1000</span>
+                            </div>
+                            <div class="badge bg-warning-subtle text-warning rounded-pill px-3 py-1 small fw-bold mt-2">
+                                82% <i data-lucide="refresh-cw" class="w-3 h-3 ms-1"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-1">
+                            @for(int i=0; i<8; i++) {
+                                <div class="flex-grow-1 rounded-pill bg-dark" style="height: 32px; @(i > 4 ? "opacity: 0.1;" : "")"></div>
                             }
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0">
-                    <h6 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="trophy" style="width: 18px;"></i>
-                        @Localizer["TopContent"]
-                    </h6>
-                </div>
-                <div class="card-body p-4">
-                    <div class="d-flex flex-column gap-3">
-                        @foreach (var content in Model.TopContent)
-                        {
-                            <div class="card card-premium p-3 border border-border border-opacity-50 hover-bg-muted-subtle transition-all cursor-default group">
-                                <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
-                                    <div class="min-w-0">
-                                        <h6 class="text-xs fw-black text-foreground mb-1 truncate group-hover:text-primary-red transition-colors">@content.Title</h6>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="badge bg-muted-subtle border border-border border-opacity-50 text-[8px] fw-black text-uppercase tracking-tighter text-muted-foreground py-1 px-2 group-hover:bg-primary-red-subtle group-hover:text-primary-red transition-all">@content.Type</span>
-                                            <span class="text-[9px] fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60">@content.AuthorName</span>
-                                        </div>
-                                    </div>
+                <!-- Data Transfer Card -->
+                <div class="col-12 col-md-4">
+                    <div class="card-modern card-modern-lime">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="w-8 h-8 rounded-circle border border-dark border-opacity-10 d-flex align-items-center justify-content-center">
+                                    <i data-lucide="shuffle" class="w-4 h-4 text-dark"></i>
                                 </div>
-                                <div class="d-flex gap-4 text-[9px] fw-black text-muted-foreground text-uppercase tracking-widest opacity-40">
-                                    <div class="d-flex align-items-center gap-1"><i data-lucide="eye" style="width: 10px;"></i> @content.Views</div>
-                                    <div class="d-flex align-items-center gap-1"><i data-lucide="heart" style="width: 10px;" class="text-danger"></i> @content.Likes</div>
-                                    <div class="d-flex align-items-center gap-1"><i data-lucide="message-square" style="width: 10px;"></i> @content.Comments</div>
-                                </div>
+                                <span class="fw-bold text-dark small">Data Transfer</span>
                             </div>
-                        }
+                            <i data-lucide="more-vertical" class="w-5 h-5 text-dark opacity-50"></i>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span class="display-5 fw-black text-dark">163</span>
+                                <span class="text-dark opacity-40 font-monospace">/ 512.0 MB</span>
+                            </div>
+                            <div class="badge bg-white bg-opacity-50 text-dark rounded-pill px-3 py-1 small fw-bold mt-2">
+                                68% <i data-lucide="refresh-cw" class="w-3 h-3 ms-1 opacity-50"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-1">
+                            @for(int i=0; i<8; i++) {
+                                <div class="flex-grow-1 rounded-pill bg-dark" style="height: 32px; @(i > 2 ? "opacity: 0.1;" : "")"></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo Card -->
+                <div class="col-12 col-md-4">
+                    <div class="card-modern card-modern-dark p-0 overflow-hidden position-relative">
+                        <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=400" class="position-absolute w-100 h-100 object-fit-cover opacity-50" />
+                        <div class="position-relative p-4 h-100 d-flex flex-column justify-content-between bg-gradient-dark">
+                            <div>
+                                <h3 class="fw-black h2 mb-1">Take Your <br /> Automation <br /> to the Next <br /> Level</h3>
+                            </div>
+                            <button class="btn btn-white rounded-pill py-3 fw-black w-100 mt-4 d-flex align-items-center justify-content-center gap-2">
+                                Upgrade <i data-lucide="play-circle" class="w-5 h-5"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-12 col-md-12 col-lg-4">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0">
-                    <h6 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="users" style="width: 18px;"></i>
-                        @Localizer["ActiveUsers"]
-                    </h6>
-                </div>
-                <div class="card-body p-4">
-                    <div class="d-flex flex-column gap-2">
-                        @foreach (var user in Model.ActiveUsers)
-                        {
-                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 hover-bg-muted-subtle transition-all cursor-default group">
-                                <div class="user-avatar-container p-0 m-0 border-0 shadow-sm position-relative" style="width: 40px; height: 40px;">
-                                    @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
-                                    {
-                                        <img src="@user.ProfilePictureUrl" alt="@user.UserName" class="rounded-circle object-fit-cover w-100 h-100" />
-                                    }
-                                    else
-                                    {
-                                        <div class="w-100 h-100 rounded-circle bg-primary-red text-white d-flex align-items-center justify-content-center fw-black text-uppercase small">
-                                            @user.UserName.Substring(0, 1)
-                                        </div>
-                                    }
-                                    @if (user.IsOnline)
-                                    {
-                                        <span class="position-absolute bottom-0 end-0 bg-success border border-4 border-card rounded-circle shadow-sm" style="width: 14px; height: 14px;"></span>
-                                    }
-                                </div>
-                                <div class="flex-grow-1 min-w-0">
-                                    <div class="text-xs fw-black text-foreground truncate group-hover:text-primary-red transition-colors">@user.UserName</div>
-                                    <div class="text-[9px] fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60">@user.LastActivityText</div>
-                                </div>
-                                <div class="text-end flex-shrink-0">
-                                    <div class="text-xs fw-black text-foreground tabular-nums">@user.PostsCount</div>
-                                    <div class="text-[8px] fw-black text-muted-foreground text-uppercase tracking-widest opacity-40">@Localizer["Posts"]</div>
-                                </div>
+            <!-- Statistics Chart -->
+            <div class="card-modern">
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <div class="d-flex align-items-center gap-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5 text-muted"></i>
+                            <span class="fw-bold">Statistics</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 ms-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="w-2 h-2 rounded-circle bg-dark"></div>
+                                <span class="xx-small fw-bold text-muted text-uppercase tracking-wider">Operations</span>
                             </div>
-                        }
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="w-2 h-2 rounded-circle bg-lime" style="background-color: var(--modern-lime)"></div>
+                                <span class="xx-small fw-bold text-muted text-uppercase tracking-wider">Data transfer</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn-modern-outline dropdown-toggle" data-bs-toggle="dropdown">2025</button>
                     </div>
                 </div>
+                <div style="height: 350px;">
+                    <canvas id="modernStatisticsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar (Right) -->
+        <div class="col-12 col-xl-3">
+            <div class="d-flex flex-column gap-3">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="info-tile text-center">
+                            <i data-lucide="message-square" class="w-6 h-6 mx-auto mb-2"></i>
+                            <span class="fw-bold small">Community</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-tile text-center">
+                            <i data-lucide="graduation-cap" class="w-6 h-6 mx-auto mb-2"></i>
+                            <span class="fw-bold small">Academy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#" class="info-tile">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <i data-lucide="help-circle" class="w-6 h-6 mb-2"></i>
+                            <h6 class="fw-bold mb-1">Help Center</h6>
+                            <p class="xx-small text-muted mb-0">Explore our detailed documentation...</p>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-muted opacity-40"></i>
+                    </div>
+                </a>
+
+                <a href="#" class="info-tile">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <i data-lucide="users" class="w-6 h-6 mb-2"></i>
+                            <h6 class="fw-bold mb-1">Partner Directory</h6>
+                            <p class="xx-small text-muted mb-0">Find the perfect partner to support...</p>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-muted opacity-40"></i>
+                    </div>
+                </a>
+
+                <a href="#" class="info-tile">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <i data-lucide="layout" class="w-6 h-6 mb-2"></i>
+                            <h6 class="fw-bold mb-1">Blog</h6>
+                            <p class="xx-small text-muted mb-0">Access popular guides & stories ab...</p>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-muted opacity-40"></i>
+                    </div>
+                </a>
+
+                <a href="#" class="info-tile">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <i data-lucide="bar-chart" class="w-6 h-6 mb-2"></i>
+                            <h6 class="fw-bold mb-1">Use Cases</h6>
+                            <p class="xx-small text-muted mb-0">Get inspired by all the ways you ca...</p>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-muted opacity-40"></i>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Premium Red Design System Chart Colors
-        const primaryRed = '#fb2c36';
-        const primaryRedSubtle = 'rgba(251, 44, 54, 0.1)';
-        const textColor = getComputedStyle(document.documentElement).getPropertyValue('--muted-foreground').trim() || '#64748b';
-        const gridColor = 'rgba(0, 0, 0, 0.05)';
-
-        const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
-        const userGrowthChart = new Chart(userGrowthCtx, {
-            type: 'line',
-            data: {
-                labels: @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Label))),
-                datasets: [{
-                    label: '@Localizer["NewUsers"]',
-                    data: @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Value))),
-                    borderColor: primaryRed,
-                    backgroundColor: primaryRedSubtle,
-                    borderWidth: 3,
-                    pointBackgroundColor: '#ffffff',
-                    pointBorderColor: primaryRed,
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#ffffff',
-                        titleColor: '#000000',
-                        bodyColor: '#64748b',
-                        borderColor: 'rgba(0, 0, 0, 0.1)',
-                        borderWidth: 1,
-                        padding: 12,
-                        cornerRadius: 12,
-                        usePointStyle: true,
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: gridColor, drawBorder: false },
-                        ticks: { font: { weight: '800', size: 10 }, color: textColor, padding: 8 }
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('modernStatisticsChart').getContext('2d');
+            
+            // Custom plugin to draw rounded bar tops (simplified for this design)
+            const statsData = {
+                labels: ['27 Jun', '28 Jun', '29 Jun', '30 Jun', '1 Jul', '2 Jul', '3 Jul', '4 Jul'],
+                datasets: [
+                    {
+                        label: 'Operations',
+                        data: [0.8, 0.5, 0.7, 0.3, 0.9, 0.1, 0.6, 0.5],
+                        backgroundColor: '#0a0a0a',
+                        borderRadius: 100,
+                        borderSkipped: false,
+                        barThickness: 32,
                     },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { weight: '800', size: 10 }, color: textColor, padding: 8 }
+                    {
+                        label: 'Data Transfer',
+                        data: [0.4, 0.3, 0.2, 0.8, 0.4, 0.7, 0.4, 0.3],
+                        backgroundColor: '#d3f54b',
+                        borderRadius: 100,
+                        borderSkipped: false,
+                        barThickness: 32,
+                    }
+                ]
+            };
+
+            const config = {
+                type: 'bar',
+                data: statsData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: '#0a0a0a',
+                            padding: 12,
+                            borderRadius: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return (context.raw * 100).toFixed(0) + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: false,
+                            grid: { display: false },
+                            ticks: {
+                                color: '#999',
+                                font: { size: 11, weight: '600' }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 1.0,
+                            grid: {
+                                color: 'rgba(0,0,0,0.03)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                stepSize: 0.1,
+                                color: '#999',
+                                font: { size: 10, weight: '600' }
+                            }
+                        }
                     }
                 }
-            }
+            };
+
+            new Chart(ctx, config);
         });
-
-        function refreshActivity() {
-            const skeleton = document.getElementById('activity-skeleton');
-            skeleton.classList.replace('d-none', 'd-flex');
-            
-            // Simulate API call
-            setTimeout(() => {
-                skeleton.classList.replace('d-flex', 'd-none');
-                console.log('Activity refreshed');
-            }, 1000);
-        }
-
-        setInterval(refreshActivity, 30000);
     </script>
 }
+
+<style>
+    .xx-small { font-size: 0.65rem; }
+    .bg-gradient-dark {
+        background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));
+    }
+    .btn-white {
+        background: white;
+        color: black;
+        border: none;
+        transition: all 0.2s;
+    }
+    .btn-white:hover {
+        background: #f0f0f0;
+        transform: translateY(-2px);
+    }
+</style>

@@ -1,59 +1,120 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @inject Microsoft.AspNetCore.Mvc.Localization.IHtmlLocalizer<CommunityCar.Web.SharedResource> SharedLocalizer
 
-<!-- Dashboard Left Sidebar -->
-<nav class="d-flex flex-column gap-2 p-3">
-    <div class="small fw-black text-uppercase tracking-widest text-muted opacity-40 px-3 mb-2" style="font-size: 0.6rem;">Management</div>
-    
-    <a asp-controller="Overview" asp-action="Index"
-        class="nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-4 small fw-bold text-uppercase tracking-wider transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Overview" ? "bg-primary-red text-white shadow-sm" : "text-dark hover-bg-light")">
-        <i data-lucide="layout-dashboard" style="width: 18px; height: 18px;"></i>
-        <span>@SharedLocalizer["Overview"]</span>
-    </a>
+<!-- Dashboard Left Sidebar (Refined) -->
+<div class="d-flex flex-column gap-3 w-100">
+    <!-- Management Section -->
+    <div class="sidebar-section-group" data-section-id="management">
+        <div class="sidebar-section-header d-flex align-items-center justify-content-between cursor-pointer" onclick="toggleSection(this)">
+            <div class="sidebar-section-title xx-small fw-black text-uppercase tracking-widest text-muted opacity-40 mb-0">@Localizer["Management"]</div>
+            <i data-lucide="chevron-down" class="section-toggle-icon text-muted opacity-40" style="width: 14px; height: 14px; transition: transform 0.2s;"></i>
+        </div>
+        
+        <div class="sidebar-section-content mt-2 d-flex flex-column gap-2 overflow-hidden" style="transition: all 0.3s ease;">
+            <a asp-controller="Overview" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Overview" ? "active" : "")">
+                <i data-lucide="layout-dashboard" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">@SharedLocalizer["Overview"]</span>
+            </a>
 
-    <a asp-controller="Analytics" asp-action="Index"
-        class="nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-4 small fw-bold text-uppercase tracking-wider transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Analytics" ? "bg-primary-red text-white shadow-sm" : "text-dark hover-bg-light")">
-        <i data-lucide="bar-chart-3" style="width: 18px; height: 18px;"></i>
-        <span>@SharedLocalizer["Analytics"]</span>
-    </a>
+            <a asp-controller="Analytics" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Analytics" ? "active" : "")">
+                <i data-lucide="bar-chart-3" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">@SharedLocalizer["Analytics"]</span>
+            </a>
 
-    <a asp-controller="AIManagement" asp-action="Index"
-        class="nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-4 small fw-bold text-uppercase tracking-wider transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "AIManagement" ? "bg-primary-red text-white shadow-sm" : "text-dark hover-bg-light")">
-        <i data-lucide="brain" style="width: 18px; height: 18px;"></i>
-        <span>AI Management</span>
-    </a>
+            <a asp-controller="Reports" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "")">
+                <i data-lucide="file-text" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">Reports</span>
+            </a>
 
-    <div class="small fw-black text-uppercase tracking-widest text-muted opacity-40 px-3 mt-4 mb-2" style="font-size: 0.6rem;">System</div>
+            <a asp-controller="AIManagement" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AIManagement" ? "active" : "")">
+                <i data-lucide="brain" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">AI Control</span>
+            </a>
+        </div>
+    </div>
 
-    <a asp-controller="Management" asp-action="Index"
-        class="nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-4 small fw-bold text-uppercase tracking-wider transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Management" ? "bg-primary-red text-white shadow-sm" : "text-dark hover-bg-light")">
-        <i data-lucide="settings-2" style="width: 18px; height: 18px;"></i>
-        <span>@SharedLocalizer["AdminControl"]</span>
-    </a>
+    <!-- System Section -->
+    <div class="sidebar-section-group mt-3" data-section-id="system">
+        <div class="sidebar-section-header d-flex align-items-center justify-content-between cursor-pointer" onclick="toggleSection(this)">
+            <div class="sidebar-section-title xx-small fw-black text-uppercase tracking-widest text-muted opacity-40 mb-0">@Localizer["System"]</div>
+            <i data-lucide="chevron-down" class="section-toggle-icon text-muted opacity-40" style="width: 14px; height: 14px; transition: transform 0.2s;"></i>
+        </div>
 
-    <a asp-controller="Errors" asp-action="Index"
-        class="nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-4 small fw-bold text-uppercase tracking-wider transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Errors" ? "bg-primary-red text-white shadow-sm" : "text-dark hover-bg-light")">
-        <i data-lucide="alert-triangle" style="width: 18px; height: 18px;"></i>
-        <span>@SharedLocalizer["ErrorLogs"]</span>
-    </a>
+        <div class="sidebar-section-content mt-2 d-flex flex-column gap-2 overflow-hidden" style="transition: all 0.3s ease;">
+            <a asp-controller="Management" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Management" ? "active" : "")">
+                <i data-lucide="settings-2" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">@SharedLocalizer["AdminControl"]</span>
+            </a>
 
-    <a asp-controller="Monitoring" asp-action="Index"
-        class="nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-4 small fw-bold text-uppercase tracking-wider transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Monitoring" ? "bg-primary-red text-white shadow-sm" : "text-dark hover-bg-light")">
-        <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
-        <span>@SharedLocalizer["Monitoring"]</span>
-    </a>
+            <a asp-controller="Errors" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Errors" ? "active" : "")">
+                <i data-lucide="alert-triangle" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">@SharedLocalizer["ErrorLogs"]</span>
+            </a>
 
-    <a asp-controller="Performance" asp-action="Index"
-        class="nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-4 small fw-bold text-uppercase tracking-wider transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Performance" ? "bg-primary-red text-white shadow-sm" : "text-dark hover-bg-light")">
-        <i data-lucide="gauge" style="width: 18px; height: 18px;"></i>
-        <span>@SharedLocalizer["Performance"]</span>
-    </a>
+            <a asp-controller="Monitoring" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Monitoring" ? "active" : "")">
+                <i data-lucide="activity" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">@SharedLocalizer["Monitoring"]</span>
+            </a>
 
-    <div class="mt-auto pt-4 border-top">
-        <a href="/"
-            class="nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-4 small fw-bold text-uppercase tracking-wider text-dark hover-bg-light">
-            <i data-lucide="home" style="width: 18px; height: 18px;"></i>
-            <span>@SharedLocalizer["BackToSite"]</span>
+            <a asp-controller="Performance" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Performance" ? "active" : "")">
+                <i data-lucide="gauge" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">@SharedLocalizer["Performance"]</span>
+            </a>
+            
+            <a asp-controller="BackgroundJobs" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "BackgroundJobs" ? "active" : "")">
+                <i data-lucide="cpu" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">Jobs</span>
+            </a>
+
+             <a asp-controller="Cache" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cache" ? "active" : "")">
+                <i data-lucide="database" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">Cache</span>
+            </a>
+
+             <a asp-controller="SEO" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "SEO" ? "active" : "")">
+                <i data-lucide="globe" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">SEO</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Configuration Section -->
+    <div class="sidebar-section-group mt-3" data-section-id="config">
+        <div class="sidebar-section-header d-flex align-items-center justify-content-between cursor-pointer" onclick="toggleSection(this)">
+            <div class="sidebar-section-title xx-small fw-black text-uppercase tracking-widest text-muted opacity-40 mb-0">Configuration</div>
+            <i data-lucide="chevron-down" class="section-toggle-icon text-muted opacity-40" style="width: 14px; height: 14px; transition: transform 0.2s;"></i>
+        </div>
+
+        <div class="sidebar-section-content mt-2 d-flex flex-column gap-2 overflow-hidden" style="transition: all 0.3s ease;">
+             <a asp-controller="Localization" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Localization" ? "active" : "")">
+                <i data-lucide="languages" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">Localization</span>
+            </a>
+            
+             <a asp-controller="Settings" asp-action="Index"
+                class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")">
+                <i data-lucide="sliders" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small uppercase tracking-wide">Settings</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="sidebar-footer mt-auto pt-4 border-top border-white border-opacity-5">
+        <a href="/" class="sidebar-nav-link text-muted">
+            <i data-lucide="home" class="sidebar-icon" style="width: 20px; height: 20px;"></i>
+            <span class="sidebar-text small uppercase tracking-wide">@SharedLocalizer["BackToSite"]</span>
         </a>
     </div>
-</nav>
+</div>

@@ -2,7 +2,7 @@
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["DashboardOverview"];
-    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    Layout = "_DashboardLayout";
 }
 
 <div class="d-flex flex-column gap-5 animate-in fade-in duration-700">
@@ -20,17 +20,17 @@
                 <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.1s">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="w-12 h-12 rounded-4 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center group-hover:scale-110 transition-all">
-                                <i data-lucide="users" class="w-6 h-6"></i>
+                            <div class="w-48px h-48px rounded-4 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center group-hover-scale-110 transition-all">
+                                <i data-lucide="users" class="w-24px h-24px"></i>
                             </div>
                             <div>
-                                <div class="h2 fw-black text-gradient mb-0">@Model.Stats.TotalUsers.ToString("N0")</div>
-                                <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@SharedLocalizer["TotalUsers"]</div>
+                                <div class="h2 fw-black text-gradient-red mb-0">@Model.Stats.TotalUsers.ToString("N0")</div>
+                                <div class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@SharedLocalizer["TotalUsers"]</div>
                             </div>
                         </div>
-                        <div class="text-[10px] fw-bold text-success d-flex align-items-center">
-                            <i data-lucide="arrow-up" class="w-3 h-3 me-1"></i> +@Model.Stats.GrowthRate%
-                            <span class="opacity-50 ms-1 fw-medium">@Localizer["ThisMonth"]</span>
+                        <div class="xx-small fw-bold text-success d-flex align-items-center">
+                            <i data-lucide="arrow-up" class="w-12px h-12px me-1"></i> +@Model.Stats.GrowthRate%
+                            <span class="opacity-50 ms-1 fw-medium text-muted">@Localizer["ThisMonth"]</span>
                         </div>
                     </div>
                 </div>
@@ -40,15 +40,15 @@
                 <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.2s">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="w-12 h-12 rounded-4 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center group-hover:scale-110 transition-all">
-                                <i data-lucide="pencil" class="w-6 h-6"></i>
+                            <div class="w-48px h-48px rounded-4 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center group-hover-scale-110 transition-all">
+                                <i data-lucide="pencil" class="w-24px h-24px"></i>
                             </div>
                             <div>
-                                <div class="h2 fw-black text-gradient mb-0">@Model.Stats.TotalPosts.ToString("N0")</div>
-                                <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@SharedLocalizer["TotalPosts"]</div>
+                                <div class="h2 fw-black text-gradient-red mb-0">@Model.Stats.TotalPosts.ToString("N0")</div>
+                                <div class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@SharedLocalizer["TotalPosts"]</div>
                             </div>
                         </div>
-                        <div class="text-[10px] fw-bold text-muted-foreground opacity-60 uppercase tracking-widest">
+                        <div class="xx-small fw-bold text-muted opacity-60 text-uppercase tracking-widest">
                             @Localizer["ActiveToday"]: <span class="text-foreground fw-black">@Model.Stats.ActiveUsersToday</span>
                         </div>
                     </div>
@@ -59,15 +59,15 @@
                 <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.3s">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="w-12 h-12 rounded-4 bg-indigo bg-opacity-10 text-indigo d-flex align-items-center justify-content-center group-hover:scale-110 transition-all">
-                                <i data-lucide="message-square" class="w-6 h-6"></i>
+                            <div class="w-48px h-48px rounded-4 bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center group-hover-scale-110 transition-all">
+                                <i data-lucide="message-square" class="w-24px h-24px"></i>
                             </div>
                             <div>
-                                <div class="h2 fw-black text-gradient mb-0">@Model.Stats.TotalComments.ToString("N0")</div>
-                                <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@SharedLocalizer["TotalComments"]</div>
+                                <div class="h2 fw-black text-gradient-red mb-0">@Model.Stats.TotalComments.ToString("N0")</div>
+                                <div class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@SharedLocalizer["TotalComments"]</div>
                             </div>
                         </div>
-                        <div class="text-[10px] fw-bold text-indigo d-flex align-items-center uppercase tracking-widest">
+                        <div class="xx-small fw-bold text-info d-flex align-items-center text-uppercase tracking-widest">
                             @Localizer["Engagement"]: <span class="fw-black ms-1">@Model.Stats.EngagementRate%</span>
                         </div>
                     </div>
@@ -78,15 +78,15 @@
                 <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.4s">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="w-12 h-12 rounded-4 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center group-hover:scale-110 transition-all">
-                                <i data-lucide="help-circle" class="w-6 h-6"></i>
+                            <div class="w-48px h-48px rounded-4 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center group-hover-scale-110 transition-all">
+                                <i data-lucide="help-circle" class="w-24px h-24px"></i>
                             </div>
                             <div>
-                                <div class="h2 fw-black text-gradient mb-0">@(Model.Stats.TotalQuestions + Model.Stats.TotalAnswers)</div>
-                                <div class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@SharedLocalizer["QAItems"]</div>
+                                <div class="h2 fw-black text-gradient-red mb-0">@(Model.Stats.TotalQuestions + Model.Stats.TotalAnswers)</div>
+                                <div class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@SharedLocalizer["QAItems"]</div>
                             </div>
                         </div>
-                        <div class="text-[10px] fw-bold text-warning d-flex align-items-center uppercase tracking-widest">
+                        <div class="xx-small fw-bold text-warning d-flex align-items-center text-uppercase tracking-widest">
                             @Model.Stats.TotalQuestions Q / @Model.Stats.TotalAnswers A
                         </div>
                     </div>
@@ -99,15 +99,15 @@
     <div class="row g-4">
         <div class="col-12 col-xl-8">
             <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0 d-flex justify-content-between align-items-center">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="trending-up" style="width: 18px;"></i>
+                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4 d-flex justify-content-between align-items-center">
+                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
+                        <i data-lucide="trending-up" class="w-18px h-18px"></i>
                         @Localizer["UserGrowthTrend"]
                     </h5>
                     <div class="btn-group btn-group-sm rounded-3 overflow-hidden border">
-                        <button type="button" class="btn btn-muted-subtle text-[10px] fw-black px-3 py-1 active" data-period="7">7D</button>
-                        <button type="button" class="btn btn-muted-subtle text-[10px] fw-black px-3 py-1" data-period="30">30D</button>
-                        <button type="button" class="btn btn-muted-subtle text-[10px] fw-black px-3 py-1" data-period="90">90D</button>
+                        <button type="button" class="btn btn-muted bg-opacity-10 text-xx-small fw-black px-3 py-1 active" data-period="7">7D</button>
+                        <button type="button" class="btn btn-muted bg-opacity-10 text-xx-small fw-black px-3 py-1" data-period="30">30D</button>
+                        <button type="button" class="btn btn-muted bg-opacity-10 text-xx-small fw-black px-3 py-1" data-period="90">90D</button>
                     </div>
                 </div>
                 <div class="card-body p-4">
@@ -123,17 +123,17 @@
 
         <div class="col-12 col-xl-4">
             <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="activity" style="width: 18px;"></i>
+                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4">
+                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
+                        <i data-lucide="activity" class="w-18px h-18px"></i>
                         @Localizer["SystemMonitoring"]
                     </h5>
                 </div>
                 <div class="card-body p-4 d-flex flex-column gap-4">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h6 class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60 mb-0">@Localizer["Status"]</h6>
-                        <span class="badge rounded-pill d-flex align-items-center gap-2 px-3 py-2 text-[10px] fw-black text-uppercase tracking-widest @(Model.SystemHealth.IsHealthy ? "bg-success bg-opacity-10 text-success border border-success border-opacity-20" : "bg-danger bg-opacity-10 text-danger border border-danger border-opacity-20 animate-pulse")">
-                            <span class="w-1.5 h-1.5 rounded-full bg-current @(Model.SystemHealth.IsHealthy ? "" : "animate-ping")"></span>
+                        <h6 class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60 mb-0">@Localizer["Status"]</h6>
+                        <span class="badge rounded-pill d-flex align-items-center gap-2 px-3 py-2 xx-small fw-black text-uppercase tracking-widest @(Model.SystemHealth.IsHealthy ? "bg-success bg-opacity-10 text-success border border-success border-opacity-20" : "bg-danger bg-opacity-10 text-danger border border-danger border-opacity-20 animate-pulse")">
+                            <span class="w-6px h-6px rounded-full bg-current @(Model.SystemHealth.IsHealthy ? "" : "animate-ping")"></span>
                             @(Model.SystemHealth.IsHealthy ? Localizer["Healthy"] : Localizer["IssuesDetected"])
                         </span>
                     </div>
@@ -141,38 +141,38 @@
                     <div class="d-flex flex-column gap-4">
                         <div class="d-flex flex-column gap-2">
                             <div class="d-flex justify-content-between align-items-end">
-                                <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["CpuUsage"]</span>
-                                <span class="text-sm fw-black tabular-nums">@Model.SystemHealth.CpuUsage%</span>
+                                <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["CpuUsage"]</span>
+                                <span class="small fw-black tabular-nums">@Model.SystemHealth.CpuUsage%</span>
                             </div>
-                            <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
+                            <div class="progress rounded-pill bg-muted bg-opacity-10" style="height: 6px;">
                                 <div class="progress-bar bg-primary rounded-pill transition-all" style="width: @Model.SystemHealth.CpuUsage%"></div>
                             </div>
                         </div>
 
                         <div class="d-flex flex-column gap-2">
                             <div class="d-flex justify-content-between align-items-end">
-                                <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["MemoryUsage"]</span>
-                                <span class="text-sm fw-black tabular-nums">@Model.SystemHealth.MemoryUsage%</span>
+                                <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["MemoryUsage"]</span>
+                                <span class="small fw-black tabular-nums">@Model.SystemHealth.MemoryUsage%</span>
                             </div>
-                            <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
+                            <div class="progress rounded-pill bg-muted bg-opacity-10" style="height: 6px;">
                                 <div class="progress-bar bg-success rounded-pill transition-all" style="width: @Model.SystemHealth.MemoryUsage%"></div>
                             </div>
                         </div>
 
                         <div class="d-flex flex-column gap-2">
                             <div class="d-flex justify-content-between align-items-end">
-                                <span class="text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground opacity-60">@Localizer["DiskUsage"]</span>
-                                <span class="text-sm fw-black tabular-nums">@Model.SystemHealth.DiskUsage%</span>
+                                <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["DiskUsage"]</span>
+                                <span class="small fw-black tabular-nums">@Model.SystemHealth.DiskUsage%</span>
                             </div>
-                            <div class="progress rounded-pill bg-muted-subtle shadow-inner" style="height: 6px;">
+                            <div class="progress rounded-pill bg-muted bg-opacity-10" style="height: 6px;">
                                 <div class="progress-bar bg-warning rounded-pill transition-all" style="width: @Model.SystemHealth.DiskUsage%"></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="pt-3 mt-2 border-top border-border border-opacity-30">
-                        <div class="d-flex align-items-center gap-2 text-[10px] fw-black text-muted-foreground text-uppercase tracking-widest opacity-60">
-                            <i data-lucide="clock" class="w-3 h-3"></i> @Localizer["LastCheck"]: <span class="text-foreground">@Model.SystemHealth.LastCheck.ToString("HH:mm")</span>
+                        <div class="d-flex align-items-center gap-2 xx-small fw-black text-muted text-uppercase tracking-widest opacity-60">
+                            <i data-lucide="clock" class="w-12px h-12px"></i> @Localizer["LastCheck"]: <span class="text-foreground">@Model.SystemHealth.LastCheck.ToString("HH:mm")</span>
                         </div>
                     </div>
                 </div>
@@ -184,27 +184,27 @@
     <div class="row g-4">
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0 d-flex justify-content-between align-items-center">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="history" style="width: 18px;"></i>
+                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4 d-flex justify-content-between align-items-center">
+                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
+                        <i data-lucide="history" class="w-18px h-18px"></i>
                         @Localizer["RecentActivity"]
                     </h5>
-                    <button class="btn btn-link p-1 text-muted-foreground hover-text-primary-red transition-all group/refresh" data-action="refresh-activity">
-                        <i data-lucide="refresh-cw" class="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"></i>
+                    <button class="btn btn-link p-1 text-muted hover-text-primary transition-all group-refresh" data-action="refresh-activity">
+                        <i data-lucide="refresh-cw" class="w-16px h-16px group-hover-rotate-180 transition-transform duration-500"></i>
                     </button>
                 </div>
-                <div class="card-body p-4 pt-4">
+                <div class="card-body p-4">
                     <div class="d-flex flex-column gap-1 overflow-auto no-scrollbar" style="max-height: 400px;" id="activityList">
                         @foreach (var activity in Model.RecentActivity)
                         {
-                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 hover-bg-muted-subtle transition-all group/activity cursor-default">
-                                <div class="w-10 h-10 rounded-4 flex-shrink-0 d-flex align-items-center justify-content-center text-white shadow-lg group-hover/activity:scale-110 transition-transform @(activity.Color == "blue" ? "bg-primary" : activity.Color == "green" ? "bg-success" : activity.Color == "amber" ? "bg-warning" : "bg-primary-red")">
-                                    <i data-lucide="@activity.Icon" class="w-5 h-5"></i>
+                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 hover-bg-muted bg-opacity-5 transition-all group-activity cursor-default">
+                                <div class="w-40px h-40px rounded-4 flex-shrink-0 d-flex align-items-center justify-content-center text-white shadow-lg group-hover-scale-110 transition-transform @(activity.Color == "blue" ? "bg-primary" : activity.Color == "green" ? "bg-success" : activity.Color == "amber" ? "bg-warning" : "bg-danger")">
+                                    <i data-lucide="@activity.Icon" class="w-20px h-20px"></i>
                                 </div>
                                 <div class="min-w-0 flex-1">
-                                    <div class="text-[13px] fw-black text-foreground truncate">@activity.Description</div>
-                                    <div class="d-flex align-items-center gap-2 mt-1 text-[10px] fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60">
-                                        <span class="text-primary-red">@activity.UserName</span>
+                                    <div class="text-sm fw-black text-foreground truncate">@activity.Description</div>
+                                    <div class="d-flex align-items-center gap-2 mt-1 xx-small fw-bold text-muted text-uppercase tracking-widest opacity-60">
+                                        <span class="text-primary">@activity.UserName</span>
                                         <span>•</span>
                                         <span>@activity.TimeAgo</span>
                                     </div>
@@ -218,26 +218,26 @@
 
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="trending-up" style="width: 18px;"></i>
+                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4">
+                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
+                        <i data-lucide="trending-up" class="w-18px h-18px"></i>
                         @Localizer["TopContent"]
                     </h5>
                 </div>
-                <div class="card-body p-4 pt-4">
+                <div class="card-body p-4">
                     <div class="d-flex flex-column gap-1">
                         @foreach (var content in Model.TopContent)
                         {
-                            <div class="p-3 rounded-4 hover-bg-muted-subtle transition-all group/content cursor-default">
-                                <h6 class="text-[13px] fw-black text-foreground truncate group-hover/content:text-primary-red transition-colors mb-2">@content.Title</h6>
+                            <div class="p-3 rounded-4 hover-bg-muted bg-opacity-5 transition-all group-content cursor-default">
+                                <h6 class="text-sm fw-black text-foreground truncate group-hover-text-primary transition-colors mb-2">@content.Title</h6>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center gap-2">
-                                        <span class="badge bg-muted-subtle border text-[8px] fw-black text-uppercase tracking-tighter text-muted-foreground">@content.Type</span>
-                                        <span class="text-[9px] fw-bold text-muted-foreground opacity-60">by @content.AuthorName</span>
+                                        <span class="badge bg-muted bg-opacity-10 border border-border text-xx-small fw-black text-uppercase tracking-tighter text-muted">@content.Type</span>
+                                        <span class="xx-small fw-bold text-muted opacity-60">by @content.AuthorName</span>
                                     </div>
-                                    <div class="d-flex align-items-center gap-3 text-[10px] fw-black text-muted-foreground text-uppercase tracking-widest opacity-50">
-                                        <div class="d-flex align-items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> @content.Views</div>
-                                        <div class="d-flex align-items-center gap-1"><i data-lucide="heart" class="w-3 h-3 text-primary-red text-opacity-60 group-hover/content:text-opacity-100 transition-all"></i> @content.Likes</div>
+                                    <div class="d-flex align-items-center gap-3 xx-small fw-black text-muted text-uppercase tracking-widest opacity-50">
+                                        <div class="d-flex align-items-center gap-1"><i data-lucide="eye" class="w-12px h-12px"></i> @content.Views</div>
+                                        <div class="d-flex align-items-center gap-1"><i data-lucide="heart" class="w-12px h-12px text-danger text-opacity-60 group-hover-opacity-100 transition-all"></i> @content.Likes</div>
                                     </div>
                                 </div>
                             </div>
@@ -249,25 +249,25 @@
 
         <div class="col-12 col-md-12 col-lg-4">
             <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-0 bg-transparent p-4 pb-0">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-wider small text-primary-red mb-0">
-                        <i data-lucide="users" style="width: 18px;"></i>
+                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4">
+                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
+                        <i data-lucide="users" class="w-18px h-18px"></i>
                         @Localizer["ActiveUsers"]
                     </h5>
                 </div>
-                <div class="card-body p-4 pt-4">
+                <div class="card-body p-4">
                     <div class="d-flex flex-column gap-1">
                         @foreach (var user in Model.ActiveUsers)
                         {
-                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 hover-bg-muted-subtle transition-all group/user cursor-default">
-                                <div class="w-10 h-10 rounded-circle bg-muted-subtle flex-shrink-0 position-relative border border-border transition-all group-hover/user:border-primary-red">
+                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 hover-bg-muted bg-opacity-5 transition-all group-user cursor-default">
+                                <div class="w-40px h-40px rounded-circle bg-muted bg-opacity-10 flex-shrink-0 position-relative border border-border transition-all group-hover-border-primary">
                                     @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
                                     {
                                         <img src="@user.ProfilePictureUrl" alt="@user.UserName" class="w-100 h-100 rounded-circle object-cover" />
                                     }
                                     else
                                     {
-                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted-foreground fw-black text-xs uppercase">
+                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted fw-black text-xx-small uppercase">
                                             @user.UserName.Substring(0, 1)
                                         </div>
                                     }
@@ -277,12 +277,12 @@
                                     }
                                 </div>
                                 <div class="min-w-0 flex-1">
-                                    <div class="text-[13px] fw-black text-foreground truncate group-hover/user:text-primary-red transition-colors">@user.UserName</div>
-                                    <div class="text-[10px] fw-bold text-muted-foreground text-uppercase tracking-widest opacity-60 truncate">@user.LastActivityText</div>
+                                    <div class="text-sm fw-black text-foreground truncate group-hover-text-primary transition-colors">@user.UserName</div>
+                                    <div class="xx-small fw-bold text-muted text-uppercase tracking-widest opacity-60 truncate">@user.LastActivityText</div>
                                 </div>
                                 <div class="text-end">
-                                    <div class="text-sm fw-black text-foreground tabular-nums">@user.PostsCount</div>
-                                    <div class="text-[8px] fw-black text-muted-foreground text-uppercase tracking-widest opacity-50">@Localizer["Posts"]</div>
+                                    <div class="small fw-black text-foreground tabular-nums">@user.PostsCount</div>
+                                    <div class="xx-small fw-black text-muted text-uppercase tracking-widest opacity-50">@Localizer["Posts"]</div>
                                 </div>
                             </div>
                         }

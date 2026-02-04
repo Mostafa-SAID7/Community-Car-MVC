@@ -121,7 +121,7 @@
             const content = document.getElementById('resultsContent');
             if (container && content) {
                 content.textContent = JSON.stringify(data, null, 2);
-                container.classList.remove('hidden');
+                container.classList.remove('d-none');
                 container.scrollIntoView({ behavior: 'smooth' });
             }
         }

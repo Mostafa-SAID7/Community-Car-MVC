@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
-using CommunityCar.Application.Common.Models.Caching;
+using CommunityCar.Application.Configuration.Caching;
 using Microsoft.Extensions.Logging;
 
 namespace CommunityCar.Application.Services.Dashboard.BackgroundJobs;

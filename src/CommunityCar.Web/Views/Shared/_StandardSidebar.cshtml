@@ -1,0 +1,125 @@
+@using CommunityCar.Domain.Constants
+@using CommunityCar.Web.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    var sidebarConfig = ViewData["SidebarConfig"] as SidebarConfig ?? new SidebarConfig();
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var currentPath = Context.Request.Path.Value ?? "";
+    
+    Func<string, string, bool> isActive = (controller, action) => 
+    {
+        var routeData = ViewContext.RouteData.Values;
+        return string.Equals(routeData["controller"]?.ToString(), controller, StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(routeData["action"]?.ToString(), action, StringComparison.OrdinalIgnoreCase);
+    };
+}
+
+<!-- Standardized Left Sidebar -->
+<div class="standard-sidebar d-flex flex-column flex-shrink-0 p-3 h-100">
+    @if (!string.IsNullOrEmpty(sidebarConfig.Title))
+    {
+        <div class="sidebar-header mb-4">
+            <h6 class="sidebar-title fw-black text-uppercase tracking-widest text-muted opacity-60">
+                @sidebarConfig.Title
+            </h6>
+        </div>
+    }
+
+    <nav class="flex-grow-1">
+        <ul class="nav nav-pills flex-column mb-auto gap-2">
+            @foreach (var section in sidebarConfig.Sections)
+            {
+                @if (!string.IsNullOrEmpty(section.Title))
+                {
+                    <li class="nav-item">
+                        <div class="sidebar-section-title xx-small fw-black text-uppercase tracking-widest text-muted opacity-40 mb-2 mt-3">
+                            @section.Title
+                        </div>
+                    </li>
+                }
+
+                @foreach (var item in section.Items)
+                {
+                    <li class="nav-item">
+                        @if (item.IsExternal)
+                        {
+                            <a href="@item.Url" 
+                               target="_blank"
+                               class="nav-link sidebar-nav-link d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                                <i data-lucide="@item.Icon" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
+                                <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer[item.Text]</span>
+                                <i data-lucide="external-link" class="ms-auto opacity-50" style="width: 14px; height: 14px;"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="@item.Controller" 
+                               asp-action="@item.Action" 
+                               asp-route-culture="@currentCulture"
+                               asp-route-id="@item.RouteId"
+                               class="nav-link sidebar-nav-link @(isActive(item.Controller, item.Action) ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                                <i data-lucide="@item.Icon" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
+                                <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer[item.Text]</span>
+                                @if (item.Badge > 0)
+                                {
+                                    <span class="badge bg-primary-red text-white rounded-pill ms-auto">@item.Badge</span>
+                                }
+                            </a>
+                        }
+                    </li>
+                }
+
+                @if (section != sidebarConfig.Sections.Last() && section.Items.Any())
+                {
+                    <li class="nav-item">
+                        <hr class="sidebar-divider my-3 opacity-10">
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+    
+    @if (sidebarConfig.ShowUserProfile)
+    {
+        <div class="sidebar-footer mt-auto px-1 pt-4 pb-2">
+            <div class="dropdown">
+                @{
+                    var isStaff = User.IsInRole(Roles.SuperAdmin) || 
+                                  User.IsInRole(Roles.ContentAdmin) || 
+                                  User.IsInRole(Roles.DesignAdmin) || 
+                                  User.IsInRole(Roles.DatabaseAdmin);
+                    var profileLabel = isStaff ? Localizer["AdminProfile"] : Localizer["MyProfile"];
+                }
+                <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle p-2 rounded-4 hover-light animate-heartbeat" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-container p-0 border-0 me-3 shadow-sm">
+                        <i data-lucide="user" class="bi text-primary-red bg-primary-subtle rounded-circle p-2" style="width: 40px; height: 40px;"></i>
+                    </div>
+                    <strong class="small text-uppercase tracking-tight">@profileLabel</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark shadow-lg border-0 rounded-4 p-2 animate-in slide-in-from-bottom-2 duration-300">
+                    <li><a class="dropdown-item rounded-3 py-2" asp-controller="Profile" asp-action="Index">@Localizer["MyProfile"]</a></li>
+                    <li><a class="dropdown-item rounded-3 py-2" asp-controller="ProfileSettings" asp-action="Index">@Localizer["Settings"]</a></li>
+                    <li><hr class="dropdown-divider opacity-10"></li>
+                    <li>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="px-2">
+                             <button type="submit" class="dropdown-item rounded-3 py-2 text-danger fw-bold">@Localizer["Logout"]</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    }
+
+    @if (sidebarConfig.ShowBackToSite)
+    {
+        <div class="sidebar-footer mt-auto pt-4 border-top border-white border-opacity-5">
+            <a href="/" class="sidebar-nav-link text-muted d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
+                <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                <span class="sidebar-text small text-uppercase tracking-wide">@Localizer["BackToSite"]</span>
+            </a>
+        </div>
+    }
+</div>
+

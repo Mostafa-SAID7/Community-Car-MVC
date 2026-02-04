@@ -2,216 +2,119 @@
 @model IEnumerable<CommunityCar.Application.Features.Dashboard.ViewModels.SettingsVM>
 @{
     ViewData["Title"] = Localizer["DashboardSettings"];
-    ViewData["PageType"] = "Settings";
+    Layout = "_DashboardLayout";
+    ViewData["UseModernTheme"] = true;
     var category = ViewBag.Category as string;
     var categories = ViewBag.Categories as string[] ?? new string[0];
 }
 
-<div class="space-y-8 animate-in fade-in duration-700">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="animate-slide-up">
+    <!-- Top Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
-            <h1 class="text-3xl font-black text-foreground tracking-tight">@Localizer["DashboardSettings"]</h1>
-            <p class="text-sm text-muted-foreground font-medium opacity-70 mt-1">@Localizer["ManageYourDashboardPreferences"]</p>
+            <h1 class="page-title mb-2">@Localizer["DashboardSettings"]</h1>
+            <p class="text-muted fw-medium">@Localizer["ManageYourDashboardPreferences"]</p>
         </div>
     </div>
 
-    <!-- Success/Error Messages -->
+    <!-- Alert Section -->
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="mb-6 bg-success-50 border border-success-200 text-success-700 px-6 py-4 rounded-2xl shadow-lg shadow-success-500/10 animate-in slide-in-from-top duration-300">
-            <div class="flex items-center gap-3">
-                <i data-lucide="check-circle" class="w-5 h-5"></i>
-                <span class="font-medium">@TempData["SuccessMessage"]</span>
+        <div class="alert card-modern border-success border-opacity-20 d-flex align-items-center gap-3 p-3 mb-4 animate-slide-up">
+            <div class="w-8 h-8 rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center text-success">
+                <i data-lucide="check" class="w-4 h-4"></i>
             </div>
-        </div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="mb-6 bg-error-50 border border-error-200 text-error-700 px-6 py-4 rounded-2xl shadow-lg shadow-error-500/10 animate-in slide-in-from-top duration-300">
-            <div class="flex items-center gap-3">
-                <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                <span class="font-medium">@TempData["ErrorMessage"]</span>
-            </div>
+            <span class="small fw-bold text-success">@TempData["SuccessMessage"]</span>
         </div>
     }
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <!-- Categories Sidebar -->
-        <div class="lg:col-span-1">
-            <div class="eng-card hover-lift">
-                <div class="eng-card-header">
-                    <h3 class="eng-card-title">@Localizer["Categories"]</h3>
-                    <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-                </div>
-                <div class="eng-card-content">
-                    <nav class="space-y-2">
-                        <a href="@Url.Action("Index", "Settings", new { area = "" })" 
-                           class="@(string.IsNullOrEmpty(category) ? "bg-primary/10 text-primary border-primary/20 shadow-glow-primary" : "text-foreground/70 hover:text-primary hover:bg-primary/5") block px-4 py-3 rounded-xl text-sm font-medium border border-border/30 transition-all duration-300 hover:border-primary/20 hover:shadow-md group">
-                            <div class="flex items-center gap-3">
-                                <i data-lucide="list" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
-                                @Localizer["AllSettings"]
-                            </div>
+    <div class="row g-4 modern-gap">
+        <!-- Sidebar Navigation -->
+        <div class="col-12 col-lg-3">
+            <div class="card-modern p-3">
+                <p class="modern-label mb-3 px-2">CATEGORIES</p>
+                <div class="d-flex flex-column gap-1">
+                    <a href="@Url.Action("Index", "Settings", new { area = "" })" 
+                       class="modern-settings-nav-item @(string.IsNullOrEmpty(category) ? "active" : "")">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                        @Localizer["AllSettings"]
+                    </a>
+                    @foreach (var cat in categories)
+                    {
+                        <a href="@Url.Action("Category", "Settings", new { category = cat })" 
+                           class="modern-settings-nav-item @(category == cat ? "active" : "")">
+                            <i data-lucide="@(cat.ToLower() switch { "display" => "monitor", "notifications" => "bell", "performance" => "gauge", "security" => "shield", _ => "settings" })" class="w-4 h-4"></i>
+                            @cat
                         </a>
-                        @foreach (var cat in categories)
-                        {
-                            <a href="@Url.Action("Category", "Settings", new { category = cat })" 
-                               class="@(category == cat ? "bg-primary/10 text-primary border-primary/20 shadow-glow-primary" : "text-foreground/70 hover:text-primary hover:bg-primary/5") block px-4 py-3 rounded-xl text-sm font-medium border border-border/30 transition-all duration-300 hover:border-primary/20 hover:shadow-md group">
-                                <div class="flex items-center gap-3">
-                                    <i data-lucide="@(cat.ToLower() switch { "display" => "monitor", "notifications" => "bell", "performance" => "gauge", "security" => "shield", _ => "settings" })" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
-                                    @cat
-                                </div>
-                            </a>
-                        }
-                    </nav>
+                    }
                 </div>
             </div>
         </div>
 
-        <!-- Settings Content -->
-        <div class="lg:col-span-3">
-            <div class="eng-card hover-lift">
-                <div class="eng-card-header">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                            <i data-lucide="@(category?.ToLower() switch { "display" => "monitor", "notifications" => "bell", "performance" => "gauge", "security" => "shield", _ => "settings" })" class="w-4 h-4"></i>
-                        </div>
-                        <h2 class="text-xl font-bold text-foreground">
-                            @if (!string.IsNullOrEmpty(category))
-                            {
-                                @string.Format(Localizer["CategorySettings"].Value, category)
-                            }
-                            else
-                            {
-                                @Localizer["AllSettings"]
-                            }
-                        </h2>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 rounded-full bg-success animate-pulse"></div>
-                        <span class="eng-stat-label">Live</span>
-                    </div>
-                </div>
-                            {
-                                @Localizer["AllSettings"]
-                            }
-                        </h2>
-                    </div>
-                </div>
+        <!-- Settings List -->
+        <div class="col-12 col-lg-9">
+            <div class="card-modern p-4">
+                <h5 class="fw-black mb-4 d-flex align-items-center gap-2">
+                    <i data-lucide="sliders" class="w-5 h-5 opacity-40"></i>
+                    @(category ?? @Localizer["AllSettings"].Value)
+                </h5>
 
-                <div class="eng-card-content">
-                    <div id="settings-skeleton" class="hidden space-y-6">
-                        @for (int i = 0; i < 5; i++)
+                <div class="d-flex flex-column">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var setting in Model)
                         {
-                            <div class="eng-card border-border/30">
-                                <div class="eng-card-content p-4">
-                                    <div class="skeleton h-4 w-3/4 mb-2"></div>
-                                    <div class="skeleton h-3 w-1/2"></div>
+                            <div class="modern-settings-action-row">
+                                <div>
+                                    <div class="fw-bold text-dark">@setting.SettingKey</div>
+                                    <div class="xx-small text-muted text-uppercase tracking-widest mt-1">CAT: @setting.Category</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <form asp-action="UpdateSetting" method="post" class="d-flex align-items-center gap-2">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="SettingKey" value="@setting.SettingKey" />
+                                        <input type="hidden" name="Category" value="@setting.Category" />
+                                        <input type="text" name="Value" value="@setting.Value" 
+                                               class="modern-input py-1 px-3" 
+                                               style="width: 140px; font-size: 0.85rem" />
+                                        <button type="submit" class="btn-modern-primary py-1 px-3" style="font-size: 0.75rem">
+                                            @Localizer["Update"]
+                                        </button>
+                                    </form>
+                                    <form asp-action="ResetSetting" asp-route-settingKey="@setting.SettingKey" method="post" class="reset-setting-form">
+                                        @Html.AntiForgeryToken()
+                                        <button type="button" class="btn-icon-modern" data-action="confirm-reset">
+                                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         }
-                    </div>
-                    <div id="settings-content">
-                        @if (Model != null && Model.Any())
-                        {
-                            <div class="space-y-4">
-                                @foreach (var setting in Model)
-                                {
-                                    <div class="eng-card border-border/30 hover:border-primary/20 transition-all duration-300 group hover-lift">
-                                        <div class="eng-card-content">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex-1">
-                                                    <div class="flex items-center gap-3 mb-2">
-                                                        <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                                            <i data-lucide="settings" class="text-primary w-4 h-4"></i>
-                                                        </div>
-                                                        <h4 class="text-sm font-bold text-foreground">@setting.SettingKey</h4>
-                                                    </div>
-                                                    <p class="eng-stat-label ml-11">
-                                                        @Localizer["CategoryLabel"]: <span class="text-primary font-medium">@setting.Category</span>
-                                                    </p>
-                                                </div>
-                                                <div class="flex items-center space-x-3">
-                                                    <form asp-action="UpdateSetting" method="post" class="inline-flex items-center space-x-3">
-                                                        @Html.AntiForgeryToken()
-                                                        <input type="hidden" name="SettingKey" value="@setting.SettingKey" />
-                                                        <input type="hidden" name="Category" value="@setting.Category" />
-                                                        <div class="relative">
-                                                            <input type="text" name="Value" value="@setting.Value" 
-                                                                   class="input w-48 h-10 text-sm bg-background/50 border-border/50 focus:border-primary/50 focus:ring-primary/20" 
-                                                                   placeholder="Enter value..." />
-                                                        </div>
-                                                        <button type="submit" 
-                                                                class="btn btn-primary btn-sm px-4 py-2 btn-gradient hover:shadow-glow-primary transition-all duration-300">
-                                                            <i data-lucide="save" class="w-4 h-4 mr-2"></i>
-                                                            @Localizer["Update"]
-                                                        </button>
-                                                    </form>
-                                                    <form asp-action="ResetSetting" asp-route-settingKey="@setting.SettingKey" method="post" class="inline reset-setting-form">
-                                                        @Html.AntiForgeryToken()
-                                                        <button type="button" 
-                                                                class="btn btn-outline btn-sm px-4 py-2 text-muted-foreground hover:text-foreground hover:border-border transition-all duration-300"
-                                                                data-action="confirm-reset">
-                                                            <i data-lucide="undo-2" class="w-4 h-4 mr-2"></i>
-                                                            @Localizer["Reset"]
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                                
-                            <!-- Reset All Settings -->
-                            <div class="mt-8 pt-6 border-t border-border/30">
-                                <div class="eng-card border-destructive/20 hover:border-destructive/30 transition-all duration-300 hover-lift">
-                                    <div class="eng-card-content">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-4">
-                                                <div class="eng-stat-icon-wrap bg-destructive/10 text-destructive">
-                                                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-                                                </div>
-                                                <div>
-                                                    <h3 class="text-lg font-bold text-foreground">@Localizer["ResetAllSettings"]</h3>
-                                                    <p class="eng-stat-label mt-1">@Localizer["ResetAllDescription"]</p>
-                                                </div>
-                                            </div>
-                                            <form asp-action="ResetAllSettings" method="post" class="inline reset-all-settings-form">
-                                                @Html.AntiForgeryToken()
-                                                <button type="button" 
-                                                        class="btn btn-destructive px-6 py-3 hover:shadow-glow-destructive transition-all duration-300"
-                                                        data-action="confirm-reset-all">
-                                                    <i data-lucide="trash-2" class="w-4 h-4 mr-2"></i>
-                                                    @Localizer["ResetAllSettings"]
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
+
+                        <!-- Danger Zone -->
+                        <div class="mt-5 pt-4 border-top">
+                            <div class="card-modern border-danger border-opacity-10 bg-danger bg-opacity-5 p-4 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="fw-black text-danger mb-1">RESET EVERYTHING</h6>
+                                    <p class="xx-small text-muted fw-bold mb-0">RETURN ALL CONFIGURATIONS TO DEFAULTS</p>
                                 </div>
+                                <form asp-action="ResetAllSettings" method="post" class="reset-all-settings-form">
+                                    @Html.AntiForgeryToken()
+                                    <button type="button" class="btn-modern-primary bg-danger border-danger py-2 px-4 shadow-none" data-action="confirm-reset-all">
+                                        <i data-lucide="trash-2" class="w-4 h-4 me-2"></i>
+                                        @Localizer["ResetAllNow"]
+                                    </button>
+                                </form>
                             </div>
-                        }
-                        else
-                        {
-                            <div class="text-center py-16">
-                                <div class="eng-stat-icon-wrap bg-muted/20 text-muted-foreground mx-auto mb-6">
-                                    <i data-lucide="settings" class="w-6 h-6"></i>
-                                </div>
-                                <h3 class="text-lg font-bold text-foreground mb-2">@Localizer["NoSettingsFound"]</h3>
-                                <p class="eng-stat-label">
-                                    @if (!string.IsNullOrEmpty(category))
-                                    {
-                                        var localizedMsg = Localizer["NoSettingsForCategory"].Value;
-                                        @string.Format(localizedMsg, category)
-                                    }
-                                    else
-                                    {
-                                        @Localizer["NoSettingsConfigured"]
-                                    }
-                                </p>
-                            </div>
-                        }
-                    </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5 opacity-30">
+                            <i data-lucide="settings-2" class="w-12 h-12 mb-3"></i>
+                            <p class="fw-bold">No settings found in this category</p>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -219,26 +122,12 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/dashboard-settings.js" asp-append-version="true"></script>
+    <script src="~/js/modules/dashboard/settings-controller.js" asp-append-version="true"></script>
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-        
-        // Confirmation dialogs
-        document.querySelectorAll('[data-action="confirm-reset"]').forEach(button => {
-            button.addEventListener('click', function(e) {
-                if (confirm('@Localizer["ConfirmResetSetting"]')) {
-                    this.closest('form').submit();
-                }
-            });
-        });
-        
-        document.querySelectorAll('[data-action="confirm-reset-all"]').forEach(button => {
-            button.addEventListener('click', function(e) {
-                if (confirm('@Localizer["ConfirmResetAllSettings"]')) {
-                    this.closest('form').submit();
-                }
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            if (CC && CC.Modules && CC.Modules.Dashboard && CC.Modules.Dashboard.Settings) {
+                CC.Modules.Dashboard.Settings.init();
+            }
         });
     </script>
 }

@@ -58,8 +58,7 @@
 
             setTimeout(() => {
                 if (activityList) activityList.style.opacity = '1';
-                if (CC.Services.Toaster) CC.Services.Toaster.success('Activity feed updated');
-                else console.log('Activity refreshed');
+                CC.Utils.Notifier.success('Activity feed updated');
             }, 800);
         }
 
@@ -69,7 +68,7 @@
                 if (icon) icon.classList.add('animate-spin');
             }
 
-            if (CC.Services.Toaster) CC.Services.Toaster.info('Refreshing monitoring data...');
+            CC.Utils.Notifier.info('Refreshing monitoring data...');
 
             // Mock Refresh
             setTimeout(() => {

@@ -1,0 +1,46 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<header class="mx-2 dashboard-header animate-slide-up">
+    <!-- Mobile Menu Toggle -->
+    <button class="btn btn-ghost d-md-none me-3 p-0" id="mobileSidebarToggle" aria-label="Toggle Menu">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Search Bar -->
+    <div class="dashboard-search-container d-none d-sm-block">
+        <i data-lucide="search" class="dashboard-search-icon" style="width: 18px; height: 18px;"></i>
+        <input type="text" class="dashboard-search-input" placeholder="Search task..." />
+        <span class="search-shortcut">⌘ F</span>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="ms-auto d-flex align-items-center gap-3">
+        <a href="/messages" class="header-action-btn" title="Messages">
+            <i data-lucide="mail" class="w-5 h-5"></i>
+        </a>
+        <a href="/notifications" class="header-action-btn" title="Notifications">
+            <i data-lucide="bell" class="w-5 h-5"></i>
+        </a>
+
+        <!-- Theme Toggle -->
+        <button id="dashboard-theme-toggle" class="header-action-btn" title="@Localizer["ToggleTheme"]">
+            <i data-lucide="sun" class="sun-icon w-5 h-5"></i>
+            <i data-lucide="moon" class="moon-icon w-5 h-5 d-none"></i>
+        </button>
+
+        <!-- Language Toggle -->
+        <button id="dashboard-lang-toggle" class="header-action-btn text-xs fw-bold" title="@Localizer["SwitchLanguage"]">
+            @(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper() == "AR" ? "EN" : "AR")
+        </button>
+
+        <!-- Profile Section -->
+        <div class="header-profile">
+            <img src="https://i.pravatar.cc/150?u=mostafasaid" alt="Profile" class="header-profile-img" />
+            <div class="header-profile-info d-none d-lg-block">
+                <span class="header-username">Mostafa Said</span>
+                <span class="header-useremail">m.said@communitycar.com</span>
+            </div>
+        </div>
+    </div>
+</header>

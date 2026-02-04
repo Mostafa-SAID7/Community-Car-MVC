@@ -3,6 +3,7 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer ViewLocalizer
 @{
     ViewData["Title"] = ViewLocalizer["PageTitle"];
+    Layout = "~/Views/Shared/_MainAppLayout.cshtml";
     var feedType = ViewBag.FeedType as string ?? "personalized";
     var currentUserId = ViewBag.CurrentUserId as Guid?;
     

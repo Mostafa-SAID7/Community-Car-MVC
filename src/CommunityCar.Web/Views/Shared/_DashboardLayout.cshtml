@@ -1,9 +1,12 @@
-@using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> SharedLocalizer
+@using System.Globalization
 @{
     var hideLeftSidebar = ViewData["HideLeftSidebar"] as bool? ?? false;
     var hideRightSidebar = ViewData["HideRightSidebar"] as bool? ?? false;
+    var dashboardSection = ViewData["DashboardSection"] as string ?? "Overview";
 }
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")" class="light">
@@ -11,29 +14,34 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="user-id" content="@(User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : "")" />
     <title>@ViewData["Title"] - Dashboard - CommunityCar</title>
 
-    <!-- Theme initialization -->
+    <!-- Theme initialization script -->
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            document.documentElement.classList.add(theme);
+            document.documentElement.setAttribute('data-bs-theme', theme);
         })();
     </script>
 
+    <seo-meta page-type="Dashboard" entity-id="@(ViewData["EntityId"] as Guid?)" />
+
     <link rel="icon" type="image/png" href="~/images/logo/logo.png">
-    
-    <!-- Fonts -->
+
+    <!-- Fonts (Synced with _Layout.cshtml) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap CSS (Local) -->
+    <!-- Styles Bundles -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.css" />
-    
-    <!-- Site Styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/modern-dual-sidebar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/modern-dashboard.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
 
@@ -41,53 +49,120 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="bg-light">
+<body class="modern-theme dual-sidebar-layout">
     @Html.AntiForgeryToken()
-    <partial name="_Header" />
+    @{
+        IgnoreSection("SidebarRight");
+        IgnoreSection("SidebarLeft");
+    }
+    
+    <partial name="Dashboard/_ModernSidebar" />
 
-    <div class="container-fluid">
-        <div class="row min-vh-100">
-            @if (!hideLeftSidebar)
+    <main role="main" class="modern-main-content">
+        <partial name="Dashboard/_DashboardHeader" />
+        
+        <div class="animate-slide-up px-1 pt-4 pt-md-5">
+             @if (ViewData["Title"] != null && !(ViewData["HidePageTitle"] as bool? ?? false))
             {
-                <div class="col-md-3 col-lg-2 d-none d-md-block border-end bg-white p-0">
-                    <div class="sticky-top" style="top: 4rem; height: calc(100vh - 4rem); overflow-y: auto;">
-                        <partial name="Dashboard/_DashboardSidebarLeft" />
-                    </div>
-                </div>
-            }
-
-            <!-- Main Content Area -->
-            <main role="main" class="py-4 @(hideLeftSidebar ? "col-12" : "col-md-9 col-lg-10") @(!hideRightSidebar ? "col-lg-7" : "col-lg-10") px-4">
-                <div class="d-flex align-items-center justify-content-between mb-5">
+                <div class="d-flex px-1 pt-4 pt-md-5 flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 mt-2">
                     <div>
-                        <h1 class="fw-black text-gradient tracking-tight mb-2">@ViewData["Title"]</h1>
-                        <p class="small text-uppercase tracking-widest text-muted opacity-50 fw-bold">Platform Management & Analytics</p>
+                        <h1 class="page-title mb-1 text-gradient">@ViewData["Title"]</h1>
+                        @if (ViewData["Subtitle"] != null)
+                        {
+                            <p class="small text-uppercase tracking-widest text-muted opacity-50 fw-black">@ViewData["Subtitle"]</p>
+                        }
                     </div>
-                </div>
-                
-                @RenderBody()
-            </main>
-
-            @if (!hideRightSidebar)
-            {
-                <div class="col-lg-3 d-none d-lg-block border-start bg-white p-0">
-                    <div class="sticky-top p-4" style="top: 4rem; height: calc(100vh - 4rem); overflow-y: auto;">
-                        <partial name="Dashboard/_DashboardSidebarRight" />
+                    <div class="d-flex align-items-center gap-2">
+                        @await RenderSectionAsync("PageActions", required: false)
                     </div>
                 </div>
             }
+            @RenderBody()
         </div>
-    </div>
+    </main>
 
+
+    <!-- Dashboard-specific modals and components -->
+    <partial name="_AlertModal" />
+
+    <!-- Core Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/core.js" asp-append-version="true" defer></script>
-    <script src="~/js/site.js" asp-append-version="true" defer></script>
+    <script src="~/js/toaster.js" asp-append-version="true" defer></script>
+    <script src="~/js/error-boundary.js" asp-append-version="true" defer></script>
+
+    <!-- SignalR for real-time dashboard updates -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <script src="~/lib/signalr/signalr.min.js"></script>
+    }
+
+    <!-- Dashboard Services -->
+    <script src="~/js/services/cookie-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/theme-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/sidebar-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/localization-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/services/notification-service.js" asp-append-version="true" defer></script>
+    <script src="~/js/components/notification-controller.js" asp-append-version="true" defer></script>
+    
+    <!-- Dashboard-specific modules -->
+    <script src="~/js/modules/dashboard/charts-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/overview-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/reports-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/settings-controller.js" asp-append-version="true" defer></script>
+    <script src="~/js/modules/dashboard/performance-controller.js" asp-append-version="true" defer></script>
+
+    <!-- Dashboard initialization script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle logic (Integrated with Dashboard Header)
+            const themeToggle = document.getElementById('dashboard-theme-toggle');
+            const sunIcons = document.querySelectorAll('.sun-icon');
+            const moonIcons = document.querySelectorAll('.moon-icon');
+            
+            function updateThemeIcons(theme) {
+                if (theme === 'dark') {
+                    sunIcons.forEach(i => i.classList.add('d-none'));
+                    moonIcons.forEach(i => i.classList.remove('d-none'));
+                } else {
+                    sunIcons.forEach(i => i.classList.remove('d-none'));
+                    moonIcons.forEach(i => i.classList.add('d-none'));
+                }
+            }
+
+            // Sync with local storage or system preference
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-bs-theme', currentTheme); // Important: Use attribute for Bootstrap
+            updateThemeIcons(currentTheme);
+            
+            themeToggle?.addEventListener('click', function() {
+                const currentAttr = document.documentElement.getAttribute('data-bs-theme');
+                const newTheme = currentAttr === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcons(newTheme);
+            });
+            
+            // Language toggle logic
+            const langToggle = document.getElementById('dashboard-lang-toggle');
+            langToggle?.addEventListener('click', function() {
+                const currentLang = document.documentElement.lang || 'en-US';
+                const newLang = currentLang.startsWith('ar') ? 'en-US' : 'ar-EG';
+                
+                const url = new URL(window.location);
+                url.searchParams.set('culture', newLang);
+                window.location.href = url.toString();
+            });
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
-    
-    <script>
-        lucide.createIcons();
-    </script>
 </body>
+
 </html>

@@ -19,8 +19,8 @@ public class CacheController : Controller
     public CacheController(
         ICacheService cacheService,
         CacheWarmupService cacheWarmupService,
-        IConnectionMultiplexer? connectionMultiplexer,
-        ILogger<CacheController> logger)
+        ILogger<CacheController> logger,
+        IConnectionMultiplexer? connectionMultiplexer = null)
     {
         _cacheService = cacheService;
         _cacheWarmupService = cacheWarmupService;

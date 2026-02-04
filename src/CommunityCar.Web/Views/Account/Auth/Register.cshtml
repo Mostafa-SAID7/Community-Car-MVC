@@ -6,176 +6,92 @@
 @inject IStringLocalizer<AccountResource> AccountLocalizer
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
-    ViewData["Title"] = "Identity Genesis";
+    ViewData["Title"] = "Create Account";
     Layout = "_AuthLayout";
+    ViewData["AuthSideImage"] = "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop";
+    ViewData["AuthSideCaption"] = "Join our community and automate your business operations seamlessly.";
 }
 
-<div class="container min-vh-100 d-flex flex-column justify-content-center py-5">
-    <div class="text-center mb-5">
-        <div class="position-relative d-inline-flex align-items-center justify-content-center mb-4">
-            <div class="position-absolute inset-0 bg-primary opacity-25 rounded-circle blur-xl animate-pulse"></div>
-            <div class="position-relative w-20 h-20 rounded-4 bg-card border border-border d-flex align-items-center justify-content-center text-primary shadow-lg" style="width: 80px; height: 80px;">
-                <i data-lucide="user-plus" class="w-10 h-10" style="width: 40px; height: 40px;"></i>
-            </div>
-        </div>
-        
-        <div class="mb-2">
-            <h1 class="display-5 fw-black text-gradient tracking-tight">Identity Genesis</h1>
-            <p class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75">Neural profile initialization</p>
-        </div>
-    </div>
+<!-- Logo Section -->
+<a href="/" class="auth-logo">
+    <i data-lucide="zap" class="w-6 h-6 text-warning"></i>
+    <span>Havenix.</span>
+</a>
 
-    <div class="card card-premium shadow-lg mx-auto" style="max-width: 500px;">
-        <div class="card-body p-4 p-md-5">
-            <div class="d-grid gap-4">
-                <div class="mt-2 text-center">
-                    <div class="position-relative d-flex align-items-center justify-content-center mb-4">
-                        <hr class="w-100 border-border opacity-25">
-                        <span class="position-absolute bg-card px-3 text-[10px] fw-black text-uppercase tracking-widest text-muted-foreground">Quick Genesis Protocols</span>
-                    </div>
+<h1 class="auth-title">Create Account</h1>
+<p class="auth-subtitle">Join us to start your automation journey</p>
 
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <button type="button" id="google-register-btn" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 d-flex align-items-center justify-content-center gap-2 text-sm transition-all border-border-subtle bg-muted-subtle hover-bg-muted">
-                                <i data-lucide="chrome" class="w-4 h-4"></i>
-                                <span>Neural</span>
-                            </button>
-                        </div>
-                        <div class="col-6">
-                            <button type="button" id="facebook-register-btn" class="btn btn-outline-secondary w-100 py-2.5 rounded-3 d-flex align-items-center justify-content-center gap-2 text-sm transition-all border-border-subtle bg-muted-subtle hover-bg-muted">
-                                <i data-lucide="facebook" class="w-4 h-4"></i>
-                                <span>Social</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <form asp-action="Register" method="post" id="register-form" class="d-grid gap-4">
-                    @Html.AntiForgeryToken()
-                    
-                    @if (!ViewData.ModelState.IsValid)
-                    {
-                        <div class="alert alert-danger border-0 bg-danger-subtle text-danger py-3">
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <i data-lucide="alert-circle" class="w-4 h-4"></i>
-                                <span class="text-sm fw-bold">Genesis Protocol Failed</span>
-                            </div>
-                            <div class="text-xs opacity-75">
-                                @Html.ValidationSummary(false)
-                            </div>
-                        </div>
-                    }
-
-                    <div class="form-group">
-                        <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Identity Designation</label>
-                        <div class="position-relative">
-                            <i data-lucide="user" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
-                            <input asp-for="FullName" 
-                                   id="register-fullname" 
-                                   data-testid="register-fullname" 
-                                   class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
-                                   placeholder="Neo Anderson" 
-                                   autocomplete="name" />
-                        </div>
-                        <span asp-validation-for="FullName" class="text-danger text-xs mt-1 d-block"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Neural Link Address</label>
-                        <div class="position-relative">
-                            <i data-lucide="mail" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
-                            <input asp-for="Email" 
-                                   id="register-email" 
-                                   data-testid="register-email" 
-                                   type="email"
-                                   class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
-                                   placeholder="neo@matrix.net" 
-                                   autocomplete="email" />
-                        </div>
-                        <span asp-validation-for="Email" class="text-danger text-xs mt-1 d-block"></span>
-                    </div>
-
-                    <div class="row g-4">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Access Cipher</label>
-                                <div class="position-relative">
-                                    <i data-lucide="lock" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
-                                    <input asp-for="Password" 
-                                           id="register-password" 
-                                           data-testid="register-password" 
-                                           type="password" 
-                                           class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
-                                           placeholder="••••••••" 
-                                           autocomplete="new-password" />
-                                </div>
-                                <span asp-validation-for="Password" class="text-danger text-xs mt-1 d-block"></span>
-                                
-                                <div class="password-strength mt-3">
-                                    <div class="progress h-1 border-0 bg-muted rounded-pill overflow-hidden">
-                                        <div id="password-strength-fill" class="progress-bar transition-all duration-300 rounded-pill" role="progressbar"></div>
-                                    </div>
-                                    <p class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground mt-2 mb-0" id="password-strength-text">Cipher Strength</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label class="text-xs fw-black text-uppercase tracking-widest text-primary-red opacity-75 mb-2 d-block">Cipher Verification</label>
-                                <div class="position-relative">
-                                    <i data-lucide="shield-check" class="position-absolute translate-middle-y top-50 start-0 ms-3 text-muted" style="width: 16px; height: 16px;"></i>
-                                    <input asp-for="ConfirmPassword" 
-                                           id="register-confirm" 
-                                           data-testid="register-confirm" 
-                                           type="password" 
-                                           class="form-control ps-5 py-3 rounded-3 border-border bg-muted-subtle" 
-                                           placeholder="••••••••" 
-                                           autocomplete="new-password" />
-                                </div>
-                                <span asp-validation-for="ConfirmPassword" class="text-danger text-xs mt-1 d-block"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" 
-                            id="register-button" 
-                            data-testid="register-submit" 
-                            class="btn btn-primary-red py-3 rounded-4 mt-2">
-                        <span id="button-text">Initialize Identity</span>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="text-center mt-5">
-        <p class="text-sm text-muted-foreground mb-0">
-            Identity already exists? 
-            <a asp-action="Login" 
-               id="signin-link" 
-               data-testid="signin-link" 
-               class="text-primary-red fw-bold text-decoration-none hover-underline d-inline-flex align-items-center gap-2">
-                <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                Return to Gateway
-            </a>
-        </p>
-    </div>
+<!-- Social Register -->
+<div class="auth-social-row">
+    <a href="#" class="btn-auth-social" id="google-register">
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" />
+        Sign up with Google
+    </a>
 </div>
 
+<div class="auth-separator">
+    <span>Or</span>
+</div>
 
-    <div class="text-center mt-6">
-        <p class="text-sm text-muted-foreground mb-2">
-            Identity already exists?
-        </p>
-        <a asp-action="Login" 
-           id="signin-link" 
-           data-testid="signin-link" 
-           class="text-primary hover:text-primary/80 font-medium inline-flex items-center gap-2 transition-all">
-            <i data-lucide="chevron-left" class="w-4 h-4"></i> 
-            Return to Gateway
-        </a>
+<!-- Register Form -->
+<form asp-action="Register" method="post" id="register-form">
+    @Html.AntiForgeryToken()
+    
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger border-0 mb-4 p-3" style="font-size: 0.85rem; border-radius: 0.75rem; background: #fef2f2; color: #991b1b;">
+            @Html.ValidationSummary(false)
+        </div>
+    }
+
+    <!-- Full Name -->
+    <div class="auth-input-group">
+        <label class="auth-label" asp-for="FullName">Full Name</label>
+        <div class="auth-input-wrapper">
+            <input asp-for="FullName" class="auth-input" placeholder="Enter your full name" required />
+        </div>
+        <span asp-validation-for="FullName" class="text-danger xx-small mt-1 px-1"></span>
     </div>
+
+    <!-- Email -->
+    <div class="auth-input-group">
+        <label class="auth-label" asp-for="Email">Email Address</label>
+        <div class="auth-input-wrapper">
+            <input asp-for="Email" class="auth-input" type="email" placeholder="Enter your email" required />
+        </div>
+        <span asp-validation-for="Email" class="text-danger xx-small mt-1 px-1"></span>
+    </div>
+
+    <!-- Password Row -->
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="auth-input-group">
+                <label class="auth-label" asp-for="Password">Password</label>
+                <div class="auth-input-wrapper">
+                    <input asp-for="Password" id="password-input" type="password" class="auth-input" placeholder="••••••••" required />
+                </div>
+                <span asp-validation-for="Password" class="text-danger xx-small mt-1 px-1"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="auth-input-group">
+                <label class="auth-label" asp-for="ConfirmPassword">Confirm</label>
+                <div class="auth-input-wrapper">
+                    <input asp-for="ConfirmPassword" type="password" class="auth-input" placeholder="••••••••" required />
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="text-danger xx-small mt-1 px-1"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn-auth-primary" id="register-button">
+        Create Account
+    </button>
+</form>
+
+<div class="auth-footer mt-5">
+    Already have an account? <a asp-action="Login" class="auth-footer-link">Login</a>
 </div>
 
 @section Scripts {
@@ -183,116 +99,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('register-form');
-            const submitButton = document.getElementById('register-button');
-            const buttonText = document.getElementById('button-text');
-            const passwordInput = document.getElementById('register-password');
-            const strengthFill = document.getElementById('password-strength-fill');
-            const strengthText = document.getElementById('password-strength-text');
+            const submitBtn = document.getElementById('register-button');
             
-            // Password strength checker
-            function checkPasswordStrength(password) {
-                let strength = 0;
-                let feedback = '@AccountLocalizer["WeakPassword"]';
-                
-                if (password.length >= 8) strength++;
-                if (/[a-z]/.test(password)) strength++;
-                if (/[A-Z]/.test(password)) strength++;
-                if (/[0-9]/.test(password)) strength++;
-                if (/[^A-Za-z0-9]/.test(password)) strength++;
-                
-                const strengthBar = strengthFill.parentElement;
-                strengthBar.className = 'password-strength-bar';
-                
-                switch (strength) {
-                    case 0:
-                    case 1:
-                        strengthBar.classList.add('password-strength-weak');
-                        feedback = '@AccountLocalizer["WeakPassword"]';
-                        break;
-                    case 2:
-                        strengthBar.classList.add('password-strength-fair');
-                        feedback = '@AccountLocalizer["FairPassword"]';
-                        break;
-                    case 3:
-                        strengthBar.classList.add('password-strength-good');
-                        feedback = '@AccountLocalizer["GoodPassword"]';
-                        break;
-                    case 4:
-                    case 5:
-                        strengthBar.classList.add('password-strength-strong');
-                        feedback = '@AccountLocalizer["StrongPassword"]';
-                        break;
+            form.addEventListener('submit', function() {
+                if ($(form).valid()) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Initializing...';
                 }
-                
-                strengthText.textContent = feedback;
-            }
-            
-            // Password input event listener
-            passwordInput?.addEventListener('input', function() {
-                checkPasswordStrength(this.value);
-            });
-            
-            // Form submission
-            form?.addEventListener('submit', function() {
-                submitButton.disabled = true;
-                submitButton.classList.add('auth-loading');
-                buttonText.textContent = '@AccountLocalizer["CreatingAccount"]...';
-            });
-            
-            // Initialize Lucide icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-            
-            // Theme toggle functionality
-            const themeToggle = document.getElementById('theme-toggle');
-            const lightIcon = themeToggle?.querySelector('.theme-icon-light');
-            const darkIcon = themeToggle?.querySelector('.theme-icon-dark');
-            
-            // Get current theme from localStorage or default to light
-            const currentTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            
-            // Update icon visibility based on current theme
-            if (currentTheme === 'dark' && lightIcon && darkIcon) {
-                lightIcon.style.display = 'none';
-                darkIcon.style.display = 'block';
-            }
-            
-            themeToggle?.addEventListener('click', function() {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                // Toggle icon visibility
-                if (newTheme === 'dark' && lightIcon && darkIcon) {
-                    lightIcon.style.display = 'none';
-                    darkIcon.style.display = 'block';
-                } else if (lightIcon && darkIcon) {
-                    lightIcon.style.display = 'block';
-                    darkIcon.style.display = 'none';
-                }
-            });
-            
-            // Language toggle functionality
-            const languageToggle = document.getElementById('language-toggle');
-            const supportedLanguages = ['en-US', 'ar-EG'];
-            
-            languageToggle?.addEventListener('click', function() {
-                const currentLang = document.documentElement.lang || 'en-US';
-                const currentIndex = supportedLanguages.indexOf(currentLang);
-                const nextIndex = (currentIndex + 1) % supportedLanguages.length;
-                const newLang = supportedLanguages[nextIndex];
-                
-                // Store language preference
-                localStorage.setItem('language', newLang);
-                
-                // Redirect to current page with new language
-                const url = new URL(window.location);
-                url.searchParams.set('culture', newLang);
-                window.location.href = url.toString();
             });
         });
     </script>

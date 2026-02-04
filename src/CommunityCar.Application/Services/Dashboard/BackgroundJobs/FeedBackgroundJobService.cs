@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
-using CommunityCar.Application.Common.Models.Caching;
+using CommunityCar.Application.Configuration.Caching;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Logging;

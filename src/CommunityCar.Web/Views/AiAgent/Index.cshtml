@@ -1,0 +1,228 @@
+@{
+    ViewData["Title"] = "AI Management Dashboard";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+@model dynamic
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">AI Management Dashboard</h1>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary btn-sm">
+                        <i data-lucide="brain" class="me-1" style="width: 16px; height: 16px;"></i>
+                        Train Model
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i data-lucide="settings" class="me-1" style="width: 16px; height: 16px;"></i>
+                        Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Alert Removed from View -->
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Conversations
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                0
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i data-lucide="message-circle" class="text-gray-300" style="width: 32px; height: 32px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Active Users
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                0
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i data-lucide="users" class="text-gray-300" style="width: 32px; height: 32px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Response Time
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                N/A
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i data-lucide="clock" class="text-gray-300" style="width: 32px; height: 32px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Satisfaction Rate
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                0.0%
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i data-lucide="star" class="text-gray-300" style="width: 32px; height: 32px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Activity Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">AI Activity Overview</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <div class="h4 font-weight-bold text-primary">0</div>
+                                <div class="text-xs text-uppercase">Messages Today</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <div class="h4 font-weight-bold text-success">0.0%</div>
+                                <div class="text-xs text-uppercase">Weekly Growth</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <div class="h4 font-weight-bold text-info">0</div>
+                                <div class="text-xs text-uppercase">Active Models</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h6 class="font-weight-bold">Top Intents</h6>
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="text-muted">No intent data available</span>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Activity</h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center text-muted">
+                        <i data-lucide="inbox" style="width: 48px; height: 48px;" class="mb-2"></i>
+                        <p>No recent activity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Training Status -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Training Status</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="h5 font-weight-bold text-warning">0</div>
+                                <div class="text-xs text-uppercase">Jobs in Queue</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="h5 font-weight-bold text-success">0</div>
+                                <div class="text-xs text-uppercase">Recent Completions</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="h5 font-weight-bold text-info">0</div>
+                                <div class="text-xs text-uppercase">Active Models</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+.icon-circle {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
