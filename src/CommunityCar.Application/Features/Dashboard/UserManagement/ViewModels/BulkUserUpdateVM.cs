@@ -1,17 +1,14 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace CommunityCar.Application.Features.Dashboard.UserManagement.ViewModels;
 
+/// <summary>
+/// ViewModel for bulk user updates
+/// </summary>
 public class BulkUserUpdateVM
 {
-    [Required]
-    public List<Guid> UserIds { get; set; } = new();
-    
-    [Required]
-    public string Action { get; set; } = string.Empty; // Activate, Deactivate, Lock, Unlock, Delete, etc.
-    
+    public string? Action { get; set; } // "activate", "deactivate", "delete", "assign_role", "remove_role"
+    public string? Role { get; set; }
     public string? Reason { get; set; }
-    public string? NewRole { get; set; }
-    public bool NotifyUsers { get; set; } = false;
+    public bool SendNotification { get; set; } = true;
+    public DateTime? EffectiveDate { get; set; }
     public Dictionary<string, object> AdditionalData { get; set; } = new();
 }

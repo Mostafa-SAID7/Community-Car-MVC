@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Gamification;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
 using CommunityCar.Domain.Constants;
 using Microsoft.Extensions.Logging;

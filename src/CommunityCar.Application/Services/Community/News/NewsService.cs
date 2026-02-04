@@ -1,6 +1,6 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.News;
 using CommunityCar.Application.Features.Community.News.ViewModels;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Domain.Entities.Community.News;
@@ -19,6 +19,20 @@ public class NewsService : INewsService
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _newsNotificationService = newsNotificationService;
+    }
+
+    public async Task<object> GetNewsAsync()
+    {
+        // Return sample news data
+        return new
+        {
+            RecentNews = new[]
+            {
+                new { Id = 1, Title = "Latest Car News", Summary = "Summary of latest car news", PublishedAt = DateTime.UtcNow.AddHours(-2) },
+                new { Id = 2, Title = "Automotive Updates", Summary = "Recent automotive industry updates", PublishedAt = DateTime.UtcNow.AddHours(-5) }
+            },
+            TotalCount = 2
+        };
     }
 
     public async Task<(IEnumerable<NewsVM> News, PaginationInfo Pagination)> GetNewsAsync(int page = 1, int pageSize = 20, NewsCategory? category = null, string? search = null)

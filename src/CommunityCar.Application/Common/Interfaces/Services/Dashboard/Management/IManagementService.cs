@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Dashboard.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Management.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management;
 
@@ -11,7 +11,7 @@ public interface IManagementService
     Task ProcessExpiredActionsAsync();
 
     // Added to match ManagementController expectations
-    Task<List<SystemHealthVM>> GetSystemHealthAsync();
+    Task<List<CommunityCar.Application.Features.Dashboard.System.ViewModels.SystemHealthVM>> GetSystemHealthAsync();
     Task<List<UserManagementVM>> GetUsersAsync(int page, int pageSize, string? search);
     Task<UserManagementVM?> GetUserAsync(Guid userId);
     Task<bool> BlockUserAsync(Guid userId, string reason);

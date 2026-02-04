@@ -130,6 +130,7 @@ public static class DependencyInjection
         services.AddScoped<ILocalizationService, LocalizationService>();
 
         // Account services
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IOAuthService, OAuthService>();
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IAccountSecurityService, AccountSecurityService>();
@@ -171,22 +172,22 @@ public static class DependencyInjection
         services.AddScoped<ITrainingHistoryService, TrainingHistoryService>();
 
         // Dashboard Services
-        services.AddScoped<IOverviewService, OverviewService>();
-        services.AddScoped<IAnalyticsService, AnalyticsService>();
-        services.AddScoped<IReportsService, ReportsService>();
-        services.AddScoped<IMonitoringService, MonitoringService>();
-        services.AddScoped<IMaintenanceService, MaintenanceService>();
-        services.AddScoped<IManagementService, ManagementService>();
-        services.AddScoped<ISettingsService, SettingsService>();
-        services.AddScoped<IPerformanceService, PerformanceService>();
-        services.AddScoped<ISecurityService, SecurityService>();
-        services.AddScoped<IAuditService, AuditService>();
-        services.AddScoped<ISystemManagementService, SystemManagementService>();
-        services.AddScoped<IUserManagementService, UserManagementService>();
+        services.AddScoped<IOverviewService, CommunityCar.Application.Services.Dashboard.Overview.OverviewService>();
+        services.AddScoped<IAnalyticsService, CommunityCar.Application.Services.Dashboard.Analytics.AnalyticsService>();
+        services.AddScoped<IReportsService, CommunityCar.Application.Services.Dashboard.Reports.ReportsService>();
+        services.AddScoped<IMonitoringService, CommunityCar.Application.Services.Dashboard.Monitoring.MonitoringService>();
+        services.AddScoped<IMaintenanceService, CommunityCar.Application.Services.Dashboard.Maintenance.MaintenanceService>();
+        services.AddScoped<IManagementService, CommunityCar.Application.Services.Dashboard.Management.ManagementService>();
+        services.AddScoped<ISettingsService, CommunityCar.Application.Services.Dashboard.Settings.SettingsService>();
+        services.AddScoped<IPerformanceService, CommunityCar.Application.Services.Dashboard.Performance.PerformanceService>();
+        services.AddScoped<ISecurityService, CommunityCar.Application.Services.Dashboard.Security.SecurityService>();
+        services.AddScoped<IAuditService, CommunityCar.Application.Services.Dashboard.Audit.AuditService>();
+        services.AddScoped<ISystemManagementService, CommunityCar.Application.Services.Dashboard.System.SystemManagementService>();
+        services.AddScoped<IUserManagementService, CommunityCar.Application.Services.Dashboard.UserManagement.UserManagementService>();
         
         // Error Management
-        services.AddScoped<IErrorService, ErrorService>();
-        services.AddScoped<IErrorReportingService, ErrorReportingService>();
+        services.AddScoped<IErrorService, CommunityCar.Application.Services.Dashboard.ErrorReporting.ErrorService>();
+        services.AddScoped<IErrorReportingService, CommunityCar.Application.Services.Dashboard.ErrorReporting.ErrorReportingService>();
 
         // SEO services
         services.AddScoped<ISEOService, SEOService>();

@@ -1,4 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Monitoring;
+using CommunityCar.Application.Features.Dashboard.Monitoring.ViewModels;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Moderation;
+using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
@@ -95,28 +98,28 @@ public class MonitoringService : IMonitoringService
             alerts.Add(new SystemAlertVM
             {
                 Id = Guid.NewGuid(),
-                Type = i % 2 == 0 ? "Security" : "System",
+                Title = $"System Alert {i + 1}",
                 Message = $"Sample alert {i + 1}",
                 Severity = i % 3 == 0 ? "High" : "Medium",
                 CreatedAt = DateTime.UtcNow.AddMinutes(-i * 10),
-                IsRead = false
+                IsRead = false,
+                Type = i % 2 == 0 ? "Security" : "System"
             });
         }
         return await Task.FromResult(alerts);
     }
 
-    public async Task<List<ModerationItemVM>> GetContentModerationAsync(int page, int pageSize)
+    public async Task<List<CommunityCar.Application.Common.Interfaces.Services.Community.Moderation.ModerationItemVM>> GetContentModerationAsync(int page, int pageSize)
     {
-        var items = new List<ModerationItemVM>();
+        var items = new List<CommunityCar.Application.Common.Interfaces.Services.Community.Moderation.ModerationItemVM>();
         for (int i = 0; i < pageSize; i++)
         {
-            items.Add(new ModerationItemVM
+            items.Add(new CommunityCar.Application.Common.Interfaces.Services.Community.Moderation.ModerationItemVM
             {
                 Id = Guid.NewGuid(),
-                Type = "Comment",
-                Title = $"Comment by User{i}",
+                ContentType = "Comment",
                 Content = "This is a sample content for moderation.",
-                AuthorName = $"User{i}",
+                Author = $"User{i}",
                 CreatedAt = DateTime.UtcNow.AddHours(-i),
                 Status = "Pending",
                 ReportCount = i % 5

@@ -1,59 +1,35 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Analytics.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.Analytics;
 
 public class AnalyticsService : IAnalyticsService
 {
-    public async Task<List<UserAnalyticsVM>> GetUserAnalyticsAsync(AnalyticsVM request)
+    public async Task<AnalyticsVM> GetAnalyticsAsync(DateTime? startDate = null, DateTime? endDate = null, CancellationToken cancellationToken = default)
     {
-        var analytics = new List<UserAnalyticsVM>();
         var random = new Random();
-        var current = request.StartDate;
+        var start = startDate ?? DateTime.UtcNow.AddDays(-30);
+        var end = endDate ?? DateTime.UtcNow;
 
-        while (current <= request.EndDate)
+        return new AnalyticsVM
         {
-            analytics.Add(new UserAnalyticsVM
-            {
-                Date = current,
-                NewUsers = random.Next(10, 50),
-                ActiveUsers = random.Next(100, 500),
-                ReturnUsers = random.Next(50, 200),
-                RetentionRate = (decimal)(0.7 + random.NextDouble() * 0.2),
-                TimeSpentOnSite = TimeSpan.FromMinutes(random.Next(5, 30))
-            });
-            current = current.AddDays(1);
-        }
-
-        return await Task.FromResult(analytics);
+            StartDate = start,
+            EndDate = end,
+            TotalUsers = random.Next(1000, 10000),
+            ActiveUsers = random.Next(500, 5000),
+            NewUsers = random.Next(50, 500),
+            PageViews = random.Next(10000, 100000),
+            Sessions = random.Next(2000, 20000),
+            BounceRate = (decimal)(0.3 + random.NextDouble() * 0.4),
+            AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 15)),
+            ConversionRate = (decimal)(0.02 + random.NextDouble() * 0.08)
+        };
     }
 
-    public async Task<List<ContentAnalyticsVM>> GetContentAnalyticsAsync(AnalyticsVM request)
+    public async Task<UserAnalyticsVM?> GetUserAnalyticsByIdAsync(Guid userId, DateTime date, CancellationToken cancellationToken = default)
     {
-        var analytics = new List<ContentAnalyticsVM>();
-        var random = new Random();
-        var current = request.StartDate;
-
-        while (current <= request.EndDate)
-        {
-            analytics.Add(new ContentAnalyticsVM
-            {
-                Date = current,
-                PostsCreated = random.Next(5, 20),
-                CommentsCreated = random.Next(20, 100),
-                TotalViews = random.Next(1000, 5000),
-                EngagementRate = (decimal)(0.05 + random.NextDouble() * 0.1)
-            });
-            current = current.AddDays(1);
-        }
-
-        return await Task.FromResult(analytics);
-    }
-
-    public async Task<UserAnalyticsVM?> GetUserAnalyticsByIdAsync(Guid userId, DateTime date)
-    {
-        return await Task.FromResult(new UserAnalyticsVM
+        return new UserAnalyticsVM
         {
             UserId = userId,
             Date = date,
@@ -65,12 +41,12 @@ public class AnalyticsService : IAnalyticsService
             DeviceType = "Mobile",
             BrowserType = "Chrome",
             Location = "New York, US"
-        });
+        };
     }
 
-    public async Task<ContentAnalyticsVM?> GetContentAnalyticsByIdAsync(Guid contentId, string contentType, DateTime date)
+    public async Task<ContentAnalyticsVM?> GetContentAnalyticsByIdAsync(Guid contentId, string contentType, DateTime date, CancellationToken cancellationToken = default)
     {
-        return await Task.FromResult(new ContentAnalyticsVM
+        return new ContentAnalyticsVM
         {
             ContentId = contentId,
             ContentType = contentType,
@@ -85,40 +61,10 @@ public class AnalyticsService : IAnalyticsService
             UniqueViewers = 980,
             TopReferrer = "Google",
             TopKeyword = "community car"
-        });
+        };
     }
 
-    public async Task<List<ChartDataVM>> GetAnalyticsChartAsync(AnalyticsVM request)
-    {
-        var data = new List<ChartDataVM>();
-        var random = new Random();
-        var current = request.StartDate;
-
-        while (current <= request.EndDate)
-        {
-            data.Add(new ChartDataVM
-            {
-                Label = current.ToString("MMM dd"),
-                Value = random.Next(100, 1000),
-                Date = current
-            });
-            current = current.AddDays(1);
-        }
-
-        return await Task.FromResult(data);
-    }
-
-    public async Task UpdateUserAnalyticsAsync(Guid userId, string action)
-    {
-        await Task.CompletedTask;
-    }
-
-    public async Task UpdateContentAnalyticsAsync(Guid contentId, string contentType, string action)
-    {
-        await Task.CompletedTask;
-    }
-
-    public async Task<TrafficAnalyticsVM> GetTrafficAnalyticsAsync(DateTime startDate, DateTime endDate)
+    public async Task<TrafficAnalyticsVM> GetTrafficAnalyticsAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
     {
         var random = new Random();
         return new TrafficAnalyticsVM
@@ -127,7 +73,11 @@ public class AnalyticsService : IAnalyticsService
             UniquePageViews = random.Next(5000, 20000),
             BounceRate = (decimal)(0.35 + random.NextDouble() * 0.2),
             AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 10)),
-            TrafficData = await GetAnalyticsChartAsync(new AnalyticsVM { StartDate = startDate, EndDate = endDate }),
+            TrafficData = new List<ChartDataVM>
+            {
+                new() { Label = "Today", Value = random.Next(1000, 5000), Date = DateTime.UtcNow },
+                new() { Label = "Yesterday", Value = random.Next(800, 4000), Date = DateTime.UtcNow.AddDays(-1) }
+            },
             TopPages = new List<TopPageVM>
             {
                 new() { Path = "/", Title = "Home", Views = 5000, UniqueViews = 3000, BounceRate = 0.4m },
@@ -136,36 +86,112 @@ public class AnalyticsService : IAnalyticsService
         };
     }
 
-    public async Task<List<ChartDataVM>> GetUserGrowthChartAsync(int days)
+    public async Task<List<TopPageVM>> GetTopPagesAsync(DateTime startDate, DateTime endDate, int count = 10, CancellationToken cancellationToken = default)
     {
-        return await GetAnalyticsChartAsync(new AnalyticsVM
+        var random = new Random();
+        var pages = new List<TopPageVM>();
+        var samplePages = new[]
         {
-            StartDate = DateTime.UtcNow.AddDays(-days),
-            EndDate = DateTime.UtcNow
-        });
+            new { Path = "/", Title = "Home" },
+            new { Path = "/Community/Feed", Title = "Community Feed" },
+            new { Path = "/Community/Posts", Title = "Posts" },
+            new { Path = "/Account/Profile", Title = "Profile" },
+            new { Path = "/Community/Groups", Title = "Groups" },
+            new { Path = "/Community/Events", Title = "Events" },
+            new { Path = "/Community/QA", Title = "Q&A" },
+            new { Path = "/Dashboard", Title = "Dashboard" }
+        };
+
+        for (int i = 0; i < Math.Min(count, samplePages.Length); i++)
+        {
+            var page = samplePages[i];
+            pages.Add(new TopPageVM
+            {
+                Path = page.Path,
+                Title = page.Title,
+                Views = random.Next(1000, 10000),
+                UniqueViews = random.Next(500, 5000),
+                BounceRate = (decimal)(0.2 + random.NextDouble() * 0.6),
+                AverageTimeOnPage = TimeSpan.FromMinutes(random.Next(1, 10)),
+                ExitRate = (decimal)(0.1 + random.NextDouble() * 0.5)
+            });
+        }
+
+        return pages.OrderByDescending(p => p.Views).ToList();
     }
 
-    public async Task<List<ChartDataVM>> GetEngagementChartAsync(int days)
+    public async Task<bool> TrackPageViewAsync(string url, Guid? userId = null, CancellationToken cancellationToken = default)
     {
-        return await GetAnalyticsChartAsync(new AnalyticsVM
-        {
-            StartDate = DateTime.UtcNow.AddDays(-days),
-            EndDate = DateTime.UtcNow
-        });
+        // In real implementation, track page view
+        await Task.Delay(10, cancellationToken);
+        return true;
     }
 
-    public async Task<List<ChartDataVM>> GetContentCreationChartAsync(int days)
+    public async Task<bool> TrackEventAsync(string eventName, Guid? userId = null, Dictionary<string, object>? properties = null, CancellationToken cancellationToken = default)
     {
-        return await GetAnalyticsChartAsync(new AnalyticsVM
-        {
-            StartDate = DateTime.UtcNow.AddDays(-days),
-            EndDate = DateTime.UtcNow
-        });
+        // In real implementation, track event
+        await Task.Delay(10, cancellationToken);
+        return true;
     }
 
-    public async Task<bool> UpdateAnalyticsAsync(AnalyticsVM request)
+    public async Task<AnalyticsVM> GetUserAnalyticsAsync(AnalyticsVM filter, CancellationToken cancellationToken = default)
     {
-        await Task.CompletedTask;
+        var random = new Random();
+        return new AnalyticsVM
+        {
+            StartDate = filter.StartDate,
+            EndDate = filter.EndDate,
+            TotalUsers = random.Next(1000, 10000),
+            ActiveUsers = random.Next(500, 5000),
+            NewUsers = random.Next(50, 500),
+            PageViews = random.Next(10000, 100000),
+            Sessions = random.Next(2000, 20000),
+            BounceRate = (decimal)(0.3 + random.NextDouble() * 0.4),
+            AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 15)),
+            ConversionRate = (decimal)(0.02 + random.NextDouble() * 0.08)
+        };
+    }
+
+    public async Task<AnalyticsVM> GetContentAnalyticsAsync(AnalyticsVM filter, CancellationToken cancellationToken = default)
+    {
+        var random = new Random();
+        return new AnalyticsVM
+        {
+            StartDate = filter.StartDate,
+            EndDate = filter.EndDate,
+            TotalUsers = random.Next(1000, 10000),
+            ActiveUsers = random.Next(500, 5000),
+            NewUsers = random.Next(50, 500),
+            PageViews = random.Next(10000, 100000),
+            Sessions = random.Next(2000, 20000),
+            BounceRate = (decimal)(0.3 + random.NextDouble() * 0.4),
+            AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 15)),
+            ConversionRate = (decimal)(0.02 + random.NextDouble() * 0.08)
+        };
+    }
+
+    public async Task<AnalyticsVM> GetAnalyticsChartAsync(AnalyticsVM filter, CancellationToken cancellationToken = default)
+    {
+        var random = new Random();
+        return new AnalyticsVM
+        {
+            StartDate = filter.StartDate,
+            EndDate = filter.EndDate,
+            TotalUsers = random.Next(1000, 10000),
+            ActiveUsers = random.Next(500, 5000),
+            NewUsers = random.Next(50, 500),
+            PageViews = random.Next(10000, 100000),
+            Sessions = random.Next(2000, 20000),
+            BounceRate = (decimal)(0.3 + random.NextDouble() * 0.4),
+            AverageSessionDuration = TimeSpan.FromMinutes(random.Next(2, 15)),
+            ConversionRate = (decimal)(0.02 + random.NextDouble() * 0.08)
+        };
+    }
+
+    public async Task<bool> UpdateAnalyticsAsync(AnalyticsVM analytics, CancellationToken cancellationToken = default)
+    {
+        // In real implementation, update analytics
+        await Task.Delay(100, cancellationToken);
         return true;
     }
 }

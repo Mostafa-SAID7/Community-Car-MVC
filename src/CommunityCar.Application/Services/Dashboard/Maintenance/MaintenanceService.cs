@@ -1,4 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Maintenance;
+using CommunityCar.Application.Features.Dashboard.Maintenance.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.Maintenance;

@@ -2,5 +2,6 @@ namespace CommunityCar.Application.Common.Interfaces.Services.Account.Gamificati
 
 public interface IGamificationService
 {
-    // Gamification service methods will be implemented as needed
+    // Gamification service interface - placeholder for now
+    Task<object> GetGamificationAsync();
 }

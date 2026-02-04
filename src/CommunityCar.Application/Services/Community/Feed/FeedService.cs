@@ -1,6 +1,6 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Feed;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Application.Common.Models;
@@ -26,6 +26,18 @@ public class FeedService : IFeedService
         _contentAggregatorService = contentAggregatorService;
         _interactionService = interactionService;
         _utilityService = utilityService;
+    }
+
+    public async Task<object> GetFeedAsync()
+    {
+        var request = new FeedVM
+        {
+            Page = 1,
+            PageSize = 20,
+            SortBy = "Recent"
+        };
+
+        return await GetPersonalizedFeedAsync(request);
     }
 
     public async Task<FeedVM> GetPersonalizedFeedAsync(FeedVM request)

@@ -2,12 +2,15 @@ using CommunityCar.Application.Features.Account.ViewModels.Activity;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Account.Profile;
 
+/// <summary>
+/// Interface for profile view tracking services
+/// </summary>
 public interface IProfileViewService
 {
-    Task<List<ProfileViewVM>> GetProfileViewsAsync(Guid userId, int page = 1, int pageSize = 20);
-    Task<List<ProfileViewVM>> GetWhoViewedMyProfileAsync(Guid userId, int page = 1, int pageSize = 20);
-    Task<bool> RecordProfileViewAsync(Guid viewerId, Guid profileUserId);
-    Task<int> GetProfileViewCountAsync(Guid userId);
-    Task<List<ProfileViewVM>> GetRecentProfileViewsAsync(Guid userId, int count = 10);
-    Task<ProfileViewStatsVM> GetProfileViewStatsAsync(Guid userId);
+    Task<bool> TrackProfileViewAsync(Guid profileUserId, Guid? viewerUserId = null, CancellationToken cancellationToken = default);
+    Task<WhoViewedMyProfileVM> GetWhoViewedMyProfileAsync(Guid userId, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default);
+    Task<int> GetProfileViewCountAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<int> GetProfileViewCountTodayAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<Dictionary<DateTime, int>> GetProfileViewsChartAsync(Guid userId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default);
+    Task<List<ProfileViewStatsVM>> GetTopViewedProfilesAsync(int count = 10, CancellationToken cancellationToken = default);
 }

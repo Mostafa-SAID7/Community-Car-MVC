@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.News;
 using CommunityCar.Domain.Entities.Community.News;
 using CommunityCar.Domain.Enums.Account;
 using Microsoft.Extensions.Logging;

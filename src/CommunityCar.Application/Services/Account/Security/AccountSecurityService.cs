@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Security;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Domain.Entities.Account.Core;

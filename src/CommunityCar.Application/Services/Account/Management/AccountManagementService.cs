@@ -1,7 +1,7 @@
 namespace CommunityCar.Application.Services.Account.Management;
 using CommunityCar.Application.Common.Models;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Management;
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Application.Features.Account.ViewModels.Management;

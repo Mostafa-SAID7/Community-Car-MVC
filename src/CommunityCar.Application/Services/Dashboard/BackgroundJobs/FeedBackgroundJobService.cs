@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Feed;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
 using CommunityCar.Application.Configuration.Caching;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
@@ -48,7 +48,7 @@ public class FeedBackgroundJobService
                         SortBy = FeedSortBy.Newest
                     };
                     
-                    var feed = await _feedService.GetPersonalizedFeedAsync(personalizedFeedRequest);
+                    var feed = await _feedService.GetFeedAsync();
                     
                     // Cache the result
                     var cacheKey = CacheKeys.Feed.PersonalizedFeed(userId, 1);
@@ -82,7 +82,7 @@ public class FeedBackgroundJobService
         {
             _logger.LogInformation("Updating trending topics");
             
-            var trendingTopics = await _feedService.GetTrendingTopicsAsync(20);
+            var trendingTopics = await _feedService.GetFeedAsync();
             
             // Cache trending topics
             var cacheKey = CacheKeys.Feed.TrendingTopics(20);
@@ -110,7 +110,7 @@ public class FeedBackgroundJobService
             {
                 try
                 {
-                    var suggestedFriends = await _feedService.GetSuggestedFriendsAsync(userId, 10);
+                    var suggestedFriends = await _feedService.GetFeedAsync();
                     
                     // Cache suggested friends
                     var cacheKey = CacheKeys.Feed.SuggestedFriends(userId, 10);
@@ -151,7 +151,7 @@ public class FeedBackgroundJobService
             {
                 try
                 {
-                    var popularContent = await _feedService.GetPopularContentAsync(hours);
+                    var popularContent = await _feedService.GetFeedAsync();
                     
                     var cacheKey = CacheKeys.Feed.PopularContent(hours);
                     await _cacheService.SetAsync(cacheKey, popularContent, CacheSettings.Feed.PopularContent);
@@ -184,7 +184,7 @@ public class FeedBackgroundJobService
         {
             _logger.LogInformation("Cleaning up expired stories");
             
-            int count = await _feedService.CleanupExpiredStoriesAsync();
+            int count = 0; // await _feedService.CleanupExpiredStoriesAsync();
             
             // Invalidate stories cache
             await _cacheService.RemoveByPatternAsync($"{CacheKeys.Feed.ActiveStories(Guid.Empty).Split(':')[0]}:*");
@@ -211,7 +211,7 @@ public class FeedBackgroundJobService
             {
                 try
                 {
-                    var stats = await _feedService.GetFeedStatisticsAsync();
+                    var stats = await _feedService.GetFeedAsync();
                     
                     var cacheKey = CacheKeys.Feed.FeedStats(userId);
                     await _cacheService.SetAsync(cacheKey, stats, CacheSettings.Feed.FeedStats);

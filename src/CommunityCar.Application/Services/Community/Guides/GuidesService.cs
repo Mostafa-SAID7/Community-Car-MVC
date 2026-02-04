@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Guides;
 using CommunityCar.Application.Common.Models;
 using CommunityCar.Application.Features.Community.Guides.ViewModels;
 using CommunityCar.Domain.Entities.Account.Core;

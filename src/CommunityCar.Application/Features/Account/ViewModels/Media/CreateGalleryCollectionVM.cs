@@ -18,24 +18,6 @@ public class CreateGalleryCollectionVM
     public string? CoverImageUrl { get; set; }
 }
 
-public class UpdateGalleryCollectionVM
-{
-    [Required]
-    public Guid Id { get; set; }
-    
-    [Required]
-    [StringLength(100)]
-    public string Name { get; set; } = string.Empty;
-    
-    [StringLength(500)]
-    public string Description { get; set; } = string.Empty;
-    
-    public bool IsPublic { get; set; }
-    public bool IsFeatured { get; set; }
-    public List<string> Tags { get; set; } = new();
-    public string? CoverImageUrl { get; set; }
-}
-
 public class GalleryStatsVM
 {
     public Guid UserId { get; set; }

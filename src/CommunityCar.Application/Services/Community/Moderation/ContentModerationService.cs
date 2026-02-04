@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Moderation;
 using System.Text.RegularExpressions;
 
 namespace CommunityCar.Application.Services.Community.Moderation;

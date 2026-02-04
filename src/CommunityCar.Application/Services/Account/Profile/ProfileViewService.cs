@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Profile;
 using CommunityCar.Application.Features.Account.ViewModels.Activity;
 using CommunityCar.Domain.Entities.Account.Profile;
 using Microsoft.Extensions.Logging;
@@ -24,6 +24,62 @@ public class ProfileViewService : IProfileViewService
         _userRepository = userRepository;
         _logger = logger;
     }
+
+    #region IProfileViewService Implementation
+
+    public async Task<bool> TrackProfileViewAsync(Guid profileUserId, Guid? viewerUserId = null, CancellationToken cancellationToken = default)
+    {
+        if (viewerUserId.HasValue && viewerUserId.Value == profileUserId) 
+            return false;
+
+        if (viewerUserId.HasValue)
+        {
+            return await RecordProfileViewAsync(viewerUserId.Value, profileUserId);
+        }
+        else
+        {
+            return await RecordAnonymousViewAsync(profileUserId);
+        }
+    }
+
+    public async Task<WhoViewedMyProfileVM> GetWhoViewedMyProfileAsync(Guid userId, int page = 1, int pageSize = 20, CancellationToken cancellationToken = default)
+    {
+        var views = await GetProfileViewsAsync(userId, page, pageSize);
+        var totalCount = await _viewRepository.GetProfileViewCountAsync(userId);
+        
+        return new WhoViewedMyProfileVM
+        {
+            UserId = userId,
+            Views = views.ToList(),
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
+        };
+    }
+
+    public async Task<int> GetProfileViewCountAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _viewRepository.GetProfileViewCountAsync(userId);
+    }
+
+    public async Task<int> GetProfileViewCountTodayAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _viewRepository.GetDailyViewCountAsync(userId, DateTime.UtcNow.Date);
+    }
+
+    public async Task<Dictionary<DateTime, int>> GetProfileViewsChartAsync(Guid userId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
+    {
+        return await _viewRepository.GetViewTrendsAsync(userId, startDate, endDate);
+    }
+
+    public async Task<List<ProfileViewStatsVM>> GetTopViewedProfilesAsync(int count = 10, CancellationToken cancellationToken = default)
+    {
+        // This would need to be implemented in the repository
+        // For now, return empty list
+        return new List<ProfileViewStatsVM>();
+    }
+
+    #endregion
 
     #region View Tracking
 

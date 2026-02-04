@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Performance;
-using CommunityCar.Application.Features.Dashboard.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Performance.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.Performance;
 

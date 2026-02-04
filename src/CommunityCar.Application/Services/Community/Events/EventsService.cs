@@ -1,7 +1,8 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Events;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Broadcast;
 using CommunityCar.Application.Features.Community.Events.ViewModels;
 using CommunityCar.Domain.Entities.Community.Events;
 using CommunityCar.Domain.Entities.Shared;
@@ -22,6 +23,18 @@ public class EventsService : IEventsService
         _mapper = mapper;
         _currentUserService = currentUserService;
         _broadcastService = broadcastService;
+    }
+
+    public async Task<object> GetEventsAsync()
+    {
+        var upcomingEvents = await GetUpcomingEventsAsync(20);
+        var stats = await GetEventsStatsAsync();
+        
+        return new
+        {
+            UpcomingEvents = upcomingEvents,
+            Stats = stats
+        };
     }
 
     public async Task<EventVM?> GetEventByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -207,7 +220,7 @@ public class EventsService : IEventsService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         // Broadcast the join event
-        await _broadcastService.BroadcastEventJoinAsync(eventId, currentUserId);
+        await _broadcastService.BroadcastToUserAsync(currentUserId.ToString(), $"You joined event: {eventEntity.Title}");
 
         return true;
     }
@@ -225,7 +238,7 @@ public class EventsService : IEventsService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         // Broadcast the leave event
-        await _broadcastService.BroadcastEventLeaveAsync(eventId, currentUserId);
+        await _broadcastService.BroadcastToUserAsync(currentUserId.ToString(), $"You left event: {eventEntity.Title}");
 
         return true;
     }
@@ -248,13 +261,7 @@ public class EventsService : IEventsService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         // Broadcast the share event
-        await _broadcastService.BroadcastEventInteractionAsync(eventId, "share", new
-        {
-            ShareCount = eventEntity.ShareCount,
-            UserId = currentUserId,
-            Platform = platform,
-            Message = shareMessage
-        });
+        await _broadcastService.BroadcastToAllAsync($"Event shared: {eventEntity.Title}");
 
         return true;
     }

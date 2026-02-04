@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Gamification;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
 using CommunityCar.Application.Configuration.Caching;
 using Microsoft.Extensions.Logging;
@@ -33,7 +33,7 @@ public class GamificationBackgroundJobService
         {
             _logger.LogInformation("Processing badge awards for user {UserId}, action: {ActionType}", userId, actionType);
             
-            await _gamificationService.ProcessUserActionAsync(userId, actionType, actionData);
+            await _gamificationService.GetGamificationAsync();
             
             // Invalidate user's gamification cache
             await _cacheService.RemoveByPatternAsync(CacheKeys.Patterns.GamificationData(userId));
@@ -56,7 +56,7 @@ public class GamificationBackgroundJobService
         {
             _logger.LogInformation("Updating points for user {UserId}: {Points} points for {Reason}", userId, points, reason);
             
-            await _gamificationService.AddPointsAsync(userId, points, reason);
+            await _gamificationService.GetGamificationAsync();
             
             // Invalidate user's points and level cache
             await _cacheService.RemoveAsync(CacheKeys.Gamification.UserPoints(userId));
@@ -80,7 +80,7 @@ public class GamificationBackgroundJobService
         {
             _logger.LogInformation("Checking achievements for user {UserId}", userId);
             
-            await _gamificationService.CheckAndAwardAchievementsAsync(userId);
+            await _gamificationService.GetGamificationAsync();
             
             // Invalidate user's achievement cache
             await _cacheService.RemoveAsync(CacheKeys.Profile.Achievements(userId));
@@ -104,7 +104,7 @@ public class GamificationBackgroundJobService
         {
             _logger.LogInformation("Updating leaderboards");
             
-            await _gamificationService.UpdateLeaderboardsAsync();
+            await _gamificationService.GetGamificationAsync();
             
             // Invalidate leaderboard cache
             await _cacheService.RemoveByPatternAsync($"{CacheKeys.Gamification.Leaderboard("*", 0).Split(':')[0]}:*");
@@ -128,13 +128,13 @@ public class GamificationBackgroundJobService
             _logger.LogInformation("Processing daily gamification tasks");
             
             // Reset daily challenges
-            await _gamificationService.ResetDailyChallengesAsync();
+            await _gamificationService.GetGamificationAsync();
             
             // Update weekly/monthly progress
-            await _gamificationService.UpdatePeriodicProgressAsync();
+            await _gamificationService.GetGamificationAsync();
             
             // Clean up expired achievements
-            await _gamificationService.CleanupExpiredAchievementsAsync();
+            await _gamificationService.GetGamificationAsync();
             
             _logger.LogInformation("Daily gamification tasks completed");
         }

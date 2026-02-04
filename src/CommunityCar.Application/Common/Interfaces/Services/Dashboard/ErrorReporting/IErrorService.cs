@@ -11,9 +11,9 @@ public interface IErrorService
     Task<string> LogErrorAsync(string message, Exception? exception = null, string? userId = null, string? requestPath = null, string? additionalData = null);
     Task<bool> ResolveErrorAsync(string errorId, string resolvedBy, string? resolution = null);
     Task<bool> DeleteErrorAsync(string errorId);
-    Task<ErrorStatsVM> GetErrorStatsAsync(DateTime? date = null);
-    Task<IEnumerable<ErrorStatsVM>> GetErrorStatsRangeAsync(DateTime startDate, DateTime endDate, string? category = null);
-    Task<(IEnumerable<ErrorBoundaryVM> Boundaries, PaginationInfo Pagination)> GetBoundaryErrorsAsync(int page = 1, int pageSize = 50, string? boundaryName = null, bool? isRecovered = null);
+    Task<Features.Dashboard.ErrorReporting.ViewModels.ErrorStatsVM> GetErrorStatsAsync(DateTime? date = null);
+    Task<IEnumerable<Features.Dashboard.ErrorReporting.ViewModels.ErrorStatsVM>> GetErrorStatsRangeAsync(DateTime startDate, DateTime endDate, string? category = null);
+    Task<(IEnumerable<Features.Dashboard.Error.ViewModels.ErrorBoundaryVM> Boundaries, PaginationInfo Pagination)> GetBoundaryErrorsAsync(int page = 1, int pageSize = 50, string? boundaryName = null, bool? isRecovered = null);
     Task<bool> RecoverBoundaryAsync(string boundaryId, string recoveryAction);
     Task UpdateErrorStatsAsync();
     Task CleanupOldErrorsAsync(int daysToKeep = 90);

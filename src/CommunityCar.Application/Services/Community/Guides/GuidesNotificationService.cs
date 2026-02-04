@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Guides;
 using CommunityCar.Domain.Entities.Community.Guides;
 using CommunityCar.Domain.Enums;
 using CommunityCar.Application.Common.Interfaces.Hubs;

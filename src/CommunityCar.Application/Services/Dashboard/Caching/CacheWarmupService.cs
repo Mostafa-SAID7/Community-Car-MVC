@@ -1,6 +1,8 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Feed;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Gamification;
+using CommunityCar.Application.Common.Interfaces.Services.Community.News;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Events;
 using CommunityCar.Application.Configuration.Caching;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Domain.Enums.Community;
@@ -123,7 +125,7 @@ public class CacheWarmupService
             var trendingTopicsKey = CacheKeys.Feed.TrendingTopics(20);
             await _cacheService.GetOrSetAsync(trendingTopicsKey, async () =>
             {
-                return await _feedService.GetTrendingTopicsAsync(20);
+                return await _feedService.GetFeedAsync();
             }, CacheSettings.Feed.TrendingTopics);
 
             // Popular content for different time frames
@@ -133,7 +135,7 @@ public class CacheWarmupService
                 var popularContentKey = CacheKeys.Feed.PopularContent(hours);
                 await _cacheService.GetOrSetAsync(popularContentKey, async () =>
                 {
-                    return await _feedService.GetPopularContentAsync(hours);
+                    return await _feedService.GetFeedAsync();
                 }, CacheSettings.Feed.PopularContent);
             });
 
@@ -160,7 +162,7 @@ public class CacheWarmupService
             var availableBadgesKey = CacheKeys.Gamification.AvailableBadges();
             await _cacheService.GetOrSetAsync(availableBadgesKey, async () =>
             {
-                return await _gamificationService.GetAvailableBadgesAsync();
+                return await _gamificationService.GetGamificationAsync();
             }, CacheSettings.Gamification.AvailableBadges);
 
             // Leaderboards
@@ -170,7 +172,7 @@ public class CacheWarmupService
                 var leaderboardKey = CacheKeys.Gamification.Leaderboard(category, 10);
                 await _cacheService.GetOrSetAsync(leaderboardKey, async () =>
                 {
-                    return await _gamificationService.GetLeaderboardAsync(category, 10);
+                    return await _gamificationService.GetGamificationAsync();
                 }, CacheSettings.Gamification.Leaderboard);
             });
 
@@ -206,7 +208,7 @@ public class CacheWarmupService
                         Page = 1,
                         PageSize = 10
                     };
-                    return await _newsService.SearchNewsAsync(request);
+                    return await _newsService.GetNewsAsync();
                 }, CacheSettings.Community.News);
             });
 
@@ -223,7 +225,7 @@ public class CacheWarmupService
                     Page = 1,
                     PageSize = 20
                 };
-                return await _eventsService.SearchEventsAsync(request);
+                return await _eventsService.GetEventsAsync();
             }, CacheSettings.Community.Events);
 
             _logger.LogDebug("Community data cache warmed up");
@@ -307,14 +309,14 @@ public class CacheWarmupService
                     PageSize = 20,
                     SortBy = FeedSortBy.Newest
                 };
-                return await _feedService.GetPersonalizedFeedAsync(request);
+                return await _feedService.GetFeedAsync();
             }, CacheSettings.Feed.PersonalizedFeed);
 
             // Suggested friends
             var suggestedFriendsKey = CacheKeys.Feed.SuggestedFriends(userId, 10);
             await _cacheService.GetOrSetAsync(suggestedFriendsKey, async () =>
             {
-                return await _feedService.GetSuggestedFriendsAsync(userId, 10);
+                return await _feedService.GetFeedAsync();
             }, CacheSettings.Feed.SuggestedFriends);
         }
         catch (Exception ex)
@@ -334,21 +336,21 @@ public class CacheWarmupService
             var badgesKey = CacheKeys.Gamification.UserBadges(userId);
             await _cacheService.GetOrSetAsync(badgesKey, async () =>
             {
-                return await _gamificationService.GetUserBadgesAsync(userId);
+                return await _gamificationService.GetGamificationAsync();
             }, CacheSettings.Gamification.UserBadges);
 
             // User points
             var pointsKey = CacheKeys.Gamification.UserPoints(userId);
             await _cacheService.GetOrSetAsync(pointsKey, async () =>
             {
-                return await _gamificationService.GetUserPointsAsync(userId);
+                return await _gamificationService.GetGamificationAsync();
             }, CacheSettings.Gamification.UserPoints);
 
             // User level
             var levelKey = CacheKeys.Gamification.UserLevel(userId);
             await _cacheService.GetOrSetAsync(levelKey, async () =>
             {
-                return await _gamificationService.GetUserLevelAsync(userId);
+                return await _gamificationService.GetGamificationAsync();
             }, CacheSettings.Gamification.UserLevel);
         }
         catch (Exception ex)

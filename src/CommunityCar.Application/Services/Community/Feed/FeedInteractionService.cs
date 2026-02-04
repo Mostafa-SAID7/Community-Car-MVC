@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Feed;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Interactions;
 using CommunityCar.Application.Features.Community.Feed.ViewModels;
 using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
 using CommunityCar.Domain.Enums.Shared;

@@ -1,6 +1,6 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Common.Interfaces.Services.Community;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Reviews;
 using CommunityCar.Application.Features.Community.Reviews.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Application.Common.Models;

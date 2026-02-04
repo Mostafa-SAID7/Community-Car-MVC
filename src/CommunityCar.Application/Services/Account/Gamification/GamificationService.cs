@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Gamification;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Features.Account.ViewModels.Gamification;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Domain.Entities.Account.Core;
@@ -38,6 +38,27 @@ public class GamificationService : IGamificationService
         _roleService = roleService;
         _currentUserService = currentUserService;
         _logger = logger;
+    }
+
+    public async Task<object> GetGamificationAsync()
+    {
+        var currentUserId = await _currentUserService.GetCurrentUserIdAsync();
+        if (currentUserId == null) return new { };
+
+        var badges = await GetUserBadgesAsync(currentUserId.Value);
+        var achievements = await GetUserAchievementsAsync(currentUserId.Value);
+        var stats = await GetUserStatsAsync(currentUserId.Value);
+        var points = await GetUserPointsAsync(currentUserId.Value);
+        var level = await GetUserLevelAsync(currentUserId.Value);
+
+        return new
+        {
+            Badges = badges,
+            Achievements = achievements,
+            Stats = stats,
+            Points = points,
+            Level = level
+        };
     }
 
     #region Badges

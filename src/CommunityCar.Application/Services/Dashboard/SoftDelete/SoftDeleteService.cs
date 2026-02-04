@@ -1,7 +1,7 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.SoftDelete;
-using CommunityCar.Application.Common.Interfaces.Services.Identity;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Features.Community.Posts.ViewModels;
 using CommunityCar.Application.Features.Community.Stories.ViewModels;
 using CommunityCar.Application.Features.Community.Groups.ViewModels;

@@ -9,9 +9,10 @@ public class SuspiciousActivityVM
     public DateTime DetectedAt { get; set; }
     public string IpAddress { get; set; } = string.Empty;
     public string UserAgent { get; set; } = string.Empty;
-    public string? UserId { get; set; }
+    public Guid? UserId { get; set; }
     public string? UserName { get; set; }
     public string Pattern { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
     public bool IsInvestigated { get; set; }
     public string? InvestigationNotes { get; set; }
     public bool IsBlocked { get; set; }

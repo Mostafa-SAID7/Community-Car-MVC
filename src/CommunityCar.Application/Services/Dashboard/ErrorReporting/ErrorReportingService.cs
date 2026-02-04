@@ -1,4 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.ErrorReporting;
+using CommunityCar.Application.Features.Dashboard.ErrorReporting.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
