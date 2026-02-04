@@ -22,22 +22,3 @@ public class DeletedContentSearchVM
     public bool HasPreviousPage => Page > 1;
     public bool HasNextPage => Page < TotalPages;
 }
-
-/// <summary>
-/// ViewModel for individual deleted content items
-/// </summary>
-public class DeletedContentItemVM
-{
-    public Guid Id { get; set; }
-    public string ContentType { get; set; } = string.Empty;
-    public string Title { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
-    public string AuthorName { get; set; } = string.Empty;
-    public Guid AuthorId { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime DeletedAt { get; set; }
-    public string? DeletedBy { get; set; }
-    public string? DeleteReason { get; set; }
-    public bool CanRestore { get; set; }
-    public bool CanPermanentlyDelete { get; set; }
-}

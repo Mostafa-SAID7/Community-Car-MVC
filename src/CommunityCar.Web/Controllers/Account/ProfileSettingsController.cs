@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Profile;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Gamification;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Management;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Security;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
