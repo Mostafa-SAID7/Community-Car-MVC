@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.ErrorReporting.ViewModels;
+namespace CommunityCar.Application.Features.Dashboard.ErrorReporting.ViewModels;
 
 /// <summary>
 /// Error Reporting ViewModels

@@ -1,16 +1,25 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
 
 public class ReportScheduleVM
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string ReportType { get; set; } = string.Empty;
-    public string Frequency { get; set; } = string.Empty; // Daily, Weekly, Monthly
-    public string Recipients { get; set; } = string.Empty;
-    public DateTime NextRunDate { get; set; }
-    public DateTime LastRunDate { get; set; }
+    [Required]
+    public string Title { get; set; } = string.Empty;
+    
+    public string Description { get; set; } = string.Empty;
+    
+    [Required]
+    public string Type { get; set; } = string.Empty;
+    
+    [Required]
+    public string Format { get; set; } = string.Empty;
+    
+    [Required]
+    public string Schedule { get; set; } = string.Empty; // Cron expression
+    
+    public List<string> Recipients { get; set; } = new();
     public bool IsActive { get; set; } = true;
-    public string Status { get; set; } = "Active";
-    public DateTime CreatedAt { get; set; }
-    public string CreatedBy { get; set; } = string.Empty;
+    public DateTime? NextRun { get; set; }
+    public Dictionary<string, object> Parameters { get; set; } = new();
 }

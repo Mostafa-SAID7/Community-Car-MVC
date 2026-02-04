@@ -1,3 +1,5 @@
+using CommunityCar.Application.Features.Shared.ViewModels;
+
 namespace CommunityCar.Application.Features.Dashboard.Moderation.ViewModels;
 
 public class ContentModerationVM

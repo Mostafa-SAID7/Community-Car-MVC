@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.SEO.ViewModels;
+namespace CommunityCar.Application.Features.Dashboard.SEO.ViewModels;
 
 public class RSSItemVM
 {

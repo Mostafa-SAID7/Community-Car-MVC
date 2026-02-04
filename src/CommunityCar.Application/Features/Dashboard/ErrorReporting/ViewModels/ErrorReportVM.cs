@@ -1,21 +1,27 @@
-namespace CommunityCar.Application.Features.ErrorReporting.ViewModels;
+using System.ComponentModel.DataAnnotations;
+
+namespace CommunityCar.Application.Features.Dashboard.ErrorReporting.ViewModels;
 
 public class ErrorReportVM
 {
-    public string ErrorId { get; set; } = string.Empty;
-    public string UserEmail { get; set; } = string.Empty;
-    public string UserName { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string StepsToReproduce { get; set; } = string.Empty;
-    public string ExpectedBehavior { get; set; } = string.Empty;
-    public string ActualBehavior { get; set; } = string.Empty;
-    public string BrowserInfo { get; set; } = string.Empty;
-    public string DeviceInfo { get; set; } = string.Empty;
-    public string Priority { get; set; } = "Medium";
-    public List<string> AttachmentUrls { get; set; } = new();
-    
-    // Response properties
-    public bool Success { get; set; }
-    public string Message { get; set; } = string.Empty;
+    public Guid Id { get; set; }
     public string TicketId { get; set; } = string.Empty;
+    
+    [Required]
+    public string Title { get; set; } = string.Empty;
+    
+    [Required]
+    public string Description { get; set; } = string.Empty;
+    
+    public string Category { get; set; } = string.Empty;
+    public string Priority { get; set; } = string.Empty; // Low, Medium, High, Critical
+    public string Status { get; set; } = string.Empty; // Open, InProgress, Resolved, Closed
+    public string? ReporterEmail { get; set; }
+    public string? ReporterName { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? ResolvedAt { get; set; }
+    public string? AssignedTo { get; set; }
+    public string? Resolution { get; set; }
+    public List<string> Attachments { get; set; } = new();
+    public Dictionary<string, object> Metadata { get; set; } = new();
 }

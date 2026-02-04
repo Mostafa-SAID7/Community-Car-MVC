@@ -1,6 +1,7 @@
-using CommunityCar.Application.Features.Dashboard.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Monitoring.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Analytics.ViewModels;
 
-using CommunityCar.Application.Features.Dashboard.Moderation.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Common.Interfaces.Services.Dashboard.Monitoring;
 

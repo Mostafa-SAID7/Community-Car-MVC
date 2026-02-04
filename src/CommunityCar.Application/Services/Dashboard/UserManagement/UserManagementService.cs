@@ -1,5 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.UserManagement;
 using CommunityCar.Application.Features.Dashboard.ViewModels;
+using CommunityCar.Application.Features.Shared.ViewModels;
 
 namespace CommunityCar.Application.Services.Dashboard.UserManagement;
 
@@ -84,7 +85,7 @@ public class UserManagementService : IUserManagementService
         return true;
     }
 
-    public async Task<bool> UpdateUserAsync(Guid userId, UpdateUserVM model)
+    public async Task<bool> UpdateUserAsync(Guid userId, Features.Dashboard.UserManagement.ViewModels.UpdateUserVM model)
     {
         // In real implementation, update user in database
         await Task.Delay(300);
@@ -167,11 +168,11 @@ public class UserManagementService : IUserManagementService
         });
     }
 
-    public async Task<UserStatisticsVM> GetUserStatisticsAsync()
+    public async Task<Features.Dashboard.UserManagement.ViewModels.UserStatisticsVM> GetUserStatisticsAsync()
     {
         var random = new Random();
         
-        return new UserStatisticsVM
+        return new Features.Dashboard.UserManagement.ViewModels.UserStatisticsVM
         {
             TotalUsers = random.Next(1000, 10000),
             ActiveUsers = random.Next(800, 8000),
@@ -209,16 +210,16 @@ public class UserManagementService : IUserManagementService
         return await Task.FromResult(data);
     }
 
-    public async Task<List<UserActivityVM>> GetRecentUserActivityAsync(int limit = 50)
+    public async Task<List<Features.Dashboard.UserManagement.ViewModels.UserActivityVM>> GetRecentUserActivityAsync(int limit = 50)
     {
-        var activities = new List<UserActivityVM>();
+        var activities = new List<Features.Dashboard.UserManagement.ViewModels.UserActivityVM>();
         var random = new Random();
         var actions = new[] { "Login", "Logout", "Profile Update", "Password Change", "Post Created", "Comment Added" };
         var users = new[] { "john.doe", "jane.smith", "admin", "moderator", "editor" };
 
         for (int i = 0; i < limit; i++)
         {
-            activities.Add(new UserActivityVM
+            activities.Add(new Features.Dashboard.UserManagement.ViewModels.UserActivityVM
             {
                 Id = Guid.NewGuid(),
                 UserId = Guid.NewGuid(),
