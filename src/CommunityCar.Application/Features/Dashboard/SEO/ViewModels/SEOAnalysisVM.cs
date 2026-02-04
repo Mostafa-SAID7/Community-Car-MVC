@@ -177,14 +177,6 @@ public class SitemapGenerationVM
     public DateTime LastModified { get; set; }
 }
 
-public class RSSFeedVM
-{
-    public string Title { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string Link { get; set; } = string.Empty;
-    public List<RSSItemVM> Items { get; set; } = new();
-}
-
 public class RSSItemVM
 {
     public string Title { get; set; } = string.Empty;

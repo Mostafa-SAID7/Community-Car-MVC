@@ -179,14 +179,3 @@ public class ProcessInfoVM
     public int ThreadCount { get; set; }
     public DateTime StartTime { get; set; }
 }
-
-public class CachePerformanceVM
-{
-    public decimal HitRate { get; set; }
-    public decimal MissRate { get; set; }
-    public int TotalRequests { get; set; }
-    public int CacheSize { get; set; }
-    public int EvictionCount { get; set; }
-    public int AverageGetTime { get; set; }
-    public int AverageSetTime { get; set; }
-}
