@@ -48,9 +48,9 @@
                             <a href="@item.Url" 
                                target="_blank"
                                class="nav-link sidebar-nav-link d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
-                                <i data-lucide="@item.Icon" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
+                                <i data-lucide="@item.Icon" class="sidebar-icon"></i>
                                 <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer[item.Text]</span>
-                                <i data-lucide="external-link" class="ms-auto opacity-50" style="width: 14px; height: 14px;"></i>
+                                <i data-lucide="external-link" class="ms-auto opacity-50 sidebar-icon-xs"></i>
                             </a>
                         }
                         else
@@ -60,7 +60,7 @@
                                asp-route-culture="@currentCulture"
                                asp-route-id="@item.RouteId"
                                class="nav-link sidebar-nav-link @(isActive(item.Controller, item.Action) ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
-                                <i data-lucide="@item.Icon" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
+                                <i data-lucide="@item.Icon" class="sidebar-icon"></i>
                                 <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer[item.Text]</span>
                                 @if (item.Badge > 0)
                                 {

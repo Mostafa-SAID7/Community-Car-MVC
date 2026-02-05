@@ -27,22 +27,22 @@
                 <div class="card-body p-2">
                     <ul class="nav nav-pills nav-fill gap-2" id="analyticsTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active rounded-3 py-3 fw-black text-uppercase tracking-widest" style="font-size: 0.7rem;" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">
+                            <button class="nav-link active rounded-3 py-3 fw-black text-uppercase tracking-widest small" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">
                                 <i class="fas fa-chart-pie me-2 opacity-50"></i>Overview
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link rounded-3 py-3 fw-black text-uppercase tracking-widest" style="font-size: 0.7rem;" id="users-tab" data-bs-toggle="pill" data-bs-target="#users" type="button" role="tab">
+                            <button class="nav-link rounded-3 py-3 fw-black text-uppercase tracking-widest small" id="users-tab" data-bs-toggle="pill" data-bs-target="#users" type="button" role="tab">
                                 <i class="fas fa-users me-2 opacity-50"></i>Users
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link rounded-3 py-3 fw-black text-uppercase tracking-widest" style="font-size: 0.7rem;" id="content-tab" data-bs-toggle="pill" data-bs-target="#content" type="button" role="tab">
+                            <button class="nav-link rounded-3 py-3 fw-black text-uppercase tracking-widest small" id="content-tab" data-bs-toggle="pill" data-bs-target="#content" type="button" role="tab">
                                 <i class="fas fa-file-alt me-2 opacity-50"></i>Content
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link rounded-3 py-3 fw-black text-uppercase tracking-widest" style="font-size: 0.7rem;" id="traffic-tab" data-bs-toggle="pill" data-bs-target="#traffic" type="button" role="tab">
+                            <button class="nav-link rounded-3 py-3 fw-black text-uppercase tracking-widest small" id="traffic-tab" data-bs-toggle="pill" data-bs-target="#traffic" type="button" role="tab">
                                 <i class="fas fa-network-wired me-2 opacity-50"></i>Traffic
                             </button>
                         </li>
@@ -64,7 +64,7 @@
                             <i class="fas fa-expand-alt text-muted opacity-50 cursor-pointer"></i>
                         </div>
                         <div class="card-body p-4">
-                            <div style="height: 350px;">
+                            <div class="chart-container">
                                 <canvas id="overviewChart"></canvas>
                             </div>
                         </div>
@@ -126,12 +126,12 @@
                     <div class="card card-premium border-0 h-100">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
                             <h5 class="fw-black text-uppercase tracking-tight mb-0">Behavioral Matrix</h5>
-                            <a href="@Url.Action("Index", "UserAnalyticsBehavior")" class="btn btn-sm btn-ghost text-primary-red fw-bold tracking-widest text-uppercase" style="font-size: 0.6rem;">
+                            <a href="@Url.Action("Index", "UserAnalyticsBehavior")" class="btn btn-sm btn-ghost text-primary-red analytics-deep-audit-btn">
                                 Deep Audit <i class="fas fa-arrow-right ms-1"></i>
                             </a>
                         </div>
                         <div class="card-body p-4">
-                            <div style="height: 300px;">
+                            <div class="chart-container-sm">
                                 <canvas id="userBehaviorChart"></canvas>
                             </div>
                         </div>
@@ -141,12 +141,12 @@
                     <div class="card card-premium border-0 h-100">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
                             <h5 class="fw-black text-uppercase tracking-tight mb-0">User Stratification</h5>
-                            <a href="@Url.Action("Index", "UserAnalyticsSegments")" class="btn btn-sm btn-ghost text-primary-red fw-bold tracking-widest text-uppercase" style="font-size: 0.6rem;">
+                            <a href="@Url.Action("Index", "UserAnalyticsSegments")" class="btn btn-sm btn-ghost text-primary-red analytics-deep-audit-btn">
                                 Segment Analysis <i class="fas fa-arrow-right ms-1"></i>
                             </a>
                         </div>
                         <div class="card-body p-4">
-                            <div style="height: 300px;">
+                            <div class="chart-container-sm">
                                 <canvas id="userSegmentsChart"></canvas>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                     <div class="card card-premium border-0">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
                             <h5 class="fw-black text-uppercase tracking-tight mb-0">Entity Performance Feed</h5>
-                            <a href="@Url.Action("Index", "ContentAnalytics")" class="btn btn-sm btn-ghost text-primary-red fw-bold tracking-widest text-uppercase" style="font-size: 0.6rem;">
+                            <a href="@Url.Action("Index", "ContentAnalytics")" class="btn btn-sm btn-ghost text-primary-red analytics-deep-audit-btn">
                                 Full Catalog <i class="fas fa-arrow-right ms-1"></i>
                             </a>
                         </div>
@@ -186,7 +186,7 @@
                             <h5 class="fw-black text-uppercase tracking-tight mb-0">Network Traffic Vector</h5>
                         </div>
                         <div class="card-body p-4">
-                            <div style="height: 400px;">
+                            <div class="chart-container-lg">
                                 <canvas id="trafficChart"></canvas>
                             </div>
                         </div>

@@ -5,7 +5,6 @@ using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Use
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Users.Activity;
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Users.Security;
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
 
 namespace CommunityCar.Application.Services.Dashboard.Overview;
 

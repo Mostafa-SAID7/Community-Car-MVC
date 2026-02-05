@@ -24,7 +24,7 @@
         <div class="col-md-3">
             <div class="card card-premium h-100 border-0">
                 <div class="card-body p-4 d-flex align-items-center gap-3">
-                    <div class="rounded-4 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
+                    <div class="dashboard-stat-icon bg-primary bg-opacity-10 text-primary">
                         <i class="fas fa-users fs-5"></i>
                     </div>
                     <div>
@@ -37,7 +37,7 @@
         <div class="col-md-3">
             <div class="card card-premium h-100 border-0">
                 <div class="card-body p-4 d-flex align-items-center gap-3">
-                    <div class="rounded-4 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
+                    <div class="dashboard-stat-icon bg-success bg-opacity-10 text-success">
                         <i class="fas fa-chart-line fs-5"></i>
                     </div>
                     <div>
@@ -50,7 +50,7 @@
         <div class="col-md-3">
             <div class="card card-premium h-100 border-0">
                 <div class="card-body p-4 d-flex align-items-center gap-3">
-                    <div class="rounded-4 bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
+                    <div class="dashboard-stat-icon bg-info bg-opacity-10 text-info">
                         <i class="fas fa-file-alt fs-5"></i>
                     </div>
                     <div>
@@ -63,7 +63,7 @@
         <div class="col-md-3">
             <div class="card card-premium h-100 border-0">
                 <div class="card-body p-4 d-flex align-items-center gap-3">
-                    <div class="rounded-4 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
+                    <div class="dashboard-stat-icon bg-warning bg-opacity-10 text-warning">
                         <i class="fas fa-heart fs-5"></i>
                     </div>
                     <div>
@@ -83,7 +83,7 @@
                     <h5 class="fw-black text-uppercase tracking-tight mb-0">User Growth</h5>
                 </div>
                 <div class="card-body p-4">
-                    <canvas id="userGrowthChart" style="height: 300px; max-height: 300px;"></canvas>
+                    <canvas id="userGrowthChart" class="chart-container-sm"></canvas>
                 </div>
             </div>
         </div>
@@ -105,7 +105,7 @@
                                     <span class="text-muted small text-uppercase tracking-widest fw-bold">CPU Usage</span>
                                     <span class="fw-black">@(Model?.SystemHealth?.CpuUsage?.ToString("F1") ?? "0")%</span>
                                 </div>
-                                <div class="progress rounded-pill shadow-none bg-light" style="height: 8px;">
+                                <div class="progress rounded-pill shadow-none bg-light progress-md">
                                     <div class="progress-bar bg-primary-red" role="progressbar" style="width: @(Model?.SystemHealth?.CpuUsage ?? 0)%"></div>
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                                     <span class="text-muted small text-uppercase tracking-widest fw-bold">Memory Usage</span>
                                     <span class="fw-black">@(Model?.SystemHealth?.MemoryUsage?.ToString("F1") ?? "0")%</span>
                                 </div>
-                                <div class="progress rounded-pill shadow-none bg-light" style="height: 8px;">
+                                <div class="progress rounded-pill shadow-none bg-light progress-md">
                                     <div class="progress-bar bg-success" role="progressbar" style="width: @(Model?.SystemHealth?.MemoryUsage ?? 0)%"></div>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@
                                     <span class="text-muted small text-uppercase tracking-widest fw-bold">Disk Usage</span>
                                     <span class="fw-black">@(Model?.SystemHealth?.DiskUsage?.ToString("F1") ?? "0")%</span>
                                 </div>
-                                <div class="progress rounded-pill shadow-none bg-light" style="height: 8px;">
+                                <div class="progress rounded-pill shadow-none bg-light progress-md">
                                     <div class="progress-bar bg-info" role="progressbar" style="width: @(Model?.SystemHealth?.DiskUsage ?? 0)%"></div>
                                 </div>
                             </div>
@@ -184,12 +184,12 @@
                 activities.forEach(function(activity) {
                     html += `
                         <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light bg-opacity-50 border border-light">
-                            <div class="rounded-circle bg-white shadow-sm d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; flex-shrink: 0;">
+                            <div class="activity-icon-container bg-white shadow-sm">
                                 <i class="fas fa-${activity.icon || 'info-circle'} text-primary-red small"></i>
                             </div>
                             <div class="flex-grow-1">
                                 <p class="mb-0 fw-bold">${activity.description}</p>
-                                <small class="text-muted opacity-75 text-uppercase tracking-widest fw-black" style="font-size: 0.65rem;">${activity.timestamp}</small>
+                                <small class="text-muted opacity-75 text-uppercase tracking-widest fw-black text-xxs">${activity.timestamp}</small>
                             </div>
                         </div>
                     `;

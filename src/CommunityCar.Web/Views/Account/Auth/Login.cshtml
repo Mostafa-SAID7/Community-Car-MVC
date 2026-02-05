@@ -13,7 +13,7 @@
 
 <!-- Logo Section -->
 <a href="/" class="d-flex align-items-center gap-3 text-decoration-none text-dark mb-5">
-    <i data-lucide="zap" class="text-warning" style="width: 24px; height: 24px;"></i>
+    <i data-lucide="zap" class="text-warning icon-md"></i>
     <span class="h4 fw-black mb-0">Havenix.</span>
 </a>
 
@@ -23,11 +23,11 @@
 <!-- Social Login -->
 <div class="d-flex flex-column gap-3 mb-4">
     <a href="#" class="btn btn-outline-secondary bg-white rounded-3 py-3 d-flex align-items-center justify-content-center gap-3 fw-semibold text-dark" id="google-login">
-        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" style="width: 20px; height: 20px;" />
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" class="social-icon" />
         Continue with Google
     </a>
     <a href="#" class="btn btn-outline-secondary bg-white rounded-3 py-3 d-flex align-items-center justify-content-center gap-3 fw-semibold text-dark" id="facebook-login">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" style="width: 20px; height: 20px;" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" class="social-icon" />
         Continue with Facebook
     </a>
 </div>
@@ -43,7 +43,7 @@
     
     @if (!ViewData.ModelState.IsValid)
     {
-        <div class="alert alert-danger border-0 mb-4 p-3 rounded-3" style="background: #fef2f2; color: #991b1b;">
+        <div class="alert alert-danger border-0 mb-4 p-3 rounded-3 auth-error-alert">
             @Html.ValidationSummary(false)
         </div>
     }
@@ -62,8 +62,8 @@
         <label class="form-label text-uppercase fw-bold small text-muted" asp-for="Password">Password</label>
         <div class="position-relative">
             <input asp-for="Password" id="password-input" type="password" class="form-control rounded-3 py-3 bg-light border-0 pe-5" placeholder="Enter your password" required />
-            <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted" id="toggle-password" style="z-index: 10;">
-                <i data-lucide="eye" style="width: 20px; height: 20px;"></i>
+            <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted password-toggle-btn" id="toggle-password">
+                <i data-lucide="eye" class="icon-sm"></i>
             </button>
         </div>
         <span asp-validation-for="Password" class="text-danger xx-small mt-1 d-block"></span>
