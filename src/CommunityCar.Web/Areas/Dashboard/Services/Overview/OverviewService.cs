@@ -1,22 +1,23 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview;
-using CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Users.Statistics;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Users.Activity;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Users.Security;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview.Users.Statistics;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview.Users.Activity;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview.Users.Security;
 
-namespace CommunityCar.Application.Services.Dashboard.Overview;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Overview;
 
 public class OverviewService : IOverviewService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
     private readonly IUserOverviewStatisticsService _userStatisticsService;
     private readonly IUserOverviewActivityService _userActivityService;
     private readonly IUserOverviewSecurityService _userSecurityService;
 
     public OverviewService(
-        IUnitOfWork unitOfWork,
+        IDashboardUnitOfWork unitOfWork,
         IUserOverviewStatisticsService userStatisticsService,
         IUserOverviewActivityService userActivityService,
         IUserOverviewSecurityService userSecurityService)
@@ -148,3 +149,7 @@ public class OverviewService : IOverviewService
         await Task.CompletedTask;
     }
 }
+
+
+
+

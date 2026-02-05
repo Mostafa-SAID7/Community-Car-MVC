@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
 
 namespace CommunityCar.Web.Areas.Dashboard.ViewModels;
 
@@ -8,3 +8,8 @@ public class DashboardAreaVM
     public OverviewVM Overview { get; set; } = new();
     public DateTime GeneratedAt { get; set; } = DateTime.UtcNow;
 }
+
+
+
+
+

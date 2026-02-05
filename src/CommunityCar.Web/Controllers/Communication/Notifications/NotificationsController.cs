@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Application.Common.Interfaces.Services.Communication;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Communication.Interfaces.Services;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Domain.Enums.Account;
 
 namespace CommunityCar.Web.Controllers.Shared.Notifications;
@@ -217,5 +217,6 @@ public class NotificationsController : Controller
         }
     }
 }
+
 
 

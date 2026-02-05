@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Response model for restore operations
@@ -11,3 +11,8 @@ public class RestoreResponseVM
     public DateTime? RestoredAt { get; set; }
     public string? RestoredBy { get; set; }
 }
+
+
+
+
+

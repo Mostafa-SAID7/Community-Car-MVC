@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Content;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 
 /// <summary>
 /// Location analytics view model
@@ -16,3 +16,7 @@ public class LocationAnalyticsVM
     public TimeSpan AverageSessionDuration { get; set; }
     public decimal Percentage { get; set; }
 }
+
+
+
+

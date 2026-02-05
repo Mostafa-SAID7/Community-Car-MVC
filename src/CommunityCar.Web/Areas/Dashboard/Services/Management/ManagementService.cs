@@ -1,26 +1,18 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management;
-using CommunityCar.Application.Features.Dashboard.Management.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
-using CommunityCar.Application.Features.Dashboard.Reports.system.ViewModels;
-using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management.Users.Core;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management.Users.Actions;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management.Users.Security;
-using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Trends;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Trends;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Security;
 
-namespace CommunityCar.Application.Services.Dashboard.Management;
+namespace CommunityCar.Web.Areas.Dashboard.Services.Management;
 
 public class ManagementService : IManagementService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
     private readonly IUserManagementCoreService _userManagementCoreService;
     private readonly IUserManagementActionsService _userManagementActionsService;
     private readonly IUserManagementSecurityService _userManagementSecurityService;
 
     public ManagementService(
-        IUnitOfWork unitOfWork,
+        IDashboardUnitOfWork unitOfWork,
         IUserManagementCoreService userManagementCoreService,
         IUserManagementActionsService userManagementActionsService,
         IUserManagementSecurityService userManagementSecurityService)
@@ -137,3 +129,6 @@ public class ManagementService : IManagementService
         return new Dictionary<string, object>();
     }
 }
+
+
+

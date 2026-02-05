@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class SEOAnalysisVM
 {
@@ -185,3 +185,7 @@ public class RSSItemVM
     public DateTime PublishDate { get; set; }
     public string Author { get; set; } = string.Empty;
 }
+
+
+
+

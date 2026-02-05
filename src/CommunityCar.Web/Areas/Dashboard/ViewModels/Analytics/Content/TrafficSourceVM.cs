@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Content;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 
 /// <summary>
 /// Traffic source analytics view model
@@ -15,3 +15,7 @@ public class TrafficSourceVM
     public decimal ConversionRate { get; set; }
     public decimal Percentage { get; set; }
 }
+
+
+
+

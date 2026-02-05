@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 public class ErrorReportResponseVM
 {
@@ -6,3 +6,7 @@ public class ErrorReportResponseVM
     public string Message { get; set; } = string.Empty;
     public string TicketId { get; set; } = string.Empty;
 }
+
+
+
+

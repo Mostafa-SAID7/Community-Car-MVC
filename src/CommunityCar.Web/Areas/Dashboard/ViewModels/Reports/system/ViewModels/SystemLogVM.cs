@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.system.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.system.ViewModels;
 
 /// <summary>
 /// System log view model
@@ -19,3 +19,7 @@ public class SystemLogVM
     public string CorrelationId { get; set; } = string.Empty;
     public Dictionary<string, object> Properties { get; set; } = new();
 }
+
+
+
+

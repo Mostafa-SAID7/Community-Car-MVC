@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Activity;
 
 public class ActivityHeatmapVM
 {
@@ -10,3 +10,7 @@ public class ActivityHeatmapVM
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Audit;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Audit;
 
 /// <summary>
 /// User audit report view model
@@ -22,3 +22,7 @@ public class UserAuditReportVM
     public List<UserAuditEntryVM> AuditEntries { get; set; } = new();
     public Dictionary<string, int> ActionsByType { get; set; } = new();
 }
+
+
+
+

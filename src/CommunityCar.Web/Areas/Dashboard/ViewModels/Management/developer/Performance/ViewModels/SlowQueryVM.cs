@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.Performance.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Performance.ViewModels;
 
 /// <summary>
 /// ViewModel for slow database queries
@@ -16,3 +16,7 @@ public class SlowQueryVM
     public string Source { get; set; } = string.Empty;
     public Dictionary<string, object> Parameters { get; set; } = new();
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// ViewModel for security threat in reports
@@ -20,3 +20,7 @@ public class SecurityThreatReportVM
     public int AttemptCount { get; set; }
     public Dictionary<string, object> Metadata { get; set; } = new();
 }
+
+
+
+

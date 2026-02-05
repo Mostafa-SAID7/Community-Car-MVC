@@ -1,7 +1,7 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users.Preferences;
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Preferences;
 
-namespace CommunityCar.Application.Services.Dashboard.Analytics.Users.Preferences;
+namespace CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users.Preferences;
 
 public class UserPreferencesService : IUserPreferencesService
 {
@@ -64,3 +64,6 @@ public class UserPreferencesService : IUserPreferencesService
         };
     }
 }
+
+
+

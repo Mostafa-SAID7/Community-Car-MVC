@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class SEOMetricsRequestVM
 {
@@ -8,3 +8,7 @@ public class SEOMetricsRequestVM
     public bool IncludeAccessibility { get; set; } = false;
     public string Device { get; set; } = "desktop"; // "desktop" or "mobile"
 }
+
+
+
+

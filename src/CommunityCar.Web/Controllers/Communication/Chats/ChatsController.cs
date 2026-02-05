@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Application.Common.Interfaces.Services.Communication;
+using CommunityCar.Web.Areas.Communication.Interfaces.Services;
 using CommunityCar.Application.Features.Communication.Chat.ViewModels;
 using System.Security.Claims;
 
@@ -110,6 +110,7 @@ public class ChatsController : Controller
         return Guid.Parse(userIdClaim ?? throw new UnauthorizedAccessException());
     }
 }
+
 
 
 

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 public class RestoreContentVM
 {
@@ -14,3 +14,8 @@ public class RestoreContentVM
     public bool NotifyAuthor { get; set; } = true;
     public bool RestoreRelatedContent { get; set; } = false;
 }
+
+
+
+
+

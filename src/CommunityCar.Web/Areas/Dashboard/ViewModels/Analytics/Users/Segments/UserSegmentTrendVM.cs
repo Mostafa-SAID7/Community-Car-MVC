@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Segments;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Segments;
 
 /// <summary>
 /// User segment trend view model
@@ -14,3 +14,7 @@ public class UserSegmentTrendVM
     public string TrendDirection { get; set; } = string.Empty; // Growing, Declining, Stable
     public Dictionary<string, object> SegmentCharacteristics { get; set; } = new();
 }
+
+
+
+

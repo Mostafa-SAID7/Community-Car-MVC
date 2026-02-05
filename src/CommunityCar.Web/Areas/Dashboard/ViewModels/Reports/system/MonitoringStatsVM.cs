@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.system;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.system;
 
 /// <summary>
 /// ViewModel for monitoring statistics
@@ -19,3 +19,7 @@ public class MonitoringStatsVM
     public Dictionary<string, string> ServiceStatuses { get; set; } = new();
     public List<string> RecentAlerts { get; set; } = new();
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Security;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Security;
 
 /// <summary>
 /// ViewModel for user security logs in management context
@@ -31,3 +31,7 @@ public class UserSecurityLogVM
     public string? RiskLevel { get; set; }
     public string? SessionId { get; set; }
 }
+
+
+
+

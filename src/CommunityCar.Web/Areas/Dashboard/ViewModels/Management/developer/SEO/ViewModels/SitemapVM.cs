@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class SitemapVM
 {
@@ -8,3 +8,7 @@ public class SitemapVM
     public double Priority { get; set; }
     public List<SitemapEntryVM> Entries { get; set; } = new();
 }
+
+
+
+

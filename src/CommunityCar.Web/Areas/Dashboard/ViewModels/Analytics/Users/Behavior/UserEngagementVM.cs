@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 /// <summary>
 /// User engagement view model for behavior analytics
@@ -16,3 +16,7 @@ public class UserEngagementVM
     public DateTime LastEngagement { get; set; }
     public Dictionary<string, int> EngagementByType { get; set; } = new();
 }
+
+
+
+

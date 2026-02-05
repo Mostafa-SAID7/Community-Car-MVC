@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.cache;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.cache;
 
 public class CacheKeyInfo
 {
@@ -9,3 +9,7 @@ public class CacheKeyInfo
     public DateTime CreatedAt { get; set; }
     public int AccessCount { get; set; }
 }
+
+
+
+

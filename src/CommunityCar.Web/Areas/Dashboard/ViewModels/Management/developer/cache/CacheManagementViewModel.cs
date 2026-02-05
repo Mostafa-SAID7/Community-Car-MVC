@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.cache;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.cache;
 
 public class CacheManagementViewModel
 {
@@ -6,3 +6,7 @@ public class CacheManagementViewModel
     public string CacheType { get; set; } = "Unknown";
     public Dictionary<string, object> Statistics { get; set; } = new();
 }
+
+
+
+

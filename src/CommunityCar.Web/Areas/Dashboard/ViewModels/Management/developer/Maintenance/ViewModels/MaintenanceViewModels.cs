@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.Maintenance.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Maintenance.ViewModels;
 
 public class MaintenanceScheduleVM
 {
@@ -20,3 +20,7 @@ public class MaintenanceScheduleVM
     public string? NotificationMessage { get; set; }
     public List<MaintenanceTaskVM> Tasks { get; set; } = new();
 }
+
+
+
+

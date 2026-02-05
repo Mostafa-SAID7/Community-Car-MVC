@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class SystemLogVM
 {
@@ -14,3 +14,7 @@ public class SystemLogVM
     public string UserAgent { get; set; } = string.Empty;
     public Dictionary<string, object> AdditionalData { get; set; } = new();
 }
+
+
+
+

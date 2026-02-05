@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Storage.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.Storage.ViewModels;
 
 public class StorageConfigVM
 {
@@ -9,3 +9,7 @@ public class StorageConfigVM
     public List<string> AllowedFileTypes { get; set; } = new();
     public bool EnableCompression { get; set; }
 }
+
+
+
+

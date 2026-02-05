@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Models;
-using CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Core;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Core;
 
 /// <summary>
 /// User management view model
@@ -81,3 +81,7 @@ public class AdminUserStatsVM
     public int NewUsersThisWeek { get; set; }
     public int NewUsersThisMonth { get; set; }
 }
+
+
+
+

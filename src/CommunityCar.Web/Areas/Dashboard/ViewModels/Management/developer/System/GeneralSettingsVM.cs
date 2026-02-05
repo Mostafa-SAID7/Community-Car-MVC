@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Settings.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System;
 
 public class GeneralSettingsVM
 {
@@ -11,3 +11,7 @@ public class GeneralSettingsVM
     public bool MaintenanceMode { get; set; }
     public string MaintenanceMessage { get; set; } = string.Empty;
 }
+
+
+
+

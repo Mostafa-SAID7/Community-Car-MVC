@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// ViewModel for security threats in security reports
@@ -19,3 +19,7 @@ public class SecurityThreatVM
     public DateTime? ResolvedAt { get; set; }
     public Dictionary<string, object> ThreatData { get; set; } = new();
 }
+
+
+
+

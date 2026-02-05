@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Content;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 
 /// <summary>
 /// ViewModel for traffic analytics
@@ -21,3 +21,7 @@ public class TrafficAnalyticsVM
     public List<LocationAnalyticsVM> LocationBreakdown { get; set; } = new();
     public List<ChartDataVM> TrafficData { get; set; } = new();
 }
+
+
+
+

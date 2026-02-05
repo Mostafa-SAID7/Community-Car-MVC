@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Request model for bulk soft delete operations
@@ -9,3 +9,8 @@ public class BulkSoftDeleteRequestVM
     public string? Reason { get; set; }
     public bool NotifyUsers { get; set; } = false;
 }
+
+
+
+
+

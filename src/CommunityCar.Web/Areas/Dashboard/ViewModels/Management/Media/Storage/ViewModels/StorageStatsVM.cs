@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Storage.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.Storage.ViewModels;
 
 public class StorageStatsVM
 {
@@ -9,3 +9,7 @@ public class StorageStatsVM
     public Dictionary<string, long> StorageByType { get; set; } = new();
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

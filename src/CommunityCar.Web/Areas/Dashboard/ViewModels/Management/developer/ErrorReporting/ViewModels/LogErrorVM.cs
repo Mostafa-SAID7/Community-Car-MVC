@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 public class LogErrorVM
 {
@@ -12,3 +12,7 @@ public class LogErrorVM
     public string Level { get; set; } = "Error";
     public Dictionary<string, object> AdditionalData { get; set; } = new();
 }
+
+
+
+

@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Communication;
+using CommunityCar.Web.Areas.Communication.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Community.News;
 using CommunityCar.Domain.Entities.Community.News;
 using CommunityCar.Domain.Enums.Account;

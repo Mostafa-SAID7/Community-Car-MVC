@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.Localization.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.Localization.ViewModels;
 
 public class CultureVM
 {
@@ -10,3 +10,7 @@ public class CultureVM
     public int ResourceCount { get; set; }
     public double CompletionPercentage { get; set; }
 }
+
+
+
+

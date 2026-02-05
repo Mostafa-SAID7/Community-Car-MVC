@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Performance;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Performance;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -60,6 +60,7 @@ public class PerformanceTagHelper : TagHelper
         output.Content.SetHtmlContent(content.ToString());
     }
 }
+
 
 
 

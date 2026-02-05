@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Core;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Core;
 
 /// <summary>
 /// ViewModel for dashboard user statistics
@@ -20,3 +20,7 @@ public class DashboardUserStatisticsVM
     public decimal RetentionRate { get; set; }
     public decimal VerificationRate { get; set; }
 }
+
+
+
+

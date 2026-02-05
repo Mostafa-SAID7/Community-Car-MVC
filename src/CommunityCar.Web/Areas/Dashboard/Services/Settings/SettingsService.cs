@@ -1,14 +1,15 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Settings;
-using CommunityCar.Application.Features.Dashboard.Settings.ViewModels;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Settings;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Settings.ViewModels;
 
-namespace CommunityCar.Application.Services.Dashboard.Settings;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Settings;
 
 public class SettingsService : ISettingsService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public SettingsService(IUnitOfWork unitOfWork)
+    public SettingsService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -90,3 +91,7 @@ public class SettingsService : ISettingsService
         return true;
     }
 }
+
+
+
+

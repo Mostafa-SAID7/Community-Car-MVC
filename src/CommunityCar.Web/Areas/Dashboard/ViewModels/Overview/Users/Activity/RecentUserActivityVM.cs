@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Activity;
 
 /// <summary>
 /// Recent user activity view model for overview
@@ -15,3 +15,7 @@ public class RecentUserActivityVM
     public string TimeAgo { get; set; } = string.Empty;
     public bool IsOnline { get; set; }
 }
+
+
+
+

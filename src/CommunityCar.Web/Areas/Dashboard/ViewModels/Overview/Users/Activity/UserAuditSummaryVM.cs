@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Activity;
 
 /// <summary>
 /// ViewModel for user audit summary in overview
@@ -21,3 +21,7 @@ public class UserAuditSummaryVM
     public List<string> MostCommonActions { get; set; } = new();
     public double SuccessRate => TotalActions > 0 ? (double)SuccessfulActions / TotalActions * 100 : 0;
 }
+
+
+
+

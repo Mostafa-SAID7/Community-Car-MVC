@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Storage.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.Storage.ViewModels;
 
 public class FileInfoVM
 {
@@ -11,3 +11,7 @@ public class FileInfoVM
     public string Owner { get; set; } = string.Empty;
     public bool IsPublic { get; set; }
 }
+
+
+
+

@@ -1,7 +1,7 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Maintenance;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Maintenance;
 using Microsoft.Extensions.Configuration;
 
-namespace CommunityCar.Application.Services.Dashboard.Maintenance;
+namespace CommunityCar.Web.Areas.Dashboard.Services.Maintenance;
 
 public class MaintenanceService : IMaintenanceService
 {
@@ -104,3 +104,6 @@ public class MaintenanceService : IMaintenanceService
         }
     }
 }
+
+
+

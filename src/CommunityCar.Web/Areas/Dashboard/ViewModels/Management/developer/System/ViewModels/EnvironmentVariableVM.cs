@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class EnvironmentVariableVM
 {
@@ -9,3 +9,7 @@ public class EnvironmentVariableVM
     public bool IsSystem { get; set; }
     public string Category { get; set; } = string.Empty;
 }
+
+
+
+

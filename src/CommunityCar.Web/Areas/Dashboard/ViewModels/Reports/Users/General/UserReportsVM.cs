@@ -1,7 +1,7 @@
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Activity;
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Activity;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.General;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.General;
 
 /// <summary>
 /// ViewModel for comprehensive user reports
@@ -61,3 +61,7 @@ public class UserStatusDistributionVM
     public decimal Percentage { get; set; }
     public string Color { get; set; } = string.Empty;
 }
+
+
+
+

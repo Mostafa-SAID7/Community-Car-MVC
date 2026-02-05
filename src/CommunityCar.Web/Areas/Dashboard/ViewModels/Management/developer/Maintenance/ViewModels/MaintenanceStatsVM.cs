@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.Maintenance.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Maintenance.ViewModels;
 
 public class MaintenanceStatsVM
 {
@@ -18,3 +18,7 @@ public class MaintenanceStatsVM
     public string MaintenanceFrequency { get; set; } = string.Empty;
     public string PreferredMaintenanceWindow { get; set; } = string.Empty;
 }
+
+
+
+

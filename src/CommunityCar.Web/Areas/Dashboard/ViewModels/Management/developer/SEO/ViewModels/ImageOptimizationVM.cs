@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class ImageOptimizationVM
 {
@@ -15,3 +15,7 @@ public class ImageOptimizationVM
     public List<string> GeneratedSizes { get; set; } = new();
     public double SavingsPercentage { get; set; }
 }
+
+
+
+

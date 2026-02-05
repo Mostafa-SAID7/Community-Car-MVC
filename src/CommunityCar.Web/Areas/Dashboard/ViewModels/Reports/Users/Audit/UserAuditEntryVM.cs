@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Audit;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Audit;
 
 /// <summary>
 /// User audit entry view model
@@ -14,3 +14,7 @@ public class UserAuditEntryVM
     public string UserAgent { get; set; } = string.Empty;
     public string Details { get; set; } = string.Empty;
 }
+
+
+
+

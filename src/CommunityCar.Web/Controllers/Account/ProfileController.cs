@@ -1,7 +1,7 @@
-using CommunityCar.Application.Common.Interfaces.Services.Account.Profile;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Media;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Gamification;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Profile;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Media;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Gamification;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Application.Features.Account.ViewModels.Media;
 using Microsoft.AspNetCore.Authorization;
@@ -445,5 +445,6 @@ public class ProfileController : Controller
         return Json(new { success = false, message = "Not implemented" });
     }
 }
+
 
 

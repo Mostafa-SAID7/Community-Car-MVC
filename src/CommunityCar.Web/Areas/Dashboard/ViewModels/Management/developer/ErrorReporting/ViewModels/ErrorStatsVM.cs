@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 /// <summary>
 /// ViewModel for error statistics
@@ -31,3 +31,7 @@ public class ErrorStatsVM
     public int ErrorsThisWeek { get; set; }
     public int ErrorsThisMonth { get; set; }
 }
+
+
+
+

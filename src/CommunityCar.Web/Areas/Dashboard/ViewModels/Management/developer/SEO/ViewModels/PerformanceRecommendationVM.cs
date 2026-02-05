@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class PerformanceRecommendationVM
 {
@@ -8,3 +8,7 @@ public class PerformanceRecommendationVM
     public decimal PotentialSavings { get; set; }
     public string Priority { get; set; } = string.Empty;
 }
+
+
+
+

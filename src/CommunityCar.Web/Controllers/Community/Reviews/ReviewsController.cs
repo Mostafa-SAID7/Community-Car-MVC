@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Reviews;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Features.Community.Reviews.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Localization;
@@ -403,6 +403,7 @@ public class ReviewsController : Controller
         }
     }
 }
+
 
 
 

@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Account;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services;
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Web.Extensions;
 using CommunityCar.Web.Helpers;
@@ -537,3 +537,4 @@ public class AccountController : Controller
 
     #endregion
 }
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class PerformanceReportVM
 {
@@ -15,3 +15,7 @@ public class PerformanceReportVM
     public PerformanceMetricsVM Metrics { get; set; } = new();
     public List<string> OptimizationTips { get; set; } = new();
 }
+
+
+
+

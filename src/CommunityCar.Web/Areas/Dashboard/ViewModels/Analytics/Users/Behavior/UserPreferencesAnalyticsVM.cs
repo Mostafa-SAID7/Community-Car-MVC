@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 /// <summary>
 /// ViewModel for user preferences analytics
@@ -148,3 +148,7 @@ public class PersonalizationMetricVM
     public decimal PerformanceScore { get; set; }
     public string PerformanceLevel { get; set; } = string.Empty;
 }
+
+
+
+

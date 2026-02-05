@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 
 /// <summary>
 /// ViewModel for bulk user updates
@@ -13,3 +13,7 @@ public class BulkUserUpdateVM
     public string Action { get; set; } = string.Empty; // Activate, Deactivate, Lock, Unlock, etc.
     public string? Reason { get; set; }
 }
+
+
+
+

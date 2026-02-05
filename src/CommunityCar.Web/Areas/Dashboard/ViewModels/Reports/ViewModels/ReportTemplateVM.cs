@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 
 public class ReportTemplateVM
 {
@@ -15,3 +15,7 @@ public class ReportTemplateVM
     public DateTime CreatedAt { get; set; }
     public string CreatedBy { get; set; } = string.Empty;
 }
+
+
+
+

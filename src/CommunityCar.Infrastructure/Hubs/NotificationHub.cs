@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using System.Collections.Concurrent;
 
 namespace CommunityCar.Infrastructure.Hubs;
@@ -82,3 +82,4 @@ public class NotificationHub : Hub
         return connectionId;
     }
 }
+

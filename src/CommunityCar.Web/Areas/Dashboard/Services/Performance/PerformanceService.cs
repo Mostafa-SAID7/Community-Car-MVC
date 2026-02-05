@@ -1,6 +1,6 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Performance;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Performance;
 
-namespace CommunityCar.Application.Services.Dashboard.Performance;
+namespace CommunityCar.Web.Areas.Dashboard.Services.Performance;
 
 public class PerformanceService : IPerformanceService
 {
@@ -67,3 +67,6 @@ public class PerformanceService : IPerformanceService
         };
     }
 }
+
+
+

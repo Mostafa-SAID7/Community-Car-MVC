@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Deleted content item view model
@@ -20,3 +20,8 @@ public class DeletedContentItemVM
     public string Slug { get; set; } = string.Empty;
     public Dictionary<string, object> Metadata { get; set; } = new();
 }
+
+
+
+
+

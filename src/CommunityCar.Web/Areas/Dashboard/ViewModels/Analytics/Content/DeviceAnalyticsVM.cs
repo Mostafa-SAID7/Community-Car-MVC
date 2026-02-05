@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Content;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 
 /// <summary>
 /// Device analytics view model
@@ -16,3 +16,7 @@ public class DeviceAnalyticsVM
     public TimeSpan AverageSessionDuration { get; set; }
     public decimal Percentage { get; set; }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 /// <summary>
 /// User behavior analytics view model
@@ -16,3 +16,7 @@ public class UserBehaviorAnalyticsVM
     public Dictionary<string, int> DeviceTypes { get; set; } = new();
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

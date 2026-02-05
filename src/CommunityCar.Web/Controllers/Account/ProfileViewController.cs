@@ -1,6 +1,6 @@
-using CommunityCar.Application.Common.Interfaces.Services.Account.Profile;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Gamification;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Profile;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Gamification;
 using CommunityCar.Application.Features.Account.ViewModels.Activity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

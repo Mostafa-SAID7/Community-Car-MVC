@@ -5,32 +5,19 @@ using CommunityCar.Web.Extensions;
 using CommunityCar.Infrastructure.Hubs;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
+using CommunityCar.Web.Areas.Dashboard.Configuration;
+using CommunityCar.Web.Areas.Identity.Configuration;
+using CommunityCar.Web.Areas.Communication.Configuration;
 using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var mvcBuilder = builder.Services.AddControllersWithViews()
-    .AddViewLocalization()
-    .AddDataAnnotationsLocalization();
-
-// Add hot reload in development
-// Note: AddRazorRuntimeCompilation requires Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation package
-if (builder.Environment.IsDevelopment())
-{
-    mvcBuilder.AddRazorRuntimeCompilation();
-}
-
-// Add SignalR
-builder.Services.AddSignalR(options =>
-{
-    options.EnableDetailedErrors = builder.Environment.IsDevelopment();
-    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
-    options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
-});
-
+// ... builder services ...
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddDashboardAreaServices();
+builder.Services.AddIdentityAreaServices();
+builder.Services.AddCommunicationAreaServices();
 builder.Services.AddAIServices(builder.Configuration);
 builder.Services.AddAppLocalization(builder.Configuration);
 
@@ -114,11 +101,11 @@ app.MapControllers();
 // Dashboard area route for all Dashboard controllers
 app.MapControllerRoute(
     name: "dashboard",
-    pattern: "{culture=en-US}/Dashboard/{controller=Dashboard}/{action=Index}/{id?}");
+    pattern: "{culture=en}/Dashboard/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{culture=en-US}/{controller=Home}/{action=Index}/{id?}")
+    pattern: "{culture=en}/{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 

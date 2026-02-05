@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Interactions;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
 using CommunityCar.Domain.Enums.Shared;
@@ -340,5 +340,6 @@ public class CommentsController : Controller
         return Json(users);
     }
 }
+
 
 

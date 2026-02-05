@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Segments;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Segments;
 
 public class UserSegmentVM
 {
@@ -27,3 +27,7 @@ public class UpdateUserSegmentVM
     public string Criteria { get; set; } = string.Empty;
     public bool IsActive { get; set; }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Content.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Content.ViewModels;
 
 /// <summary>
 /// ViewModel for content moderation items
@@ -32,3 +32,7 @@ public class ModerationItemVM
     public string ThumbnailUrl { get; set; } = string.Empty;
     public string Url { get; set; } = string.Empty;
 }
+
+
+
+

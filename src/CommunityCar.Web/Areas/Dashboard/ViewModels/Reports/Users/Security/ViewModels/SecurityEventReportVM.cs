@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// ViewModel for security event in reports
@@ -21,3 +21,7 @@ public class SecurityEventReportVM
     public DateTime? ResolvedAt { get; set; }
     public Dictionary<string, object> EventData { get; set; } = new();
 }
+
+
+
+

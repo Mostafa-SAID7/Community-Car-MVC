@@ -1,21 +1,22 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports;
-using CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports.Users.General;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports.Users.Security;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports.Users.Audit;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports.Users.General;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports.Users.Audit;
 
-namespace CommunityCar.Application.Services.Dashboard.Reports;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Reports;
 
 public class ReportsService : IReportsService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
     private readonly IUserReportsService _userReportsService;
     private readonly IUserSecurityReportsService _userSecurityReportsService;
     private readonly IUserAuditReportsService _userAuditReportsService;
 
     public ReportsService(
-        IUnitOfWork unitOfWork,
+        IDashboardUnitOfWork unitOfWork,
         IUserReportsService userReportsService,
         IUserSecurityReportsService userSecurityReportsService,
         IUserAuditReportsService userAuditReportsService)
@@ -72,3 +73,7 @@ public class ReportsService : IReportsService
         return new List<SystemReportVM>();
     }
 }
+
+
+
+

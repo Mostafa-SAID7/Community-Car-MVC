@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 
 public class ReportFieldVM
 {
@@ -10,3 +10,7 @@ public class ReportFieldVM
     public int Order { get; set; }
     public string? Format { get; set; }
 }
+
+
+
+

@@ -1,80 +1,33 @@
 using CommunityCar.Infrastructure.Configuration;
 using CommunityCar.Infrastructure.Configuration.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Account;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
-using CommunityCar.Application.Common.Interfaces.Services.Communication;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Common.Interfaces.Data;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
-using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Common.Interfaces.Repositories.AI;
-using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Repositories.Localization;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Content;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Behavior;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Segments;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Preferences;
-// using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management.Users.Core; // Commented out due to compilation errors
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management.Users.Actions;
-// using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Overview.Users.Statistics; // Commented out due to compilation errors
-// using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Overview.Users.Activity; // Commented out due to compilation errors
-// using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Overview.Users.Security; // Commented out due to compilation errors
-// using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports.Users.General; // Commented out due to compilation errors
-// using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports.Users.Security; // Commented out due to compilation errors
-// using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports.Users.Audit; // Commented out due to compilation errors
-using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
-using CommunityCar.Application.Common.Interfaces.Services.Authentication;
-using CommunityCar.Application.Common.Interfaces.Repositories.Authorization;
-using CommunityCar.Application.Services.Account.Authorization;
+using CommunityCar.Application.Common.Interfaces.Authentication;
 using CommunityCar.Application.Services.Shared;
 using CommunityCar.Application.Services.AI;
 using CommunityCar.Application.Services.AI.ModelManagement;
 using CommunityCar.Application.Services.AI.Training;
 using CommunityCar.Application.Services.AI.History;
-using CommunityCar.Application.Services.Account;
-using Redis = StackExchange.Redis;
-using CommunityCar.Application.Services.Account.Authentication;
-using CommunityCar.Application.Services.Account.Authentication.OAuth;
-using CommunityCar.Application.Services.Communication;
-using CommunityCar.Application.Services.Community;
-using CommunityCar.Application.Common.Interfaces.Hubs;
-using CommunityCar.Infrastructure.Hubs;
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Account.Authorization;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using CommunityCar.Infrastructure.Persistence.Repositories.Community;
-using CommunityCar.Infrastructure.Persistence.Repositories.Account.Core;
-using CommunityCar.Infrastructure.Persistence.Repositories.Account.Authentication;
-using CommunityCar.Infrastructure.Persistence.Repositories.Account.Activity;
-using CommunityCar.Infrastructure.Persistence.Repositories.Account.Gamification;
-using CommunityCar.Infrastructure.Persistence.Repositories.Account.Social;
-using CommunityCar.Infrastructure.Persistence.Repositories.Account.Media;
-using CommunityCar.Infrastructure.Persistence.Repositories.Account.Management;
-using CommunityCar.Infrastructure.Persistence.Repositories.Account.Authorization;
 using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
 using CommunityCar.Infrastructure.Persistence.Repositories.AI;
-using CommunityCar.Infrastructure.Persistence.Repositories.Chat;
 using CommunityCar.Infrastructure.Persistence.Repositories.Localization;
-using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Content;
-using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Users.Behavior;
-using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Users.Segments;
-using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Users.Preferences;
-// using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Management.Users.Core; // Commented out due to compilation errors
-using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Management.Users.Actions;
-// using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Overview.Users.Statistics; // Commented out due to compilation errors
-// using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Overview.Users.Activity; // Commented out due to compilation errors
-// using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Overview.Users.Security; // Commented out due to compilation errors
-// using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.Users.General; // Commented out due to compilation errors
-// using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.Users.Security; // Commented out due to compilation errors
-// using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.Users.Audit; // Commented out due to compilation errors
 using CommunityCar.Infrastructure.Persistence.UnitOfWork;
-using CommunityCar.Application.Services.Account.Core;
+using CommunityCar.Infrastructure.Hubs;
+using CommunityCar.Application.Common.Interfaces.Hubs;
+using CommunityCar.Application.Common.Interfaces.Services.Community.Broadcast;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -82,7 +35,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 namespace CommunityCar.Infrastructure;
 
@@ -103,7 +55,6 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         services.AddHttpContextAccessor();
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         services.AddIdentity<User, CommunityCar.Domain.Entities.Account.Authorization.Role>(options => {
             // Password policy
@@ -114,7 +65,7 @@ public static class DependencyInjection
             options.Password.RequireLowercase = true;
             options.Password.RequiredUniqueChars = 4;
 
-            // Lockout settings - Relaxed for testing
+            // Lockout settings
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
             options.Lockout.MaxFailedAccessAttempts = 999;
             options.Lockout.AllowedForNewUsers = false;
@@ -124,7 +75,7 @@ public static class DependencyInjection
             options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 
             // Email confirmation
-            options.SignIn.RequireConfirmedEmail = false; // Allow external logins without email confirmation
+            options.SignIn.RequireConfirmedEmail = false;
             options.SignIn.RequireConfirmedAccount = false;
 
             // Token settings
@@ -165,8 +116,7 @@ public static class DependencyInjection
                 options.Scope.Add("public_profile");
             });
 
-        services.AddScoped<IConversationRepository, ConversationRepository>();
-        services.AddScoped<IMessageRepository, MessageRepository>();
+        // Community Repositories
         services.AddScoped<IQARepository, QARepository>();
         services.AddScoped<IVoteRepository, VoteRepository>();
         services.AddScoped<IViewRepository, ViewRepository>();
@@ -188,74 +138,25 @@ public static class DependencyInjection
         services.AddScoped<IPostsRepository, PostsRepository>();
         services.AddScoped<IFriendsRepository, FriendsRepository>();
         services.AddScoped<IGuidesRepository, GuidesRepository>();
-        services.AddScoped<IConversationRepository, ConversationRepository>();
-        services.AddScoped<IMessageRepository, MessageRepository>();
 
         // AI Repositories
         services.AddScoped<IAIModelRepository, AIModelRepository>();
         services.AddScoped<ITrainingJobRepository, TrainingJobRepository>();
         services.AddScoped<ITrainingHistoryRepository, TrainingHistoryRepository>();
 
-        // Reports Repositories
-        services.AddScoped<IReportRepository, CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.ReportRepository>();
-        services.AddScoped<IReportScheduleRepository, CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.ReportScheduleRepository>();
-
-        // Dashboard Analytics Repositories
-        services.AddScoped<IContentAnalyticsRepository, ContentAnalyticsRepository>();
-        services.AddScoped<IUserBehaviorAnalyticsRepository, UserBehaviorAnalyticsRepository>();
-        services.AddScoped<IUserSegmentRepository, UserSegmentRepository>();
-        services.AddScoped<IUserPreferencesRepository, UserPreferencesRepository>();
-
-        // Dashboard Management Repositories
-        // services.AddScoped<IUserManagementRepository, UserManagementCoreRepository>(); // Commented out due to compilation errors
-        // services.AddScoped<IUserManagementActionsRepository, UserManagementActionsRepository>(); // Commented out due to compilation errors
-
-        // Dashboard Overview Repositories
-        // services.AddScoped<IUserOverviewStatisticsRepository, UserOverviewStatisticsRepository>(); // Commented out due to compilation errors
-        // services.AddScoped<IUserOverviewActivityRepository, UserOverviewActivityRepository>(); // Commented out due to compilation errors
-        // services.AddScoped<IUserOverviewSecurityRepository, UserOverviewSecurityRepository>(); // Commented out due to compilation errors
-
-        // Dashboard Reports Repositories
-        // services.AddScoped<IUserReportsRepository, UserReportsRepository>(); // Commented out due to compilation errors
-        // services.AddScoped<IUserSecurityReportsRepository, UserSecurityReportsRepository>(); // Commented out due to compilation errors
-        // services.AddScoped<IUserAuditReportsRepository, UserAuditReportsRepository>(); // Commented out due to compilation errors
-
         // AI Services
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        // Consolidated User Repository (replacing multiple user-related repositories)
-        // Consolidated User Repository (replacing multiple user-related repositories)
-        services.AddScoped<IUserRepository, UserRepository>();
-
-
-        // Profile Repositories
-        services.AddScoped<IUserGalleryRepository, UserGalleryRepository>();
-        services.AddScoped<IUserBadgeRepository, UserBadgeRepository>();
-        services.AddScoped<IUserAchievementRepository, UserAchievementRepository>();
-        services.AddScoped<IUserActivityRepository, UserActivityRepository>();
-        services.AddScoped<IUserInterestRepository, UserInterestRepository>();
-        services.AddScoped<IUserFollowingRepository, UserFollowingRepository>();
-        services.AddScoped<IUserProfileViewRepository, UserProfileViewRepository>();
-
-        // Authorization Repositories
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IPermissionRepository, PermissionRepository>();
 
         // Localization Repositories
         services.AddScoped<ILocalizationCultureRepository, LocalizationCultureRepository>();
         services.AddScoped<ILocalizationResourceRepository, LocalizationResourceRepository>();
 
-
         // SignalR Hub Context Wrapper
         services.AddScoped<INotificationHubContext, NotificationHubContextWrapper>();
         
-        // Broadcast Service
-        services.AddScoped<IBroadcastService, Services.BroadcastService>();
-
         // System Services
         services.AddMemoryCache();
         services.AddHttpClient();
-
 
         // Seeding
         services.AddScoped<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>(provider =>

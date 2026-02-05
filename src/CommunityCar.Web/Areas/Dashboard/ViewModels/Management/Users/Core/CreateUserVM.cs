@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Core;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Core;
 
 /// <summary>
 /// Admin create user view model for dashboard operations
@@ -15,3 +15,7 @@ public class AdminCreateUserVM
     public bool IsActive { get; set; } = true;
     public bool SendWelcomeEmail { get; set; } = true;
 }
+
+
+
+

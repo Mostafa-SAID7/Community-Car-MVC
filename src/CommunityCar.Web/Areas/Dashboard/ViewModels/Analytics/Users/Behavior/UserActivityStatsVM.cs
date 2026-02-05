@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 public class UserActivityStatsVM
 {
@@ -16,3 +16,7 @@ public class UserActivityStatsVM
     public Dictionary<string, int> ActivityBreakdown { get; set; } = new();
     public Dictionary<string, int> DailyActivity { get; set; } = new();
 }
+
+
+
+

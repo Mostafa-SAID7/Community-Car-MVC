@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Retention;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Retention;
 
 /// <summary>
 /// Retention cohort view model
@@ -9,3 +9,7 @@ public class RetentionCohortVM
     public int InitialSize { get; set; }
     public Dictionary<int, double> RetentionRates { get; set; } = new(); // Period -> Rate
 }
+
+
+
+

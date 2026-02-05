@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.developer.cache;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.developer.cache;
 
 public class CacheStatistics
 {
@@ -10,3 +10,7 @@ public class CacheStatistics
     public int ConnectedClients { get; set; }
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

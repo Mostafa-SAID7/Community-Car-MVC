@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 /// <summary>
 /// User activity heatmap view model
@@ -15,3 +15,7 @@ public class UserActivityHeatmapVM
     public double IntensityScore { get; set; }
     public Dictionary<string, int> ActivityTypes { get; set; } = new();
 }
+
+
+
+

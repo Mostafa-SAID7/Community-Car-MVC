@@ -1,5 +1,5 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics;
-using CommunityCar.Application.Features.Dashboard.Analytics.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -92,3 +92,7 @@ public class AnalyticsController : Controller
         }
     }
 }
+
+
+
+

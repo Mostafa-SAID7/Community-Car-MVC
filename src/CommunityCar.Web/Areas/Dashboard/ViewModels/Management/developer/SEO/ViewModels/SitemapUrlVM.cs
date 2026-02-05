@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class SitemapUrlVM
 {
@@ -7,3 +7,7 @@ public class SitemapUrlVM
     public string ChangeFrequency { get; set; } = string.Empty;
     public decimal Priority { get; set; }
 }
+
+
+
+

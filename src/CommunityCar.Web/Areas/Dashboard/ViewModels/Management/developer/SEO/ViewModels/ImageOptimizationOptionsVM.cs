@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class ImageOptimizationOptionsVM
 {
@@ -13,3 +13,7 @@ public class ImageOptimizationOptionsVM
     public bool PreserveMetadata { get; set; } = false;
     public bool Progressive { get; set; } = true;
 }
+
+
+
+

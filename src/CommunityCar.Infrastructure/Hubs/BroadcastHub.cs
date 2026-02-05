@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using System.Collections.Concurrent;
 

@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Statistics for soft deleted content
@@ -15,3 +15,8 @@ public class SoftDeleteStatsVM
     public DateTime LastCleanup { get; set; }
     public int ItemsCleanedUpLastTime { get; set; }
 }
+
+
+
+
+

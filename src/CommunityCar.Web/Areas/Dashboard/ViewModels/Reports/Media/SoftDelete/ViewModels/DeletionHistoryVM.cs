@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Media.SoftDelete.ViewModels;
 
 public class DeletionHistoryVM
 {
@@ -8,3 +8,8 @@ public class DeletionHistoryVM
     public string Reason { get; set; } = string.Empty;
     public Dictionary<string, object> AdditionalData { get; set; } = new();
 }
+
+
+
+
+

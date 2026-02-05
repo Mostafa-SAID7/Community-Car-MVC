@@ -1,26 +1,27 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics;
-using CommunityCar.Application.Features.Dashboard.Analytics.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
-using CommunityCar.Application.Features.Dashboard.Analytics.Content;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Content;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users.Behavior;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users.Segments;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users.Preferences;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Content;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Behavior;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Preferences;
 
-namespace CommunityCar.Application.Services.Dashboard.Analytics;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Analytics;
 
 public class AnalyticsService : IAnalyticsService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
     private readonly IContentAnalyticsService _contentAnalyticsService;
     private readonly IUserBehaviorAnalyticsService _userBehaviorAnalyticsService;
     private readonly IUserSegmentationService _userSegmentationService;
     private readonly IUserPreferencesAnalyticsService _userPreferencesAnalyticsService;
 
     public AnalyticsService(
-        IUnitOfWork unitOfWork,
+        IDashboardUnitOfWork unitOfWork,
         IContentAnalyticsService contentAnalyticsService,
         IUserBehaviorAnalyticsService userBehaviorAnalyticsService,
         IUserSegmentationService userSegmentationService,
@@ -118,3 +119,7 @@ public class AnalyticsService : IAnalyticsService
         return true;
     }
 }
+
+
+
+

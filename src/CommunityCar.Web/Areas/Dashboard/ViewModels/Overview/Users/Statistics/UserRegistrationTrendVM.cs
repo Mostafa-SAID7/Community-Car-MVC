@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Statistics;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Statistics;
 
 /// <summary>
 /// User registration trend view model
@@ -11,3 +11,7 @@ public class UserRegistrationTrendVM
     public double GrowthRate { get; set; }
     public string Period { get; set; } = string.Empty; // Daily, Weekly, Monthly
 }
+
+
+
+

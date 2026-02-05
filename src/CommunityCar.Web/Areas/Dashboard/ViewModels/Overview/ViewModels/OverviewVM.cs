@@ -1,8 +1,8 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Activity;
 
-namespace CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
 
 public class OverviewVM
 {
@@ -61,3 +61,7 @@ public class SystemHealthSummaryVM
     public int WarningAlerts { get; set; }
     public TimeSpan Uptime { get; set; }
 }
+
+
+
+

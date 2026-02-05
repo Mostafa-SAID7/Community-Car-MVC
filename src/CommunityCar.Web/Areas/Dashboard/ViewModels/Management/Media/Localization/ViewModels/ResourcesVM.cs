@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Models;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.Localization.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.Localization.ViewModels;
 
 public class ResourcesVM
 {
@@ -16,3 +16,7 @@ public class ResourcesVM
     public int PageSize { get; set; } = 50;
     public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
 }
+
+
+
+

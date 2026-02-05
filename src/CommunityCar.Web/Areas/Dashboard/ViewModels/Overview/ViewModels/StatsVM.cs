@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
 
 public class DashboardStatsVM
 {
@@ -28,3 +28,7 @@ public class DashboardStatsVM
     public double ChangePercentage { get; set; }
     public bool IsPositiveChange { get; set; }
 }
+
+
+
+

@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Friends;
-using CommunityCar.Application.Common.Interfaces.Services.Communication;
+using CommunityCar.Web.Areas.Communication.Interfaces.Services;
 using CommunityCar.Application.Features.Community.Friends.ViewModels;
 using CommunityCar.Domain.Entities.Account.Core;
 using CommunityCar.Domain.Entities.Community.Friends;
@@ -423,5 +423,6 @@ public class FriendsService : IFriendsService
         return mutualFriends.OrderBy(f => f.FullName);
     }
 }
+
 
 

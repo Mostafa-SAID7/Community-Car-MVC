@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Roles;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Roles;
 
 /// <summary>
 /// Role change history view model
@@ -11,3 +11,7 @@ public class RoleChangeHistoryVM
     public string ChangedBy { get; set; } = string.Empty;
     public string Reason { get; set; } = string.Empty;
 }
+
+
+
+

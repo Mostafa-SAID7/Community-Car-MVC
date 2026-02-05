@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Preferences;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Preferences;
 
 /// <summary>
 /// User preference insights view model
@@ -12,3 +12,7 @@ public class UserPreferenceInsightsVM
     public double DiversityIndex { get; set; }
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

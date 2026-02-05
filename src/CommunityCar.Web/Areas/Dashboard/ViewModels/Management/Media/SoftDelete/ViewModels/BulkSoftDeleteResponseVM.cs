@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Response model for bulk operations
@@ -15,3 +15,8 @@ public class BulkSoftDeleteResponseVM
     public IEnumerable<Guid> FailedIds { get; set; } = new List<Guid>();
     public IEnumerable<string> Errors { get; set; } = new List<string>();
 }
+
+
+
+
+

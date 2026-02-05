@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.ViewModels;
 
 public class SystemTaskVM
 {
@@ -24,3 +24,7 @@ public class SystemTaskVM
     public TimeSpan? ActualDuration { get; set; }
     public Dictionary<string, object> Parameters { get; set; } = new();
 }
+
+
+
+

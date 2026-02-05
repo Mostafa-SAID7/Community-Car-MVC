@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Roles;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Roles;
 
 /// <summary>
 /// User role management view model
@@ -17,3 +17,7 @@ public class UserRoleManagementVM
     public bool CanManageRoles { get; set; }
     public List<RoleChangeHistoryVM> RoleHistory { get; set; } = new();
 }
+
+
+
+

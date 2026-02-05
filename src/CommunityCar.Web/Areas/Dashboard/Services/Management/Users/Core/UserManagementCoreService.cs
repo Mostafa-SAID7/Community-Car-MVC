@@ -1,16 +1,17 @@
-using CommunityCar.Application.Features.Dashboard.Management.Users.Core;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Core;
 using CommunityCar.Application.Features.Shared.ViewModels.Users;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management.Users.Core;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Management.Users.Core;
+
 using CommunityCar.Application.Common.Models;
 
-namespace CommunityCar.Application.Services.Dashboard.Management.Users.Core;
+namespace CommunityCar.Web.Areas.Dashboard.Services.Management.Users.Core;
 
 public class UserManagementCoreService : IUserManagementCoreService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public UserManagementCoreService(IUnitOfWork unitOfWork)
+    public UserManagementCoreService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -68,3 +69,7 @@ public class UserManagementCoreService : IUserManagementCoreService
         };
     }
 }
+
+
+
+

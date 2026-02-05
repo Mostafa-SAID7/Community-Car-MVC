@@ -1,7 +1,7 @@
 using CommunityCar.Domain.Enums.Account;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 /// <summary>
 /// ViewModel for basic user analytics data
@@ -49,3 +49,7 @@ public class BasicUserAnalyticsVM
     public string BrowserType { get; set; } = string.Empty;
     public string Location { get; set; } = string.Empty;
 }
+
+
+
+

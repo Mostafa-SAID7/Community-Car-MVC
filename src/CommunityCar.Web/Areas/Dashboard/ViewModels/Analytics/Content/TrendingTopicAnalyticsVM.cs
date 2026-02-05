@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.ViewModels.Content;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 
 public class TrendingTopicAnalyticsVM
 {
@@ -15,3 +15,7 @@ public class TrendingTopicAnalyticsVM
     public bool IsRising { get; set; }
     public double GrowthRate { get; set; }
 }
+
+
+
+

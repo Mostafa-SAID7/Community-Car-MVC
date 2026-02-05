@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 
 /// <summary>
 /// Bulk user action view model
@@ -43,3 +43,7 @@ public class AdminUserModerationVM
     public bool SendNotification { get; set; } = true;
     public string ModeratorNotes { get; set; } = string.Empty;
 }
+
+
+
+

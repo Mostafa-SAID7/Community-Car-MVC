@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.ViewModels;
 
 public class SystemStatsVM
 {
@@ -9,3 +9,7 @@ public class SystemStatsVM
     public string SystemHealth { get; set; } = string.Empty;
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

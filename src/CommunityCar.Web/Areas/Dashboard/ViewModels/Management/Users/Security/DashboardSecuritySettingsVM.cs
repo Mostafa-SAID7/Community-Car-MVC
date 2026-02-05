@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Security;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Security;
 
 /// <summary>
 /// ViewModel for dashboard security settings
@@ -32,3 +32,7 @@ public class SecurityRuleVM
     public string RuleType { get; set; } = string.Empty;
     public Dictionary<string, object> RuleParameters { get; set; } = new();
 }
+
+
+
+

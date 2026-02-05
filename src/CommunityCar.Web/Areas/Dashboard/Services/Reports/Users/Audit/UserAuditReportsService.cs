@@ -1,15 +1,16 @@
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports.Users.Audit;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports.Users.Audit;
 
-namespace CommunityCar.Application.Services.Dashboard.Reports.Users.Audit;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Reports.Users.Audit;
 
 public class UserAuditReportsService : IUserAuditReportsService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public UserAuditReportsService(IUnitOfWork unitOfWork)
+    public UserAuditReportsService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -50,3 +51,7 @@ public class UserAuditReportsService : IUserAuditReportsService
         return new List<AuditLogVM>();
     }
 }
+
+
+
+

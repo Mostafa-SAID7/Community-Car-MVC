@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class DatabaseStatusVM
 {
@@ -23,3 +23,7 @@ public class DatabaseStatusVM
     public double ResponseTime { get; set; }
     public List<DatabaseTableVM> Tables { get; set; } = new();
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Content;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 
 /// <summary>
 /// Top content analytics view model
@@ -19,3 +19,7 @@ public class TopContentAnalyticsVM
     public int Rank { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+
+
+
+

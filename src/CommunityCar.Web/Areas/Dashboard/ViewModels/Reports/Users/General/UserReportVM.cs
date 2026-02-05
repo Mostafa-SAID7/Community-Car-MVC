@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.General;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.General;
 
 /// <summary>
 /// General user report view model
@@ -15,3 +15,7 @@ public class UserReportVM
     public List<UserRetentionReportVM> RetentionReports { get; set; } = new();
     public Dictionary<string, object> Summary { get; set; } = new();
 }
+
+
+
+

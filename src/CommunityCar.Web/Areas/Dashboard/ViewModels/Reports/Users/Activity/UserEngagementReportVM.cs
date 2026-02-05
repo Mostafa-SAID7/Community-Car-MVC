@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Activity;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Activity;
 
 /// <summary>
 /// ViewModel for user engagement report
@@ -128,3 +128,7 @@ public class JoinDateDistributionVM
     public int Count { get; set; }
     public decimal Percentage { get; set; }
 }
+
+
+
+

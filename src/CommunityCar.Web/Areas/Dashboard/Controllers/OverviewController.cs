@@ -1,5 +1,5 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview;
-using CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -128,3 +128,7 @@ public class OverviewController : Controller
         }
     }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Summary of recently deleted content
@@ -16,3 +16,8 @@ public class DeletedContentSummaryVM
     public bool CanRestore { get; set; }
     public bool CanPermanentDelete { get; set; }
 }
+
+
+
+
+

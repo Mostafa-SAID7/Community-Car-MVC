@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.General;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.General;
 
 /// <summary>
 /// User statistics for reports
@@ -17,3 +17,7 @@ public class UserStatsVM
     public decimal GrowthRate { get; set; }
     public decimal RetentionRate { get; set; }
 }
+
+
+
+

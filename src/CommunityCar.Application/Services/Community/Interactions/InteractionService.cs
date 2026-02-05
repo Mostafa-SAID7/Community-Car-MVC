@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community.Interactions;
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Common.Interfaces.Services.Communication;
+using CommunityCar.Web.Areas.Communication.Interfaces.Services;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Moderation;
 using CommunityCar.Application.Features.Shared.Interactions.ViewModels;
 using CommunityCar.Domain.Entities.Shared;
@@ -752,5 +752,6 @@ public partial class InteractionService : IInteractionService
 
     #endregion
 }
+
 
 

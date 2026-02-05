@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.cache;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.cache;
 
 public class CacheKeyVM
 {
@@ -11,3 +11,7 @@ public class CacheKeyVM
     public int AccessCount { get; set; }
     public DateTime LastAccessed { get; set; }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Preferences;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Preferences;
 
 /// <summary>
 /// User preferences view model
@@ -14,3 +14,7 @@ public class UserPreferencesVM
     public int InteractionCount { get; set; }
     public double EngagementScore { get; set; }
 }
+
+
+
+

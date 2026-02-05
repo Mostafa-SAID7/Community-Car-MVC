@@ -1,9 +1,9 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Reports;
 using CommunityCar.Domain.Entities.Dashboard.Reports;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports;
+namespace CommunityCar.Web.Areas.Dashboard.Repositories.Reports;
 
 public class ReportRepository : IReportRepository
 {
@@ -96,3 +96,6 @@ public class ReportRepository : IReportRepository
             .ToListAsync(cancellationToken);
     }
 }
+
+
+

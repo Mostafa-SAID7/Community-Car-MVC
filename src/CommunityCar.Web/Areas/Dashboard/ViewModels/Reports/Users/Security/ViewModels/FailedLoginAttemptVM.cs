@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 public class FailedLoginAttemptVM
 {
@@ -17,3 +17,7 @@ public class FailedLoginAttemptVM
     public int AttemptCount { get; set; }
     public string RiskLevel { get; set; } = string.Empty;
 }
+
+
+
+

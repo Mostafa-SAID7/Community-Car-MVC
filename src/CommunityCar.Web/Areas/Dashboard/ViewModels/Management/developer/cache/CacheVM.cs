@@ -1,6 +1,6 @@
-using CommunityCar.Application.Features.Dashboard.Reports.developer.cache;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.developer.cache;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.cache;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.cache;
 
 public class CacheVM
 {
@@ -9,3 +9,7 @@ public class CacheVM
     public bool IsRedisConnected { get; set; }
     public string ConnectionString { get; set; } = string.Empty;
 }
+
+
+
+

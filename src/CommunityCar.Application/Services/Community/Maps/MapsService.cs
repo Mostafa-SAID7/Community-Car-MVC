@@ -1,7 +1,7 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Maps;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Features.Community.Maps.ViewModels;
 using CommunityCar.Domain.Entities.Community.Maps;
 using CommunityCar.Domain.Enums.Community;
@@ -513,5 +513,6 @@ public class MapsService : IMapsService
         return degrees * Math.PI / 180;
     }
 }
+
 
 

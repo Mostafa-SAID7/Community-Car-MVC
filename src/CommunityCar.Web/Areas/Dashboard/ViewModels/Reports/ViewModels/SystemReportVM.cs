@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 
 public class SystemReportVM
 {
@@ -29,3 +29,7 @@ public class SystemReportVM
     public ReportDataVM Data { get; set; } = new();
     public List<ReportSectionVM> Sections { get; set; } = new();
 }
+
+
+
+

@@ -1,10 +1,10 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users;
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Preferences;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Statistics;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Statistics;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Activity;
 
-namespace CommunityCar.Application.Services.Dashboard.Analytics.Users;
+namespace CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users;
 
 public class UserAnalyticsService : IUserAnalyticsService
 {
@@ -143,3 +143,6 @@ public class UserAnalyticsService : IUserAnalyticsService
         };
     }
 }
+
+
+

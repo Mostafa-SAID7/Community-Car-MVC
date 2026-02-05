@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Trends;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Trends;
 
 /// <summary>
 /// User registration trend view model
@@ -11,3 +11,7 @@ public class UserRegistrationTrendVM
     public decimal GrowthRate { get; set; }
     public int CumulativeCount { get; set; }
 }
+
+
+
+

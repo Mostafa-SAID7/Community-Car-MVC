@@ -1,15 +1,16 @@
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Preferences;
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users.Preferences;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Preferences;
 
-namespace CommunityCar.Application.Services.Dashboard.Analytics.Users.Preferences;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users.Preferences;
 
 public class UserPreferencesAnalyticsService : IUserPreferencesAnalyticsService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public UserPreferencesAnalyticsService(IUnitOfWork unitOfWork)
+    public UserPreferencesAnalyticsService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -42,3 +43,7 @@ public class UserPreferencesAnalyticsService : IUserPreferencesAnalyticsService
         };
     }
 }
+
+
+
+

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
-using CommunityCar.Application.Common.Interfaces.Repositories.Account;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Repositories;
 using CommunityCar.Domain.Entities.Account;
 using CommunityCar.Application.Common.Models;
 

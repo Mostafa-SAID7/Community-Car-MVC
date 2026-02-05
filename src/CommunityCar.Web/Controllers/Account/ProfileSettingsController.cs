@@ -1,8 +1,8 @@
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Profile;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Gamification;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Management;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Security;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Profile;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Gamification;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Management;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Security;
 using CommunityCar.Application.Common.Interfaces.Services.Storage;
 using CommunityCar.Application.Features.Account.ViewModels.Authentication;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
@@ -357,6 +357,7 @@ public class ProfileSettingsController : Controller
         }
     }
 }
+
 
 
 

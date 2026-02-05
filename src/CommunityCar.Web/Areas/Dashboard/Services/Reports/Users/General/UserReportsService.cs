@@ -1,15 +1,16 @@
-using CommunityCar.Application.Features.Dashboard.Reports.Users.General;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.General;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports.Users.General;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports.Users.General;
 
-namespace CommunityCar.Application.Services.Dashboard.Reports.Users.General;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Reports.Users.General;
 
 public class UserReportsService : IUserReportsService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public UserReportsService(IUnitOfWork unitOfWork)
+    public UserReportsService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -51,3 +52,7 @@ public class UserReportsService : IUserReportsService
         return new List<CommunityCar.Application.Features.Shared.ViewModels.Users.UserActivityVM>();
     }
 }
+
+
+
+

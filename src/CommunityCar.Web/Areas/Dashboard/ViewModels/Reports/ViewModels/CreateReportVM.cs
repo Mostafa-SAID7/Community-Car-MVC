@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 
 public class CreateReportVM
 {
@@ -15,3 +15,7 @@ public class CreateReportVM
     public bool SendByEmail { get; set; } = false;
     public string EmailRecipients { get; set; } = string.Empty;
 }
+
+
+
+

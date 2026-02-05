@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class SystemHealthVM
 {
@@ -38,3 +38,7 @@ public class SystemIssueVM
     public bool IsResolved { get; set; }
     public string? Resolution { get; set; }
 }
+
+
+
+

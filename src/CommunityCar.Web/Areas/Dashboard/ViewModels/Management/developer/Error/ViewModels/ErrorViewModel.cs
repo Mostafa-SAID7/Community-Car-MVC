@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Error.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Error.ViewModels;
 
 public class ErrorViewModel
 {
@@ -6,3 +6,7 @@ public class ErrorViewModel
 
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 }
+
+
+
+

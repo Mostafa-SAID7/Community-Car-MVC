@@ -1,7 +1,7 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Events;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Broadcast;
 using CommunityCar.Application.Features.Community.Events.ViewModels;
 using CommunityCar.Domain.Entities.Community.Events;

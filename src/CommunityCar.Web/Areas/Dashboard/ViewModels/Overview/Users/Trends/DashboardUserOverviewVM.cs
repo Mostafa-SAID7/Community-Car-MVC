@@ -1,6 +1,6 @@
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Trends;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Trends;
 
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Trends;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Trends;
 
 /// <summary>
 /// User overview view model
@@ -18,3 +18,7 @@ public class DashboardUserOverviewVM
     public List<UserRegistrationTrendVM> RegistrationTrend { get; set; } = new();
     public List<ActiveUserTrendVM> ActivityTrend { get; set; } = new();
 }
+
+
+
+

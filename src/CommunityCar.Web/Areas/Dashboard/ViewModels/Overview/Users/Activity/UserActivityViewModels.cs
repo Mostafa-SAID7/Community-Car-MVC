@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Activity;
 
 /// <summary>
 /// User activity overview view model
@@ -77,3 +77,7 @@ public class UserActivityVM
     public string? IpAddress { get; set; }
     public string? UserAgent { get; set; }
 }
+
+
+
+

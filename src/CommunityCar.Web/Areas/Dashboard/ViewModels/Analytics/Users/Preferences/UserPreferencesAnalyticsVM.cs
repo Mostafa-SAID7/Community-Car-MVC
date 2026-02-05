@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Preferences;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Preferences;
 
 /// <summary>
 /// User preferences analytics view model
@@ -19,3 +19,7 @@ public class UserPreferencesAnalyticsVM
     public List<PreferenceTrendVM> TrendingPreferences { get; set; } = new();
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

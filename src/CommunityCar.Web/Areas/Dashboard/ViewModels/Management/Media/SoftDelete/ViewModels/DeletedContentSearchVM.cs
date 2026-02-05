@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// ViewModel for searching and managing soft-deleted content
@@ -23,3 +23,7 @@ public class DeletedContentSearchVM
     public bool HasPreviousPage => Page > 1;
     public bool HasNextPage => Page < TotalPages;
 }
+
+
+
+

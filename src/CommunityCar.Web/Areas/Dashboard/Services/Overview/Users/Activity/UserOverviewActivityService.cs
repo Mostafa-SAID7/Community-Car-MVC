@@ -1,14 +1,15 @@
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Users.Activity;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Activity;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview.Users.Activity;
 
-namespace CommunityCar.Application.Services.Dashboard.Overview.Users.Activity;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Overview.Users.Activity;
 
 public class UserOverviewActivityService : IUserOverviewActivityService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public UserOverviewActivityService(IUnitOfWork unitOfWork)
+    public UserOverviewActivityService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -49,3 +50,7 @@ public class UserOverviewActivityService : IUserOverviewActivityService
         };
     }
 }
+
+
+
+

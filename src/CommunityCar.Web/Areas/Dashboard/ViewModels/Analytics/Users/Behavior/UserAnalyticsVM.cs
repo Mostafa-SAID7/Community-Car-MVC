@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 /// <summary>
 /// User analytics view model
@@ -32,3 +32,7 @@ public class UserActivityVM
     public string UserAgent { get; set; } = string.Empty;
     public Dictionary<string, object> Metadata { get; set; } = new();
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 public class AnalyticsSuggestionVM
 {
@@ -14,3 +14,7 @@ public class AnalyticsSuggestionVM
     public int FollowersCount { get; set; }
     public int PostsCount { get; set; }
 }
+
+
+
+

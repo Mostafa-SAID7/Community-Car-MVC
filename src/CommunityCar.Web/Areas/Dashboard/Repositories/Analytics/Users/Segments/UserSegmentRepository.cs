@@ -1,9 +1,9 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Segments;
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Segments;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Users.Segments;
+namespace CommunityCar.Web.Areas.Dashboard.Repositories.Analytics.Users.Segments;
 
 public class UserSegmentRepository : IUserSegmentRepository
 {
@@ -73,3 +73,6 @@ public class UserSegmentRepository : IUserSegmentRepository
         return await Task.FromResult(true);
     }
 }
+
+
+

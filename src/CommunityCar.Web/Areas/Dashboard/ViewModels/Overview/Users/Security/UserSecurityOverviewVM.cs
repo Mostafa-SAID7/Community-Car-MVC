@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Security;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Security;
 
 public class UserSecurityOverviewVM
 {
@@ -11,3 +11,7 @@ public class UserSecurityOverviewVM
     public int SuspiciousActivities { get; set; }
     public DateTime LastSecurityScan { get; set; }
 }
+
+
+
+

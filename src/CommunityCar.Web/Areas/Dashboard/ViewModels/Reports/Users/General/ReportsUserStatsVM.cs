@@ -1,6 +1,6 @@
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Trends;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Trends;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.General;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.General;
 
 /// <summary>
 /// Reports user statistics view model
@@ -24,3 +24,7 @@ public class ReportsUserStatsVM
     public Dictionary<string, int> UsersByStatus { get; set; } = new();
     public List<UserRegistrationTrendVM> RegistrationTrend { get; set; } = new();
 }
+
+
+
+

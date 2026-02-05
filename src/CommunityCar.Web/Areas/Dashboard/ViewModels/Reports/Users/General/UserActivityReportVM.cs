@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.General;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.General;
 
 /// <summary>
 /// User activity report view model
@@ -19,3 +19,7 @@ public class UserActivityReportVM
     public Dictionary<string, int> ActivityByDay { get; set; } = new();
     public List<string> TopActivities { get; set; } = new();
 }
+
+
+
+

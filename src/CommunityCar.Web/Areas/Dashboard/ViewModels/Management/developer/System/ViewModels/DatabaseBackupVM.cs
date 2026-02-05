@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class DatabaseBackupVM
 {
@@ -15,3 +15,7 @@ public class DatabaseBackupVM
     public string Path { get; set; } = string.Empty;
     public TimeSpan Duration { get; set; }
 }
+
+
+
+

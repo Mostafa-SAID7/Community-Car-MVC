@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// ViewModel for suspicious activity
@@ -20,3 +20,7 @@ public class SuspiciousActivityVM
     public DateTime? ResolvedAt { get; set; }
     public Dictionary<string, object> ActivityData { get; set; } = new();
 }
+
+
+
+

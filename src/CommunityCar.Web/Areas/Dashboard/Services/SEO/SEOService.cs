@@ -1,7 +1,7 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.SEO;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.SEO;
 using System.Text.Json;
 
-namespace CommunityCar.Application.Services.Dashboard.SEO;
+namespace CommunityCar.Web.Areas.Dashboard.Services.SEO;
 
 public class SEOService : ISEOService
 {
@@ -143,3 +143,6 @@ public class SEOService : ISEOService
         return Math.Min(100, score);
     }
 }
+
+
+

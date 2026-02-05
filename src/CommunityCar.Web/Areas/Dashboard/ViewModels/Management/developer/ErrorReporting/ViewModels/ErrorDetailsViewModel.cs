@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 public class ErrorDetailsViewModel
 {
@@ -21,3 +21,7 @@ public class ErrorDetailsViewModel
     public Dictionary<string, object> AdditionalData { get; set; } = new();
     public bool IsResolved { get; set; }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class CoreWebVitalsVM
 {
@@ -13,3 +13,7 @@ public class CoreWebVitalsVM
     public string FIDGrade { get; set; } = string.Empty;
     public string CLSGrade { get; set; } = string.Empty;
 }
+
+
+
+

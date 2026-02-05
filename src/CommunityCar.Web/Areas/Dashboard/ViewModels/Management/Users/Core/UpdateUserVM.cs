@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Core;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Core;
 
 /// <summary>
 /// Update user view model
@@ -15,3 +15,7 @@ public class UpdateUserVM
     public List<string> Roles { get; set; } = new();
     public string Notes { get; set; } = string.Empty;
 }
+
+
+
+

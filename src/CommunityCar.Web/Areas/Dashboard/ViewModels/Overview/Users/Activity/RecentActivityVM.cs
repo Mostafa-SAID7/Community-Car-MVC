@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Activity;
 
 public class RecentActivityVM
 {
@@ -12,3 +12,7 @@ public class RecentActivityVM
     public string? EntityType { get; set; }
     public Dictionary<string, object>? Metadata { get; set; }
 }
+
+
+
+

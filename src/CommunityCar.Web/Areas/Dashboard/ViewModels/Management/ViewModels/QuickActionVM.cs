@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.ViewModels;
 
 public class QuickActionVM
 {
@@ -8,3 +8,7 @@ public class QuickActionVM
     public string Icon { get; set; } = string.Empty;
     public string Color { get; set; } = string.Empty;
 }
+
+
+
+

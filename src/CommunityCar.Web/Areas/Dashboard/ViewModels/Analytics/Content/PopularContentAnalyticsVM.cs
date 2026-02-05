@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.ViewModels.Content;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 
 public class PopularContentAnalyticsVM
 {
@@ -19,3 +19,7 @@ public class PopularContentAnalyticsVM
     public string PopularityReason { get; set; } = string.Empty;
     public IEnumerable<string> Tags { get; set; } = new List<string>();
 }
+
+
+
+

@@ -1,11 +1,11 @@
-using CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Reports.Users.General;
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Trends;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.General;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Trends;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Security;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.ViewModels;
 
 public class DashboardOverviewVM
 {
@@ -54,3 +54,7 @@ public class DashboardOverviewVM
     public List<SystemAlertVM> SystemAlerts { get; set; } = new();
     public List<QuickActionVM> QuickActions { get; set; } = new();
 }
+
+
+
+

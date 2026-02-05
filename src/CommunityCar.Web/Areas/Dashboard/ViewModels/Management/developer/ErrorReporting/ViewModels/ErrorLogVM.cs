@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 public class ErrorLogVM
 {
@@ -31,3 +31,7 @@ public class ErrorLogVM
     public DateTime LastOccurrence { get; set; }
     public Dictionary<string, object> AdditionalData { get; set; } = new();
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// User content deletion summary
@@ -23,3 +23,8 @@ public class UserContentDeletionSummaryVM
                                    (TotalGroups - DeletedGroups) > 0 || 
                                    (TotalComments - DeletedComments) > 0;
 }
+
+
+
+
+

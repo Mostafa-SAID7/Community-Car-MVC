@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.General;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.General;
 
 /// <summary>
 /// User engagement report view model
@@ -19,3 +19,7 @@ public class UserEngagementReportVM
     public List<string> TopEngagingUsers { get; set; } = new();
     public List<string> TopEngagingContent { get; set; } = new();
 }
+
+
+
+

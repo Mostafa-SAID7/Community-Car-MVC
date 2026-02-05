@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 /// <summary>
 /// User engagement statistics view model
@@ -19,3 +19,7 @@ public class UserEngagementStatsVM
     public string EngagementLevel { get; set; } = string.Empty; // Low, Medium, High
     public Dictionary<string, int> InteractionsByType { get; set; } = new();
 }
+
+
+
+

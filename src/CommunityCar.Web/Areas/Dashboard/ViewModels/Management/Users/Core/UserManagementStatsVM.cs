@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Core;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Core;
 
 /// <summary>
 /// User management statistics view model
@@ -17,3 +17,7 @@ public class UserManagementStatsVM
     public decimal UserRetentionRate { get; set; }
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

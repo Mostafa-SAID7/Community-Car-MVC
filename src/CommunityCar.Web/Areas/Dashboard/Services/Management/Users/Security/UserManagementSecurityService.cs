@@ -1,15 +1,16 @@
-using CommunityCar.Application.Features.Dashboard.Management.Users.Security;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management.Users.Security;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Management.Users.Security;
+
 using CommunityCar.Application.Common.Models;
 
-namespace CommunityCar.Application.Services.Dashboard.Management.Users.Security;
+namespace CommunityCar.Web.Areas.Dashboard.Services.Management.Users.Security;
 
 public class UserManagementSecurityService : IUserManagementSecurityService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public UserManagementSecurityService(IUnitOfWork unitOfWork)
+    public UserManagementSecurityService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -68,3 +69,7 @@ public class UserManagementSecurityService : IUserManagementSecurityService
         return new List<UserSecurityLogVM>();
     }
 }
+
+
+
+

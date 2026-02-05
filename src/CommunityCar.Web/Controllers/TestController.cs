@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Interactions;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Common.Interfaces.Data;
 using CommunityCar.Domain.Enums.Community;
 using CommunityCar.Domain.Enums.Shared;
@@ -192,5 +192,6 @@ public class TestController : Controller
         }
     }
 }
+
 
 

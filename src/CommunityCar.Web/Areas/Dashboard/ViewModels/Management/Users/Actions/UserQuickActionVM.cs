@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 
 /// <summary>
 /// ViewModel for user quick actions
@@ -13,3 +13,7 @@ public class UserQuickActionVM
     public bool IsEnabled { get; set; } = true;
     public string Permission { get; set; } = string.Empty;
 }
+
+
+
+

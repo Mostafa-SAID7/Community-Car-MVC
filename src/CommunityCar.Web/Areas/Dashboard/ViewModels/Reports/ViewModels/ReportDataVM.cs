@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 
 public class ReportDataVM
 {
@@ -9,3 +9,7 @@ public class ReportDataVM
     public List<ChartDataVM> Charts { get; set; } = new();
     public Dictionary<string, object> Metadata { get; set; } = new();
 }
+
+
+
+

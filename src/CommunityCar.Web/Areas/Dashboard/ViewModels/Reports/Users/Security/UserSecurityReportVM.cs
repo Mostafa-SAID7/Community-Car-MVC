@@ -1,6 +1,6 @@
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security;
 
 /// <summary>
 /// ViewModel for user security report
@@ -43,3 +43,7 @@ public class BlockedIpReportVM
     public string Location { get; set; } = string.Empty;
     public string ThreatLevel { get; set; } = string.Empty;
 }
+
+
+
+

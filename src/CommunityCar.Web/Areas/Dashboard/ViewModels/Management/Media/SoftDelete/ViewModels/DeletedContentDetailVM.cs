@@ -1,6 +1,6 @@
-using CommunityCar.Application.Features.Dashboard.Reports.Media.SoftDelete.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Media.SoftDelete.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 public class DeletedContentDetailVM
 {
@@ -20,3 +20,8 @@ public class DeletedContentDetailVM
     public List<DeletionHistoryVM> DeletionHistory { get; set; } = new();
     public Dictionary<string, object> OriginalData { get; set; } = new();
 }
+
+
+
+
+

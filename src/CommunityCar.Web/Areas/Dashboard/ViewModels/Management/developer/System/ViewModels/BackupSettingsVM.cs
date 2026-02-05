@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Settings.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class BackupSettingsVM
 {
@@ -11,3 +11,7 @@ public class BackupSettingsVM
     public bool CompressBackups { get; set; }
     public bool EncryptBackups { get; set; }
 }
+
+
+
+

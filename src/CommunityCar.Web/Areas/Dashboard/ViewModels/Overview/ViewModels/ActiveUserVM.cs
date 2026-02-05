@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
 
 public class ActiveUserVM
 {
@@ -16,3 +16,7 @@ public class ActiveUserVM
     public string Device { get; set; } = string.Empty;
     public bool IsOnline { get; set; }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Audit;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Audit;
 
 /// <summary>
 /// Audit statistics for reports
@@ -24,3 +24,7 @@ public class AuditStatisticsVM
     public List<string> MostCommonActions { get; set; } = new();
     public List<string> TopActions { get; set; } = new();
 }
+
+
+
+

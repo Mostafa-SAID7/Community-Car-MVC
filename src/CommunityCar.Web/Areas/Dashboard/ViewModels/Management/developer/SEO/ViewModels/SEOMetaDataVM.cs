@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class SEOMetaDataVM
 {
@@ -19,3 +19,7 @@ public class SEOMetaDataVM
     public string TwitterImage { get; set; } = string.Empty;
     public Dictionary<string, string> CustomMeta { get; set; } = new();
 }
+
+
+
+

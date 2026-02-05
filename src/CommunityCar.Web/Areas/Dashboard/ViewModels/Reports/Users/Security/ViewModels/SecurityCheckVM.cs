@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 public class SecurityCheckVM
 {
@@ -9,3 +9,7 @@ public class SecurityCheckVM
     public string? Details { get; set; }
     public string? Recommendation { get; set; }
 }
+
+
+
+

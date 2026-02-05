@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// ViewModel for audit logs
@@ -21,3 +21,7 @@ public class AuditLogVM
     public string? ErrorMessage { get; set; }
     public Dictionary<string, object> AdditionalData { get; set; } = new();
 }
+
+
+
+

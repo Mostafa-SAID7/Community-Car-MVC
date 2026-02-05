@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 
 /// <summary>
 /// Admin user management action view model for dashboard operations
@@ -25,3 +25,7 @@ public class AdminUserManagementActionVM
     public bool RequiresApproval { get; set; }
     public bool IsReversible { get; set; }
 }
+
+
+
+

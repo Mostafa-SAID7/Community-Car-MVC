@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Authorization;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Authorization;
 using System.Security.Claims;
 
 namespace CommunityCar.Web.Attributes;

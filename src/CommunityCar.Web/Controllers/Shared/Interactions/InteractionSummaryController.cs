@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Interactions;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Domain.Enums.Shared;
 
 namespace CommunityCar.Web.Controllers.Shared;
@@ -84,5 +84,6 @@ public class InteractionSummaryController : Controller
         }
     }
 }
+
 
 

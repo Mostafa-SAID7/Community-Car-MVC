@@ -1,8 +1,8 @@
-using CommunityCar.Application.Features.Dashboard.Management.Users.Security;
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Core;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Core;
 
 /// <summary>
 /// Admin user management dashboard view model
@@ -69,3 +69,7 @@ public class RecentUserActivityVM
     public string IpAddress { get; set; } = string.Empty;
     public string UserAgent { get; set; } = string.Empty;
 }
+
+
+
+

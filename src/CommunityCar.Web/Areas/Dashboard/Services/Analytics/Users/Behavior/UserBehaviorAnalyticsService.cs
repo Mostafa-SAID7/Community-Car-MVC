@@ -1,13 +1,14 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users.Behavior;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Behavior;
 
-namespace CommunityCar.Application.Services.Dashboard.Analytics.Users.Behavior;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users.Behavior;
 
 public class UserBehaviorAnalyticsService : IUserBehaviorAnalyticsService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public UserBehaviorAnalyticsService(IUnitOfWork unitOfWork)
+    public UserBehaviorAnalyticsService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -36,3 +37,7 @@ public class UserBehaviorAnalyticsService : IUserBehaviorAnalyticsService
         return new List<CommunityCar.Application.Features.Shared.ViewModels.Users.UserActivityVM>();
     }
 }
+
+
+
+

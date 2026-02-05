@@ -1,6 +1,6 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.ErrorReporting;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.ErrorReporting;
 
-namespace CommunityCar.Application.Services.Dashboard.ErrorReporting;
+namespace CommunityCar.Web.Areas.Dashboard.Services.ErrorReporting;
 
 public class ErrorService : IErrorService
 {
@@ -72,3 +72,6 @@ public class ErrorService : IErrorService
         return true;
     }
 }
+
+
+

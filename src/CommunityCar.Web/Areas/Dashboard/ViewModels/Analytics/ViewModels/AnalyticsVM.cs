@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.ViewModels;
 
 public class AnalyticsVM
 {
@@ -26,3 +26,7 @@ public class AnalyticsVM
     public double GrowthRate { get; set; }
     public double EngagementRate { get; set; }
 }
+
+
+
+

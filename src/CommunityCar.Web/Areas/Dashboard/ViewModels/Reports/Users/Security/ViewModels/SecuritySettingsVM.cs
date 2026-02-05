@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// ViewModel for security settings
@@ -37,3 +37,7 @@ public class SecurityRuleSettingVM
     public string RuleType { get; set; } = string.Empty;
     public Dictionary<string, object> RuleParameters { get; set; } = new();
 }
+
+
+
+

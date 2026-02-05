@@ -1,5 +1,5 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports;
-using CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -170,3 +170,7 @@ public class ReportController : Controller
         }
     }
 }
+
+
+
+

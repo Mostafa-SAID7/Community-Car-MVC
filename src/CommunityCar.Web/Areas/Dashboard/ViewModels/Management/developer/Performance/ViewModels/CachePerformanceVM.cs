@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.Performance.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Performance.ViewModels;
 
 public class CachePerformanceVM
 {
@@ -10,3 +10,7 @@ public class CachePerformanceVM
     public int AverageGetTime { get; set; } // milliseconds
     public int AverageSetTime { get; set; } // milliseconds
 }
+
+
+
+

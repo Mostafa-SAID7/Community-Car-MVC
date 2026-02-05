@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 
 /// <summary>
 /// ViewModel for user activity summary
@@ -23,3 +23,7 @@ public class UserActivitySummaryVM
     public List<string> MostActiveUsers { get; set; } = new();
     public Dictionary<string, int> ActivityByType { get; set; } = new();
 }
+
+
+
+

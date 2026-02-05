@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Request model for restore operations
@@ -9,3 +9,8 @@ public class RestoreRequestVM
     public string? Reason { get; set; }
     public bool NotifyUser { get; set; } = false;
 }
+
+
+
+
+

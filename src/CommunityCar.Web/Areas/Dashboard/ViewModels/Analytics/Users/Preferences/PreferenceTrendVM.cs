@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Preferences;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Preferences;
 
 /// <summary>
 /// Preference trend view model
@@ -55,3 +55,7 @@ public class PreferenceDistributionVM
     public Dictionary<string, double> EngagementByCategory { get; set; } = new();
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

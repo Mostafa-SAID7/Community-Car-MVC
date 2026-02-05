@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Statistics;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Statistics;
 
 /// <summary>
 /// User quick statistics view model for overview
@@ -14,3 +14,7 @@ public class UserQuickStatsVM
     public decimal GrowthPercentage { get; set; }
     public string TrendDirection { get; set; } = string.Empty; // Up, Down, Stable
 }
+
+
+
+

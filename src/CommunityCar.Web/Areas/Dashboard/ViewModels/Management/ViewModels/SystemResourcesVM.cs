@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.ViewModels;
 
 /// <summary>
 /// ViewModel for system resources in management context
@@ -21,3 +21,7 @@ public class SystemResourcesVM
     public int ActiveConnections { get; set; }
     public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
 }
+
+
+
+

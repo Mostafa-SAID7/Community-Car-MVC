@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Cleanup configuration model
@@ -13,3 +13,8 @@ public class CleanupConfigurationVM
     public IEnumerable<string> ContentTypesToCleanup { get; set; } = new List<string> { "Post", "Story", "Comment" };
     public IEnumerable<string> ExcludedContentTypes { get; set; } = new List<string> { "Group" };
 }
+
+
+
+
+

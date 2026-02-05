@@ -9,3 +9,7 @@ public class DashboardAreaService : IDashboardAreaService
 {
     public string GetAreaStatus() => "Dashboard Area is active and organized.";
 }
+
+
+
+

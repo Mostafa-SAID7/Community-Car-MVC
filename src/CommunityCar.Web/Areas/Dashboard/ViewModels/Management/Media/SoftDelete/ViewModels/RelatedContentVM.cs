@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 public class RelatedContentVM
 {
@@ -8,3 +8,8 @@ public class RelatedContentVM
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 }
+
+
+
+
+

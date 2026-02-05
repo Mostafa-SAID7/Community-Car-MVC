@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// Failed login trend view model
@@ -9,3 +9,7 @@ public class FailedLoginTrendVM
     public int Count { get; set; }
     public string Label { get; set; } = string.Empty;
 }
+
+
+
+

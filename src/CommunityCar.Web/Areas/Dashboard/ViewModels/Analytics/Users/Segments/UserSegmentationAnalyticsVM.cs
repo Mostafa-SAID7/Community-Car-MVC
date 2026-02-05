@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Segments;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Segments;
 
 /// <summary>
 /// ViewModel for user segmentation analytics
@@ -159,3 +159,7 @@ public class TrendDataPointVM
     public decimal Value { get; set; }
     public string Label { get; set; } = string.Empty;
 }
+
+
+
+

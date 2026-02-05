@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// ViewModel for blocked IP addresses
@@ -16,3 +16,7 @@ public class BlockedIpVM
     public bool IsActive { get; set; }
     public string Location { get; set; } = string.Empty;
 }
+
+
+
+

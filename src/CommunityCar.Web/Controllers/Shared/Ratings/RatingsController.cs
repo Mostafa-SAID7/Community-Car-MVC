@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Interactions;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Domain.Enums.Shared;
 using CommunityCar.Domain.Entities.Shared;
@@ -195,5 +195,6 @@ public class UpdateRatingRequest
     public double Value { get; set; }
     public string? Comment { get; set; }
 }
+
 
 

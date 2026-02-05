@@ -1,10 +1,10 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.System;
-using CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Management.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.System;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.ViewModels;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.System;
+namespace CommunityCar.Web.Areas.Dashboard.Repositories.System;
 
 public class SystemRepository : ISystemRepository
 {
@@ -84,3 +84,6 @@ public class SystemRepository : ISystemRepository
         return await Task.FromResult(true);
     }
 }
+
+
+

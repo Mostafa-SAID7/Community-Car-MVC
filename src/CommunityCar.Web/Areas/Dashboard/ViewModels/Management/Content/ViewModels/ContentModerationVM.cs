@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.Content.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Content.ViewModels;
 
 public class ContentModerationVM
 {
@@ -16,3 +16,7 @@ public class ContentModerationVM
     public double AverageResponseTime { get; set; }
     public List<ChartDataVM> ModerationStatsChart { get; set; } = new();
 }
+
+
+
+

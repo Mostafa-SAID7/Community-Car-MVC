@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 
 public class ReportChartVM
 {
@@ -8,3 +8,7 @@ public class ReportChartVM
     public string DataSource { get; set; } = string.Empty;
     public Dictionary<string, object> Configuration { get; set; } = new();
 }
+
+
+
+

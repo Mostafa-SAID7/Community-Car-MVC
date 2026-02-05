@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 public class ErrorSummaryVM
 {
@@ -14,3 +14,7 @@ public class ErrorSummaryVM
     public string MostCommonErrorType { get; set; } = string.Empty;
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

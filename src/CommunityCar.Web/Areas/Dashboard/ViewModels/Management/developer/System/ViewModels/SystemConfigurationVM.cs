@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class SystemConfigurationVM
 {
@@ -30,3 +30,7 @@ public class SystemConfigurationVM
     public Dictionary<string, string> Settings { get; set; } = new();
     public List<EnvironmentVariableVM> EnvironmentVariables { get; set; } = new();
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Content.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Content.ViewModels;
 
 public class ModerateContentVM
 {
@@ -11,3 +11,7 @@ public class ModerateContentVM
     public bool BanUser { get; set; } = false;
     public int BanDurationDays { get; set; } = 0;
 }
+
+
+
+

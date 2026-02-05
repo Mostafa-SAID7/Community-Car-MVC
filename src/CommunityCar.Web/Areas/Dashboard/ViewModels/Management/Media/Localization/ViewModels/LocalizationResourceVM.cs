@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.Localization.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.Localization.ViewModels;
 
 public class LocalizationResourceVM
 {
@@ -12,3 +12,7 @@ public class LocalizationResourceVM
     public DateTime? ModifiedAt { get; set; }
     public bool IsActive { get; set; }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
 
 public class RecentActivityVM
 {
@@ -20,3 +20,7 @@ public class RecentActivityVM
     public string User { get; set; } = string.Empty;
     public string Action { get; set; } = string.Empty;
 }
+
+
+
+

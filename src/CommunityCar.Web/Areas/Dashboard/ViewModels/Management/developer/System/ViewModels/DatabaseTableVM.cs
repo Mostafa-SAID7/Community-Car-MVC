@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class DatabaseTableVM
 {
@@ -7,3 +7,7 @@ public class DatabaseTableVM
     public long Size { get; set; }
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

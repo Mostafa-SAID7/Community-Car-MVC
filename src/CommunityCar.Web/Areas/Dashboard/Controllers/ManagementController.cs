@@ -1,7 +1,7 @@
-using CommunityCar.Application.Features.Dashboard.Management.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Trends;
-using CommunityCar.Application.Features.Dashboard.Overview.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Trends;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -104,3 +104,7 @@ public class ManagementController : Controller
         }
     }
 }
+
+
+
+

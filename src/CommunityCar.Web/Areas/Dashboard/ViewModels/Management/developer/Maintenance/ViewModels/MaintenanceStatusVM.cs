@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.Maintenance.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Maintenance.ViewModels;
 
 public class MaintenanceStatusVM
 {
@@ -62,3 +62,7 @@ public class MaintenanceTaskVM
     public int Priority { get; set; }
     public decimal ProgressPercentage { get; set; }
 }
+
+
+
+

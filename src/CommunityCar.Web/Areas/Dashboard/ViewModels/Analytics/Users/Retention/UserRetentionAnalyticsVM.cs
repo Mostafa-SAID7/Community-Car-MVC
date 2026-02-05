@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Retention;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Retention;
 
 /// <summary>
 /// User retention analytics view model
@@ -16,3 +16,7 @@ public class UserRetentionAnalyticsVM
     public List<RetentionCohortVM> Cohorts { get; set; } = new();
     public Dictionary<string, double> RetentionBySegment { get; set; } = new();
 }
+
+
+
+

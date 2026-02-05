@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Core;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Core;
 
 /// <summary>
 /// Dashboard update user view model for dashboard operations
@@ -14,3 +14,7 @@ public class DashboardUpdateUserVM
     public bool IsActive { get; set; }
     public bool IsVerified { get; set; }
 }
+
+
+
+

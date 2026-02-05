@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 public class AnalyticsFollowingVM
 {
@@ -16,3 +16,7 @@ public class AnalyticsFollowingVM
     public bool IsEngaged { get; set; }
     public string TimeAgo { get; set; } = string.Empty;
 }
+
+
+
+

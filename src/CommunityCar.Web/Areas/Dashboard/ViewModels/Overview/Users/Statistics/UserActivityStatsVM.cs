@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Statistics;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Statistics;
 
 /// <summary>
 /// User activity statistics view model
@@ -16,3 +16,7 @@ public class UserActivityStatsVM
     public Dictionary<string, int> ActivityByDay { get; set; } = new();
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

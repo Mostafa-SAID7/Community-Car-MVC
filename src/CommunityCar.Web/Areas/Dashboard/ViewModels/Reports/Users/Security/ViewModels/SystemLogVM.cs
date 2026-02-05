@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// ViewModel for system logs in user management context
@@ -48,3 +48,7 @@ public class SystemLogVM
         return $"{(int)(timeSpan.TotalDays / 365)}y ago";
     }
 }
+
+
+
+

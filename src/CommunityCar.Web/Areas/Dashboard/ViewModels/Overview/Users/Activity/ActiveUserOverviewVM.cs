@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Activity;
 
 /// <summary>
 /// Active user overview view model
@@ -16,3 +16,7 @@ public class ActiveUserOverviewVM
     public int PostsToday { get; set; }
     public int CommentsToday { get; set; }
 }
+
+
+
+

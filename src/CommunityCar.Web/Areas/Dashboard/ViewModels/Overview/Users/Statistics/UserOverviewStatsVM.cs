@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Statistics;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Statistics;
 
 /// <summary>
 /// User overview statistics view model
@@ -33,3 +33,7 @@ public class UserOverviewStatsVM
     public string TrendDirection { get; set; } = string.Empty;
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

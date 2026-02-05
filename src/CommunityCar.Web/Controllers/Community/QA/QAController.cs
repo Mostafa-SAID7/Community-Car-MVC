@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services.Community.QA;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Features.Community.QA.ViewModels;
 using CommunityCar.Domain.Enums.Shared;

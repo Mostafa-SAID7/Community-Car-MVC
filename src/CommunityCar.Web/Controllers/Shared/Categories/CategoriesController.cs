@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Domain.Entities.Shared;
 using Microsoft.AspNetCore.Authorization;
 
@@ -175,5 +175,6 @@ public class UpdateCategoryRequest
     public string? Description { get; set; }
     public Guid? ParentCategoryId { get; set; }
 }
+
 
 

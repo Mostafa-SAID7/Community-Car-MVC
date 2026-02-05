@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.ViewModels;
 
 public class TopContentVM
 {
@@ -18,3 +18,7 @@ public class TopContentVM
     public string ThumbnailUrl { get; set; } = string.Empty;
     public double EngagementScore { get; set; }
 }
+
+
+
+

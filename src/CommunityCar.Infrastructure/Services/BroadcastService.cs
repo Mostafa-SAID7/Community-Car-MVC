@@ -1,6 +1,6 @@
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
 

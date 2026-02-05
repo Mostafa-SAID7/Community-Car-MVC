@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class ResourceAnalysisVM
 {
@@ -15,3 +15,7 @@ public class ResourceAnalysisVM
     public List<string> RenderBlockingResources { get; set; } = new();
     public List<string> UnusedResources { get; set; } = new();
 }
+
+
+
+

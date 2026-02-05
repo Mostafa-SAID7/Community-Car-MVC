@@ -1,0 +1,135 @@
+using CommunityCar.Web.Areas.Dashboard.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Repositories.Analytics.Content;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Analytics.Content;
+using CommunityCar.Web.Areas.Dashboard.Repositories.Analytics.Users.Behavior;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Analytics.Users.Behavior;
+using CommunityCar.Web.Areas.Dashboard.Repositories.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.Repositories.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.Repositories.Management;
+using CommunityCar.Web.Areas.Dashboard.Repositories.Management.Users.Actions;
+using CommunityCar.Web.Areas.Dashboard.Repositories.Management.Authorization;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Management;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Management.Users.Core;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Management.Users.Actions;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Management.Authorization;
+using CommunityCar.Web.Areas.Dashboard.Repositories.Performance;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Performance;
+using CommunityCar.Web.Areas.Dashboard.Repositories.Reports;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Reports.Users.General;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Reports.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Reports.Users.Audit;
+using CommunityCar.Web.Areas.Dashboard.Repositories.System;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.System;
+using CommunityCar.Web.Areas.Dashboard.Services.Analytics;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics;
+using CommunityCar.Web.Areas.Dashboard.Services.Analytics.Content;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Content;
+using CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users.Behavior;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Behavior;
+using CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users;
+using CommunityCar.Web.Areas.Dashboard.Services.ErrorReporting;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.ErrorReporting;
+using CommunityCar.Web.Areas.Dashboard.Services.Maintenance;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Maintenance;
+using CommunityCar.Web.Areas.Dashboard.Services.Management;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Management;
+using CommunityCar.Web.Areas.Dashboard.Services.Management.Users.Actions;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Management.Users.Actions;
+using CommunityCar.Web.Areas.Dashboard.Services.Management.Users.Core;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Management.Users.Core;
+using CommunityCar.Web.Areas.Dashboard.Services.Management.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Management.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Services.Management.Authorization;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Management.Authorization;
+using CommunityCar.Web.Areas.Dashboard.Services.Overview;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview;
+using CommunityCar.Web.Areas.Dashboard.Services.Overview.Users.Activity;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview.Users.Activity;
+using CommunityCar.Web.Areas.Dashboard.Services.Overview.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Services.Overview.Users.Statistics;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Overview.Users.Statistics;
+using CommunityCar.Web.Areas.Dashboard.Services.Performance;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Performance;
+using CommunityCar.Web.Areas.Dashboard.Services.Reports;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports;
+using CommunityCar.Web.Areas.Dashboard.Services.Reports.Users.Audit;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports.Users.Audit;
+using CommunityCar.Web.Areas.Dashboard.Services.Reports.Users.General;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports.Users.General;
+using CommunityCar.Web.Areas.Dashboard.Services.Reports.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.Services.SEO;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.SEO;
+using CommunityCar.Web.Areas.Dashboard.Services.Settings;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Settings;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace CommunityCar.Web.Areas.Dashboard.Configuration;
+
+public static class DashboardDependencyInjection
+{
+    public static IServiceCollection AddDashboardAreaServices(this IServiceCollection services)
+    {
+        // Unit of Work
+        services.AddScoped<IDashboardUnitOfWork, DashboardUnitOfWork>();
+
+        // Repositories
+        services.AddScoped<IContentAnalyticsRepository, ContentAnalyticsRepository>();
+        services.AddScoped<IUserBehaviorAnalyticsRepository, UserBehaviorAnalyticsRepository>();
+        services.AddScoped<IUserPreferencesRepository, UserPreferencesRepository>();
+        services.AddScoped<IUserSegmentRepository, UserSegmentRepository>();
+        services.AddScoped<IUserManagementActionsRepository, UserManagementActionsRepository>();
+        services.AddScoped<IUserManagementRepository, UserManagementRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IPermissionRepository, PermissionRepository>();
+        services.AddScoped<IUserOverviewActivityRepository, UserOverviewActivityRepository>();
+        services.AddScoped<IUserOverviewSecurityRepository, UserOverviewSecurityRepository>();
+        services.AddScoped<IUserOverviewStatisticsRepository, UserOverviewStatisticsRepository>();
+        services.AddScoped<IUserAuditReportsRepository, UserAuditReportsRepository>();
+        services.AddScoped<IUserReportsRepository, UserReportsRepository>();
+        services.AddScoped<IUserSecurityReportsRepository, UserSecurityReportsRepository>();
+        services.AddScoped<IPerformanceRepository, PerformanceRepository>();
+        services.AddScoped<IReportRepository, ReportRepository>();
+        services.AddScoped<IReportScheduleRepository, ReportScheduleRepository>();
+        services.AddScoped<ISystemRepository, SystemRepository>();
+
+        // Services
+        services.AddScoped<IAnalyticsService, AnalyticsService>();
+        services.AddScoped<IContentAnalyticsService, ContentAnalyticsService>();
+        services.AddScoped<IUserBehaviorAnalyticsService, UserBehaviorAnalyticsService>();
+        services.AddScoped<IUserPreferencesAnalyticsService, UserPreferencesAnalyticsService>();
+        services.AddScoped<IUserPreferencesService, UserPreferencesService>();
+        services.AddScoped<IUserSegmentService, UserSegmentService>();
+        services.AddScoped<IUserSegmentationService, UserSegmentationService>();
+        services.AddScoped<IUserAnalyticsService, UserAnalyticsService>();
+        services.AddScoped<IErrorService, ErrorService>();
+        services.AddScoped<IMaintenanceService, MaintenanceService>();
+        services.AddScoped<IManagementService, ManagementService>();
+        services.AddScoped<IAccountManagementService, AccountManagementService>();
+        services.AddScoped<IUserManagementActionsService, UserManagementActionsService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IPermissionService, PermissionService>();
+        services.AddScoped<IOverviewService, OverviewService>();
+        services.AddScoped<IUserOverviewActivityService, UserOverviewActivityService>();
+        services.AddScoped<IUserOverviewSecurityService, UserOverviewSecurityService>();
+        services.AddScoped<IUserOverviewStatisticsService, UserOverviewStatisticsService>();
+        services.AddScoped<IPerformanceService, PerformanceService>();
+        services.AddScoped<IReportsService, ReportsService>();
+        services.AddScoped<IUserAuditReportsService, UserAuditReportsService>();
+        services.AddScoped<IUserReportsService, UserReportsService>();
+        services.AddScoped<IUserSecurityReportsService, UserSecurityReportsService>();
+        services.AddScoped<ISEOService, SEOService>();
+        services.AddScoped<ISettingsService, SettingsService>();
+
+        return services;
+    }
+}

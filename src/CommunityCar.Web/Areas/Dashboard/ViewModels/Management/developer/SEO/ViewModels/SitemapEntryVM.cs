@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class SitemapEntryVM
 {
@@ -7,3 +7,7 @@ public class SitemapEntryVM
     public string ChangeFrequency { get; set; } = string.Empty;
     public double Priority { get; set; }
 }
+
+
+
+

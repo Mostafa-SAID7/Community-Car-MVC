@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Error.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Error.ViewModels;
 
 public class ErrorDetailsViewModel
 {
@@ -12,3 +12,7 @@ public class ErrorDetailsViewModel
     public string? Details { get; set; }
     public string? StackTrace { get; set; }
 }
+
+
+
+

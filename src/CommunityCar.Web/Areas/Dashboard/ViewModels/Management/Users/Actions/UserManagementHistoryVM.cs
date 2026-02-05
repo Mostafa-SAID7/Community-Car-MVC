@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 
 /// <summary>
 /// User management history view model
@@ -15,3 +15,7 @@ public class UserManagementHistoryVM
     public string IpAddress { get; set; } = string.Empty;
     public Dictionary<string, object> AdditionalData { get; set; } = new();
 }
+
+
+
+

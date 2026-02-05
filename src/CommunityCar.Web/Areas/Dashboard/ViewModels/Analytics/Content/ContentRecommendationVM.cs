@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.ViewModels.Content;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 
 public class ContentRecommendationVM
 {
@@ -18,3 +18,7 @@ public class ContentRecommendationVM
     public int CommentCount { get; set; }
     public IEnumerable<string> Tags { get; set; } = new List<string>();
 }
+
+
+
+

@@ -1,7 +1,7 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users.Segments;
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Segments;
 
-namespace CommunityCar.Application.Services.Dashboard.Analytics.Users.Segments;
+namespace CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users.Segments;
 
 public class UserSegmentService : IUserSegmentService
 {
@@ -109,3 +109,6 @@ public class UserSegmentService : IUserSegmentService
         };
     }
 }
+
+
+

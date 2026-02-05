@@ -1,5 +1,5 @@
-using CommunityCar.Web.Areas.Dashboard.Repositories.Interfaces.Analytics.Content;
-using CommunityCar.Application.Features.Dashboard.Analytics.Content;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Analytics.Content;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,3 +62,6 @@ public class ContentAnalyticsRepository : IContentAnalyticsRepository
         await Task.CompletedTask;
     }
 }
+
+
+

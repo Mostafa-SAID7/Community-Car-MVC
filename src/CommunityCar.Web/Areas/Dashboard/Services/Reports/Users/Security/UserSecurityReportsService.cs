@@ -1,15 +1,16 @@
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security;
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports.Users.Security;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Reports.Users.Security;
 
-namespace CommunityCar.Application.Services.Dashboard.Reports.Users.Security;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Reports.Users.Security;
 
 public class UserSecurityReportsService : IUserSecurityReportsService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public UserSecurityReportsService(IUnitOfWork unitOfWork)
+    public UserSecurityReportsService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -52,3 +53,7 @@ public class UserSecurityReportsService : IUserSecurityReportsService
         };
     }
 }
+
+
+
+

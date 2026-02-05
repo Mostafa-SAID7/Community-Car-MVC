@@ -1,11 +1,11 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Behavior;
-using CommunityCar.Application.Features.Dashboard.Analytics.Users;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Analytics.Users.Behavior;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Application.Features.Shared.ViewModels.Users;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.Repositories.Analytics.Users.Behavior;
 
 public class UserBehaviorAnalyticsRepository : IUserBehaviorAnalyticsRepository
 {
@@ -73,3 +73,6 @@ public class UserBehaviorAnalyticsRepository : IUserBehaviorAnalyticsRepository
         await Task.CompletedTask;
     }
 }
+
+
+

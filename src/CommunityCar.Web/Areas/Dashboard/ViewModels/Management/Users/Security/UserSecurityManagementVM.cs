@@ -1,7 +1,7 @@
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels.Security;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Security;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Security;
 
 /// <summary>
 /// ViewModel for user security management
@@ -116,3 +116,7 @@ public class SecurityActionVM
     public string Icon { get; set; } = string.Empty;
     public string Color { get; set; } = string.Empty;
 }
+
+
+
+

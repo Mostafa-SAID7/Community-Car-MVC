@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.developer.backgroundjobs;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.developer.backgroundjobs;
 
 public class RecentJobInfo
 {
@@ -9,3 +9,7 @@ public class RecentJobInfo
     public TimeSpan? Duration { get; set; }
     public string? Error { get; set; }
 }
+
+
+
+

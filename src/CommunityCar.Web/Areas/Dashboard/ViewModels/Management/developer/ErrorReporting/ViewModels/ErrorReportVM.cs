@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 public class ErrorReportVM
 {
@@ -82,3 +82,7 @@ public class ErrorAlertConfigVM
     public int ThresholdCount { get; set; }
     public int TimeWindowMinutes { get; set; }
 }
+
+
+
+

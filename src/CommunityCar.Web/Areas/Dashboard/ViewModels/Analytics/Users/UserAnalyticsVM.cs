@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users;
 
 /// <summary>
 /// User analytics view model for dashboard analytics
@@ -17,3 +17,7 @@ public class UserAnalyticsVM
     public Dictionary<string, int> ActivityByDay { get; set; } = new();
     public List<string> TopPages { get; set; } = new();
 }
+
+
+
+

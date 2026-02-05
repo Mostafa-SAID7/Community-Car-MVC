@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Settings.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Performance.ViewModels;
 
 public class PerformanceSettingsVM
 {
@@ -11,3 +11,7 @@ public class PerformanceSettingsVM
     public int MaxRequestSize { get; set; }
     public int RequestTimeout { get; set; }
 }
+
+
+
+

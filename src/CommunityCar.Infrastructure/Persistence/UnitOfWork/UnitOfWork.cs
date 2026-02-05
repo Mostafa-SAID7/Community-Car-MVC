@@ -1,21 +1,9 @@
 using CommunityCar.Application.Common.Interfaces.Repositories;
-using CommunityCar.Application.Common.Interfaces.Repositories.Account;
+using CommunityCar.Web.Areas.Identity.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Community;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Repositories.Localization;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Content;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Behavior;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Segments;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Preferences;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management.Users.Core;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management.Users.Actions;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Overview.Users.Statistics;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Overview.Users.Activity;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Overview.Users.Security;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports.Users.General;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports.Users.Security;
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports.Users.Audit;
 using CommunityCar.Infrastructure.Persistence.Data;
 
 namespace CommunityCar.Infrastructure.Persistence.UnitOfWork;
@@ -50,20 +38,7 @@ public class UnitOfWork : IUnitOfWork
         IGuidesRepository guidesRepository,
         IUserRepository userRepository,
         ILocalizationCultureRepository localizationCultureRepository,
-        ILocalizationResourceRepository localizationResourceRepository,
-        // Dashboard repositories
-        IContentAnalyticsRepository contentAnalyticsRepository,
-        IUserBehaviorAnalyticsRepository userBehaviorAnalyticsRepository,
-        IUserSegmentRepository userSegmentRepository,
-        IUserPreferencesRepository userPreferencesRepository,
-        CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management.Users.Core.IUserManagementRepository userManagementRepository,
-        IUserManagementActionsRepository userManagementActionsRepository,
-        IUserOverviewStatisticsRepository userOverviewStatisticsRepository,
-        IUserOverviewActivityRepository userOverviewActivityRepository,
-        IUserOverviewSecurityRepository userOverviewSecurityRepository,
-        IUserReportsRepository userReportsRepository,
-        IUserSecurityReportsRepository userSecurityReportsRepository,
-        IUserAuditReportsRepository userAuditReportsRepository)
+        ILocalizationResourceRepository localizationResourceRepository)
     {
         _context = context;
         Conversations = conversationRepository;
@@ -91,20 +66,6 @@ public class UnitOfWork : IUnitOfWork
         Users = userRepository;
         LocalizationCultures = localizationCultureRepository;
         LocalizationResources = localizationResourceRepository;
-        
-        // Dashboard repositories
-        ContentAnalytics = contentAnalyticsRepository;
-        UserBehaviorAnalytics = userBehaviorAnalyticsRepository;
-        UserSegments = userSegmentRepository;
-        UserPreferences = userPreferencesRepository;
-        UserManagement = userManagementRepository;
-        UserManagementActions = userManagementActionsRepository;
-        UserOverviewStatistics = userOverviewStatisticsRepository;
-        UserOverviewActivity = userOverviewActivityRepository;
-        UserOverviewSecurity = userOverviewSecurityRepository;
-        UserReports = userReportsRepository;
-        UserSecurityReports = userSecurityReportsRepository;
-        UserAuditReports = userAuditReportsRepository;
     }
 
     public IConversationRepository Conversations { get; }
@@ -132,26 +93,6 @@ public class UnitOfWork : IUnitOfWork
     public IUserRepository Users { get; }
     public ILocalizationCultureRepository LocalizationCultures { get; }
     public ILocalizationResourceRepository LocalizationResources { get; }
-    
-    // Dashboard Repositories - Analytics
-    public IContentAnalyticsRepository ContentAnalytics { get; }
-    public IUserBehaviorAnalyticsRepository UserBehaviorAnalytics { get; }
-    public IUserSegmentRepository UserSegments { get; }
-    public IUserPreferencesRepository UserPreferences { get; }
-    
-    // Dashboard Repositories - Management
-    public CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management.Users.Core.IUserManagementRepository UserManagement { get; }
-    public IUserManagementActionsRepository UserManagementActions { get; }
-    
-    // Dashboard Repositories - Overview
-    public IUserOverviewStatisticsRepository UserOverviewStatistics { get; }
-    public IUserOverviewActivityRepository UserOverviewActivity { get; }
-    public IUserOverviewSecurityRepository UserOverviewSecurity { get; }
-    
-    // Dashboard Repositories - Reports
-    public IUserReportsRepository UserReports { get; }
-    public IUserSecurityReportsRepository UserSecurityReports { get; }
-    public IUserAuditReportsRepository UserAuditReports { get; }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -163,3 +104,4 @@ public class UnitOfWork : IUnitOfWork
         _context.Dispose();
     }
 }
+

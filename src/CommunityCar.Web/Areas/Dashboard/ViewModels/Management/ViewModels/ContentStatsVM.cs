@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.ViewModels;
 
 public class ContentStatsVM
 {
@@ -8,3 +8,7 @@ public class ContentStatsVM
     public int CommentsToday { get; set; }
     public int PendingModeration { get; set; }
 }
+
+
+
+

@@ -1,6 +1,6 @@
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security;
 
 /// <summary>
 /// Security statistics view model
@@ -36,3 +36,7 @@ public class FailedLoginTrendVM
     public int Count { get; set; }
     public string Period { get; set; } = string.Empty;
 }
+
+
+
+

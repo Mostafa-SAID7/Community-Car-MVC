@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Response model for soft delete operations
@@ -11,3 +11,8 @@ public class SoftDeleteResponseVM
     public DateTime? DeletedAt { get; set; }
     public string? DeletedBy { get; set; }
 }
+
+
+
+
+

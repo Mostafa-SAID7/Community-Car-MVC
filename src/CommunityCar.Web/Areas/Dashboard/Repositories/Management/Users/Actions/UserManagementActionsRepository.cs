@@ -1,9 +1,9 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management.Users.Actions;
-using CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Management.Users.Actions;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Management.Users.Actions;
+namespace CommunityCar.Web.Areas.Dashboard.Repositories.Management.Users.Actions;
 
 public class UserManagementActionsRepository : IUserManagementActionsRepository
 {
@@ -95,3 +95,6 @@ public class UserManagementActionsRepository : IUserManagementActionsRepository
         return await Task.FromResult(true);
     }
 }
+
+
+

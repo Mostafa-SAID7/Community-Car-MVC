@@ -1,0 +1,26 @@
+using CommunityCar.Application.Common.Models;
+using CommunityCar.Application.Features.Account.ViewModels.Authentication;
+
+namespace CommunityCar.Web.Areas.Identity.Interfaces.Services.Authentication.OAuth;
+
+/// <summary>
+/// Service responsible for Google OAuth operations
+/// </summary>
+public interface IGoogleOAuthService
+{
+    /// <summary>
+    /// Signs in user with Google ID token
+    /// </summary>
+    Task<Result> GoogleSignInAsync(GoogleSignInRequest request);
+
+    /// <summary>
+    /// Links Google account to existing user
+    /// </summary>
+    Task<Result> LinkGoogleAccountAsync(LinkExternalAccountRequest request);
+
+    /// <summary>
+    /// Verifies Google ID token and returns user info
+    /// </summary>
+    Task<CommunityCar.Application.Features.Account.ViewModels.Authentication.GoogleUserInfo?> VerifyGoogleTokenAsync(string idToken);
+}
+

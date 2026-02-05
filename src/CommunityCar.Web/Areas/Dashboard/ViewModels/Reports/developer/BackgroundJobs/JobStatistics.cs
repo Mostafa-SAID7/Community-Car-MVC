@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.developer.BackgroundJobs;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.developer.BackgroundJobs;
 
 public class JobStatistics
 {
@@ -9,3 +9,7 @@ public class JobStatistics
     public long ScheduledCount { get; set; }
     public int ServersCount { get; set; }
 }
+
+
+
+

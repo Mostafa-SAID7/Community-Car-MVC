@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Segments;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Segments;
 
 public class UserPrivacySettingsVM
 {
@@ -11,3 +11,7 @@ public class UserPrivacySettingsVM
     public bool AllowAnalytics { get; set; }
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

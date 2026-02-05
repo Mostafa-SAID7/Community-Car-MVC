@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 
 public class ReportScheduleVM
 {
@@ -17,3 +17,7 @@ public class ReportScheduleVM
     public string Format { get; set; } = string.Empty;
     public ReportGenerationVM Template { get; set; } = new();
 }
+
+
+
+

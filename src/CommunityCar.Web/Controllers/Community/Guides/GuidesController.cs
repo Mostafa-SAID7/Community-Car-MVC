@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Guides;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Features.Community.Guides.ViewModels;
 using CommunityCar.Domain.Enums.Community;
 using Microsoft.Extensions.Localization;
@@ -550,6 +550,7 @@ public class GuidesController : Controller
         return RedirectToAction(nameof(Details), new { id });
     }
 }
+
 
 
 

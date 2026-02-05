@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// Security blocked IP view model
@@ -16,3 +16,7 @@ public class SecurityBlockedIpVM
     public string LastAttemptReason { get; set; } = string.Empty;
     public string Location { get; set; } = string.Empty;
 }
+
+
+
+

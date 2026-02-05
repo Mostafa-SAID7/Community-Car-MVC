@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class SystemServiceVM
 {
@@ -11,3 +11,7 @@ public class SystemServiceVM
     public decimal CpuUsage { get; set; }
     public string Description { get; set; } = string.Empty;
 }
+
+
+
+

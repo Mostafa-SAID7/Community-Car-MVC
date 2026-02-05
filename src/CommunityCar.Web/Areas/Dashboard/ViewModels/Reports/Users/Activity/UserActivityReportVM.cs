@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Activity;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Activity;
 
 /// <summary>
 /// User activity report view model
@@ -21,3 +21,7 @@ public class UserActivityReportVM
     public List<string> DevicesUsed { get; set; } = new();
     public Dictionary<string, int> HourlyActivity { get; set; } = new();
 }
+
+
+
+

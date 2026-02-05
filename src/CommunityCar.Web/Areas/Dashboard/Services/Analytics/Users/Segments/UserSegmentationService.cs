@@ -1,15 +1,16 @@
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Segments;
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users.Segments;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Users.Segments;
 
-namespace CommunityCar.Application.Services.Dashboard.Analytics.Users.Segments;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Analytics.Users.Segments;
 
 public class UserSegmentationService : IUserSegmentationService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public UserSegmentationService(IUnitOfWork unitOfWork)
+    public UserSegmentationService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -37,3 +38,7 @@ public class UserSegmentationService : IUserSegmentationService
         return new List<TrendingItemVM>();
     }
 }
+
+
+
+

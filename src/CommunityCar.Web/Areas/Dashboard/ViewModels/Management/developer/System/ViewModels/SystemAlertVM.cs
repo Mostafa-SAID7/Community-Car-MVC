@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 /// <summary>
 /// ViewModel for system alerts
@@ -26,4 +26,9 @@ public class SystemAlertVM
     public bool IsRead { get; set; }
     public string Type { get; set; } = string.Empty;
 }
+
+
+
+
+
 

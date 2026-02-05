@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 
 public class ReportSectionVM
 {
@@ -11,3 +11,7 @@ public class ReportSectionVM
     public List<ChartDataVM> Charts { get; set; } = new();
     public int Order { get; set; }
 }
+
+
+
+

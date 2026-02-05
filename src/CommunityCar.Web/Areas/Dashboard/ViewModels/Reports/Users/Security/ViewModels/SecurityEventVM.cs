@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 public class SecurityEventVM
 {
@@ -20,3 +20,7 @@ public class SecurityEventVM
     public string? ResolvedBy { get; set; }
     public Dictionary<string, object> AdditionalData { get; set; } = new();
 }
+
+
+
+

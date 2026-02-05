@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Settings.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Maintenance.ViewModels;
 
 public class MaintenanceSettingsVM
 {
@@ -9,3 +9,7 @@ public class MaintenanceSettingsVM
     public bool AutoOptimizeDatabase { get; set; }
     public string MaintenanceWindow { get; set; } = string.Empty;
 }
+
+
+
+

@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.ViewModels;
 
 public class ReportGenerationVM
 {
@@ -15,3 +15,7 @@ public class ReportGenerationVM
     public bool IncludeRawData { get; set; }
     public Dictionary<string, object> Parameters { get; set; } = new();
 }
+
+
+
+

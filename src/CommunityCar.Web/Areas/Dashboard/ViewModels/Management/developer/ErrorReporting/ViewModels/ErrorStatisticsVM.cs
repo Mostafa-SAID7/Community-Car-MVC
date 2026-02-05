@@ -1,6 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 public class ErrorStatisticsVM
 {
@@ -31,3 +31,7 @@ public class ErrorStatisticsVM
     public List<string> TopErrorSources { get; set; } = new();
     public List<ErrorSummaryVM> TopErrors { get; set; } = new();
 }
+
+
+
+

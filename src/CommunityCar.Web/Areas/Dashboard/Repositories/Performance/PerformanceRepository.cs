@@ -1,11 +1,11 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Performance;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Performance;
 using CommunityCar.Application.Features.SEO.ViewModels;
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Segments;
-using CommunityCar.Application.Features.Dashboard.Management.developer.Performance.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Segments;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.Performance.ViewModels;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Performance;
+namespace CommunityCar.Web.Areas.Dashboard.Repositories.Performance;
 
 public class PerformanceRepository : IPerformanceRepository
 {
@@ -67,3 +67,6 @@ public class PerformanceRepository : IPerformanceRepository
         return await Task.FromResult(new List<SlowQueryVM>());
     }
 }
+
+
+

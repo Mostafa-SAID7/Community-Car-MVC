@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Cleanup report model
@@ -15,3 +15,8 @@ public class CleanupReportVM
     public string? ErrorMessage { get; set; }
     public IEnumerable<string> Warnings { get; set; } = new List<string>();
 }
+
+
+
+
+

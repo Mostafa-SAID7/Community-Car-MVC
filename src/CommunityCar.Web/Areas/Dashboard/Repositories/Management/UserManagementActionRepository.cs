@@ -1,10 +1,10 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Management;
 using CommunityCar.Domain.Entities.Account.Management;
 using CommunityCar.Infrastructure.Persistence.Data;
 using CommunityCar.Infrastructure.Persistence.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Management;
+namespace CommunityCar.Web.Areas.Dashboard.Repositories.Management;
 
 /// <summary>
 /// Repository implementation for UserManagementAction entity operations (Dashboard/Admin context)
@@ -168,3 +168,6 @@ public class UserManagementActionRepository : BaseRepository<UserManagementActio
 
     #endregion
 }
+
+
+

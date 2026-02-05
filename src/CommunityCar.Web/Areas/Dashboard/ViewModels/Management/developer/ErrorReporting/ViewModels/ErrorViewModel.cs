@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 public class ErrorViewModel
 {
@@ -8,3 +8,7 @@ public class ErrorViewModel
     public string? ErrorCode { get; set; }
     public DateTime? Timestamp { get; set; }
 }
+
+
+
+

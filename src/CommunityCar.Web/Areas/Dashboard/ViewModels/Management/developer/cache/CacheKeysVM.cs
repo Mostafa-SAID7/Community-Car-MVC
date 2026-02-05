@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.cache;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.cache;
 
 public class CacheKeysVM
 {
@@ -11,3 +11,7 @@ public class CacheKeysVM
     public int PageSize { get; set; } = 50;
     public int TotalPages { get; set; }
 }
+
+
+
+

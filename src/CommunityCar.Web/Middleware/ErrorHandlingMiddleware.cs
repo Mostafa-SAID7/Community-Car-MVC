@@ -1,5 +1,5 @@
 using CommunityCar.Application.Common.Interfaces.Services;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.ErrorReporting;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.ErrorReporting;
 using CommunityCar.Web.Extensions;
 using System.Net;
 using System.Text.Json;
@@ -166,5 +166,6 @@ public class ErrorResponse
     public string? Details { get; set; }
     public string? StackTrace { get; set; }
 }
+
 
 

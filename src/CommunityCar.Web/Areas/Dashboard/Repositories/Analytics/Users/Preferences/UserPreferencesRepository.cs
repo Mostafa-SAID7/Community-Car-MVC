@@ -1,9 +1,9 @@
-using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Preferences;
-using CommunityCar.Application.Features.Dashboard.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories.Analytics.Users.Preferences;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Preferences;
 using CommunityCar.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Users.Preferences;
+namespace CommunityCar.Web.Areas.Dashboard.Repositories.Analytics.Users.Preferences;
 
 public class UserPreferencesRepository : IUserPreferencesRepository
 {
@@ -65,3 +65,6 @@ public class UserPreferencesRepository : IUserPreferencesRepository
         return await Task.FromResult(new Dictionary<string, double>());
     }
 }
+
+
+

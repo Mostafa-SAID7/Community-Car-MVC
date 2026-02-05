@@ -1,7 +1,7 @@
-using CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security;
 
 /// <summary>
 /// Security overview for reports
@@ -26,3 +26,7 @@ public class ReportSecurityOverviewVM
     public List<ChartDataVM> ThreatTrend { get; set; } = new();
     public Dictionary<string, int> ThreatsByType { get; set; } = new();
 }
+
+
+
+

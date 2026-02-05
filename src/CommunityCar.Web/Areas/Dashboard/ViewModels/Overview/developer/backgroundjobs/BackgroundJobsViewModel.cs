@@ -1,6 +1,6 @@
-using CommunityCar.Application.Features.Dashboard.Reports.developer.BackgroundJobs;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.developer.BackgroundJobs;
 
-namespace CommunityCar.Application.Features.Dashboard.Overview.developer.backgroundjobs;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.developer.backgroundjobs;
 
 public class BackgroundJobsViewModel
 {
@@ -14,3 +14,7 @@ public class BackgroundJobsViewModel
     public int CompletedJobs { get; set; }
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

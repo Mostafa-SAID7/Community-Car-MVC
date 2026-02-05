@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.Security.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.Security.ViewModels;
 
 /// <summary>
 /// ViewModel for security audit
@@ -44,3 +44,7 @@ public class SecurityRecommendationVM
     public string ActionRequired { get; set; } = string.Empty;
     public DateTime? DueDate { get; set; }
 }
+
+
+
+

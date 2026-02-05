@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.ErrorReporting.ViewModels;
 
 /// <summary>
 /// Error Reporting ViewModels
@@ -16,3 +16,7 @@ namespace CommunityCar.Application.Features.Dashboard.Management.developer.Error
 
 // The individual classes are now in separate files within this namespace.
 // This file is kept for documentation and backward compatibility.
+
+
+
+

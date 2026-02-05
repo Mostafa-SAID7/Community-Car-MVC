@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 
 /// <summary>
 /// ViewModel for dashboard user activity
@@ -17,3 +17,7 @@ public class DashboardUserActivityVM
     public bool IsSuccessful { get; set; }
     public string Details { get; set; } = string.Empty;
 }
+
+
+
+

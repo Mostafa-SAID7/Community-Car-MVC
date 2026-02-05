@@ -1,14 +1,15 @@
-using CommunityCar.Application.Features.Dashboard.Analytics.Content;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Content;
-using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.Analytics.Content;
 
-namespace CommunityCar.Application.Services.Dashboard.Analytics.Content;
+
+namespace CommunityCar.Web.Areas.Dashboard.Services.Analytics.Content;
 
 public class ContentAnalyticsService : IContentAnalyticsService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDashboardUnitOfWork _unitOfWork;
 
-    public ContentAnalyticsService(IUnitOfWork unitOfWork)
+    public ContentAnalyticsService(IDashboardUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -43,3 +44,7 @@ public class ContentAnalyticsService : IContentAnalyticsService
         };
     }
 }
+
+
+
+

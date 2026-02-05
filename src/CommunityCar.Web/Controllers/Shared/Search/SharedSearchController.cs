@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Features.Shared.ViewModels;
 using CommunityCar.Domain.Enums.Shared;
 
@@ -352,5 +352,6 @@ public class SharedSearchController : Controller
         }
     }
 }
+
 
 

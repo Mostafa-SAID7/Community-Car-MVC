@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Content;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Content;
 
 /// <summary>
 /// Content analytics view model
@@ -31,3 +31,7 @@ public class ContentAnalyticsVM
     public double EngagementGrowth { get; set; }
     public double SharesGrowth { get; set; }
 }
+
+
+
+

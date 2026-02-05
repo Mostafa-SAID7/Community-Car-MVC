@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Trends;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Trends;
 
 /// <summary>
 /// Active user trend view model
@@ -9,3 +9,7 @@ public class ActiveUserTrendVM
     public int Count { get; set; }
     public string Label { get; set; } = string.Empty;
 }
+
+
+
+

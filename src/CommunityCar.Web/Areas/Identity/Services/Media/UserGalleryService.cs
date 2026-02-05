@@ -1,0 +1,219 @@
+using CommunityCar.Web.Areas.Identity.Interfaces.Repositories;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Media;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Profile;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
+using CommunityCar.Application.Common.Interfaces.Services.Shared;
+using CommunityCar.Application.Features.Account.ViewModels.Media;
+using CommunityCar.Application.Features.Account.ViewModels.Core;
+using CommunityCar.Domain.Entities.Account.Media;
+using CommunityCar.Domain.Enums.Account;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
+
+namespace CommunityCar.Web.Areas.Identity.Services.Media;
+
+public class UserGalleryService : IUserGalleryService
+{
+    private readonly IUserRepository _userRepository;
+    private readonly IUserGalleryRepository _galleryRepository;
+    private readonly ICurrentUserService _currentUserService;
+    private readonly IProfileService _profileService;
+    private readonly IFileStorageService _fileStorageService;
+    private readonly ILogger<UserGalleryService> _logger;
+
+    public UserGalleryService(
+        IUserRepository userRepository,
+        IUserGalleryRepository galleryRepository,
+        ICurrentUserService currentUserService,
+        IProfileService profileService,
+        IFileStorageService fileStorageService,
+        ILogger<UserGalleryService> logger)
+    {
+        _userRepository = userRepository;
+        _galleryRepository = galleryRepository;
+        _currentUserService = currentUserService;
+        _profileService = profileService;
+        _fileStorageService = fileStorageService;
+        _logger = logger;
+    }
+
+    #region Gallery Management
+
+    public async Task<IEnumerable<UserGalleryItemVM>> GetUserGalleryAsync(Guid userId)
+    {
+        try
+        {
+            var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : (Guid?)null;
+            _logger.LogInformation("Getting gallery for user {UserId}, current user {CurrentUserId}", userId, currentUserId);
+            
+            var galleryItems = (currentUserId != userId) 
+                ? await _galleryRepository.GetPublicGalleryAsync(userId)
+                : await _galleryRepository.GetUserGalleryAsync(userId);
+            
+            _logger.LogInformation("Retrieved {Count} gallery items for user {UserId}", galleryItems?.Count() ?? 0, userId);
+            
+            if (galleryItems == null)
+            {
+                _logger.LogWarning("Gallery items returned null for user {UserId}", userId);
+                return Enumerable.Empty<UserGalleryItemVM>();
+            }
+            
+            return galleryItems.Select(item => new UserGalleryItemVM
+            {
+                Id = item.Id,
+                UserId = item.UserId,
+                ImageUrl = item.MediaUrl,
+                ThumbnailUrl = item.ThumbnailUrl ?? item.MediaUrl,
+                Caption = item.Description ?? item.Title,
+                CreatedAt = item.UploadedAt,
+                ViewCount = item.ViewCount,
+                // LikeCount = item.LikeCount, // Not in VM
+                IsPublic = item.IsPublic,
+                // IsFeatured = item.IsFeatured // Not in VM
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting gallery for user {UserId}", userId);
+            return Enumerable.Empty<UserGalleryItemVM>();
+        }
+    }
+
+    public async Task<UserGalleryItemVM?> GetGalleryItemAsync(Guid userId, Guid imageId)
+    {
+        var currentUserId = Guid.TryParse(_currentUserService.UserId, out var id) ? id : Guid.Empty;
+        var item = await _galleryRepository.GetGalleryItemAsync(userId, imageId);
+        if (item == null || item.UserId != userId) return null;
+
+        return new UserGalleryItemVM
+        {
+            Id = item.Id,
+            UserId = item.UserId,
+            ImageUrl = item.MediaUrl,
+            ThumbnailUrl = item.ThumbnailUrl ?? item.MediaUrl,
+            Caption = item.Description ?? item.Title,
+            CreatedAt = item.UploadedAt,
+            IsPublic = item.IsPublic
+        };
+    }
+
+    public async Task<UserGalleryItemVM?> UploadImageAsync(UploadImageRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("Starting image upload for user {UserId}, fileName: {FileName}", request.UserId, request.FileName);
+            
+            var imageBytes = Convert.FromBase64String(request.ImageData);
+            if (imageBytes.Length > 5 * 1024 * 1024) 
+            {
+                _logger.LogWarning("Image size {Size} exceeds 5MB limit for user {UserId}", imageBytes.Length, request.UserId);
+                return null; // 5MB limit
+            }
+
+            // Create user-specific gallery directory structure
+            var userGalleryPath = Path.Combine("gallery", request.UserId.ToString());
+            var fileName = Path.Combine(userGalleryPath, $"{Guid.NewGuid()}{Path.GetExtension(request.FileName)}");
+            
+            _logger.LogInformation("Uploading file to path: {FilePath} for user {UserId}", fileName, request.UserId);
+            
+            using var stream = new MemoryStream(imageBytes);
+            var url = await _fileStorageService.UploadFileAsync(stream, fileName, request.ContentType);
+            
+            if (string.IsNullOrEmpty(url)) 
+            {
+                _logger.LogError("File storage service returned empty URL for user {UserId}, fileName: {FileName}", request.UserId, request.FileName);
+                return null;
+            }
+
+            _logger.LogInformation("File uploaded successfully, URL: {Url} for user {UserId}", url, request.UserId);
+
+            var item = new UserGallery(request.UserId, request.Caption ?? "Untitled", url, MediaType.Image, request.IsPublic);
+            await _galleryRepository.AddAsync(item);
+
+            _logger.LogInformation("Gallery item created successfully with ID: {ItemId} for user {UserId}", item.Id, request.UserId);
+
+            return new UserGalleryItemVM { 
+                Id = item.Id, 
+                UserId = item.UserId, 
+                ImageUrl = item.MediaUrl, 
+                ThumbnailUrl = item.ThumbnailUrl ?? item.MediaUrl,
+                Caption = item.Description ?? item.Title,
+                CreatedAt = item.UploadedAt,
+                IsPublic = item.IsPublic,
+                ViewCount = item.ViewCount
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Gallery upload failed for user {UserId}, fileName: {FileName}", request.UserId, request.FileName);
+            return null;
+        }
+    }
+
+    public async Task<bool> DeleteImageAsync(Guid userId, Guid imageId)
+    {
+        var item = await _galleryRepository.GetByIdAsync(imageId);
+        if (item == null || item.UserId != userId) return false;
+
+        await _fileStorageService.DeleteFileAsync(item.MediaUrl);
+        await _galleryRepository.DeleteAsync(item);
+        return true;
+    }
+
+    #endregion
+
+    #region Image Operations
+
+    public async Task<bool> SetAsProfilePictureAsync(Guid userId, Guid imageId)
+    {
+        var item = await _galleryRepository.GetByIdAsync(imageId);
+        if (item == null || item.UserId != userId) return false;
+        return await _profileService.UpdateProfilePictureAsync(userId, item.MediaUrl);
+    }
+
+    public async Task<bool> SetAsCoverImageAsync(Guid userId, Guid imageId)
+    {
+        var item = await _galleryRepository.GetByIdAsync(imageId);
+        if (item == null || item.UserId != userId) return false;
+        return await _profileService.UpdateCoverImageAsync(userId, item.MediaUrl);
+    }
+
+    public async Task<bool> UpdateImageCaptionAsync(Guid userId, Guid imageId, string caption)
+    {
+        var item = await _galleryRepository.GetByIdAsync(imageId);
+        if (item == null || item.UserId != userId) return false;
+        item.UpdateDetails(item.Title, caption, item.Tags);
+        await _galleryRepository.UpdateAsync(item);
+        return true;
+    }
+
+    public async Task<bool> ToggleItemVisibilityAsync(Guid userId, Guid imageId)
+    {
+        var item = await _galleryRepository.GetByIdAsync(imageId);
+        if (item == null || item.UserId != userId) return false;
+        
+        // Toggle visibility
+        item.ToggleVisibility();
+        await _galleryRepository.UpdateAsync(item);
+        
+        _logger.LogInformation("Toggled visibility for gallery item {ItemId} to {IsPublic}", imageId, item.IsPublic);
+        return true;
+    }
+
+    public Task<bool> ReorderImagesAsync(Guid userId, IEnumerable<Guid> imageIds) => Task.FromResult(true);
+    public Task<bool> DeleteGalleryItemAsync(Guid userId, Guid imageId) => DeleteImageAsync(userId, imageId);
+
+    #endregion
+
+    #region Statistics & Validation
+
+    public async Task<int> GetImageCountAsync(Guid userId) => (await _galleryRepository.GetUserGalleryAsync(userId, 1, int.MaxValue)).Count();
+    public Task<long> GetTotalStorageUsedAsync(Guid userId) => Task.FromResult(0L);
+    public Task<bool> IsStorageLimitExceededAsync(Guid userId) => Task.FromResult(false);
+    public Task<bool> IsValidImageAsync(byte[] imageData) => Task.FromResult(true);
+    public Task<bool> IsImageSizeAllowedAsync(long fileSize) => Task.FromResult(fileSize < 5 * 1024 * 1024);
+    public Task<IEnumerable<string>> GetAllowedImageFormatsAsync() => Task.FromResult<IEnumerable<string>>(new[] { ".jpg", ".png", ".webp" });
+
+    #endregion
+}
+

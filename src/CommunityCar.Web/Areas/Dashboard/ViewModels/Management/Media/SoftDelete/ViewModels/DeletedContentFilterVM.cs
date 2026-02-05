@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Media.SoftDelete.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Media.SoftDelete.ViewModels;
 
 /// <summary>
 /// Filter model for deleted content search
@@ -16,3 +16,8 @@ public class DeletedContentFilterVM
     public int Page { get; set; } = 1;
     public int PageSize { get; set; } = 20;
 }
+
+
+
+
+

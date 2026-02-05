@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.cache;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.cache;
 
 public class CacheKeysViewModel
 {
@@ -6,3 +6,7 @@ public class CacheKeysViewModel
     public List<string> Keys { get; set; } = new();
     public int TotalCount { get; set; }
 }
+
+
+
+

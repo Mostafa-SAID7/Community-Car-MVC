@@ -1,7 +1,7 @@
 using AutoMapper;
 using CommunityCar.Application.Common.Interfaces.Repositories;
 using CommunityCar.Application.Common.Interfaces.Services.Community.Groups;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
+using CommunityCar.Web.Areas.Identity.Interfaces.Services.Core;
 using CommunityCar.Application.Features.Community.Groups.ViewModels;
 using CommunityCar.Domain.Entities.Community.Groups;
 using CommunityCar.Domain.Enums.Community;

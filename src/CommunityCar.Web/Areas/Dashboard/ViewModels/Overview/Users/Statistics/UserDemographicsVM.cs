@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Overview.Users.Statistics;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Overview.Users.Statistics;
 
 /// <summary>
 /// User demographics view model
@@ -12,3 +12,7 @@ public class UserDemographicsVM
     public Dictionary<string, int> RegistrationSources { get; set; } = new();
     public DateTime LastUpdated { get; set; }
 }
+
+
+
+

@@ -12,3 +12,7 @@ public class DashboardAreaRepository : IDashboardAreaRepository
         // Placeholder for area-specific logging or data access
     }
 }
+
+
+
+

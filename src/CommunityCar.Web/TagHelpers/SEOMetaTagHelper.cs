@@ -1,4 +1,4 @@
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.SEO;
+using CommunityCar.Web.Areas.Dashboard.Interfaces.Services.SEO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -84,6 +84,7 @@ public class SEOMetaTagHelper : TagHelper
         };
     }
 }
+
 
 
 

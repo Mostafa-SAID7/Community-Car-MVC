@@ -1,7 +1,7 @@
 using CommunityCar.Domain.Enums.Account;
 using CommunityCar.Application.Features.Shared.ViewModels;
 
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 /// <summary>
 /// User Analytics ViewModels
@@ -31,3 +31,7 @@ namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
 
 // The individual classes are now in separate files within this namespace.
 // This file is kept for documentation and backward compatibility.
+
+
+
+

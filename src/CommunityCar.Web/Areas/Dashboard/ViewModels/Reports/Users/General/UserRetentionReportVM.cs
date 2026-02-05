@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Reports.Users.General;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Reports.Users.General;
 
 /// <summary>
 /// User retention report view model
@@ -15,3 +15,7 @@ public class UserRetentionReportVM
     public List<string> RetentionFactors { get; set; } = new();
     public List<string> ChurnReasons { get; set; } = new();
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.System.ViewModels;
 
 public class LogFileVM
 {
@@ -13,3 +13,7 @@ public class LogFileVM
     public bool CanDownload { get; set; }
     public bool CanDelete { get; set; }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.SEO.ViewModels;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.SEO.ViewModels;
 
 public class PerformanceMetricsVM
 {
@@ -16,3 +16,7 @@ public class PerformanceMetricsVM
     public double FCP { get; set; }
     public double TTFB { get; set; }
 }
+
+
+
+

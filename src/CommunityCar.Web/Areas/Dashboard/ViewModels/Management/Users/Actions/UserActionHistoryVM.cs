@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.Users.Actions;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.Users.Actions;
 
 /// <summary>
 /// User action history view model
@@ -28,3 +28,7 @@ public class UserActionStatsVM
     public Dictionary<string, int> ActionsByType { get; set; } = new();
     public DateTime LastActionDate { get; set; }
 }
+
+
+
+

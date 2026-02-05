@@ -1,7 +1,7 @@
 using CommunityCar.Application.Common.Interfaces.Repositories.Base;
 using CommunityCar.Domain.Entities.Account.Management;
 
-namespace CommunityCar.Application.Common.Interfaces.Repositories.Account;
+namespace CommunityCar.Web.Areas.Identity.Interfaces.Repositories;
 
 /// <summary>
 /// Repository interface for UserManagement entity operations

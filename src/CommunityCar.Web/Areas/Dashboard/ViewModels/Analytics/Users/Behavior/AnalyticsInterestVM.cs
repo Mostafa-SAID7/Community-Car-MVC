@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 public class AnalyticsInterestVM
 {
@@ -16,3 +16,7 @@ public class AnalyticsInterestVM
     public bool IsActive { get; set; }
     public string ScoreLevel { get; set; } = string.Empty; // Low, Medium, High, Very High
 }
+
+
+
+

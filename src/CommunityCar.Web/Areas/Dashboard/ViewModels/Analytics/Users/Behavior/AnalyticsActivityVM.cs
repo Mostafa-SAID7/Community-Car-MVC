@@ -1,6 +1,6 @@
 using CommunityCar.Domain.Enums.Account;
 
-namespace CommunityCar.Application.Features.Dashboard.Analytics.Users.Behavior;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Analytics.Users.Behavior;
 
 public class AnalyticsActivityVM
 {
@@ -17,3 +17,7 @@ public class AnalyticsActivityVM
     public string ActivityIcon { get; set; } = string.Empty;
     public string ActivityColor { get; set; } = string.Empty;
 }
+
+
+
+

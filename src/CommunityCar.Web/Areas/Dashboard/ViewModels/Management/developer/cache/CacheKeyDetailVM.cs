@@ -1,4 +1,4 @@
-namespace CommunityCar.Application.Features.Dashboard.Management.developer.cache;
+namespace CommunityCar.Web.Areas.Dashboard.ViewModels.Management.developer.cache;
 
 public class CacheKeyDetailVM
 {
@@ -13,3 +13,7 @@ public class CacheKeyDetailVM
     public DateTime LastAccessed { get; set; }
     public string Type { get; set; } = string.Empty;
 }
+
+
+
+
