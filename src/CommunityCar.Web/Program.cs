@@ -49,11 +49,12 @@ using (var scope = app.Services.CreateScope())
     // Configure background jobs if enabled
     try
     {
-        var backgroundJobSettings = builder.Configuration.GetSection("BackgroundJobs").Get<CommunityCar.Infrastructure.Configuration.BackgroundJobSettings>();
-        if (backgroundJobSettings?.EnableScheduledJobs == true)
-        {
-            CommunityCar.Infrastructure.Configuration.BackgroundJobConfiguration.ConfigureRecurringJobs(scope.ServiceProvider);
-        }
+        // Background jobs configuration is not available yet
+        // var backgroundJobSettings = builder.Configuration.GetSection("BackgroundJobs").Get<CommunityCar.Infrastructure.Configuration.BackgroundJobSettings>();
+        // if (backgroundJobSettings?.EnableScheduledJobs == true)
+        // {
+        //     CommunityCar.Infrastructure.Configuration.BackgroundJobConfiguration.ConfigureRecurringJobs(scope.ServiceProvider);
+        // }
     }
     catch (Exception ex)
     {

@@ -7,85 +7,100 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     ViewData["Title"] = "Sign In";
-    Layout = "_Auth Layout";
+    Layout = "_AuthLayout";
     ViewData["AuthSideCaption"] = "Browse thousands of activities with trusted automation agents.";
 }
 
-<!-- Logo Section -->
-<a href="/" class="d-flex align-items-center gap-3 text-decoration-none text-dark mb-5">
-    <i data-lucide="zap" class="text-warning icon-md"></i>
-    <span class="h4 fw-black mb-0">Havenix.</span>
-</a>
+<div class="auth-gradient-bg">
+    <div class="auth-login-container">
+        <div class="login-card">
+            <!-- Header Section -->
+            <div class="login-header">
+                <a href="/" class="auth-logo">
+                    <i data-lucide="zap" class="text-primary"></i>
+                    <span>CommunityCar</span>
+                </a>
+                <h1 class="login-title">Welcome Back</h1>
+                <p class="login-subtitle">Sign in to your account</p>
+            </div>
 
-<h1 class="display-5 fw-black mb-2">Welcome Back</h1>
-<p class="text-muted fw-medium mb-4">Let's login to grab amazing deal</p>
+            <!-- Form Container -->
+            <div class="login-form">
+                <!-- Social Login -->
+                <div class="social-buttons">
+                    <button type="button" class="social-button" id="google-login">
+                        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" class="social-button-icon" />
+                        Google
+                    </button>
+                    <button type="button" class="social-button" id="facebook-login">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" class="social-button-icon" />
+                        Facebook
+                    </button>
+                </div>
 
-<!-- Social Login -->
-<div class="d-flex flex-column gap-3 mb-4">
-    <a href="#" class="btn btn-outline-secondary bg-white rounded-3 py-3 d-flex align-items-center justify-content-center gap-3 fw-semibold text-dark" id="google-login">
-        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" class="social-icon" />
-        Continue with Google
-    </a>
-    <a href="#" class="btn btn-outline-secondary bg-white rounded-3 py-3 d-flex align-items-center justify-content-center gap-3 fw-semibold text-dark" id="facebook-login">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" class="social-icon" />
-        Continue with Facebook
-    </a>
-</div>
+                <div class="social-divider">
+                    <span>Or continue with email</span>
+                </div>
 
-<div class="position-relative text-center my-4">
-    <hr class="border-top" />
-    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small fw-bold">Or</span>
-</div>
+                <!-- Login Form -->
+                <form asp-action="Login" method="post" id="login-form">
+                    @Html.AntiForgeryToken()
+                    
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger border-0 mb-4 rounded-3">
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
 
-<!-- Login Form -->
-<form asp-action="Login" method="post" id="login-form">
-    @Html.AntiForgeryToken()
-    
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger border-0 mb-4 p-3 rounded-3 auth-error-alert">
-            @Html.ValidationSummary(false)
+                    <!-- Email Field -->
+                    <div class="login-form-group">
+                        <label class="login-label" asp-for="LoginIdentifier">Email Address</label>
+                        <div class="position-relative">
+                            <input asp-for="LoginIdentifier" class="login-input" placeholder="Enter your email address" required />
+                            <i data-lucide="mail" class="login-input-icon"></i>
+                        </div>
+                        <span asp-validation-for="LoginIdentifier" class="login-error-message"></span>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="login-form-group">
+                        <label class="login-label" asp-for="Password">Password</label>
+                        <div class="password-field-container">
+                            <input asp-for="Password" id="password-input" type="password" class="login-input" placeholder="Enter your password" required />
+                            <i data-lucide="lock" class="login-input-icon"></i>
+                            <button type="button" class="password-toggle-btn" id="toggle-password">
+                                <i data-lucide="eye" class="icon-sm"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="login-error-message"></span>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="remember-me-container">
+                        <input type="checkbox" id="remember-me" class="remember-me-checkbox" />
+                        <label for="remember-me" class="remember-me-label">Remember me for 30 days</label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="signin-button" id="login-button">
+                        Sign In
+                    </button>
+
+                    <!-- Forgot Password -->
+                    <div class="text-center mt-3">
+                        <a asp-action="ForgotPassword" class="forgot-password-link">Forgot your password?</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Create Account Section -->
+            <div class="create-account-section">
+                <p class="create-account-text">Don't have an account?</p>
+                <a asp-action="Register" class="create-account-link">Create your account</a>
+            </div>
         </div>
-    }
-
-    <!-- Email Field -->
-    <div class="mb-4">
-        <label class="form-label text-uppercase fw-bold small text-muted" asp-for="LoginIdentifier">Email</label>
-        <div class="position-relative">
-            <input asp-for="LoginIdentifier" class="form-control rounded-3 py-3 bg-light border-0" placeholder="Enter your email" required />
-        </div>
-        <span asp-validation-for="LoginIdentifier" class="text-danger xx-small mt-1 d-block"></span>
     </div>
-
-    <!-- Password Field -->
-    <div class="mb-4">
-        <label class="form-label text-uppercase fw-bold small text-muted" asp-for="Password">Password</label>
-        <div class="position-relative">
-            <input asp-for="Password" id="password-input" type="password" class="form-control rounded-3 py-3 bg-light border-0 pe-5" placeholder="Enter your password" required />
-            <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted password-toggle-btn" id="toggle-password">
-                <i data-lucide="eye" class="icon-sm"></i>
-            </button>
-        </div>
-        <span asp-validation-for="Password" class="text-danger xx-small mt-1 d-block"></span>
-    </div>
-
-    <!-- Actions -->
-    <div class="d-flex align-items-center justify-content-between mb-4">
-        <div class="form-check">
-            <input type="checkbox" id="remember-me" class="form-check-input rounded" />
-            <label for="remember-me" class="form-check-label small fw-semibold">Remember me</label>
-        </div>
-        <a asp-action="ForgotPassword" class="text-dark text-decoration-underline small fw-bold">Forgot Password?</a>
-    </div>
-
-    <!-- Submit -->
-    <button type="submit" class="btn btn-dark w-100 py-3 rounded-3 fw-bold" id="login-button">
-        Login
-    </button>
-</form>
-
-<div class="text-center mt-5 text-muted fw-medium">
-    Don't have an account? <a asp-action="Register" class="text-dark fw-bold text-decoration-none">Sign Up</a>
 </div>
 
 @section Scripts {
@@ -114,7 +129,18 @@
             
             form.addEventListener('submit', function() {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Logging in...';
+                submitBtn.classList.add('loading');
+            });
+
+            // Social login handlers
+            document.getElementById('google-login')?.addEventListener('click', function() {
+                // Handle Google OAuth
+                window.location.href = '/Account/ExternalLogin?provider=Google';
+            });
+
+            document.getElementById('facebook-login')?.addEventListener('click', function() {
+                // Handle Facebook OAuth
+                window.location.href = '/Account/ExternalLogin?provider=Facebook';
             });
         });
     </script>

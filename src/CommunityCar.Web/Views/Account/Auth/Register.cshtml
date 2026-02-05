@@ -12,89 +12,159 @@
     ViewData["AuthSideCaption"] = "Join our community and automate your business operations seamlessly.";
 }
 
-<!-- Logo Section -->
-<a href="/" class="d-flex align-items-center gap-3 text-decoration-none text-dark mb-5">
-    <i data-lucide="zap" class="text-warning" style="width: 24px; height: 24px;"></i>
-    <span class="h4 fw-black mb-0">Havenix.</span>
-</a>
+<div class="auth-gradient-bg">
+    <div class="auth-login-container">
+        <div class="login-card">
+            <!-- Header Section -->
+            <div class="login-header">
+                <a href="/" class="auth-logo">
+                    <i data-lucide="zap" class="text-primary"></i>
+                    <span>CommunityCar</span>
+                </a>
+                <h1 class="login-title">Create Account</h1>
+                <p class="login-subtitle">Join our community today</p>
+            </div>
 
-<h1 class="display-5 fw-black mb-2">Create Account</h1>
-<p class="text-muted fw-medium mb-4">Join us to start your automation journey</p>
+            <!-- Form Container -->
+            <div class="login-form">
+                <!-- Social Register -->
+                <div class="social-buttons">
+                    <button type="button" class="social-button w-100" id="google-register" style="grid-column: 1 / -1;">
+                        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" class="social-button-icon" />
+                        Sign up with Google
+                    </button>
+                </div>
 
-<!-- Social Register -->
-<div class="d-flex flex-column gap-3 mb-4">
-    <a href="#" class="btn btn-outline-secondary bg-white rounded-3 py-3 d-flex align-items-center justify-content-center gap-3 fw-semibold text-dark" id="google-register">
-        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" style="width: 20px; height: 20px;" />
-        Sign up with Google
-    </a>
-</div>
+                <div class="social-divider">
+                    <span>Or create with email</span>
+                </div>
 
-<div class="position-relative text-center my-4">
-    <hr class="border-top" />
-    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small fw-bold">Or</span>
-</div>
+                <!-- Register Form -->
+                <form asp-action="Register" method="post" id="register-form">
+                    @Html.AntiForgeryToken()
+                    
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger border-0 mb-4 rounded-3">
+                            @Html.ValidationSummary(false)
+                        </div>
+                    }
 
-<!-- Register Form -->
-<form asp-action="Register" method="post" id="register-form">
-    @Html.AntiForgeryToken()
-    
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger border-0 mb-4 p-3" style="font-size: 0.85rem; border-radius: 0.75rem; background: #fef2f2; color: #991b1b;">
-            @Html.ValidationSummary(false)
+                    <!-- Full Name -->
+                    <div class="login-form-group">
+                        <label class="login-label" asp-for="FullName">Full Name</label>
+                        <div class="position-relative">
+                            <input asp-for="FullName" class="login-input" placeholder="Enter your full name" required />
+                            <i data-lucide="user" class="login-input-icon"></i>
+                        </div>
+                        <span asp-validation-for="FullName" class="login-error-message"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="login-form-group">
+                        <label class="login-label" asp-for="Email">Email Address</label>
+                        <div class="position-relative">
+                            <input asp-for="Email" class="login-input" type="email" placeholder="Enter your email address" required />
+                            <i data-lucide="mail" class="login-input-icon"></i>
+                        </div>
+                        <span asp-validation-for="Email" class="login-error-message"></span>
+                    </div>
+
+                    <!-- Password Fields -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="login-form-group">
+                                <label class="login-label" asp-for="Password">Password</label>
+                                <div class="password-field-container">
+                                    <input asp-for="Password" id="password-input" type="password" class="login-input" placeholder="Create password" required />
+                                    <i data-lucide="lock" class="login-input-icon"></i>
+                                    <button type="button" class="password-toggle-btn" id="toggle-password">
+                                        <i data-lucide="eye" class="icon-sm"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="Password" class="login-error-message"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="login-form-group">
+                                <label class="login-label" asp-for="ConfirmPassword">Confirm Password</label>
+                                <div class="password-field-container">
+                                    <input asp-for="ConfirmPassword" id="confirm-password-input" type="password" class="login-input" placeholder="Confirm password" required />
+                                    <i data-lucide="lock" class="login-input-icon"></i>
+                                    <button type="button" class="password-toggle-btn" id="toggle-confirm-password">
+                                        <i data-lucide="eye" class="icon-sm"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="login-error-message"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms Agreement -->
+                    <div class="remember-me-container">
+                        <input type="checkbox" id="agree-terms" class="remember-me-checkbox" required />
+                        <label for="agree-terms" class="remember-me-label">
+                            I agree to the <a href="/terms" class="text-primary">Terms of Service</a> and <a href="/privacy" class="text-primary">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="signin-button" id="register-button">
+                        Create Account
+                    </button>
+                </form>
+            </div>
+
+            <!-- Login Section -->
+            <div class="create-account-section">
+                <p class="create-account-text">Already have an account?</p>
+                <a asp-action="Login" class="create-account-link">Sign in to your account</a>
+            </div>
         </div>
-    }
-
-    <!-- Full Name -->
-    <div class="mb-4">
-        <label class="form-label text-uppercase fw-bold small text-muted" asp-for="FullName">Full Name</label>
-        <input asp-for="FullName" class="form-control rounded-3 py-3 bg-light border-0" placeholder="Enter your full name" required />
-        <span asp-validation-for="FullName" class="text-danger xx-small mt-1 d-block"></span>
     </div>
-
-    <!-- Email -->
-    <div class="mb-4">
-        <label class="form-label text-uppercase fw-bold small text-muted" asp-for="Email">Email Address</label>
-        <input asp-for="Email" class="form-control rounded-3 py-3 bg-light border-0" type="email" placeholder="Enter your email" required />
-        <span asp-validation-for="Email" class="text-danger xx-small mt-1 d-block"></span>
-    </div>
-
-    <!-- Password Row -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-6">
-            <label class="form-label text-uppercase fw-bold small text-muted" asp-for="Password">Password</label>
-            <input asp-for="Password" id="password-input" type="password" class="form-control rounded-3 py-3 bg-light border-0" placeholder="••••••••" required />
-            <span asp-validation-for="Password" class="text-danger xx-small mt-1 d-block"></span>
-        </div>
-        <div class="col-md-6">
-            <label class="form-label text-uppercase fw-bold small text-muted" asp-for="ConfirmPassword">Confirm</label>
-            <input asp-for="ConfirmPassword" type="password" class="form-control rounded-3 py-3 bg-light border-0" placeholder="••••••••" required />
-            <span asp-validation-for="ConfirmPassword" class="text-danger xx-small mt-1 d-block"></span>
-        </div>
-    </div>
-
-    <!-- Submit -->
-    <button type="submit" class="btn btn-dark w-100 py-3 rounded-3 fw-bold" id="register-button">
-        Create Account
-    </button>
-</form>
-
-<div class="text-center mt-5 text-muted fw-medium">
-    Already have an account? <a asp-action="Login" class="text-dark fw-bold text-decoration-none">Login</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Password toggle functionality
+            function setupPasswordToggle(inputId, toggleId) {
+                const passwordInput = document.getElementById(inputId);
+                const togglePasswordBtn = document.getElementById(toggleId);
+                
+                if (togglePasswordBtn && passwordInput) {
+                    togglePasswordBtn.addEventListener('click', function() {
+                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordInput.setAttribute('type', type);
+                        
+                        const icon = this.querySelector('i');
+                        if (type === 'text') {
+                            icon.setAttribute('data-lucide', 'eye-off');
+                        } else {
+                            icon.setAttribute('data-lucide', 'eye');
+                        }
+                        lucide.createIcons();
+                    });
+                }
+            }
+
+            setupPasswordToggle('password-input', 'toggle-password');
+            setupPasswordToggle('confirm-password-input', 'toggle-confirm-password');
+
             const form = document.getElementById('register-form');
             const submitBtn = document.getElementById('register-button');
             
             form.addEventListener('submit', function() {
                 if ($(form).valid()) {
                     submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Initializing...';
+                    submitBtn.classList.add('loading');
                 }
+            });
+
+            // Social register handler
+            document.getElementById('google-register')?.addEventListener('click', function() {
+                window.location.href = '/Account/ExternalLogin?provider=Google&returnUrl=' + encodeURIComponent('/Account/Register');
             });
         });
     </script>

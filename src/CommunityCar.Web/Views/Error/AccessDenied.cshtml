@@ -6,48 +6,47 @@
     Layout = "_AuthLayout";
 }
 
-<div class="container min-vh-100 d-flex flex-column justify-content-center py-5 animate-in fade-in slide-in-from-bottom-8 duration-700">
+<div class="container min-vh-100 d-flex flex-column justify-content-center py-5 animate-in fade-in">
     <div class="text-center mb-5">
-        <div class="position-relative d-inline-flex align-items-center justify-content-center mb-4 group">
-            <div class="position-absolute inset-0 bg-danger opacity-25 rounded-circle blur-3xl group-hover:opacity-40 transition-all duration-1000"></div>
-            <div class="position-relative w-32 h-32 rounded-circle border-4 border-danger border-opacity-20 d-flex align-items-center justify-content-center text-danger bg-card shadow-2xl overflow-hidden" style="width: 120px; height: 120px;">
-                <div class="position-absolute bottom-0 start-0 end-0 h-50 bg-danger bg-opacity-5"></div>
-                <i data-lucide="shield-alert" class="w-12 h-12 position-relative animate-pulse" style="width: 48px; height: 48px;"></i>
+        <div class="position-relative d-inline-flex align-items-center justify-content-center mb-4">
+            <div class="error-icon-container position-relative rounded-circle border border-danger border-opacity-25 d-flex align-items-center justify-content-center text-danger bg-white shadow-lg overflow-hidden">
+                <div class="position-absolute bottom-0 start-0 end-0 bg-danger bg-opacity-5" style="height: 50%;"></div>
+                <i data-lucide="shield-alert" class="icon-lg position-relative animate-pulse"></i>
             </div>
         </div>
         
         <div class="mb-5">
-            <h1 class="display-4 fw-black text-gradient tracking-tighter mb-2">ACCESS SHUTDOWN</h1>
-            <p class="text-xs fw-black text-uppercase tracking-[0.4em] text-danger opacity-75">Unauthorized Identity Fragment</p>
+            <h1 class="display-4 fw-black text-gradient mb-2">ACCESS SHUTDOWN</h1>
+            <p class="xx-small fw-black text-uppercase text-danger opacity-75">Unauthorized Identity Fragment</p>
         </div>
     </div>
 
     <div class="card card-premium shadow-lg mx-auto text-center" style="max-width: 500px;">
         <div class="card-body p-5">
             <div class="mb-5">
-                <p class="text-xs fw-black text-uppercase tracking-widest text-muted-foreground opacity-75 leading-relaxed mb-4">
+                <p class="xx-small fw-black text-uppercase text-muted opacity-75 mb-4">
                     Your current protocol lacks the required authorization levels to penetrate this restricted node. 
                 </p>
-                <div class="h-1 bg-danger bg-opacity-10 rounded-pill mx-auto mb-4" style="width: 40px;"></div>
-                <p class="text-[10px] fw-black text-foreground text-decoration-underline decoration-danger decoration-4 text-underline-offset-4 mb-0">
+                <div class="error-divider bg-danger bg-opacity-10 rounded-pill mx-auto mb-4"></div>
+                <p class="xxx-small fw-black text-dark text-decoration-underline mb-0">
                     Security incident logged in primary mainframe.
                 </p>
             </div>
             
             <div class="d-grid gap-3 pt-3">
-                <a href="javascript:history.back()" class="btn btn-outline-secondary py-3 rounded-4 fw-black text-uppercase tracking-widest text-[10px]">
+                <a href="javascript:history.back()" class="btn btn-outline-secondary py-3 rounded-4 fw-black text-uppercase xxx-small">
                     Retreat to Safe Node
                 </a>
-                <a asp-controller="Feed" asp-action="Index" class="btn btn-primary-red py-3 rounded-4 fw-black text-uppercase tracking-widest text-[10px] shadow-lg">
+                <a asp-controller="Feed" asp-action="Index" class="btn btn-primary-red py-3 rounded-4 fw-black text-uppercase xxx-small shadow-lg">
                     Return to Foundation
                 </a>
             </div>
         </div>
     </div>
 
-    <div class="d-flex align-items-center justify-content-center gap-3 mt-5 opacity-40">
-         <span class="text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground">Mainframe ID: @Guid.NewGuid().ToString().Substring(0, 8).ToUpper()</span>
-         <div class="vr bg-border" style="height: 10px;"></div>
-         <span class="text-[9px] fw-black text-uppercase tracking-widest text-danger">Clearance: Level 0</span>
+    <div class="d-flex align-items-center justify-content-center gap-3 mt-5 opacity-50">
+         <span class="xxx-small fw-black text-uppercase text-muted">Mainframe ID: @Guid.NewGuid().ToString().Substring(0, 8).ToUpper()</span>
+         <div class="vr bg-secondary" style="height: 10px;"></div>
+         <span class="xxx-small fw-black text-uppercase text-danger">Clearance: Level 0</span>
     </div>
 </div>

@@ -13,4 +13,10 @@ public class StatsVM
     public string Description { get; set; } = string.Empty;
     public string Url { get; set; } = string.Empty;
     public Dictionary<string, object> Metadata { get; set; } = new();
+
+    // Dashboard specific properties
+    public int TotalUsers { get; set; }
+    public int ActiveUsers { get; set; }
+    public int TotalContent { get; set; }
+    public int TotalEngagements { get; set; }
 }

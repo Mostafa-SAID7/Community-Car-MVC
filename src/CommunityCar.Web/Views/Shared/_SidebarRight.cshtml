@@ -9,14 +9,14 @@
 
 <!-- Right Sidebar (Premium Design System) -->
 <div class="d-none d-xl-block h-100">
-    <div class="sticky-top" style="top: 1.5rem; z-index: 1000;">
+    <div class="sticky-top sidebar-sticky">
         @if (feedData != null)
         {
             <!-- Trending Topics -->
             <div class="card card-premium mb-4 animate-in fade-in slide-in-from-right duration-500">
                 <div class="card-header border-0 bg-transparent pt-4 pb-2">
                     <h6 class="mb-0 d-flex align-items-center gap-2 fw-bold text-uppercase tracking-wider small opacity-75">
-                        <i data-lucide="trending-up" class="text-primary-red" style="width: 18px;"></i>
+                        <i data-lucide="trending-up" class="text-primary-red sidebar-icon"></i>
                         @SharedLocalizer["TrendingTopics"]
                     </h6>
                 </div>
@@ -25,14 +25,14 @@
                     {
                         @foreach (var topic in feedData.TrendingTopics.Take(3))
                         {
-                            <a href="#" class="list-group-item list-group-item-action border-0 rounded-4 mb-1 py-3 transition-all hover:bg-light">
+                            <a href="#" class="list-group-item list-group-item-action border-0 rounded-4 mb-1 py-3 transition-all hover-bg-light">
                                 <div class="d-flex w-100 justify-content-between align-items-center">
                                     <h6 class="mb-1 fw-bold text-gradient">#@topic.Topic</h6>
                                     <small class="text-muted opacity-50">@topic.TimeAgo</small>
                                 </div>
                                 <div class="d-flex align-items-baseline gap-2 mt-1">
                                     <small class="text-muted fw-semibold">@topic.PostCount @SharedLocalizer["PostsLabel"]</small>
-                                    <span class="badge rounded-pill bg-primary-subtle text-primary-red border-0 px-2 py-1" style="font-size: 0.65rem;">
+                                    <span class="badge rounded-pill bg-primary-subtle text-primary-red border-0 px-2 py-1 badge-sm">
                                         @topic.TrendingReason
                                     </span>
                                 </div>
@@ -40,14 +40,14 @@
                         }
                         <div class="text-center mt-2">
                              <a href="/feed/trending" class="btn btn-sm btn-link text-primary-red text-decoration-none fw-bold small">
-                                @SharedLocalizer["ViewAllTrending"] <i data-lucide="chevron-right" style="width: 12px;"></i>
+                                @SharedLocalizer["ViewAllTrending"] <i data-lucide="chevron-right" class="icon-sm"></i>
                              </a>
                         </div>
                     }
                     else
                     {
                          <div class="p-5 text-center opacity-50">
-                            <i data-lucide="hash" class="mb-2" style="width: 32px;"></i>
+                            <i data-lucide="hash" class="mb-2 icon-lg"></i>
                             <p class="small mb-0">@SharedLocalizer["NoTrendingTopics"]</p>
                         </div>
                     }
@@ -60,7 +60,7 @@
                 <div class="card card-premium mb-4 animate-in fade-in slide-in-from-right duration-700">
                      <div class="card-header border-0 bg-transparent pt-4 pb-2">
                         <h6 class="mb-0 d-flex align-items-center gap-2 fw-bold text-uppercase tracking-wider small opacity-75">
-                            <i data-lucide="users" class="text-primary-red" style="width: 18px;"></i>
+                            <i data-lucide="users" class="text-primary-red sidebar-icon"></i>
                             @SharedLocalizer["PeopleYouMayKnow"]
                         </h6>
                     </div>
@@ -70,7 +70,7 @@
                             <div class="list-group-item d-flex gap-3 align-items-center border-0 py-3">
                                 <div class="user-avatar-container shadow-sm p-0">
                                     <img src="@(friend.Avatar ?? "/images/default-avatar.png")" alt="@friend.Name"
-                                            class="rounded-circle object-fit-cover" width="44" height="44" />
+                                            class="rounded-circle object-fit-cover avatar-md" />
                                 </div>
                                 
                                 <div class="flex-grow-1 min-w-0">
@@ -78,15 +78,15 @@
                                     <p class="mb-0 small text-muted text-truncate opacity-75">@friend.SuggestionReason</p>
                                 </div>
                                 
-                                <button class="btn btn-sm btn-primary-red rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;"
+                                <button class="btn btn-sm btn-primary-red rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm btn-icon-sm"
                                     data-action="send-friend-request" data-user-id="@friend.UserId" title="@SharedLocalizer["AddFriend"]">
-                                    <i data-lucide="user-plus" style="width: 16px;"></i>
+                                    <i data-lucide="user-plus" class="icon-sm"></i>
                                 </button>
                             </div>
                         }
                         <div class="text-center mt-2">
                             <a href="/friends/suggestions" class="btn btn-sm btn-link text-primary-red text-decoration-none fw-bold small">
-                                @SharedLocalizer["SeeAllSuggestions"] <i data-lucide="chevron-right" style="width: 12px;"></i>
+                                @SharedLocalizer["SeeAllSuggestions"] <i data-lucide="chevron-right" class="icon-sm"></i>
                             </a>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
              <div class="card card-premium animate-in fade-in slide-in-from-right duration-1000">
                 <div class="card-header border-0 bg-transparent pt-4 pb-2">
                     <h6 class="mb-0 d-flex align-items-center gap-2 fw-bold text-uppercase tracking-wider small opacity-75">
-                        <i data-lucide="bar-chart-2" class="text-primary-red" style="width: 18px;"></i>
+                        <i data-lucide="bar-chart-2" class="text-primary-red sidebar-icon"></i>
                         @SharedLocalizer["CommunityStats"]
                     </h6>
                 </div>
@@ -107,26 +107,26 @@
                         <div class="row g-3">
                             <div class="col-6">
                                 <div class="p-3 bg-light rounded-4 text-center border-0 shadow-sm animate-float">
-                                    <small class="text-muted d-block fw-bold text-uppercase opacity-50" style="font-size: 0.6rem;">@SharedLocalizer["TotalPosts"]</small>
+                                    <small class="text-muted d-block fw-bold text-uppercase opacity-50 stats-label">@SharedLocalizer["TotalPosts"]</small>
                                     <span class="fw-black fs-5 text-gradient">@feedData.Stats.TotalItems.ToString("N0")</span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="p-3 bg-light rounded-4 text-center border-0 shadow-sm">
-                                    <small class="text-muted d-block fw-bold text-uppercase opacity-50" style="font-size: 0.6rem;">@SharedLocalizer["ActiveStories"]</small>
+                                    <small class="text-muted d-block fw-bold text-uppercase opacity-50 stats-label">@SharedLocalizer["ActiveStories"]</small>
                                     <span class="fw-black fs-5 text-gradient">@feedData.Stats.ActiveStoriesCount</span>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="p-3 bg-light rounded-4 text-center border-0 shadow-sm">
-                                    <small class="text-muted d-block fw-bold text-uppercase opacity-50" style="font-size: 0.6rem;">@SharedLocalizer["TotalEngagement"]</small>
+                                    <small class="text-muted d-block fw-bold text-uppercase opacity-50 stats-label">@SharedLocalizer["TotalEngagement"]</small>
                                     <span class="fw-black fs-5 text-gradient">@((feedData.Stats.TotalLikes + feedData.Stats.TotalComments).ToString("N0"))</span>
                                 </div>
                             </div>
                         </div>
                         <div class="text-center mt-3">
-                             <div class="badge bg-secondary-subtle text-muted rounded-pill px-3 py-1 opacity-75" style="font-size: 0.65rem;">
-                                <i data-lucide="refresh-cw" class="me-1" style="width: 10px;"></i>
+                             <div class="badge bg-secondary-subtle text-muted rounded-pill px-3 py-1 opacity-75 badge-sm">
+                                <i data-lucide="refresh-cw" class="me-1 icon-xs"></i>
                                 @SharedLocalizer["LastUpdated"]: @feedData.Stats.LastRefreshAgo
                              </div>
                         </div>

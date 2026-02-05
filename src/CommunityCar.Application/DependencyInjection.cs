@@ -39,7 +39,12 @@ using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports.User
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Settings;
 using CommunityCar.Application.Common.Interfaces.Services.Communication;
 using CommunityCar.Application.Common.Interfaces.Services.Shared;
-using CommunityCar.Application.Common.Interfaces.Services.AI;
+using CommunityCar.Application.Common.Interfaces.Services.Account.Management;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Maintenance;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Performance;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.SEO;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.ErrorReporting;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Analytics.Users;
 using CommunityCar.Application.Services.Community.Events;
 using CommunityCar.Application.Services.Community.Feed;
 using CommunityCar.Application.Services.Community.Friends;
@@ -78,7 +83,13 @@ using CommunityCar.Application.Services.Dashboard.Reports.Users.Audit;
 using CommunityCar.Application.Services.Dashboard.Settings;
 using CommunityCar.Application.Services.Communication;
 using CommunityCar.Application.Services.Shared;
+using CommunityCar.Application.Services.Account.Management;
 using CommunityCar.Application.Services.AI;
+using CommunityCar.Application.Services.Storage;
+using CommunityCar.Application.Services.Dashboard.Maintenance;
+using CommunityCar.Application.Services.Dashboard.Performance;
+using CommunityCar.Application.Services.Dashboard.SEO;
+using CommunityCar.Application.Services.Dashboard.ErrorReporting;
 
 namespace CommunityCar.Application;
 
@@ -105,6 +116,7 @@ public static class DependencyInjection
         // Account Services
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IAccountSecurityService, AccountSecurityService>();
+        services.AddScoped<IAccountManagementService, AccountManagementService>();
         // services.AddScoped<IUserProfileService, UserProfileService>(); // TODO: Create UserProfileService
         services.AddScoped<IUserGalleryService, UserGalleryService>();
         // services.AddScoped<IUserGamificationService, UserGamificationService>(); // TODO: Create UserGamificationService
@@ -136,10 +148,22 @@ public static class DependencyInjection
 
         // Shared Services
         services.AddScoped<ISharedSearchService, SharedSearchService>();
-        services.AddScoped<IFileStorageService, FileStorageService>();
+        services.AddScoped<Common.Interfaces.Services.Shared.IFileStorageService, Services.Shared.FileStorageService>();
+        services.AddScoped<Common.Interfaces.Services.Storage.IFileStorageService, Services.Storage.FileStorageService>();
 
         // AI Services
         services.AddScoped<IAIManagementService, AIManagementService>();
+
+        // Analytics Services
+        services.AddScoped<IUserAnalyticsService, Services.Dashboard.Analytics.Users.UserAnalyticsService>();
+
+        // Missing Dashboard Services
+        services.AddScoped<IMaintenanceService, MaintenanceService>();
+        services.AddScoped<IPerformanceService, PerformanceService>();
+        services.AddScoped<ISEOService, SEOService>();
+        services.AddScoped<IErrorService, ErrorService>();
+        services.AddScoped<IUserPreferencesService, UserPreferencesService>();
+        services.AddScoped<IUserSegmentService, UserSegmentService>();
 
         return services;
     }

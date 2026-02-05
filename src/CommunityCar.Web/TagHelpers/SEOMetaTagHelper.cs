@@ -24,38 +24,44 @@ public class SEOMetaTagHelper : TagHelper
         // Construct URL from PageType and EntityId
         var url = ConstructUrl(PageType, EntityId);
         
-        var metaData = await _seoService.GenerateMetaDataAsync(url);
-        var structuredData = await _seoService.GenerateStructuredDataAsync(url);
+        // Use available methods from ISEOService
+        var metaDescription = await _seoService.GenerateMetaDescriptionAsync($"{PageType} page");
+        var keywords = await _seoService.GenerateKeywordsAsync($"{PageType} page");
+        var seoScore = await _seoService.GetSEOScoreAsync(url);
 
         output.TagName = null; // Don't render the <seo-meta> tag itself
 
         var content = new StringBuilder();
         
         // Basic Meta Tags
-        content.AppendLine($"<title>{GetValueOrDefault(metaData, "Title", "Community Car")}</title>");
-        content.AppendLine($"<meta name=\"description\" content=\"{GetValueOrDefault(metaData, "Description", "Community Car Platform")}\" />");
-        content.AppendLine($"<meta name=\"keywords\" content=\"{GetValueOrDefault(metaData, "Keywords", "community, car, automotive")}\" />");
+        content.AppendLine($"<title>Community Car - {PageType}</title>");
+        content.AppendLine($"<meta name=\"description\" content=\"{metaDescription}\" />");
+        content.AppendLine($"<meta name=\"keywords\" content=\"{string.Join(", ", keywords)}\" />");
         
-        var canonicalUrl = GetValueOrDefault(metaData, "CanonicalUrl", "");
-        if (!string.IsNullOrEmpty(canonicalUrl))
-        {
-            content.AppendLine($"<link rel=\"canonical\" href=\"{canonicalUrl}\" />");
-        }
+        content.AppendLine($"<link rel=\"canonical\" href=\"{url}\" />");
 
         // Open Graph
-        content.AppendLine($"<meta property=\"og:title\" content=\"{GetValueOrDefault(metaData, "OgTitle", GetValueOrDefault(metaData, "Title", "Community Car"))}\" />");
-        content.AppendLine($"<meta property=\"og:description\" content=\"{GetValueOrDefault(metaData, "OgDescription", GetValueOrDefault(metaData, "Description", "Community Car Platform"))}\" />");
-        content.AppendLine($"<meta property=\"og:type\" content=\"{GetValueOrDefault(metaData, "OgType", "website")}\" />");
-        content.AppendLine($"<meta property=\"og:site_name\" content=\"{GetValueOrDefault(metaData, "SiteName", "Community Car")}\" />");
+        content.AppendLine($"<meta property=\"og:title\" content=\"Community Car - {PageType}\" />");
+        content.AppendLine($"<meta property=\"og:description\" content=\"{metaDescription}\" />");
+        content.AppendLine($"<meta property=\"og:type\" content=\"website\" />");
+        content.AppendLine($"<meta property=\"og:site_name\" content=\"Community Car\" />");
 
         // Twitter
-        content.AppendLine($"<meta name=\"twitter:card\" content=\"{GetValueOrDefault(metaData, "TwitterCard", "summary")}\" />");
-        content.AppendLine($"<meta name=\"twitter:title\" content=\"{GetValueOrDefault(metaData, "OgTitle", GetValueOrDefault(metaData, "Title", "Community Car"))}\" />");
-        content.AppendLine($"<meta name=\"twitter:description\" content=\"{GetValueOrDefault(metaData, "OgDescription", GetValueOrDefault(metaData, "Description", "Community Car Platform"))}\" />");
+        content.AppendLine($"<meta name=\"twitter:card\" content=\"summary\" />");
+        content.AppendLine($"<meta name=\"twitter:title\" content=\"Community Car - {PageType}\" />");
+        content.AppendLine($"<meta name=\"twitter:description\" content=\"{metaDescription}\" />");
 
-        // Structured Data
+        // Simple structured data
+        var structuredData = $@"{{
+            ""@context"": ""https://schema.org"",
+            ""@type"": ""WebPage"",
+            ""name"": ""Community Car - {PageType}"",
+            ""description"": ""{metaDescription}"",
+            ""url"": ""{url}""
+        }}";
+
         content.AppendLine("<script type=\"application/ld+json\">");
-        content.AppendLine(structuredData.ToString());
+        content.AppendLine(structuredData);
         content.AppendLine("</script>");
 
         output.Content.SetHtmlContent(content.ToString());
@@ -76,11 +82,6 @@ public class SEOMetaTagHelper : TagHelper
             "profile" => entityId.HasValue ? $"/profile/{entityId}" : "/profile",
             _ => baseUrl
         };
-    }
-
-    private string GetValueOrDefault(Dictionary<string, object> dictionary, string key, string defaultValue)
-    {
-        return dictionary.TryGetValue(key, out var value) ? value?.ToString() ?? defaultValue : defaultValue;
     }
 }
 

@@ -5,220 +5,225 @@
     ViewData["Title"] = $"{Model.Title} - {Localizer["BroadcastArchive"]}";
 }
 
-<div class="mx-auto space-y-8 animate-in fade-in duration-700">
+<div class="container-fluid community-detail-container mx-auto py-4 animate-in fade-in">
     <!-- Skeleton Loader -->
-    <div id="loading-skeleton" class="hidden space-y-8">
-        <div class="space-y-4">
-            <skeleton type="Line" class="w-32" /> <!-- Breadcrumb -->
-            <skeleton type="Card" class="h-96" /> <!-- Hero -->
-            <skeleton type="Line" /> <!-- Meta -->
+    <div id="loading-skeleton" class="d-none vstack gap-4">
+        <div class="vstack gap-3">
+            <div class="skeleton-line" style="width: 200px;"></div> <!-- Breadcrumb -->
+            <div class="skeleton-card" style="height: 400px;"></div> <!-- Hero -->
+            <div class="skeleton-line"></div> <!-- Meta -->
         </div>
     </div>
 
     <!-- Main Content -->
-    <div>
-    <!-- Navigation & Signal Strategy -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 px-2">
-        <div class="space-y-4">
-            <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">
-                <i data-lucide="zap" class="w-3.5 h-3.5 fill-current"></i> @Localizer["SignalBroadcast"]
-            </nav>
-            <h1 class="text-5xl font-black text-foreground tracking-tighter leading-none">@Model.Title</h1>
-            <p class="text-sm font-medium text-muted-foreground opacity-70 mt-4 border-l-4 border-primary/20 pl-4 py-1 max-w-2xl">@Localizer["TransmissionLog"]</p>
+    <div id="main-content">
+        <!-- Navigation & Signal Strategy -->
+        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-4 px-2 mb-4">
+            <div class="vstack gap-4">
+                <nav class="d-flex align-items-center gap-3 text-primary mb-3 nav-breadcrumb">
+                    <i data-lucide="zap" class="icon-sm"></i> @Localizer["SignalBroadcast"]
+                </nav>
+                <h1 class="display-4 fw-black text-dark lh-1">@Model.Title</h1>
+                <p class="small fw-medium text-muted opacity-75 mt-4 border-start border-4 border-primary border-opacity-25 ps-4 py-1 transmission-log">@Localizer["TransmissionLog"]</p>
+            </div>
+            
+            <a asp-controller="Posts" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center gap-2 px-4 py-2 rounded-4 back-btn">
+                <i data-lucide="arrow-left" class="icon-md back-arrow"></i>
+                @Localizer["FeedRegistry"]
+            </a>
         </div>
-        
-        <a asp-controller="Posts" asp-action="Index" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-muted/20 border border-border/50 hover:bg-muted/30 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group/back">
-            <i data-lucide="arrow-left" class="w-4 h-4 group-hover/back:-translate-x-1 transition-transform"></i>
-            @Localizer["FeedRegistry"]
-        </a>
-    </div>
 
-    <div class="relative group">
-        <!-- Structural Glow -->
-        <div class="absolute -inset-1 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 rounded-[2.5rem] blur-3xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
-
-        <div class="relative bg-card/40 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] shadow-2xl overflow-hidden">
-            <!-- Article Header: Hero Style -->
-            <div class="p-8 md:p-14 space-y-8">
-                <div class="space-y-6">
-                    <div class="flex items-center gap-3">
-                         <span class="px-4 py-1.5 rounded-2xl bg-primary/10 text-primary border border-primary/20 text-[9px] font-black uppercase tracking-widest">
-                            @Model.Type PAYLOAD
-                         </span>
-                         <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@string.Format(Localizer["Frequency"].Value, Model.CreatedAt.ToString("MMM dd, yyyy"))</span>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between pt-6 border-t border-border/20">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl bg-muted border border-border flex items-center justify-center overflow-hidden shadow-inner group/avatar">
-                             @if (!string.IsNullOrEmpty(Model.AuthorProfilePicture))
-                             {
-                                 <img src="@Model.AuthorProfilePicture" class="w-full h-full object-cover group-hover/avatar:scale-110 transition-transform" alt="@Model.AuthorName" />
-                             }
-                             else
-                             {
-                                 <i data-lucide="user" class="w-7 h-7 text-muted-foreground opacity-30 group-hover/avatar:scale-110 transition-transform"></i>
-                             }
-                        </div>
-                        <div>
-                             @if (Model.AuthorId != Guid.Empty)
-                             {
-                                 <a href="@Url.Action("Index", "Profile", new { area = "", culture = System.Globalization.CultureInfo.CurrentCulture.Name, id = Model.AuthorId })" class="block text-sm font-black text-foreground underline decoration-primary decoration-4 underline-offset-4 decoration-transparent hover:decoration-primary transition-all">@Model.AuthorName</a>
-                             }
-                             else
-                             {
-                                 <span class="block text-sm font-black text-foreground underline decoration-primary decoration-4 underline-offset-4 decoration-transparent hover:decoration-primary transition-all cursor-pointer">@Localizer["ProtocolGhost"]</span>
-                             }
-                             <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["SystemContributor"] • @Localizer["VerifiedEnthusiast"]</span>
+        <div class="position-relative mb-4">
+            <div class="position-relative community-content-card border border-secondary border-opacity-25 rounded-5 shadow-lg overflow-hidden">
+                <!-- Article Header: Hero Style -->
+                <div class="p-4 p-md-5 vstack gap-4">
+                    <div class="vstack gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                             <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 payload-badge">
+                                @Model.Type PAYLOAD
+                             </span>
+                             <span class="frequency-text xx-small fw-black text-uppercase text-muted opacity-50">@string.Format(Localizer["Frequency"].Value, Model.CreatedAt.ToString("MMM dd, yyyy"))</span>
                         </div>
                     </div>
-                    
-                    <div class="hidden sm:flex gap-8">
-                        <div class="text-right">
-                             <span class="block text-xl font-black text-foreground leading-none tracking-tighter like-count">@(Model.LikeCount > 0 ? Model.LikeCount.ToString("N0") : "0")</span>
-                             <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["SignalPulse"]</span>
-                        </div>
-                        <div class="text-right">
-                             <span class="block text-xl font-black text-foreground leading-none tracking-tighter">@(Model.CommentCount > 0 ? Model.CommentCount.ToString("N0") : "0")</span>
-                             <span class="block text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Interactions"]</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Content Fluidity -->
-            <div class="px-8 md:px-14 py-12 bg-muted/10 border-y border-border/20">
-                <div class="prose prose-lg dark:prose-invert max-w-none text-foreground/80 leading-[1.8] font-medium">
-                    @Html.Raw(Model.Content.Replace("\n", "<br/>"))
-                </div>
-            </div>
-
-            <!-- Interaction Control Strip -->
-            <div class="p-8 md:px-14 flex items-center justify-between bg-card/40">
-                <div class="flex items-center gap-8">
-                    <!-- Like Button -->
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <form asp-controller="Posts" asp-action="Like" method="post" class="like-form" data-post-id="@Model.Id">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@Model.Id" />
-                            <button type="submit" class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-red-500 transition-all like-btn">
-                                <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-red-500/10">
-                                    <i data-lucide="heart" class="w-4 h-4 group-hover/tool:fill-current"></i>
-                                </div>
-                                @Localizer["OscillateLiked"]
-                            </button>
-                        </form>
-                    }
-                    else
-                    {
-                        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-red-500 transition-all" title="Login to like">
-                            <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-red-500/10">
-                                <i data-lucide="heart" class="w-4 h-4 group-hover/tool:fill-current"></i>
+                    <div class="d-flex align-items-center justify-content-between pt-4 border-top border-secondary border-opacity-25">
+                        <div class="d-flex align-items-center gap-4">
+                            <div class="user-avatar-container border border-secondary shadow-sm overflow-hidden">
+                                 @if (!string.IsNullOrEmpty(Model.AuthorProfilePicture))
+                                 {
+                                     <img src="@Model.AuthorProfilePicture" class="w-100 h-100 object-fit-cover hover-scale transition-all" alt="@Model.AuthorName" />
+                                 }
+                                 else
+                                 {
+                                     <i data-lucide="user" class="icon-lg text-muted opacity-50 hover-scale transition-all"></i>
+                                 }
                             </div>
-                            @Localizer["OscillateLiked"]
-                        </a>
-                    }
-
-                    <!-- Join Stream (Comment) Button -->
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <button onclick="scrollToCommentForm()" class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-all">
-                            <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-blue-500/10">
-                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                            <div>
+                                 @if (Model.AuthorId != Guid.Empty)
+                                 {
+                                     <a href="@Url.Action("Index", "Profile", new { area = "", culture = System.Globalization.CultureInfo.CurrentCulture.Name, id = Model.AuthorId })" class="d-block small fw-black text-dark text-decoration-underline text-decoration-primary text-underline-offset-2 hover-text-primary transition-all">@Model.AuthorName</a>
+                                 }
+                                 else
+                                 {
+                                     <span class="d-block small fw-black text-dark text-decoration-underline text-decoration-primary text-underline-offset-2 hover-text-primary transition-all">@Localizer["ProtocolGhost"]</span>
+                                 }
+                                 <span class="d-block xxx-small fw-black text-uppercase text-muted opacity-50">@Localizer["SystemContributor"] • @Localizer["VerifiedEnthusiast"]</span>
                             </div>
-                            @Localizer["JoinStream"]
-                        </button>
-                    }
-                    else
-                    {
-                        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="flex items-center gap-3 group/tool text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-blue-500 transition-all" title="Login to comment">
-                            <div class="w-10 h-10 flex items-center justify-center rounded-2xl bg-muted/40 group-hover/tool:bg-blue-500/10">
-                                <i data-lucide="message-circle" class="w-4 h-4"></i>
-                            </div>
-                            @Localizer["JoinStream"]
-                        </a>
-                    }
-                </div>
-
-                <div class="flex gap-3">
-                    <!-- Share Button -->
-                    <button onclick="sharePost()" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90 share-btn" title="Share post">
-                        <i data-lucide="share-2" class="w-5 h-5"></i>
-                    </button>
-
-                    <!-- Bookmark Button -->
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <form asp-controller="Posts" asp-action="Bookmark" method="post" class="bookmark-form" data-post-id="@Model.Id">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@Model.Id" />
-                            <button type="submit" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90 bookmark-btn" title="Bookmark post">
-                                <i data-lucide="bookmark" class="w-5 h-5"></i>
-                            </button>
-                        </form>
-                    }
-                    else
-                    {
-                        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-muted border border-border/50 hover:border-primary hover:text-primary transition-all active:scale-90" title="Login to bookmark">
-                            <i data-lucide="bookmark" class="w-5 h-5"></i>
-                        </a>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Comments Section -->
-    @if (User.Identity.IsAuthenticated)
-    {
-        <div class="bg-card/40 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] shadow-2xl overflow-hidden">
-            <div class="p-8 md:p-14">
-                <h3 class="text-2xl font-black text-foreground tracking-tighter leading-none mb-6">@Localizer["JoinStream"]</h3>
-                
-                <form asp-controller="Posts" asp-action="Comment" method="post" class="comment-form" data-post-id="@Model.Id">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" value="@Model.Id" />
-                    
-                    <div class="space-y-4">
-                        <div class="relative">
-                            <textarea name="content" rows="4" class="w-full px-4 py-3 bg-muted/20 border border-border/50 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="@Localizer["ShareYourThoughts"]" required></textarea>
                         </div>
                         
-                        <div class="flex justify-end">
-                            <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all active:scale-95 font-medium comment-submit-btn">
-                                <i data-lucide="send" class="w-4 h-4"></i>
-                                @Localizer["PostComment"]
-                            </button>
+                        <div class="d-none d-sm-flex gap-4">
+                            <div class="text-end">
+                                 <span class="d-block fs-4 fw-black text-dark lh-1 like-count">@(Model.LikeCount > 0 ? Model.LikeCount.ToString("N0") : "0")</span>
+                                 <span class="d-block xxx-small fw-black text-uppercase text-muted opacity-50">@Localizer["SignalPulse"]</span>
+                            </div>
+                            <div class="text-end">
+                                 <span class="d-block fs-4 fw-black text-dark lh-1">@(Model.CommentCount > 0 ? Model.CommentCount.ToString("N0") : "0")</span>
+                                 <span class="d-block xxx-small fw-black text-uppercase text-muted opacity-50">@Localizer["Interactions"]</span>
+                            </div>
                         </div>
                     </div>
-                </form>
+                </div>
+
+                <!-- Content Fluidity -->
+                <div class="px-4 px-md-5 py-5 bg-light bg-opacity-25 border-top border-bottom border-secondary border-opacity-25">
+                    <div class="text-dark lh-lg fw-medium">
+                        @Html.Raw(Model.Content.Replace("\n", "<br/>"))
+                    </div>
+                </div>
+
+                <!-- Interaction Control Strip -->
+                <div class="p-4 p-md-5 d-flex align-items-center justify-content-between bg-white bg-opacity-50">
+                    <div class="d-flex gap-4">
+                        <!-- Like Button -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form asp-controller="Posts" asp-action="Like" method="post" class="like-form" data-post-id="@Model.Id">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <button type="submit" class="btn btn-link d-flex align-items-center gap-3 community-interaction-btn xx-small fw-black text-uppercase text-muted hover-text-danger transition-all like-btn p-0">
+                                    <div class="interaction-icon-container bg-light bg-opacity-75 rounded-4 d-flex align-items-center justify-content-center">
+                                        <i data-lucide="heart" class="icon-md"></i>
+                                    </div>
+                                    @Localizer["OscillateLiked"]
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="btn btn-link d-flex align-items-center gap-3 community-interaction-btn xx-small fw-black text-uppercase text-muted hover-text-danger transition-all p-0" title="Login to like">
+                                <div class="interaction-icon-container bg-light bg-opacity-75 rounded-4 d-flex align-items-center justify-content-center">
+                                    <i data-lucide="heart" class="icon-md"></i>
+                                </div>
+                                @Localizer["OscillateLiked"]
+                            </a>
+                        }
+
+                        <!-- Join Stream (Comment) Button -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button onclick="scrollToCommentForm()" class="btn btn-link d-flex align-items-center gap-3 community-interaction-btn xx-small fw-black text-uppercase text-muted hover-text-info transition-all p-0">
+                                <div class="interaction-icon-container bg-light bg-opacity-75 rounded-4 d-flex align-items-center justify-content-center">
+                                    <i data-lucide="message-circle" class="icon-md"></i>
+                                </div>
+                                @Localizer["JoinStream"]
+                            </button>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="btn btn-link d-flex align-items-center gap-3 community-interaction-btn xx-small fw-black text-uppercase text-muted hover-text-info transition-all p-0" title="Login to comment">
+                                <div class="interaction-icon-container bg-light bg-opacity-75 rounded-4 d-flex align-items-center justify-content-center">
+                                    <i data-lucide="message-circle" class="icon-md"></i>
+                                </div>
+                                @Localizer["JoinStream"]
+                            </a>
+                        }
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <!-- Share Button -->
+                        <button onclick="sharePost()" class="btn btn-outline-secondary rounded-4 d-flex align-items-center justify-content-center community-interaction-btn share-btn" style="width: 48px; height: 48px;" title="Share post">
+                            <i data-lucide="share-2" class="icon-md"></i>
+                        </button>
+
+                        <!-- Bookmark Button -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form asp-controller="Posts" asp-action="Bookmark" method="post" class="bookmark-form" data-post-id="@Model.Id">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <button type="submit" class="btn btn-outline-secondary rounded-4 d-flex align-items-center justify-content-center community-interaction-btn bookmark-btn" style="width: 48px; height: 48px;" title="Bookmark post">
+                                    <i data-lucide="bookmark" class="icon-md"></i>
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="btn btn-outline-secondary rounded-4 d-flex align-items-center justify-content-center community-interaction-btn" style="width: 48px; height: 48px;" title="Login to bookmark">
+                                <i data-lucide="bookmark" class="icon-md"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
-    }
 
-    <!-- System Metadata Trace -->
-    <div class="p-8 bg-muted/20 border border-border/40 rounded-[2.5rem] grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div class="space-y-1">
-            <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["TransportID"]</span>
-            <code class="text-xs font-mono text-primary font-bold">@Model.Id.ToString().Substring(0, 18)...</code>
-        </div>
-        <div class="space-y-1">
-            <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["CipherFormat"]</span>
-            <span class="text-xs font-black text-foreground">UTF-8 RAW</span>
-        </div>
-        <div class="space-y-1">
-            <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Originator"]</span>
-            <span class="text-xs font-black text-foreground">EN-AUT-GATEWAY</span>    </div> <!-- End Main Content -->
-</div>
-        </div>
-        <div class="space-y-1 text-right flex flex-col items-end">
-            <span class="block text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-40">@Localizer["Status"]</span>
-            <span class="flex items-center gap-2 text-xs font-black text-green-500">
-                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                @Localizer["ActiveArchive"]
-            </span>
+        <!-- Comments Section -->
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="community-content-card border border-secondary border-opacity-25 rounded-5 shadow-lg overflow-hidden mb-4">
+                <div class="p-4 p-md-5">
+                    <h3 class="h4 fw-black text-dark lh-1 mb-4">@Localizer["JoinStream"]</h3>
+                    
+                    <form asp-controller="Posts" asp-action="Comment" method="post" class="comment-form" data-post-id="@Model.Id">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        
+                        <div class="vstack gap-3">
+                            <div class="position-relative">
+                                <textarea name="content" class="form-control border-0 bg-light bg-opacity-50 rounded-4 p-4" rows="4" style="resize: none;" placeholder="@Localizer["ShareYourThoughts"]" required></textarea>
+                            </div>
+                            
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 py-3 rounded-4 fw-medium comment-submit-btn">
+                                    <i data-lucide="send" class="icon-sm"></i>
+                                    @Localizer["PostComment"]
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+
+        <!-- System Metadata Trace -->
+        <div class="p-4 p-md-5 bg-light bg-opacity-50 border border-secondary border-opacity-25 rounded-5 row g-4">
+            <div class="col-12 col-md-3">
+                <div class="vstack gap-1">
+                    <span class="d-block xxx-small fw-black text-uppercase text-muted opacity-50">@Localizer["TransportID"]</span>
+                    <code class="xx-small font-monospace text-primary fw-bold">@Model.Id.ToString().Substring(0, 18)...</code>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="vstack gap-1">
+                    <span class="d-block xxx-small fw-black text-uppercase text-muted opacity-50">@Localizer["CipherFormat"]</span>
+                    <span class="xx-small fw-black text-dark">UTF-8 RAW</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="vstack gap-1">
+                    <span class="d-block xxx-small fw-black text-uppercase text-muted opacity-50">@Localizer["Originator"]</span>
+                    <span class="xx-small fw-black text-dark">EN-AUT-GATEWAY</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="vstack gap-1 text-md-end d-flex flex-column align-items-md-end">
+                    <span class="d-block xx-small fw-black text-uppercase text-muted opacity-50">@Localizer["Status"]</span>
+                    <span class="d-flex align-items-center gap-2 xx-small fw-black text-success">
+                        <span class="status-indicator bg-success rounded-circle animate-pulse"></span>
+                        @Localizer["ActiveArchive"]
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -229,7 +234,6 @@
         let broadcastConnection;
         
         document.addEventListener('DOMContentLoaded', function() {
-            Skeleton.initPageLoad('loading-skeleton', 'main-content');
             initializePostInteractions();
             initializeBroadcastHub();
         });
@@ -333,11 +337,11 @@
                 <text>
                 if (postData.GroupId === "@Model.GroupId" && postData.Id !== "@Model.Id") {
                     const notification = document.createElement('div');
-                    notification.className = 'fixed top-4 right-4 bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg z-50 animate-in slide-in-from-right duration-300';
+                    notification.className = 'position-fixed top-0 end-0 m-4 bg-primary text-white px-4 py-2 rounded-3 shadow-lg animate-in fade-in';
                     notification.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="zap" class="w-4 h-4"></i>
-                            <span class="text-sm font-medium">New post by ${postData.AuthorName}</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <i data-lucide="zap" class="icon-sm"></i>
+                            <span class="small fw-medium">New post by ${postData.AuthorName}</span>
                         </div>
                     `;
                     
@@ -345,8 +349,7 @@
                     
                     // Auto-remove after 5 seconds
                     setTimeout(() => {
-                        notification.classList.add('animate-out', 'slide-out-to-right');
-                        setTimeout(() => document.body.removeChild(notification), 300);
+                        notification.remove();
                     }, 5000);
                 }
                 </text>
@@ -407,16 +410,16 @@
                     
                     // Update button appearance
                     const icon = button.querySelector('i');
-                    const container = button.querySelector('.w-10');
+                    const container = button.querySelector('.interaction-icon-container');
                     
                     if (data.liked) {
-                        button.classList.add('text-red-500');
-                        container.classList.add('bg-red-500/10');
+                        button.classList.add('text-danger');
+                        container.classList.add('bg-danger', 'bg-opacity-10');
                         icon.classList.add('fill-current');
                         showToast('Post liked!', 'success');
                     } else {
-                        button.classList.remove('text-red-500');
-                        container.classList.remove('bg-red-500/10');
+                        button.classList.remove('text-danger');
+                        container.classList.remove('bg-danger', 'bg-opacity-10');
                         icon.classList.remove('fill-current');
                         showToast('Like removed!', 'success');
                     }
@@ -434,7 +437,7 @@
                         });
                     }
                 } else {
-                    showToast('Failed to update like. Please try again.', 'error');
+                    showToast('Failed to update likePlease try again.', 'error');
                 }
             } catch (error) {
                 console.error('Like error:', error);
@@ -469,11 +472,11 @@
                     // Update button appearance
                     const icon = button.querySelector('i');
                     if (data.bookmarked) {
-                        button.classList.add('text-amber-500', 'bg-amber-500/5', 'border-amber-500/20');
+                        button.classList.add('text-warning', 'bg-warning', 'bg-opacity-5', 'border-warning', 'border-opacity-25');
                         icon.classList.add('fill-current');
                         showToast('Post bookmarked!', 'success');
                     } else {
-                        button.classList.remove('text-amber-500', 'bg-amber-500/5', 'border-amber-500/20');
+                        button.classList.remove('text-warning', 'bg-warning', 'bg-opacity-5', 'border-warning', 'border-opacity-25');
                         icon.classList.remove('fill-current');
                         showToast('Bookmark removed!', 'success');
                     }
@@ -542,7 +545,7 @@
                     }
                     
                     // Optionally reload to show new comment
-                    if (data.reload) {
+                    if (data.shouldReload) {
                         setTimeout(() => window.location.reload(), 1000);
                     }
                 } else {
@@ -584,6 +587,7 @@
                 }).catch((error) => {
                     console.log('Error sharing:', error);
                     fallbackShare(url);
+                });                fallbackShare(url);
                 });
             } else {
                 fallbackShare(url);
@@ -603,22 +607,18 @@
         function showToast(message, type = 'info') {
             // Simple toast notification
             const toast = document.createElement('div');
-            toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 ${
-                type === 'success' ? 'bg-green-500 text-white' :
-                type === 'error' ? 'bg-red-500 text-white' :
-                'bg-blue-500 text-white'
+            toast.className = `position-fixed top-0 end-0 m-4 px-4 py-3 rounded-3 shadow-lg animate-in fade-in ${
+                type === 'success' ? 'bg-success text-white' :
+                type === 'error' ? 'bg-danger text-white' :
+                'bg-info text-white'
             }`;
             toast.textContent = message;
             
             document.body.appendChild(toast);
             
-            // Animate in
-            setTimeout(() => toast.style.transform = 'translateX(0)', 10);
-            
             // Remove after 3 seconds
             setTimeout(() => {
-                toast.style.transform = 'translateX(100%)';
-                setTimeout(() => document.body.removeChild(toast), 300);
+                toast.remove();
             }, 3000);
         }
 
