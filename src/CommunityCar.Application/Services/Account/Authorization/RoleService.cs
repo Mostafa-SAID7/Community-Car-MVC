@@ -412,7 +412,7 @@ public class RoleService : IRoleService
                     Permissions.Users.View, Permissions.Users.Edit, Permissions.Users.ViewProfile,
                     Permissions.Content.View, Permissions.Content.Edit, Permissions.Content.Moderate,
                     Permissions.Community.ViewGroups, Permissions.Community.ManageGroups,
-                    Permissions.System.ViewDashboard, Permissions.System.ViewMetrics,
+                    Permissions.System.ViewMetrics,
                     Permissions.Analytics.ViewBasic, Permissions.Analytics.ViewAdvanced
                 }
             ),
@@ -445,8 +445,7 @@ public class RoleService : IRoleService
                 new List<string>
                 {
                     Permissions.Content.View, Permissions.Content.Edit,
-                    Permissions.Media.View, Permissions.Media.Upload, Permissions.Media.Edit,
-                    Permissions.System.ViewDashboard
+                    Permissions.Media.View, Permissions.Media.Upload, Permissions.Media.Edit
                 }
             ),
             [Roles.Master] = (

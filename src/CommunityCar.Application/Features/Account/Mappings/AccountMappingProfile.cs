@@ -5,7 +5,6 @@ using CommunityCar.Application.Features.Account.Mappings.Activity;
 using CommunityCar.Application.Features.Account.Mappings.Gamification;
 using CommunityCar.Application.Features.Account.Mappings.Social;
 using CommunityCar.Application.Features.Account.Mappings.Media;
-using CommunityCar.Application.Features.Account.Mappings.Management;
 
 namespace CommunityCar.Application.Features.Account.Mappings;
 

@@ -8,6 +8,10 @@ public class SystemResourcesVM
     public decimal CpuUsage { get; set; }
     public decimal MemoryUsage { get; set; }
     public decimal DiskUsage { get; set; }
+    
+    // Missing property that services expect
+    public decimal NetworkUsage { get; set; }
+    
     public int NetworkIn { get; set; }
     public int NetworkOut { get; set; }
     public int AvailableMemory { get; set; }

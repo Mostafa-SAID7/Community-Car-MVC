@@ -5,23 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CommunityCar</title>
     
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.css" />
+    
+    <!-- Site Styles (Unified Design System) -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/modern-auth.css" asp-append-version="true" />
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
 </head>
-<body class="auth-body">
-    <div class="auth-modern-container">
-        <!-- Left Side: Form Content -->
-        <main class="auth-form-side" role="main">
-            @RenderBody()
-        </main>
-        
-        <!-- Right Side: Visual Content -->
-        <div class="auth-image-side">
+<body class="auth-layout-container">
+    <div class="container-fluid">
+        <div class="row g-0 auth-card-wrapper mx-auto">
+            <!-- Left Side: Form Content -->
+            <div class="col-md-6 p-5">
+                <main role="main">
+                    @RenderBody()
+                </main>
+            </div>
+            
+            <!-- Right Side: Visual Content -->
+            <div class="col-md-6 auth-image-side d-none d-md-block">
             <div class="auth-image-container">
                 <img src="@(ViewData["AuthSideImage"] ?? "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop")" class="auth-side-img" alt="Experience" />
                 <div class="auth-image-overlay">
@@ -31,6 +39,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
     
     <!-- Lucide Icons -->

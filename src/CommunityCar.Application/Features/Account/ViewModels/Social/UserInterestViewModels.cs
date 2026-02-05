@@ -14,7 +14,6 @@ namespace CommunityCar.Application.Features.Account.ViewModels.Social;
  * 
  * Interest ViewModels:
  * - ProfileInterestVM.cs
- * - InterestsDashboardVM.cs
  * - InterestSuggestionVM.cs
  * - AddInterestRequest.cs
  * - InterestAnalyticsVM.cs

@@ -1,5 +1,6 @@
 using CommunityCar.Application.Features.Shared.ViewModels;
-using CommunityCar.Application.Features.Dashboard.System.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Management.developer.System.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
 
 namespace CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
 
@@ -9,6 +10,12 @@ public class OverviewVM
     public DateTime EndDate { get; set; }
     public DateTime LastUpdated { get; set; }
     public string TimeRange { get; set; } = "7d";
+    
+    // Missing properties that services expect
+    public int TotalUsers { get; set; }
+    public int NewUsersToday { get; set; }
+    public decimal SecurityScore { get; set; }
+    
     public StatsVM Stats { get; set; } = new();
     public StatsVM QuickStats { get; set; } = new();
     public List<RecentActivityVM> RecentActivity { get; set; } = new();

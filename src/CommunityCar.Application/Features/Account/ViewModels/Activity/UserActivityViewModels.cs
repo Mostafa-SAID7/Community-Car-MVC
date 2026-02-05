@@ -16,7 +16,6 @@ namespace CommunityCar.Application.Features.Account.ViewModels.Activity;
  * 
  * Activity ViewModels:
  * - TimelineActivityVM.cs
- * - ActivityDashboardVM.cs
  * 
  * Profile View ViewModels:
  * - ProfileViewVM.cs

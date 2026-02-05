@@ -1,209 +1,103 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Management;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
-using CommunityCar.Application.Features.Dashboard.UserManagement.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Management.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Management;
 
-[Route("dashboard/management")]
+[Route("{culture=en-US}/dashboard/management")]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class ManagementController : Controller
 {
     private readonly IManagementService _managementService;
-    private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<ManagementController> _logger;
 
     public ManagementController(
         IManagementService managementService,
-        ICurrentUserService currentUserService,
         ILogger<ManagementController> logger)
     {
         _managementService = managementService;
-        _currentUserService = currentUserService;
         _logger = logger;
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index(int page = 1, int pageSize = 20)
+    public async Task<IActionResult> Index()
     {
         try
         {
-            var history = await _managementService.GetUserManagementHistoryAsync(page, pageSize);
-            ViewBag.CurrentPage = page;
-            ViewBag.PageSize = pageSize;
-            return View("~/Views/Dashboard/Management/Index.cshtml", history);
+            var overview = await _managementService.GetDashboardOverviewAsync();
+            return View(overview);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading user management history");
-            TempData["ErrorMessage"] = "Failed to load user management history. Please try again.";
-            return View();
+            _logger.LogError(ex, "Error loading management dashboard");
+            TempData["ErrorMessage"] = "Failed to load management dashboard. Please try again.";
+            return View(new DashboardOverviewVM());
         }
     }
 
-    [HttpGet("user/{userId}")]
-    public async Task<IActionResult> UserHistory(Guid userId, int page = 1, int pageSize = 20)
+    [HttpGet("system-tasks")]
+    public async Task<IActionResult> GetSystemTasks()
     {
         try
         {
-            var history = await _managementService.GetUserManagementHistoryByUserAsync(userId, page, pageSize);
-            ViewBag.UserId = userId;
-            ViewBag.CurrentPage = page;
-            ViewBag.PageSize = pageSize;
-            return View(history);
+            var tasks = await _managementService.GetSystemTasksAsync();
+            return Json(new { success = true, data = tasks });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading user management history for user: {UserId}", userId);
-            TempData["ErrorMessage"] = "Failed to load user management history.";
-            return RedirectToAction(nameof(Index));
+            _logger.LogError(ex, "Error loading system tasks");
+            return Json(new { success = false, message = "Failed to load system tasks" });
         }
     }
 
-    [HttpGet("action")]
-    public IActionResult PerformAction()
-    {
-        return View();
-    }
-
-    [HttpPost("action")]
+    [HttpPost("execute-task")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> PerformAction(UserManagementVM request)
+    public async Task<IActionResult> ExecuteSystemTask(string taskType, [FromBody] Dictionary<string, object>? parameters = null)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(request);
-        }
-
         try
         {
-            var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            var success = await _managementService.PerformUserActionAsync(request.Action, request.UserId, currentUserId.ToString());
-            if (success)
+            var result = await _managementService.ExecuteSystemTaskAsync(taskType, parameters);
+            if (result)
             {
-                TempData["SuccessMessage"] = $"User action '{request.Action}' performed successfully!";
-                return RedirectToAction(nameof(UserHistory), new { userId = request.UserId });
+                return Json(new { success = true, message = "Task executed successfully" });
             }
-            else
-            {
-                ModelState.AddModelError("", "Failed to perform user action. Please check the details and try again.");
-                return View(request);
-            }
+            return Json(new { success = false, message = "Failed to execute task" });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error performing user action: {Action} for user: {UserId}", request.Action, request.UserId);
-            ModelState.AddModelError("", "An error occurred while performing the action. Please try again.");
-            return View(request);
+            _logger.LogError(ex, "Error executing system task: {TaskType}", taskType);
+            return Json(new { success = false, message = "Failed to execute task" });
         }
     }
 
-    [HttpPost("reverse/{actionId}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ReverseAction(Guid actionId)
+    [HttpGet("system-resources")]
+    public async Task<IActionResult> GetSystemResources()
     {
         try
         {
-            var success = await _managementService.ReverseUserActionAsync(actionId);
-            if (success)
-            {
-                TempData["SuccessMessage"] = "User action reversed successfully!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Failed to reverse user action.";
-            }
-
-            return RedirectToAction(nameof(Index));
+            var resources = await _managementService.GetSystemResourcesAsync();
+            return Json(new { success = true, data = resources });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error reversing user action: {ActionId}", actionId);
-            TempData["ErrorMessage"] = "An error occurred while reversing the action.";
-            return RedirectToAction(nameof(Index));
+            _logger.LogError(ex, "Error loading system resources");
+            return Json(new { success = false, message = "Failed to load system resources" });
         }
     }
 
-    [HttpGet("history-data")]
-    public async Task<IActionResult> GetHistory(int page = 1, int pageSize = 20)
+    [HttpGet("system-logs")]
+    public async Task<IActionResult> GetSystemLogs(int page = 1, int pageSize = 50, string? level = null)
     {
         try
         {
-            var history = await _managementService.GetUserManagementHistoryAsync(page, pageSize);
-            return Json(new { success = true, data = history, page, pageSize });
+            var logs = await _managementService.GetSystemLogsAsync(page, pageSize, level);
+            return Json(new { success = true, data = logs });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading user management history API");
-            return Json(new { success = false, message = "Failed to load history" });
-        }
-    }
-
-    [HttpGet("user/{userId}/history-data")]
-    public async Task<IActionResult> GetUserHistory(Guid userId, int page = 1, int pageSize = 20)
-    {
-        try
-        {
-            var history = await _managementService.GetUserManagementHistoryByUserAsync(userId, page, pageSize);
-            return Json(new { success = true, data = history, userId, page, pageSize });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error loading user history API for user: {UserId}", userId);
-            return Json(new { success = false, message = "Failed to load user history" });
-        }
-    }
-
-    [HttpPost("action-api")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> PerformActionApi([FromBody] UserManagementVM request)
-    {
-        if (!ModelState.IsValid)
-        {
-            return Json(new { success = false, message = "Invalid request data", errors = ModelState });
-        }
-
-        try
-        {
-            var currentUserId = Guid.Parse(_currentUserService.UserId!);
-            var success = await _managementService.PerformUserActionAsync(request.Action, request.UserId, currentUserId.ToString());
-            if (success)
-            {
-                return Json(new { success = true, message = $"User action '{request.Action}' performed successfully" });
-            }
-            else
-            {
-                return Json(new { success = false, message = "Failed to perform user action" });
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error performing user action API: {Action} for user: {UserId}", request.Action, request.UserId);
-            return Json(new { success = false, message = "An error occurred while performing the action" });
-        }
-    }
-
-    [HttpPost("reverse-api/{actionId}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ReverseActionApi(Guid actionId)
-    {
-        try
-        {
-            var success = await _managementService.ReverseUserActionAsync(actionId);
-            if (success)
-            {
-                return Json(new { success = true, message = "User action reversed successfully" });
-            }
-            else
-            {
-                return Json(new { success = false, message = "Failed to reverse user action" });
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error reversing user action API: {ActionId}", actionId);
-            return Json(new { success = false, message = "An error occurred while reversing the action" });
+            _logger.LogError(ex, "Error loading system logs");
+            return Json(new { success = false, message = "Failed to load system logs" });
         }
     }
 }
-
-

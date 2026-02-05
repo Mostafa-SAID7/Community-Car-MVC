@@ -1,0 +1,24 @@
+namespace CommunityCar.Application.Features.Dashboard.Analytics.Content;
+
+/// <summary>
+/// Content analytics view model
+/// </summary>
+public class ContentAnalyticsVM
+{
+    public Guid ContentId { get; set; }
+    public string ContentType { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public int Views { get; set; }
+    public int Likes { get; set; }
+    public int Comments { get; set; }
+    public int Shares { get; set; }
+    public double EngagementRate { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime AnalyzedAt { get; set; }
+    
+    // Missing properties that services expect
+    public int TotalPosts { get; set; }
+    public int TotalComments { get; set; }
+    public int TotalViews { get; set; }
+    public DateTime Date { get; set; }
+}

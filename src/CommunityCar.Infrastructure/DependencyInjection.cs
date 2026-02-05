@@ -14,10 +14,19 @@ using CommunityCar.Application.Common.Interfaces.Repositories.AI;
 using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 using CommunityCar.Application.Common.Interfaces.Repositories.Shared;
 using CommunityCar.Application.Common.Interfaces.Repositories.Localization;
-using CommunityCar.Application.Common.Interfaces.Services.Storage;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Maintenance;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
-using CommunityCar.Application.Common.Interfaces.Services.Dashboard.BackgroundJobs;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Content;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Behavior;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Segments;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Analytics.Users.Preferences;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management.Users.Core;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Management.Users.Actions;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Overview.Users.Statistics;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Overview.Users.Activity;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Overview.Users.Security;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports.Users.General;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports.Users.Security;
+using CommunityCar.Application.Common.Interfaces.Repositories.Dashboard.Reports.Users.Audit;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Authentication.OAuth;
 using CommunityCar.Application.Common.Interfaces.Services.Authentication;
 using CommunityCar.Application.Common.Interfaces.Repositories.Authorization;
@@ -28,13 +37,11 @@ using CommunityCar.Application.Services.AI.ModelManagement;
 using CommunityCar.Application.Services.AI.Training;
 using CommunityCar.Application.Services.AI.History;
 using CommunityCar.Application.Services.Account;
+using Redis = StackExchange.Redis;
 using CommunityCar.Application.Services.Account.Authentication;
 using CommunityCar.Application.Services.Account.Authentication.OAuth;
 using CommunityCar.Application.Services.Communication;
 using CommunityCar.Application.Services.Community;
-using CommunityCar.Application.Services.Storage;
-using CommunityCar.Application.Services.Dashboard;
-using CommunityCar.Application.Services.Dashboard.Caching;
 using CommunityCar.Application.Common.Interfaces.Hubs;
 using CommunityCar.Infrastructure.Hubs;
 using CommunityCar.Domain.Entities.Account.Core;
@@ -54,10 +61,21 @@ using CommunityCar.Infrastructure.Persistence.Repositories.Shared;
 using CommunityCar.Infrastructure.Persistence.Repositories.AI;
 using CommunityCar.Infrastructure.Persistence.Repositories.Chat;
 using CommunityCar.Infrastructure.Persistence.Repositories.Localization;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Content;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Users.Behavior;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Users.Segments;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Analytics.Users.Preferences;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Management.Users.Core;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Management.Users.Actions;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Overview.Users.Statistics;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Overview.Users.Activity;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Overview.Users.Security;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.Users.General;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.Users.Security;
+using CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.Users.Audit;
 using CommunityCar.Infrastructure.Persistence.UnitOfWork;
 using CommunityCar.Application.Services.Account.Core;
 
-using CommunityCar.Infrastructure.BackgroundJobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -87,7 +105,7 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-        services.AddIdentity<User, Role>(options => {
+        services.AddIdentity<User, CommunityCar.Domain.Entities.Account.Authorization.Role>(options => {
             // Password policy
             options.Password.RequireDigit = true;
             options.Password.RequiredLength = 8;
@@ -178,6 +196,30 @@ public static class DependencyInjection
         services.AddScoped<ITrainingJobRepository, TrainingJobRepository>();
         services.AddScoped<ITrainingHistoryRepository, TrainingHistoryRepository>();
 
+        // Reports Repositories
+        services.AddScoped<IReportRepository, CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.ReportRepository>();
+        services.AddScoped<IReportScheduleRepository, CommunityCar.Infrastructure.Persistence.Repositories.Dashboard.Reports.ReportScheduleRepository>();
+
+        // Dashboard Analytics Repositories
+        services.AddScoped<IContentAnalyticsRepository, ContentAnalyticsRepository>();
+        services.AddScoped<IUserBehaviorAnalyticsRepository, UserBehaviorAnalyticsRepository>();
+        services.AddScoped<IUserSegmentRepository, UserSegmentRepository>();
+        services.AddScoped<IUserPreferencesRepository, UserPreferencesRepository>();
+
+        // Dashboard Management Repositories
+        services.AddScoped<IUserManagementRepository, UserManagementCoreRepository>();
+        services.AddScoped<IUserManagementActionsRepository, UserManagementActionsRepository>();
+
+        // Dashboard Overview Repositories
+        services.AddScoped<IUserOverviewStatisticsRepository, UserOverviewStatisticsRepository>();
+        services.AddScoped<IUserOverviewActivityRepository, UserOverviewActivityRepository>();
+        services.AddScoped<IUserOverviewSecurityRepository, UserOverviewSecurityRepository>();
+
+        // Dashboard Reports Repositories
+        services.AddScoped<IUserReportsRepository, UserReportsRepository>();
+        services.AddScoped<IUserSecurityReportsRepository, UserSecurityReportsRepository>();
+        services.AddScoped<IUserAuditReportsRepository, UserAuditReportsRepository>();
+
         // AI Services
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -214,50 +256,13 @@ public static class DependencyInjection
         services.AddMemoryCache();
         services.AddHttpClient();
 
-        // Caching Services - Configure Redis if enabled
-        services.AddRedisCache(configuration);
-        services.AddScoped<CacheWarmupService>();
-        
-        // Background Job Services - only add if enabled
-        var backgroundJobSettings = configuration.GetSection("BackgroundJobs").Get<BackgroundJobSettings>();
-        if (backgroundJobSettings?.EnableScheduledJobs == true)
-        {
-            services.AddBackgroundJobs(configuration);
-        }
-        
-        services.AddScoped<IBackgroundJobService, BackgroundJobs.BackgroundJobService>();
-
-        // Caching Configuration
-        services.Configure<CacheSettings>(configuration.GetSection(CacheSettings.SectionName));
-        
-        // Add distributed cache if enabled
-        var cacheSettings = configuration.GetSection(CacheSettings.SectionName).Get<CacheSettings>();
-        if (cacheSettings?.EnableDistributedCache == true && !string.IsNullOrEmpty(cacheSettings.RedisConnectionString))
-        {
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = cacheSettings.RedisConnectionString;
-            });
-        }
-
-        // Background Jobs Services
-        services.Configure<BackgroundJobSettings>(configuration.GetSection(BackgroundJobSettings.SectionName));
-        services.AddScoped<IJobProcessor, JobProcessor>();
-        
-        // Add hosted service for scheduled jobs
-        var jobSettings = configuration.GetSection(BackgroundJobSettings.SectionName).Get<BackgroundJobSettings>();
-        if (jobSettings?.EnableScheduledJobs == true)
-        {
-            services.AddHostedService<ScheduledJobsHostedService>();
-        }
-
 
         // Seeding
         services.AddScoped<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>(provider =>
             new CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder(
                 provider.GetRequiredService<ApplicationDbContext>(),
                 provider.GetRequiredService<UserManager<User>>(),
-                provider.GetRequiredService<RoleManager<Role>>(),
+                provider.GetRequiredService<RoleManager<CommunityCar.Domain.Entities.Account.Authorization.Role>>(),
                 provider.GetRequiredService<ILogger<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>>(),
                 provider));
 

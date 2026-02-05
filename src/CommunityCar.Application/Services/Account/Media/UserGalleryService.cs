@@ -2,7 +2,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Account;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Media;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Profile;
 using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
-using CommunityCar.Application.Common.Interfaces.Services.Storage;
+using CommunityCar.Application.Common.Interfaces.Services.Shared;
 using CommunityCar.Application.Features.Account.ViewModels.Media;
 using CommunityCar.Application.Features.Account.ViewModels.Core;
 using CommunityCar.Domain.Entities.Account.Media;
@@ -16,24 +16,24 @@ public class UserGalleryService : IUserGalleryService
 {
     private readonly IUserRepository _userRepository;
     private readonly IUserGalleryRepository _galleryRepository;
-    private readonly IFileStorageService _fileStorageService;
     private readonly ICurrentUserService _currentUserService;
     private readonly IProfileService _profileService;
+    private readonly IFileStorageService _fileStorageService;
     private readonly ILogger<UserGalleryService> _logger;
 
     public UserGalleryService(
         IUserRepository userRepository,
         IUserGalleryRepository galleryRepository,
-        IFileStorageService fileStorageService,
         ICurrentUserService currentUserService,
         IProfileService profileService,
+        IFileStorageService fileStorageService,
         ILogger<UserGalleryService> logger)
     {
         _userRepository = userRepository;
         _galleryRepository = galleryRepository;
-        _fileStorageService = fileStorageService;
         _currentUserService = currentUserService;
         _profileService = profileService;
+        _fileStorageService = fileStorageService;
         _logger = logger;
     }
 

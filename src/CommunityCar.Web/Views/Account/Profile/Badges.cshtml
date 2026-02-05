@@ -9,81 +9,109 @@
     var isArabic = currentCulture.StartsWith("ar");
 }
 
-<div class="profile-container py-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-    <div>
-        @if (false)
-        {
-            <!-- Single Column Layout - No Sidebar -->
-            <div class="space-y-6">
-                <!-- Tab Navigation & Content -->
-                <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                    <partial name="_ProfileNavigation" />
+<div class="container-fluid py-4 animate-in fade-in">
+    <!-- Grid Layout with Sidebar -->
+    <div class="row g-4">
+        <!-- Left Sidebar -->
+        <div class="col-12 col-lg-3">
+            <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="col-12 col-lg-9">
+            <div class="vstack gap-4">
+                <!-- Tab Navigation -->
+                <partial name="~/Views/Account/Profile/_ProfileNavigation.cshtml" />
 
-                    <div class="p-6 sm:p-8">
-                        <!-- Badges Header -->
-                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                <!-- Badges Content Card -->
+                <div class="card card-premium border-0 shadow-lg overflow-hidden rounded-4">
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Header -->
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 mb-5 pb-4 border-bottom border-light">
                             <div>
-                                <h1 class="text-2xl font-black text-foreground tracking-tight flex items-center gap-3">
-                                    <i data-lucide="award" class="w-6 h-6 text-primary"></i>
+                                <h1 class="h3 fw-black text-dark tracking-tighter mb-1 d-flex align-items-center gap-3">
+                                    <i class="fas fa-award text-primary-red"></i>
                                     @Localizer["MyBadges"]
                                 </h1>
-                                <p class="text-sm text-muted-foreground mt-1">@Localizer["BadgesSubtitle"]</p>
+                                <p class="small text-muted fw-bold mb-0">@Localizer["BadgesSubtitle"]</p>
                             </div>
                         </div>
 
                         <!-- Achievement Stats Area -->
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                            <div class="bg-muted/20 border border-border rounded-xl p-4">
-                                <p class="text-[10px] font-bold uppercase text-profile-text-muted mb-1">@Localizer["TotalBadges"]</p>
-                                <p class="text-xl font-black text-foreground" id="totalBadges">0</p>
+                        <div class="row g-3 mb-5">
+                            <div class="col-6 col-md-3">
+                                <div class="bg-light bg-opacity-50 border border-light rounded-4 p-4 transition-all hover-white shadow-hover">
+                                    <p class="xx-small fw-black text-uppercase text-muted opacity-50 tracking-widest mb-1">@Localizer["TotalBadges"]</p>
+                                    <p class="h3 fw-black text-dark mb-0" id="totalBadges">0</p>
+                                </div>
                             </div>
-                            <div class="bg-muted/20 border border-border rounded-xl p-4">
-                                <p class="text-[10px] font-bold uppercase text-profile-text-muted mb-1">@Localizer["RareBadges"]</p>
-                                <p class="text-xl font-black text-foreground" id="rareBadges">0</p>
+                            <div class="col-6 col-md-3">
+                                <div class="bg-light bg-opacity-50 border border-light rounded-4 p-4 transition-all hover-white shadow-hover">
+                                    <p class="xx-small fw-black text-uppercase text-muted opacity-50 tracking-widest mb-1">@Localizer["RareBadges"]</p>
+                                    <p class="h3 fw-black text-dark mb-0" id="rareBadges">0</p>
+                                </div>
                             </div>
-                            <div class="bg-muted/20 border border-border rounded-xl p-4">
-                                <p class="text-[10px] font-bold uppercase text-profile-text-muted mb-1">@Localizer["Recent"]</p>
-                                <p class="text-xl font-black text-foreground" id="recentBadges">0</p>
+                            <div class="col-6 col-md-3">
+                                <div class="bg-light bg-opacity-50 border border-light rounded-4 p-4 transition-all hover-white shadow-hover">
+                                    <p class="xx-small fw-black text-uppercase text-muted opacity-50 tracking-widest mb-1">@Localizer["Recent"]</p>
+                                    <p class="h3 fw-black text-dark mb-0" id="recentBadges">0</p>
+                                </div>
                             </div>
-                            <div class="bg-muted/20 border border-border rounded-xl p-4">
-                                <p class="text-[10px] font-bold uppercase text-profile-text-muted mb-1">@Localizer["Progress"]</p>
-                                <p class="text-xl font-black text-foreground" id="progressPercent">0%</p>
+                            <div class="col-6 col-md-3">
+                                <div class="bg-light bg-opacity-50 border border-light rounded-4 p-4 transition-all hover-white shadow-hover">
+                                    <p class="xx-small fw-black text-uppercase text-muted opacity-50 tracking-widest mb-1">@Localizer["Progress"]</p>
+                                    <div class="d-flex align-items-baseline gap-2">
+                                        <p class="h3 fw-black text-dark mb-0" id="progressPercent">0%</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Badge Categories Grid -->
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            <div class="lg:col-span-2 space-y-6">
-                                <div class="bg-background border border-border rounded-xl p-6">
-                                    <h3 class="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
-                                        <i data-lucide="trophy" class="w-4 h-4 text-primary"></i>
+                        <div class="row g-4">
+                            <div class="col-12 col-lg-8">
+                                <div class="card card-premium-subtle bg-white border-light border-opacity-50 rounded-4 p-4 p-md-5 h-100 shadow-sm">
+                                    <h3 class="xx-small fw-black text-dark text-uppercase tracking-widest mb-5 d-flex align-items-center gap-3">
+                                        <i class="fas fa-trophy text-primary-red"></i>
                                         @Localizer["EarnedBadges"]
                                     </h3>
                                     
-                                    <div id="earnedBadges" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div class="flex flex-col items-center justify-center py-12 text-center opacity-30">
-                                            <i data-lucide="award" class="w-12 h-12 mb-4"></i>
-                                            <p class="text-sm font-bold">@Localizer["NoBadgesTitle"]</p>
+                                    <div id="earnedBadges" class="row g-4">
+                                        <div class="col-12 text-center py-5 opacity-20">
+                                            <i class="fas fa-award display-2 mb-4 d-block"></i>
+                                            <p class="small fw-black text-uppercase tracking-widest mb-0">@Localizer["NoBadgesTitle"]</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="space-y-6">
-                                <div class="bg-background border border-border rounded-xl p-6">
-                                    <h3 class="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
-                                        <i data-lucide="grid-3x3" class="w-4 h-4 text-primary"></i>
+                            <div class="col-12 col-lg-4">
+                                <div class="card card-premium-subtle bg-white border-light border-opacity-50 rounded-4 p-4 shadow-sm">
+                                    <h3 class="xx-small fw-black text-dark text-uppercase tracking-widest mb-4 d-flex align-items-center gap-3">
+                                        <i class="fas fa-th-large text-primary-red"></i>
                                         @Localizer["Categories"]
                                     </h3>
-                                    <div class="space-y-2">
-                                        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer text-xs">
-                                            <span class="font-bold text-foreground">@Localizer["Community"]</span>
-                                            <span class="text-muted-foreground">5</span>
+                                    <div class="vstack gap-2" id="badgeCategories">
+                                        <div class="category-item d-flex justify-content-between align-items-center p-3 rounded-3 bg-light transition-all hover-white hover-translate-x cursor-pointer">
+                                            <span class="small fw-black text-dark text-uppercase tracking-tight">@Localizer["Community"]</span>
+                                            <span class="badge rounded-pill bg-dark xx-small fw-black px-3 py-2">5</span>
                                         </div>
-                                        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer text-xs">
-                                            <span class="font-bold text-foreground">@Localizer["Automotive"]</span>
-                                            <span class="text-muted-foreground">8</span>
+                                        <div class="category-item d-flex justify-content-between align-items-center p-3 rounded-3 bg-light transition-all hover-white hover-translate-x cursor-pointer">
+                                            <span class="small fw-black text-dark text-uppercase tracking-tight">@Localizer["Automotive"]</span>
+                                            <span class="badge rounded-pill bg-dark xx-small fw-black px-3 py-2">8</span>
                                         </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card card-premium-subtle bg-dark rounded-4 p-4 mt-4 shadow-lg overflow-hidden position-relative">
+                                    <div class="position-absolute translate-middle-x start-50 top-0 bg-primary-red rounded-circle blur-3xl opacity-20" style="width: 100px; height: 100px; transform: translateY(-50%) !important;"></div>
+                                    <div class="position-relative z-1">
+                                        <p class="xx-small fw-black text-uppercase tracking-widest text-primary-red mb-2">Next Achievement</p>
+                                        <h5 class="small fw-black text-white mb-3">Community Hero</h5>
+                                        <div class="bg-white bg-opacity-10 rounded-pill overflow-hidden mb-2" style="height: 6px;">
+                                            <div class="bg-primary-red h-100" style="width: 75%;"></div>
+                                        </div>
+                                        <p class="xx-small fw-bold text-white opacity-40 text-uppercase tracking-widest mb-0">75% Complete</p>
                                     </div>
                                 </div>
                             </div>
@@ -91,104 +119,18 @@
                     </div>
                 </div>
             </div>
-        }
-        else
-        {
-            <!-- Grid Layout with Sidebar -->
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <!-- Left Sidebar -->
-                <div class="lg:col-span-1">
-                    <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
-                </div>
-                
-                <!-- Main Content -->
-                <div class="lg:col-span-3 space-y-6">
-                    <!-- Tab Navigation & Content -->
-                    <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                        <partial name="~/Views/Account/Profile/_ProfileNavigation.cshtml" />
-
-                        <div class="p-6 sm:p-8">
-                            <!-- Badges Header -->
-                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
-                                <div>
-                                    <h1 class="text-2xl font-black text-foreground tracking-tight flex items-center gap-3">
-                                        <i data-lucide="award" class="w-6 h-6 text-primary"></i>
-                                        @Localizer["MyBadges"]
-                                    </h1>
-                                    <p class="text-sm text-muted-foreground mt-1">@Localizer["BadgesSubtitle"]</p>
-                                </div>
-                            </div>
-
-                            <!-- Achievement Stats Area -->
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                                <div class="bg-muted/20 border border-border rounded-xl p-4">
-                                    <p class="text-[10px] font-bold uppercase text-profile-text-muted mb-1">@Localizer["TotalBadges"]</p>
-                                    <p class="text-xl font-black text-foreground" id="totalBadges">0</p>
-                                </div>
-                                <div class="bg-muted/20 border border-border rounded-xl p-4">
-                                    <p class="text-[10px] font-bold uppercase text-profile-text-muted mb-1">@Localizer["RareBadges"]</p>
-                                    <p class="text-xl font-black text-foreground" id="rareBadges">0</p>
-                                </div>
-                                <div class="bg-muted/20 border border-border rounded-xl p-4">
-                                    <p class="text-[10px] font-bold uppercase text-profile-text-muted mb-1">@Localizer["Recent"]</p>
-                                    <p class="text-xl font-black text-foreground" id="recentBadges">0</p>
-                                </div>
-                                <div class="bg-muted/20 border border-border rounded-xl p-4">
-                                    <p class="text-[10px] font-bold uppercase text-profile-text-muted mb-1">@Localizer["Progress"]</p>
-                                    <p class="text-xl font-black text-foreground" id="progressPercent">0%</p>
-                                </div>
-                            </div>
-
-                            <!-- Badge Categories Grid -->
-                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                <div class="lg:col-span-2 space-y-6">
-                                    <div class="bg-background border border-border rounded-xl p-6">
-                                        <h3 class="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
-                                            <i data-lucide="trophy" class="w-4 h-4 text-primary"></i>
-                                            @Localizer["EarnedBadges"]
-                                        </h3>
-                                        
-                                        <div id="earnedBadges" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div class="flex flex-col items-center justify-center py-12 text-center opacity-30">
-                                                <i data-lucide="award" class="w-12 h-12 mb-4"></i>
-                                                <p class="text-sm font-bold">@Localizer["NoBadgesTitle"]</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-6">
-                                    <div class="bg-background border border-border rounded-xl p-6">
-                                        <h3 class="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
-                                            <i data-lucide="grid-3x3" class="w-4 h-4 text-primary"></i>
-                                            @Localizer["Categories"]
-                                        </h3>
-                                        <div class="space-y-2">
-                                            <div class="flex items-center justify-between p-2 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer text-xs">
-                                                <span class="font-bold text-foreground">@Localizer["Community"]</span>
-                                                <span class="text-muted-foreground">5</span>
-                                            </div>
-                                            <div class="flex items-center justify-between p-2 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer text-xs">
-                                                <span class="font-bold text-foreground">@Localizer["Automotive"]</span>
-                                                <span class="text-muted-foreground">8</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+        </div>
     </div>
 </div>
 
+<style>
+    .xx-small { font-size: 0.6rem; }
+    .hover-white:hover { background-color: #fff !important; border-color: var(--primary-red) !important; }
+    .shadow-hover:hover { box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); }
+    .hover-translate-x:hover { transform: translateX(5px); }
+    .card-premium-subtle { border: 1px solid rgba(0,0,0,0.05); }
+</style>
+
 @section Scripts {
-    <script>
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-    </script>
     <script src="~/js/modules/profile/badges-controller.js" asp-append-version="true"></script>
 }

@@ -14,4 +14,8 @@ public class RecentActivityVM
     public string Url { get; set; } = string.Empty;
     public string Icon { get; set; } = string.Empty;
     public string Color { get; set; } = string.Empty;
+    
+    // Missing properties that services expect
+    public string Activity { get; set; } = string.Empty;
+    public string User { get; set; } = string.Empty;
 }

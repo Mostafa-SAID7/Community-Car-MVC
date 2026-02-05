@@ -11,7 +11,6 @@ namespace CommunityCar.Application.Features.Account.ViewModels.Social;
 /// 
 /// Individual files:
 /// - NetworkUserVM.cs - Network user with following relationship details
-/// - FollowingDashboardVM.cs - Dashboard view for following statistics
 /// - FollowingListVM.cs - List view for followers/following with pagination
 /// - FollowingVM.cs - Individual following user details
 /// - FollowStatsVM.cs - Following statistics and relationship status
@@ -19,7 +18,6 @@ namespace CommunityCar.Application.Features.Account.ViewModels.Social;
 /// - SuggestedUserVM.cs - Suggested user with mutual connections
 /// - FollowSuggestionsVM.cs - Container for follow suggestions
 /// - UserFollowingWebVM.cs - Web-specific alias for NetworkUserVM
-/// - FollowingDashboardWebVM.cs - Web-specific alias for FollowingDashboardVM
 /// - FollowingListWebVM.cs - Web-specific alias for FollowingListVM
 /// - FollowingAnalyticsVM.cs - Analytics view for following relationships
 /// - FollowUserRequest.cs - Request model for following a user

@@ -17,47 +17,58 @@
     var userSlug = ViewBag.Slug as string;
 }
 
-<div class="border-bottom border-light mb-4">
-    <div class="overflow-x-auto scrollbar-hide p-2">
-        <div class="d-flex justify-content-center min-w-max">
-            <div class="d-inline-flex align-items-center gap-2 bg-white p-1.5 rounded-pill shadow-sm border">
-                <a class="nav-link py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isOverviewActive ? "bg-primary-red text-white shadow-sm" : "text-muted hover-bg-light")" 
-                   asp-controller="Profile" 
-                   asp-action="@(!string.IsNullOrEmpty(userSlug) ? "ViewProfileBySlug" : "ViewProfile")" 
-                   asp-route-culture="@currentCulture" 
-                   asp-route-slug="@userSlug" 
-                   asp-route-id="@(string.IsNullOrEmpty(userSlug) ? userId : null)">
-                    <i data-lucide="layout-dashboard" class="me-2" style="width: 14px;"></i> 
-                    <span>@Localizer["Overview"]</span>
-                </a>
-                
-                <a class="nav-link py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isGalleryActive ? "bg-primary-red text-white shadow-sm" : "text-muted hover-bg-light")" 
-                   asp-controller="Profile" asp-action="ViewUserGallery" asp-route-culture="@currentCulture" asp-route-id="@userId">
-                    <i data-lucide="image" class="me-2" style="width: 14px;"></i> 
-                    <span>@Localizer["Gallery"]</span>
-                </a>
-                
-                <a class="nav-link py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isInterestsActive ? "bg-primary-red text-white shadow-sm" : "text-muted hover-bg-light")" 
-                   asp-controller="Profile" asp-action="Interests" asp-route-culture="@currentCulture" asp-route-id="@userId">
-                    <i data-lucide="sparkles" class="me-2" style="width: 14px;"></i> 
-                    <span>@Localizer["Interests"]</span>
-                </a>
-                
-                <a class="nav-link py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isBadgesActive ? "bg-primary-red text-white shadow-sm" : "text-muted hover-bg-light")" 
-                   asp-controller="Profile" asp-action="Badges" asp-route-culture="@currentCulture" asp-route-id="@userId">
-                    <i data-lucide="award" class="me-2" style="width: 14px;"></i> 
-                    <span>@Localizer["Badges"]</span>
-                </a>
-                
-                @if (isOwner)
-                {
-                    <a class="nav-link py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isSettingsActive ? "bg-primary-red text-white shadow-sm" : "text-muted hover-bg-light")" 
-                       asp-controller="ProfileSettings" asp-action="Index" asp-route-culture="@currentCulture">
-                        <i data-lucide="settings" class="me-2" style="width: 14px;"></i> 
-                        <span>@Localizer["Settings"]</span>
+<div class="border-bottom border-light mb-5">
+    <div class="container-fluid px-4 px-md-5">
+        <div class="overflow-x-auto scrollbar-hide py-2">
+            <div class="d-flex justify-content-center">
+                <div class="card card-premium p-2 border-0 rounded-pill shadow-sm d-inline-flex flex-row align-items-center gap-2 bg-white">
+                    <a class="nav-link-premium py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isOverviewActive ? "bg-primary-red text-white shadow-premium" : "text-muted opacity-60 hover-opacity-100")" 
+                       asp-controller="Profile" 
+                       asp-action="@(!string.IsNullOrEmpty(userSlug) ? "ViewProfileBySlug" : "ViewProfile")" 
+                       asp-route-culture="@currentCulture" 
+                       asp-route-slug="@userSlug" 
+                       asp-route-id="@(string.IsNullOrEmpty(userSlug) ? userId : null)">
+                        <i class="fas fa-user-circle me-2"></i> 
+                        <span>@Localizer["Overview"]</span>
                     </a>
-                }
+                    
+                    <a class="nav-link-premium py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isGalleryActive ? "bg-primary-red text-white shadow-premium" : "text-muted opacity-60 hover-opacity-100")" 
+                       asp-controller="Profile" asp-action="ViewUserGallery" asp-route-culture="@currentCulture" asp-route-id="@userId">
+                        <i class="fas fa-images me-2"></i> 
+                        <span>@Localizer["Gallery"]</span>
+                    </a>
+                    
+                    <a class="nav-link-premium py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isInterestsActive ? "bg-primary-red text-white shadow-premium" : "text-muted opacity-60 hover-opacity-100")" 
+                       asp-controller="Profile" asp-action="Interests" asp-route-culture="@currentCulture" asp-route-id="@userId">
+                        <i class="fas fa-sparkles me-2"></i> 
+                        <span>@Localizer["Interests"]</span>
+                    </a>
+                    
+                    <a class="nav-link-premium py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isBadgesActive ? "bg-primary-red text-white shadow-premium" : "text-muted opacity-60 hover-opacity-100")" 
+                       asp-controller="Profile" asp-action="Badges" asp-route-culture="@currentCulture" asp-route-id="@userId">
+                        <i class="fas fa-award me-2"></i> 
+                        <span>@Localizer["Badges"]</span>
+                    </a>
+                    
+                    @if (isOwner)
+                    {
+                        <div class="vr mx-2 bg-dark opacity-10" style="height: 20px;"></div>
+                        <a class="nav-link-premium py-2 px-4 rounded-pill small fw-black text-uppercase tracking-widest transition-all @(isSettingsActive ? "bg-primary-red text-white shadow-premium" : "text-muted opacity-60 hover-opacity-100")" 
+                           asp-controller="ProfileSettings" asp-action="Index" asp-route-culture="@currentCulture">
+                            <i class="fas fa-user-gear me-2"></i> 
+                            <span>@Localizer["Settings"]</span>
+                        </a>
+                    }
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .nav-link-premium { text-decoration: none; display: flex; align-items: center; white-space: nowrap; }
+    .shadow-premium { box-shadow: 0 10px 20px -5px rgba(251, 44, 54, 0.3) !important; }
+    .hover-opacity-100:hover { opacity: 1 !important; color: var(--primary-red) !important; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>

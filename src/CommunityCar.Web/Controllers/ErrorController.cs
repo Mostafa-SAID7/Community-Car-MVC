@@ -1,4 +1,4 @@
-using CommunityCar.Application.Features.Error.ViewModels;
+using CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels;
 using CommunityCar.Web.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -35,7 +35,7 @@ namespace CommunityCar.Web.Controllers
         {
             var model = new ErrorDetailsViewModel
             {
-                ErrorId = errorId,
+                ErrorId = Guid.TryParse(errorId, out var parsedErrorId) ? parsedErrorId : Guid.NewGuid(),
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             };
 
@@ -52,13 +52,13 @@ namespace CommunityCar.Web.Controllers
 
                     if (errorResponse != null)
                     {
-                        model.Message = errorResponse.Message;
+                        model.Message = errorResponse.Message ?? "Unknown error";
                         model.StatusCode = errorResponse.StatusCode;
-                        model.Details = errorResponse.Details;
                         model.StackTrace = errorResponse.StackTrace;
-                        model.Path = errorResponse.Path;
-                        model.Method = errorResponse.Method;
+                        model.RequestPath = errorResponse.Path;
+                        model.HttpMethod = errorResponse.Method;
                         model.Timestamp = errorResponse.Timestamp;
+                        model.Exception = errorResponse.Details;
                     }
                 }
                 catch (Exception ex)

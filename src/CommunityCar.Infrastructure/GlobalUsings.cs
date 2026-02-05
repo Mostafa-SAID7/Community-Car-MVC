@@ -6,7 +6,4 @@ global using System.Threading.Tasks;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
-global using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
-global using CommunityCar.Application.Common.Interfaces.Services.Dashboard.BackgroundJobs;
 global using CommunityCar.Domain.Entities.Account.Core;
-global using CommunityCar.Application.Services.Dashboard.BackgroundJobs;

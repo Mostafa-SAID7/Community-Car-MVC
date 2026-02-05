@@ -1,93 +1,96 @@
 @model CommunityCar.Application.Features.Dashboard.Overview.ViewModels.OverviewVM
-@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["DashboardOverview"];
+    ViewData["Title"] = "Dashboard Overview";
     Layout = "_DashboardLayout";
 }
 
-<div class="d-flex flex-column gap-5 animate-in fade-in duration-700">
-    <div id="overview-skeleton" class="d-none">
-        <div class="row g-4 mb-5">
-            @for (int i = 0; i < 4; i++) {
-                <div class="col-12 col-md-6 col-lg-3"><skeleton type="Card" /></div>
-            }
+<div class="container-fluid py-4 animate-in fade-in">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 mt-2">
+        <div>
+            <h2 class="fw-black text-gradient mb-1"><i class="fas fa-tachometer-alt me-2 small opacity-50"></i>Dashboard Overview</h2>
+            <p class="text-muted small text-uppercase tracking-widest opacity-50 fw-black">System analytics and performance metrics</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-danger px-4 rounded-4 fw-bold" onclick="refreshMetrics()">
+                <i class="fas fa-sync-alt me-2"></i>Refresh
+            </button>
+            <div class="dropdown">
+                <button type="button" class="btn btn-primary-red px-4 rounded-4 fw-bold dropdown-toggle shadow-sm" data-bs-toggle="dropdown">
+                    <i class="fas fa-calendar me-2"></i>Time Range
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end rounded-4 shadow-lg border-0">
+                    <li><a class="dropdown-item py-2 px-4 fw-bold tracking-tight" href="#" onclick="setTimeRange(7)">Last 7 days</a></li>
+                    <li><a class="dropdown-item py-2 px-4 fw-bold tracking-tight" href="#" onclick="setTimeRange(30)">Last 30 days</a></li>
+                    <li><a class="dropdown-item py-2 px-4 fw-bold tracking-tight" href="#" onclick="setTimeRange(90)">Last 90 days</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <div id="overview-content" class="d-flex flex-column gap-5">
-        <div class="row g-4">
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.1s">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="w-48px h-48px rounded-4 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center group-hover-scale-110 transition-all">
-                                <i data-lucide="users" class="w-24px h-24px"></i>
-                            </div>
-                            <div>
-                                <div class="h2 fw-black text-gradient-red mb-0">@Model.Stats.TotalUsers.ToString("N0")</div>
-                                <div class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@SharedLocalizer["TotalUsers"]</div>
-                            </div>
+    <!-- Key Metrics Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card card-premium-accent border-0 h-100 overflow-hidden" style="background: var(--gradient-premium-red);">
+                <div class="card-body p-4 position-relative z-1">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-white text-opacity-75 small text-uppercase tracking-widest fw-black mb-2">Total Users</h6>
+                            <h2 class="fw-black text-white mb-1" id="totalUsers">@Model.TotalUsers.ToString("N0")</h2>
+                            <small class="text-white text-opacity-75 tracking-tight fw-bold">+@Model.NewUsersToday today</small>
                         </div>
-                        <div class="xx-small fw-bold text-success d-flex align-items-center">
-                            <i data-lucide="arrow-up" class="w-12px h-12px me-1"></i> +@Model.Stats.GrowthRate%
-                            <span class="opacity-50 ms-1 fw-medium text-muted">@Localizer["ThisMonth"]</span>
+                        <div class="rounded-circle bg-white bg-opacity-20 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas fa-users text-white fs-5"></i>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.2s">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="w-48px h-48px rounded-4 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center group-hover-scale-110 transition-all">
-                                <i data-lucide="pencil" class="w-24px h-24px"></i>
-                            </div>
-                            <div>
-                                <div class="h2 fw-black text-gradient-red mb-0">@Model.Stats.TotalPosts.ToString("N0")</div>
-                                <div class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@SharedLocalizer["TotalPosts"]</div>
-                            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-2">Active Users</h6>
+                            <h2 class="fw-black mb-1" id="activeUsers">@Model.ActiveUsers.ToString("N0")</h2>
+                            <small class="text-success tracking-tight fw-bold">@Model.ActiveUsersPercentage.ToString("P1") active</small>
                         </div>
-                        <div class="xx-small fw-bold text-muted opacity-60 text-uppercase tracking-widest">
-                            @Localizer["ActiveToday"]: <span class="text-foreground fw-black">@Model.Stats.ActiveUsersToday</span>
+                        <div class="rounded-4 bg-success bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas fa-user-check text-success fs-5"></i>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.3s">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="w-48px h-48px rounded-4 bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center group-hover-scale-110 transition-all">
-                                <i data-lucide="message-square" class="w-24px h-24px"></i>
-                            </div>
-                            <div>
-                                <div class="h2 fw-black text-gradient-red mb-0">@Model.Stats.TotalComments.ToString("N0")</div>
-                                <div class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@SharedLocalizer["TotalComments"]</div>
-                            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-2">Total Posts</h6>
+                            <h2 class="fw-black mb-1" id="totalPosts">@Model.TotalPosts.ToString("N0")</h2>
+                            <small class="text-info tracking-tight fw-bold">+@Model.NewPostsToday today</small>
                         </div>
-                        <div class="xx-small fw-bold text-info d-flex align-items-center text-uppercase tracking-widest">
-                            @Localizer["Engagement"]: <span class="fw-black ms-1">@Model.Stats.EngagementRate%</span>
+                        <div class="rounded-4 bg-info bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas fa-file-alt text-info fs-5"></i>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-premium shadow-lg h-100 group animate-float" style="animation-delay: 0.4s">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="w-48px h-48px rounded-4 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center group-hover-scale-110 transition-all">
-                                <i data-lucide="help-circle" class="w-24px h-24px"></i>
-                            </div>
-                            <div>
-                                <div class="h2 fw-black text-gradient-red mb-0">@(Model.Stats.TotalQuestions + Model.Stats.TotalAnswers)</div>
-                                <div class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@SharedLocalizer["QAItems"]</div>
-                            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-2">Engagement</h6>
+                            <h2 class="fw-black mb-1" id="engagementRate">@Model.EngagementRate.ToString("P1")</h2>
+                            <small class="@(Model.EngagementTrend > 0 ? "text-success" : "text-danger") tracking-tight fw-bold">
+                                <i class="fas fa-arrow-@(Model.EngagementTrend > 0 ? "up" : "down") me-1"></i>
+                                @Model.EngagementTrend.ToString("P1") vs last period
+                            </small>
                         </div>
-                        <div class="xx-small fw-bold text-warning d-flex align-items-center text-uppercase tracking-widest">
-                            @Model.Stats.TotalQuestions Q / @Model.Stats.TotalAnswers A
+                        <div class="rounded-4 bg-warning bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas fa-heart text-warning fs-5"></i>
                         </div>
                     </div>
                 </div>
@@ -96,214 +99,306 @@
     </div>
 
     <!-- Charts Row -->
-    <div class="row g-4">
-        <div class="col-12 col-xl-8">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4 d-flex justify-content-between align-items-center">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
-                        <i data-lucide="trending-up" class="w-18px h-18px"></i>
-                        @Localizer["UserGrowthTrend"]
-                    </h5>
-                    <div class="btn-group btn-group-sm rounded-3 overflow-hidden border">
-                        <button type="button" class="btn btn-muted bg-opacity-10 text-xx-small fw-black px-3 py-1 active" data-period="7">7D</button>
-                        <button type="button" class="btn btn-muted bg-opacity-10 text-xx-small fw-black px-3 py-1" data-period="30">30D</button>
-                        <button type="button" class="btn btn-muted bg-opacity-10 text-xx-small fw-black px-3 py-1" data-period="90">90D</button>
-                    </div>
+    <div class="row g-4 mb-5">
+        <div class="col-md-8">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-chart-line me-2 text-primary-red opacity-50"></i>User Growth Trend</h5>
                 </div>
                 <div class="card-body p-4">
-                    <div style="height: 320px;">
-                        <canvas id="userGrowthChart" class="w-100 h-100"
-                                data-labels='@Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Label)))'
-                                data-datasets='[{"label": "@Localizer["NewUsers"]", "data": @Html.Raw(Json.Serialize(Model.UserGrowthChart.Select(x => x.Value)))}]'
-                                data-show-points="true"></canvas>
-                    </div>
+                    <canvas id="userGrowthChart" style="height: 300px; max-height: 300px;"></canvas>
                 </div>
             </div>
         </div>
-
-        <div class="col-12 col-xl-4">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
-                        <i data-lucide="activity" class="w-18px h-18px"></i>
-                        @Localizer["SystemMonitoring"]
-                    </h5>
+        <div class="col-md-4">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-chart-pie me-2 text-primary-red opacity-50"></i>Content Distribution</h5>
                 </div>
-                <div class="card-body p-4 d-flex flex-column gap-4">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <h6 class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60 mb-0">@Localizer["Status"]</h6>
-                        <span class="badge rounded-pill d-flex align-items-center gap-2 px-3 py-2 xx-small fw-black text-uppercase tracking-widest @(Model.SystemHealth.IsHealthy ? "bg-success bg-opacity-10 text-success border border-success border-opacity-20" : "bg-danger bg-opacity-10 text-danger border border-danger border-opacity-20 animate-pulse")">
-                            <span class="w-6px h-6px rounded-full bg-current @(Model.SystemHealth.IsHealthy ? "" : "animate-ping")"></span>
-                            @(Model.SystemHealth.IsHealthy ? Localizer["Healthy"] : Localizer["IssuesDetected"])
-                        </span>
-                    </div>
-
-                    <div class="d-flex flex-column gap-4">
-                        <div class="d-flex flex-column gap-2">
-                            <div class="d-flex justify-content-between align-items-end">
-                                <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["CpuUsage"]</span>
-                                <span class="small fw-black tabular-nums">@Model.SystemHealth.CpuUsage%</span>
-                            </div>
-                            <div class="progress rounded-pill bg-muted bg-opacity-10" style="height: 6px;">
-                                <div class="progress-bar bg-primary rounded-pill transition-all" style="width: @Model.SystemHealth.CpuUsage%"></div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column gap-2">
-                            <div class="d-flex justify-content-between align-items-end">
-                                <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["MemoryUsage"]</span>
-                                <span class="small fw-black tabular-nums">@Model.SystemHealth.MemoryUsage%</span>
-                            </div>
-                            <div class="progress rounded-pill bg-muted bg-opacity-10" style="height: 6px;">
-                                <div class="progress-bar bg-success rounded-pill transition-all" style="width: @Model.SystemHealth.MemoryUsage%"></div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column gap-2">
-                            <div class="d-flex justify-content-between align-items-end">
-                                <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["DiskUsage"]</span>
-                                <span class="small fw-black tabular-nums">@Model.SystemHealth.DiskUsage%</span>
-                            </div>
-                            <div class="progress rounded-pill bg-muted bg-opacity-10" style="height: 6px;">
-                                <div class="progress-bar bg-warning rounded-pill transition-all" style="width: @Model.SystemHealth.DiskUsage%"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pt-3 mt-2 border-top border-border border-opacity-30">
-                        <div class="d-flex align-items-center gap-2 xx-small fw-black text-muted text-uppercase tracking-widest opacity-60">
-                            <i data-lucide="clock" class="w-12px h-12px"></i> @Localizer["LastCheck"]: <span class="text-foreground">@Model.SystemHealth.LastCheck.ToString("HH:mm")</span>
-                        </div>
-                    </div>
+                <div class="card-body p-4">
+                    <canvas id="contentChart" style="height: 300px; max-height: 300px;"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Content Row -->
-    <div class="row g-4">
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4 d-flex justify-content-between align-items-center">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
-                        <i data-lucide="history" class="w-18px h-18px"></i>
-                        @Localizer["RecentActivity"]
-                    </h5>
-                    <button class="btn btn-link p-1 text-muted hover-text-primary transition-all group-refresh" data-action="refresh-activity">
-                        <i data-lucide="refresh-cw" class="w-16px h-16px group-hover-rotate-180 transition-transform duration-500"></i>
+    <!-- Activity and Stats Row -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-8">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-clock me-2 text-primary-red opacity-50"></i>Recent Activity</h5>
+                    <button class="btn btn-sm btn-ghost text-primary-red fw-bold text-uppercase tracking-widest" style="font-size: 0.65rem;" onclick="loadRecentActivity()">
+                        <i class="fas fa-sync-alt me-1"></i>Refresh
                     </button>
                 </div>
                 <div class="card-body p-4">
-                    <div class="d-flex flex-column gap-1 overflow-auto no-scrollbar" style="max-height: 400px;" id="activityList">
-                        @foreach (var activity in Model.RecentActivity)
+                    <div id="recentActivity" class="vstack gap-2">
+                        @if (Model.RecentActivities?.Any() == true)
                         {
-                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 hover-bg-muted bg-opacity-5 transition-all group-activity cursor-default">
-                                <div class="w-40px h-40px rounded-4 flex-shrink-0 d-flex align-items-center justify-content-center text-white shadow-lg group-hover-scale-110 transition-transform @(activity.Color == "blue" ? "bg-primary" : activity.Color == "green" ? "bg-success" : activity.Color == "amber" ? "bg-warning" : "bg-danger")">
-                                    <i data-lucide="@activity.Icon" class="w-20px h-20px"></i>
-                                </div>
-                                <div class="min-w-0 flex-1">
-                                    <div class="text-sm fw-black text-foreground truncate">@activity.Description</div>
-                                    <div class="d-flex align-items-center gap-2 mt-1 xx-small fw-bold text-muted text-uppercase tracking-widest opacity-60">
-                                        <span class="text-primary">@activity.UserName</span>
-                                        <span>•</span>
-                                        <span>@activity.TimeAgo</span>
+                            @foreach (var activity in Model.RecentActivities.Take(10))
+                            {
+                                <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light bg-opacity-50 border border-light transition-all hover-translate-x">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold tracking-tight mb-0">@activity.Action</div>
+                                        <small class="text-muted opacity-75">by @activity.UserName</small>
                                     </div>
+                                    <small class="text-muted text-uppercase fw-black tracking-widest" style="font-size: 0.65rem;">@activity.Timestamp.ToString("MMM dd, HH:mm")</small>
                                 </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <p class="text-muted mb-0 opacity-50 fw-bold">No recent activity discovered.</p>
                             </div>
                         }
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
-                        <i data-lucide="trending-up" class="w-18px h-18px"></i>
-                        @Localizer["TopContent"]
-                    </h5>
+        <div class="col-md-4">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-chart-bar me-2 text-primary-red opacity-50"></i>Quick Stats</h5>
                 </div>
                 <div class="card-body p-4">
-                    <div class="d-flex flex-column gap-1">
-                        @foreach (var content in Model.TopContent)
-                        {
-                            <div class="p-3 rounded-4 hover-bg-muted bg-opacity-5 transition-all group-content cursor-default">
-                                <h6 class="text-sm fw-black text-foreground truncate group-hover-text-primary transition-colors mb-2">@content.Title</h6>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="badge bg-muted bg-opacity-10 border border-border text-xx-small fw-black text-uppercase tracking-tighter text-muted">@content.Type</span>
-                                        <span class="xx-small fw-bold text-muted opacity-60">by @content.AuthorName</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-3 xx-small fw-black text-muted text-uppercase tracking-widest opacity-50">
-                                        <div class="d-flex align-items-center gap-1"><i data-lucide="eye" class="w-12px h-12px"></i> @content.Views</div>
-                                        <div class="d-flex align-items-center gap-1"><i data-lucide="heart" class="w-12px h-12px text-danger text-opacity-60 group-hover-opacity-100 transition-all"></i> @content.Likes</div>
-                                    </div>
-                                </div>
+                    <div class="row g-3 text-center mb-4">
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-primary bg-opacity-10 h-100">
+                                <div class="h4 fw-black text-primary mb-1">@Model.TotalComments.ToString("N0")</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Comments</div>
                             </div>
-                        }
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-success bg-opacity-10 h-100">
+                                <div class="h4 fw-black text-success mb-1">@Model.TotalLikes.ToString("N0")</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Likes</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-info bg-opacity-10 h-100">
+                                <div class="h4 fw-black text-info mb-1">@Model.TotalShares.ToString("N0")</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Shares</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-warning bg-opacity-10 h-100">
+                                <div class="h4 fw-black text-warning mb-1">@Model.TotalViews.ToString("N0")</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Views</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-12 col-lg-4">
-            <div class="card card-premium shadow-xl h-100 overflow-hidden">
-                <div class="card-header border-bottom border-border border-opacity-50 bg-transparent p-4">
-                    <h5 class="d-flex align-items-center gap-2 fw-black text-uppercase tracking-widest small text-primary mb-0">
-                        <i data-lucide="users" class="w-18px h-18px"></i>
-                        @Localizer["ActiveUsers"]
-                    </h5>
-                </div>
-                <div class="card-body p-4">
-                    <div class="d-flex flex-column gap-1">
-                        @foreach (var user in Model.ActiveUsers)
-                        {
-                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 hover-bg-muted bg-opacity-5 transition-all group-user cursor-default">
-                                <div class="w-40px h-40px rounded-circle bg-muted bg-opacity-10 flex-shrink-0 position-relative border border-border transition-all group-hover-border-primary">
-                                    @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
-                                    {
-                                        <img src="@user.ProfilePictureUrl" alt="@user.UserName" class="w-100 h-100 rounded-circle object-cover" />
-                                    }
-                                    else
-                                    {
-                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted fw-black text-xx-small uppercase">
-                                            @user.UserName.Substring(0, 1)
-                                        </div>
-                                    }
-                                    @if (user.IsOnline)
-                                    {
-                                        <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-2 border-white rounded-circle shadow-sm" style="width: 10px; height: 10px;"></span>
-                                    }
-                                </div>
-                                <div class="min-w-0 flex-1">
-                                    <div class="text-sm fw-black text-foreground truncate group-hover-text-primary transition-colors">@user.UserName</div>
-                                    <div class="xx-small fw-bold text-muted text-uppercase tracking-widest opacity-60 truncate">@user.LastActivityText</div>
-                                </div>
-                                <div class="text-end">
-                                    <div class="small fw-black text-foreground tabular-nums">@user.PostsCount</div>
-                                    <div class="xx-small fw-black text-muted text-uppercase tracking-widest opacity-50">@Localizer["Posts"]</div>
-                                </div>
-                            </div>
-                        }
+                    <div class="p-4 rounded-4 border border-light bg-light bg-opacity-30 text-center">
+                        <div class="h4 fw-black text-dark mb-1">@Model.AverageSessionDuration.ToString(@"hh\:mm\:ss")</div>
+                        <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Avg Session Duration</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
+    <!-- System Status -->
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="card card-premium border-0">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-server me-2 text-primary-red opacity-50"></i>Tactical System Status</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 border border-light transition-all hover-translate-y">
+                                <div class="position-relative">
+                                    <div class="rounded-circle animate-pulse" style="width: 12px; height: 12px; background-color: @(Model.DatabaseStatus == "Connected" ? "#10b981" : "#fb2c36");"></div>
+                                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle bg-opacity-20 animate-ping" style="width: 24px; height: 24px; background-color: @(Model.DatabaseStatus == "Connected" ? "#10b981" : "#fb2c36");"></div>
+                                </div>
+                                <div>
+                                    <div class="small text-muted text-uppercase tracking-widest fw-black opacity-50 mb-0" style="font-size: 0.6rem;">Database</div>
+                                    <div class="fw-bold tracking-tight">@Model.DatabaseStatus</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 border border-light transition-all hover-translate-y">
+                                <div class="position-relative">
+                                    <div class="rounded-circle animate-pulse" style="width: 12px; height: 12px; background-color: @(Model.CacheStatus == "Running" ? "#10b981" : "#fb2c36");"></div>
+                                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle bg-opacity-20 animate-ping" style="width: 24px; height: 24px; background-color: @(Model.CacheStatus == "Running" ? "#10b981" : "#fb2c36");"></div>
+                                </div>
+                                <div>
+                                    <div class="small text-muted text-uppercase tracking-widest fw-black opacity-50 mb-0" style="font-size: 0.6rem;">Distributed Cache</div>
+                                    <div class="fw-bold tracking-tight">@Model.CacheStatus</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 border border-light transition-all hover-translate-y">
+                                <div class="position-relative">
+                                    <div class="rounded-circle animate-pulse" style="width: 12px; height: 12px; background-color: @(Model.QueueStatus == "Processing" ? "#10b981" : "#fb2c36");"></div>
+                                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle bg-opacity-20 animate-ping" style="width: 24px; height: 24px; background-color: @(Model.QueueStatus == "Processing" ? "#10b981" : "#fb2c36");"></div>
+                                </div>
+                                <div>
+                                    <div class="small text-muted text-uppercase tracking-widest fw-black opacity-50 mb-0" style="font-size: 0.6rem;">Async Queue</div>
+                                    <div class="fw-bold tracking-tight">@Model.QueueStatus</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 border border-light transition-all hover-translate-y">
+                                <div class="position-relative">
+                                    <div class="rounded-circle bg-success animate-pulse" style="width: 12px; height: 12px;"></div>
+                                    <div class="position-absolute top-50 start-50 translate-middle bg-success rounded-circle bg-opacity-20 animate-ping" style="width: 24px; height: 24px;"></div>
+                                </div>
+                                <div>
+                                    <div class="small text-muted text-uppercase tracking-widest fw-black opacity-50 mb-0" style="font-size: 0.6rem;">External API</div>
+                                    <div class="fw-bold tracking-tight">System Online</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="~/js/modules/dashboard/charts-controller.js" asp-append-version="true"></script>
-    <script src="~/js/modules/dashboard/overview-controller.js" asp-append-version="true"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (CC.Modules.Dashboard.Charts) CC.Modules.Dashboard.Charts.init();
-            if (CC.Modules.Dashboard.Overview) CC.Modules.Dashboard.Overview.init();
+        let userGrowthChart, contentChart;
+        let currentTimeRange = 30; // days
+
+        $(document).ready(function() {
+            initializeCharts();
+            loadRecentActivity();
         });
+
+        function initializeCharts() {
+            const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+            userGrowthChart = new Chart(userGrowthCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'New Users',
+                        data: [],
+                        borderColor: '#fb2c36',
+                        backgroundColor: 'rgba(251, 44, 54, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#fb2c36',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 6,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' } }
+                    }
+                }
+            });
+
+            const contentCtx = document.getElementById('contentChart').getContext('2d');
+            contentChart = new Chart(contentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Posts', 'Comments', 'Stories', 'Reviews'],
+                    datasets: [{
+                        data: [@Model.TotalPosts, @Model.TotalComments, @Model.TotalStories, @Model.TotalReviews],
+                        backgroundColor: [
+                            'rgba(251, 44, 54, 0.85)',
+                            'rgba(0, 112, 243, 0.85)',
+                            'rgba(0, 112, 243, 0.6)',
+                            'rgba(0, 112, 243, 0.4)'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, padding: 20, font: { weight: '800' } } }
+                    }
+                }
+            });
+
+            loadChartData();
+        }
+
+        function loadChartData() {
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(endDate.getDate() - currentTimeRange);
+
+            fetch(`@Url.Action("GetUserGrowthChart")?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        userGrowthChart.data.labels = result.data.map(d => d.label);
+                        userGrowthChart.data.datasets[0].data = result.data.map(d => d.value);
+                        userGrowthChart.update();
+                    }
+                })
+                .catch(error => console.error('Error loading chart data:', error));
+        }
+
+        function loadRecentActivity() {
+            fetch('@Url.Action("GetRecentActivity")')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        const activityHtml = result.data.map(activity => `
+                            <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light bg-opacity-50 border border-light transition-all">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold tracking-tight mb-0">${activity.action}</div>
+                                    <small class="text-muted opacity-75">by ${activity.userName}</small>
+                                </div>
+                                <small class="text-muted text-uppercase fw-black tracking-widest" style="font-size: 0.65rem;">${new Date(activity.timestamp).toLocaleDateString()}</small>
+                            </div>
+                        `).join('');
+                        document.getElementById('recentActivity').innerHTML = activityHtml || '<div class="text-center py-5"><p class="text-muted mb-0 opacity-50 fw-bold">No recent activity discovered.</p></div>';
+                    }
+                });
+        }
+
+        function refreshMetrics() {
+            showLoading();
+            fetch('@Url.Action("RefreshMetrics")', {
+                method: 'POST',
+                headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() }
+            })
+            .then(response => response.json())
+            .then(result => {
+                hideLoading();
+                if (result.success) setTimeout(() => location.reload(), 500);
+            })
+            .catch(() => hideLoading());
+        }
+
+        function setTimeRange(days) {
+            currentTimeRange = days;
+            loadChartData();
+        }
+
+        function showLoading() {
+            $('body').append('<div id="loading-overlay" class="position-fixed w-100 h-100 d-flex align-items-center justify-content-center" style="top:0;left:0;background:rgba(0,0,0,0.3);z-index:9999;backdrop-filter:blur(4px);"><div class="spinner-border text-primary-red" role="status"></div></div>');
+        }
+
+        function hideLoading() { $('#loading-overlay').remove(); }
     </script>
-}
+</div>
+<style>
+    .hover-translate-x:hover { transform: translateX(5px); }
+    .hover-translate-y:hover { transform: translateY(-5px); }
+    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    .animate-ping { animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
+    @@keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+</style>

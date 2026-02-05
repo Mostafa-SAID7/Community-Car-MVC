@@ -1,262 +1,220 @@
-@using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@model List<CommunityCar.Application.Features.Dashboard.Reports.ViewModels.SystemReportVM>
 @{
-    int currentPage = ViewBag.CurrentPage ?? 1;
-    int pageSize = ViewBag.PageSize ?? 10;
+    ViewData["Title"] = "Reports Dashboard";
+    Layout = "_DashboardLayout";
 }
-<div class="d-flex flex-column gap-5 animate-in fade-in duration-700">
+
+<div class="container-fluid py-4 animate-in fade-in">
     <!-- Header -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 mt-2">
         <div>
-            <h1 class="h2 fw-black text-gradient mb-1">@Localizer["Reports"]</h1>
-            <p class="text-sm fw-bold text-muted-foreground opacity-70">@Localizer["ReportsDesc"]</p>
+            <h2 class="fw-black text-gradient mb-1"><i class="fas fa-file-contract me-2 small opacity-50"></i>Report Subsystem</h2>
+            <p class="text-muted small text-uppercase tracking-widest opacity-50 fw-black">Comprehensive system auditing and data exports</p>
         </div>
-        <div class="d-flex align-items-center gap-3">
-            <a href="@Url.Action("Generate", "Reports")" 
-               class="btn btn-primary-red px-4 text-[10px] fw-black text-uppercase tracking-widest shadow-lg shadow-primary-red shadow-opacity-20 d-flex align-items-center gap-2 group">
-                <i data-lucide="plus" class="w-4 h-4 group-hover:rotate-90 transition-transform"></i>
-                @Localizer["GenerateReport"]
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Create")" class="btn btn-primary-red px-4 rounded-4 fw-bold shadow-sm text-decoration-none">
+                <i class="fas fa-plus me-2"></i>New Report
             </a>
+            <div class="dropdown">
+                <button type="button" class="btn btn-outline-danger px-4 rounded-4 fw-bold shadow-sm dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fas fa-microchip me-2"></i>Operations
+                </button>
+                <ul class="dropdown-menu border-0 shadow-lg rounded-4 p-2">
+                    <li><a class="dropdown-item rounded-3 fw-bold py-2" href="#" onclick="loadScheduledReports()">
+                        <i class="fas fa-clock me-2 opacity-50"></i>Scheduled Tasker
+                    </a></li>
+                    <li><a class="dropdown-item rounded-3 fw-bold py-2" href="#" onclick="loadReportTemplates()">
+                        <i class="fas fa-layer-group me-2 opacity-50"></i>Static Templates
+                    </a></li>
+                    <li><hr class="dropdown-divider opacity-10"></li>
+                    <li><a class="dropdown-item rounded-3 fw-bold py-2 text-danger" href="#" onclick="refreshReports()">
+                        <i class="fas fa-sync-alt me-2 opacity-50"></i>Re-sync Matrix
+                    </a></li>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <!-- Success/Error Messages -->
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert bg-success bg-opacity-10 border border-success border-opacity-20 text-success rounded-4 p-4 shadow-lg shadow-success shadow-opacity-10 animate-in slide-in-from-top duration-300">
-            <div class="d-flex align-items-center gap-3">
-                <i data-lucide="check-circle" class="w-5 h-5"></i>
-                <span class="fw-bold">@TempData["SuccessMessage"]</span>
-            </div>
-        </div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert bg-danger bg-opacity-10 border border-danger border-opacity-20 text-danger rounded-4 p-4 shadow-lg shadow-danger shadow-opacity-10 animate-in slide-in-from-top duration-300">
-            <div class="d-flex align-items-center gap-3">
-                <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                <span class="fw-bold">@TempData["ErrorMessage"]</span>
-            </div>
-        </div>
-    }
-
-    <div class="card card-premium shadow-xl overflow-hidden border-border border-opacity-50">
-        <!-- Reports Hero Section -->
-        <div class="card-header border-0 bg-transparent p-4 p-md-5 pb-0">
-            <div class="d-flex flex-column gap-4">
-                <div class="d-flex align-items-center gap-3 mb-2">
-                    <span class="badge rounded-pill bg-primary-red bg-opacity-10 text-primary-red border border-primary-red border-opacity-20 text-[9px] fw-black px-3 py-1.5 uppercase tracking-widest">
-                        <i data-lucide="database" class="w-3 h-3 me-1"></i> SYSTEM ANALYTICS
-                    </span>
-                    <span class="text-[10px] fw-black text-muted-foreground opacity-40 uppercase tracking-widest">@string.Format("GENERATED {0}", DateTime.Now.ToString("MMM dd, yyyy"))</span>
-                </div>
-
-                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4 pt-4 border-t border-border border-opacity-20">
-                    <div class="d-flex align-items-center gap-4">
-                        <div class="w-14 h-14 rounded-4 bg-primary-red bg-opacity-10 border border-primary-red border-opacity-10 d-flex align-items-center justify-content-center shadow-inner group">
-                            <i data-lucide="bar-chart-3" class="w-7 h-7 text-primary-red group-hover:scale-110 transition-transform"></i>
-                        </div>
-                        <div>
-                            <span class="h5 fw-black text-foreground d-block mb-1">@Localizer["GeneratedReports"]</span>
-                            <span class="text-[10px] fw-black text-muted-foreground opacity-40 uppercase tracking-widest">@Localizer["SystemContributor"]</span>
-                        </div>
+    <!-- Report Categories -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card card-premium text-center border-0 h-100 transition-all hover-translate-y">
+                <div class="card-body p-4">
+                    <div class="rounded-4 bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                        <i class="fas fa-users fs-3 text-primary"></i>
                     </div>
-                    
-                    <div class="d-flex gap-5">
-                        <div class="text-right">
-                            <span class="h4 fw-black text-foreground d-block mb-0 tabular-nums">@(Model?.Count.ToString("N0") ?? "0")</span>
-                            <span class="text-[8px] fw-black text-muted-foreground opacity-40 uppercase tracking-widest">@Localizer["TotalReports"]</span>
-                        </div>
-                        <div class="text-right">
-                            @{
-                                int completedCount = 0;
-                                if (Model != null)
-                                {
-                                    foreach (var report in Model)
-                                    {
-                                        if (report.Status.ToLower() == "generated")
-                                        {
-                                            completedCount++;
-                                        }
-                                    }
-                                }
-                            }
-                            <span class="h4 fw-black text-foreground d-block mb-0 tabular-nums">@completedCount</span>
-                            <span class="text-[8px] fw-black text-muted-foreground opacity-40 uppercase tracking-widest">@Localizer["Completed"]</span>
-                        </div>
-                    </div>
+                    <h5 class="fw-black text-uppercase tracking-tight">Active Users</h5>
+                    <p class="text-muted small fw-bold opacity-75">Retention, cohorts, and behavioral analytics</p>
+                    <button class="btn btn-sm btn-ghost text-primary-red fw-bold text-uppercase tracking-widest mt-2" onclick="filterReports('user')">Execute Query</button>
                 </div>
             </div>
         </div>
-
-        <!-- Reports List -->
-        <div class="card-body p-4 p-md-5 bg-muted-subtle bg-opacity-20 border-y border-border border-opacity-20">
-            <div id="reports-skeleton" class="d-none">
-                <div class="d-flex flex-column gap-3">
-                    @for (int i = 0; i < 4; i++) {
-                        <div class="h-16 bg-muted animate-pulse rounded-4 w-100"></div>
-                    }
+        <div class="col-md-3">
+            <div class="card card-premium text-center border-0 h-100 transition-all hover-translate-y">
+                <div class="card-body p-4">
+                    <div class="rounded-4 bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                        <i class="fas fa-newspaper fs-3 text-success"></i>
+                    </div>
+                    <h5 class="fw-black text-uppercase tracking-tight">Content Feed</h5>
+                    <p class="text-muted small fw-bold opacity-75">Engagement depth and asset performance</p>
+                    <button class="btn btn-sm btn-ghost text-primary-red fw-bold text-uppercase tracking-widest mt-2" onclick="filterReports('content')">Execute Query</button>
                 </div>
             </div>
-            <div id="reports-list-container">
-            @if (Model != null && Model.Count > 0)
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium text-center border-0 h-100 transition-all hover-translate-y">
+                <div class="card-body p-4">
+                    <div class="rounded-4 bg-info bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                        <i class="fas fa-chart-line fs-3 text-info"></i>
+                    </div>
+                    <h5 class="fw-black text-uppercase tracking-tight">System Traffic</h5>
+                    <p class="text-muted small fw-bold opacity-75">Origin vectors and temporal throughput</p>
+                    <button class="btn btn-sm btn-ghost text-primary-red fw-bold text-uppercase tracking-widest mt-2" onclick="filterReports('analytics')">Execute Query</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium text-center border-0 h-100 transition-all hover-translate-y">
+                <div class="card-body p-4">
+                    <div class="rounded-4 bg-warning bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                        <i class="fas fa-server fs-3 text-warning"></i>
+                    </div>
+                    <h5 class="fw-black text-uppercase tracking-tight">Kernel Health</h5>
+                    <p class="text-muted small fw-bold opacity-75">Infrastructure stability and error stacks</p>
+                    <button class="btn btn-sm btn-ghost text-primary-red fw-bold text-uppercase tracking-widest mt-2" onclick="filterReports('system')">Execute Query</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reports List -->
+    <div class="card card-premium border-0 overflow-hidden">
+        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-list-ul me-2 text-primary-red opacity-50"></i>Available Audit Logs</h5>
+            <div class="input-group search-premium" style="max-width: 350px;">
+                <span class="input-group-text bg-light border-0"><i class="fas fa-search opacity-50"></i></span>
+                <input type="text" class="form-control bg-light border-0 fw-bold" placeholder="SEARCH ARCHIVES..." id="searchReports">
+                <button class="btn btn-dark fw-black text-uppercase tracking-widest" style="font-size: 0.65rem;" type="button" onclick="searchReports()">SCAN</button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @if (Model?.Any() == true)
             {
-                <div class="d-flex flex-column gap-4">
-                    @foreach (var report in Model)
-                    {
-                        <div class="card card-premium-subtle border-border border-opacity-40 rounded-4 p-4 hover-bg-muted-subtle transition-all group">
-                            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-4">
-                                <div class="d-flex align-items-center gap-4 flex-grow-1">
-                                    <div class="w-12 h-12 rounded-4 bg-primary-red bg-opacity-10 d-flex align-items-center justify-content-center text-primary-red border border-primary-red border-opacity-10 shrink-0 group-hover:scale-110 transition-transform shadow-sm">
-                                        <i data-lucide="file-text" class="w-6 h-6"></i>
-                                    </div>
-                                    <div class="flex-grow-1 min-w-0">
-                                        <h6 class="text-[15px] fw-black text-foreground mb-1 tracking-tight group-hover:text-primary-red transition-colors">
-                                            @report.ReportType
-                                        </h6>
-                                        <p class="text-sm text-muted-foreground opacity-70 mb-2 truncate">@report.Description</p>
-                                        <div class="d-flex align-items-center gap-4 text-[10px] fw-black text-muted-foreground opacity-60 uppercase tracking-widest">
-                                            <span>@report.StartDate.ToString("MMM dd") - @report.EndDate.ToString("MMM dd, yyyy")</span>
-                                            <span>•</span>
-                                            <span>@report.CreatedAt.ToString("HH:mm")</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="d-flex align-items-center gap-4">
-                                    @{
-                                        var statusConfig = report.Status.ToLower() switch
-                                        {
-                                            "generated" => new { Class = "bg-success bg-opacity-10 text-success border-success border-opacity-20", Icon = "check-circle", Text = "COMPLETED" },
-                                            "generating" => new { Class = "bg-warning bg-opacity-10 text-warning border-warning border-opacity-20", Icon = "loader-2", Text = "PROCESSING" },
-                                            "failed" => new { Class = "bg-danger bg-opacity-10 text-danger border-danger border-opacity-20", Icon = "x-circle", Text = "FAILED" },
-                                            "scheduled" => new { Class = "bg-info bg-opacity-10 text-info border-info border-opacity-20", Icon = "clock", Text = "SCHEDULED" },
-                                            _ => new { Class = "bg-muted-subtle text-muted-foreground border-border border-opacity-40", Icon = "help-circle", Text = "UNKNOWN" }
-                                        };
-                                    }
-                                    <span class="badge rounded-pill @statusConfig.Class border text-[9px] fw-black px-3 py-1.5 uppercase tracking-widest d-flex align-items-center gap-2">
-                                        <i data-lucide="@statusConfig.Icon" class="w-3.5 h-3.5 @(statusConfig.Icon == "loader-2" ? "animate-spin" : "")"></i>
-                                        @statusConfig.Text
-                                    </span>
-                                    
-                                    <div class="d-flex gap-2">
-                                        <a href="@Url.Action("Details", "Reports", new { id = report.Id })" 
-                                           class="btn btn-muted-subtle btn-sm p-2 rounded-3 text-muted-foreground hover-text-primary-red transition-all shadow-none d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                                            <i data-lucide="eye" class="w-4 h-4"></i>
-                                        </a>
-                                        @if (report.Status.ToLower() == "generated")
-                                        {
-                                            <a href="@Url.Action("Download", "Reports", new { id = report.Id })" 
-                                               class="btn btn-muted-subtle btn-sm p-2 rounded-3 text-muted-foreground hover-text-primary-red transition-all shadow-none d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                                                <i data-lucide="download" class="w-4 h-4"></i>
-                                            </a>
-                                        }
-                                        <form asp-action="Delete" asp-route-id="@report.Id" method="post" class="delete-report-form d-inline-block">
-                                            @Html.AntiForgeryToken()
-                                            <button type="button" 
-                                                    class="btn btn-muted-subtle btn-sm p-2 rounded-3 text-muted-foreground hover-text-danger transition-all shadow-none d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"
-                                                    data-action="confirm-delete-report">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-
-                <!-- Pagination -->
-                @if (currentPage > 1 || Model.Count() >= pageSize)
-                {
-                    <div class="mt-5 pt-4 border-t border-border border-opacity-20 d-flex align-items-center justify-content-between">
-                        <div class="text-[10px] fw-black text-muted-foreground opacity-40 uppercase tracking-widest">
-                            @string.Format(Localizer["ShowingPageOfReports"].Value, currentPage)
-                        </div>
-                        <div class="d-flex gap-2">
-                            @if (currentPage > 1)
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="reportsTable">
+                        <thead class="bg-light bg-opacity-50">
+                            <tr>
+                                <th class="ps-4 border-0 text-muted xx-small fw-black text-uppercase tracking-widest">Report Identity</th>
+                                <th class="border-0 text-muted xx-small fw-black text-uppercase tracking-widest">Metadata</th>
+                                <th class="border-0 text-muted xx-small fw-black text-uppercase tracking-widest">Status</th>
+                                <th class="border-0 text-muted xx-small fw-black text-uppercase tracking-widest pe-4">Vector Control</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-top-0">
+                            @foreach (var report in Model)
                             {
-                                <a href="@Url.Action("Index", new { page = currentPage - 1, pageSize })" 
-                                   class="btn btn-muted-subtle btn-sm px-4 rounded-3 text-[10px] fw-black text-uppercase tracking-widest hover-text-primary-red d-flex align-items-center gap-2">
-                                    <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
-                                    @Localizer["Previous"]
-                                </a>
+                                <tr data-category="@report.Category.ToLower()" class="transition-all hover-bg-light">
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-3 bg-light d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                <i class="fas fa-@(GetReportIcon(report.Category)) text-muted opacity-50"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-black tracking-tight mb-0">@report.Name</div>
+                                                <div class="text-muted xx-small fw-bold text-uppercase opacity-75">@report.Description</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-3">
+                                        <div class="vstack">
+                                            <span class="badge rounded-pill bg-@(GetCategoryColor(report.Category)) bg-opacity-10 text-@(GetCategoryColor(report.Category)) fw-black text-uppercase tracking-widest mb-1" style="font-size: 0.6rem; width: fit-content;">@report.Category</span>
+                                            <small class="text-muted fw-bold xx-small">CREATED: @report.CreatedAt.ToString("MM.dd.yy")</small>
+                                        </div>
+                                    </td>
+                                    <td class="py-3">
+                                        <span class="badge rounded-pill bg-@(report.Status == "Ready" ? "success" : report.Status == "Generating" ? "warning" : "secondary") bg-opacity-10 text-@(report.Status == "Ready" ? "success" : report.Status == "Generating" ? "warning" : "secondary") fw-black text-uppercase tracking-widest" style="font-size: 0.6rem;">
+                                            @report.Status
+                                        </span>
+                                    </td>
+                                    <td class="pe-4 py-3 text-end">
+                                        <div class="btn-group shadow-sm rounded-3 overflow-hidden">
+                                            <a href="@Url.Action("Details", new { id = report.Id })" class="btn btn-sm btn-light border-end" title="Inspect">
+                                                <i class="fas fa-microscope text-primary"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-light border-end" onclick="generateReport(@report.Id)" title="Execute">
+                                                <i class="fas fa-play text-success"></i>
+                                            </button>
+                                            @if (report.Status == "Ready")
+                                            {
+                                                <div class="btn-group">
+                                                    <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" title="Export">
+                                                        <i class="fas fa-file-export text-info"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu border-0 shadow-lg rounded-4 p-2">
+                                                        <li><a class="dropdown-item rounded-3 fw-bold py-2" href="@Url.Action("Download", new { id = report.Id, format = "pdf" })">
+                                                            <i class="fas fa-file-pdf me-2 text-danger opacity-75"></i>PDF Matrix
+                                                        </a></li>
+                                                        <li><a class="dropdown-item rounded-3 fw-bold py-2" href="@Url.Action("Download", new { id = report.Id, format = "excel" })">
+                                                            <i class="fas fa-file-excel me-2 text-success opacity-75"></i>Excel Sheet
+                                                        </a></li>
+                                                        <li><a class="dropdown-item rounded-3 fw-bold py-2" href="@Url.Action("Download", new { id = report.Id, format = "csv" })">
+                                                            <i class="fas fa-file-csv me-2 text-primary opacity-75"></i>CSV Plaintext
+                                                        </a></li>
+                                                    </ul>
+                                                </div>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
                             }
-                            <a href="@Url.Action("Index", new { page = currentPage + 1, pageSize })" 
-                               class="btn btn-muted-subtle btn-sm px-4 rounded-3 text-[10px] fw-black text-uppercase tracking-widest hover-text-primary-red d-flex align-items-center gap-2">
-                                @Localizer["Next"]
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-                            </a>
-                        </div>
-                    </div>
-                }
+                        </tbody>
+                    </table>
+                </div>
             }
             else
             {
-                <div class="text-center py-12 opacity-40">
-                    <div class="w-20 h-20 bg-muted bg-opacity-40 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 border border-border border-opacity-20 shadow-inner">
-                        <i data-lucide="file-text" class="w-10 h-10 text-muted-foreground"></i>
+                <div class="text-center py-5">
+                    <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                        <i class="fas fa-chart-bar fs-1 text-muted opacity-25"></i>
                     </div>
-                    <h3 class="h5 fw-black text-foreground mb-2 mt-4 tracking-tight">@Localizer["NoReportsFound"]</h3>
-                    <p class="text-sm fw-bold text-muted-foreground max-w-sm mx-auto mb-5">@Localizer["NoReportsFoundDesc"]</p>
-                    <a href="@Url.Action("Generate", "Reports")" 
-                       class="btn btn-primary-red px-5 py-3 rounded-4 text-[10px] fw-black text-uppercase tracking-widest shadow-xl shadow-primary-red shadow-opacity-30">
-                        <i data-lucide="plus" class="w-4 h-4 me-2"></i>
-                        @Localizer["GenerateYourFirstReport"]
+                    <h5 class="fw-black text-uppercase tracking-tight text-muted">Zero Archive Entries</h5>
+                    <p class="text-muted small fw-bold opacity-50 mb-4 px-5">Initiate a new report sequence to populate the audit subsystem with tactical data insights.</p>
+                    <a href="@Url.Action("Create")" class="btn btn-primary-red px-5 rounded-4 fw-bold shadow-sm text-decoration-none">
+                        <i class="fas fa-plus me-2"></i>Initiate First Sequence
                     </a>
                 </div>
             }
-            </div>
         </div>
+    </div>
 
-        <!-- Footer Strip -->
-        <div class="card-footer border-0 bg-transparent p-4 p-md-5 pt-0 mt-n4">
-            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4">
-                <div class="d-flex align-items-center gap-4">
-                    <button class="btn btn-muted-subtle px-3 py-2 rounded-3 text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground hover-text-primary-red d-flex align-items-center gap-2">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                        @Localizer["RefreshReports"]
-                    </button>
-                    <button class="btn btn-muted-subtle px-3 py-2 rounded-3 text-[9px] fw-black text-uppercase tracking-widest text-muted-foreground hover-text-info d-flex align-items-center gap-2">
-                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
-                        @Localizer["FilterReports"]
-                    </button>
+    <!-- Modals -->
+    <div class="modal fade" id="scheduledReportsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header bg-dark text-white border-0 py-3">
+                    <h5 class="modal-title fw-black text-uppercase tracking-tight"><i class="fas fa-clock me-2 text-primary-red"></i>Active Schedule Stack</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-
-                <div class="d-flex gap-2">
-                    <button class="btn btn-muted-subtle p-2 rounded-3 text-muted-foreground hover-text-primary-red transition-all" style="width: 36px; height: 36px;">
-                        <i data-lucide="download" class="w-4 h-4"></i>
-                    </button>
-                    <button class="btn btn-muted-subtle p-2 rounded-3 text-muted-foreground hover-text-primary-red transition-all" style="width: 36px; height: 36px;">
-                        <i data-lucide="settings" class="w-4 h-4"></i>
-                    </button>
+                <div class="modal-body p-4" id="scheduledReportsContent">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary-red" role="status"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- System Metadata -->
-    <div class="card card-premium shadow-lg border-border border-opacity-30 overflow-hidden">
-        <div class="card-body p-4 bg-muted-subtle bg-opacity-20">
-            <div class="row g-4 text-center text-md-start">
-                <div class="col-12 col-md-3 border-md-end border-border border-opacity-20 px-4">
-                    <span class="text-[10px] fw-black text-muted-foreground opacity-40 uppercase tracking-widest mb-1 d-block">@Localizer["SystemID"]</span>
-                    <code class="text-xs fw-black text-primary-red">REPORTS-@DateTime.Now.ToString("yyyyMMdd")</code>
+    <div class="modal fade" id="reportTemplatesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header bg-dark text-white border-0 py-3">
+                    <h5 class="modal-title fw-black text-uppercase tracking-tight"><i class="fas fa-file-invoice me-2 text-primary-red"></i>Template Blueprint Catalog</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="col-12 col-md-3 border-md-end border-border border-opacity-20 px-4">
-                    <span class="text-[10px] fw-black text-muted-foreground opacity-40 uppercase tracking-widest mb-1 d-block">@Localizer["DataFormat"]</span>
-                    <span class="text-xs fw-black text-foreground">JSON/CSV</span>
-                </div>
-                <div class="col-12 col-md-3 border-md-end border-border border-opacity-20 px-4">
-                    <span class="text-[10px] fw-black text-muted-foreground opacity-40 uppercase tracking-widest mb-1 d-block">@Localizer["Generator"]</span>
-                    <span class="text-xs fw-black text-foreground uppercase">DASHBOARD-ANALYTICS</span>
-                </div>
-                <div class="col-12 col-md-3 px-4 text-md-end">
-                    <span class="text-[10px] fw-black text-muted-foreground opacity-40 uppercase tracking-widest mb-1 d-block">@Localizer["Status"]</span>
-                    <span class="d-flex align-items-center justify-content-center justify-content-md-end gap-2 text-xs fw-black text-success uppercase">
-                        <span class="w-1.5 h-1.5 rounded-circle bg-success animate-pulse"></span>
-                        @Localizer["SystemOnline"]
-                    </span>
+                <div class="modal-body p-4" id="reportTemplatesContent">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary-red" role="status"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -264,12 +222,157 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/modules/dashboard/reports-controller.js" asp-append-version="true"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (CC.Modules.Dashboard.Reports) {
-                CC.Modules.Dashboard.Reports.init();
+        function filterReports(category) {
+            const rows = document.querySelectorAll('#reportsTable tbody tr');
+            rows.forEach(row => {
+                const rowCategory = row.getAttribute('data-category');
+                if (category === 'all' || rowCategory === category) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function searchReports() {
+            const searchTerm = document.getElementById('searchReports').value.toLowerCase();
+            const rows = document.querySelectorAll('#reportsTable tbody tr');
+            
+            rows.forEach(row => {
+                const reportName = row.querySelector('td .fw-black').textContent.toLowerCase();
+                const description = row.querySelector('td .xx-small').textContent.toLowerCase();
+                
+                if (reportName.includes(searchTerm) || description.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function generateReport(reportId) {
+            if (confirm('AUTHORIZE EXECUTION: Are you sure you want to generate this report?')) {
+                showLoading('Executing generation sequence...');
+                
+                fetch(`@Url.Action("Generate")/${reportId}`)
+                    .then(response => {
+                        hideLoading();
+                        if (response.ok) {
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        hideLoading();
+                    });
+            }
+        }
+
+        function loadScheduledReports() {
+            const modal = new bootstrap.Modal(document.getElementById('scheduledReportsModal'));
+            modal.show();
+            
+            fetch('@Url.Action("GetScheduledReports")')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        const content = `<div class="vstack gap-3">${result.data.map(report => `
+                            <div class="p-3 rounded-4 bg-light border border-light shadow-sm">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h6 class="fw-black text-uppercase tracking-tight mb-1">${report.name}</h6>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary fw-black text-uppercase tracking-widest xx-small">SCHEDULED</span>
+                                </div>
+                                <p class="text-muted small fw-bold opacity-75 mb-2">${report.description}</p>
+                                <div class="text-muted xx-small fw-black text-uppercase tracking-widest">NEXT EXECUTION: ${new Date(report.nextRun).toLocaleString()}</div>
+                            </div>
+                        `).join('')}</div>`;
+                        
+                        document.getElementById('scheduledReportsContent').innerHTML = content || '<div class="text-center py-5 text-muted fw-bold">No active scheduled sequences.</div>';
+                    }
+                });
+        }
+
+        function loadReportTemplates() {
+            const modal = new bootstrap.Modal(document.getElementById('reportTemplatesModal'));
+            modal.show();
+            
+            fetch('@Url.Action("GetReportTemplates")')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        const content = `<div class="row g-3">${result.data.map(template => `
+                            <div class="col-md-6">
+                                <div class="p-4 rounded-4 bg-light border border-light h-100 transition-all hover-translate-y cursor-pointer">
+                                    <span class="badge bg-secondary bg-opacity-10 text-secondary fw-black text-uppercase tracking-widest xx-small mb-2">${template.category}</span>
+                                    <h6 class="fw-black text-uppercase tracking-tight mb-2">${template.name}</h6>
+                                    <p class="text-muted xx-small fw-bold opacity-75 mb-0">${template.description}</p>
+                                </div>
+                            </div>
+                        `).join('')}</div>`;
+                        
+                        document.getElementById('reportTemplatesContent').innerHTML = content || '<div class="text-center py-5 text-muted fw-bold">No registered templates found.</div>';
+                    }
+                });
+        }
+
+        function refreshReports() {
+            location.reload();
+        }
+
+        function showLoading(msg = 'Processing system request...') {
+            $('body').append(`
+                <div id="loading-overlay" class="position-fixed w-100 h-100 d-flex flex-column align-items-center justify-content-center" style="top:0;left:0;background:rgba(0,0,0,0.85);z-index:9999;backdrop-filter:blur(8px);">
+                    <div class="spinner-border text-primary-red mb-4" style="width: 3.5rem; height: 3.5rem; border-width: 0.35rem;" role="status"></div>
+                <div class="text-white fw-black text-uppercase tracking-widest small animate-pulse">${msg}</div>
+                </div>
+            `);
+        }
+
+        function hideLoading() {
+            $('#loading-overlay').remove();
+        }
+
+        document.getElementById('searchReports').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchReports();
             }
         });
     </script>
 }
+
+@functions {
+    private string GetReportIcon(string category)
+    {
+        return category.ToLower() switch
+        {
+            "user" => "users",
+            "content" => "newspaper",
+            "analytics" => "chart-line",
+            "system" => "server",
+            _ => "file-contract"
+        };
+    }
+
+    private string GetCategoryColor(string category)
+    {
+        return category.ToLower() switch
+        {
+            "user" => "primary",
+            "content" => "success",
+            "analytics" => "info",
+            "system" => "warning",
+            _ => "secondary"
+        };
+    }
+}
+
+<style>
+    .hover-translate-x:hover { transform: translateX(5px); }
+    .hover-translate-y:hover { transform: translateY(-5px); }
+    .transition-all { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .xx-small { font-size: 0.6rem; }
+    .hover-bg-light:hover { background-color: rgba(0,0,0,0.02) !important; }
+    .cursor-pointer { cursor: pointer; }
+    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+</style>

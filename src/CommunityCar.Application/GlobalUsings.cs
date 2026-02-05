@@ -6,6 +6,4 @@ global using System.Threading.Tasks;
 global using CommunityCar.Domain.Entities.Account;
 global using CommunityCar.Domain.Entities;
 global using CommunityCar.Application.Common.Models;
-global using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Caching;
-global using CommunityCar.Application.Common.Interfaces.Services.Dashboard.BackgroundJobs;
 global using Microsoft.Extensions.Logging;

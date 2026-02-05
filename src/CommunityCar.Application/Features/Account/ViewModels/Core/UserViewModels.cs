@@ -1,6 +1,6 @@
 namespace CommunityCar.Application.Features.Account.ViewModels.Core;
 
-public class UserDashboardVM
+public class UserOverviewVM
 {
     public Guid UserId { get; set; }
     public string UserName { get; set; } = string.Empty;

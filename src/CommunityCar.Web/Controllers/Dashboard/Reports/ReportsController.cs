@@ -1,76 +1,72 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Reports;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Features.Dashboard.Reports.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Web.Controllers.Dashboard.Reports;
 
-[Route("dashboard/reports")]
+[Route("{culture=en-US}/dashboard/reports")]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class ReportsController : Controller
 {
     private readonly IReportsService _reportsService;
-    private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<ReportsController> _logger;
 
     public ReportsController(
         IReportsService reportsService,
-        ICurrentUserService currentUserService,
         ILogger<ReportsController> logger)
     {
         _reportsService = reportsService;
-        _currentUserService = currentUserService;
         _logger = logger;
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index(int page = 1, int pageSize = 20)
+    public async Task<IActionResult> Index()
     {
         try
         {
-            var reports = await _reportsService.GetReportsAsync(page, pageSize);
-            ViewBag.CurrentPage = page;
-            ViewBag.PageSize = pageSize;
-            return View("~/Views/Dashboard/Reports/Index.cshtml", reports);
+            var reports = await _reportsService.GetReportsAsync();
+            return View(reports);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading reports");
             TempData["ErrorMessage"] = "Failed to load reports. Please try again.";
-            return View("~/Views/Dashboard/Reports/Index.cshtml");
+            return View(new List<SystemReportVM>());
         }
     }
 
-    [HttpGet("generate")]
-    public IActionResult Generate()
+    [HttpGet("create")]
+    public IActionResult Create()
     {
-        return View("~/Views/Dashboard/Reports/Generate.cshtml");
+        return View(new CreateReportVM());
     }
 
-    [HttpPost("generate")]
+    [HttpPost("create")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Generate(ReportGenerationVM request)
+    public async Task<IActionResult> Create(CreateReportVM model)
     {
         if (!ModelState.IsValid)
         {
-            return View("~/Views/Dashboard/Reports/Generate.cshtml", request);
+            return View(model);
         }
 
         try
         {
-            var reportId = await _reportsService.GenerateReportAsync(request);
-            TempData["SuccessMessage"] = "Report generation started successfully! You will be notified when it's ready.";
+            var reportId = await _reportsService.CreateReportAsync(model);
+            TempData["SuccessMessage"] = "Report created successfully.";
             return RedirectToAction(nameof(Details), new { id = reportId });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error generating report");
-            ModelState.AddModelError("", "Failed to generate report. Please try again.");
-            return View("~/Views/Dashboard/Reports/Generate.cshtml", request);
+            _logger.LogError(ex, "Error creating report");
+            ModelState.AddModelError("", "Failed to create report. Please try again.");
+            return View(model);
         }
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Details(Guid id)
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> Details(int id)
     {
         try
         {
@@ -80,42 +76,52 @@ public class ReportsController : Controller
                 return NotFound();
             }
 
-            return View("~/Views/Dashboard/Reports/Details.cshtml", report);
+            return View(report);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading report details for ID: {ReportId}", id);
-            TempData["ErrorMessage"] = "Failed to load report details.";
-            return RedirectToAction(nameof(Index));
+            return NotFound();
         }
     }
 
-    [HttpGet("{id}/download")]
-    public async Task<IActionResult> Download(Guid id)
+    [HttpGet("generate/{id:int}")]
+    public async Task<IActionResult> Generate(int id)
     {
         try
         {
-            var report = await _reportsService.GetReportByIdAsync(id);
-            if (report == null)
+            var result = await _reportsService.GenerateReportAsync(id);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Report generated successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to generate report.";
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error generating report: {ReportId}", id);
+            TempData["ErrorMessage"] = "Failed to generate report. Please try again.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+    }
+
+    [HttpGet("download/{id:int}")]
+    public async Task<IActionResult> Download(int id, string format = "pdf")
+    {
+        try
+        {
+            var fileData = await _reportsService.ExportReportAsync(id, format);
+            if (fileData == null || fileData.Length == 0)
             {
                 return NotFound();
             }
 
-            if (report.Status != "Completed")
-            {
-                TempData["ErrorMessage"] = "Report is not ready for download yet.";
-                return RedirectToAction(nameof(Details), new { id });
-            }
-
-            var fileBytes = await _reportsService.DownloadReportAsync(id);
-            if (fileBytes == null)
-            {
-                TempData["ErrorMessage"] = "Report file not found.";
-                return RedirectToAction(nameof(Details), new { id });
-            }
-
-            var fileName = $"{report.Title}_{DateTime.UtcNow:yyyyMMdd}.{report.Format?.ToLower()}";
-            var contentType = report.Format?.ToLower() switch
+            var contentType = format.ToLower() switch
             {
                 "pdf" => "application/pdf",
                 "excel" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -123,56 +129,43 @@ public class ReportsController : Controller
                 _ => "application/octet-stream"
             };
 
-            return File(fileBytes, contentType, fileName);
+            var fileName = $"report_{id}_{DateTime.UtcNow:yyyyMMdd}.{format}";
+            return File(fileData, contentType, fileName);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error downloading report: {ReportId}", id);
-            TempData["ErrorMessage"] = "Failed to download report.";
-            return RedirectToAction(nameof(Details), new { id });
+            return NotFound();
         }
     }
 
-    [HttpPost("{id}/delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpGet("templates")]
+    public async Task<IActionResult> GetReportTemplates()
     {
         try
         {
-            var success = await _reportsService.DeleteReportAsync(id);
-            if (success)
-            {
-                TempData["SuccessMessage"] = "Report deleted successfully!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Failed to delete report.";
-            }
-
-            return RedirectToAction(nameof(Index));
+            var templates = await _reportsService.GetReportTemplatesAsync();
+            return Json(new { success = true, data = templates });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error deleting report: {ReportId}", id);
-            TempData["ErrorMessage"] = "Failed to delete report.";
-            return RedirectToAction(nameof(Index));
+            _logger.LogError(ex, "Error loading report templates");
+            return Json(new { success = false, message = "Failed to load report templates" });
         }
     }
 
-    [HttpGet("list-data")]
-    public async Task<IActionResult> GetReports(int page = 1, int pageSize = 20)
+    [HttpGet("scheduled")]
+    public async Task<IActionResult> GetScheduledReports()
     {
         try
         {
-            var reports = await _reportsService.GetReportsAsync(page, pageSize);
-            return Json(new { success = true, data = reports, page, pageSize });
+            var scheduled = await _reportsService.GetScheduledReportsAsync();
+            return Json(new { success = true, data = scheduled });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading reports API");
-            return Json(new { success = false, message = "Failed to load reports" });
+            _logger.LogError(ex, "Error loading scheduled reports");
+            return Json(new { success = false, message = "Failed to load scheduled reports" });
         }
     }
 }
-
-

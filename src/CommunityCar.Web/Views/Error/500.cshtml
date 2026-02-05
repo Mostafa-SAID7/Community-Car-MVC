@@ -7,83 +7,83 @@
 }
 
 <!-- Responsive 500 Error Page - Mobile First Design -->
-<div class="w-full min-h-[calc(100vh-12rem)] flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12">
+<div class="w-100 d-flex flex-column align-items-center justify-content-center p-3 p-sm-4 p-md-5" style="min-height: calc(100vh - 12rem);">
     
     <!-- Main 500 Content -->
-    <div class="w-full max-w-4xl mx-auto space-y-8 sm:space-y-10 md:space-y-12 animate-in fade-in duration-1000">
+    <div class="w-100 mx-auto vstack gap-4 gap-sm-5 animate-in fade-in" style="max-width: 56rem; animation-duration: 1s;">
         
         <!-- 500 Visual Section -->
-        <div class="text-center space-y-6 sm:space-y-8">
-            <div class="relative inline-flex items-center justify-center group">
+        <div class="text-center vstack gap-4 gap-sm-5">
+            <div class="position-relative d-inline-flex align-items-center justify-content-center">
                 <!-- Destructive Anomaly Glow (Responsive) -->
-                <div class="absolute -inset-6 sm:-inset-8 md:-inset-10 bg-destructive/10 rounded-full blur-2xl sm:blur-3xl animate-pulse"></div>
-                <div class="absolute -inset-10 sm:-inset-12 md:-inset-20 bg-destructive/5 rounded-full blur-2xl sm:blur-3xl animate-pulse delay-150"></div>
+                <div class="position-absolute bg-danger bg-opacity-10 rounded-circle animate-pulse" style="inset: -1.5rem; filter: blur(3rem);"></div>
+                <div class="position-absolute bg-danger bg-opacity-5 rounded-circle animate-pulse" style="inset: -2.5rem; filter: blur(4rem); animation-delay: 150ms;"></div>
                 
                 <!-- Error Icon Container (Responsive) -->
-                <div class="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl md:rounded-[3rem] bg-card border border-destructive/20 flex items-center justify-center text-destructive shadow-xl sm:shadow-2xl rotate-2 sm:rotate-3 group-hover:rotate-0 transition-transform duration-700">
-                    <i data-lucide="flame" class="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 animate-bounce"></i>
-                    <i data-lucide="alert-triangle" class="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 absolute -top-2 -right-2 sm:-top-3 sm:-right-3 md:-top-4 md:-right-4 text-destructive shadow-glow-destructive"></i>
+                <div class="position-relative rounded-4 bg-white border border-danger border-opacity-20 d-flex align-items-center justify-content-center text-danger shadow-lg transition-transform" style="width: clamp(6rem, 20vw, 10rem); height: clamp(6rem, 20vw, 10rem); transform: rotate(3deg);">
+                    <i data-lucide="flame" class="animate-bounce" style="width: clamp(2rem, 8vw, 5rem); height: clamp(2rem, 8vw, 5rem);"></i>
+                    <i data-lucide="alert-triangle" class="position-absolute text-danger shadow-glow-destructive" style="width: clamp(1rem, 4vw, 2.5rem); height: clamp(1rem, 4vw, 2.5rem); top: -0.75rem; right: -0.75rem;"></i>
                 </div>
             </div>
             
             <!-- Status Badge and Title (Responsive) -->
-            <div class="space-y-3 sm:space-y-4 px-4 sm:px-6">
-                <div class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-destructive/10 border border-destructive/20 rounded-full text-destructive text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest">
-                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-destructive animate-ping"></span>
+            <div class="vstack gap-3 gap-sm-4 px-3 px-sm-4">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-2 bg-danger bg-opacity-10 border border-danger border-opacity-20 rounded-pill text-danger fw-black text-uppercase align-self-center" style="font-size: clamp(0.5rem, 1.5vw, 0.625rem); letter-spacing: 0.1em;">
+                    <span class="rounded-circle bg-danger animate-ping" style="width: 8px; height: 8px;"></span>
                     @Localizer["SystemError"]
                 </div>
-                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-foreground tracking-tighter leading-tight uppercase">
+                <h1 class="fw-black text-uppercase lh-sm" style="font-size: clamp(1.8rem, 6vw, 3.5rem); letter-spacing: -0.05em;">
                     @Localizer["ServerErrorHeading"]
                 </h1>
-                <p class="text-xs sm:text-sm font-medium text-muted-foreground max-w-xs sm:max-w-lg mx-auto uppercase tracking-wide sm:tracking-widest opacity-60 leading-relaxed">
+                <p class="small fw-medium text-muted text-uppercase opacity-75 mx-auto lh-base" style="max-width: clamp(20rem, 60vw, 32rem); letter-spacing: 0.1em;">
                     @Localizer["ServerErrorDescription"]
                 </p>
             </div>
         </div>
 
         <!-- Fault Isolation Panel (Responsive) -->
-        <div class="bg-black/95 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] border border-white/5 p-4 sm:p-6 md:p-8 lg:p-12 shadow-xl sm:shadow-2xl relative overflow-hidden group/console mx-4 sm:mx-0">
-            <div class="absolute inset-0 bg-gradient-to-br from-destructive/[0.03] to-transparent pointer-events-none"></div>
+        <div class="card bg-dark text-white rounded-4 border-white border-opacity-10 p-3 p-sm-4 p-md-5 shadow-lg position-relative overflow-hidden mx-3 mx-sm-0">
+            <div class="position-absolute top-0 start-0 w-100 h-100 bg-gradient-to-br from-danger opacity-5 pointer-events-none"></div>
             
             <!-- Console Header (Responsive) -->
-            <div class="flex items-center justify-between mb-6 sm:mb-8 md:mb-10 border-b border-white/10 pb-4 sm:pb-6">
-                <span class="text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-destructive animate-pulse">@Localizer["TacticalFailover"]</span>
-                <div class="flex gap-1.5 sm:gap-2.5">
-                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/10"></div>
-                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/10"></div>
-                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white/10"></div>
+            <div class="d-flex align-items-center justify-content-between mb-4 mb-sm-5 border-bottom border-white border-opacity-10 pb-3 pb-sm-4">
+                <span class="fw-black text-uppercase text-danger animate-pulse" style="font-size: clamp(0.5rem, 1.5vw, 0.625rem); letter-spacing: 0.1em;">@Localizer["TacticalFailover"]</span>
+                <div class="d-flex gap-2">
+                    <div class="rounded-circle bg-white bg-opacity-10" style="width: 10px; height: 10px;"></div>
+                    <div class="rounded-circle bg-white bg-opacity-10" style="width: 10px; height: 10px;"></div>
+                    <div class="rounded-circle bg-white bg-opacity-10" style="width: 10px; height: 10px;"></div>
                 </div>
             </div>
             
             <!-- Console Content (Responsive) -->
-            <div class="space-y-4 sm:space-y-6 md:space-y-8 font-mono">
-                <div class="space-y-2 sm:space-y-3">
-                    <span class="block text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-white/30">@Localizer["FaultVector"]</span>
-                    <code class="block text-xs sm:text-sm text-destructive font-black break-all">@Localizer["ExceptionMessage"]</code>
+            <div class="vstack gap-4 gap-sm-5 font-monospace">
+                <div class="vstack gap-2">
+                    <span class="text-uppercase text-white text-opacity-25 fw-black" style="font-size: clamp(0.5rem, 1.5vw, 0.625rem); letter-spacing: 0.1em;">@Localizer["FaultVector"]</span>
+                    <code class="d-block text-danger fw-black word-break-all" style="font-size: clamp(0.75rem, 2vw, 0.875rem);">@Localizer["ExceptionMessage"]</code>
                 </div>
-                <div class="space-y-2 sm:space-y-3">
-                    <span class="block text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-white/30">@Localizer["RecoveryProtocol"]</span>
-                    <code class="block text-xs sm:text-sm text-white/60 leading-relaxed">@Localizer["RecoveryMessage"]</code>
+                <div class="vstack gap-2">
+                    <span class="text-uppercase text-white text-opacity-25 fw-black" style="font-size: clamp(0.5rem, 1.5vw, 0.625rem); letter-spacing: 0.1em;">@Localizer["RecoveryProtocol"]</span>
+                    <code class="d-block text-white text-opacity-50 lh-lg" style="font-size: clamp(0.75rem, 2vw, 0.875rem);">@Localizer["RecoveryMessage"]</code>
                 </div>
             </div>
             
             <!-- Console Footer (Responsive) -->
-            <div class="mt-8 sm:mt-10 md:mt-12 pt-4 sm:pt-6 md:pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
-                <span class="text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] text-white/20 text-center sm:text-left">@Localizer["SystemArchive"]</span>
-                <button onclick="location.reload()" class="w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-white/5 hover:bg-white/10 text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wide sm:tracking-widest transition-all border border-white/10 min-h-[44px] touch-manipulation">
+            <div class="mt-4 mt-sm-5 pt-3 pt-sm-4 border-top border-white border-opacity-5 d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 gap-sm-4">
+                <span class="text-uppercase text-white text-opacity-20 fw-black text-center text-sm-start" style="font-size: clamp(0.5rem, 1.5vw, 0.625rem); letter-spacing: 0.2em;">@Localizer["SystemArchive"]</span>
+                <button onclick="location.reload()" class="btn btn-outline-light w-100 w-sm-auto px-4 px-sm-5 py-3 rounded-4 fw-black text-uppercase border-white border-opacity-10" style="font-size: clamp(0.5rem, 1.5vw, 0.625rem); letter-spacing: 0.1em; min-height: 44px;">
                     @Localizer["EmergencyRestart"]
                 </button>
             </div>
         </div>
 
         <!-- Action Links (Responsive) -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-2 sm:pt-4 px-4 sm:px-0">
-            <a asp-controller="Feed" asp-action="Index" class="text-[9px] sm:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 min-h-[44px] touch-manipulation">
-                <i data-lucide="home" class="w-3 h-3 sm:w-4 sm:h-4"></i> @Localizer["EscapeToHome"]
+        <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center gap-3 gap-sm-4 pt-2 pt-sm-4 px-3 px-sm-0">
+            <a asp-controller="Feed" asp-action="Index" class="text-decoration-none text-uppercase fw-black text-muted hover-text-dark d-flex align-items-center gap-2" style="font-size: clamp(0.5rem, 1.5vw, 0.625rem); letter-spacing: 0.1em; min-height: 44px;">
+                <i data-lucide="home" style="width: 1rem; height: 1rem;"></i> @Localizer["EscapeToHome"]
             </a>
-            <div class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-border hidden sm:block"></div>
-            <a href="/contact" class="text-[9px] sm:text-[10px] font-black uppercase tracking-wide sm:tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 min-h-[44px] touch-manipulation">
-                <i data-lucide="message-square" class="w-3 h-3 sm:w-4 sm:h-4"></i> @Localizer["NotifySupport"]
+            <div class="rounded-circle bg-border d-none d-sm-block" style="width: 6px; height: 6px;"></div>
+            <a href="/contact" class="text-decoration-none text-uppercase fw-black text-muted hover-text-dark d-flex align-items-center gap-2" style="font-size: clamp(0.5rem, 1.5vw, 0.625rem); letter-spacing: 0.1em; min-height: 44px;">
+                <i data-lucide="message-square" style="width: 1rem; height: 1rem;"></i> @Localizer["NotifySupport"]
             </a>
         </div>
     </div>
@@ -106,18 +106,41 @@
     .animate-in.fade-in {
         animation: fade-in 0.8s ease-out;
     }
+
+    @@keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @@keyframes bounce {
+        0%, 100% { transform: translateY(-10%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+        50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+    }
+
+    .animate-bounce {
+        animation: bounce 1s infinite;
+    }
+
+    @@keyframes ping {
+        75%, 100% { transform: scale(2); opacity: 0; }
+    }
+
+    .animate-ping {
+        animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
     
     /* Mobile-specific improvements */
     @@media (max-width: 640px) {
-        /* Better text scaling */
-        .tracking-widest {
-            letter-spacing: 0.1em;
+        .word-break-all {
+            word-break: break-all;
         }
         
-        /* Improve console readability */
-        code {
-            word-break: break-word;
-            hyphens: auto;
+        button, a {
+            touch-action: manipulation;
         }
     }
     
@@ -128,23 +151,14 @@
     
     /* Enhanced hover effects for desktop */
     @@media (min-width: 1024px) {
-        .group:hover .animate-bounce {
+        .card:hover .animate-bounce {
             animation-duration: 0.8s;
         }
     }
     
-    /* RTL Support */
-    [dir="rtl"] .border-l-2,
-    [dir="rtl"] .border-l-4 {
-        border-left: none;
-        border-right: 2px solid hsl(var(--primary));
-        padding-left: 0;
-        padding-right: 0.75rem;
-    }
-    
     /* Dark mode optimizations */
-    .dark .bg-black\/95 {
-        background-color: rgba(0, 0, 0, 0.98);
+    .dark .bg-dark {
+        background-color: rgba(0, 0, 0, 0.98) !important;
     }
     
     .dark .shadow-glow-destructive {

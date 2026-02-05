@@ -7,33 +7,34 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     ViewData["Title"] = "Sign In";
-    Layout = "_AuthLayout";
+    Layout = "_Auth Layout";
     ViewData["AuthSideCaption"] = "Browse thousands of activities with trusted automation agents.";
 }
 
 <!-- Logo Section -->
-<a href="/" class="auth-logo">
-    <i data-lucide="zap" class="w-6 h-6 text-warning"></i>
-    <span>Havenix.</span>
+<a href="/" class="d-flex align-items-center gap-3 text-decoration-none text-dark mb-5">
+    <i data-lucide="zap" class="text-warning" style="width: 24px; height: 24px;"></i>
+    <span class="h4 fw-black mb-0">Havenix.</span>
 </a>
 
-<h1 class="auth-title">Welcome Back</h1>
-<p class="auth-subtitle">Let's login to grab amazing deal</p>
+<h1 class="display-5 fw-black mb-2">Welcome Back</h1>
+<p class="text-muted fw-medium mb-4">Let's login to grab amazing deal</p>
 
 <!-- Social Login -->
-<div class="auth-social-row">
-    <a href="#" class="btn-auth-social" id="google-login">
-        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" />
+<div class="d-flex flex-column gap-3 mb-4">
+    <a href="#" class="btn btn-outline-secondary bg-white rounded-3 py-3 d-flex align-items-center justify-content-center gap-3 fw-semibold text-dark" id="google-login">
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" style="width: 20px; height: 20px;" />
         Continue with Google
     </a>
-    <a href="#" class="btn-auth-social" id="facebook-login">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" />
+    <a href="#" class="btn btn-outline-secondary bg-white rounded-3 py-3 d-flex align-items-center justify-content-center gap-3 fw-semibold text-dark" id="facebook-login">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook" style="width: 20px; height: 20px;" />
         Continue with Facebook
     </a>
 </div>
 
-<div class="auth-separator">
-    <span>Or</span>
+<div class="position-relative text-center my-4">
+    <hr class="border-top" />
+    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small fw-bold">Or</span>
 </div>
 
 <!-- Login Form -->
@@ -42,49 +43,49 @@
     
     @if (!ViewData.ModelState.IsValid)
     {
-        <div class="alert alert-danger border-0 mb-4 p-3" style="font-size: 0.85rem; border-radius: 0.75rem; background: #fef2f2; color: #991b1b;">
+        <div class="alert alert-danger border-0 mb-4 p-3 rounded-3" style="background: #fef2f2; color: #991b1b;">
             @Html.ValidationSummary(false)
         </div>
     }
 
     <!-- Email Field -->
-    <div class="auth-input-group">
-        <label class="auth-label" asp-for="LoginIdentifier">Email</label>
-        <div class="auth-input-wrapper">
-            <input asp-for="LoginIdentifier" class="auth-input" placeholder="Enter your email" required />
+    <div class="mb-4">
+        <label class="form-label text-uppercase fw-bold small text-muted" asp-for="LoginIdentifier">Email</label>
+        <div class="position-relative">
+            <input asp-for="LoginIdentifier" class="form-control rounded-3 py-3 bg-light border-0" placeholder="Enter your email" required />
         </div>
-        <span asp-validation-for="LoginIdentifier" class="text-danger xx-small mt-1 px-1"></span>
+        <span asp-validation-for="LoginIdentifier" class="text-danger xx-small mt-1 d-block"></span>
     </div>
 
     <!-- Password Field -->
-    <div class="auth-input-group">
-        <label class="auth-label" asp-for="Password">Password</label>
-        <div class="auth-input-wrapper">
-            <input asp-for="Password" id="password-input" type="password" class="auth-input" placeholder="Enter your password" required />
-            <button type="button" class="password-toggle" id="toggle-password">
-                <i data-lucide="eye" class="w-5 h-5"></i>
+    <div class="mb-4">
+        <label class="form-label text-uppercase fw-bold small text-muted" asp-for="Password">Password</label>
+        <div class="position-relative">
+            <input asp-for="Password" id="password-input" type="password" class="form-control rounded-3 py-3 bg-light border-0 pe-5" placeholder="Enter your password" required />
+            <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted" id="toggle-password" style="z-index: 10;">
+                <i data-lucide="eye" style="width: 20px; height: 20px;"></i>
             </button>
         </div>
-        <span asp-validation-for="Password" class="text-danger xx-small mt-1 px-1"></span>
+        <span asp-validation-for="Password" class="text-danger xx-small mt-1 d-block"></span>
     </div>
 
     <!-- Actions -->
-    <div class="auth-actions">
-        <div class="auth-checkbox-group">
-            <input type="checkbox" id="remember-me" class="rounded border-gray-300" />
-            <label for="remember-me" class="mb-0">Remember me</label>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="form-check">
+            <input type="checkbox" id="remember-me" class="form-check-input rounded" />
+            <label for="remember-me" class="form-check-label small fw-semibold">Remember me</label>
         </div>
-        <a asp-action="ForgotPassword" class="auth-link">Forgot Password?</a>
+        <a asp-action="ForgotPassword" class="text-dark text-decoration-underline small fw-bold">Forgot Password?</a>
     </div>
 
     <!-- Submit -->
-    <button type="submit" class="btn-auth-primary" id="login-button">
+    <button type="submit" class="btn btn-dark w-100 py-3 rounded-3 fw-bold" id="login-button">
         Login
     </button>
 </form>
 
-<div class="auth-footer mt-5">
-    Don't have an account? <a asp-action="Register" class="auth-footer-link">Sign Up</a>
+<div class="text-center mt-5 text-muted fw-medium">
+    Don't have an account? <a asp-action="Register" class="text-dark fw-bold text-decoration-none">Sign Up</a>
 </div>
 
 @section Scripts {

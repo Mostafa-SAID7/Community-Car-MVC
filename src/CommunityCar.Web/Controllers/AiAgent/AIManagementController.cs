@@ -5,7 +5,7 @@ using CommunityCar.Application.Common.Interfaces.Repositories.Chat;
 
 namespace CommunityCar.Web.Controllers.AiAgent;
 
-[Route("AiAgent")]
+[Route("ai-agent")]
 public class AIManagementController : Controller
 {
     private readonly IAIManagementService _aiManagementService;

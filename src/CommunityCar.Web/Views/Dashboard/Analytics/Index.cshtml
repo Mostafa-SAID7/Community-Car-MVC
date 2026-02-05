@@ -1,240 +1,195 @@
-@model CommunityCar.Application.Features.Dashboard.Analytics.ViewModels.UserAnalyticsVM
-@inject IViewLocalizer Localizer
+@model CommunityCar.Application.Features.Dashboard.Analytics.ViewModels.AnalyticsVM
 @{
-    ViewData["Title"] = Localizer["AnalyticsDashboard"];
+    ViewData["Title"] = "Analytics Dashboard";
+    ViewData["PageTitle"] = "Analytics";
+    ViewData["Description"] = "Comprehensive analytics and insights";
     Layout = "_DashboardLayout";
 }
 
-<div class="row g-4 animate-in">
-    <!-- Page Header -->
-    <div class="col-12 mb-2">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
-            <div>
-                <p class="xx-small text-uppercase tracking-widest text-muted opacity-60 fw-black mb-1">Performance</p>
-                <h1 class="h2 fw-black text-white mb-0">Platform Analytics</h1>
-            </div>
-            <div class="d-flex align-items-center gap-3">
-                <div class="dropdown">
-                    <button class="btn btn-ghost-glass px-3 py-2 xx-small fw-black text-white text-uppercase tracking-widest d-flex align-items-center gap-2 border border-white border-opacity-10 rounded-3 shadow-sm" data-bs-toggle="dropdown">
-                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-                        Last 30 Days
-                    </button>
-                </div>
-                <button type="button" onclick="exportAnalytics()" 
-                        class="btn btn-gradient-premium px-4 xx-small fw-black text-uppercase tracking-widest shadow-glow-primary border-0 rounded-3">
-                    <i data-lucide="download" class="w-3.5 h-3.5 me-2"></i>
-                    Export Data
-                </button>
-            </div>
+<div class="container-fluid py-4 animate-in fade-in">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 mt-2">
+        <div>
+            <h2 class="fw-black text-gradient mb-1"><i class="fas fa-chart-line me-2 small opacity-50"></i>Analytics Engine</h2>
+            <p class="text-muted small text-uppercase tracking-widest opacity-50 fw-black">Deep behavioral insights and performance metrics</p>
+        </div>
+        <div class="d-flex gap-2 bg-light p-1 rounded-4 shadow-sm">
+            <button type="button" class="btn btn-sm px-3 rounded-3 fw-bold transition-all" id="btn-7d" onclick="setDateRange('7d')">7D</button>
+            <button type="button" class="btn btn-sm px-3 rounded-3 fw-bold transition-all" id="btn-30d" onclick="setDateRange('30d')">30D</button>
+            <button type="button" class="btn btn-sm btn-primary-red px-3 rounded-3 fw-bold shadow-sm" id="btn-90d" onclick="setDateRange('90d')">90D</button>
         </div>
     </div>
 
-    <!-- Main KPIs -->
-    <div class="col-12">
-        <div class="row g-4">
-            <!-- New Users -->
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-premium-glass p-4 group">
-                    <div class="d-flex align-items-center justify-content-between mb-3 text-muted">
-                        <span class="xx-small fw-black text-uppercase tracking-widest opacity-60">@Localizer["NewUsers"]</span>
-                        <div class="w-10 h-10 rounded-circle bg-white bg-opacity-5 d-flex align-items-center justify-content-center border border-white border-opacity-5 group-hover:text-white transition-colors">
-                            <i data-lucide="user-plus" class="w-5 h-5"></i>
-                        </div>
-                    </div>
-                    <h3 class="h2 fw-black text-white mb-1 tabular-nums">@Model.NewUsers.ToString("N0")</h3>
-                    <div class="xx-small fw-bold text-success d-flex align-items-center gap-1">
-                        <i data-lucide="arrow-up" class="w-3 h-3"></i> +12.5% <span class="opacity-40 fw-medium text-muted">vs last period</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Active Users -->
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-premium-glass p-4 group">
-                    <div class="d-flex align-items-center justify-content-between mb-3 text-muted">
-                        <span class="xx-small fw-black text-uppercase tracking-widest opacity-60">@Localizer["ActiveUsers"]</span>
-                        <div class="w-10 h-10 rounded-circle bg-white bg-opacity-5 d-flex align-items-center justify-content-center border border-white border-opacity-5 group-hover:text-white transition-colors">
-                            <i data-lucide="users" class="w-5 h-5"></i>
-                        </div>
-                    </div>
-                    <h3 class="h2 fw-black text-white mb-1 tabular-nums">@Model.ActiveUsers.ToString("N0")</h3>
-                    <div class="xx-small fw-bold text-primary d-flex align-items-center gap-1">
-                        <i data-lucide="arrow-up" class="w-3 h-3"></i> +8.3% <span class="opacity-40 fw-medium text-muted">vs last period</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Retention -->
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-premium-glass p-4 group">
-                    <div class="d-flex align-items-center justify-content-between mb-3 text-muted">
-                        <span class="xx-small fw-black text-uppercase tracking-widest opacity-60">@Localizer["RetentionRate"]</span>
-                        <div class="w-10 h-10 rounded-circle bg-white bg-opacity-5 d-flex align-items-center justify-content-center border border-white border-opacity-5 group-hover:text-white transition-colors">
-                            <i data-lucide="activity" class="w-5 h-5"></i>
-                        </div>
-                    </div>
-                    <h3 class="h2 fw-black text-white mb-1 tabular-nums">@Model.RetentionRate.ToString("F1")%</h3>
-                    <div class="xx-small fw-bold text-info d-flex align-items-center gap-1">
-                        <i data-lucide="arrow-up" class="w-3 h-3"></i> +2.1% <span class="opacity-40 fw-medium text-muted">vs last period</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Session Time -->
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-premium-glass p-4 group">
-                    <div class="d-flex align-items-center justify-content-between mb-3 text-muted">
-                        <span class="xx-small fw-black text-uppercase tracking-widest opacity-60">@Localizer["AvgSession"]</span>
-                        <div class="w-10 h-10 rounded-circle bg-white bg-opacity-5 d-flex align-items-center justify-content-center border border-white border-opacity-5 group-hover:text-white transition-colors">
-                            <i data-lucide="clock" class="w-5 h-5"></i>
-                        </div>
-                    </div>
-                    <h3 class="h2 fw-black text-white mb-1 tabular-nums">@Model.AverageSessionDuration.ToString(@"mm\:ss")</h3>
-                    <div class="xx-small fw-bold text-danger d-flex align-items-center gap-1">
-                        <i data-lucide="arrow-down" class="w-3 h-3"></i> -1.2% <span class="opacity-40 fw-medium text-muted">vs last period</span>
-                    </div>
+    <!-- Analytics Navigation -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card card-premium border-0 overflow-hidden">
+                <div class="card-body p-2">
+                    <ul class="nav nav-pills nav-fill gap-2" id="analyticsTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active rounded-3 py-3 fw-black text-uppercase tracking-widest" style="font-size: 0.7rem;" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">
+                                <i class="fas fa-chart-pie me-2 opacity-50"></i>Overview
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-3 py-3 fw-black text-uppercase tracking-widest" style="font-size: 0.7rem;" id="users-tab" data-bs-toggle="pill" data-bs-target="#users" type="button" role="tab">
+                                <i class="fas fa-users me-2 opacity-50"></i>Users
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-3 py-3 fw-black text-uppercase tracking-widest" style="font-size: 0.7rem;" id="content-tab" data-bs-toggle="pill" data-bs-target="#content" type="button" role="tab">
+                                <i class="fas fa-file-alt me-2 opacity-50"></i>Content
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-3 py-3 fw-black text-uppercase tracking-widest" style="font-size: 0.7rem;" id="traffic-tab" data-bs-toggle="pill" data-bs-target="#traffic" type="button" role="tab">
+                                <i class="fas fa-network-wired me-2 opacity-50"></i>Traffic
+                            </button>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Growth & Distribution -->
-    <div class="col-12 col-xl-8">
-        <div class="card card-premium-glass p-0 overflow-hidden h-100">
-            <div class="card-header border-0 bg-transparent p-4 d-flex justify-content-between align-items-center">
-                <h6 class="xx-small fw-black text-uppercase tracking-widest text-white mb-0">Engagement Dynamics</h6>
-                <div class="d-flex gap-2">
-                    <span class="xx-small fw-black text-uppercase tracking-widest text-primary-red d-flex align-items-center gap-1">
-                        <span class="w-2 h-2 rounded-circle bg-primary-red"></span> Growth
-                    </span>
-                    <span class="xx-small fw-black text-uppercase tracking-widest text-muted d-flex align-items-center gap-1 ms-3">
-                        <span class="w-2 h-2 rounded-circle bg-white bg-opacity-20"></span> Active
-                    </span>
+    <!-- Tab Content -->
+    <div class="tab-content" id="analyticsTabContent">
+        <!-- Overview Tab -->
+        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <div class="card card-premium border-0 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                            <h5 class="fw-black text-uppercase tracking-tight mb-0">System-Wide Performance</h5>
+                            <i class="fas fa-expand-alt text-muted opacity-50 cursor-pointer"></i>
+                        </div>
+                        <div class="card-body p-4">
+                            <div style="height: 350px;">
+                                <canvas id="overviewChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="card-body p-4 pt-0">
-                <div style="height: 340px;">
-                    <canvas id="userGrowthChart" class="w-100 h-100"
-                            data-labels='@Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Label)))'
-                            data-datasets='[{"label": "@Localizer["NewUsers"]", "data": @Html.Raw(Json.Serialize(Model.UserGrowthData.Select(x => x.Value)))}, {"label": "@Localizer["ActiveUsers"]", "data": @Html.Raw(Json.Serialize(Model.ActivityData.Select(x => x.Value)))}]'></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+                <div class="col-md-4">
+                    <div class="card card-premium border-0 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4">
+                            <h5 class="fw-black text-uppercase tracking-tight mb-0">Key Infrastructure Metrics</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="vstack gap-3">
+                                <div class="p-3 rounded-4 bg-light border border-light transition-all hover-translate-x">
+                                    <div class="text-muted xx-small fw-black text-uppercase tracking-widest mb-1">Total System Engagement</div>
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <h3 class="fw-black mb-0">@(Model?.TotalViews?.ToString("N0") ?? "0")</h3>
+                                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-bold small"><i class="fas fa-caret-up me-1"></i>12%</span>
+                                    </div>
+                                    <div class="text-muted small opacity-50 fw-bold">Aggregate page views</div>
+                                </div>
 
-    <div class="col-12 col-xl-4">
-        <div class="card card-premium-glass p-0 overflow-hidden h-100">
-            <div class="card-header border-0 bg-transparent p-4">
-                <h6 class="xx-small fw-black text-uppercase tracking-widest text-white mb-0">Content Distribution</h6>
-            </div>
-            <div class="card-body p-4 pt-0">
-                <div style="height: 280px; position: relative;">
-                    <canvas id="activityChart" class="w-100 h-100"
-                            data-labels='["@Localizer["Posts"]", "@Localizer["Questions"]", "@Localizer["Answers"]", "@Localizer["Reviews"]", "@Localizer["Stories"]"]'
-                            data-values='[@Model.PostsCreated, @Model.QuestionsAsked, @Model.AnswersGiven, @Model.ReviewsWritten, @Model.StoriesShared]'></canvas>
-                    <div class="position-absolute top-50 start-50 translate-middle text-center" style="pointer-events: none;">
-                        <span class="xx-small fw-black text-uppercase text-muted opacity-40">Total</span>
-                        <h4 class="mb-0 fw-black text-white">@((Model.PostsCreated + Model.QuestionsAsked + Model.AnswersGiven + Model.ReviewsWritten + Model.StoriesShared).ToString("N0"))</h4>
-                    </div>
-                </div>
-                <div class="mt-4 d-flex flex-column gap-2">
-                    <div class="d-flex align-items-center justify-content-between xx-small fw-bold">
-                        <span class="text-muted opacity-60">Top Channel</span>
-                        <span class="text-white">Motor News (42%)</span>
-                    </div>
-                    <div class="progress bg-white bg-opacity-5" style="height: 4px;">
-                        <div class="progress-bar bg-gradient-premium shadow-sm" style="width: 42%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                                <div class="p-3 rounded-4 bg-light border border-light transition-all hover-translate-x">
+                                    <div class="text-muted xx-small fw-black text-uppercase tracking-widest mb-1">Unique Entity Reach</div>
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <h3 class="fw-black mb-0">@(Model?.UniqueVisitors?.ToString("N0") ?? "0")</h3>
+                                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-bold small"><i class="fas fa-caret-up me-1"></i>5%</span>
+                                    </div>
+                                    <div class="text-muted small opacity-50 fw-bold">Individual visitor count</div>
+                                </div>
 
-    <!-- Engagement Breakdown -->
-    <div class="col-12 col-lg-6">
-        <div class="card card-premium-glass p-0 h-100">
-            <div class="card-header border-0 bg-transparent p-4">
-                <h6 class="xx-small fw-black text-uppercase tracking-widest text-white mb-0">Engagement Depth</h6>
-            </div>
-            <div class="card-body p-4 pt-0 d-flex flex-column gap-4">
-                <div class="d-flex flex-column gap-2">
-                    <div class="d-flex justify-content-between align-items-end">
-                        <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["PostsCreated"]</span>
-                        <span class="small fw-black text-white tabular-nums">@Model.PostsCreated.ToString("N0")</span>
-                    </div>
-                    <div class="progress bg-white bg-opacity-5" style="height: 4px;">
-                        <div class="progress-bar bg-primary-red shadow-glow-primary" style="width: 85%"></div>
-                    </div>
-                </div>
-                
-                <div class="d-flex flex-column gap-2">
-                    <div class="d-flex justify-content-between align-items-end">
-                        <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["QuestionsAsked"]</span>
-                        <span class="small fw-black text-white tabular-nums">@Model.QuestionsAsked.ToString("N0")</span>
-                    </div>
-                    <div class="progress bg-white bg-opacity-5" style="height: 4px;">
-                        <div class="progress-bar bg-success shadow-glow-primary" style="width: 70%"></div>
-                    </div>
-                </div>
-                
-                <div class="d-flex flex-column gap-2">
-                    <div class="d-flex justify-content-between align-items-end">
-                        <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["AnswersGiven"]</span>
-                        <span class="small fw-black text-white tabular-nums">@Model.AnswersGiven.ToString("N0")</span>
-                    </div>
-                    <div class="progress bg-white bg-opacity-5" style="height: 4px;">
-                        <div class="progress-bar bg-warning shadow-glow-primary" style="width: 60%"></div>
-                    </div>
-                </div>
-                
-                <div class="d-flex flex-column gap-2">
-                    <div class="d-flex justify-content-between align-items-end">
-                        <span class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-60">@Localizer["ReviewsWritten"]</span>
-                        <span class="small fw-black text-white tabular-nums">@Model.ReviewsWritten.ToString("N0")</span>
-                    </div>
-                    <div class="progress bg-white bg-opacity-5" style="height: 4px;">
-                        <div class="progress-bar bg-info shadow-glow-primary" style="width: 45%"></div>
+                                <div class="p-3 rounded-4 bg-light border border-light transition-all hover-translate-x">
+                                    <div class="text-muted xx-small fw-black text-uppercase tracking-widest mb-1">Retention Friction</div>
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <h3 class="fw-black mb-0">@(Model?.BounceRate?.ToString("F1") ?? "0")%</h3>
+                                        <span class="badge rounded-pill bg-danger bg-opacity-10 text-danger fw-bold small"><i class="fas fa-caret-up me-1"></i>2%</span>
+                                    </div>
+                                    <div class="text-muted small opacity-50 fw-bold">Single-page session rate</div>
+                                </div>
+
+                                <div class="p-4 rounded-4 bg-dark text-white shadow-lg mt-2 overflow-hidden position-relative">
+                                    <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                                        <i class="fas fa-hourglass-start fs-1"></i>
+                                    </div>
+                                    <div class="text-white text-opacity-50 xx-small fw-black text-uppercase tracking-widest mb-1">Avg. Temporal Depth</div>
+                                    <h3 class="fw-black mb-0 text-white">@(Model?.AverageSessionDuration?.ToString(@"mm\:ss") ?? "00:00")</h3>
+                                    <div class="text-white text-opacity-25 small fw-bold">Time per session segment</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Demographics -->
-    <div class="col-12 col-lg-6">
-        <div class="card card-premium-glass p-0 h-100">
-            <div class="card-header border-0 bg-transparent p-4">
-                <h6 class="xx-small fw-black text-uppercase tracking-widest text-white mb-0">Audience Architecture</h6>
+        <!-- Users Tab -->
+        <div class="tab-pane fade" id="users" role="tabpanel">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card card-premium border-0 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                            <h5 class="fw-black text-uppercase tracking-tight mb-0">Behavioral Matrix</h5>
+                            <a href="@Url.Action("Index", "UserAnalyticsBehavior")" class="btn btn-sm btn-ghost text-primary-red fw-bold tracking-widest text-uppercase" style="font-size: 0.6rem;">
+                                Deep Audit <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                        <div class="card-body p-4">
+                            <div style="height: 300px;">
+                                <canvas id="userBehaviorChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-premium border-0 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                            <h5 class="fw-black text-uppercase tracking-tight mb-0">User Stratification</h5>
+                            <a href="@Url.Action("Index", "UserAnalyticsSegments")" class="btn btn-sm btn-ghost text-primary-red fw-bold tracking-widest text-uppercase" style="font-size: 0.6rem;">
+                                Segment Analysis <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                        <div class="card-body p-4">
+                            <div style="height: 300px;">
+                                <canvas id="userSegmentsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body p-0">
-                <div class="d-flex flex-column">
-                    <div class="p-4 border-top border-white border-opacity-5 hover:bg-white hover:bg-opacity-5 transition-all d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-3">
-                            <i data-lucide="smartphone" class="w-4 h-4 text-muted opacity-40"></i>
-                            <span class="xx-small fw-black text-muted text-uppercase tracking-widest opacity-60">@Localizer["MostActiveDevice"]</span>
+        </div>
+
+        <!-- Content Tab -->
+        <div class="tab-pane fade" id="content" role="tabpanel">
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="card card-premium border-0">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                            <h5 class="fw-black text-uppercase tracking-tight mb-0">Entity Performance Feed</h5>
+                            <a href="@Url.Action("Index", "ContentAnalytics")" class="btn btn-sm btn-ghost text-primary-red fw-bold tracking-widest text-uppercase" style="font-size: 0.6rem;">
+                                Full Catalog <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
                         </div>
-                        <span class="small fw-black text-white">@Model.DeviceType</span>
+                        <div class="card-body p-4">
+                            <div id="contentAnalyticsContainer" class="py-5 text-center">
+                                <div class="spinner-border text-primary-red" role="status"></div>
+                                <p class="text-muted fw-bold text-uppercase tracking-widest small mt-3">Synthesizing entity data...</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-4 border-top border-white border-opacity-5 hover:bg-white hover:bg-opacity-5 transition-all d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-3">
-                            <i data-lucide="browser" class="w-4 h-4 text-muted opacity-40"></i>
-                            <span class="xx-small fw-black text-muted text-uppercase tracking-widest opacity-60">@Localizer["PrimaryBrowser"]</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Traffic Tab -->
+        <div class="tab-pane fade" id="traffic" role="tabpanel">
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="card card-premium border-0">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4">
+                            <h5 class="fw-black text-uppercase tracking-tight mb-0">Network Traffic Vector</h5>
                         </div>
-                        <span class="small fw-black text-white">@Model.BrowserType</span>
-                    </div>
-                    <div class="p-4 border-top border-white border-opacity-5 hover:bg-white hover:bg-opacity-5 transition-all d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-3">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-muted opacity-40"></i>
-                            <span class="xx-small fw-black text-muted text-uppercase tracking-widest opacity-60">@Localizer["TopLocation"]</span>
+                        <div class="card-body p-4">
+                            <div style="height: 400px;">
+                                <canvas id="trafficChart"></canvas>
+                            </div>
                         </div>
-                        <span class="small fw-black text-white">@Model.Location</span>
-                    </div>
-                    <div class="p-4 border-top border-white border-opacity-5 hover:bg-white hover:bg-opacity-5 transition-all d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-3">
-                            <i data-lucide="eye" class="w-4 h-4 text-muted opacity-40"></i>
-                            <span class="xx-small fw-black text-muted text-uppercase tracking-widest opacity-60">@Localizer["TotalPageViews"]</span>
-                        </div>
-                        <span class="small fw-black text-primary-red tabular-nums">@Model.PageViews.ToString("N0")</span>
                     </div>
                 </div>
             </div>
@@ -243,16 +198,62 @@
 </div>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="~/js/modules/dashboard/charts-controller.js" asp-append-version="true"></script>
+    <script src="~/js/dashboard/analytics.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (CC.Modules.Dashboard.Charts) {
-                CC.Modules.Dashboard.Charts.init();
-            }
-        });
-        function exportAnalytics() { 
-            CC.Utils.Notifier.info('@Localizer["ExportingAnalytics"]...');
+        let currentDateRange = '90d';
+
+        function setDateRange(range) {
+            currentDateRange = range;
+            
+            // Update UI
+            $('.btn-group .btn, .d-flex.gap-2.bg-light .btn').removeClass('btn-primary-red shadow-sm').addClass('bg-transparent');
+            $(`#btn-${range}`).removeClass('bg-transparent').addClass('btn-primary-red shadow-sm');
+            
+            loadAnalyticsData();
         }
+
+        function loadAnalyticsData() {
+            const endDate = new Date();
+            const startDate = new Date();
+            
+            switch(currentDateRange) {
+                case '7d':
+                    startDate.setDate(endDate.getDate() - 7);
+                    break;
+                case '30d':
+                    startDate.setDate(endDate.getDate() - 30);
+                    break;
+                case '90d':
+                    startDate.setDate(endDate.getDate() - 90);
+                    break;
+            }
+
+            $.get('@Url.Action("GetAnalyticsData")', {
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString()
+            }, function(data) {
+                if (data.success) {
+                    updateCharts(data.data);
+                }
+            });
+        }
+
+        function updateCharts(data) {
+            // Updated via dashboard/analytics.js
+        }
+
+        $(document).ready(function() {
+            loadAnalyticsData();
+        });
     </script>
 }
+
+<style>
+    .hover-translate-x:hover { transform: translateX(5px); }
+    .transition-all { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .cursor-pointer { cursor: pointer; }
+    .nav-pills .nav-link { color: var(--bs-gray-600); transition: all 0.2s ease; border: 1px solid transparent; }
+    .nav-pills .nav-link:hover { background: rgba(0,0,0,0.02); }
+    .nav-pills .nav-link.active { background: #000 !important; color: #fff !important; }
+    .xx-small { font-size: 0.6rem; }
+</style>

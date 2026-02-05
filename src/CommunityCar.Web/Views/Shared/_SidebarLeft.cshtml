@@ -1,0 +1,83 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<aside class="grid-sidebar-sticky hidden lg:block z-40">
+    <div class="overflow-y-auto custom-scrollbar h-full">
+        <div class="space-y-4 py-4">
+            <div class="px-3 py-2">
+                <h2 class="mb-2 px-4 text-lg font-semibold tracking-tight">
+                    @Localizer["Navigation"]
+                </h2>
+                <div class="space-y-1">
+                    <a href="@Url.Action("Index", "Feed")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <i data-lucide="home" class="mr-2 h-4 w-4"></i>
+                        @Localizer["Feed"]
+                    </a>
+                    <a href="@Url.Action("Index", "Community")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <i data-lucide="users" class="mr-2 h-4 w-4"></i>
+                        @Localizer["Community"]
+                    </a>
+                    <a href="@Url.Action("Index", "Events")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <i data-lucide="calendar" class="mr-2 h-4 w-4"></i>
+                        @Localizer["Events"]
+                    </a>
+                    <a href="@Url.Action("Index", "QA")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <i data-lucide="help-circle" class="mr-2 h-4 w-4"></i>
+                        @Localizer["QA"]
+                    </a>
+                    <a href="@Url.Action("Index", "Stories")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <i data-lucide="book-open" class="mr-2 h-4 w-4"></i>
+                        @Localizer["Stories"]
+                    </a>
+                    <a href="@Url.Action("Index", "Groups")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <i data-lucide="users-2" class="mr-2 h-4 w-4"></i>
+                        @Localizer["Groups"]
+                    </a>
+                </div>
+            </div>
+            
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div class="px-3 py-2">
+                    <h2 class="mb-2 px-4 text-lg font-semibold tracking-tight">
+                        @Localizer["MyAccount"]
+                    </h2>
+                    <div class="space-y-1">
+                        <a href="@Url.Action("Index", "Profile")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                            <i data-lucide="user" class="mr-2 h-4 w-4"></i>
+                            @Localizer["Profile"]
+                        </a>
+                        <a href="@Url.Action("Settings", "Profile")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                            <i data-lucide="settings" class="mr-2 h-4 w-4"></i>
+                            @Localizer["Settings"]
+                        </a>
+                        <a href="@Url.Action("Index", "Friends")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                            <i data-lucide="user-plus" class="mr-2 h-4 w-4"></i>
+                            @Localizer["Friends"]
+                        </a>
+                    </div>
+                </div>
+            }
+            
+            <div class="px-3 py-2">
+                <h2 class="mb-2 px-4 text-lg font-semibold tracking-tight">
+                    @Localizer["Discover"]
+                </h2>
+                <div class="space-y-1">
+                    <a href="@Url.Action("Index", "News")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <i data-lucide="newspaper" class="mr-2 h-4 w-4"></i>
+                        @Localizer["News"]
+                    </a>
+                    <a href="@Url.Action("Index", "Guides")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <i data-lucide="book" class="mr-2 h-4 w-4"></i>
+                        @Localizer["Guides"]
+                    </a>
+                    <a href="@Url.Action("Index", "Reviews")" class="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        <i data-lucide="star" class="mr-2 h-4 w-4"></i>
+                        @Localizer["Reviews"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>

@@ -5,6 +5,7 @@ using CommunityCar.Web.Extensions;
 using CommunityCar.Infrastructure.Hubs;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,21 @@ using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<CommunityCar.Infrastructure.Persistence.Seeding.DataSeeder>();
     await seeder.SeedAsync();
+    
+    // Configure background jobs if enabled
+    try
+    {
+        var backgroundJobSettings = builder.Configuration.GetSection("BackgroundJobs").Get<CommunityCar.Infrastructure.Configuration.BackgroundJobSettings>();
+        if (backgroundJobSettings?.EnableScheduledJobs == true)
+        {
+            CommunityCar.Infrastructure.Configuration.BackgroundJobConfiguration.ConfigureRecurringJobs(scope.ServiceProvider);
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogWarning(ex, "Failed to configure background jobs - continuing without them");
+    }
 }
 
 
@@ -64,6 +80,24 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Add Hangfire Dashboard if background jobs are enabled
+try
+{
+    var backgroundJobSettings = builder.Configuration.GetSection("BackgroundJobs").Get<CommunityCar.Infrastructure.Configuration.BackgroundJobSettings>();
+    if (backgroundJobSettings?.EnableScheduledJobs == true)
+    {
+        app.UseHangfireDashboard("/hangfire", new Hangfire.DashboardOptions
+        {
+            Authorization = new[] { new Hangfire.Dashboard.LocalRequestsOnlyAuthorizationFilter() }
+        });
+    }
+}
+catch (Exception ex)
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogWarning(ex, "Failed to configure Hangfire dashboard");
+}
 
 app.MapStaticAssets();
 

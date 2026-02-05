@@ -10,121 +10,29 @@
     ViewData["HideMainContentId"] = true;
 }
 
-<div class=" mx-auto space-y-8 animate-in fade-in duration-700">
-    <div class="space-y-8">
-        @if (false)
-        {
-            <!-- Single Column Layout - No Sidebar -->
-            <div class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Badges Card -->
-                    <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                        <div class="p-6 sm:p-8">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-4 flex items-center justify-between">
-                                <span><i data-lucide="award" class="w-4 h-4 inline mr-2 text-primary"></i> @Localizer["Badges"]</span>
-                                <span class="text-primary">@Model.BadgesCount</span>
-                            </h3>
-                            @if (Model.BadgesCount > 0)
-                            {
-                                <div class="flex flex-wrap gap-2">
-                                    @for(int i=0; i < Math.Min(5, Model.BadgesCount); i++)
-                                    {
-                                        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center" title="Badge @(i+1)">
-                                            <i data-lucide="award" class="w-6 h-6 text-primary"></i>
-                                        </div>
-                                    }
-                                </div>
-                                <div class="mt-4 p-4 bg-primary/5 border border-primary/10 rounded-lg">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded bg-primary/20 flex items-center justify-center">
-                                            <i data-lucide="shield-check" class="w-5 h-5 text-primary"></i>
-                                        </div>
-                                        <div>
-                                            <div class="text-xs font-medium text-primary/80 uppercase tracking-wide">Most Recent</div>
-                                            <div class="text-sm font-bold text-foreground">@Localizer["PioneerBadge"]</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <p class="text-sm text-muted-foreground">@Localizer["NoBadgesEarned"]</p>
-                            }
-                        </div>
-                    </div>
-
-                    <!-- Activity Summary -->
-                    <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                        <div class="p-6 sm:p-8">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-4 flex items-center justify-between">
-                                <span><i data-lucide="calendar-days" class="w-4 h-4 inline mr-2 text-primary"></i> @Localizer["ActivityHeatmap"]</span>
-                                <span class="text-xs font-medium text-muted-foreground">@Model.Stats.DaysActive days active</span>
-                            </h3>
-                            
-                            <div class="heatmap-container">
-                                <div class="heatmap-grid !grid-cols-[repeat(53,8px)]">
-                                    @for (int i = 0; i < 53 * 7; i++)
-                                    {
-                                        var level = (i % 7 == 0 && i % 4 == 0) ? "level-" + (new Random().Next(1, 5)) : "";
-                                        <div class="heatmap-cell @level"></div>
-                                    }
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4 flex items-center justify-between text-xs text-muted-foreground font-medium">
-                                <div class="flex items-center gap-1">
-                                    <span>Less</span>
-                                    <div class="w-2 h-2 rounded-sm bg-muted/40"></div>
-                                    <div class="w-2 h-2 rounded-sm bg-primary/60"></div>
-                                    <span>More</span>
-                                </div>
-                                <div>Max streak: 12</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab Navigation & Content -->
-                <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                    <partial name="_ProfileNavigation" />
-
-                    <div class="p-6 sm:p-8 min-h-[300px]">
-                        <div class="flex flex-col items-center justify-center text-center py-12">
-                            <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                                <i data-lucide="sparkles" class="w-8 h-8 text-primary"></i>
-                            </div>
-                            <h2 class="text-xl font-bold mb-2 text-foreground">@Localizer["WelcomeBack"], @Model.FullName!</h2>
-                            <p class="text-muted-foreground max-w-sm mx-auto text-sm">
-                                Navigate through the tabs to manage your profile exhibits and activities.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        else
-        {
-            <!-- Grid Layout with Sidebar -->
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <!-- Left Sidebar -->
-                <div class="lg:col-span-1">
-                    <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
-                </div>
-                
-                <!-- Main Content -->
-                <div class="lg:col-span-3 space-y-6">
-                    <!-- Cover Image Header with Integrated Profile Avatar -->
-                    @{
-                        var coverImageUrl = ViewBag.CoverImageUrl as string ?? "/images/default-cover.svg";
-                        var profilePictureUrl = ViewBag.ProfilePictureUrl as string ?? "/images/default-avatar.png";
-                    }
-                    <div class="relative h-64 rounded-2xl overflow-hidden shadow-lg mb-6">
-                        <img src="@(coverImageUrl)?v=@DateTime.Now.Ticks" alt="Cover" class="w-full h-full object-cover" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                        
-                        <!-- Profile Avatar integrated with cover -->
-                        <div class="absolute bottom-6 left-6 flex items-end gap-4">
-                            <!-- Large Profile Avatar -->
+<div class="container-fluid py-4 animate-in fade-in">
+    <!-- Grid Layout with Sidebar -->
+    <div class="row g-4">
+        <!-- Left Sidebar -->
+        <div class="col-12 col-lg-3">
+            <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="col-12 col-lg-9">
+            <div class="vstack gap-4">
+                <!-- Cover Image Header -->
+                @{
+                    var coverImageUrl = ViewBag.CoverImageUrl as string ?? "/images/default-cover.svg";
+                    var profilePictureUrl = ViewBag.ProfilePictureUrl as string ?? "/images/default-avatar.png";
+                }
+                <div class="card card-premium border-0 shadow-lg overflow-hidden rounded-4 position-relative" style="height: 300px;">
+                    <img src="@(coverImageUrl)?v=@DateTime.Now.Ticks" alt="Cover" class="w-100 h-100 object-fit-cover transition-all duration-700" id="profileCover" />
+                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-gradient-to-t from-black opacity-60"></div>
+                    
+                    <!-- Profile Info Overlay -->
+                    <div class="position-absolute bottom-0 start-0 w-100 p-4 p-md-5 d-flex align-items-end gap-4">
+                        <div class="d-none d-md-block">
                             @{
                                 ViewData["Size"] = "large";
                                 ViewData["Context"] = "cover";
@@ -132,124 +40,159 @@
                                 ViewData["ShowStatus"] = true;
                             }
                             <partial name="~/Views/Account/Profile/_ProfileAvatar.cshtml" />
-                            
-                            <!-- Profile Info -->
-                            <div class="text-white pb-2">
-                                <h1 class="text-3xl font-black mb-1 drop-shadow-lg">@ViewBag.FullName</h1>
-                                <p class="text-white/90 font-medium text-lg drop-shadow-md">@ViewBag.Bio</p>
-                                <div class="flex items-center gap-4 mt-2">
-                                    <div class="flex items-center gap-1 text-white/80">
-                                        <i data-lucide="map-pin" class="w-4 h-4"></i>
-                                        <span class="text-sm font-medium">@ViewBag.City, @ViewBag.Country</span>
-                                    </div>
-                                    <div class="flex items-center gap-1 text-white/80">
-                                        <i data-lucide="award" class="w-4 h-4"></i>
-                                        <span class="text-sm font-medium">@ViewBag.TotalPoints pts</span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         
-                        <!-- Inner Profile Sidebar positioned over cover -->
-                        <div class="absolute top-6 right-6 w-80 hidden xl:block">
-                            <partial name="~/Views/Account/Profile/_InnerProfileSidebar.cshtml" />
+                        <div class="flex-grow-1 text-white pb-2">
+                            <h1 class="display-5 fw-black mb-1 text-gradient-white">@ViewBag.FullName</h1>
+                            <p class="small fw-bold opacity-75 mb-3 d-flex align-items-center gap-3">
+                                <span><i class="fas fa-map-marker-alt me-1"></i> @ViewBag.City, @ViewBag.Country</span>
+                                <span class="vr bg-white opacity-25"></span>
+                                <span><i class="fas fa-award me-1"></i> @ViewBag.TotalPoints pts</span>
+                            </p>
+                            <p class="small fw-medium opacity-90 mb-0 max-w-lg">@ViewBag.Bio</p>
+                        </div>
+
+                        <!-- Inner Profile Sidebar (Overlay Desktop) -->
+                        <div class="position-absolute top-4 end-4 d-none d-xl-block" style="width: 320px;">
+                            <div class="backdrop-blur bg-white bg-opacity-10 border border-white border-opacity-10 rounded-4 p-1 shadow-2xl">
+                                <partial name="~/Views/Account/Profile/_InnerProfileSidebar.cshtml" />
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Badges Card -->
-                        <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                            <div class="p-6 sm:p-8">
-                                <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-4 flex items-center justify-between">
-                                    <span><i data-lucide="award" class="w-4 h-4 inline mr-2 text-primary"></i> @Localizer["Badges"]</span>
-                                    <span class="text-primary">@Model.BadgesCount</span>
-                                </h3>
+                <!-- Tab Navigation -->
+                <partial name="~/Views/Account/Profile/_ProfileNavigation.cshtml" />
+
+                <!-- Overview Stats & Activity Matrix -->
+                <div class="row g-4">
+                    <!-- Badges Summary -->
+                    <div class="col-12 col-md-5">
+                        <div class="card card-premium border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-body p-4 p-md-5">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h3 class="xx-small fw-black text-dark text-uppercase tracking-widest mb-0 d-flex align-items-center gap-2">
+                                        <i class="fas fa-award text-primary-red"></i>
+                                        @Localizer["RecentBadges"]
+                                    </h3>
+                                    <span class="badge rounded-pill bg-light text-dark xx-small fw-black px-3 py-2">@Model.BadgesCount</span>
+                                </div>
+
                                 @if (Model.BadgesCount > 0)
                                 {
-                                    <div class="flex flex-wrap gap-2">
-                                        @for(int i=0; i < Math.Min(5, Model.BadgesCount); i++)
+                                    <div class="d-flex flex-wrap gap-3 mb-4">
+                                        @for(int i=0; i < Math.Min(4, Model.BadgesCount); i++)
                                         {
-                                            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center" title="Badge @(i+1)">
-                                                <i data-lucide="award" class="w-6 h-6 text-primary"></i>
+                                            <div class="bg-light bg-opacity-50 border border-light rounded-4 d-flex align-items-center justify-content-center hover-translate-y transition-all shadow-sm-hover" 
+                                                 style="width: 60px; height: 60px;" title="Badge @(i+1)">
+                                                <i class="fas fa-award text-primary-red opacity-50 fs-4"></i>
                                             </div>
                                         }
                                     </div>
-                                    <div class="mt-4 p-4 bg-primary/5 border border-primary/10 rounded-lg">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded bg-primary/20 flex items-center justify-center">
-                                                <i data-lucide="shield-check" class="w-5 h-5 text-primary"></i>
-                                            </div>
-                                            <div>
-                                                <div class="text-xs font-medium text-primary/80 uppercase tracking-wide">Most Recent</div>
-                                                <div class="text-sm font-bold text-foreground">@Localizer["PioneerBadge"]</div>
-                                            </div>
+                                    <div class="p-3 bg-light bg-opacity-50 border border-light rounded-4 d-flex align-items-center gap-3">
+                                        <div class="bg-primary-red bg-opacity-10 rounded-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                                            <i class="fas fa-shield-alt text-primary-red animate-pulse-subtle"></i>
+                                        </div>
+                                        <div>
+                                            <div class="xx-small fw-black text-primary-red text-uppercase tracking-widest mb-0">Latest Achievement</div>
+                                            <div class="small fw-black text-dark">@Localizer["PioneerBadge"]</div>
                                         </div>
                                     </div>
                                 }
                                 else
                                 {
-                                    <p class="text-sm text-muted-foreground">@Localizer["NoBadgesEarned"]</p>
+                                    <div class="text-center py-4 opacity-50">
+                                        <i class="fas fa-award display-4 mb-3 d-block"></i>
+                                        <p class="small fw-black text-uppercase">@Localizer["NoBadgesEarned"]</p>
+                                    </div>
                                 }
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Activity Summary -->
-                        <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                            <div class="p-6 sm:p-8">
-                                <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-4 flex items-center justify-between">
-                                    <span><i data-lucide="calendar-days" class="w-4 h-4 inline mr-2 text-primary"></i> @Localizer["ActivityHeatmap"]</span>
-                                    <span class="text-xs font-medium text-muted-foreground">@Model.Stats.DaysActive days active</span>
-                                </h3>
+                    <!-- Activity Heatmap -->
+                    <div class="col-12 col-md-7">
+                        <div class="card card-premium border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-body p-4 p-md-5">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h3 class="xx-small fw-black text-dark text-uppercase tracking-widest mb-0 d-flex align-items-center gap-2">
+                                        <i class="fas fa-calendar-alt text-primary-red"></i>
+                                        @Localizer["ActivityHeatmap"]
+                                    </h3>
+                                    <span class="xx-small fw-bold text-muted">@Model.Stats.DaysActive @Localizer["DaysActive"]</span>
+                                </div>
                                 
-                                <div class="heatmap-container">
-                                    <div class="heatmap-grid !grid-cols-[repeat(53,8px)]">
-                                        @for (int i = 0; i < 53 * 7; i++)
+                                <div class="heatmap-container mb-4 overflow-auto">
+                                    <div class="heatmap-grid d-flex gap-1" style="min-width: 600px;">
+                                        @for (int w = 0; w < 52; w++)
                                         {
-                                            var level = (i % 7 == 0 && i % 4 == 0) ? "level-" + (new Random().Next(1, 5)) : "";
-                                            <div class="heatmap-cell @level"></div>
+                                            <div class="d-flex flex-column gap-1">
+                                                @for (int d = 0; d < 7; d++)
+                                                {
+                                                    var intensity = (new Random().Next(0, 5));
+                                                    var colorClass = intensity switch {
+                                                        0 => "bg-light opacity-50",
+                                                        1 => "bg-primary-red opacity-10",
+                                                        2 => "bg-primary-red opacity-30",
+                                                        3 => "bg-primary-red opacity-60",
+                                                        _ => "bg-primary-red opacity-100"
+                                                    };
+                                                    <div class="heatmap-cell @colorClass rounded-1 shadow-sm" style="width: 10px; height: 10px; flex-shrink: 0;" title="Activity Level @intensity"></div>
+                                                }
+                                            </div>
                                         }
                                     </div>
                                 </div>
                                 
-                                <div class="mt-4 flex items-center justify-between text-xs text-muted-foreground font-medium">
-                                    <div class="flex items-center gap-1">
-                                        <span>Less</span>
-                                        <div class="w-2 h-2 rounded-sm bg-muted/40"></div>
-                                        <div class="w-2 h-2 rounded-sm bg-primary/60"></div>
-                                        <span>More</span>
+                                <div class="d-flex align-items-center justify-content-between small text-muted fw-bold border-top border-light pt-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="xx-small text-uppercase tracking-widest opacity-50">Less</span>
+                                        <div class="d-flex gap-1">
+                                            <div class="bg-light opacity-50 rounded-1" style="width: 8px; height: 8px;"></div>
+                                            <div class="bg-primary-red opacity-30 rounded-1" style="width: 8px; height: 8px;"></div>
+                                            <div class="bg-primary-red opacity-60 rounded-1" style="width: 8px; height: 8px;"></div>
+                                            <div class="bg-primary-red opacity-100 rounded-1" style="width: 8px; height: 8px;"></div>
+                                        </div>
+                                        <span class="xx-small text-uppercase tracking-widest opacity-50">More</span>
                                     </div>
-                                    <div>Max streak: 12</div>
+                                    <div class="xx-small text-uppercase tracking-widest">Max streak: 12</div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab Navigation & Content -->
-                    <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                        <partial name="~/Views/Account/Profile/_ProfileNavigation.cshtml" />
-
-                        <div class="p-6 sm:p-8 min-h-[300px]">
-                            <div class="flex flex-col items-center justify-center text-center py-12">
-                                <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                                    <i data-lucide="sparkles" class="w-8 h-8 text-primary"></i>
-                                </div>
-                                <h2 class="text-xl font-bold mb-2 text-foreground">@Localizer["WelcomeBack"], @Model.FullName!</h2>
-                                <p class="text-muted-foreground max-w-sm mx-auto text-sm">
-                                    Navigate through the tabs to manage your profile exhibits and activities.
-                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Main Content Placeholder / Feed -->
+                <div class="card card-premium border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="card-body p-5 text-center py-5">
+                        <div class="bg-light bg-opacity-50 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                            <i class="fas fa-sparkles text-primary-red display-6 opacity-20"></i>
+                        </div>
+                        <h2 class="h3 fw-black text-dark mb-2">@Localizer["WelcomeBack"], @Model.FullName!</h2>
+                        <p class="small text-muted fw-medium mx-auto" style="max-width: 400px;">
+                            @Localizer["ProfileWelcomeMessage"]
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <a href="#" class="btn btn-primary-red px-4 py-2 rounded-3 xx-small fw-black text-uppercase tracking-widest shadow-sm">
+                                <i class="fas fa-plus me-2"></i> @Localizer["NewPost"]
+                            </a>
+                            <a href="#" class="btn btn-outline-dark px-4 py-2 rounded-3 xx-small fw-black text-uppercase tracking-widest">
+                                <i class="fas fa-eye me-2"></i> @Localizer["PublicView"]
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        }
+        </div>
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-    </script>
-}
+<style>
+    .xx-small { font-size: 0.6rem; }
+    .bg-gradient-to-t { background: linear-gradient(to top, var(--tw-gradient-stops)); }
+    .text-gradient-white { background: linear-gradient(to bottom, #fff, #ccc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .heatmap-grid { scrollbar-width: thin; padding-bottom: 10px; }
+    .hover-translate-y:hover { transform: translateY(-3px); }
+    .shadow-sm-hover:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .max-pw-lg { max-width: 32rem; }
+</style>

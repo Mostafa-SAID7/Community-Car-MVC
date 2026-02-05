@@ -1,51 +1,46 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview;
 using CommunityCar.Application.Features.Dashboard.Overview.ViewModels;
 using CommunityCar.Application.Features.Shared.ViewModels;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Users.Statistics;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Users.Activity;
+using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Overview.Users.Security;
+using CommunityCar.Application.Common.Interfaces.Repositories;
+using CommunityCar.Application.Features.Dashboard.Overview.Users.Activity;
 
 namespace CommunityCar.Application.Services.Dashboard.Overview;
 
 public class OverviewService : IOverviewService
 {
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserOverviewStatisticsService _userStatisticsService;
+    private readonly IUserOverviewActivityService _userActivityService;
+    private readonly IUserOverviewSecurityService _userSecurityService;
+
+    public OverviewService(
+        IUnitOfWork unitOfWork,
+        IUserOverviewStatisticsService userStatisticsService,
+        IUserOverviewActivityService userActivityService,
+        IUserOverviewSecurityService userSecurityService)
+    {
+        _unitOfWork = unitOfWork;
+        _userStatisticsService = userStatisticsService;
+        _userActivityService = userActivityService;
+        _userSecurityService = userSecurityService;
+    }
+
     public async Task<OverviewVM> GetOverviewAsync(OverviewVM? request = null)
     {
-        var startDate = request?.StartDate ?? DateTime.UtcNow.AddDays(-30);
-        var endDate = request?.EndDate ?? DateTime.UtcNow;
+        var userStats = await _userStatisticsService.GetUserOverviewStatsAsync();
+        var activitySummary = await _userActivityService.GetActivitySummaryAsync();
+        var securityOverview = await _userSecurityService.GetSecurityOverviewAsync();
 
-        var overview = new OverviewVM
+        return new OverviewVM
         {
-            Stats = new StatsVM
-            {
-                TotalUsers = 1250,
-                TotalPosts = 4500,
-                TotalComments = 12500,
-                TotalQuestions = 850,
-                TotalAnswers = 1200,
-                TotalReviews = 450,
-                TotalStories = 320,
-                TotalNews = 150,
-                TotalInteractions = 25000,
-                ActiveUsersToday = 125,
-                EngagementRate = 4.5,
-                GrowthRate = 12.5,
-                LastUpdated = DateTime.UtcNow
-            },
-            RecentActivity = await GetRecentActivityAsync(10),
-            TopContent = new List<TopContentVM>
-            {
-                new() { Id = Guid.NewGuid(), Title = "Top 10 Car Care Tips", AuthorName = "John Doe", Views = 1500, Likes = 250, Comments = 45, CreatedAt = DateTime.UtcNow.AddDays(-5) },
-                new() { Id = Guid.NewGuid(), Title = "Best SUV for 2024", AuthorName = "Jane Smith", Views = 1200, Likes = 180, Comments = 35, CreatedAt = DateTime.UtcNow.AddDays(-3) }
-            },
-            ActiveUsers = new List<ActiveUserVM>
-            {
-                new() { Id = Guid.NewGuid(), UserName = "user1", Email = "user1@example.com", IsOnline = true, LastActivity = DateTime.UtcNow },
-                new() { Id = Guid.NewGuid(), UserName = "user2", Email = "user2@example.com", IsOnline = false, LastActivity = DateTime.UtcNow.AddMinutes(-15) }
-            },
-            UserGrowthChart = await GetUserGrowthChartAsync(startDate, endDate),
-            ContentChart = await GetContentChartAsync(startDate, endDate),
-            EngagementChart = await GetEngagementChartAsync(startDate, endDate)
+            TotalUsers = userStats.TotalUsers,
+            ActiveUsers = new List<ActiveUserVM>(),
+            NewUsersToday = userStats.NewUsersToday,
+            SecurityScore = securityOverview.SecurityScore
         };
-
-        return overview;
     }
 
     public async Task<OverviewVM> GetOverviewAsync()
@@ -53,114 +48,99 @@ public class OverviewService : IOverviewService
         return await GetOverviewAsync(null);
     }
 
-
-    public async Task<List<StatsVM>> GetQuickStatsAsync()
+    public async Task<List<CommunityCar.Application.Features.Shared.ViewModels.StatsVM>> GetQuickStatsAsync()
     {
-        return new List<StatsVM>
+        return new List<CommunityCar.Application.Features.Shared.ViewModels.StatsVM>
         {
-            new () { Title = "Total Users", Value = "1,250", Icon = "users", Color = "primary", ChangePercentage = 12.5, IsPositiveChange = true },
-            new () { Title = "Active Now", Value = "125", Icon = "activity", Color = "success", ChangePercentage = 5.2, IsPositiveChange = true },
-            new() { Title = "New Orders", Value = "45", Icon = "shopping-cart", Color = "warning", ChangePercentage = 2.1, IsPositiveChange = false },
-            new() { Title = "Reports", Value = "12", Icon = "flag", Color = "danger", ChangePercentage = 0, IsPositiveChange = true }
+            new() { Title = "Total Users", Value = "1,234", Icon = "users", Change = "+5.2%" },
+            new() { Title = "Active Today", Value = "456", Icon = "activity", Change = "+2.1%" },
+            new() { Title = "New Posts", Value = "89", Icon = "file-text", Change = "+12.3%" }
         };
-    }
-
-    public async Task<StatsVM> GetStatsAsync(DateTime? startDate, DateTime? endDate)
-    {
-        var overview = await GetOverviewAsync(new OverviewVM 
-        { 
-            StartDate = startDate ?? DateTime.UtcNow.AddDays(-30), 
-            EndDate = endDate ?? DateTime.UtcNow 
-        });
-        return overview.Stats;
-    }
-
-    public async Task<List<RecentActivityVM>> GetRecentActivityAsync(int count)
-    {
-        var activities = new List<RecentActivityVM>();
-        var types = new[] { "UserRegistered", "PostCreated", "CommentAdded", "ReportSubmitted" };
-        var random = new Random();
-
-        for (int i = 0; i < count; i++)
-        {
-            activities.Add(new RecentActivityVM
-            {
-                Type = types[random.Next(types.Length)],
-                Description = $"User {i + 1} performed an action",
-                UserName = $"user{i + 1}",
-                Timestamp = DateTime.UtcNow.AddMinutes(-random.Next(1, 1440)),
-                TimeAgo = $"{i + 1}h ago",
-                Icon = "info",
-                Color = "primary"
-            });
-        }
-
-        return await Task.FromResult(activities.OrderByDescending(a => a.Timestamp).ToList());
     }
 
     public async Task<List<ChartDataVM>> GetUserGrowthChartAsync(DateTime startDate, DateTime endDate)
     {
         var data = new List<ChartDataVM>();
-        var random = new Random();
         var current = startDate;
+        var random = new Random();
 
         while (current <= endDate)
         {
             data.Add(new ChartDataVM
             {
                 Label = current.ToString("MMM dd"),
-                Value = random.Next(10, 50),
+                Value = random.Next(10, 100),
                 Date = current
             });
-            current = current.AddDays(7);
+            current = current.AddDays(1);
         }
 
-        return await Task.FromResult(data);
+        return data;
     }
 
     public async Task<List<ChartDataVM>> GetContentChartAsync(DateTime startDate, DateTime endDate)
     {
         var data = new List<ChartDataVM>();
-        var random = new Random();
         var current = startDate;
+        var random = new Random();
 
         while (current <= endDate)
         {
             data.Add(new ChartDataVM
             {
                 Label = current.ToString("MMM dd"),
-                Value = random.Next(50, 200),
+                Value = random.Next(5, 50),
                 Date = current
             });
-            current = current.AddDays(7);
+            current = current.AddDays(1);
         }
 
-        return await Task.FromResult(data);
+        return data;
     }
 
     public async Task<List<ChartDataVM>> GetEngagementChartAsync(DateTime startDate, DateTime endDate)
     {
         var data = new List<ChartDataVM>();
-        var random = new Random();
         var current = startDate;
+        var random = new Random();
 
         while (current <= endDate)
         {
             data.Add(new ChartDataVM
             {
                 Label = current.ToString("MMM dd"),
-                Value = random.Next(100, 500),
+                Value = random.Next(20, 200),
                 Date = current
             });
-            current = current.AddDays(7);
+            current = current.AddDays(1);
         }
 
-        return await Task.FromResult(data);
+        return data;
     }
 
     public async Task RefreshOverviewDataAsync()
     {
         await Task.CompletedTask;
+    }
+
+    public async Task<CommunityCar.Application.Features.Shared.ViewModels.StatsVM> GetStatsAsync(DateTime? startDate, DateTime? endDate)
+    {
+        return new CommunityCar.Application.Features.Shared.ViewModels.StatsVM
+        {
+            Title = "Overview Stats",
+            Value = "Summary",
+            Icon = "bar-chart",
+            Change = "+3.5%"
+        };
+    }
+
+    public async Task<List<RecentActivityVM>> GetRecentActivityAsync(int count)
+    {
+        return new List<RecentActivityVM>
+        {
+            new() { Activity = "User registered", User = "John Doe", Timestamp = DateTime.UtcNow.AddMinutes(-5) },
+            new() { Activity = "Post created", User = "Jane Smith", Timestamp = DateTime.UtcNow.AddMinutes(-10) }
+        };
     }
 
     public async Task RefreshMetricsAsync()

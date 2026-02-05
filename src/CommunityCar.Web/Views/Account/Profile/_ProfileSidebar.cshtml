@@ -26,21 +26,23 @@
 }
 
 <!-- Profile Information Card -->
-<div class="card card-premium p-4 border-0 mb-4 overflow-hidden position-relative group">
+<div class="card card-premium p-4 border-0 mb-4 overflow-hidden position-relative group animate-in fade-in">
     <!-- Identity Header -->
     <div class="text-center mb-4">
-        <div class="user-avatar-container mx-auto mb-3" style="width: 120px; height: 120px;">
-            <img src="@profilePictureUrl" alt="@fullName" class="rounded-circle object-fit-cover w-100 h-100 shadow-lg border-4 border-white" />
-            <div class="position-absolute bottom-0 end-0 bg-primary-red text-white rounded-circle d-flex align-items-center justify-content-center fw-black shadow-sm" style="width: 32px; height: 32px; font-size: 0.65rem; border: 3px solid white;">
-                LVL @level
+        <div class="position-relative mx-auto mb-3" style="width: 120px; height: 120px;">
+            <div class="w-100 h-100 rounded-circle overflow-hidden border border-4 border-white shadow-lg">
+                <img src="@profilePictureUrl" alt="@fullName" class="w-100 h-100 object-fit-cover" />
+            </div>
+            <div class="position-absolute bottom-0 end-0 bg-primary-red text-white rounded-circle d-flex align-items-center justify-content-center fw-black shadow-sm" style="width: 38px; height: 38px; font-size: 0.65rem; border: 3px solid white; transform: translate(5px, 5px);">
+                @level
             </div>
         </div>
         
         <h4 class="fw-black mb-1 text-gradient">@fullName</h4>
-        <p class="small text-muted opacity-50 fw-bold text-uppercase tracking-widest mb-3">@@@userName</p>
+        <p class="xx-small text-muted opacity-50 fw-black text-uppercase tracking-widest mb-3">@@@userName</p>
 
         <!-- Rank Badge -->
-        <span class="badge bg-primary-red-subtle text-primary-red rounded-pill px-3 py-2 border border-primary-red small fw-black tracking-widest">
+        <span class="badge bg-primary-red bg-opacity-10 text-primary-red rounded-pill px-3 py-2 border border-primary-red border-opacity-20 xx-small fw-black tracking-widest">
             RANK #@rank.ToString("N0")
         </span>
     </div>
@@ -49,63 +51,63 @@
     <div class="d-grid gap-2 mb-4">
         @if (isOwnProfile)
         {
-            <a asp-controller="ProfileSettings" asp-action="Index" asp-route-culture="@currentCulture" class="btn btn-primary-red shadow-sm animate-heartbeat">
-                <i data-lucide="edit-3" class="me-2" style="width: 16px;"></i> @Localizer["EditProfile"]
+            <a asp-controller="ProfileSettings" asp-action="Index" asp-route-culture="@currentCulture" class="btn btn-primary-red shadow-sm py-2 rounded-3 animate-pulse-subtle">
+                <i class="fas fa-edit me-2 small"></i> @Localizer["EditProfile"]
             </a>
         }
     </div>
 
     <!-- Bio -->
-    <div class="bg-light p-3 rounded-4 border mb-4 text-center">
-        <p class="mb-0 small fw-medium text-muted font-italic">
+    <div class="bg-light p-3 rounded-4 border border-light mb-4 text-center">
+        <p class="mb-0 small fw-bold text-muted font-italic opacity-75">
             "@(string.IsNullOrEmpty(displayBio) ? Localizer["NoBio"].Value : displayBio)"
         </p>
     </div>
 
     <!-- Metadata -->
-    <div class="d-flex flex-column gap-2 mb-4 border-top pt-4">
+    <div class="d-flex flex-column gap-3 mb-4 border-top border-light pt-4">
         <div class="d-flex justify-content-between align-items-center">
-            <span class="small fw-black text-muted opacity-40 text-uppercase tracking-widest d-flex align-items-center gap-2">
-                <i data-lucide="map-pin" class="text-primary-red" style="width: 14px;"></i> @Localizer["Location"]
+            <span class="xx-small fw-black text-muted opacity-40 text-uppercase tracking-widest d-flex align-items-center gap-2">
+                <i class="fas fa-map-marker-alt text-primary-red opacity-50"></i> @Localizer["Location"]
             </span>
-            <span class="small fw-bold">@city</span>
+            <span class="small fw-black">@city</span>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-            <span class="small fw-black text-muted opacity-40 text-uppercase tracking-widest d-flex align-items-center gap-2">
-                <i data-lucide="calendar" class="text-primary-red" style="width: 14px;"></i> @Localizer["Joined"]
+            <span class="xx-small fw-black text-muted opacity-40 text-uppercase tracking-widest d-flex align-items-center gap-2">
+                <i class="fas fa-calendar-alt text-primary-red opacity-50"></i> @Localizer["Joined"]
             </span>
-            <span class="small fw-bold">@createdAt.ToString("MMM yyyy")</span>
+            <span class="small fw-black">@createdAt.ToString("MMM yyyy")</span>
         </div>
     </div>
 
     <!-- Stats Grid -->
-    <div class="border-top pt-4">
-        <nav class="small fw-black text-uppercase tracking-widest text-primary-red mb-3 d-flex align-items-center gap-2">
-            <i data-lucide="bar-chart-3" style="width: 16px;"></i> @Localizer["Statistics"]
-        </nav>
+    <div class="border-top border-light pt-4">
+        <div class="xx-small fw-black text-uppercase tracking-widest text-primary-red mb-3 d-flex align-items-center gap-2">
+            <i class="fas fa-chart-bar"></i> @Localizer["Statistics"]
+        </div>
         <div class="row g-2">
             <div class="col-6">
-                <div class="bg-light p-3 rounded-4 border h-100 group-hover-bg-primary-red-subtle transition-all">
-                    <span class="d-block small fw-black text-muted opacity-40 text-uppercase tracking-tighter mb-1">Points</span>
-                    <span class="h5 fw-black mb-0">@points.ToString("N0")</span>
+                <div class="bg-light p-3 rounded-4 border border-light h-100 transition-all hover-translate-y">
+                    <span class="d-block xx-small fw-black text-muted opacity-40 text-uppercase tracking-widest mb-1">Points</span>
+                    <span class="h5 fw-black mb-0 text-dark">@points.ToString("N0")</span>
                 </div>
             </div>
             <div class="col-6">
-                <div class="bg-light p-3 rounded-4 border h-100">
-                    <span class="d-block small fw-black text-muted opacity-40 text-uppercase tracking-tighter mb-1">Badges</span>
-                    <span class="h5 fw-black mb-0">@badges</span>
+                <div class="bg-light p-3 rounded-4 border border-light h-100 transition-all hover-translate-y">
+                    <span class="d-block xx-small fw-black text-muted opacity-40 text-uppercase tracking-widest mb-1">Badges</span>
+                    <span class="h5 fw-black mb-0 text-dark">@badges</span>
                 </div>
             </div>
             <div class="col-6">
-                <div class="bg-light p-3 rounded-4 border h-100">
-                    <span class="d-block small fw-black text-muted opacity-40 text-uppercase tracking-tighter mb-1">Posts</span>
-                    <span class="h5 fw-black mb-0">@posts</span>
+                <div class="bg-light p-3 rounded-4 border border-light h-100 transition-all hover-translate-y">
+                    <span class="d-block xx-small fw-black text-muted opacity-40 text-uppercase tracking-widest mb-1">Posts</span>
+                    <span class="h5 fw-black mb-0 text-dark">@posts</span>
                 </div>
             </div>
             <div class="col-6">
-                <div class="bg-light p-3 rounded-4 border h-100">
-                    <span class="d-block small fw-black text-muted opacity-40 text-uppercase tracking-tighter mb-1">Comments</span>
-                    <span class="h5 fw-black mb-0">@comments</span>
+                <div class="bg-light p-3 rounded-4 border border-light h-100 transition-all hover-translate-y">
+                    <span class="d-block xx-small fw-black text-muted opacity-40 text-uppercase tracking-widest mb-1">Comments</span>
+                    <span class="h5 fw-black mb-0 text-dark">@comments</span>
                 </div>
             </div>
         </div>
@@ -113,9 +115,9 @@
 </div>
 
 <!-- Profile Navigation using Standard Sidebar -->
-<div class="standard-sidebar profile-theme">
-    <nav class="flex-grow-1">
-        <ul class="nav nav-pills flex-column mb-auto gap-2">
+<div class="card card-premium bg-dark border-0 rounded-4 overflow-hidden shadow-lg mb-4">
+    <div class="card-body p-2">
+        <ul class="nav nav-pills flex-column gap-1">
             @{
                 Func<string, string, bool> isActive = (controller, action) => 
                 {
@@ -127,42 +129,52 @@
             
             <li class="nav-item">
                 <a asp-controller="Profile" asp-action="Index" asp-route-id="@userId" asp-route-culture="@currentCulture" 
-                   class="nav-link sidebar-nav-link @(isActive("Profile", "Index") ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
-                    <i data-lucide="user" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
-                    <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer["Profile"]</span>
+                   class="nav-link py-3 px-3 rounded-3 transition-all d-flex align-items-center gap-3 @(isActive("Profile", "Index") ? "bg-primary-red text-white shadow-sm" : "text-white opacity-60 hover-opacity-100")">
+                    <i class="fas fa-user small"></i>
+                    <span class="xx-small fw-black text-uppercase tracking-widest">@Localizer["Profile"]</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a asp-controller="Profile" asp-action="Gallery" asp-route-id="@userId" asp-route-culture="@currentCulture" 
-                   class="nav-link sidebar-nav-link @(isActive("Profile", "Gallery") ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
-                    <i data-lucide="image" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
-                    <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer["Gallery"]</span>
+                   class="nav-link py-3 px-3 rounded-3 transition-all d-flex align-items-center gap-3 @(isActive("Profile", "Gallery") ? "bg-primary-red text-white shadow-sm" : "text-white opacity-60 hover-opacity-100")">
+                    <i class="fas fa-images small"></i>
+                    <span class="xx-small fw-black text-uppercase tracking-widest">@Localizer["Gallery"]</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a asp-controller="Profile" asp-action="Interests" asp-route-id="@userId" asp-route-culture="@currentCulture" 
-                   class="nav-link sidebar-nav-link @(isActive("Profile", "Interests") ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
-                    <i data-lucide="heart" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
-                    <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer["Interests"]</span>
+                   class="nav-link py-3 px-3 rounded-3 transition-all d-flex align-items-center gap-3 @(isActive("Profile", "Interests") ? "bg-primary-red text-white shadow-sm" : "text-white opacity-60 hover-opacity-100")">
+                    <i class="fas fa-heart small"></i>
+                    <span class="xx-small fw-black text-uppercase tracking-widest">@Localizer["Interests"]</span>
                 </a>
             </li>
 
             @if (isOwnProfile)
             {
                 <li class="nav-item">
-                    <hr class="sidebar-divider my-3 opacity-10">
+                    <hr class="mx-3 my-2 border-white opacity-10">
                 </li>
                 
                 <li class="nav-item">
                     <a asp-controller="ProfileSettings" asp-action="Index" asp-route-culture="@currentCulture" 
-                       class="nav-link sidebar-nav-link @(isActive("ProfileSettings", "Index") ? "active" : "") d-flex align-items-center gap-3 py-3 px-3 rounded-4 transition-all">
-                        <i data-lucide="settings" class="sidebar-icon opacity-75" style="width: 20px; height: 20px;"></i>
-                        <span class="sidebar-text fw-bold small text-uppercase tracking-wider">@Localizer["Settings"]</span>
+                       class="nav-link py-3 px-3 rounded-3 transition-all d-flex align-items-center gap-3 @(isActive("ProfileSettings", "Index") ? "bg-primary-red text-white shadow-sm" : "text-white opacity-60 hover-opacity-100")">
+                        <i class="fas fa-cog small"></i>
+                        <span class="xx-small fw-black text-uppercase tracking-widest">@Localizer["Settings"]</span>
                     </a>
                 </li>
             }
         </ul>
-    </nav>
+    </div>
 </div>
+
+<style>
+    .xx-small { font-size: 0.6rem; }
+    .text-gradient { background: linear-gradient(135deg, var(--primary-red), #333); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .bg-primary-red-subtle { background-color: rgba(251, 44, 54, 0.1); }
+    .animate-pulse-subtle { animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @@keyframes pulse-subtle { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+    .hover-translate-y:hover { transform: translateY(-3px); border-color: var(--primary-red) !important; background-color: #fff !important; }
+    .opacity-hover-100:hover { opacity: 1 !important; }
+</style>

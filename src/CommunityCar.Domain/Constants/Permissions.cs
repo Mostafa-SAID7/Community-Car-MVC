@@ -85,7 +85,6 @@ public static class Permissions
     {
         public const string ViewLogs = "system.view_logs";
         public const string ViewMetrics = "system.view_metrics";
-        public const string ViewDashboard = "system.view_dashboard";
         public const string ManageSettings = "system.manage_settings";
         public const string ManageCache = "system.manage_cache";
         public const string ManageJobs = "system.manage_jobs";
@@ -194,7 +193,7 @@ public static class Permissions
             },
             ["System"] = new List<string>
             {
-                System.ViewLogs, System.ViewMetrics, System.ViewDashboard, System.ManageSettings,
+                System.ViewLogs, System.ViewMetrics, System.ManageSettings,
                 System.ManageCache, System.ManageJobs, System.DatabaseAccess, System.SystemConfiguration,
                 System.BackupRestore, System.MaintenanceMode
             },

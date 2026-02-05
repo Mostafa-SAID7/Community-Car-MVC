@@ -8,4 +8,7 @@ public class StatsBoxVM
     public string EntityType { get; set; } = string.Empty;
     public bool AlwaysShow { get; set; } = false;
     public bool IsActive { get; set; } = false;
+    
+    // Missing property that services expect
+    public string Label { get; set; } = string.Empty;
 }

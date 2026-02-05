@@ -442,3 +442,357 @@ html[lang=ar] h6 {
         transform: translateY(0);
     }
 }
+
+.animate-slide-up {
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   AUTHENTICATION PAGE STYLES
+   ========================================================================== */
+
+/* Auth Container with Bootstrap Grid */
+.auth-layout-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(var(--color-background));
+    padding: 2rem;
+}
+
+.auth-card-wrapper {
+    background: hsl(var(--color-card));
+    border-radius: var(--radius-3xl);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    max-width: 1100px;
+    width: 100%;
+}
+
+/* Auth Image Side with Clip Path */
+.auth-image-side {
+    position: relative;
+    padding: 2.5rem;
+    background: #000;
+    min-height: 700px;
+}
+
+.auth-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 2.5rem;
+    overflow: hidden;
+    clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 30%, 85% 30%, 85% 0%);
+}
+
+.auth-side-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+.auth-image-overlay {
+    position: absolute;
+    top: 4rem;
+    right: 4rem;
+    left: 4rem;
+    color: white;
+    text-align: right;
+}
+
+.auth-image-caption {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.4;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Auth Layout */
+@media (max-width: 992px) {
+    .auth-image-side {
+        display: none;
+    }
+
+    .auth-card-wrapper {
+        max-width: 500px;
+    }
+}
+
+/* ==========================================================================
+   DASHBOARD STYLES
+   ========================================================================== */
+
+/* Dashboard Header */
+.dashboard-header {
+    background: hsl(var(--color-card));
+    border-radius: var(--radius-3xl);
+    padding: 0.75rem 1.5rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid hsl(var(--color-border));
+    transition: all var(--transition-smooth);
+}
+
+[data-bs-theme="dark"] .dashboard-header {
+    border-color: hsla(var(--color-border), 0.5);
+}
+
+.dashboard-search-input {
+    background: hsl(var(--color-muted));
+    border: none;
+    border-radius: var(--radius-xl);
+    padding: 0.7rem 1rem 0.7rem 2.75rem;
+    font-size: 0.9rem;
+    width: 100%;
+    transition: all var(--transition-base);
+}
+
+.dashboard-search-input:focus {
+    background: hsl(var(--color-card));
+    box-shadow: 0 0 0 2px hsl(var(--color-primary) / 0.2);
+    outline: none;
+}
+
+.header-action-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid hsl(var(--color-border));
+    background: hsl(var(--color-card));
+    color: hsl(var(--color-foreground));
+    transition: all var(--transition-base);
+}
+
+.header-action-btn:hover {
+    background: hsl(var(--color-muted));
+    border-color: hsl(var(--color-primary));
+    color: hsl(var(--color-primary));
+}
+
+/* Dashboard Cards */
+.card-dashboard {
+    background: hsl(var(--color-card));
+    border-radius: var(--radius-3xl);
+    border: 1px solid hsl(var(--color-border));
+    box-shadow: var(--shadow-md);
+    padding: 2rem;
+    transition: all var(--transition-smooth);
+}
+
+.card-dashboard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Dashboard Stats */
+.dashboard-stat-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: hsl(var(--color-foreground));
+}
+
+.dashboard-stat-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: hsl(var(--color-muted-foreground));
+}
+
+/* Modern Badges */
+.badge-modern {
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.badge-outline {
+    border: 1px solid hsl(var(--color-border));
+    color: hsl(var(--color-muted-foreground));
+    background: transparent;
+}
+
+/* Modern Tables */
+.table-modern {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-modern thead th {
+    background: hsl(var(--color-muted));
+    padding: 1.25rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: hsl(var(--color-muted-foreground));
+    border-bottom: 1px solid hsl(var(--color-border));
+}
+
+.table-modern tbody td {
+    padding: 1.25rem 1.5rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid hsl(var(--color-border));
+    vertical-align: middle;
+}
+
+.table-modern tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-modern tbody tr:hover td {
+    background: hsl(var(--color-muted) / 0.5);
+}
+
+/* Utility Classes */
+.xx-small {
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tracking-tight {
+    letter-spacing: -0.025em;
+}
+
+.tracking-tighter {
+    letter-spacing: -0.05em;
+}
+
+.tracking-wide {
+    letter-spacing: 0.025em;
+}
+
+.tracking-wider {
+    letter-spacing: 0.05em;
+}
+
+.tracking-widest {
+    letter-spacing: 0.1em;
+}
+
+.fw-black {
+    font-weight: 900 !important;
+}
+
+.text-gradient {
+    background: var(--gradient-premium-red);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Button Variants */
+.btn-primary-red {
+    background: hsl(var(--color-primary));
+    color: white;
+    border: none;
+    font-weight: 700;
+    transition: all var(--transition-base);
+}
+
+.btn-primary-red:hover {
+    background: var(--red-600);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.btn-ghost {
+    background: transparent;
+    border: none;
+    color: hsl(var(--color-foreground));
+    transition: all var(--transition-base);
+}
+
+.btn-ghost:hover {
+    background: hsl(var(--color-muted));
+    color: hsl(var(--color-primary));
+}
+
+/* Hover Effects */
+.hover-scale {
+    transition: transform var(--transition-base);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.hover-bg-white:hover {
+    background-color: white !important;
+}
+
+.hover-opacity-100:hover {
+    opacity: 1 !important;
+}
+
+.hover-text-primary-red:hover {
+    color: hsl(var(--color-primary)) !important;
+}
+
+.hover-border-primary-red:hover {
+    border-color: hsl(var(--color-primary)) !important;
+}
+
+/* Cursor Utilities */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-zoom-in {
+    cursor: zoom-in;
+}
+
+/* Custom Scroll */
+.custom-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--color-border));
+    border-radius: var(--radius-full);
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--color-primary) / 0.3);
+}
+
+/* Background Utilities */
+.bg-primary-red-subtle {
+    background-color: hsl(var(--color-primary) / 0.1) !important;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2rem !important;
+    }
+
+    .dashboard-stat-value {
+        font-size: 1.75rem !important;
+    }
+}

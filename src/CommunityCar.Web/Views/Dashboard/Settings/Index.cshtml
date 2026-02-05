@@ -1,120 +1,327 @@
-@inject IViewLocalizer Localizer
-@model IEnumerable<CommunityCar.Application.Features.Dashboard.Settings.ViewModels.SettingsVM>
+@model CommunityCar.Application.Features.Dashboard.Settings.ViewModels.DashboardSettingsVM
 @{
-    ViewData["Title"] = Localizer["DashboardSettings"];
+    ViewData["Title"] = "Dashboard Settings";
     Layout = "_DashboardLayout";
-    ViewData["UseModernTheme"] = true;
-    var category = ViewBag.Category as string;
-    var categories = ViewBag.Categories as string[] ?? new string[0];
 }
 
-<div class="animate-slide-up">
-    <!-- Top Header Section -->
-    <div class="d-flex justify-content-between align-items-center mb-5">
+<div class="container-fluid py-4 animate-in fade-in">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 mt-2">
         <div>
-            <h1 class="page-title mb-2">@Localizer["DashboardSettings"]</h1>
-            <p class="text-muted fw-medium">@Localizer["ManageYourDashboardPreferences"]</p>
+            <h2 class="fw-black text-gradient mb-1"><i class="fas fa-sliders-h me-2 small opacity-50"></i>System Configuration</h2>
+            <p class="text-muted small text-uppercase tracking-widest opacity-50 fw-black">Fine-tune the operational environment and UI parameters</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-danger px-4 rounded-4 fw-bold shadow-sm" onclick="resetToDefaults()">
+                <i class="fas fa-undo me-2"></i>Reset Defaults
+            </button>
+            <button type="button" class="btn btn-primary-red px-4 rounded-4 fw-bold shadow-sm" onclick="saveAllSettings()">
+                <i class="fas fa-save me-2"></i>Apply Changes
+            </button>
         </div>
     </div>
 
-    <!-- Alert Section -->
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert card-modern border-success border-opacity-20 d-flex align-items-center gap-3 p-3 mb-4 animate-slide-up">
-            <div class="w-8 h-8 rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center text-success">
-                <i data-lucide="check" class="w-4 h-4"></i>
-            </div>
-            <span class="small fw-bold text-success">@TempData["SuccessMessage"]</span>
-        </div>
-    }
-
-    <div class="row g-4 modern-gap">
-        <!-- Sidebar Navigation -->
-        <div class="col-12 col-lg-3">
-            <div class="card-modern p-3">
-                <p class="modern-label mb-3 px-2">CATEGORIES</p>
-                <div class="d-flex flex-column gap-1">
-                    <a href="@Url.Action("Index", "Settings", new { area = "" })" 
-                       class="modern-settings-nav-item @(string.IsNullOrEmpty(category) ? "active" : "")">
-                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
-                        @Localizer["AllSettings"]
-                    </a>
-                    @foreach (var cat in categories)
-                    {
-                        <a href="@Url.Action("Category", "Settings", new { category = cat })" 
-                           class="modern-settings-nav-item @(category == cat ? "active" : "")">
-                            <i data-lucide="@(cat.ToLower() switch { "display" => "monitor", "notifications" => "bell", "performance" => "gauge", "security" => "shield", _ => "settings" })" class="w-4 h-4"></i>
-                            @cat
+    <div class="row g-4">
+        <!-- Settings Navigation -->
+        <div class="col-md-3">
+            <div class="card card-premium border-0 sticky-top" style="top: 20px; z-index: 10;">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h6 class="fw-black text-uppercase tracking-widest small opacity-50">Vector Categories</h6>
+                </div>
+                <div class="card-body p-2">
+                    <div class="list-group list-group-flush gap-1" id="settingsNav">
+                        <a href="#general" class="list-group-item list-group-item-action border-0 rounded-3 py-3 active fw-bold text-uppercase tracking-widest" data-category="general" style="font-size: 0.7rem;">
+                            <i class="fas fa-cog me-3 opacity-50"></i>General Logic
                         </a>
-                    }
+                        <a href="#appearance" class="list-group-item list-group-item-action border-0 rounded-3 py-3 fw-bold text-uppercase tracking-widest" data-category="appearance" style="font-size: 0.7rem;">
+                            <i class="fas fa-palette me-3 opacity-50"></i>Visual Layer
+                        </a>
+                        <a href="#security" class="list-group-item list-group-item-action border-0 rounded-3 py-3 fw-bold text-uppercase tracking-widest" data-category="security" style="font-size: 0.7rem;">
+                            <i class="fas fa-shield-alt me-3 opacity-50"></i>Security Protocols
+                        </a>
+                        <a href="#notifications" class="list-group-item list-group-item-action border-0 rounded-3 py-3 fw-bold text-uppercase tracking-widest" data-category="notifications" style="font-size: 0.7rem;">
+                            <i class="fas fa-bell me-3 opacity-50"></i>Signal Alerts
+                        </a>
+                        <a href="#performance" class="list-group-item list-group-item-action border-0 rounded-3 py-3 fw-bold text-uppercase tracking-widest" data-category="performance" style="font-size: 0.7rem;">
+                            <i class="fas fa-tachometer-alt me-3 opacity-50"></i>Optimal Velocity
+                        </a>
+                        <a href="#maintenance" class="list-group-item list-group-item-action border-0 rounded-3 py-3 fw-bold text-uppercase tracking-widest" data-category="maintenance" style="font-size: 0.7rem;">
+                            <i class="fas fa-tools me-3 opacity-50"></i>Core Maintenance
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Settings List -->
-        <div class="col-12 col-lg-9">
-            <div class="card-modern p-4">
-                <h5 class="fw-black mb-4 d-flex align-items-center gap-2">
-                    <i data-lucide="sliders" class="w-5 h-5 opacity-40"></i>
-                    @(category ?? @Localizer["AllSettings"].Value)
-                </h5>
-
-                <div class="d-flex flex-column">
-                    @if (Model != null && Model.Any())
-                    {
-                        @foreach (var setting in Model)
-                        {
-                            <div class="modern-settings-action-row">
-                                <div>
-                                    <div class="fw-bold text-dark">@setting.SettingKey</div>
-                                    <div class="xx-small text-muted text-uppercase tracking-widest mt-1">CAT: @setting.Category</div>
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <form asp-action="UpdateSetting" method="post" class="d-flex align-items-center gap-2">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="SettingKey" value="@setting.SettingKey" />
-                                        <input type="hidden" name="Category" value="@setting.Category" />
-                                        <input type="text" name="Value" value="@setting.Value" 
-                                               class="modern-input py-1 px-3" 
-                                               style="width: 140px; font-size: 0.85rem" />
-                                        <button type="submit" class="btn-modern-primary py-1 px-3" style="font-size: 0.75rem">
-                                            @Localizer["Update"]
-                                        </button>
-                                    </form>
-                                    <form asp-action="ResetSetting" asp-route-settingKey="@setting.SettingKey" method="post" class="reset-setting-form">
-                                        @Html.AntiForgeryToken()
-                                        <button type="button" class="btn-icon-modern" data-action="confirm-reset">
-                                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                                        </button>
-                                    </form>
-                                </div>
+        <!-- Settings Content -->
+        <div class="col-md-9">
+            <div class="card card-premium border-0 min-vh-75">
+                <div class="card-body p-4 p-md-5">
+                    <!-- General Settings -->
+                    <div id="general-settings" class="settings-section animate-in fade-in">
+                        <h4 class="fw-black text-uppercase tracking-tight mb-4 text-gradient"><i class="fas fa-cog me-2 opacity-50"></i>General Parameters</h4>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Identity Label</label>
+                                <input type="text" class="form-control form-control-premium" value="@Model.ApplicationName" id="applicationName">
                             </div>
-                        }
-
-                        <!-- Danger Zone -->
-                        <div class="mt-5 pt-4 border-top">
-                            <div class="card-modern border-danger border-opacity-10 bg-danger bg-opacity-5 p-4 d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="fw-black text-danger mb-1">RESET EVERYTHING</h6>
-                                    <p class="xx-small text-muted fw-bold mb-0">RETURN ALL CONFIGURATIONS TO DEFAULTS</p>
-                                </div>
-                                <form asp-action="ResetAllSettings" method="post" class="reset-all-settings-form">
-                                    @Html.AntiForgeryToken()
-                                    <button type="button" class="btn-modern-primary bg-danger border-danger py-2 px-4 shadow-none" data-action="confirm-reset-all">
-                                        <i data-lucide="trash-2" class="w-4 h-4 me-2"></i>
-                                        @Localizer["ResetAllNow"]
-                                    </button>
-                                </form>
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Linguistic Matrix</label>
+                                <select class="form-select form-select-premium" id="defaultLanguage">
+                                    <option value="en-US" selected>English / Global</option>
+                                    <option value="ar-EG">Arabic / Regional</option>
+                                    <option value="fr-FR">French / Regional</option>
+                                    <option value="es-ES">Spanish / Regional</option>
+                                </select>
                             </div>
                         </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-5 opacity-30">
-                            <i data-lucide="settings-2" class="w-12 h-12 mb-3"></i>
-                            <p class="fw-bold">No settings found in this category</p>
+
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Temporal Zone</label>
+                                <select class="form-select form-select-premium" id="timeZone">
+                                    <option value="UTC" selected>UTC (Universal Coordinate)</option>
+                                    <option value="America/New_York">Eastern Zone</option>
+                                    <option value="America/Chicago">Central Zone</option>
+                                    <option value="America/Denver">Mountain Zone</option>
+                                    <option value="America/Los_Angeles">Pacific Zone</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Date Architecture</label>
+                                <select class="form-select form-select-premium" id="dateFormat">
+                                    <option value="MM/dd/yyyy" selected>MM.DD.YYYY</option>
+                                    <option value="dd/MM/yyyy">DD.MM.YYYY</option>
+                                    <option value="yyyy-MM-dd">YYYY.MM.DD</option>
+                                </select>
+                            </div>
                         </div>
-                    }
+
+                        <div class="vstack gap-3 border-top pt-4">
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enableAnalytics">Deep Analytic Tracking</label>
+                                <input class="form-check-input" type="checkbox" id="enableAnalytics" checked>
+                            </div>
+
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enableDebugMode">Verbose Debug Logs</label>
+                                <input class="form-check-input" type="checkbox" id="enableDebugMode">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appearance Settings -->
+                    <div id="appearance-settings" class="settings-section d-none animate-in fade-in">
+                        <h4 class="fw-black text-uppercase tracking-tight mb-4 text-gradient"><i class="fas fa-palette me-2 opacity-50"></i>Visual Layer Protocol</h4>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Color Mode</label>
+                                <select class="form-select form-select-premium" id="theme">
+                                    <option value="light" selected>High Contrast / Light</option>
+                                    <option value="dark">Low Contrast / Dark</option>
+                                    <option value="auto">Adaptive / System</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Primary Accent Vector</label>
+                                <div class="d-flex gap-2">
+                                    <input type="color" class="form-control form-control-color border-0 p-1 bg-light rounded-3" value="#fb2c36" id="primaryColor">
+                                    <input type="text" class="form-control form-control-premium flex-grow-1" value="#FB2C36" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Sidebar UI Architecture</label>
+                                <select class="form-select form-select-premium" id="sidebarStyle">
+                                    <option value="fixed" selected>Static Sidebar</option>
+                                    <option value="collapsible">Minimizing Sidebar</option>
+                                    <option value="overlay">Floating Overlay</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Entity Buffer Density</label>
+                                <select class="form-select form-select-premium" id="itemsPerPage">
+                                    <option value="10">10 Units</option>
+                                    <option value="20" selected>20 Units</option>
+                                    <option value="50">50 Units</option>
+                                    <option value="100">100 Units</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="vstack gap-3 border-top pt-4">
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="showBreadcrumbs">Logical Breadcrumbs</label>
+                                <input class="form-check-input" type="checkbox" id="showBreadcrumbs" checked>
+                            </div>
+
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enableAnimations">Fluid Transitional FX</label>
+                                <input class="form-check-input" type="checkbox" id="enableAnimations" checked>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div id="security-settings" class="settings-section d-none animate-in fade-in">
+                        <h4 class="fw-black text-uppercase tracking-tight mb-4 text-gradient"><i class="fas fa-shield-alt me-2 opacity-50"></i>Firewall & Guard Protocols</h4>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Inactivity Session Timeout</label>
+                                <div class="input-group search-premium">
+                                    <input type="number" class="form-control bg-light border-0 fw-bold" value="30" min="5" max="480" id="sessionTimeout">
+                                    <span class="input-group-text bg-light border-0 fw-black xx-small opacity-50">MIN</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Max Authentication Cycles</label>
+                                <input type="number" class="form-control form-control-premium" value="5" min="3" max="10" id="maxLoginAttempts">
+                            </div>
+                        </div>
+
+                        <div class="vstack gap-3 border-top pt-4">
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="requireTwoFactor">Enforce MFA Matrix</label>
+                                <input class="form-check-input" type="checkbox" id="requireTwoFactor">
+                            </div>
+
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enableIpWhitelist">Origin IP Validation</label>
+                                <input class="form-check-input" type="checkbox" id="enableIpWhitelist">
+                            </div>
+
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="logSecurityEvents">Audit Sensitive Operations</label>
+                                <input class="form-check-input" type="checkbox" id="logSecurityEvents" checked>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Settings -->
+                    <div id="notifications-settings" class="settings-section d-none animate-in fade-in">
+                        <h4 class="fw-black text-uppercase tracking-tight mb-4 text-gradient"><i class="fas fa-bell me-2 opacity-50"></i>Signal & Dispatch Config</h4>
+                        
+                        <div class="vstack gap-3 mb-5">
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enableEmailNotifications">External SMTP Dispatch</label>
+                                <input class="form-check-input" type="checkbox" id="enableEmailNotifications" checked>
+                            </div>
+
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enablePushNotifications">Real-time Push Overrides</label>
+                                <input class="form-check-input" type="checkbox" id="enablePushNotifications" checked>
+                            </div>
+
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="notifyNewUsers">New Entity Induction Alerts</label>
+                                <input class="form-check-input" type="checkbox" id="notifyNewUsers" checked>
+                            </div>
+
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="notifySystemErrors">Kernel Exception Broadcaster</label>
+                                <input class="form-check-input" type="checkbox" id="notifySystemErrors" checked>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 border-top pt-4">
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Command Center E-Mail</label>
+                                <input type="email" class="form-control form-control-premium" placeholder="ENGINEER@PLATFORM.COM" id="notificationEmail">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Dispatch Periodicity</label>
+                                <select class="form-select form-select-premium" id="notificationFrequency">
+                                    <option value="immediate" selected>Real-time / Immediate</option>
+                                    <option value="hourly">Burst / Hourly</option>
+                                    <option value="daily">Summary / Daily</option>
+                                    <option value="weekly">Archive / Weekly</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Settings -->
+                    <div id="performance-settings" class="settings-section d-none animate-in fade-in">
+                        <h4 class="fw-black text-uppercase tracking-tight mb-4 text-gradient"><i class="fas fa-tachometer-alt me-2 opacity-50"></i>Throughput & Buffer Optimization</h4>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">RAM Cache Temporal Depth</label>
+                                <div class="input-group search-premium">
+                                    <input type="number" class="form-control bg-light border-0 fw-bold" value="60" min="5" max="1440" id="cacheDuration">
+                                    <span class="input-group-text bg-light border-0 fw-black xx-small opacity-50">MIN</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Max Concurrent Operations</label>
+                                <input type="number" class="form-control form-control-premium" value="100" min="10" max="1000" id="maxConcurrentRequests">
+                            </div>
+                        </div>
+
+                        <div class="vstack gap-3 border-top pt-4">
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enableCaching">Active Memory Caching</label>
+                                <input class="form-check-input" type="checkbox" id="enableCaching" checked>
+                            </div>
+
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enableCompression">Response G-Zip Compression</label>
+                                <input class="form-check-input" type="checkbox" id="enableCompression" checked>
+                            </div>
+
+                            <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enableMinification">Static Asset Minification</label>
+                                <input class="form-check-input" type="checkbox" id="enableMinification" checked>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Maintenance Settings -->
+                    <div id="maintenance-settings" class="settings-section d-none animate-in fade-in">
+                        <h4 class="fw-black text-uppercase tracking-tight mb-4 text-gradient"><i class="fas fa-tools me-2 opacity-50"></i>System Core Overrides</h4>
+                        
+                        <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center mb-4 p-3 rounded-4 bg-danger bg-opacity-5 border border-danger border-opacity-10">
+                            <div>
+                                <label class="text-danger small fw-black text-uppercase tracking-widest cursor-pointer mb-0" for="maintenanceMode">FORCE MAINTENANCE LOCKDOWN</label>
+                                <div class="text-danger xx-small opacity-50 fw-bold">BLOCKS ALL NON-ADMIN ACCESS TO THE ECOSYSTEM</div>
+                            </div>
+                            <input class="form-check-input" type="checkbox" id="maintenanceMode">
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Public Lockdown Message</label>
+                            <textarea class="form-control form-control-premium" rows="3" id="maintenanceMessage" placeholder="The system is currently undergoing structural re-calibration. Expected restoration in T-minus 120 minutes."></textarea>
+                        </div>
+
+                        <div class="row g-4 mb-5 border-top pt-4">
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Backup Delta Frequency</label>
+                                <select class="form-select form-select-premium" id="backupFrequency">
+                                    <option value="never">Manual Only</option>
+                                    <option value="daily" selected>Daily Snapshots</option>
+                                    <option value="weekly">Weekly Rollups</option>
+                                    <option value="monthly">Monthly Archives</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small fw-black text-uppercase tracking-widest mb-2 opacity-75">Log Buffer Retention</label>
+                                <div class="input-group search-premium">
+                                    <input type="number" class="form-control bg-light border-0 fw-bold" value="30" min="1" max="365" id="logRetention">
+                                    <span class="input-group-text bg-light border-0 fw-black xx-small opacity-50">DAYS</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-check form-switch custom-switch p-0 d-flex justify-content-between align-items-center border-top pt-4">
+                            <label class="text-muted small fw-black text-uppercase tracking-widest opacity-75 cursor-pointer" for="enableAutoUpdates">Binary Auto-Synchronization</label>
+                            <input class="form-check-input" type="checkbox" id="enableAutoUpdates">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,12 +329,166 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/modules/dashboard/settings-controller.js" asp-append-version="true"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (CC && CC.Modules && CC.Modules.Dashboard && CC.Modules.Dashboard.Settings) {
-                CC.Modules.Dashboard.Settings.init();
-            }
+        $(document).ready(function() {
+            initializeSettingsNavigation();
+            loadCurrentSettings();
         });
+
+        function initializeSettingsNavigation() {
+            $('#settingsNav a').on('click', function(e) {
+                e.preventDefault();
+                
+                // Update active nav item
+                $('#settingsNav a').removeClass('active bg-dark text-white shadow-premium');
+                $(this).addClass('active bg-dark text-white shadow-premium');
+                
+                // Show corresponding settings section
+                const category = $(this).data('category');
+                $('.settings-section').addClass('d-none');
+                $(`#${category}-settings`).removeClass('d-none');
+            });
+
+            // Set initial active state properly
+            $('#settingsNav a.active').addClass('bg-dark text-white shadow-premium');
+        }
+
+        function loadCurrentSettings() {
+            // Updated via model/gathering logic
+        }
+
+        function saveAllSettings() {
+            const settings = gatherAllSettings();
+            
+            showLoading('Applying configuration overrides...');
+            
+            fetch('@Url.Action("UpdateSettings")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.json())
+            .then(result => {
+                hideLoading();
+                if (result.success) {
+                    // Logic for success
+                }
+            })
+            .catch(error => {
+                hideLoading();
+            });
+        }
+
+        function gatherAllSettings() {
+            return {
+                applicationName: $('#applicationName').val(),
+                defaultLanguage: $('#defaultLanguage').val(),
+                timeZone: $('#timeZone').val(),
+                dateFormat: $('#dateFormat').val(),
+                enableAnalytics: $('#enableAnalytics').is(':checked'),
+                enableDebugMode: $('#enableDebugMode').is(':checked'),
+                theme: $('#theme').val(),
+                primaryColor: $('#primaryColor').val(),
+                sidebarStyle: $('#sidebarStyle').val(),
+                itemsPerPage: parseInt($('#itemsPerPage').val()),
+                showBreadcrumbs: $('#showBreadcrumbs').is(':checked'),
+                enableAnimations: $('#enableAnimations').is(':checked'),
+                sessionTimeout: parseInt($('#sessionTimeout').val()),
+                maxLoginAttempts: parseInt($('#maxLoginAttempts').val()),
+                requireTwoFactor: $('#requireTwoFactor').is(':checked'),
+                enableIpWhitelist: $('#enableIpWhitelist').is(':checked'),
+                logSecurityEvents: $('#logSecurityEvents').is(':checked'),
+                enableEmailNotifications: $('#enableEmailNotifications').is(':checked'),
+                enablePushNotifications: $('#enablePushNotifications').is(':checked'),
+                notifyNewUsers: $('#notifyNewUsers').is(':checked'),
+                notifySystemErrors: $('#notifySystemErrors').is(':checked'),
+                notificationEmail: $('#notificationEmail').val(),
+                notificationFrequency: $('#notificationFrequency').val(),
+                cacheDuration: parseInt($('#cacheDuration').val()),
+                maxConcurrentRequests: parseInt($('#maxConcurrentRequests').val()),
+                enableCaching: $('#enableCaching').is(':checked'),
+                enableCompression: $('#enableCompression').is(':checked'),
+                enableMinification: $('#enableMinification').is(':checked'),
+                maintenanceMode: $('#maintenanceMode').is(':checked'),
+                maintenanceMessage: $('#maintenanceMessage').val(),
+                backupFrequency: $('#backupFrequency').val(),
+                logRetention: parseInt($('#logRetention').val()),
+                enableAutoUpdates: $('#enableAutoUpdates').is(':checked')
+            };
+        }
+
+        function resetToDefaults() {
+            if (confirm('REVERT TO KERNEL DEFAULTS: Are you sure? This will overwrite all custom configuration vectors.')) {
+                showLoading('Reverting to factory defaults...');
+                
+                fetch('@Url.Action("ResetToDefaults")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    hideLoading();
+                    if (result.success) {
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                });
+            }
+        }
+
+        function showLoading(msg) {
+            $('body').append(`
+                <div id="loading-overlay" class="position-fixed w-100 h-100 d-flex flex-column align-items-center justify-content-center" style="top:0;left:0;background:rgba(0,0,0,0.85);z-index:9999;backdrop-filter:blur(8px);">
+                    <div class="spinner-border text-primary-red mb-4" style="width: 3.5rem; height: 3.5rem; border-width: 0.35rem;" role="status"></div>
+                <div class="text-white fw-black text-uppercase tracking-widest small animate-pulse">${msg}</div>
+                </div>
+            `);
+        }
+
+        function hideLoading() { $('#loading-overlay').remove(); }
     </script>
 }
+
+<style>
+    .transition-all { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .xx-small { font-size: 0.6rem; }
+    .cursor-pointer { cursor: pointer; }
+    .shadow-premium { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5) !important; }
+    .form-control-premium, .form-select-premium { 
+        background-color: var(--bs-gray-100); 
+        border: 2px solid transparent; 
+        border-radius: 12px; 
+        padding: 0.75rem 1rem; 
+        font-weight: 700; 
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+    }
+    .form-control-premium:focus, .form-select-premium:focus {
+        background-color: #fff;
+        border-color: var(--primary-red);
+        box-shadow: 0 0 0 4px rgba(251, 44, 54, 0.1);
+        outline: none;
+    }
+    .custom-switch .form-check-input {
+        width: 3.5rem;
+        height: 1.75rem;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e");
+        border: none;
+        background-color: var(--bs-gray-300);
+    }
+    .custom-switch .form-check-input:checked {
+        background-color: var(--primary-red);
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+    }
+    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+</style>

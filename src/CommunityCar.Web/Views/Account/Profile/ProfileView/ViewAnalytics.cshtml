@@ -1,60 +1,41 @@
 @using CommunityCar.Application.Features.Account.ViewModels.Activity
 @model ProfileViewAnalyticsVM
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Profile View Analytics";
-    ViewData["PageHeader"] = "View Analytics";
-    ViewData["PageDescription"] = "Detailed analytics about your profile views";
+    ViewData["Title"] = Localizer["ProfileAnalytics"];
     ViewData["HideLeftSidebar"] = true;
     ViewData["HideRightSidebar"] = true;
     ViewData["HideMainContainer"] = true;
     ViewData["HideMainContentId"] = true;
 }
 
-<div class="space-y-8 animate-in fade-in duration-700">
-    <div class="profile-container py-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div>
-            @if (ViewData["HideLeftSidebar"] as bool? == true)
-            {
-                <!-- Single Column Layout - No Sidebar -->
-                <div class="space-y-6">
-                    <!-- Breadcrumb -->
-                    <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
-                        <a href="@Url.Action("WhoViewedMyProfile")" class="hover:text-primary transition-colors flex items-center gap-2">
-                            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Profile Views
-                        </a>
-                        <span class="opacity-20">/</span>
-                        <span class="text-foreground/40">Analytics</span>
-                    </nav>
+<div class="container-fluid py-4 animate-in fade-in">
+    <!-- Grid Layout with Sidebar -->
+    <div class="row g-4">
+        <!-- Left Sidebar -->
+        <div class="col-12 col-lg-3">
+            <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="col-12 col-lg-9">
+            <div class="vstack gap-4">
+                <!-- Breadcrumb/Nav -->
+                <nav class="d-flex align-items-center gap-2 xx-small fw-black text-uppercase tracking-widest text-muted px-2">
+                    <a href="@Url.Action("WhoViewedMyProfile")" class="text-decoration-none text-muted hover-text-primary-red transition-all d-flex align-items-center gap-1">
+                        <i class="fas fa-chevron-left small"></i> @Localizer["ProfileViews"]
+                    </a>
+                    <span class="opacity-20">/</span>
+                    <span class="text-dark opacity-50">@Localizer["AnalyticsMatrix"]</span>
+                </nav>
 
-                    <!-- Analytics Content -->
-                    @await Html.PartialAsync("_ViewAnalyticsContent", Model)
-                </div>
-            }
-            else
-            {
-                <!-- Grid Layout with Sidebar -->
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                    <!-- Left Sidebar -->
-                    <div class="lg:col-span-1">
-                        <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
-                    </div>
-                    
-                    <!-- Main Content -->
-                    <div class="lg:col-span-3 space-y-6">
-                        <!-- Breadcrumb -->
-                        <nav class="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 px-2">
-                            <a href="@Url.Action("WhoViewedMyProfile")" class="hover:text-primary transition-colors flex items-center gap-2">
-                                <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Profile Views
-                            </a>
-                            <span class="opacity-20">/</span>
-                            <span class="text-foreground/40">Analytics</span>
-                        </nav>
-
-                        <!-- Analytics Content -->
-                        @await Html.PartialAsync("_ViewAnalyticsContent", Model)
-                    </div>
-                </div>
-            }
+                <!-- Analytics Content -->
+                @await Html.PartialAsync("_ViewAnalyticsContent", Model)
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .xx-small { font-size: 0.6rem; }
+</style>

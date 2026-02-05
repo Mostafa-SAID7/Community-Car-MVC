@@ -16,7 +16,6 @@ namespace CommunityCar.Application.Features.Account.ViewModels.Gamification;
 /// Achievement ViewModels:
 /// - AchievementVM.cs - Achievement definition with requirements
 /// - UserAchievementVM.cs - User's achievement progress and completion
-/// - AchievementDashboardVM.cs - Dashboard view of user achievements
 /// - GrantAchievementRequest.cs - Request model for granting achievements
 /// - UpdateAchievementProgressRequest.cs - Request model for updating progress
 /// 

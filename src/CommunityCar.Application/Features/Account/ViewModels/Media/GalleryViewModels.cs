@@ -14,7 +14,6 @@ namespace CommunityCar.Application.Features.Account.ViewModels.Media;
 /// - UploadImageRequest.cs - Request model for uploading images
 /// - AddGalleryItemRequest.cs - Request model for adding gallery items (inherits from UploadImageRequest)
 /// - UpdateGalleryItemRequest.cs - Request model for updating gallery items
-/// - GalleryDashboardVM.cs - Dashboard view for gallery statistics
 /// - GalleryTagsVM.cs - Gallery tags with usage statistics
 /// - TagUsageVM.cs - Individual tag usage information
 /// - GalleryCollectionVM.cs - Collection of gallery items with pagination

@@ -1,702 +1,366 @@
 @model CommunityCar.Application.Features.Account.ViewModels.Core.ProfileSettingsVM
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
-@* Force re-compilation *@
 @{
     ViewData["Title"] = Localizer["PageTitle"];
     ViewData["HideLeftSidebar"] = true;
     ViewData["HideRightSidebar"] = true;
     ViewData["HideMainContainer"] = true;
     ViewData["HideMainContentId"] = true;
-    var hideLeftSidebar = false; // Keep profile sidebar visible
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
 }
 
 @section Styles {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 }
 
-<div class="space-y-8 animate-in fade-in duration-700 pt-20">
-    <div class="space-y-8">
-        @if (hideLeftSidebar)
-        {
-            <!-- Single Column Layout - No Sidebar -->
-            <div class="space-y-6">
-                <!-- Tab Navigation & Content -->
-                <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                    <partial name="~/Views/Account/Profile/_ProfileNavigation.cshtml" />
+<div class="container-fluid py-4 animate-in fade-in">
+    <!-- Grid Layout with Sidebar -->
+    <div class="row g-4">
+        <!-- Left Sidebar -->
+        <div class="col-12 col-lg-3">
+            <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="col-12 col-lg-9">
+            <div class="vstack gap-4">
+                <!-- Tab Navigation -->
+                <partial name="~/Views/Account/Profile/_ProfileNavigation.cshtml" />
 
-                    <div class="p-6 sm:p-8">
-                        <div class="mb-8 border-b border-border pb-6 flex items-center justify-between">
-                            <h1 class="text-2xl font-bold flex items-center mb-0 text-foreground">
-                                <i data-lucide="settings" class="w-6 h-6 mr-3 text-primary"></i>@Localizer["AccountSettings"]
-                            </h1>
+                <!-- Settings Content Card -->
+                <div class="card card-premium border-0 shadow-lg overflow-hidden rounded-4">
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Header -->
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 mb-5 pb-4 border-bottom border-light">
+                            <div>
+                                <h1 class="h3 fw-black text-dark tracking-tighter mb-1 d-flex align-items-center gap-3">
+                                    <i class="fas fa-cog text-primary-red"></i>
+                                    @Localizer["AccountSettings"]
+                                </h1>
+                                <p class="small text-muted fw-bold mb-0">@Localizer["SettingsSubtitle"]</p>
+                            </div>
                         </div>
 
-                        <!-- Success/Error Messages -->
-                        @if (TempData["SuccessMessage"] != null)
-                        {
-                            <div class="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-                                <div class="flex items-center">
-                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mr-2"></i>
-                                    <span class="text-green-800 font-medium">@TempData["SuccessMessage"]</span>
-                                </div>
-                            </div>
-                        }
-
-                        @if (TempData["ErrorMessage"] != null)
-                        {
-                            <div class="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                                <div class="flex items-center">
-                                    <i data-lucide="alert-circle" class="w-5 h-5 text-red-600 mr-2"></i>
-                                    <span class="text-red-800 font-medium">@TempData["ErrorMessage"]</span>
-                                </div>
-                            </div>
-                        }
-
-                        <!-- Settings Navigation: Mirroring Feed Page "Sorting Pulse" aesthetic -->
-                        <div class="flex justify-center mb-8">
-                            <div class="inline-flex items-center gap-4 bg-muted/30 backdrop-blur-md p-1.5 rounded-[1.5rem] border border-border/50 shadow-xl">
-                                <button data-action="show-tab" data-tab="profile" id="profileTab" class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all bg-background text-foreground shadow-lg border border-border">
-                                    <i data-lucide="user" class="w-3.5 h-3.5"></i> @Localizer["Profile"]
+                        <!-- Settings Navigation (Tactical Pills) -->
+                        <div class="d-flex justify-content-center mb-5">
+                            <div class="bg-light bg-opacity-50 p-2 rounded-pill border border-light d-inline-flex gap-2 backdrop-blur shadow-sm">
+                                <button data-action="show-tab" data-tab="profile" id="profileTab" class="btn btn-dark rounded-pill px-4 py-2 xx-small fw-black text-uppercase tracking-widest transition-all shadow-sm">
+                                    <i class="fas fa-user me-2 small"></i> @Localizer["Profile"]
                                 </button>
-                                <button data-action="show-tab" data-tab="privacy" id="privacyTab" class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all text-muted-foreground/60 hover:text-foreground hover:bg-muted/50">
-                                    <i data-lucide="shield" class="w-3.5 h-3.5"></i> @Localizer["Privacy"]
+                                <button data-action="show-tab" data-tab="privacy" id="privacyTab" class="btn btn-link text-muted rounded-pill px-4 py-2 xx-small fw-black text-uppercase tracking-widest text-decoration-none hover-bg-light transition-all">
+                                    <i class="fas fa-shield-alt me-2 small"></i> @Localizer["Privacy"]
                                 </button>
-                                <button data-action="show-tab" data-tab="notifications" id="notificationsTab" class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all text-muted-foreground/60 hover:text-foreground hover:bg-muted/50">
-                                    <i data-lucide="bell" class="w-3.5 h-3.5"></i> @Localizer["Notifications"]
+                                <button data-action="show-tab" data-tab="notifications" id="notificationsTab" class="btn btn-link text-muted rounded-pill px-4 py-2 xx-small fw-black text-uppercase tracking-widest text-decoration-none hover-bg-light transition-all">
+                                    <i class="fas fa-bell me-2 small"></i> @Localizer["Notifications"]
                                 </button>
-                                <button data-action="show-tab" data-tab="security" id="securityTab" class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all text-muted-foreground/60 hover:text-foreground hover:bg-muted/50">
-                                    <i data-lucide="lock" class="w-3.5 h-3.5"></i> @Localizer["Security"]
+                                <button data-action="show-tab" data-tab="security" id="securityTab" class="btn btn-link text-muted rounded-pill px-4 py-2 xx-small fw-black text-uppercase tracking-widest text-decoration-none hover-bg-light transition-all">
+                                    <i class="fas fa-lock me-2 small"></i> @Localizer["Security"]
                                 </button>
                             </div>
                         </div>
                         
                         <!-- Settings Content -->
                         <div class="settings-content">
-                            <!-- Profile Settings Tab -->
-                            <div id="profileSettings" class="tab-content">
-                                <form asp-controller="ProfileSettings" asp-action="UpdateProfile" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" enctype="multipart/form-data">
+                            <!-- Profile Tab -->
+                            <div id="profileSettings" class="tab-content animate-in slide-in-from-bottom-2 duration-300">
+                                <form asp-controller="ProfileSettings" asp-action="UpdateProfile" asp-route-culture="@currentCulture" method="post" enctype="multipart/form-data">
                                     @Html.AntiForgeryToken()
                                     
-                                    <!-- Cover Image Section -->
-                                    <div class="mb-8 relative group/cover">
-                                        <div class="w-full h-48 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-primary/10 shadow-lg relative bg-gradient-to-br from-muted/20 to-muted/40">
-                                            <img src="@(Model.CoverImageUrl ?? "/images/default-cover.svg")?v=@DateTime.Now.Ticks" alt="Cover Image" id="cover-preview" class="w-full h-full object-cover group-hover/cover:scale-105 transition-transform duration-500" />
-                                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/cover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <i data-lucide="image" class="w-12 h-12 text-white"></i>
+                                    <!-- Visual Identity Section -->
+                                    <div class="row g-5 mb-5 align-items-center">
+                                        <div class="col-12 col-md-4">
+                                            <div class="text-center group-avatar position-relative">
+                                                <div class="mx-auto rounded-4 overflow-hidden border-4 border-light shadow-lg mb-4" style="width: 160px; height: 160px;">
+                                                    <img src="@(Model.ProfilePictureUrl ?? "/images/default-avatar.png")?v=@DateTime.Now.Ticks" 
+                                                         alt="Avatar" id="profile-preview" class="w-100 h-100 object-fit-cover transition-all duration-500 hover-scale-110" />
+                                                </div>
+                                                <label class="btn btn-light rounded-pill px-4 py-2 xx-small fw-black text-uppercase tracking-widest border border-light shadow-sm cursor-pointer hover-translate-y">
+                                                    <i class="fas fa-camera me-2 small"></i> @Localizer["ChangePhoto"]
+                                                    <input type="file" name="ProfilePicture" class="d-none" accept="image/*" />
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class="text-center">
-                                            <label class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-medium text-sm py-2 px-4 rounded-lg transition-all cursor-pointer shadow-sm">
-                                                <span>@Localizer["ChangeCover"]</span>
-                                                <input type="file" name="CoverImage" class="hidden" accept="image/*" />
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Profile Picture Section -->
-                                    <div class="mb-10 text-center relative group/photo">
-                                        <div class="w-32 h-32 mx-auto mb-6 rounded-2xl overflow-hidden border-4 border-primary/10 shadow-lg relative">
-                                            <img src="@(Model.ProfilePictureUrl ?? "/images/default-avatar.png")?v=@DateTime.Now.Ticks" alt="Profile Picture" id="profile-preview" class="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500" />
-                                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/photo:opacity-100 transition-opacity flex items-center justify-center">
-                                                <i data-lucide="camera" class="w-8 h-8 text-white"></i>
+                                        <div class="col-12 col-md-8">
+                                            <div class="card card-premium-subtle bg-light bg-opacity-30 border-light rounded-4 p-4 position-relative overflow-hidden">
+                                                <div class="position-absolute top-0 end-0 p-4 opacity-10">
+                                                    <i class="fas fa-image display-1"></i>
+                                                </div>
+                                                <p class="xx-small fw-black text-dark text-uppercase tracking-widest mb-3">@Localizer["CoverImage"]</p>
+                                                <div class="rounded-3 overflow-hidden border border-light mb-3" style="height: 100px;">
+                                                    <img src="@(Model.CoverImageUrl ?? "/images/default-cover.svg")?v=@DateTime.Now.Ticks" 
+                                                         alt="Cover" id="cover-preview" class="w-100 h-100 object-fit-cover" />
+                                                </div>
+                                                <label class="btn btn-outline-dark rounded-pill px-4 py-2 xx-small fw-black text-uppercase tracking-widest border-light hover-translate-y">
+                                                    <i class="fas fa-upload me-2 small"></i> @Localizer["ChangeCover"]
+                                                    <input type="file" name="CoverImage" class="d-none" accept="image/*" />
+                                                </label>
                                             </div>
                                         </div>
-                                        <label class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-medium text-sm py-3 px-6 rounded-lg transition-all cursor-pointer shadow-sm">
-                                            <span>@Localizer["ChangePhoto"]</span>
-                                            <input type="file" name="ProfilePicture" class="hidden" accept="image/*" />
-                                        </label>
                                     </div>
 
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div class="space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["FullName"]</label>
-                                            <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="FullName" placeholder="@Localizer["FullNamePlaceholder"]" data-testid="profile-fullname-input" />
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["UsernameEmail"]</label>
-                                           <input type="text" class="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg text-muted-foreground cursor-not-allowed" value="@Model.Email" readonly />
-                                        </div>
-                                        <div class="md:col-span-2 space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["PrimaryEmail"]</label>
-                                            <input type="email" class="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg text-muted-foreground cursor-not-allowed" asp-for="Email" readonly />
-                                            <p class="text-xs text-muted-foreground mt-2">@Localizer["EmailChangeRestriction"]</p>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["PhoneNumber"]</label>
-                                            <input type="tel" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="PhoneNumber" placeholder="@Localizer["PhoneNumberPlaceholder"]" data-testid="profile-phone-input" />
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["Country"]</label>
-                                            <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="Country" placeholder="@Localizer["CountryPlaceholder"]" data-testid="profile-country-input" />
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["City"]</label>
-                                            <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="City" placeholder="@Localizer["CityPlaceholder"]" data-testid="profile-city-input" />
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["CountryAr"]</label>
-                                            <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="CountryAr" placeholder="@Localizer["CountryArPlaceholder"]" dir="rtl" />
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["CityAr"]</label>
-                                            <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="CityAr" placeholder="@Localizer["CityArPlaceholder"]" dir="rtl" />
-                                        </div>
-                                        <div class="md:col-span-2 space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["Bio"]</label>
-                                            <textarea class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none" asp-for="Bio" rows="4" placeholder="@Localizer["BioPlaceholder"]" data-testid="profile-bio-input"></textarea>
-                                        </div>
-                                        <div class="md:col-span-2 space-y-2">
-                                            <label class="block text-sm font-medium text-foreground">@Localizer["BioAr"]</label>
-                                            <textarea class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none" asp-for="BioAr" rows="4" placeholder="@Localizer["BioArPlaceholder"]" dir="rtl"></textarea>
+                                    <!-- Personal Information Matrix -->
+                                    <div class="bg-light bg-opacity-30 border border-light rounded-4 p-4 p-md-5 mb-5">
+                                        <h3 class="xx-small fw-black text-dark text-uppercase tracking-widest mb-4 d-flex align-items-center gap-3">
+                                            <i class="fas fa-user-edit text-primary-red"></i>
+                                            @Localizer["PersonalIdentity"]
+                                        </h3>
+                                        <div class="row g-4">
+                                            <div class="col-12 col-md-6">
+                                                <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["FullName"]</label>
+                                                <input type="text" asp-for="FullName" class="form-control form-control-lg border-2 border-light rounded-3 bg-white" placeholder="@Localizer["FullNamePlaceholder"]" />
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["PrimaryEmail"]</label>
+                                                <input type="email" value="@Model.Email" class="form-control form-control-lg border-2 border-light rounded-3 bg-light text-muted" readonly />
+                                                <p class="xx-small text-muted mt-2 fw-bold">@Localizer["EmailChangeRestriction"]</p>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["PhoneNumber"]</label>
+                                                <input type="tel" asp-for="PhoneNumber" class="form-control form-control-lg border-2 border-light rounded-3 bg-white" placeholder="@Localizer["PhoneNumberPlaceholder"]" />
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["Country"]</label>
+                                                <input type="text" asp-for="Country" class="form-control form-control-lg border-2 border-light rounded-3 bg-white" placeholder="@Localizer["CountryPlaceholder"]" />
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["City"]</label>
+                                                <input type="text" asp-for="City" class="form-control form-control-lg border-2 border-light rounded-3 bg-white" placeholder="@Localizer["CityPlaceholder"]" />
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["CountryAr"]</label>
+                                                <input type="text" asp-for="CountryAr" class="form-control form-control-lg border-2 border-light rounded-3 bg-white" placeholder="@Localizer["CountryArPlaceholder"]" dir="rtl" />
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["CityAr"]</label>
+                                                <input type="text" asp-for="CityAr" class="form-control form-control-lg border-2 border-light rounded-3 bg-white" placeholder="@Localizer["CityArPlaceholder"]" dir="rtl" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["Bio"] (EN)</label>
+                                                <textarea asp-for="Bio" class="form-control border-2 border-light rounded-3 bg-white" rows="4" placeholder="@Localizer["BioPlaceholder"]"></textarea>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["BioAr"] (AR)</label>
+                                                <textarea asp-for="BioAr" class="form-control border-2 border-light rounded-3 bg-white" rows="4" placeholder="@Localizer["BioArPlaceholder"]" dir="rtl"></textarea>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="pt-6">
-                                        <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium py-3 px-6 rounded-lg transition-all shadow-lg" data-testid="profile-save-button">
-                                            @Localizer["SaveProfileChanges"]
-                                        </button>
-                                    </div>
+                                    <button type="submit" class="btn btn-primary-red w-100 py-3 rounded-4 xx-small fw-black text-uppercase tracking-widest shadow-lg transition-all hover-translate-y">
+                                        <i class="fas fa-save me-2"></i> @Localizer["SaveProfileChanges"]
+                                    </button>
                                 </form>
                             </div>
 
-                            <!-- Other tabs content would go here -->
-                            <!-- Privacy Settings Tab -->
-                            <div id="privacySettings" class="tab-content hidden">
-                                <form asp-controller="ProfileSettings" asp-action="UpdatePrivacy" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" data-ajax="true">
+                            <!-- Privacy Tab -->
+                            <div id="privacySettings" class="tab-content d-none animate-in slide-in-from-bottom-2 duration-300">
+                                <form asp-controller="ProfileSettings" asp-action="UpdatePrivacy" asp-route-culture="@currentCulture" method="post" data-ajax="true">
                                     @Html.AntiForgeryToken()
-                                    <div class="space-y-6">
-                                        <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                            <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["ProfileVisibility"]</h3>
-                                            <div class="space-y-4">
-                                                <div class="flex items-center justify-between">
+                                    <div class="vstack gap-4">
+                                        <div class="card card-premium-subtle bg-light bg-opacity-30 border-light rounded-4 p-4 p-md-5">
+                                            <h3 class="xx-small fw-black text-dark text-uppercase tracking-widest mb-5 d-flex align-items-center gap-3">
+                                                <i class="fas fa-eye text-primary-red"></i>
+                                                @Localizer["ProfileVisibility"]
+                                            </h3>
+                                            <div class="vstack gap-4">
+                                                <div class="d-flex justify-content-between align-items-center p-3 bg-white rounded-3 shadow-sm">
                                                     <div>
-                                                        <p class="font-bold text-foreground">@Localizer["PublicProfile"]</p>
-                                                        <p class="text-xs text-muted-foreground">@Localizer["PublicProfileDescription"]</p>
+                                                        <p class="small fw-black text-dark mb-0">@Localizer["PublicProfile"]</p>
+                                                        <p class="xx-small text-muted fw-bold mb-0">@Localizer["PublicProfileDescription"]</p>
                                                     </div>
-                                                    <label class="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" asp-for="PublicProfile" class="sr-only peer">
-                                                        <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                    </label>
+                                                    <div class="form-check form-switch p-0 m-0">
+                                                        <input type="checkbox" asp-for="PublicProfile" class="form-check-input ms-0" style="width: 44px; height: 22px;" />
+                                                    </div>
                                                 </div>
-                                                <div class="flex items-center justify-between">
+                                                <div class="d-flex justify-content-between align-items-center p-3 bg-white rounded-3 shadow-sm">
                                                     <div>
-                                                        <p class="font-bold text-foreground">@Localizer["ShowOnlineStatus"]</p>
-                                                        <p class="text-xs text-muted-foreground">@Localizer["ShowOnlineStatusDescription"]</p>
+                                                        <p class="small fw-black text-dark mb-0">@Localizer["ShowOnlineStatus"]</p>
+                                                        <p class="xx-small text-muted fw-bold mb-0">@Localizer["ShowOnlineStatusDescription"]</p>
                                                     </div>
-                                                    <label class="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" asp-for="ShowOnlineStatus" class="sr-only peer">
-                                                        <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                            <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["ContactAndDiscovery"]</h3>
-                                            <div class="space-y-4">
-                                                <div class="flex items-center justify-between">
-                                                    <div>
-                                                        <p class="font-bold text-foreground">@Localizer["AllowMessages"]</p>
-                                                        <p class="text-xs text-muted-foreground">@Localizer["AllowMessagesDescription"]</p>
+                                                    <div class="form-check form-switch p-0 m-0">
+                                                        <input type="checkbox" asp-for="ShowOnlineStatus" class="form-check-input ms-0" style="width: 44px; height: 22px;" />
                                                     </div>
-                                                    <label class="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" asp-for="AllowMessages" class="sr-only peer">
-                                                        <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                    </label>
-                                                </div>
-                                                <div class="flex items-center justify-between">
-                                                    <div>
-                                                        <p class="font-bold text-foreground">@Localizer["AllowFriendRequests"]</p>
-                                                        <p class="text-xs text-muted-foreground">@Localizer["AllowFriendRequestsDescription"]</p>
-                                                    </div>
-                                                    <label class="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" asp-for="AllowFriendRequests" class="sr-only peer">
-                                                        <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-black uppercase tracking-widest py-4 px-6 rounded-2xl transition-all shadow-lg active:scale-[0.98]">
+                                        <div class="card card-premium-subtle bg-light bg-opacity-30 border-light rounded-4 p-4 p-md-5">
+                                            <h3 class="xx-small fw-black text-dark text-uppercase tracking-widest mb-5 d-flex align-items-center gap-3">
+                                                <i class="fas fa-users text-primary-red"></i>
+                                                @Localizer["ContactAndDiscovery"]
+                                            </h3>
+                                            <div class="vstack gap-4">
+                                                <div class="d-flex justify-content-between align-items-center p-3 bg-white rounded-3 shadow-sm">
+                                                    <div>
+                                                        <p class="small fw-black text-dark mb-0">@Localizer["AllowMessages"]</p>
+                                                        <p class="xx-small text-muted fw-bold mb-0">@Localizer["AllowMessagesDescription"]</p>
+                                                    </div>
+                                                    <div class="form-check form-switch p-0 m-0">
+                                                        <input type="checkbox" asp-for="AllowMessages" class="form-check-input ms-0" style="width: 44px; height: 22px;" />
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center p-3 bg-white rounded-3 shadow-sm">
+                                                    <div>
+                                                        <p class="small fw-black text-dark mb-0">@Localizer["AllowFriendRequests"]</p>
+                                                        <p class="xx-small text-muted fw-bold mb-0">@Localizer["AllowFriendRequestsDescription"]</p>
+                                                    </div>
+                                                    <div class="form-check form-switch p-0 m-0">
+                                                        <input type="checkbox" asp-for="AllowFriendRequests" class="form-check-input ms-0" style="width: 44px; height: 22px;" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-dark w-100 py-3 rounded-4 xx-small fw-black text-uppercase tracking-widest shadow-lg">
                                             @Localizer["UpdatePrivacySettings"]
                                         </button>
                                     </div>
                                 </form>
                             </div>
 
-                            <!-- Notifications Settings Tab -->
-                            <div id="notificationsSettings" class="tab-content hidden">
-                                <form asp-controller="ProfileSettings" asp-action="UpdateNotifications" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" data-ajax="true">
+                            <!-- Notifications Tab -->
+                            <div id="notificationsSettings" class="tab-content d-none animate-in slide-in-from-bottom-2 duration-300">
+                                <form asp-controller="ProfileSettings" asp-action="UpdateNotifications" asp-route-culture="@currentCulture" method="post" data-ajax="true">
                                     @Html.AntiForgeryToken()
-                                    <div class="space-y-6">
-                                        <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                            <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["CommunicationChannels"]</h3>
-                                            <div class="space-y-4">
-                                                <div class="flex items-center justify-between">
-                                                    <div>
-                                                        <p class="font-bold text-foreground">@Localizer["EmailNotifications"]</p>
-                                                        <p class="text-xs text-muted-foreground">@Localizer["EmailNotificationsDescription"]</p>
+                                    <div class="vstack gap-4">
+                                        <div class="card card-premium-subtle bg-light bg-opacity-30 border-light rounded-4 p-4 p-md-5">
+                                            <h3 class="xx-small fw-black text-dark text-uppercase tracking-widest mb-5 d-flex align-items-center gap-3">
+                                                <i class="fas fa-paper-plane text-primary-red"></i>
+                                                @Localizer["CommunicationChannels"]
+                                            </h3>
+                                            <div class="vstack gap-4">
+                                                @foreach (var (prop, label, dec) in new[] { 
+                                                    ("EmailNotifications", Localizer["EmailNotifications"], Localizer["EmailNotificationsDescription"]),
+                                                    ("PushNotifications", Localizer["PushNotifications"], Localizer["PushNotificationsDescription"]) 
+                                                }) {
+                                                    <div class="d-flex justify-content-between align-items-center p-3 bg-white rounded-3 shadow-sm">
+                                                        <div>
+                                                            <p class="small fw-black text-dark mb-0">@label</p>
+                                                            <p class="xx-small text-muted fw-bold mb-0">@dec</p>
+                                                        </div>
+                                                        <div class="form-check form-switch p-0 m-0">
+                                                            <input type="checkbox" name="@prop" @(prop == "EmailNotifications" && Model.EmailNotifications || prop == "PushNotifications" && Model.PushNotifications ? "checked" : "") class="form-check-input ms-0" style="width: 44px; height: 22px;" />
+                                                        </div>
                                                     </div>
-                                                    <label class="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" asp-for="EmailNotifications" class="sr-only peer">
-                                                        <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                    </label>
-                                                </div>
-                                                <div class="flex items-center justify-between">
-                                                    <div>
-                                                        <p class="font-bold text-foreground">@Localizer["PushNotifications"]</p>
-                                                        <p class="text-xs text-muted-foreground">@Localizer["PushNotificationsDescription"]</p>
-                                                    </div>
-                                                    <label class="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" asp-for="PushNotifications" class="sr-only peer">
-                                                        <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                    </label>
-                                                </div>
+                                                }
                                             </div>
                                         </div>
-
-                                        <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                            <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["ContentAndSecurity"]</h3>
-                                            <div class="space-y-4">
-                                                <div class="flex items-center justify-between">
-                                                    <div>
-                                                        <p class="font-bold text-foreground">@Localizer["WeeklyDigest"]</p>
-                                                        <p class="text-xs text-muted-foreground">@Localizer["WeeklyDigestDescription"]</p>
-                                                    </div>
-                                                    <label class="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" asp-for="WeeklyDigest" class="sr-only peer">
-                                                        <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                    </label>
-                                                </div>
-                                                <div class="flex items-center justify-between">
-                                                    <div>
-                                                        <p class="font-bold text-foreground">@Localizer["SecurityAlerts"]</p>
-                                                        <p class="text-xs text-muted-foreground">@Localizer["SecurityAlertsDescription"]</p>
-                                                    </div>
-                                                    <label class="relative inline-flex items-center cursor-pointer">
-                                                        <input type="checkbox" asp-for="SecurityAlerts" class="sr-only peer">
-                                                        <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-black uppercase tracking-widest py-4 px-6 rounded-2xl transition-all shadow-lg active:scale-[0.98]">
+                                        <button type="submit" class="btn btn-dark w-100 py-3 rounded-4 xx-small fw-black text-uppercase tracking-widest shadow-lg">
                                             @Localizer["UpdateNotificationSettings"]
                                         </button>
                                     </div>
                                 </form>
                             </div>
 
-                            <!-- Security Settings Tab -->
-                            <div id="securitySettings" class="tab-content hidden">
-                                <form asp-controller="ProfileSettings" asp-action="UpdateSecurity" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" data-ajax="true">
+                            <!-- Security Tab -->
+                            <div id="securitySettings" class="tab-content d-none animate-in slide-in-from-bottom-2 duration-300">
+                                <form asp-controller="ProfileSettings" asp-action="UpdateSecurity" asp-route-culture="@currentCulture" method="post" data-ajax="true">
                                     @Html.AntiForgeryToken()
-                                    <div class="space-y-6">
-                                        <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                            <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["PasswordManagement"]</h3>
-                                            <div class="grid grid-cols-1 gap-6">
-                                                <div class="space-y-2">
-                                                    <label class="block text-xs font-black uppercase tracking-widest text-muted-foreground">@Localizer["CurrentPassword"]</label>
-                                                    <input type="password" asp-for="CurrentPassword" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
-                                                    <span asp-validation-for="CurrentPassword" class="text-xs text-red-500"></span>
+                                    <div class="vstack gap-4">
+                                        <div class="card card-premium-subtle bg-light bg-opacity-30 border-light rounded-4 p-4 p-md-5">
+                                            <h3 class="xx-small fw-black text-dark text-uppercase tracking-widest mb-5 d-flex align-items-center gap-3">
+                                                <i class="fas fa-lock text-primary-red"></i>
+                                                @Localizer["PasswordManagement"]
+                                            </h3>
+                                            <div class="row g-4">
+                                                <div class="col-12">
+                                                    <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["CurrentPassword"]</label>
+                                                    <input type="password" asp-for="CurrentPassword" class="form-control form-control-lg border-2 border-light rounded-3 bg-white" />
                                                 </div>
-                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <div class="space-y-2">
-                                                        <label class="block text-xs font-black uppercase tracking-widest text-muted-foreground">@Localizer["NewPassword"]</label>
-                                                        <input type="password" asp-for="NewPassword" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
-                                                        <span asp-validation-for="NewPassword" class="text-xs text-red-500"></span>
-                                                    </div>
-                                                    <div class="space-y-2">
-                                                        <label class="block text-xs font-black uppercase tracking-widest text-muted-foreground">@Localizer["ConfirmNewPassword"]</label>
-                                                        <input type="password" asp-for="ConfirmPassword" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
-                                                        <span asp-validation-for="ConfirmPassword" class="text-xs text-red-500"></span>
-                                                    </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["NewPassword"]</label>
+                                                    <input type="password" asp-for="NewPassword" class="form-control form-control-lg border-2 border-light rounded-3 bg-white" />
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="xx-small fw-black text-muted text-uppercase tracking-widest mb-2 d-block">@Localizer["ConfirmNewPassword"]</label>
+                                                    <input type="password" asp-for="ConfirmPassword" class="form-control form-control-lg border-2 border-light rounded-3 bg-white" />
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-black uppercase tracking-widest py-4 px-6 rounded-2xl transition-all shadow-lg active:scale-[0.98]">
+                                        <button type="submit" class="btn btn-dark w-100 py-3 rounded-4 xx-small fw-black text-uppercase tracking-widest shadow-lg">
                                             @Localizer["ChangePassword"]
                                         </button>
+
+                                        <!-- Danger Zone -->
+                                        <div class="card border-danger border-opacity-25 bg-danger bg-opacity-5 rounded-4 p-4 p-md-5 mt-4">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h3 class="xx-small fw-black text-danger text-uppercase tracking-widest mb-2">@Localizer["DangerZone"]</h3>
+                                                    <p class="small fw-black text-dark mb-0">@Localizer["DeleteAccount"]</p>
+                                                    <p class="xx-small text-muted fw-bold mb-0">@Localizer["DeleteAccountDescription"]</p>
+                                                </div>
+                                                <button type="button" data-action="show-delete-modal" class="btn btn-danger rounded-pill px-4 py-2 xx-small fw-black text-uppercase tracking-widest shadow-sm">
+                                                    @Localizer["DeleteMyAccount"]
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
-                                
-                                <div class="mt-8 p-6 bg-red-500/5 border border-red-500/20 rounded-2xl">
-                                    <h3 class="text-sm font-black uppercase tracking-widest text-red-500 mb-6">@Localizer["DangerZone"]</h3>
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="font-bold text-foreground">@Localizer["DeleteAccount"]</p>
-                                            <p class="text-xs text-muted-foreground">@Localizer["DeleteAccountDescription"]</p>
-                                        </div>
-                                        <button data-action="show-delete-modal" class="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-black uppercase tracking-widest text-[10px] rounded-xl transition-all active:scale-95">
-                                            @Localizer["DeleteMyAccount"]
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        }
-        else
-        {
-            <!-- Grid Layout with Sidebar -->
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <!-- Left Sidebar -->
-                <div class="lg:col-span-1">
-                    <partial name="~/Views/Account/Profile/_ProfileSidebar.cshtml" />
-                </div>
-                
-                <!-- Main Content -->
-                <div class="lg:col-span-3 space-y-6">
-                    <!-- Tab Navigation & Content -->
-                    <div class="bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-                        <partial name="~/Views/Account/Profile/_ProfileNavigation.cshtml" />
-
-                        <div class="p-6 sm:p-8">
-                            <div class="mb-8 border-b border-border pb-6 flex items-center justify-between">
-                                <h1 class="text-2xl font-bold flex items-center mb-0 text-foreground">
-                                    <i data-lucide="settings" class="w-6 h-6 mr-3 text-primary"></i>@Localizer["AccountSettings"]
-                                </h1>
-                            </div>
-
-                            <!-- Success/Error Messages -->
-                            @if (TempData["SuccessMessage"] != null)
-                            {
-                                <div class="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-                                    <div class="flex items-center">
-                                        <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mr-2"></i>
-                                        <span class="text-green-800 font-medium">@TempData["SuccessMessage"]</span>
-                                    </div>
-                                </div>
-                            }
-
-                            @if (TempData["ErrorMessage"] != null)
-                            {
-                                <div class="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                                    <div class="flex items-center">
-                                        <i data-lucide="alert-circle" class="w-5 h-5 text-red-600 mr-2"></i>
-                                        <span class="text-red-800 font-medium">@TempData["ErrorMessage"]</span>
-                                    </div>
-                                </div>
-                            }
-
-                            <!-- Settings Navigation: Mirroring Feed Page "Sorting Pulse" aesthetic -->
-                            <div class="flex justify-center mb-8">
-                                <div class="inline-flex items-center gap-4 bg-muted/30 backdrop-blur-md p-1.5 rounded-[1.5rem] border border-border/50 shadow-xl">
-                                    <button data-action="show-tab" data-tab="profile" id="profileTab" class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all bg-background text-foreground shadow-lg border border-border">
-                                        <i data-lucide="user" class="w-3.5 h-3.5"></i> @Localizer["Profile"]
-                                    </button>
-                                    <button data-action="show-tab" data-tab="privacy" id="privacyTab" class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all text-muted-foreground/60 hover:text-foreground hover:bg-muted/50">
-                                        <i data-lucide="shield" class="w-3.5 h-3.5"></i> @Localizer["Privacy"]
-                                    </button>
-                                    <button data-action="show-tab" data-tab="notifications" id="notificationsTab" class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all text-muted-foreground/60 hover:text-foreground hover:bg-muted/50">
-                                        <i data-lucide="bell" class="w-3.5 h-3.5"></i> @Localizer["Notifications"]
-                                    </button>
-                                    <button data-action="show-tab" data-tab="security" id="securityTab" class="inline-flex items-center gap-3 px-8 py-2.5 rounded-[1.25rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all text-muted-foreground/60 hover:text-foreground hover:bg-muted/50">
-                                        <i data-lucide="lock" class="w-3.5 h-3.5"></i> @Localizer["Security"]
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- Settings Content -->
-                            <div class="settings-content">
-                                <!-- Profile Settings Tab -->
-                                <div id="profileSettings" class="tab-content">
-                                    <form asp-controller="ProfileSettings" asp-action="UpdateProfile" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" enctype="multipart/form-data">
-                                        @Html.AntiForgeryToken()
-                                        <div class="mb-10 text-center relative group/photo">
-                                            <div class="w-32 h-32 mx-auto mb-6 rounded-2xl overflow-hidden border-4 border-primary/10 shadow-lg relative">
-                                                <img src="@(Model.ProfilePictureUrl ?? "/images/default-avatar.png")?v=@DateTime.Now.Ticks" alt="Profile Picture" id="profile-preview" class="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500" />
-                                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/photo:opacity-100 transition-opacity flex items-center justify-center">
-                                                    <i data-lucide="camera" class="w-8 h-8 text-white"></i>
-                                                </div>
-                                            </div>
-                                            <label class="inline-flex items-center justify-center bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground font-medium text-sm py-3 px-6 rounded-lg transition-all cursor-pointer shadow-sm">
-                                                <span>@Localizer["ChangePhoto"]</span>
-                                                <input type="file" name="ProfilePicture" class="hidden" />
-                                            </label>
-                                        </div>
-
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div class="space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["FullName"]</label>
-                                                <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="FullName" placeholder="@Localizer["FullNamePlaceholder"]" data-testid="profile-fullname-input" />
-                                            </div>
-                                            <div class="space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["UsernameEmail"]</label>
-                                               <input type="text" class="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg text-muted-foreground cursor-not-allowed" value="@Model.Email" readonly />
-                                            </div>
-                                            <div class="md:col-span-2 space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["PrimaryEmail"]</label>
-                                                <input type="email" class="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg text-muted-foreground cursor-not-allowed" asp-for="Email" readonly />
-                                                <p class="text-xs text-muted-foreground mt-2">@Localizer["EmailChangeRestriction"]</p>
-                                            </div>
-                                            <div class="space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["PhoneNumber"]</label>
-                                                <input type="tel" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="PhoneNumber" placeholder="@Localizer["PhoneNumberPlaceholder"]" data-testid="profile-phone-input" />
-                                            </div>
-                                            <div class="space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["Country"]</label>
-                                                <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="Country" placeholder="@Localizer["CountryPlaceholder"]" data-testid="profile-country-input" />
-                                            </div>
-                                            <div class="space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["City"]</label>
-                                                <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="City" placeholder="@Localizer["CityPlaceholder"]" data-testid="profile-city-input" />
-                                            </div>
-                                            <div class="space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["CountryAr"]</label>
-                                                <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="CountryAr" placeholder="@Localizer["CountryArPlaceholder"]" dir="rtl" />
-                                            </div>
-                                            <div class="space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["CityAr"]</label>
-                                                <input type="text" class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" asp-for="CityAr" placeholder="@Localizer["CityArPlaceholder"]" dir="rtl" />
-                                            </div>
-                                            <div class="md:col-span-2 space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["Bio"]</label>
-                                                <textarea class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none" asp-for="Bio" rows="4" placeholder="@Localizer["BioPlaceholder"]" data-testid="profile-bio-input"></textarea>
-                                            </div>
-                                            <div class="md:col-span-2 space-y-2">
-                                                <label class="block text-sm font-medium text-foreground">@Localizer["BioAr"]</label>
-                                                <textarea class="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none" asp-for="BioAr" rows="4" placeholder="@Localizer["BioArPlaceholder"]" dir="rtl"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="pt-6">
-                                            <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium py-3 px-6 rounded-lg transition-all shadow-lg" data-testid="profile-save-button">
-                                                @Localizer["SaveProfileChanges"]
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <!-- Other tabs content would go here -->
-                                <!-- Privacy Settings Tab -->
-                                <div id="privacySettings" class="tab-content hidden">
-                                    <form asp-controller="ProfileSettings" asp-action="UpdatePrivacy" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" data-ajax="true">
-                                        @Html.AntiForgeryToken()
-                                        <div class="space-y-6">
-                                            <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                                <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["ProfileVisibility"]</h3>
-                                                <div class="space-y-4">
-                                                    <div class="flex items-center justify-between">
-                                                        <div>
-                                                            <p class="font-bold text-foreground">@Localizer["PublicProfile"]</p>
-                                                            <p class="text-xs text-muted-foreground">@Localizer["PublicProfileDescription"]</p>
-                                                        </div>
-                                                        <label class="relative inline-flex items-center cursor-pointer">
-                                                            <input type="checkbox" asp-for="PublicProfile" class="sr-only peer">
-                                                            <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="flex items-center justify-between">
-                                                        <div>
-                                                            <p class="font-bold text-foreground">@Localizer["ShowOnlineStatus"]</p>
-                                                            <p class="text-xs text-muted-foreground">@Localizer["ShowOnlineStatusDescription"]</p>
-                                                        </div>
-                                                        <label class="relative inline-flex items-center cursor-pointer">
-                                                            <input type="checkbox" asp-for="ShowOnlineStatus" class="sr-only peer">
-                                                            <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                                <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["ContactAndDiscovery"]</h3>
-                                                <div class="space-y-4">
-                                                    <div class="flex items-center justify-between">
-                                                        <div>
-                                                            <p class="font-bold text-foreground">@Localizer["AllowMessages"]</p>
-                                                            <p class="text-xs text-muted-foreground">@Localizer["AllowMessagesDescription"]</p>
-                                                        </div>
-                                                        <label class="relative inline-flex items-center cursor-pointer">
-                                                            <input type="checkbox" asp-for="AllowMessages" class="sr-only peer">
-                                                            <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="flex items-center justify-between">
-                                                        <div>
-                                                            <p class="font-bold text-foreground">@Localizer["AllowFriendRequests"]</p>
-                                                            <p class="text-xs text-muted-foreground">@Localizer["AllowFriendRequestsDescription"]</p>
-                                                        </div>
-                                                        <label class="relative inline-flex items-center cursor-pointer">
-                                                            <input type="checkbox" asp-for="AllowFriendRequests" class="sr-only peer">
-                                                            <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-black uppercase tracking-widest py-4 px-6 rounded-2xl transition-all shadow-lg active:scale-[0.98]">
-                                                @Localizer["UpdatePrivacySettings"]
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <!-- Notifications Settings Tab -->
-                                <div id="notificationsSettings" class="tab-content hidden">
-                                    <form asp-controller="ProfileSettings" asp-action="UpdateNotifications" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" data-ajax="true">
-                                        @Html.AntiForgeryToken()
-                                        <div class="space-y-6">
-                                            <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                                <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["CommunicationChannels"]</h3>
-                                                <div class="space-y-4">
-                                                    <div class="flex items-center justify-between">
-                                                        <div>
-                                                            <p class="font-bold text-foreground">@Localizer["EmailNotifications"]</p>
-                                                            <p class="text-xs text-muted-foreground">@Localizer["EmailNotificationsDescription"]</p>
-                                                        </div>
-                                                        <label class="relative inline-flex items-center cursor-pointer">
-                                                            <input type="checkbox" asp-for="EmailNotifications" class="sr-only peer">
-                                                            <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="flex items-center justify-between">
-                                                        <div>
-                                                            <p class="font-bold text-foreground">@Localizer["PushNotifications"]</p>
-                                                            <p class="text-xs text-muted-foreground">@Localizer["PushNotificationsDescription"]</p>
-                                                        </div>
-                                                        <label class="relative inline-flex items-center cursor-pointer">
-                                                            <input type="checkbox" asp-for="PushNotifications" class="sr-only peer">
-                                                            <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                                <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["ContentAndSecurity"]</h3>
-                                                <div class="space-y-4">
-                                                    <div class="flex items-center justify-between">
-                                                        <div>
-                                                            <p class="font-bold text-foreground">@Localizer["WeeklyDigest"]</p>
-                                                            <p class="text-xs text-muted-foreground">@Localizer["WeeklyDigestDescription"]</p>
-                                                        </div>
-                                                        <label class="relative inline-flex items-center cursor-pointer">
-                                                            <input type="checkbox" asp-for="WeeklyDigest" class="sr-only peer">
-                                                            <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="flex items-center justify-between">
-                                                        <div>
-                                                            <p class="font-bold text-foreground">@Localizer["SecurityAlerts"]</p>
-                                                            <p class="text-xs text-muted-foreground">@Localizer["SecurityAlertsDescription"]</p>
-                                                        </div>
-                                                        <label class="relative inline-flex items-center cursor-pointer">
-                                                            <input type="checkbox" asp-for="SecurityAlerts" class="sr-only peer">
-                                                            <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-black uppercase tracking-widest py-4 px-6 rounded-2xl transition-all shadow-lg active:scale-[0.98]">
-                                                @Localizer["UpdateNotificationSettings"]
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <!-- Security Settings Tab -->
-                                <div id="securitySettings" class="tab-content hidden">
-                                    <form asp-controller="ProfileSettings" asp-action="UpdateSecurity" asp-route-culture="@System.Globalization.CultureInfo.CurrentCulture.Name" method="post" data-ajax="true">
-                                        @Html.AntiForgeryToken()
-                                        <div class="space-y-6">
-                                            <div class="p-6 bg-muted/20 border border-border/40 rounded-2xl">
-                                                <h3 class="text-sm font-black uppercase tracking-widest text-foreground mb-6">@Localizer["PasswordManagement"]</h3>
-                                                <div class="grid grid-cols-1 gap-6">
-                                                    <div class="space-y-2">
-                                                        <label class="block text-xs font-black uppercase tracking-widest text-muted-foreground">@Localizer["CurrentPassword"]</label>
-                                                        <input type="password" asp-for="CurrentPassword" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
-                                                        <span asp-validation-for="CurrentPassword" class="text-xs text-red-500"></span>
-                                                    </div>
-                                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                        <div class="space-y-2">
-                                                            <label class="block text-xs font-black uppercase tracking-widest text-muted-foreground">@Localizer["NewPassword"]</label>
-                                                            <input type="password" asp-for="NewPassword" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
-                                                            <span asp-validation-for="NewPassword" class="text-xs text-red-500"></span>
-                                                        </div>
-                                                        <div class="space-y-2">
-                                                            <label class="block text-xs font-black uppercase tracking-widest text-muted-foreground">@Localizer["ConfirmNewPassword"]</label>
-                                                            <input type="password" asp-for="ConfirmPassword" class="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" />
-                                                            <span asp-validation-for="ConfirmPassword" class="text-xs text-red-500"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-black uppercase tracking-widest py-4 px-6 rounded-2xl transition-all shadow-lg active:scale-[0.98]">
-                                                @Localizer["ChangePassword"]
-                                            </button>
-                                        </div>
-                                    </form>
-                                    
-                                    <div class="mt-8 p-6 bg-red-500/5 border border-red-500/20 rounded-2xl">
-                                        <h3 class="text-sm font-black uppercase tracking-widest text-red-500 mb-6">@Localizer["DangerZone"]</h3>
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <p class="font-bold text-foreground">@Localizer["DeleteAccount"]</p>
-                                                <p class="text-xs text-muted-foreground">@Localizer["DeleteAccountDescription"]</p>
-                                            </div>
-                                            <button data-action="show-delete-modal" class="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-black uppercase tracking-widest text-[10px] rounded-xl transition-all active:scale-95">
-                                                @Localizer["DeleteMyAccount"]
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+        </div>
     </div>
 </div>
+
+<style>
+    .xx-small { font-size: 0.6rem; }
+    .card-premium-subtle { border: 1px solid rgba(0,0,0,0.05); }
+    .hover-translate-y:hover { transform: translateY(-3px); }
+    .hover-scale-110:hover { transform: scale(1.1); }
+    .backdrop-blur { backdrop-filter: blur(10px); }
+    .transition-all { transition: all 0.3s ease; }
+    .shadow-sm-hover:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .form-switch .form-check-input { cursor: pointer; }
+    .form-switch .form-check-input:checked { background-color: var(--primary-red); border-color: var(--primary-red); }
+</style>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="~/js/modules/profile/settings-controller.js" asp-append-version="true"></script>
     
     <script>
-        // Image preview functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Profile picture preview
-            const profileInput = document.querySelector('input[name="ProfilePicture"]');
-            const profilePreview = document.getElementById('profile-preview');
+            // Tab Switching Logic (Legacy Support for the Controller)
+            const tabButtons = document.querySelectorAll('[data-action="show-tab"]');
+            const tabContents = document.querySelectorAll('.tab-content');
             
-            if (profileInput && profilePreview) {
-                profileInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            profilePreview.src = e.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    }
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.getAttribute('data-tab');
+                    
+                    // Update buttons
+                    tabButtons.forEach(b => {
+                        b.classList.remove('btn-dark', 'shadow-sm');
+                        b.classList.add('btn-link', 'text-muted');
+                    });
+                    btn.classList.add('btn-dark', 'shadow-sm');
+                    btn.classList.remove('btn-link', 'text-muted');
+                    
+                    // Update content
+                    tabContents.forEach(c => c.classList.add('d-none'));
+                    document.getElementById(target + 'Settings').classList.remove('d-none');
                 });
-            }
-            
-            // Cover image preview
-            const coverInput = document.querySelector('input[name="CoverImage"]');
-            const coverPreview = document.getElementById('cover-preview');
-            
-            if (coverInput && coverPreview) {
-                coverInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            coverPreview.src = e.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            }
+            });
+
+            // Image Previews
+            const setupPreview = (inputName, previewId) => {
+                const input = document.querySelector(`input[name="${inputName}"]`);
+                const preview = document.getElementById(previewId);
+                if (input && preview) {
+                    input.addEventListener('change', e => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = e => preview.src = e.target.result;
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            };
+            setupPreview('ProfilePicture', 'profile-preview');
+            setupPreview('CoverImage', 'cover-preview');
         });
     </script>
     
@@ -706,28 +370,21 @@
             Toastify({
                 text: "@TempData["SuccessMessage"]",
                 duration: 3000,
-                close: true,
                 gravity: "top",
                 position: "right",
-                style: {
-                    background: "linear-gradient(to right, #00b09b, #96c93d)",
-                }
+                style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
             }).showToast();
         </script>
     }
-    
     @if (TempData["ErrorMessage"] != null)
     {
         <script>
             Toastify({
                 text: "@TempData["ErrorMessage"]",
                 duration: 4000,
-                close: true,
                 gravity: "top",
                 position: "right",
-                style: {
-                    background: "linear-gradient(to right, #ff5f6d, #ffc371)",
-                }
+                style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
             }).showToast();
         </script>
     }

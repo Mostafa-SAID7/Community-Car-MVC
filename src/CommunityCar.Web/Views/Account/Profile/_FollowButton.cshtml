@@ -1,37 +1,36 @@
 @using CommunityCar.Application.Features.Account.ViewModels.Social
 @model FollowStatsVM
 
-<div class="follow-button-container" data-user-id="@ViewBag.UserId">
+<div class="follow-button-container d-inline-block animate-in fade-in" data-user-id="@ViewBag.UserId">
     @if (Model.CanFollow)
     {
         <button onclick="toggleFollow('@ViewBag.UserId')" 
                 id="follow-btn-@ViewBag.UserId"
-                class="follow-btn px-4 py-2 rounded-2xl text-sm font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 @(Model.IsFollowing ? "bg-muted text-foreground hover:bg-muted/80" : "bg-primary text-primary-foreground hover:bg-primary/90")"
-                data-following="@Model.IsFollowing.ToString().ToLower()">
+                class="btn @(Model.IsFollowing ? "btn-light border" : "btn-primary-red shadow-sm") px-4 py-2 rounded-4 xx-small fw-black text-uppercase tracking-widest transition-all hover-scale-105 active-scale-95"
+                data-following="@Model.IsFollowing.ToString().ToLower()"
+                style="min-width: 120px;">
             @if (Model.IsFollowing)
             {
-                <span class="following-text">Following</span>
-                <span class="unfollow-text hidden">Unfollow</span>
+                <span class="following-text"><i class="fas fa-check me-2"></i>Following</span>
+                <span class="unfollow-text d-none"><i class="fas fa-user-minus me-2"></i>Unfollow</span>
             }
             else
             {
-                <span class="follow-text">Follow</span>
+                <span class="follow-text"><i class="fas fa-user-plus me-2"></i>Follow</span>
             }
         </button>
     }
     
-    <div class="follow-stats mt-2 text-xs text-muted-foreground">
-        <span id="followers-count-@ViewBag.UserId">@Model.FollowersCount</span> followers
-        <span class="mx-2">•</span>
-        <span>@Model.FollowingCount following</span>
+    <div class="follow-stats mt-2 xx-small fw-bold text-muted opacity-60 text-uppercase tracking-widest d-flex align-items-center">
+        <span id="followers-count-@ViewBag.UserId" class="text-dark fw-black">@Model.FollowersCount.ToString("N0")</span> <span class="ms-1">Followers</span>
+        <span class="mx-2 opacity-25">•</span>
+        <span class="text-dark fw-black">@Model.FollowingCount.ToString("N0")</span> <span class="ms-1">Following</span>
         
         @if (Model.IsFollowedBy)
         {
-            <div class="mt-1">
-                <span class="px-2 py-1 bg-blue-500/10 text-blue-600 text-xs font-black uppercase tracking-widest rounded-xl border border-blue-500/20">
-                    Follows You
-                </span>
-            </div>
+            <span class="ms-3 badge rounded-pill bg-info bg-opacity-10 text-info border border-info border-opacity-20 px-2 py-1" style="font-size: 0.55rem;">
+                Follows You
+            </span>
         }
     </div>
 </div>
@@ -45,10 +44,10 @@
                 const followingText = this.querySelector('.following-text');
                 const unfollowText = this.querySelector('.unfollow-text');
                 if (followingText && unfollowText) {
-                    followingText.classList.add('hidden');
-                    unfollowText.classList.remove('hidden');
-                    this.classList.remove('bg-muted', 'hover:bg-muted/80');
-                    this.classList.add('bg-red-500', 'hover:bg-red-600', 'text-white');
+                    followingText.classList.add('d-none');
+                    unfollowText.classList.remove('d-none');
+                    this.classList.remove('btn-light');
+                    this.classList.add('btn-danger', 'text-white');
                 }
             });
             
@@ -56,12 +55,18 @@
                 const followingText = this.querySelector('.following-text');
                 const unfollowText = this.querySelector('.unfollow-text');
                 if (followingText && unfollowText) {
-                    followingText.classList.remove('hidden');
-                    unfollowText.classList.add('hidden');
-                    this.classList.remove('bg-red-500', 'hover:bg-red-600', 'text-white');
-                    this.classList.add('bg-muted', 'hover:bg-muted/80');
+                    followingText.classList.remove('d-none');
+                    unfollowText.classList.add('d-none');
+                    this.classList.remove('btn-danger', 'text-white');
+                    this.classList.add('btn-light');
                 }
             });
         }
     });
 </script>
+
+<style>
+    .xx-small { font-size: 0.6rem; }
+    .hover-scale-105:hover { transform: scale(1.05); }
+    .active-scale-95:active { transform: scale(0.95); }
+</style>

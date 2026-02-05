@@ -1,0 +1,281 @@
+@model CommunityCar.Application.Features.Dashboard.Analytics.Content.ContentAnalyticsVM
+@{
+    ViewData["Title"] = "Content Analytics";
+    ViewData["PageTitle"] = "Content Analytics";
+    ViewData["Description"] = "Detailed content performance and engagement analytics";
+    Layout = "_DashboardLayout";
+}
+
+<div class="container-fluid py-4 animate-in fade-in">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 mt-2">
+        <div>
+            <h2 class="fw-black text-gradient mb-1"><i class="fas fa-file-invoice me-2 small opacity-50"></i>Content Intelligence</h2>
+            <p class="text-muted small text-uppercase tracking-widest opacity-50 fw-black">Track content performance and user engagement metrics</p>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-danger px-4 rounded-4 fw-bold shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-filter me-2"></i>Filter
+                </button>
+                <ul class="dropdown-menu border-0 shadow-lg rounded-4 p-2">
+                    <li><a class="dropdown-item rounded-3 fw-bold py-2" href="#" onclick="filterContent('all')">All Content</a></li>
+                    <li><a class="dropdown-item rounded-3 fw-bold py-2 text-primary" href="#" onclick="filterContent('posts')"><i class="fas fa-newspaper me-2 opacity-50"></i>Posts</a></li>
+                    <li><a class="dropdown-item rounded-3 fw-bold py-2 text-success" href="#" onclick="filterContent('stories')"><i class="fas fa-history me-2 opacity-50"></i>Stories</a></li>
+                    <li><a class="dropdown-item rounded-3 fw-bold py-2 text-info" href="#" onclick="filterContent('guides')"><i class="fas fa-lightbulb me-2 opacity-50"></i>Guides</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Performance Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                            <i class="fas fa-file-alt text-primary"></i>
+                        </div>
+                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-bold small">+@(Model?.ContentGrowth ?? 0)%</span>
+                    </div>
+                    <h2 class="fw-black mb-1">@(Model?.TotalContent ?? 0)</h2>
+                    <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-0 opacity-50">Total Assets</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                            <i class="fas fa-eye text-success"></i>
+                        </div>
+                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-bold small">+@(Model?.ViewsGrowth ?? 0)%</span>
+                    </div>
+                    <h2 class="fw-black mb-1">@(Model?.TotalViews?.ToString("N0") ?? "0")</h2>
+                    <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-0 opacity-50">Total Impressions</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="rounded-circle bg-info bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                            <i class="fas fa-heart text-info"></i>
+                        </div>
+                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-bold small">+@(Model?.EngagementGrowth ?? 0)%</span>
+                    </div>
+                    <h2 class="fw-black mb-1">@(Model?.TotalEngagements ?? 0)</h2>
+                    <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-0 opacity-50">Interactions</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                            <i class="fas fa-share text-warning"></i>
+                        </div>
+                        <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-bold small">+@(Model?.SharesGrowth ?? 0)%</span>
+                    </div>
+                    <h2 class="fw-black mb-1">@(Model?.TotalShares ?? 0)</h2>
+                    <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-0 opacity-50">Network Reach</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-8">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0">Engagement Vector</h5>
+                    <i class="fas fa-ellipsis-v text-muted opacity-50"></i>
+                </div>
+                <div class="card-body p-4">
+                    <canvas id="contentPerformanceChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0">Content Mix</h5>
+                </div>
+                <div class="card-body p-4">
+                    <canvas id="contentTypesChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Content Section -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-crown me-2 text-warning opacity-50"></i>High Performance Assets</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <div id="topContentContainer">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary-red" role="status"></div>
+                            <p class="mt-3 text-muted fw-bold text-uppercase tracking-widest small">Polling data...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-fire me-2 text-danger opacity-50"></i>Trending Dispatches</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <div id="trendingTopicsContainer">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary-red" role="status"></div>
+                            <p class="mt-3 text-muted fw-bold text-uppercase tracking-widest small">Analyzing trends...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Traffic Sources -->
+    <div class="row g-4">
+        <div class="col-md-12">
+            <div class="card card-premium border-0">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-map-marker-alt me-2 text-primary-red opacity-50"></i>Origin Vectors</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <div id="trafficAnalyticsContainer">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary-red" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/dashboard/content-analytics.js"></script>
+    <script>
+        let currentFilter = 'all';
+
+        function filterContent(type) {
+            currentFilter = type;
+            loadContentData();
+        }
+
+        function loadContentData() {
+            // Load top performing content
+            $.get('@Url.Action("GetPopularContent")', { count: 10 }, function(data) {
+                if (data.success) {
+                    renderTopContent(data.data);
+                }
+            });
+
+            // Load trending topics
+            $.get('@Url.Action("GetTrendingTopics")', { count: 10 }, function(data) {
+                if (data.success) {
+                    renderTrendingTopics(data.data);
+                }
+            });
+
+            // Load traffic analytics
+            $.get('@Url.Action("GetTrafficAnalytics")', function(data) {
+                if (data.success) {
+                    renderTrafficAnalytics(data.data);
+                }
+            });
+        }
+
+        function renderTopContent(content) {
+            let html = '<div class="vstack gap-2">';
+            if (content && content.length > 0) {
+                content.forEach(function(item, index) {
+                    html += `
+                        <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light bg-opacity-50 border border-light transition-all hover-translate-x">
+                            <div class="ms-1 fw-black text-muted opacity-50" style="width: 24px;">${index + 1}</div>
+                            <div class="me-auto">
+                                <h6 class="fw-bold tracking-tight mb-1">${item.title}</h6>
+                                <div class="d-flex gap-3 mt-1">
+                                    <span class="xx-small text-muted fw-bold"><i class="fas fa-eye me-1"></i> ${item.views || 0}</span>
+                                    <span class="xx-small text-muted fw-bold"><i class="fas fa-heart me-1"></i> ${item.likes || 0}</span>
+                                    <span class="xx-small text-muted fw-bold"><i class="fas fa-share me-1"></i> ${item.shares || 0}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<div class="text-center py-4 text-muted fw-bold">Zero active dispatches in queue.</div>';
+            }
+            html += '</div>';
+            $('#topContentContainer').html(html);
+        }
+
+        function renderTrendingTopics(topics) {
+            let html = '<div class="d-flex flex-wrap gap-2 py-3">';
+            if (topics && topics.length > 0) {
+                topics.forEach(function(topic) {
+                    html += `
+                        <div class="px-3 py-2 rounded-pill bg-light border border-light d-flex align-items-center gap-2 transition-all hover-translate-y">
+                            <span class="fw-bold small text-muted">#${topic.name}</span>
+                            <span class="badge rounded-circle bg-dark text-white p-2" style="font-size: 0.6rem; min-width: 24px;">${topic.count}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<p class="text-muted w-100 text-center py-4 fw-bold">No trending signals detected.</p>';
+            }
+            html += '</div>';
+            $('#trendingTopicsContainer').html(html);
+        }
+
+        function renderTrafficAnalytics(traffic) {
+            let html = '<div class="row g-4 py-3">';
+            if (traffic && traffic.sources) {
+                traffic.sources.forEach(function(source) {
+                    html += `
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-4 bg-light bg-opacity-30 border border-light">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted xx-small fw-black text-uppercase tracking-widest">${source.name}</span>
+                                    <span class="fw-black small">${source.percentage}%</span>
+                                </div>
+                                <div class="progress rounded-pill" style="height: 6px;">
+                                    <div class="progress-bar bg-primary-red" style="width: ${source.percentage}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<div class="col-12 text-center text-muted fw-bold">Incomplete origin matrix.</div>';
+            }
+            html += '</div>';
+            $('#trafficAnalyticsContainer').html(html);
+        }
+
+        $(document).ready(function() {
+            loadContentData();
+        });
+    </script>
+}
+
+<style>
+    .hover-translate-x:hover { transform: translateX(5px); }
+    .hover-translate-y:hover { transform: translateY(-5px); }
+    .transition-all { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .xx-small { font-size: 0.6rem; }
+</style>

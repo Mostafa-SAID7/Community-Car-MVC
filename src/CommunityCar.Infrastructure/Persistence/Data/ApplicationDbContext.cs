@@ -26,6 +26,7 @@ using CommunityCar.Domain.Entities.Community.Reviews;
 using CommunityCar.Domain.Entities.Community.Stories;
 using CommunityCar.Domain.Entities.Dashboard.Analytics;
 using CommunityCar.Domain.Entities.Dashboard.Overview;
+using CommunityCar.Domain.Entities.Dashboard.Reports;
 using CommunityCar.Domain.Entities.Dashboard.Settings;
 using CommunityCar.Domain.Entities.Dashboard.System;
 using CommunityCar.Domain.Entities.Localization;
@@ -103,6 +104,8 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, Role, Guid>, I
     public DbSet<Metric> Metrics => Set<Metric>();
     public DbSet<Ticket> Tickets => Set<Ticket>();
     public DbSet<GeneratedReport> GeneratedReports => Set<GeneratedReport>();
+    public DbSet<CommunityCar.Domain.Entities.Dashboard.Reports.Report> Reports => Set<CommunityCar.Domain.Entities.Dashboard.Reports.Report>();
+    public DbSet<CommunityCar.Domain.Entities.Dashboard.Reports.ReportSchedule> ReportSchedules => Set<CommunityCar.Domain.Entities.Dashboard.Reports.ReportSchedule>();
     public DbSet<SystemSetting> SystemSettings => Set<SystemSetting>();
     public DbSet<LogEntry> LogEntries => Set<LogEntry>();
 

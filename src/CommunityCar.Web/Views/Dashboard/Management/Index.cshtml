@@ -1,106 +1,511 @@
-@model IEnumerable<CommunityCar.Application.Features.Dashboard.UserManagement.ViewModels.UserManagementVM>
-@inject IViewLocalizer Localizer
+@model CommunityCar.Application.Features.Dashboard.Management.ViewModels.DashboardOverviewVM
 @{
-    ViewData["Title"] = Localizer["AdminControl"];
+    ViewData["Title"] = "Management Dashboard";
     Layout = "_DashboardLayout";
 }
 
-<div class="d-flex flex-column gap-5 animate-in fade-in duration-700">
-    <!-- Header -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+<div class="container-fluid py-4 animate-in fade-in">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 mt-2">
         <div>
-            <h1 class="h2 fw-black text-gradient-red mb-1">@Localizer["AdminControl"]</h1>
-            <p class="small fw-bold text-muted opacity-70">@Localizer["ReviewManageLogs"]</p>
+            <h2 class="fw-black text-gradient mb-1"><i class="fas fa-tasks me-2 small opacity-50"></i>Management Dashboard</h2>
+            <p class="text-muted small text-uppercase tracking-widest opacity-50 fw-black">System control and operational oversight</p>
         </div>
-        <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-primary-red px-4 py-2 rounded-3 xx-small fw-black text-uppercase tracking-widest shadow-lg active-scale-95 transition-all">
-                <i data-lucide="file-output" class="w-16px h-16px me-2"></i> @Localizer["ExportLogs"]
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-danger px-4 rounded-4 fw-bold shadow-sm" onclick="refreshDashboard()">
+                <i class="fas fa-sync-alt me-2"></i>Refresh
+            </button>
+            <button type="button" class="btn btn-outline-info px-4 rounded-4 fw-bold shadow-sm" onclick="loadSystemResources()">
+                <i class="fas fa-server me-2"></i>Resources
+            </button>
+            <button type="button" class="btn btn-primary-red px-4 rounded-4 fw-bold shadow-sm" onclick="loadSystemLogs()">
+                <i class="fas fa-file-alt me-2"></i>System Logs
             </button>
         </div>
     </div>
 
-    <!-- Management Table -->
-    <div class="card card-premium shadow-xl overflow-hidden mb-4">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead>
-                    <tr class="bg-muted bg-opacity-5 border-bottom border-border border-opacity-50">
-                        <th class="px-4 py-3 xx-small fw-black text-uppercase tracking-widest text-muted border-0">@Localizer["User"]</th>
-                        <th class="px-4 py-3 xx-small fw-black text-uppercase tracking-widest text-muted border-0">@Localizer["Action"]</th>
-                        <th class="px-4 py-3 xx-small fw-black text-uppercase tracking-widest text-muted border-0">@Localizer["Reason"]</th>
-                        <th class="px-4 py-3 xx-small fw-black text-uppercase tracking-widest text-muted border-0">@Localizer["Date"]</th>
-                        <th class="px-4 py-3 xx-small fw-black text-uppercase tracking-widest text-muted border-0">@Localizer["PerformedBy"]</th>
-                        <th class="px-4 py-3 xx-small fw-black text-uppercase tracking-widest text-muted border-0 text-end">@Localizer["Actions"]</th>
-                    </tr>
-                </thead>
-                <tbody class="border-border border-opacity-10" id="management-list-container">
-                    <tr id="management-skeleton" class="d-none">
-                        <td colspan="6" class="p-4">
-                            <div class="d-flex flex-column gap-2">
-                                <div class="h-12px bg-muted bg-opacity-10 animate-pulse rounded w-100"></div>
-                                <div class="h-12px bg-muted bg-opacity-10 animate-pulse rounded w-100"></div>
-                                <div class="h-12px bg-muted bg-opacity-10 animate-pulse rounded w-100"></div>
+    <!-- System Status Row -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card card-premium-accent border-0 h-100 overflow-hidden">
+                <div class="card-body p-4 position-relative z-1">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-white text-opacity-75 small text-uppercase tracking-widest fw-black mb-2">System Health</h6>
+                            <h2 class="fw-black text-white mb-1">@Model.SystemHealthScore%</h2>
+                            <div class="progress bg-white bg-opacity-20 rounded-pill mt-2" style="height: 4px; width: 80px;">
+                                <div class="progress-bar bg-white" style="width: @Model.SystemHealthScore%"></div>
                             </div>
-                        </td>
-                    </tr>
-                    @foreach (var item in Model)
-                    {
-                        <tr class="transition-all group">
-                            <td class="px-4 py-3 border-border border-opacity-10">
-                                <div class="d-flex flex-column">
-                                    <span class="small fw-black text-foreground italic text-decoration-underline text-decoration-opacity-30 group-hover:text-decoration-opacity-100 transition-all">@item.UserName</span>
-                                    <span class="xx-small fw-bold text-muted opacity-60">@item.Email</span>
-                                </div>
-                            </td>
-                            <td class="px-4 py-3 border-border border-opacity-10">
-                                <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 xx-small fw-black text-uppercase tracking-tighter px-2 py-1">
-                                    @item.Action
-                                </span>
-                            </td>
-                            <td class="px-4 py-3 border-border border-opacity-10">
-                                <span class="x-small fw-bold text-foreground opacity-80 text-truncate d-inline-block" style="max-width: 200px;">@item.Reason</span>
-                            </td>
-                            <td class="px-4 py-3 border-border border-opacity-10 xx-small fw-black text-muted tabular-nums opacity-80">
-                                @item.ActionDate.ToString("MMM dd, yyyy HH:mm")
-                            </td>
-                            <td class="px-4 py-3 border-border border-opacity-10 x-small fw-bold text-foreground opacity-70">
-                                @item.PerformedByName
-                            </td>
-                            <td class="px-4 py-3 border-border border-opacity-10 text-end">
-                                <div class="d-flex justify-content-end gap-2">
-                                    @if (item.IsReversible)
-                                    {
-                                        <form asp-action="ReverseAction" asp-route-actionId="@item.Id" method="post" class="d-inline">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-muted bg-opacity-5 btn-sm p-2 rounded-3 text-danger hover-bg-danger hover-bg-opacity-10 transition-all" title="@Localizer["ReverseAction"]">
-                                                <i data-lucide="undo-2" class="w-16px h-16px"></i>
-                                            </button>
-                                        </form>
-                                    }
-                                    <a href="@Url.Action("UserHistory", new { userId = item.UserId })" class="btn btn-muted bg-opacity-5 btn-sm p-2 rounded-3 text-primary hover-bg-primary hover-bg-opacity-10 transition-all" title="@Localizer["ViewUserHistory"]">
-                                        <i data-lucide="history" class="w-16px h-16px"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                        </div>
+                        <div class="rounded-circle bg-white bg-opacity-20 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas fa-heartbeat text-white fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-2">Active Services</h6>
+                            <h2 class="fw-black mb-1">@Model.ActiveServices<span class="opacity-25 fs-6 fw-bold">/@Model.TotalServices</span></h2>
+                            <small class="text-success tracking-tight fw-bold">@((Model.ActiveServices * 100.0 / Math.Max(1, Model.TotalServices)).ToString("F0"))% Operational</small>
+                        </div>
+                        <div class="rounded-4 bg-success bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas fa-layer-group text-success fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-2">Pending Tasks</h6>
+                            <h2 class="fw-black mb-1" id="pendingTasksCount">@Model.PendingTasks</h2>
+                            <small class="text-warning tracking-tight fw-bold">Awaiting processing</small>
+                        </div>
+                        <div class="rounded-4 bg-warning bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas fa-hourglass-half text-warning fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted small text-uppercase tracking-widest fw-black mb-2">System Alerts</h6>
+                            <h2 class="fw-black mb-1 @(Model.SystemAlerts > 0 ? "text-danger" : "")">@Model.SystemAlerts</h2>
+                            <small class="@(Model.SystemAlerts > 0 ? "text-danger" : "text-muted") tracking-tight fw-bold">@(Model.SystemAlerts > 0 ? "Requires attention" : "No active threats")</small>
+                        </div>
+                        <div class="rounded-4 @(Model.SystemAlerts > 0 ? "bg-danger" : "bg-light") bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="fas @(Model.SystemAlerts > 0 ? "fa-exclamation-triangle" : "fa-shield-check") @(Model.SystemAlerts > 0 ? "text-danger" : "text-muted") fs-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Pagination -->
-    <div class="d-flex align-items-center justify-content-between pb-5">
-        <p class="xx-small fw-black text-uppercase tracking-widest text-muted opacity-50 mb-0">
-            @Localizer["ShowingRecords"] @ViewBag.CurrentPage
-        </p>
-        <div class="d-flex gap-2">
-            <a href="?page=@(ViewBag.CurrentPage - 1)&pageSize=@ViewBag.PageSize" class="btn btn-muted bg-opacity-5 border border-border px-4 py-2 rounded-3 xx-small fw-black text-uppercase tracking-widest transition-all @(ViewBag.CurrentPage <= 1 ? "disabled opacity-30" : "hover-bg-muted hover-bg-opacity-10")">
-                @Localizer["Previous"]
-            </a>
-            <a href="?page=@(ViewBag.CurrentPage + 1)&pageSize=@ViewBag.PageSize" class="btn btn-muted bg-opacity-5 border border-border px-4 py-2 rounded-3 xx-small fw-black text-uppercase tracking-widest hover-bg-muted hover-bg-opacity-10 transition-all">
-                @Localizer["Next"]
-            </a>
+    <!-- Management Sections -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex align-items-center gap-2">
+                    <i class="fas fa-users text-primary-red opacity-50"></i>
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0">Users</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row text-center g-3 mb-4">
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-light border border-light">
+                                <div class="h4 fw-black text-dark mb-0">@Model.TotalUsers.ToString("N0")</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Total</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-success bg-opacity-10">
+                                <div class="h4 fw-black text-success mb-0">@Model.ActiveUsers.ToString("N0")</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Active</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vstack gap-2">
+                        <a href="/Dashboard/Users" class="btn btn-primary-red py-2 rounded-3 fw-bold shadow-sm">
+                            <i class="fas fa-user-gear me-2"></i>Manage Directory
+                        </a>
+                        <button class="btn btn-outline-danger py-2 rounded-3 fw-bold" onclick="executeTask('user-cleanup')">
+                            <i class="fas fa-broom me-2"></i>User Cleanup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex align-items-center gap-2">
+                    <i class="fas fa-newspaper text-primary-red opacity-50"></i>
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0">Content</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row text-center g-3 mb-4">
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-light border border-light">
+                                <div class="h4 fw-black text-dark mb-0">@Model.TotalPosts.ToString("N0")</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Total Posts</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-warning bg-opacity-10">
+                                <div class="h4 fw-black text-warning mb-0">@Model.PendingModeration.ToString("N0")</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Mod Queue</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vstack gap-2">
+                        <a href="/Dashboard/Content" class="btn btn-primary-red py-2 rounded-3 fw-bold shadow-sm">
+                            <i class="fas fa-magnifying-glass me-2"></i>Open Moderator
+                        </a>
+                        <button class="btn btn-outline-danger py-2 rounded-3 fw-bold" onclick="executeTask('content-moderation')">
+                            <i class="fas fa-robot me-2"></i>Auto-Moderation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex align-items-center gap-2">
+                    <i class="fas fa-database text-primary-red opacity-50"></i>
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0">Infrastructure</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row text-center g-3 mb-4">
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-light border border-light">
+                                <div class="h4 fw-black text-dark mb-0">@Model.DatabaseSize MB</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">DB Size</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded-4 bg-info bg-opacity-10">
+                                <div class="h4 fw-black text-info mb-0">@Model.CacheHitRate.ToString("P1")</div>
+                                <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.6rem;">Cache Hit</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vstack gap-2">
+                        <button class="btn btn-primary-red py-2 rounded-3 fw-bold shadow-sm" onclick="executeTask('database-optimize')">
+                            <i class="fas fa-bolt-lightning me-2"></i>Optimize DB
+                        </button>
+                        <button class="btn btn-outline-danger py-2 rounded-3 fw-bold" onclick="executeTask('cache-clear')">
+                            <i class="fas fa-trash-can me-2"></i>Purge Caches
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Tasks -->
+    <div class="row g-4 mb-5">
+        <div class="col-12">
+            <div class="card card-premium border-0">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-microchip me-2 text-primary-red opacity-50"></i>Engineer Task Queue</h5>
+                    <button class="btn btn-sm btn-ghost text-primary-red fw-bold text-uppercase tracking-widest" style="font-size: 0.65rem;" onclick="loadSystemTasks()">
+                        <i class="fas fa-rotate me-1"></i>Refresh Stack
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div id="systemTasks" class="row g-4">
+                        <div class="col-12 text-center py-5">
+                            <div class="spinner-border text-primary-red" role="status"></div>
+                            <p class="mt-3 text-muted fw-bold text-uppercase tracking-widest small">Polling system tasks...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resource Utilization Row -->
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-history me-2 text-primary-red opacity-50"></i>Recent Audit Log</h5>
+                </div>
+                <div class="card-body p-4 pt-0">
+                    <div id="recentActivity">
+                        @if (Model.RecentActivities?.Any() == true)
+                        {
+                            <div class="vstack gap-2">
+                                @foreach (var activity in Model.RecentActivities.Take(10))
+                                {
+                                    <div class="d-flex align-items-center gap-3 p-3 rounded-4 bg-light bg-opacity-50 border border-light transition-all hover-translate-x">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold tracking-tight mb-0">@activity.Action</div>
+                                            <small class="text-muted opacity-75">@activity.Description</small>
+                                        </div>
+                                        <small class="text-muted text-uppercase fw-black tracking-widest" style="font-size: 0.65rem;">@activity.Timestamp.ToString("MMM dd, HH:mm")</small>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <p class="text-muted mb-0 opacity-50 fw-bold">No recent management operations logged.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-premium border-0 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-black text-uppercase tracking-tight mb-0"><i class="fas fa-gauge-high me-2 text-primary-red opacity-50"></i>Resource Monitor</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="vstack gap-4">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.65rem;">CPU Cluster</span>
+                                <span class="fw-black" id="cpuUsage">@Model.CpuUsage.ToString("F1")%</span>
+                            </div>
+                            <div class="progress rounded-pill bg-light" style="height: 8px;">
+                                <div class="progress-bar bg-primary-red" role="progressbar" style="width: @Model.CpuUsage%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.65rem;">Physical Memory</span>
+                                <span class="fw-black" id="memoryUsage">@Model.MemoryUsage.ToString("F1")%</span>
+                            </div>
+                            <div class="progress rounded-pill bg-light" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: @Model.MemoryUsage%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted small text-uppercase tracking-widest fw-black opacity-50" style="font-size: 0.65rem;">Persistent Disk</span>
+                                <span class="fw-black" id="diskUsage">@Model.DiskUsage.ToString("F1")%</span>
+                            </div>
+                            <div class="progress rounded-pill bg-light" style="height: 8px;">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: @Model.DiskUsage%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-2 p-4 rounded-4 border border-light bg-light bg-opacity-30 text-center">
+                            <div class="text-muted small text-uppercase tracking-widest fw-black opacity-50 mb-1" style="font-size: 0.6rem;">System Continuous Uptime</div>
+                            <div class="h3 fw-black text-success mb-0" id="systemUptime">@Model.SystemUptime.ToString(@"dd\.hh\:mm")</div>
+                            <div class="xx-small opacity-50 fw-black">days . hours : minutes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Modals -->
+<div class="modal fade" id="systemResourcesModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header bg-dark text-white border-0 py-3">
+                <h5 class="modal-title fw-black text-uppercase tracking-tight"><i class="fas fa-server me-2 text-primary-red"></i>System Infrastructure</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4" id="systemResourcesContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary-red" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="systemLogsModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header bg-dark text-white border-0 py-3">
+                <h5 class="modal-title fw-black text-uppercase tracking-tight"><i class="fas fa-file-alt me-2 text-primary-red"></i>Kernel Diagnostic Logs</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0" id="systemLogsContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary-red" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            loadSystemTasks();
+            startResourceMonitoring();
+        });
+
+        function loadSystemTasks() {
+            fetch('@Url.Action("GetSystemTasks")')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        renderSystemTasks(result.data);
+                    } else {
+                        document.getElementById('systemTasks').innerHTML = '<div class="col-12 text-center py-4"><p class="text-danger fw-bold">Critical Error: Unable to poll system task stack.</p></div>';
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('systemTasks').innerHTML = '<div class="col-12 text-center py-4"><p class="text-danger fw-bold">Network Collision: Task synchronization failed.</p></div>';
+                });
+        }
+
+        function renderSystemTasks(tasks) {
+            const tasksHtml = tasks.map(task => `
+                <div class="col-md-4">
+                    <div class="card card-premium h-100 border-0 transition-all hover-translate-y">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-black text-uppercase tracking-tight mb-0">${task.name}</h6>
+                                <span class="badge rounded-pill bg-${task.status === 'Ready' ? 'success' : task.status === 'Running' ? 'warning' : 'secondary'} bg-opacity-10 text-${task.status === 'Ready' ? 'success' : task.status === 'Running' ? 'warning' : 'secondary'} fw-black text-uppercase tracking-widest" style="font-size: 0.55rem;">${task.status}</span>
+                            </div>
+                            <p class="text-muted small opacity-75 mb-4" style="min-height: 3rem;">${task.description}</p>
+                            <button class="btn btn-sm ${task.status === 'Running' ? 'btn-outline-secondary' : 'btn-primary-red'} w-100 py-2 rounded-3 fw-bold shadow-sm" onclick="executeTask('${task.type}')" ${task.status === 'Running' ? 'disabled' : ''}>
+                                <i class="fas fa-${task.status === 'Running' ? 'cog fa-spin' : 'play'} me-2"></i>${task.status === 'Running' ? 'Executing...' : 'Run Module'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('systemTasks').innerHTML = tasksHtml || '<div class="col-12 text-center py-4"><p class="text-muted fw-bold">System clean: All background threads terminated.</p></div>';
+        }
+
+        function executeTask(taskType) {
+            if (confirm(`INITIATE SEQUENTIAL OVERRIDE: Are you sure you want to execute ${taskType}?`)) {
+                showLoading(`Executing tactical task: ${taskType}...`);
+                
+                fetch('@Url.Action("ExecuteSystemTask")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    body: JSON.stringify({ taskType: taskType })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    hideLoading();
+                    if (result.success) {
+                        loadSystemTasks();
+                    }
+                })
+                .catch(() => {
+                    hideLoading();
+                });
+            }
+        }
+
+        function loadSystemResources() {
+            const modal = new bootstrap.Modal(document.getElementById('systemResourcesModal'));
+            modal.show();
+            
+            fetch('@Url.Action("GetSystemResources")')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        const content = `
+                            <div class="row g-4">
+                                <div class="col-md-6 text-center">
+                                    <div class="p-4 rounded-4 bg-primary bg-opacity-5 border border-primary border-opacity-10">
+                                        <i class="fas fa-microchip text-primary fs-3 mb-3"></i>
+                                        <div class="text-muted xx-small fw-black tracking-widest mb-1">PROCS / CORES</div>
+                                        <div class="h4 fw-black">${result.data.cpuCores} Logic Cores</div>
+                                        <div class="text-primary fw-bold small mt-2">${result.data.cpuUsage}% Active Load</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                    <div class="p-4 rounded-4 bg-success bg-opacity-5 border border-success border-opacity-10">
+                                        <i class="fas fa-memory text-success fs-3 mb-3"></i>
+                                        <div class="text-muted xx-small fw-black tracking-widest mb-1">ALLOCATED RAM</div>
+                                        <div class="h4 fw-black">${result.data.totalMemory} GB System</div>
+                                        <div class="text-success fw-bold small mt-2">${result.data.availableMemory} GB Free</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        document.getElementById('systemResourcesContent').innerHTML = content;
+                    }
+                });
+        }
+
+        function loadSystemLogs() {
+            const modal = new bootstrap.Modal(document.getElementById('systemLogsModal'));
+            modal.show();
+            
+            fetch('@Url.Action("GetSystemLogs")')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        const logsHtml = `
+                            <div class="table-responsive">
+                                <table class="table table-dark table-hover mb-0" style="font-family: 'Courier New', monospace; font-size: 0.8rem;">
+                                    <thead class="bg-black text-muted xx-small tracking-widest">
+                                        <tr>
+                                            <th class="ps-4 border-0">LEVEL</th>
+                                            <th class="border-0">TIMESTAMP</th>
+                                            <th class="border-0 pe-4">MESSAGE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${result.data.map(log => `
+                                            <tr class="border-bottom border-secondary border-opacity-10">
+                                                <td class="ps-4"><span class="badge bg-${log.level === 'Error' ? 'danger' : log.level === 'Warning' ? 'warning' : 'info'} bg-opacity-10 text-${log.level === 'Error' ? 'danger' : log.level === 'Warning' ? 'warning' : 'info'} fw-bold" style="font-size: 0.6rem;">${log.level}</span></td>
+                                                <td class="text-white text-opacity-50 small">${new Date(log.timestamp).toLocaleString()}</td>
+                                                <td class="text-white pe-4">${log.message}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `;
+                        
+                        document.getElementById('systemLogsContent').innerHTML = logsHtml || '<div class="p-5 text-center text-muted">Zero log entries detected in current temporal slice.</div>';
+                    }
+                });
+        }
+
+        function startResourceMonitoring() {
+            setInterval(() => {
+                fetch('@Url.Action("GetSystemResources")')
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            $('#cpuUsage').text(result.data.cpuUsage.toFixed(1) + '%').parent().next().find('.progress-bar').css('width', result.data.cpuUsage + '%');
+                            $('#memoryUsage').text(result.data.memoryUsage.toFixed(1) + '%').parent().next().find('.progress-bar').css('width', result.data.memoryUsage + '%');
+                            $('#diskUsage').text(result.data.diskUsage.toFixed(1) + '%').parent().next().find('.progress-bar').css('width', result.data.diskUsage + '%');
+                        }
+                    });
+            }, 30000);
+        }
+
+        function refreshDashboard() {
+            location.reload();
+        }
+
+        function showLoading(msg) {
+            $('body').append(`
+                <div id="loading-overlay" class="position-fixed w-100 h-100 d-flex flex-column align-items-center justify-content-center" style="top:0;left:0;background:rgba(0,0,0,0.85);z-index:9999;backdrop-filter:blur(8px);">
+                    <div class="spinner-border text-primary-red mb-4" style="width: 3.5rem; height: 3.5rem; border-width: 0.35rem;" role="status"></div>
+                    <div class="text-white fw-black text-uppercase tracking-widest small animate-pulse">${msg}</div>
+                </div>
+            `);
+        }
+
+        function hideLoading() { $('#loading-overlay').remove(); }
+    </script>
+}
+
+<style>
+    .hover-translate-x:hover { transform: translateX(5px); }
+    .hover-translate-y:hover { transform: translateY(-5px); }
+    .transition-all { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+</style>

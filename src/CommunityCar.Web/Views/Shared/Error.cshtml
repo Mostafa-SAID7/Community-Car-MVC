@@ -1,71 +1,93 @@
-@model CommunityCar.Application.Features.Dashboard.ErrorReporting.ViewModels.ErrorViewModel
+@model CommunityCar.Application.Features.Dashboard.Management.developer.ErrorReporting.ViewModels.ErrorViewModel
 @{
     ViewData["Title"] = "System Anomaly Detected";
     Layout = "_DashboardLayout";
 }
 
-<div class="max-w-4xl mx-auto py-12 space-y-12 animate-in fade-in duration-1000">
-    <div class="flex flex-col md:flex-row items-center gap-10">
-        <div class="relative group">
-            <div class="absolute -inset-4 bg-destructive/10 rounded-[2rem] blur-2xl group-hover:bg-destructive/20 transition-all duration-1000"></div>
-            <div class="relative w-32 h-32 rounded-[2.5rem] bg-card border border-destructive/20 flex items-center justify-center text-destructive shadow-2xl rotate-3 group-hover:rotate-0 transition-transform">
-                <i data-lucide="unplug" class="w-16 h-16"></i>
+<div class="container py-5 animate-in fade-in" style="max-width: 1000px;">
+    <div class="row align-items-center g-5 mb-5">
+        <div class="col-md-auto">
+            <div class="position-relative">
+                <div class="position-absolute translate-middle-x bg-danger bg-opacity-10 shadow-lg rounded-5 blur-xl" style="width: 150px; height: 150px; left: 50%; top: 50%; z-index: -1;"></div>
+                <div class="card-premium border-danger border-opacity-10 d-flex align-items-center justify-content-center text-danger shadow-lg rotate-1 transition-all hover-rotate-0" style="width: 120px; height: 120px; border-radius: 30px;">
+                    <i class="fas fa-unlink fa-3x"></i>
+                </div>
             </div>
         </div>
         
-        <div class="text-center md:text-left space-y-4">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-destructive/10 border border-destructive/20 rounded-full text-destructive text-[10px] font-black uppercase tracking-widest">
-                <span class="w-2 h-2 rounded-full bg-destructive animate-ping"></span>
-                Critical System Fault
+        <div class="col-md text-center text-md-start">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-2 bg-danger bg-opacity-10 border border-danger border-opacity-20 rounded-pill text-danger xx-small fw-black text-uppercase tracking-widest mb-3">
+                <span class="pulse-red" style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--bs-danger);"></span>
+                Critical Kernel Exception
             </div>
-            <h1 class="text-5xl font-black text-foreground tracking-tighter leading-tight">System Anomaly <br class="hidden md:block"/> Detected</h1>
-            <p class="text-sm font-medium text-muted-foreground max-w-md uppercase tracking-widest opacity-60 leading-relaxed">The application encountered an unhandled exception during fragment processing.</p>
+            <h1 class="fw-black text-gradient display-4 tracking-tighter mb-2">Kernel Anomaly <br class="d-none d-md-block"/> Detected</h1>
+            <p class="text-muted small fw-bold text-uppercase tracking-widest opacity-60">The application state has been compromised by an unhandled logic fork.</p>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Debug Trace Console -->
-        <div class="bg-black/90 rounded-[2rem] p-8 shadow-2xl border border-white/5 relative overflow-hidden group">
-            <div class="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
-                <span class="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Telemetry Relay</span>
-                <div class="flex gap-2">
-                    <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
-                    <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
-                    <div class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
-                </div>
-            </div>
-            <div class="space-y-6 font-mono">
-                @if (Model.ShowRequestId)
-                {
-                    <div class="space-y-2">
-                        <span class="block text-[9px] font-black uppercase tracking-widest text-primary/50">Request ID</span>
-                        <code class="block text-xs text-white/90 break-all leading-relaxed">@Model.RequestId</code>
+    <div class="row g-4">
+        <!-- Telemetry Details -->
+        <div class="col-lg-6">
+            <div class="card bg-dark border-0 rounded-5 p-4 h-100 shadow-xl overflow-hidden position-relative">
+                <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-white border-opacity-10 pb-3">
+                    <span class="xx-small fw-black text-uppercase tracking-widest text-muted">Telemetry Relay</span>
+                    <div class="d-flex gap-2">
+                        <div class="rounded-circle bg-danger bg-opacity-50" style="width: 10px; height: 10px;"></div>
+                        <div class="rounded-circle bg-warning bg-opacity-50" style="width: 10px; height: 10px;"></div>
+                        <div class="rounded-circle bg-success bg-opacity-50" style="width: 10px; height: 10px;"></div>
                     </div>
-                }
-                <div class="space-y-2">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-primary/50">Context Node</span>
-                    <code class="block text-xs text-white/90">EN-AUT-MVC-FAILOVER</code>
                 </div>
-            </div>
-            <div class="mt-8 pt-6 border-t border-white/5">
-                <p class="text-[9px] text-muted-foreground/40 leading-relaxed uppercase tracking-widest">Incident logged in central registry for tactical analysis.</p>
+                
+                <div class="vstack gap-4 font-monospace">
+                    @if (Model.ShowRequestId)
+                    {
+                        <div>
+                            <span class="d-block xx-small fw-black text-uppercase tracking-widest text-danger text-opacity-75 mb-2">Request Identification</span>
+                            <code class="d-block small text-white text-opacity-90 text-break bg-white bg-opacity-5 p-3 rounded-4">@Model.RequestId</code>
+                        </div>
+                    }
+                    <div>
+                        <span class="d-block xx-small fw-black text-uppercase tracking-widest text-danger text-opacity-75 mb-2">Context Node</span>
+                        <code class="d-block small text-white text-opacity-90 bg-white bg-opacity-5 p-3 rounded-4">KRNL-ANOMALY-FAILOVER-V1</code>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-4 border-top border-white border-opacity-5">
+                    <p class="xx-small text-muted text-opacity-50 fw-bold text-uppercase tracking-widest mb-0">Incident archived in central registry for forensic evaluation.</p>
+                </div>
             </div>
         </div>
 
-        <!-- Directive Panel -->
-        <div class="bg-card/40 backdrop-blur-xl border border-border/50 rounded-[2rem] p-10 flex flex-col justify-center space-y-8">
-            <h3 class="text-xs font-black uppercase tracking-[0.3em] text-foreground">Immediate Directives:</h3>
-            <div class="space-y-4">
-                <a href="javascript:location.reload()" class="flex items-center justify-between p-5 bg-background border border-border/50 rounded-2xl hover:border-primary transition-all group/opt">
-                    <span class="text-[10px] font-black uppercase tracking-widest">Retry Protocol</span>
-                    <i data-lucide="refresh-cw" class="w-4 h-4 text-muted-foreground group-hover/opt:text-primary transition-colors"></i>
-                </a>
-                <a asp-controller="Feed" asp-action="Index" class="flex items-center justify-between p-5 bg-background border border-border/50 rounded-2xl hover:border-primary transition-all group/opt">
-                    <span class="text-[10px] font-black uppercase tracking-widest">Foundation Return</span>
-                    <i data-lucide="home" class="w-4 h-4 text-muted-foreground group-hover/opt:text-primary transition-colors"></i>
-                </a>
+        <!-- Directives -->
+        <div class="col-lg-6">
+            <div class="card card-premium border-0 rounded-5 p-4 p-md-5 h-100 d-flex flex-column justify-content-center">
+                <h3 class="xx-small fw-black text-uppercase tracking-widest text-dark opacity-50 mb-4 ps-2">Sequence Recovery:</h3>
+                
+                <div class="vstack gap-3 mb-4">
+                    <a href="javascript:location.reload()" class="d-flex align-items-center justify-content-between p-4 bg-light border border-light rounded-4 text-decoration-none group hover-border-primary transition-all">
+                        <span class="fw-black text-uppercase tracking-widest small text-dark">Retry Sequence</span>
+                        <i class="fas fa-sync-alt text-muted group-hover-text-primary"></i>
+                    </a>
+                    <a asp-controller="Feed" asp-action="Index" class="d-flex align-items-center justify-content-between p-4 bg-light border border-light rounded-4 text-decoration-none group hover-border-primary transition-all">
+                        <span class="fw-black text-uppercase tracking-widest small text-dark">Foundation Hub</span>
+                        <i class="fas fa-home text-muted group-hover-text-primary"></i>
+                    </a>
+                </div>
+                
+                <p class="xx-small font-medium text-muted fw-bold text-uppercase tracking-widest opacity-60 mb-0 ps-2 leading-relaxed">If state persistency fails, contact regional engineers with the Telemetry ID.</p>
             </div>
-            <p class="text-[9px] font-medium text-muted-foreground/60 uppercase tracking-widest leading-relaxed">If failure persists, please contact the engineering detachment with the provided Telemetry ID.</p>
         </div>
     </div>
 </div>
+
+<style>
+    .xx-small { font-size: 0.6rem; }
+    .blur-xl { filter: blur(40px); }
+    .rotate-1 { transform: rotate(1deg); }
+    .hover-rotate-0:hover { transform: rotate(0deg); }
+    .pulse-red { animation: pulse-red 2s infinite; }
+    @@keyframes pulse-red { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+    .group:hover .group-hover-text-primary { color: var(--primary-red) !important; }
+    .hover-border-primary:hover { border-color: var(--primary-red) !important; box-shadow: 0 5px 15px -5px rgba(251, 44, 54, 0.2); }
+    .leading-relaxed { line-height: 1.6; }
+</style>

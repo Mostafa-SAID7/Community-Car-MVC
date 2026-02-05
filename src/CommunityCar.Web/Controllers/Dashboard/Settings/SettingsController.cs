@@ -1,5 +1,4 @@
 using CommunityCar.Application.Common.Interfaces.Services.Dashboard.Settings;
-using CommunityCar.Application.Common.Interfaces.Services.Account.Core;
 using CommunityCar.Application.Features.Dashboard.Settings.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,288 +10,199 @@ namespace CommunityCar.Web.Controllers.Dashboard.Settings;
 public class SettingsController : Controller
 {
     private readonly ISettingsService _settingsService;
-    private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<SettingsController> _logger;
 
     public SettingsController(
         ISettingsService settingsService,
-        ICurrentUserService currentUserService,
         ILogger<SettingsController> logger)
     {
         _settingsService = settingsService;
-        _currentUserService = currentUserService;
         _logger = logger;
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index(string? category = null)
+    public async Task<IActionResult> Index()
     {
         try
         {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            object settings;
-            if (string.IsNullOrEmpty(category))
-            {
-                settings = await _settingsService.GetSettingsAsync();
-            }
-            else
-            {
-                settings = await _settingsService.GetSettingsByCategoryAsync(category);
-            }
-
-            ViewBag.Category = category;
-            ViewBag.Categories = new[] { "Display", "Notifications", "Performance", "Security" };
-
-            return View("~/Views/Dashboard/Settings/Index.cshtml", settings);
+            var settings = await _settingsService.GetDashboardSettingsAsync();
+            return View(settings);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading dashboard settings");
-            TempData["ErrorMessage"] = "Failed to load dashboard settings. Please try again.";
-            return View("~/Views/Dashboard/Settings/Index.cshtml");
+            TempData["ErrorMessage"] = "Failed to load settings. Please try again.";
+            return View(new DashboardSettingsVM());
         }
     }
 
-    [HttpGet("category/{category}")]
-    public async Task<IActionResult> Category(string category)
-    {
-        try
-        {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var settings = await _settingsService.GetSettingsByCategoryAsync(category);
-            ViewBag.Category = category;
-
-            return View("~/Views/Dashboard/Settings/Index.cshtml", settings);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error loading dashboard settings for category: {Category}", category);
-            TempData["ErrorMessage"] = "Failed to load settings for the specified category.";
-            return RedirectToAction(nameof(Index));
-        }
-    }
-
-    [HttpPost("update")]
+    [HttpPost("")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateSetting(SettingsVM request)
+    public async Task<IActionResult> UpdateSettings(DashboardSettingsVM model)
     {
         if (!ModelState.IsValid)
         {
-            TempData["ErrorMessage"] = "Invalid setting data provided.";
-            return RedirectToAction(nameof(Index));
+            return View("Index", model);
         }
 
         try
         {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
+            var result = await _settingsService.UpdateDashboardSettingsAsync(model);
+            if (result)
             {
-                return RedirectToAction("Login", "Account");
+                TempData["SuccessMessage"] = "Settings updated successfully.";
+                return RedirectToAction(nameof(Index));
             }
 
-            var success = await _settingsService.UpdateSettingAsync(request.Key, request.Value);
-            if (success)
-            {
-                TempData["SuccessMessage"] = "Setting updated successfully!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Failed to update setting.";
-            }
-
-            return RedirectToAction(nameof(Index), new { category = request.Category });
+            ModelState.AddModelError("", "Failed to update settings.");
+            return View("Index", model);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error updating dashboard setting: {SettingKey}", request.SettingKey);
-            TempData["ErrorMessage"] = "An error occurred while updating the setting.";
-            return RedirectToAction(nameof(Index));
+            _logger.LogError(ex, "Error updating dashboard settings");
+            ModelState.AddModelError("", "Failed to update settings. Please try again.");
+            return View("Index", model);
         }
     }
 
-    [HttpPost("reset/{settingKey}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ResetSetting(string settingKey)
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetSettingsCategories()
     {
         try
         {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var success = await _settingsService.ResetToDefaultAsync(settingKey);
-            if (success)
-            {
-                TempData["SuccessMessage"] = "Setting reset to default successfully!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Failed to reset setting to default.";
-            }
-
-            return RedirectToAction(nameof(Index));
+            var categories = await _settingsService.GetSettingsCategoriesAsync();
+            return Json(new { success = true, data = categories });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error resetting dashboard setting: {SettingKey}", settingKey);
-            TempData["ErrorMessage"] = "An error occurred while resetting the setting.";
-            return RedirectToAction(nameof(Index));
+            _logger.LogError(ex, "Error loading settings categories");
+            return Json(new { success = false, message = "Failed to load settings categories" });
         }
     }
 
-    [HttpPost("reset-all")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ResetAllSettings()
+    [HttpGet("category/{categoryName}")]
+    public async Task<IActionResult> GetCategorySettings(string categoryName)
     {
         try
         {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var success = await _settingsService.ResetAllToDefaultAsync();
-            if (success)
-            {
-                TempData["SuccessMessage"] = "All settings reset to default successfully!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Failed to reset all settings to default.";
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error resetting all dashboard settings");
-            TempData["ErrorMessage"] = "An error occurred while resetting all settings.";
-            return RedirectToAction(nameof(Index));
-        }
-    }
-
-    [HttpGet("get-all")]
-    public async Task<IActionResult> GetSettings(string? category = null)
-    {
-        try
-        {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            {
-                return Json(new { success = false, message = "User not authenticated" });
-            }
-
-            object settings;
-            if (string.IsNullOrEmpty(category))
-            {
-                settings = await _settingsService.GetSettingsAsync();
-            }
-            else
-            {
-                settings = await _settingsService.GetSettingsByCategoryAsync(category);
-            }
-
+            var settings = await _settingsService.GetCategorySettingsAsync(categoryName);
             return Json(new { success = true, data = settings });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading dashboard settings API");
-            return Json(new { success = false, message = "Failed to load settings" });
+            _logger.LogError(ex, "Error loading category settings: {CategoryName}", categoryName);
+            return Json(new { success = false, message = "Failed to load category settings" });
         }
     }
 
-    [HttpGet("get-one/{settingKey}")]
-    public async Task<IActionResult> GetSetting(string settingKey)
-    {
-        try
-        {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            {
-                return Json(new { success = false, message = "User not authenticated" });
-            }
-
-            var setting = await _settingsService.GetSettingAsync(settingKey);
-            if (setting == null)
-            {
-                return Json(new { success = false, message = "Setting not found" });
-            }
-
-            return Json(new { success = true, data = setting });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error loading dashboard setting API: {SettingKey}", settingKey);
-            return Json(new { success = false, message = "Failed to load setting" });
-        }
-    }
-
-    [HttpPost("update-api")]
+    [HttpPost("category/{categoryName}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateSettingApi([FromBody] SettingsVM request)
+    public async Task<IActionResult> UpdateCategorySettings(string categoryName, [FromBody] List<SettingItemVM> settings)
     {
-        if (!ModelState.IsValid)
-        {
-            return Json(new { success = false, message = "Invalid setting data", errors = ModelState });
-        }
-
         try
         {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
+            var result = await _settingsService.UpdateCategorySettingsAsync(categoryName, settings);
+            if (result)
             {
-                return Json(new { success = false, message = "User not authenticated" });
+                return Json(new { success = true, message = "Category settings updated successfully" });
             }
-
-            var success = await _settingsService.UpdateSettingAsync(request.SettingKey, request.Value);
-            if (success)
-            {
-                return Json(new { success = true, message = "Setting updated successfully" });
-            }
-            else
-            {
-                return Json(new { success = false, message = "Failed to update setting" });
-            }
+            return Json(new { success = false, message = "Failed to update category settings" });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error updating dashboard setting API: {SettingKey}", request.SettingKey);
-            return Json(new { success = false, message = "An error occurred while updating the setting" });
+            _logger.LogError(ex, "Error updating category settings: {CategoryName}", categoryName);
+            return Json(new { success = false, message = "Failed to update category settings" });
         }
     }
 
-    [HttpPost("reset-api/{settingKey}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ResetSettingApi(string settingKey)
+    [HttpGet("security")]
+    public async Task<IActionResult> GetSecuritySettings()
     {
         try
         {
-            if (!Guid.TryParse(_currentUserService.UserId, out var userId))
-            {
-                return Json(new { success = false, message = "User not authenticated" });
-            }
-
-            var success = await _settingsService.ResetToDefaultAsync(settingKey);
-            if (success)
-            {
-                return Json(new { success = true, message = "Setting reset to default successfully" });
-            }
-            else
-            {
-                return Json(new { success = false, message = "Failed to reset setting to default" });
-            }
+            var settings = await _settingsService.GetSecuritySettingsAsync();
+            return Json(new { success = true, data = settings });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error resetting dashboard setting API: {SettingKey}", settingKey);
-            return Json(new { success = false, message = "An error occurred while resetting the setting" });
+            _logger.LogError(ex, "Error loading security settings");
+            return Json(new { success = false, message = "Failed to load security settings" });
+        }
+    }
+
+    [HttpPost("security")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateSecuritySettings([FromBody] DashboardSecuritySettingsVM settings)
+    {
+        try
+        {
+            var result = await _settingsService.UpdateSecuritySettingsAsync(settings);
+            if (result)
+            {
+                return Json(new { success = true, message = "Security settings updated successfully" });
+            }
+            return Json(new { success = false, message = "Failed to update security settings" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating security settings");
+            return Json(new { success = false, message = "Failed to update security settings" });
+        }
+    }
+
+    [HttpGet("notifications")]
+    public async Task<IActionResult> GetNotificationSettings()
+    {
+        try
+        {
+            var settings = await _settingsService.GetNotificationSettingsAsync();
+            return Json(new { success = true, data = settings });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading notification settings");
+            return Json(new { success = false, message = "Failed to load notification settings" });
+        }
+    }
+
+    [HttpPost("notifications")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateNotificationSettings([FromBody] DashboardNotificationSettingsVM settings)
+    {
+        try
+        {
+            var result = await _settingsService.UpdateNotificationSettingsAsync(settings);
+            if (result)
+            {
+                return Json(new { success = true, message = "Notification settings updated successfully" });
+            }
+            return Json(new { success = false, message = "Failed to update notification settings" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating notification settings");
+            return Json(new { success = false, message = "Failed to update notification settings" });
+        }
+    }
+
+    [HttpPost("reset")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResetToDefaults()
+    {
+        try
+        {
+            var result = await _settingsService.ResetToDefaultsAsync();
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Settings reset to defaults successfully.";
+                return Json(new { success = true, message = "Settings reset to defaults successfully" });
+            }
+            return Json(new { success = false, message = "Failed to reset settings" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error resetting settings to defaults");
+            return Json(new { success = false, message = "Failed to reset settings" });
         }
     }
 }
-
-

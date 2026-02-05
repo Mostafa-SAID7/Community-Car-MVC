@@ -1,0 +1,174 @@
+@model List<CommunityCar.Application.Features.Dashboard.Management.Users.Core.UserManagementVM>
+@{
+    ViewData["Title"] = "User Management";
+    ViewData["PageTitle"] = "User Management";
+    ViewData["Description"] = "Manage user accounts and permissions";
+    Layout = "_DashboardLayout";
+    
+    var search = ViewBag.Search as string;
+    var role = ViewBag.Role as string;
+    var isActive = ViewBag.IsActive as bool?;
+    var page = ViewBag.Page as int? ?? 1;
+    var pageSize = ViewBag.PageSize as int? ?? 20;
+    var totalCount = ViewBag.TotalCount as int? ?? 0;
+}
+
+<div class="container-fluid py-4 animate-in fade-in">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5 mt-2">
+        <div>
+            <h2 class="fw-black text-gradient mb-1"><i class="fas fa-users-cog me-2 small opacity-50"></i>User Identity Control</h2>
+            <p class="text-muted small text-uppercase tracking-widest opacity-50 fw-black">Manage authentication levels and account status</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary-red px-4 rounded-4 fw-bold shadow-sm" onclick="showAddUserModal()">
+                <i class="fas fa-user-plus me-2"></i>Provision User
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters & Search -->
+    <div class="card card-premium border-0 mb-4 overflow-hidden">
+        <div class="card-body p-4">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="text-muted xx-small fw-black text-uppercase tracking-widest mb-2 opacity-75">Search Matrix</label>
+                    <div class="input-group search-premium">
+                        <span class="input-group-text bg-light border-0"><i class="fas fa-search opacity-50"></i></span>
+                        <input type="text" name="search" class="form-control bg-light border-0 fw-bold" value="@search" placeholder="USERNAME / EMAIL / ID...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="text-muted xx-small fw-black text-uppercase tracking-widest mb-2 opacity-75">Role Tier</label>
+                    <select name="role" class="form-select form-select-premium">
+                        <option value="">All Tiers</option>
+                        <option value="Admin">Administrator</option>
+                        <option value="Moderator">Moderator</option>
+                        <option value="User">Standard User</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="text-muted xx-small fw-black text-uppercase tracking-widest mb-2 opacity-75">Access Status</label>
+                    <select name="isActive" class="form-select form-select-premium">
+                        <option value="">All States</option>
+                        <option value="true">Active Only</option>
+                        <option value="false">Deactivated Only</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-dark w-100 fw-black text-uppercase tracking-widest py-2 rounded-3" style="font-size: 0.7rem;">Execute Scan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card card-premium border-0 overflow-hidden">
+        <div class="card-body p-0">
+            @if (Model?.Any() == true)
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light bg-opacity-50">
+                            <tr>
+                                <th class="ps-4 border-0 text-muted xx-small fw-black text-uppercase tracking-widest">User Entity</th>
+                                <th class="border-0 text-muted xx-small fw-black text-uppercase tracking-widest">Role Tier</th>
+                                <th class="border-0 text-muted xx-small fw-black text-uppercase tracking-widest">Last Access</th>
+                                <th class="border-0 text-muted xx-small fw-black text-uppercase tracking-widest">Status</th>
+                                <th class="border-0 text-muted xx-small fw-black text-uppercase tracking-widest pe-4 text-end">Vector Control</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-top-0">
+                            @foreach (var user in Model)
+                            {
+                                <tr class="transition-all hover-bg-light">
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center border" style="width: 42px; height: 42px;">
+                                                <i class="fas fa-user-circle text-muted fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-black tracking-tight mb-0">@user.Username</div>
+                                                <div class="text-muted xx-small fw-bold opacity-75">@user.Email</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary fw-black text-uppercase tracking-widest" style="font-size: 0.6rem;">@user.Role</span>
+                                    </td>
+                                    <td>
+                                        <div class="text-muted xx-small fw-black">@(user.LastLoginAt?.ToString("MM.dd.yy HH:mm") ?? "NEVER")</div>
+                                    </td>
+                                    <td>
+                                        @if (user.IsActive)
+                                        {
+                                            <span class="badge rounded-pill bg-success bg-opacity-10 text-success fw-black text-uppercase tracking-widest" style="font-size: 0.6rem;">ACTIVE</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill bg-danger bg-opacity-10 text-danger fw-black text-uppercase tracking-widest" style="font-size: 0.6rem;">LOCKED</span>
+                                        }
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <div class="btn-group shadow-sm rounded-3 overflow-hidden">
+                                            <button class="btn btn-sm btn-light border-end" onclick="editUser('@user.Id')" title="Edit Identity">
+                                                <i class="fas fa-edit text-primary"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-light border-end" onclick="toggleUserStatus('@user.Id')" title="@(user.IsActive ? "Lock" : "Unlock") Account">
+                                                <i class="fas fa-@(user.IsActive ? "lock" : "unlock") text-warning"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-light" onclick="deleteUser('@user.Id')" title="Purge Entity">
+                                                <i class="fas fa-trash-alt text-danger"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                        <i class="fas fa-users-slash fs-1 text-muted opacity-25"></i>
+                    </div>
+                    <h5 class="fw-black text-uppercase tracking-tight text-muted">No User Entities Detected</h5>
+                    <p class="text-muted small fw-bold opacity-50 mb-0">Adjust your filter parameters or provision a new user to the platform.</p>
+                </div>
+            }
+        </div>
+        @if (totalCount > pageSize)
+        {
+            <div class="card-footer bg-transparent border-top-0 p-4">
+                <nav>
+                    <ul class="pagination pagination-sm justify-content-center mb-0 gap-1">
+                        @* Pagination logic would go here *@
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .transition-all { transition: all 0.2s ease; }
+    .xx-small { font-size: 0.6rem; }
+    .hover-bg-light:hover { background-color: rgba(0,0,0,0.02) !important; }
+    .form-control-premium, .form-select-premium { 
+        background-color: var(--bs-gray-100); 
+        border: 2px solid transparent; 
+        border-radius: 12px; 
+        padding: 0.75rem 1rem; 
+        font-weight: 700; 
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+    }
+    .form-control-premium:focus, .form-select-premium:focus {
+        background-color: #fff;
+        border-color: var(--primary-red);
+        box-shadow: 0 0 0 4px rgba(251, 44, 54, 0.1);
+        outline: none;
+    }
+</style>
